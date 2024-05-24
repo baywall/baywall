@@ -325,6 +325,8 @@ export class WpRestApi {
 
 	/**
 	 * サーバーでRPC URLに接続し、チェーンIDを取得します。
+	 *
+	 * @param rpcUrl RPC URL
 	 */
 	public async getChainId( rpcUrl: string ) {
 		return (
@@ -334,7 +336,11 @@ export class WpRestApi {
 		).data.chain_id;
 	}
 
-	/** @deprecated */
+	/**
+	 * @deprecated
+	 *
+	 * @param chainId
+	 */
 	public async getTxConfirmationsSettings( chainId: number ) {
 		return await this.get< { value: number | null; default: number } >(
 			`/settings/tx-confirmations/${ chainId }`,
@@ -361,7 +367,7 @@ export class WpRestApi {
 
 	/**
 	 * 開発モードで動作しているかどうかを取得します。
-	 * @returns 開発モードで動作している場合はtrue
+	 * @return 開発モードで動作している場合はtrue
 	 */
 	public async getIsDevelopmentMode() {
 		return ( await this.get< { value: boolean } >( '/development-mode', REST_API_ACTION_TYPE.ADMIN ) ).data.value;
@@ -390,6 +396,8 @@ export class WpRestApi {
 
 	/**
 	 * 現在動作中のネットワーク種別を設定します。
+	 *
+	 * @param networkType ネットワーク種別
 	 */
 	public async setActiveNetworkType( networkType: NetworkType ) {
 		return await this.post( '/settings/active-network', REST_API_ACTION_TYPE.ADMIN, {
@@ -399,7 +407,6 @@ export class WpRestApi {
 
 	/**
 	 * 利用規約のURLを取得します。
-	 * @returns
 	 */
 	public async getTermsUrl(): Promise< string > {
 		return this.getUrl( '/docs/terms', undefined );
@@ -407,7 +414,6 @@ export class WpRestApi {
 
 	/**
 	 * サイト所有者が利用規約に同意したときの情報を取得します。
-	 * @returns
 	 */
 	public async getSiteOwnerAgreedTermsInfo(): Promise< {
 		version: string;
@@ -428,10 +434,10 @@ export class WpRestApi {
 	/**
 	 * サイト所有者が利用規約に同意したときの情報を設定します。
 	 *
-	 * @param version
-	 * @param message
-	 * @param signature
-	 * @returns
+	 * @param info
+	 * @param info.version
+	 * @param info.message
+	 * @param info.signature
 	 */
 	public async setSiteOwnerAgreedTermsInfo( info: { version: string; message: string; signature: string } ) {
 		return await this.post( '/site-owner-agreed-terms', REST_API_ACTION_TYPE.ADMIN, {
@@ -459,7 +465,7 @@ export class WpRestApi {
 	/**
 	 * 指定したチェーンでの支払可能な通貨シンボルの設定を取得します。
 	 * @param chainId
-	 * @returns 支払可能な通貨シンボルの配列
+	 * @return 支払可能な通貨シンボルの配列
 	 * @deprecated
 	 */
 	public async getPayableSymbolsSetting_old( chainId: number ) {
@@ -474,7 +480,8 @@ export class WpRestApi {
 	/**
 	 * スマートコントラクトで支払可能な通貨一覧の情報をブロックチェーンから取得します。
 	 * ※ このサイトで設定されている支払可能な通貨とは異なることに注意。
-	 * @returns
+	 *
+	 * @param chainId チェーンID
 	 */
 	public async getBlockchainPayableSymbolsInfo( chainId: number ) {
 		return (
@@ -488,7 +495,7 @@ export class WpRestApi {
 	/**
 	 * 投稿IDに紐づく設定を取得します。
 	 * @param postId
-	 * @returns	投稿IDに紐づく設定。
+	 * @return	投稿IDに紐づく設定。
 	 * @throws	設定が存在しない場合は404エラーが発生します。
 	 */
 	public async getPostSetting( postId: number ) {
@@ -523,13 +530,6 @@ export class WpRestApi {
 			.data.value;
 	}
 
-	/**
-	 * 購入時に必要となる署名等の情報を取得します。
-	 * @param chainId 購入先チェーンID
-	 * @param postId 投稿ID
-	 * @param symbol 購入する通貨のシンボル
-	 * @returns 署名等の情報
-	 */
 	public async getPurchaseInfo( postId: number, chainId: number, symbol: string ) {
 		return await this.get< PurchaseSignatureResponse >(
 			`/purchase-info/${ postId }/${ chainId }/${ symbol }`,
@@ -537,14 +537,6 @@ export class WpRestApi {
 		);
 	}
 
-	/**
-	 * 署名を送信して記事の有料部分を取得します。
-	 * @param postId 投稿ID
-	 * @param chainId 支払いを行ったチェーンID
-	 * @param message 署名に使ったメッセージ
-	 * @param signature 署名
-	 * @returns
-	 */
 	public async getPurchasedContent( postId: number, chainId: number, message: string, signature: string ) {
 		return this.post< PurchasedContentResponse >( `/purchased-content/${ postId }`, REST_API_ACTION_TYPE.VIEW, {
 			message,
@@ -569,7 +561,6 @@ export class WpRestApi {
 	 * 指定したチェーンで支払可能な通貨を設定します。
 	 * @param chainId
 	 * @param payableSymbols
-	 * @returns
 	 */
 	public async setPayableSymbols( chainId: number, payableSymbols: string[] ) {
 		return this.post( `/settings/payable-symbols/${ chainId.toString() }`, REST_API_ACTION_TYPE.ADMIN, {
@@ -579,6 +570,8 @@ export class WpRestApi {
 
 	/**
 	 * フォントをインストールします。
+	 *
+	 * @param fontFile フォントファイル
 	 */
 	public async installFont( fontFile: File ) {
 		const formData = new FormData();
@@ -600,7 +593,6 @@ export class WpRestApi {
 
 	/**
 	 * ユーザーがインストールしたフォント一覧を取得します。
-	 * @returns
 	 */
 	public async getUserInstalledFonts() {
 		return this.get< InstalledFontResponse >( `/user-installed-fonts`, REST_API_ACTION_TYPE.ADMIN );

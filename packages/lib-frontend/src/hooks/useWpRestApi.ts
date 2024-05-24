@@ -5,8 +5,8 @@ export const useWpRestApi = (): WpRestApi | undefined => {
 	const [ wpApi, setWpApi ] = useState< WpRestApi | undefined >( undefined );
 
 	useEffect( () => {
-		WpRestApi.getInstance().then( ( wpApi ) => {
-			setWpApi( wpApi );
+		WpRestApi.getInstance().then( ( w ) => {
+			setWpApi( w );
 		} );
 	}, [] );
 

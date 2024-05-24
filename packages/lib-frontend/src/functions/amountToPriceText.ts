@@ -36,7 +36,7 @@ export const amountToPriceText = ( amount: BigNumberish, decimals: number ): str
  * @param decimals
  * @param locales
  * @param symbol
- * @returns
+ * @return
  * TODO: 順序入れ替え。最後にlocales
  */
 export const amountToLocalizedPriceText = (
