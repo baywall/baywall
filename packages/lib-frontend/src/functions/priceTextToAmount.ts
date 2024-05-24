@@ -40,8 +40,7 @@ export const inputValueToAmount = ( inputValue: string, locales?: string ) => {
 		};
 	}
 
-	const decimalSeparator =
-		Intl.NumberFormat( locales ).formatToParts( 1.1 )[ 1 ].value;
+	const decimalSeparator = Intl.NumberFormat( locales ).formatToParts( 1.1 )[ 1 ].value;
 
 	return {
 		amount: BigNumber.from( inputValue.replace( decimalSeparator, '' ) ), //	数量は小数点を無視してBigNumberに変換したもの。
@@ -55,15 +54,9 @@ export const inputValueToAmount = ( inputValue: string, locales?: string ) => {
  * @param locales
  * @param symbol
  */
-export const localizedPriceTextToAmount = (
-	localizedPriceText: string,
-	locales: string,
-	symbol: string
-) => {
-	const decimalSeparator =
-		Intl.NumberFormat( locales ).formatToParts( 1.1 )[ 1 ].value;
-	const thousandSeparator =
-		Intl.NumberFormat( locales ).formatToParts( 11111 )[ 1 ].value;
+export const localizedPriceTextToAmount = ( localizedPriceText: string, locales: string, symbol: string ) => {
+	const decimalSeparator = Intl.NumberFormat( locales ).formatToParts( 1.1 )[ 1 ].value;
+	const thousandSeparator = Intl.NumberFormat( locales ).formatToParts( 11111 )[ 1 ].value;
 
 	//	通貨記号を削除
 	const priceText = ( () => {
@@ -87,9 +80,7 @@ export const localizedPriceTextToAmount = (
 	//	小数点以下の桁数を取得
 	const decimals = priceText.split( decimalSeparator )[ 1 ]?.length ?? 0;
 	//	桁区切りと小数点を削除
-	const amount = priceText
-		.replace( new RegExp( thousandSeparator, 'g' ), '' )
-		.replace( decimalSeparator, '' );
+	const amount = priceText.replace( new RegExp( thousandSeparator, 'g' ), '' ).replace( decimalSeparator, '' );
 
 	return {
 		amount: BigNumber.from( amount ),

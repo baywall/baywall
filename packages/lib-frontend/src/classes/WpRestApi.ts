@@ -164,8 +164,7 @@ const REST_API_ACTION_TYPE = {
 	ADMIN: 'admin',
 	EDITOR: 'editor',
 } as const;
-type RestApiActionType =
-	( typeof REST_API_ACTION_TYPE )[ keyof typeof REST_API_ACTION_TYPE ];
+type RestApiActionType = ( typeof REST_API_ACTION_TYPE )[ keyof typeof REST_API_ACTION_TYPE ];
 
 /**
  * WordPressのREST APIのURLを組み立てるクラス
@@ -193,23 +192,14 @@ class WpApiUrlAssembler {
 			this._apiVersion === null ||
 			this._apiVersion === undefined
 		) {
-			console.error(
-				'_availableApiRootPath: ',
-				this._availableApiRootPath,
-				', _apiVersion: ',
-				this._apiVersion
-			);
+			console.error( '_availableApiRootPath: ', this._availableApiRootPath, ', _apiVersion: ', this._apiVersion );
 			throw new Error( '{60DF4F84-1DF4-4881-BB55-4A9EC1965A88}' );
 		}
 
 		return new URL(
-			[
-				this._availableApiRootPath,
-				constants.restNamespaceCore,
-				'/v',
-				this._apiVersion.toString(),
-				path,
-			].join( '' ),
+			[ this._availableApiRootPath, constants.restNamespaceCore, '/v', this._apiVersion.toString(), path ].join(
+				''
+			),
 			this._siteAddress
 		).toString();
 	}
@@ -227,9 +217,7 @@ class WpApiUrlAssembler {
 		for ( const apiRootPath of this._apiRootPaths ) {
 			//	バージョン情報を取得するためのパス
 			const url = new URL(
-				[ apiRootPath, constants.restNamespaceCore, '/version' ].join(
-					''
-				),
+				[ apiRootPath, constants.restNamespaceCore, '/version' ].join( '' ),
 				this._siteAddress
 			).toString();
 
@@ -273,10 +261,7 @@ export class WpRestApi {
 		if ( WpRestApi._instance === undefined ) {
 			WpRestApi._initializing = true;
 			const phpVar = getPhpCommonVar();
-			const instance = new WpRestApi(
-				phpVar.site_address,
-				phpVar.api_root_paths
-			);
+			const instance = new WpRestApi( phpVar.site_address, phpVar.api_root_paths );
 			await instance.init();
 			WpRestApi._instance = instance;
 			WpRestApi._initializing = false;
@@ -299,9 +284,7 @@ export class WpRestApi {
 		//	nonceが初期化されていない場合。
 		//	(view用のnonceはだれがアクセスしても取得できるため、ここに値が設定されているかどうかで判定)
 		if ( this._actionNonce[ REST_API_ACTION_TYPE.VIEW ] === undefined ) {
-			const reqConfig = this._wpRestNonce
-				? { headers: { 'X-WP-Nonce': this._wpRestNonce } }
-				: undefined;
+			const reqConfig = this._wpRestNonce ? { headers: { 'X-WP-Nonce': this._wpRestNonce } } : undefined;
 			const { data } = await axios.post< NonceResponse >(
 				this._assembler.getUrl( '/nonce' ),
 				{ post_id: getPostIdFromDom() },
@@ -310,15 +293,11 @@ export class WpRestApi {
 
 			this._actionNonce[ REST_API_ACTION_TYPE.VIEW ] = data.view_nonce;
 			this._actionNonce[ REST_API_ACTION_TYPE.ADMIN ] = data.admin_nonce;
-			this._actionNonce[ REST_API_ACTION_TYPE.EDITOR ] =
-				data.editor_nonce;
+			this._actionNonce[ REST_API_ACTION_TYPE.EDITOR ] = data.editor_nonce;
 		}
 	}
 
-	private getUrl(
-		path: string,
-		action: RestApiActionType | undefined
-	): string {
+	private getUrl( path: string, action: RestApiActionType | undefined ): string {
 		const url = new URL( this._assembler.getUrl( path ) );
 		if ( action ) {
 			// `_wpnonce`はCookieが使える環境でないと`rest_cookie_invalid_nonce`エラーが発生する。
@@ -329,43 +308,19 @@ export class WpRestApi {
 	}
 
 	private getAxiosRequestConfig(): AxiosRequestConfig | undefined {
-		return this._wpRestNonce
-			? { headers: { 'X-WP-Nonce': this._wpRestNonce } }
-			: undefined;
+		return this._wpRestNonce ? { headers: { 'X-WP-Nonce': this._wpRestNonce } } : undefined;
 	}
 
-	private async get< T >(
-		path: string,
-		action: RestApiActionType | undefined
-	) {
-		return axios.get< T >(
-			this.getUrl( path, action ),
-			this.getAxiosRequestConfig()
-		);
+	private async get< T >( path: string, action: RestApiActionType | undefined ) {
+		return axios.get< T >( this.getUrl( path, action ), this.getAxiosRequestConfig() );
 	}
 
-	private async post< T >(
-		path: string,
-		action: RestApiActionType | undefined,
-		data?: any
-	) {
-		return axios.post< T >(
-			this.getUrl( path, action ),
-			data,
-			this.getAxiosRequestConfig()
-		);
+	private async post< T >( path: string, action: RestApiActionType | undefined, data?: any ) {
+		return axios.post< T >( this.getUrl( path, action ), data, this.getAxiosRequestConfig() );
 	}
 
-	private async put< T >(
-		path: string,
-		action: RestApiActionType | undefined,
-		data?: any
-	) {
-		return axios.put< T >(
-			this.getUrl( path, action ),
-			data,
-			this.getAxiosRequestConfig()
-		);
+	private async put< T >( path: string, action: RestApiActionType | undefined, data?: any ) {
+		return axios.put< T >( this.getUrl( path, action ), data, this.getAxiosRequestConfig() );
 	}
 
 	/**
@@ -373,13 +328,9 @@ export class WpRestApi {
 	 */
 	public async getChainId( rpcUrl: string ) {
 		return (
-			await this.post< { chain_id: number } >(
-				'/chain-id',
-				REST_API_ACTION_TYPE.ADMIN,
-				{
-					rpc_url: rpcUrl,
-				}
-			)
+			await this.post< { chain_id: number } >( '/chain-id', REST_API_ACTION_TYPE.ADMIN, {
+				rpc_url: rpcUrl,
+			} )
 		).data.chain_id;
 	}
 
@@ -402,39 +353,23 @@ export class WpRestApi {
 		);
 	}
 
-	public async setTxConfirmationsSettings(
-		chainId: number,
-		confirmations: number | null
-	) {
-		return await this.post(
-			`/settings/tx-confirmations/${ chainId }`,
-			REST_API_ACTION_TYPE.ADMIN,
-			{
-				value: confirmations,
-			}
-		);
+	public async setTxConfirmationsSettings( chainId: number, confirmations: number | null ) {
+		return await this.post( `/settings/tx-confirmations/${ chainId }`, REST_API_ACTION_TYPE.ADMIN, {
+			value: confirmations,
+		} );
 	}
-
 
 	/**
 	 * 開発モードで動作しているかどうかを取得します。
 	 * @returns 開発モードで動作している場合はtrue
 	 */
 	public async getIsDevelopmentMode() {
-		return (
-			await this.get< { value: boolean } >(
-				'/development-mode',
-				REST_API_ACTION_TYPE.ADMIN
-			)
-		).data.value;
+		return ( await this.get< { value: boolean } >( '/development-mode', REST_API_ACTION_TYPE.ADMIN ) ).data.value;
 	}
 
 	public async getLogLevels() {
 		return (
-			await this.get< { value: { [ target: string ]: string } } >(
-				'/log-levels',
-				REST_API_ACTION_TYPE.ADMIN
-			)
+			await this.get< { value: { [ target: string ]: string } } >( '/log-levels', REST_API_ACTION_TYPE.ADMIN )
 		).data.value;
 	}
 
@@ -449,10 +384,7 @@ export class WpRestApi {
 	 */
 	public async getActiveNetworkType(): Promise< NetworkType | null > {
 		return (
-			await this.get< { value: NetworkType | null } >(
-				'/settings/active-network',
-				REST_API_ACTION_TYPE.ADMIN
-			)
+			await this.get< { value: NetworkType | null } >( '/settings/active-network', REST_API_ACTION_TYPE.ADMIN )
 		).data.value;
 	}
 
@@ -460,13 +392,9 @@ export class WpRestApi {
 	 * 現在動作中のネットワーク種別を設定します。
 	 */
 	public async setActiveNetworkType( networkType: NetworkType ) {
-		return await this.post(
-			'/settings/active-network',
-			REST_API_ACTION_TYPE.ADMIN,
-			{
-				value: networkType,
-			}
-		);
+		return await this.post( '/settings/active-network', REST_API_ACTION_TYPE.ADMIN, {
+			value: networkType,
+		} );
 	}
 
 	/**
@@ -505,30 +433,19 @@ export class WpRestApi {
 	 * @param signature
 	 * @returns
 	 */
-	public async setSiteOwnerAgreedTermsInfo( info: {
-		version: string;
-		message: string;
-		signature: string;
-	} ) {
-		return await this.post(
-			'/site-owner-agreed-terms',
-			REST_API_ACTION_TYPE.ADMIN,
-			{
-				version: info.version,
-				message: info.message,
-				signature: info.signature,
-			}
-		);
+	public async setSiteOwnerAgreedTermsInfo( info: { version: string; message: string; signature: string } ) {
+		return await this.post( '/site-owner-agreed-terms', REST_API_ACTION_TYPE.ADMIN, {
+			version: info.version,
+			message: info.message,
+			signature: info.signature,
+		} );
 	}
 
 	public async getPostSellableSymbolsInfo( postId: number ) {
 		return (
 			await this.get< {
 				value: { symbol: string; isPaused: boolean }[];
-			} >(
-				`/post-sellable-symbols-info/${ postId }`,
-				REST_API_ACTION_TYPE.EDITOR
-			)
+			} >( `/post-sellable-symbols-info/${ postId }`, REST_API_ACTION_TYPE.EDITOR )
 		).data.value;
 	}
 
@@ -575,10 +492,7 @@ export class WpRestApi {
 	 * @throws	設定が存在しない場合は404エラーが発生します。
 	 */
 	public async getPostSetting( postId: number ) {
-		return await this.get< PostSettingResponse >(
-			`/post-setting/${ postId }`,
-			REST_API_ACTION_TYPE.EDITOR
-		);
+		return await this.get< PostSettingResponse >( `/post-setting/${ postId }`, REST_API_ACTION_TYPE.EDITOR );
 	}
 
 	public async setPostSetting(
@@ -590,34 +504,23 @@ export class WpRestApi {
 		affiliatePercentAmountHex: string,
 		affiliatePercentDecimals: number
 	) {
-		return await this.post(
-			`/post-setting/${ postId }`,
-			REST_API_ACTION_TYPE.EDITOR,
-			{
-				selling_paused: sellingPaused,
-				selling_amount_hex: sellingAmountHex,
-				selling_decimals: sellingDecimals,
-				selling_symbol: sellingSymbol,
-				affiliate_percent_amount_hex: affiliatePercentAmountHex,
-				affiliate_percent_decimals: affiliatePercentDecimals,
-			}
-		);
+		return await this.post( `/post-setting/${ postId }`, REST_API_ACTION_TYPE.EDITOR, {
+			selling_paused: sellingPaused,
+			selling_amount_hex: sellingAmountHex,
+			selling_decimals: sellingDecimals,
+			selling_symbol: sellingSymbol,
+			affiliate_percent_amount_hex: affiliatePercentAmountHex,
+			affiliate_percent_decimals: affiliatePercentDecimals,
+		} );
 	}
 
 	public async getViewingInfo() {
-		return await this.get< ViewingInfoResponse >(
-			'/viewing-info',
-			REST_API_ACTION_TYPE.VIEW
-		);
+		return await this.get< ViewingInfoResponse >( '/viewing-info', REST_API_ACTION_TYPE.VIEW );
 	}
 
 	public async getTxConfirmations( chainId: number ) {
-		return (
-			await this.get< { value: number } >(
-				`/tx-confirmations/${ chainId }`,
-				REST_API_ACTION_TYPE.VIEW
-			)
-		).data.value;
+		return ( await this.get< { value: number } >( `/tx-confirmations/${ chainId }`, REST_API_ACTION_TYPE.VIEW ) )
+			.data.value;
 	}
 
 	/**
@@ -627,11 +530,7 @@ export class WpRestApi {
 	 * @param symbol 購入する通貨のシンボル
 	 * @returns 署名等の情報
 	 */
-	public async getPurchaseInfo(
-		postId: number,
-		chainId: number,
-		symbol: string
-	) {
+	public async getPurchaseInfo( postId: number, chainId: number, symbol: string ) {
 		return await this.get< PurchaseSignatureResponse >(
 			`/purchase-info/${ postId }/${ chainId }/${ symbol }`,
 			REST_API_ACTION_TYPE.VIEW
@@ -646,21 +545,12 @@ export class WpRestApi {
 	 * @param signature 署名
 	 * @returns
 	 */
-	public async getPurchasedContent(
-		postId: number,
-		chainId: number,
-		message: string,
-		signature: string
-	) {
-		return this.post< PurchasedContentResponse >(
-			`/purchased-content/${ postId }`,
-			REST_API_ACTION_TYPE.VIEW,
-			{
-				message,
-				signature,
-				chainId,
-			}
-		);
+	public async getPurchasedContent( postId: number, chainId: number, message: string, signature: string ) {
+		return this.post< PurchasedContentResponse >( `/purchased-content/${ postId }`, REST_API_ACTION_TYPE.VIEW, {
+			message,
+			signature,
+			chainId,
+		} );
 	}
 
 	public async getRpcUrls( networkType?: NetworkType ) {
@@ -670,13 +560,9 @@ export class WpRestApi {
 	}
 
 	public async setRpcUrl( chainId: number, rpcUrl: string | null ) {
-		return this.post(
-			`/rpc-url/${ chainId.toString() }`,
-			REST_API_ACTION_TYPE.ADMIN,
-			{
-				rpc_url: rpcUrl,
-			}
-		);
+		return this.post( `/rpc-url/${ chainId.toString() }`, REST_API_ACTION_TYPE.ADMIN, {
+			rpc_url: rpcUrl,
+		} );
 	}
 
 	/**
@@ -685,17 +571,10 @@ export class WpRestApi {
 	 * @param payableSymbols
 	 * @returns
 	 */
-	public async setPayableSymbols(
-		chainId: number,
-		payableSymbols: string[]
-	) {
-		return this.post(
-			`/settings/payable-symbols/${ chainId.toString() }`,
-			REST_API_ACTION_TYPE.ADMIN,
-			{
-				value: payableSymbols,
-			}
-		);
+	public async setPayableSymbols( chainId: number, payableSymbols: string[] ) {
+		return this.post( `/settings/payable-symbols/${ chainId.toString() }`, REST_API_ACTION_TYPE.ADMIN, {
+			value: payableSymbols,
+		} );
 	}
 
 	/**
@@ -716,10 +595,7 @@ export class WpRestApi {
 	 * ライブラリインストール時に同梱されていたフォント一覧を取得します。
 	 */
 	public async getDistInstalledFonts() {
-		return this.get< InstalledFontResponse >(
-			`/dist-installed-fonts`,
-			REST_API_ACTION_TYPE.ADMIN
-		);
+		return this.get< InstalledFontResponse >( `/dist-installed-fonts`, REST_API_ACTION_TYPE.ADMIN );
 	}
 
 	/**
@@ -727,25 +603,15 @@ export class WpRestApi {
 	 * @returns
 	 */
 	public async getUserInstalledFonts() {
-		return this.get< InstalledFontResponse >(
-			`/user-installed-fonts`,
-			REST_API_ACTION_TYPE.ADMIN
-		);
+		return this.get< InstalledFontResponse >( `/user-installed-fonts`, REST_API_ACTION_TYPE.ADMIN );
 	}
 
-	public async getSalesHistories(
-		startUnixTime: number | undefined,
-		endUnixTime: number | undefined
-	) {
+	public async getSalesHistories( startUnixTime: number | undefined, endUnixTime: number | undefined ) {
 		return (
-			await this.post< { value: SalesHistoriesResponse } >(
-				`/sales-histories`,
-				REST_API_ACTION_TYPE.ADMIN,
-				{
-					start_unix_time: startUnixTime,
-					end_unix_time: endUnixTime,
-				}
-			)
+			await this.post< { value: SalesHistoriesResponse } >( `/sales-histories`, REST_API_ACTION_TYPE.ADMIN, {
+				start_unix_time: startUnixTime,
+				end_unix_time: endUnixTime,
+			} )
 		).data.value;
 	}
 }

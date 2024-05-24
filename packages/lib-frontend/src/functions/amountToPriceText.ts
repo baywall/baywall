@@ -1,9 +1,6 @@
 import { BigNumber, BigNumberish, ethers } from 'ethers';
 
-export const amountToPriceText = (
-	amount: BigNumberish,
-	decimals: number
-): string => {
+export const amountToPriceText = ( amount: BigNumberish, decimals: number ): string => {
 	amount = ethers.BigNumber.from( amount );
 	if ( decimals < 0 ) {
 		throw new Error( '{5D9167DA-49A0-482A-9DFD-23C1688FE198}' );
@@ -62,13 +59,9 @@ export const amountToLocalizedPriceText = (
 			return formattedPrice;
 		}
 	} catch ( e: any ) {
-		if (
-			typeof e.message === 'string' &&
-			e.message.startsWith( 'Invalid currency code' )
-		) {
+		if ( typeof e.message === 'string' && e.message.startsWith( 'Invalid currency code' ) ) {
 			//	小数点の記号を取得
-			const decimalSeparator =
-				Intl.NumberFormat( locales ).formatToParts( 1.1 )[ 1 ].value;
+			const decimalSeparator = Intl.NumberFormat( locales ).formatToParts( 1.1 )[ 1 ].value;
 			//	通貨コードが無効な場合
 
 			//	整数部分をUSDに変換
@@ -89,14 +82,11 @@ export const amountToLocalizedPriceText = (
 				.trim();
 
 			//	フォーマット済みの価格。一旦桁区切りが行われた後の整数部分のみを設定
-			let formattedPrice = integerUsdFormat
-				.replace( usdSymbol, '' )
-				.trim();
+			let formattedPrice = integerUsdFormat.replace( usdSymbol, '' ).trim();
 			//	小数点以下がある場合、小数点以下を取得して後ろに追加
 			if ( priceText.includes( '.' ) ) {
 				//
-				formattedPrice +=
-					decimalSeparator + priceText.split( '.' )[ 1 ];
+				formattedPrice += decimalSeparator + priceText.split( '.' )[ 1 ];
 			}
 
 			//	通貨記号を後ろに付与して返す
