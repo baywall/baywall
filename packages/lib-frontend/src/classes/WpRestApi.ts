@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import constants from "@yamaneyuta/serendipity-constants/dist/constants-frontend.json";
+import constants from '@yamaneyuta/serendipity-constants/dist/constants-frontend.json';
 import { getRestNonce } from '../functions/getRestNonce';
 import { getPostIdFromDom } from '../functions/getPostIdFromDom';
 import { getPhpCommonVar } from '../functions/getPhpVar';

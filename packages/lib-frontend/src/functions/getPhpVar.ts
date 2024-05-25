@@ -1,4 +1,4 @@
-import constants from "@yamaneyuta/serendipity-constants/dist/constants-frontend.json";
+import constants from '@yamaneyuta/serendipity-constants/dist/constants-frontend.json';
 
 export const getPhpVar = < T >( variableName: string ): T => {
 	const phpVar: T | undefined = ( globalThis as any )[ variableName ];
