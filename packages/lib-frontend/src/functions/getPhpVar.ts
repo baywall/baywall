@@ -1,4 +1,4 @@
-import constants from '@yamaneyuta/serendipity-constants/dist/constants-frontend.json';
+// import constants from '@yamaneyuta/serendipity-constants/dist/constants-frontend.json';
 
 export const getPhpVar = < T >( variableName: string ): T => {
 	const phpVar: T | undefined = ( globalThis as any )[ variableName ];
@@ -19,5 +19,6 @@ type PhpCommonVarType = {
 };
 
 export const getPhpCommonVar = (): PhpCommonVarType => {
-	return getPhpVar< PhpCommonVarType >( constants.phpVarName.common );
+	throw new Error( 'TODO' );
+	// return getPhpVar< PhpCommonVarType >( constants.phpVarName.common );
 };

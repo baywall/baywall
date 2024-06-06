@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import constants from '@yamaneyuta/serendipity-constants/dist/constants-frontend.json';
+import constants from '@yamaneyuta/serendipity-constants/constants-frontend-admin.json';
 import { getRestNonce } from '../functions/getRestNonce';
 import { getPostIdFromDom } from '../functions/getPostIdFromDom';
 import { getPhpCommonVar } from '../functions/getPhpVar';
@@ -196,12 +196,13 @@ class WpApiUrlAssembler {
 			throw new Error( '{60DF4F84-1DF4-4881-BB55-4A9EC1965A88}' );
 		}
 
-		return new URL(
-			[ this._availableApiRootPath, constants.restNamespaceCore, '/v', this._apiVersion.toString(), path ].join(
-				''
-			),
-			this._siteAddress
-		).toString();
+		throw new Error( 'TODO' );
+		// return new URL(
+		// 	[ this._availableApiRootPath, constants.restNamespaceCore, '/v', this._apiVersion.toString(), path ].join(
+		// 		''
+		// 	),
+		// 	this._siteAddress
+		// ).toString();
 	}
 
 	public initialized() {
@@ -215,11 +216,12 @@ class WpApiUrlAssembler {
 
 		//	APIバージョンを取得すると同時に、アクセス可能なAPIのルートパスを取得する。
 		for ( const apiRootPath of this._apiRootPaths ) {
-			//	バージョン情報を取得するためのパス
-			const url = new URL(
-				[ apiRootPath, constants.restNamespaceCore, '/version' ].join( '' ),
-				this._siteAddress
-			).toString();
+			throw new Error( 'TODO' );
+			// //	バージョン情報を取得するためのパス
+			// const url = new URL(
+			// 	[ apiRootPath, constants.restNamespaceCore, '/version' ].join( '' ),
+			// 	this._siteAddress
+			// ).toString();
 
 			try {
 				const response = await axios.get< VersionResponse >( url );
