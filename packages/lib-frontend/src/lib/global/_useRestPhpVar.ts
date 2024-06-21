@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import Constants from '@yamaneyuta/serendipity-constants/frontend/lib/constants.json';
 
 /**
  * PHPから出力されたJavaScript変数からREST API関連の情報を取得します。
@@ -15,7 +16,6 @@ type RestPhpVar = {
 };
 
 const getRestPhpVar = (): RestPhpVar | null => {
-	// TODO: jsonから取得
-	const varName = 'php_var_rest_20792bdd';
+	const varName = Constants.phpVarName.rest;
 	return (window as any)[varName] ?? null;
 };
