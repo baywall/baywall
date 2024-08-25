@@ -1,4 +1,5 @@
-import Constants from '@yamaneyuta/serendipity-constants/frontend/lib/constants.json';
+// import Constants from '@yamaneyuta/serendipity-constants/frontend/lib/constants.json';
+const Constants = require('@yamaneyuta/serendipity-constants/frontend/lib/constants.json');
 
 type RestPhpVar = {
 	wpRestNonce: string;
