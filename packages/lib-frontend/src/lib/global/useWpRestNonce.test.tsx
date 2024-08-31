@@ -1,6 +1,6 @@
 import { useWpRestNonce } from './useWpRestNonce';
 import { getRestPhpVarName } from './getRestPhpVarName';
-import { render } from '../../jest';
+import { render, renderHook } from '../../jest';
 
 const TEST_ID = 'D7BE51B9';
 
@@ -57,5 +57,19 @@ describe( '[0ABFAF3C] useWpRestNonce', () => {
 		// ASSERT
 		const nonce = getByTestId( TEST_ID ).textContent;
 		expect( nonce ).toBe( 'null' ); // 値が存在しない場合はnullが返る
+	} );
+
+	/**
+	 * nonceが存在しない場合のテスト(renderHookを使った場合)
+	 */
+	it( '[0A701BB5] useWpRestNonce - nonce does not exist', () => {
+		// ARRANGE
+		// Do nothing
+
+		// ACT
+		const { result } = renderHook( () => useWpRestNonce() );
+
+		// ASSERT
+		expect( result.current ).toBeNull();
 	} );
 } );
