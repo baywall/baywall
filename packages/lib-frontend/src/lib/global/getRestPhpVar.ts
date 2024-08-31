@@ -1,5 +1,4 @@
-// import Constants from '@yamaneyuta/serendipity-constants/frontend/lib/constants.json';
-const Constants = require( '@yamaneyuta/serendipity-constants/frontend/lib/constants.json' );
+import { getRestPhpVarName } from './getRestPhpVarName';
 
 type RestPhpVar = {
 	wpRestNonce: string;
@@ -7,6 +6,6 @@ type RestPhpVar = {
 };
 
 export const getRestPhpVar = (): RestPhpVar | null => {
-	const varName = Constants.phpVarName.rest;
+	const varName = getRestPhpVarName();
 	return ( window as any )[ varName ] ?? null;
 };
