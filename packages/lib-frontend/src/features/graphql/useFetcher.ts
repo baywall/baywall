@@ -10,22 +10,22 @@ import { createRequestInit } from './_createRequestInit';
  * useXXMutation関数がReact Hooksに対応できていないためfetcherを使ってください。
  * @see ./fetcher.ts
  */
-export const useFetcher = <TData, TVariables>(query: string, variables?: TVariables) => {
+export const useFetcher = < TData, TVariables >( query: string, variables?: TVariables ) => {
 	const { endpoint, requestInit } = useFetchParames();
 
-	return fetcher<TData, TVariables>(endpoint, requestInit, query, variables);
+	return fetcher< TData, TVariables >( endpoint, requestInit, query, variables );
 };
 
 const useFetchParames = () => {
 	const endpoint = useGraphQLUrl();
 	const nonce = useWpRestNonce();
 
-	if (!endpoint || !nonce) {
-		throw new Error(`[11D62E9A] endpoint: ${endpoint}, nonce: ${nonce}`);
+	if ( ! endpoint || ! nonce ) {
+		throw new Error( `[11D62E9A] endpoint: ${ endpoint }, nonce: ${ nonce }` );
 	}
 
 	return {
 		endpoint,
-		requestInit: createRequestInit(nonce),
+		requestInit: createRequestInit( nonce ),
 	} as const;
 };

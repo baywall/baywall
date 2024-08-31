@@ -1,4 +1,4 @@
-export const createRequestInit = (nonce: string): RequestInit => {
+export const createRequestInit = ( nonce: string ): RequestInit => {
 	return {
 		headers: {
 			'Content-Type': 'application/json',
