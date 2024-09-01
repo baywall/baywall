@@ -1,12 +1,7 @@
-// import Constants from '@yamaneyuta/serendipity-constants/frontend/lib/constants.json';
-const Constants = require( '@yamaneyuta/serendipity-constants/frontend/lib/constants.json' );
-
-type RestPhpVar = {
-	wpRestNonce: string;
-	graphqlUrl: string;
-};
+import { RestPhpVar } from '../../types/RestPhpVar';
+import { getRestPhpVarName } from './getRestPhpVarName';
 
 export const getRestPhpVar = (): RestPhpVar | null => {
-	const varName = Constants.phpVarName.rest;
+	const varName = getRestPhpVarName();
 	return ( window as any )[ varName ] ?? null;
 };
