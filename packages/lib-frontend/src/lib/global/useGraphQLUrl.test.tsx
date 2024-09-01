@@ -1,6 +1,6 @@
 import { useGraphQLUrl } from './useGraphQLUrl';
 import { getRestPhpVarName } from './getRestPhpVarName';
-import { render } from '../../jest';
+import { render } from '../../jest-lib';
 import { RestPhpVar } from '../../types/RestPhpVar';
 
 const TEST_ID = '61D2F697';

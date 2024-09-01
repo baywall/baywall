@@ -1,6 +1,6 @@
 import { useWpRestNonce } from './useWpRestNonce';
 import { getRestPhpVarName } from './getRestPhpVarName';
-import { render, renderHook } from '../../jest';
+import { render, renderHook } from '../../jest-lib';
 import { RestPhpVar } from '../../types/RestPhpVar';
 
 const TEST_ID = 'D7BE51B9';
