@@ -1,6 +1,7 @@
 import { useWpRestNonce } from './useWpRestNonce';
 import { getRestPhpVarName } from './getRestPhpVarName';
 import { render, renderHook } from '../../jest';
+import { RestPhpVar } from '../../types/RestPhpVar';
 
 const TEST_ID = 'D7BE51B9';
 
@@ -15,10 +16,11 @@ const Sut: React.FC = () => {
 
 const setGlobalVar = ( graphqlUrl: string, wpRestNonce: string ) => {
 	const varName = getRestPhpVarName();
-	( global as any )[ varName ] = {
+	const globalVar: RestPhpVar = {
 		graphqlUrl,
 		wpRestNonce,
 	};
+	( global as any )[ varName ] = globalVar;
 };
 
 describe( '[0ABFAF3C] useWpRestNonce', () => {

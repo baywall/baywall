@@ -1,9 +1,5 @@
+import { RestPhpVar } from '../../types/RestPhpVar';
 import { getRestPhpVarName } from './getRestPhpVarName';
-
-type RestPhpVar = {
-	wpRestNonce: string;
-	graphqlUrl: string;
-};
 
 export const getRestPhpVar = (): RestPhpVar | null => {
 	const varName = getRestPhpVarName();

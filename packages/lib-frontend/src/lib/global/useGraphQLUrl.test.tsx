@@ -1,6 +1,7 @@
 import { useGraphQLUrl } from './useGraphQLUrl';
 import { getRestPhpVarName } from './getRestPhpVarName';
 import { render } from '../../jest';
+import { RestPhpVar } from '../../types/RestPhpVar';
 
 const TEST_ID = '61D2F697';
 
@@ -13,12 +14,13 @@ const Sut: React.FC = () => {
 	);
 };
 
-const setGlobalVar = ( graphqlUrl: string, wpRestgraphqlUrl: string ) => {
+const setGlobalVar = ( graphqlUrl: string, wpRestNonce: string ) => {
 	const varName = getRestPhpVarName();
-	( global as any )[ varName ] = {
+	const globalVar: RestPhpVar = {
 		graphqlUrl,
-		wpRestgraphqlUrl,
+		wpRestNonce,
 	};
+	( global as any )[ varName ] = globalVar;
 };
 
 describe( '[975F9282] useGraphQLUrl', () => {
