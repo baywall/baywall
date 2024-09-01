@@ -6,6 +6,7 @@
  * @param query
  * @param variables
  */
+// istanbul ignore next
 export function fetcher< TData, TVariables >(
 	endpoint: string,
 	requestInit: RequestInit,
