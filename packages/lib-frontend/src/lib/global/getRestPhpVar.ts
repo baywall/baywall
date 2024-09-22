@@ -1,7 +1,7 @@
 import { RestPhpVar } from '../../types/RestPhpVar';
-import { getRestPhpVarName } from './getRestPhpVarName';
+import { RestPhpVarName } from '../repository/RestPhpVarName';
 
 export const getRestPhpVar = (): RestPhpVar | null => {
-	const varName = getRestPhpVarName();
+	const varName = new RestPhpVarName().get();
 	return ( window as any )[ varName ] ?? null;
 };
