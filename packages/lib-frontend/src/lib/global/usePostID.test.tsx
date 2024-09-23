@@ -21,7 +21,6 @@ describe( '[D78FB2CE] usePostID', () => {
 	beforeEach( cleanup );
 	afterEach( cleanup );
 
-
 	/**
 	 * 投稿IDが存在する場合のテスト
 	 */
