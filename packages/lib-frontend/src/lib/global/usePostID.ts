@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useRestPhpVar } from './_useRestPhpVar';
+import { usePhpVar } from './_usePhpVar';
 
 /**
  * 投稿IDを取得します。
@@ -7,7 +7,7 @@ import { useRestPhpVar } from './_useRestPhpVar';
 export const usePostID = (): number | null | undefined => {
 	const [ postID, setPostID ] = useState< number | null | undefined >( undefined );
 
-	const restPhpVar = useRestPhpVar();
+	const restPhpVar = usePhpVar();
 
 	useEffect( () => {
 		if ( restPhpVar === null || restPhpVar.postID === undefined ) {
