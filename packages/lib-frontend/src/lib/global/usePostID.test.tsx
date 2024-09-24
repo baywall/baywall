@@ -1,11 +1,11 @@
 import { usePostID } from './usePostID';
 import { PhpVarName } from '../repository/PhpVarName';
 import { renderHook } from '../../jest-lib';
-import { RestPhpVar } from '../../types/RestPhpVar';
+import { PhpVar } from '../../types/PhpVar';
 
 const setGlobalVar = ( postID: number | undefined ) => {
 	const varName = new PhpVarName().get();
-	const globalVar: RestPhpVar = {
+	const globalVar: PhpVar = {
 		graphqlUrl: 'https://example.com/graphql',
 		wpRestNonce: 'abcde01234',
 		postID,

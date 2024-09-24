@@ -1,7 +1,7 @@
 import { useGraphQLUrl } from './useGraphQLUrl';
 import { PhpVarName } from '../repository/PhpVarName';
 import { render } from '../../jest-lib';
-import { RestPhpVar } from '../../types/RestPhpVar';
+import { PhpVar } from '../../types/PhpVar';
 
 const TEST_ID = '61D2F697';
 
@@ -16,7 +16,7 @@ const Sut: React.FC = () => {
 
 const setGlobalVar = ( graphqlUrl: string, wpRestNonce: string ) => {
 	const varName = new PhpVarName().get();
-	const globalVar: RestPhpVar = {
+	const globalVar: PhpVar = {
 		graphqlUrl,
 		wpRestNonce,
 	};

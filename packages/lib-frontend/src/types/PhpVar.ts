@@ -1,4 +1,4 @@
-export type RestPhpVar = {
+export type PhpVar = {
 	wpRestNonce: string;
 	graphqlUrl: string;
 	postID?: number | undefined;
