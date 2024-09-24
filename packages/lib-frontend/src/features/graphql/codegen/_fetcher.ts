@@ -1,5 +1,5 @@
 /**
- * graphql-condegen(@graphql-codegen/typescript-react-query v6.1.0)が生成したオリジナルのfetcher
+ * graphql-codegen(@graphql-codegen/typescript-react-query v6.1.0)が生成したオリジナルのfetcher
  * ※ codegen.tsのconfigをコメントアウトして実行すると、この関数が生成される
  * @param endpoint
  * @param requestInit
