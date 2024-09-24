@@ -1,10 +1,10 @@
 import { usePostID } from './usePostID';
-import { RestPhpVarName } from '../repository/RestPhpVarName';
+import { PhpVarName } from '../repository/PhpVarName';
 import { renderHook } from '../../jest-lib';
 import { RestPhpVar } from '../../types/RestPhpVar';
 
 const setGlobalVar = ( postID: number | undefined ) => {
-	const varName = new RestPhpVarName().get();
+	const varName = new PhpVarName().get();
 	const globalVar: RestPhpVar = {
 		graphqlUrl: 'https://example.com/graphql',
 		wpRestNonce: 'abcde01234',
@@ -16,7 +16,7 @@ const setGlobalVar = ( postID: number | undefined ) => {
 describe( '[D78FB2CE] usePostID', () => {
 	const cleanup = () => {
 		// document.head.innerHTML = '';
-		( global as any )[ new RestPhpVarName().get() ] = undefined;
+		( global as any )[ new PhpVarName().get() ] = undefined;
 	};
 	beforeEach( cleanup );
 	afterEach( cleanup );
