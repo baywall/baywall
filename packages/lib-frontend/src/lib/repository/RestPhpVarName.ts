@@ -3,6 +3,6 @@
  */
 export class RestPhpVarName {
 	public get(): string {
-		return 'php_var_rest_20792bdd';
+		return 'php_var_20792bdd';
 	}
 }
