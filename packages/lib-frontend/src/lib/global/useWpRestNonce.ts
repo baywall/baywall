@@ -1,9 +1,9 @@
-import { useRestPhpVar } from './_useRestPhpVar';
+import { usePhpVar } from './_usePhpVar';
 
 /**
  * REST APIにアクセスする際のNonceを取得します。
  */
 export const useWpRestNonce = () => {
-	const restPhpVar = useRestPhpVar();
+	const restPhpVar = usePhpVar();
 	return restPhpVar !== null ? restPhpVar.wpRestNonce : null;
 };

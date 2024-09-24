@@ -1,9 +1,9 @@
-import { useRestPhpVar } from './_useRestPhpVar';
+import { usePhpVar } from './_usePhpVar';
 
 /**
  * GraphQLのURLを取得します。
  */
 export const useGraphQLUrl = () => {
-	const restPhpVar = useRestPhpVar();
+	const restPhpVar = usePhpVar();
 	return restPhpVar !== null ? restPhpVar.graphqlUrl : null;
 };
