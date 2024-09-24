@@ -1,9 +1,9 @@
-import { getRestPhpVar } from '../../lib/global/getRestPhpVar';
+import { getPhpVar } from '../../lib/global/getPhpVar';
 import { fetcher as _fetcher } from './codegen/_fetcher';
 import { createRequestInit } from './_createRequestInit';
 
 export const fetcher = < TData, TVariables >( query: string, variables?: TVariables ) => {
-	const phpVar = getRestPhpVar();
+	const phpVar = getPhpVar();
 
 	const endpoint = phpVar?.graphqlUrl;
 	const nonce = phpVar?.wpRestNonce;
