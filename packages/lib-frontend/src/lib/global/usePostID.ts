@@ -15,7 +15,7 @@ export const usePostID = (): number | null | undefined => {
 		} else if ( typeof phpVar.postID === 'number' ) {
 			setPostID( phpVar.postID );
 		} else {
-			throw new Error( '[CD24E7A4] Unkown Error. phpVar: ' + JSON.stringify( phpVar ) );
+			throw new Error( '[CD24E7A4] Unknown Error. phpVar: ' + JSON.stringify( phpVar ) );
 		}
 	}, [ phpVar ] );
 

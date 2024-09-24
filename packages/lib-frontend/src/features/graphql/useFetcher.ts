@@ -11,12 +11,12 @@ import { createRequestInit } from './_createRequestInit';
  * @see ./fetcher.ts
  */
 export const useFetcher = < TData, TVariables >( query: string, variables?: TVariables ) => {
-	const { endpoint, requestInit } = useFetchParames();
+	const { endpoint, requestInit } = useFetchParams();
 
 	return fetcher< TData, TVariables >( endpoint, requestInit, query, variables );
 };
 
-const useFetchParames = () => {
+const useFetchParams = () => {
 	const endpoint = useGraphQLUrl();
 	const nonce = useWpRestNonce();
 
