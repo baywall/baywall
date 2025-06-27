@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "create-block/qik-chain-pay",
+	"version": "0.1.0",
+	"title": "Qik Chain Pay",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "Allows you to implement a paywall using crypto-assets.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "qik-chain-pay",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}
