@@ -1,19 +1,20 @@
 import { useCallback } from 'react';
-import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
+import { useSelectedNetworkCategoryId } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategoryId';
 import { useSelectableNetworkCategories } from './useSelectableNetworkCategories';
 import { useGetSellableSymbolsCallback } from '../../provider/serverData/useGetSellableSymbolsCallback';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
-import { NetworkCategory } from '../../../types/NetworkCategory';
+import { NetworkCategoryId } from '@serendipity/lib-value-object';
+import type { NetworkCategorySelectProps } from './NetworkCategorySelect';
 
 /**
  * ネットワーク選択コンポーネントのプロパティを取得します。
  */
-export const useNetworkCategorySelectProps = () => {
+export const useNetworkCategorySelectProps = (): NetworkCategorySelectProps => {
 	// 選択されたネットワークはProviderのstateから取得
-	const { selectedNetworkCategory: value } = useSelectedNetworkCategory();
+	const { selectedNetworkCategoryId: value } = useSelectedNetworkCategoryId();
 
 	// 選択可能なネットワークはサーバーから受信した情報から取得される
-	const networks = useSelectableNetworkCategories();
+	const networkCategories = useSelectableNetworkCategories();
 
 	// ネットワークが変更された時のコールバック
 	const onChange = useOnChangeCallback();
@@ -23,7 +24,7 @@ export const useNetworkCategorySelectProps = () => {
 
 	return {
 		value,
-		networks,
+		networkCategories,
 		onChange,
 		disabled,
 	};
@@ -33,25 +34,25 @@ export const useNetworkCategorySelectProps = () => {
  * ネットワークが変更された時のコールバックを取得します。
  */
 const useOnChangeCallback = () => {
-	const { setSelectedNetworkCategory } = useSelectedNetworkCategory();
+	const { setSelectedNetworkCategoryId } = useSelectedNetworkCategoryId();
 
 	const { selectedPriceSymbol, setSelectedPriceSymbol } = useSelectedPriceSymbol();
 	const getSellableSymbol = useGetSellableSymbolsCallback();
 
 	return useCallback(
 		( event: React.ChangeEvent< HTMLSelectElement > ) => {
-			const network = NetworkCategory.from( parseInt( event.target.value ) );
+			const networkCategoryId = new NetworkCategoryId( parseInt( event.target.value ) );
 			// 選択されているネットワークを更新
-			setSelectedNetworkCategory( network );
+			setSelectedNetworkCategoryId( networkCategoryId );
 
 			// 以下、現在選択されている通貨シンボルが変更後のネットワークに存在しない場合はnullを設定する処理
 			// ネットワーク変更後に選択可能な通貨シンボルを取得
-			const symbols = getSellableSymbol( network );
+			const symbols = getSellableSymbol( networkCategoryId );
 			if ( selectedPriceSymbol && symbols && ! symbols.includes( selectedPriceSymbol ) ) {
 				// 選択されている通貨シンボルが変更後のネットワークで選択不可の場合はnullに変更
 				setSelectedPriceSymbol( null );
 			}
 		},
-		[ setSelectedNetworkCategory, selectedPriceSymbol, setSelectedPriceSymbol, getSellableSymbol ]
+		[ setSelectedNetworkCategoryId, selectedPriceSymbol, setSelectedPriceSymbol, getSellableSymbol ]
 	);
 };
