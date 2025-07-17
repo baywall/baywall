@@ -2,11 +2,11 @@ import { jest, expect } from '@jest/globals';
 import { useSelectableSymbols as sut } from './useSelectableSymbols';
 import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
 import { renderHook } from '../../../../jest-lib/renderHook';
-import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
-import { NetworkCategory } from '../../../types/NetworkCategory';
+import { useSelectedNetworkCategoryId } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategoryId';
+import { NetworkCategoryId } from '@serendipity/lib-value-object';
 
 jest.mock( '../../provider/serverData/postSetting/usePostSetting' );
-jest.mock( '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory' );
+jest.mock( '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategoryId' );
 
 type UsePostSettingResult = ReturnType< typeof usePostSetting >;
 
@@ -17,14 +17,14 @@ it( '[23C5844D] useSelectableSymbols() - default(mainnet)', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
 		networkCategories: [
-			{ id: 1, sellableSymbols: [ 'JPY' ] },
-			{ id: 2, sellableSymbols: [ 'USD' ] },
-			{ id: 3, sellableSymbols: [ 'EUR', 'GBP' ] },
+			{ id: NetworkCategoryId.Mainnet.value, sellableSymbols: [ 'JPY' ] },
+			{ id: NetworkCategoryId.Testnet.value, sellableSymbols: [ 'USD' ] },
+			{ id: NetworkCategoryId.Privatenet.value, sellableSymbols: [ 'EUR', 'GBP' ] },
 		],
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
-	( useSelectedNetworkCategory as jest.Mock ).mockReturnValue( {
-		selectedNetworkCategory: NetworkCategory.mainnet(),
+	( useSelectedNetworkCategoryId as jest.Mock ).mockReturnValue( {
+		selectedNetworkCategoryId: NetworkCategoryId.Mainnet,
 	} );
 
 	// ACT
@@ -41,14 +41,14 @@ it( '[69581160] useSelectableSymbols() - default(testnet)', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
 		networkCategories: [
-			{ id: 1, sellableSymbols: [ 'JPY' ] },
-			{ id: 2, sellableSymbols: [ 'USD' ] },
-			{ id: 3, sellableSymbols: [ 'EUR', 'GBP' ] },
+			{ id: NetworkCategoryId.Mainnet.value, sellableSymbols: [ 'JPY' ] },
+			{ id: NetworkCategoryId.Testnet.value, sellableSymbols: [ 'USD' ] },
+			{ id: NetworkCategoryId.Privatenet.value, sellableSymbols: [ 'EUR', 'GBP' ] },
 		],
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
-	( useSelectedNetworkCategory as jest.Mock ).mockReturnValue( {
-		selectedNetworkCategory: NetworkCategory.testnet(),
+	( useSelectedNetworkCategoryId as jest.Mock ).mockReturnValue( {
+		selectedNetworkCategoryId: NetworkCategoryId.Testnet,
 	} );
 
 	// ACT
@@ -65,14 +65,14 @@ it( '[B43240DF] useSelectableSymbols() - default(privatenet)', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
 		networkCategories: [
-			{ id: 1, sellableSymbols: [ 'JPY' ] },
-			{ id: 2, sellableSymbols: [ 'USD' ] },
-			{ id: 3, sellableSymbols: [ 'EUR', 'GBP' ] },
+			{ id: NetworkCategoryId.Mainnet.value, sellableSymbols: [ 'JPY' ] },
+			{ id: NetworkCategoryId.Testnet.value, sellableSymbols: [ 'USD' ] },
+			{ id: NetworkCategoryId.Privatenet.value, sellableSymbols: [ 'EUR', 'GBP' ] },
 		],
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
-	( useSelectedNetworkCategory as jest.Mock ).mockReturnValue( {
-		selectedNetworkCategory: NetworkCategory.privatenet(),
+	( useSelectedNetworkCategoryId as jest.Mock ).mockReturnValue( {
+		selectedNetworkCategoryId: NetworkCategoryId.Privatenet,
 	} );
 
 	// ACT
@@ -104,13 +104,13 @@ it( '[1DDC9FA6] useSelectableSymbols(null) - loading', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
 		networkCategories: [
-			{ id: 1, sellableSymbols: [ 'JPY' ] },
-			{ id: 2, sellableSymbols: [ 'USD' ] },
-			{ id: 3, sellableSymbols: [ 'EUR', 'GBP' ] },
+			{ id: NetworkCategoryId.Mainnet.value, sellableSymbols: [ 'JPY' ] },
+			{ id: NetworkCategoryId.Testnet.value, sellableSymbols: [ 'USD' ] },
+			{ id: NetworkCategoryId.Privatenet.value, sellableSymbols: [ 'EUR', 'GBP' ] },
 		],
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
-	( useSelectedNetworkCategory as jest.Mock ).mockReturnValue( { selectedNetworkCategory: null } );
+	( useSelectedNetworkCategoryId as jest.Mock ).mockReturnValue( { selectedNetworkCategoryId: null } );
 
 	// ACT
 	const sellableSymbols = renderHook( () => sut() ).result.current;
@@ -126,8 +126,8 @@ it( '[1DDC9FA6] useSelectableSymbols() - loading, invalid network type', async (
 	// ARRANGE
 	const res: UsePostSettingResult = undefined;
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
-	( useSelectedNetworkCategory as jest.Mock ).mockReturnValue( {
-		selectedNetworkCategory: NetworkCategory.mainnet(),
+	( useSelectedNetworkCategoryId as jest.Mock ).mockReturnValue( {
+		selectedNetworkCategoryId: NetworkCategoryId.Mainnet,
 	} );
 
 	// ACT
@@ -145,14 +145,14 @@ it( '[E9CD00AF] useSelectableSymbols() - []', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
 		networkCategories: [
-			{ id: 1, sellableSymbols: [] },
-			{ id: 2, sellableSymbols: [] },
-			{ id: 3, sellableSymbols: [] },
+			{ id: NetworkCategoryId.Mainnet.value, sellableSymbols: [] },
+			{ id: NetworkCategoryId.Testnet.value, sellableSymbols: [] },
+			{ id: NetworkCategoryId.Privatenet.value, sellableSymbols: [] },
 		],
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
-	( useSelectedNetworkCategory as jest.Mock ).mockReturnValue( {
-		selectedNetworkCategory: NetworkCategory.mainnet(),
+	( useSelectedNetworkCategoryId as jest.Mock ).mockReturnValue( {
+		selectedNetworkCategoryId: NetworkCategoryId.Mainnet,
 	} );
 
 	// ACT
