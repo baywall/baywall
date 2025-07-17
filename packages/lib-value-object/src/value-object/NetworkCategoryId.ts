@@ -13,13 +13,30 @@ export class NetworkCategoryId {
 	}
 
 	public get isMainnet(): boolean {
-		return this.networkCategoryIdValue === NetworkCategoryIdValue.Mainnet;
+		return this.equals( NetworkCategoryId.Mainnet );
 	}
 	public get isTestnet(): boolean {
-		return this.networkCategoryIdValue === NetworkCategoryIdValue.Testnet;
+		return this.equals( NetworkCategoryId.Testnet );
 	}
 	public get isPrivatenet(): boolean {
-		return this.networkCategoryIdValue === NetworkCategoryIdValue.Privatenet;
+		return this.equals( NetworkCategoryId.Privatenet );
+	}
+
+	/** メインネットのネットワークカテゴリIDを表すインスタンスを取得します */
+	public static get Mainnet(): NetworkCategoryId {
+		return new NetworkCategoryId( NetworkCategoryIdValue.Mainnet );
+	}
+	/** テストネットのネットワークカテゴリIDを表すインスタンスを取得します */
+	public static get Testnet(): NetworkCategoryId {
+		return new NetworkCategoryId( NetworkCategoryIdValue.Testnet );
+	}
+	/** プライベートネットのネットワークカテゴリIDを表すインスタンスを取得します */
+	public static get Privatenet(): NetworkCategoryId {
+		return new NetworkCategoryId( NetworkCategoryIdValue.Privatenet );
+	}
+
+	public equals( other: NetworkCategoryId ): boolean {
+		return this.value === other.value;
 	}
 }
 
