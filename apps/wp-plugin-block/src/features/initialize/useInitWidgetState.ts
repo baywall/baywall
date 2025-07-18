@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
+import { useSelectedNetworkCategoryId } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategoryId';
 import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
 import { useWidgetAttributes } from '../../provider/widgetState/widgetAttributes/useWidgetAttributes';
-import { NetworkCategory } from '../../../types/NetworkCategory';
+import { NetworkCategoryId } from '@serendipity/lib-value-object';
 
 /**
  * ウィジェット(ブロック)の状態を初期化します。
@@ -27,17 +27,19 @@ const useInitSelectedNetwork = () => {
 	const { widgetAttributes } = useWidgetAttributes();
 
 	// ユーザーが選択したネットワーク
-	const { selectedNetworkCategory, setSelectedNetworkCategory } = useSelectedNetworkCategory();
+	const { selectedNetworkCategoryId, setSelectedNetworkCategoryId } = useSelectedNetworkCategoryId();
+
+	// const selectedNetworkCategoryIdRawValue = selectedNetworkCategoryId === null ? null : selectedNetworkCategoryId?.value;
 
 	useEffect( () => {
-		if ( selectedNetworkCategory === undefined ) {
+		if ( selectedNetworkCategoryId === undefined ) {
 			if ( widgetAttributes.sellingNetworkCategoryID === null ) {
-				setSelectedNetworkCategory( null );
+				setSelectedNetworkCategoryId( null );
 			} else {
-				setSelectedNetworkCategory( NetworkCategory.from( widgetAttributes.sellingNetworkCategoryID ) );
+				setSelectedNetworkCategoryId( new NetworkCategoryId( widgetAttributes.sellingNetworkCategoryID ) );
 			}
 		}
-	}, [ widgetAttributes, selectedNetworkCategory, setSelectedNetworkCategory ] );
+	}, [ widgetAttributes, selectedNetworkCategoryId, setSelectedNetworkCategoryId ] );
 };
 
 /**

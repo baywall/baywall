@@ -1,12 +1,12 @@
 import assert from 'assert';
 import { useContext } from 'react';
-import { SelectedNetworkCategoryContext } from './SelectedNetworkCategoryProvider';
+import { SelectedNetworkCategoryIdContext } from './SelectedNetworkCategoryIdProvider';
 
 /**
  * ユーザーが選択したネットワークカテゴリを取得または設定する機能を提供します。
  */
-export const useSelectedNetworkCategory = () => {
-	const context = useContext( SelectedNetworkCategoryContext );
+export const useSelectedNetworkCategoryId = () => {
+	const context = useContext( SelectedNetworkCategoryIdContext );
 	assert( context, '[90D2588E] Context is not found' );
 
 	return context;

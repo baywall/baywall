@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
-import { NetworkCategory } from '../../../types/NetworkCategory';
+import { NetworkCategoryId } from '@serendipity/lib-value-object';
 
 /**
  * 投稿編集画面で選択可能なネットワークカテゴリ一覧を取得します。
@@ -14,8 +14,8 @@ export const useSelectableNetworkCategories = () => {
 			return undefined;
 		}
 
-		return serverPostSetting.networkCategories.map( ( networkCategory ) =>
-			NetworkCategory.from( networkCategory.id )
+		return serverPostSetting.networkCategories.map(
+			( networkCategory ) => new NetworkCategoryId( networkCategory.id )
 		);
 	}, [ serverPostSetting ] );
 };
