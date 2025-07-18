@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { useCallback } from 'react';
 import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
-import { NetworkCategory } from '../../../types/NetworkCategory';
+import { NetworkCategoryId } from '@serendipity/lib-value-object';
 
 /**
  * 指定されたネットワークで販売可能な通貨シンボル一覧を取得するコールバックを返します。
@@ -10,19 +10,18 @@ export const useGetSellableSymbolsCallback = () => {
 	const postSetting = usePostSetting(); // サーバーから設定を取得
 
 	return useCallback(
-		( networkCategory: NetworkCategory ) => {
+		( networkCategoryId: NetworkCategoryId ) => {
 			if ( postSetting === undefined ) {
-				// 読み込み中
-				return undefined;
+				return undefined; // 読み込み中
 			}
 
-			const selectableSymbols = postSetting.networkCategories.find( ( n ) => n.id === networkCategory.id() )
+			const selectableSymbols = postSetting.networkCategories.find( ( n ) => n.id === networkCategoryId.value )
 				?.sellableSymbols;
 
 			// APIの仕様上、selectableSymbolsはundefinedにはならない
 			assert(
 				selectableSymbols !== undefined,
-				`[519DA805] Sellable symbols is undefined. - networkCategory: ${ networkCategory }`
+				`[519DA805] Sellable symbols is undefined. - networkCategory: ${ networkCategoryId.value }`
 			);
 
 			return selectableSymbols;
