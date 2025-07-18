@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
+import { useSelectedNetworkCategoryId } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategoryId';
 import { useWidgetAttributes } from '../../provider/widgetState/widgetAttributes/useWidgetAttributes';
 import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
-import { NetworkCategory } from '../../../types/NetworkCategory';
+import { NetworkCategoryId } from '@serendipity/lib-value-object';
 import { WidgetAttributes } from '../../types/WidgetAttributes';
 
 /**
@@ -28,22 +28,23 @@ const useUpdateSellingNetworkAttribute = () => {
 	const { widgetAttributes, setWidgetAttributes } = useWidgetAttributes();
 
 	// ユーザーが選択したネットワークカテゴリ
-	const { selectedNetworkCategory } = useSelectedNetworkCategory();
+	const { selectedNetworkCategoryId } = useSelectedNetworkCategoryId();
 
 	useEffect( () => {
-		// 値が変更されている場合は属性を更新
-		if ( selectedNetworkCategory === undefined ) {
+		if ( selectedNetworkCategoryId === undefined ) {
 			return;
 		}
+
+		// 値が変更されている場合は属性を更新
 		const orgSelectedNetworkCategory =
 			widgetAttributes.sellingNetworkCategoryID === null
 				? null
-				: NetworkCategory.from( widgetAttributes.sellingNetworkCategoryID );
+				: new NetworkCategoryId( widgetAttributes.sellingNetworkCategoryID );
 
-		if ( orgSelectedNetworkCategory !== selectedNetworkCategory && selectedNetworkCategory ) {
-			setWidgetAttributes( ( s ) => ( { ...s, sellingNetworkCategoryID: selectedNetworkCategory.id() } ) );
+		if ( selectedNetworkCategoryId && orgSelectedNetworkCategory?.value !== selectedNetworkCategoryId.value ) {
+			setWidgetAttributes( ( s ) => ( { ...s, sellingNetworkCategoryID: selectedNetworkCategoryId.value } ) );
 		}
-	}, [ widgetAttributes, setWidgetAttributes, selectedNetworkCategory ] );
+	}, [ widgetAttributes, setWidgetAttributes, selectedNetworkCategoryId ] );
 };
 
 /**
