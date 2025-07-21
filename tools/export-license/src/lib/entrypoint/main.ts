@@ -3,12 +3,12 @@ import { exportLicenseMeta } from '../exportLicenseMeta';
 import { getPackageManagerType, PackageManagerType } from '../getPackageManagerType';
 import { getPackagesComposer } from '../getPackagesComposer';
 import { getPackagesNpm } from '../getPackagesNpm';
-import { parseCommand } from '../parseCommand';
+import { parseCommand, CommandArgsType } from '../parseCommand';
 import { verifyMetaFile } from '../verify/verifyMetaFile';
 
-export const main = async () => {
+export const main = async ( parseCommandFn: () => CommandArgsType = parseCommand ) => {
 	// コマンドラインから引数を取得
-	const { start, output, metaFile } = parseCommand();
+	const { start, output, metaFile } = parseCommandFn();
 
 	// 起点となるディレクトリから、パッケージマネージャーの種類を判定
 	const packageManagerType = getPackageManagerType( start );
