@@ -18,14 +18,14 @@ return new class() extends DatabaseMigrationBase {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`     timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`invoice_id`     varchar(191)  NOT NULL,
-				`log_index`      int           NOT NULL,
-				`from_address`   varchar(191)  NOT NULL,
-				`to_address`     varchar(191)  NOT NULL,
-				`token_address`  varchar(191)  NOT NULL,
-				`amount`         varchar(191)  NOT NULL,
-				`transfer_type`  int           NOT NULL,
+				`created_at`     timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`invoice_id`     varchar(191)     NOT NULL,
+				`log_index`      int              NOT NULL,
+				`from_address`   varchar(191)     NOT NULL,
+				`to_address`     varchar(191)     NOT NULL,
+				`token_address`  varchar(191)     NOT NULL,
+				`amount`         decimal(65, 30)  NOT NULL,
+				`transfer_type`  int              NOT NULL,
 				PRIMARY KEY (`invoice_id`, `log_index`),
 				KEY `idx_{$this->table_name}_E1160E22` (`created_at`)
 			) {$this->wpdb()->get_charset_collate()};

@@ -21,18 +21,18 @@ return new class() extends DatabaseMigrationBase {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`             timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`             timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-				`id`                     varchar(191)            NOT NULL,
-				`post_id`			     bigint        unsigned  NOT NULL,
-				`chain_id`               bigint        unsigned  NOT NULL,
-				`selling_amount`         varchar(191)            NOT NULL,
-				`selling_symbol`         varchar(191)            NOT NULL,
-				`seller_address`         varchar(191)            NOT NULL,
-				`payment_token_address`  varchar(191)            NOT NULL,
-				`payment_amount`         varchar(191)            NOT NULL,
-				`consumer_address`       varchar(191)            NOT NULL,
-				`nonce`                  varchar(191) 		     DEFAULT NULL,
+				`created_at`             timestamp                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`updated_at`             timestamp                  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`id`                     varchar(191)               NOT NULL,
+				`post_id`			     bigint           unsigned  NOT NULL,
+				`chain_id`               bigint           unsigned  NOT NULL,
+				`selling_amount`         decimal(65, 30)            NOT NULL,
+				`selling_symbol`         varchar(191)               NOT NULL,
+				`seller_address`         varchar(191)               NOT NULL,
+				`payment_token_address`  varchar(191)               NOT NULL,
+				`payment_amount`         decimal(65, 30)            NOT NULL,
+				`consumer_address`       varchar(191)               NOT NULL,
+				`nonce`                  varchar(191)               DEFAULT NULL,
 				PRIMARY KEY (`id`),
 				KEY `{$index_name}` (`created_at`)
 			) {$charset};
