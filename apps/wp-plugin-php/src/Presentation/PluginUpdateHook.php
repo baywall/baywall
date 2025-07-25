@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Repository\PluginInfo;
 
 // ■プラグインがインストールされた時や更新時のhookに関して
 // - `update_plugins_{$host_name}`
-// 　-> WP5.8.0以降で使用可能。2024/9/25時点でWP5.4で開発しているため使用しない
+// 　-> WP5.8.0以降で使用可能。2025/7/25にWPの最低バージョンを5.8に更新したが、時点では未使用
 // 　   https://wordpress.stackexchange.com/a/419585
 // - `plugins_loaded`, `init`
 // 　-> FTPやSVNでプラグインを更新した場合でも検知できるが、フロントエンドを含む全てのページで実行される欠点あり
