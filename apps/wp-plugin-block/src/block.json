@@ -8,7 +8,8 @@
 	"icon": "smiley",
 	"description": "Allows you to implement a paywall using crypto-assets.",
 	"supports": {
-		"html": false
+		"html": false,
+		"multiple": false
 	},
 	"textdomain": "qik-chain-pay",
 	"editorScript": "file:./index.js",
