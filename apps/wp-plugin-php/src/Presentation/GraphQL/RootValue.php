@@ -46,6 +46,7 @@ class RootValue {
 			'token'                     => $container->get( TokenResolver::class ),
 
 			// Query
+			'chains'                    => $container->get( ChainsResolver::class ),
 			'consumerTermsVersion'      => $container->get( ConsumerTermsVersionResolver::class ),
 			'currentSellerTerms'        => $container->get( CurrentSellerTermsResolver::class ),
 			'networkCategories'         => $container->get( NetworkCategoriesResolver::class ),
@@ -64,7 +65,6 @@ class RootValue {
 			'setRpcUrl'                 => $container->get( SetRpcUrlResolver::class ),
 			'setConfirmations'          => $container->get( SetConfirmationsResolver::class ),
 			// React-Adminの都合によりMutation
-			'chains'                    => $container->get( ChainsResolver::class ),
 			'salesHistories'            => $container->get( SalesHistoriesResolver::class ),
 		);
 
