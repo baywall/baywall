@@ -51,6 +51,7 @@ class RootValue {
 			'currentSellerTerms'        => $container->get( CurrentSellerTermsResolver::class ),
 			'networkCategories'         => $container->get( NetworkCategoriesResolver::class ),
 			'post'                      => $container->get( PostResolver::class ),
+			'salesHistories'            => $container->get( SalesHistoriesResolver::class ),
 			'seller'                    => $container->get( SellerResolver::class ),
 			'serverSigner'              => $container->get( ServerSignerResolver::class ),
 			'tokens'                    => $container->get( TokensResolver::class ),
@@ -65,7 +66,6 @@ class RootValue {
 			'setRpcUrl'                 => $container->get( SetRpcUrlResolver::class ),
 			'setConfirmations'          => $container->get( SetConfirmationsResolver::class ),
 			// React-Adminの都合によりMutation
-			'salesHistories'            => $container->get( SalesHistoriesResolver::class ),
 		);
 
 		$result = array();
