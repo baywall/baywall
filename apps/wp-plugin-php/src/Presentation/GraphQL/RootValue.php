@@ -52,6 +52,7 @@ class RootValue {
 			'post'                      => $container->get( PostResolver::class ),
 			'seller'                    => $container->get( SellerResolver::class ),
 			'serverSigner'              => $container->get( ServerSignerResolver::class ),
+			'tokens'                    => $container->get( TokensResolver::class ),
 			'verifiableChains'          => $container->get( VerifiableChainsResolver::class ),
 
 			// Mutation
@@ -64,7 +65,6 @@ class RootValue {
 			'setConfirmations'          => $container->get( SetConfirmationsResolver::class ),
 			// React-Adminの都合によりMutation
 			'chains'                    => $container->get( ChainsResolver::class ),
-			'tokens'                    => $container->get( TokensResolver::class ),
 			'salesHistories'            => $container->get( SalesHistoriesResolver::class ),
 		);
 
