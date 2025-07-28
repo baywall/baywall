@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\versions\_0_0_1;
 
 use Cornix\Serendipity\Core\Infrastructure\Constant\ChainIdValue;
-use Cornix\Serendipity\Core\Constant\NetworkCategoryIdValue;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\Config\InitialBlockExplorerURL;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
@@ -62,11 +62,11 @@ return new class() extends DatabaseMigrationBase {
 
 	private function insertInitialData(): void {
 
-		$Record = new class( 1, '', 1, null, '', '' ) {
+		$Record = new class( 1, '', NetworkCategoryID::mainnet(), null, '', '' ) {
 			public function __construct(
 				int $chain_id,
 				string $name,
-				int $network_category_id,
+				NetworkCategoryID $network_category_id,
 				?string $rpc_url,
 				string $confirmations,
 				?string $block_explorer_url
@@ -80,21 +80,21 @@ return new class() extends DatabaseMigrationBase {
 			}
 			public int $chain_id;
 			public string $name;
-			public int $network_category_id;
+			public NetworkCategoryID $network_category_id;
 			public ?string $rpc_url;
 			public string $confirmations;
 			public ?string $block_explorer_url;
 		};
 
 		$records = array(
-			new $Record( ChainIdValue::ETH_MAINNET, 'Ethereum Mainnet', NetworkCategoryIdValue::MAINNET, null, '1', InitialBlockExplorerURL::ETH_MAINNET ),
-			new $Record( ChainIdValue::SEPOLIA, 'Sepolia', NetworkCategoryIdValue::TESTNET, null, '1', InitialBlockExplorerURL::SEPOLIA ),
-			new $Record( ChainIdValue::SONEIUM_MINATO, 'Soneium Testnet Minato', NetworkCategoryIdValue::TESTNET, null, '1', InitialBlockExplorerURL::SONEIUM_MINATO ),
+			new $Record( ChainIdValue::ETH_MAINNET, 'Ethereum Mainnet', NetworkCategoryID::mainnet(), null, '1', InitialBlockExplorerURL::ETH_MAINNET ),
+			new $Record( ChainIdValue::SEPOLIA, 'Sepolia', NetworkCategoryID::testnet(), null, '1', InitialBlockExplorerURL::SEPOLIA ),
+			new $Record( ChainIdValue::SONEIUM_MINATO, 'Soneium Testnet Minato', NetworkCategoryID::testnet(), null, '1', InitialBlockExplorerURL::SONEIUM_MINATO ),
 		);
 		// 開発モード時はプライベートネットのチェーン情報も登録
 		if ( $this->environment()->isDevelopmentMode() ) {
-			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, 'Privatenet1', NetworkCategoryIdValue::PRIVATENET, $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L1 ), '1', InitialBlockExplorerURL::PRIVATENET_L1 );
-			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, 'Privatenet2', NetworkCategoryIdValue::PRIVATENET, $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L2 ), '1', InitialBlockExplorerURL::PRIVATENET_L2 );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, 'Privatenet1', NetworkCategoryID::privatenet(), $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L1 ), '1', InitialBlockExplorerURL::PRIVATENET_L1 );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, 'Privatenet2', NetworkCategoryID::privatenet(), $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L2 ), '1', InitialBlockExplorerURL::PRIVATENET_L2 );
 		}
 
 		foreach ( $records as $record ) {
@@ -103,7 +103,7 @@ return new class() extends DatabaseMigrationBase {
 				array(
 					'chain_id'            => $record->chain_id,
 					'name'                => $record->name,
-					'network_category_id' => $record->network_category_id,
+					'network_category_id' => $record->network_category_id->value(),
 					'rpc_url'             => $record->rpc_url,
 					'confirmations'       => $record->confirmations,
 					'block_explorer_url'  => $record->block_explorer_url,
