@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\versions\_0_0_1;
 
-use Cornix\Serendipity\Core\Constant\ChainIdValue;
+use Cornix\Serendipity\Core\Infrastructure\Constant\ChainIdValue;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 

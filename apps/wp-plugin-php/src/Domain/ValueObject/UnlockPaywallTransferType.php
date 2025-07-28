@@ -3,36 +3,34 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Constant\UnlockPaywallTransferTypeID;
-
 class UnlockPaywallTransferType {
 
-	private function __construct( int $unlock_paywall_transfer_type_id ) {
-		self::checkValidTransferTypeID( $unlock_paywall_transfer_type_id );
-		$this->id = $unlock_paywall_transfer_type_id;
+	// 以下の定義はコントラクトで定義されている内容と一致させるようにしてください。
+	/** 販売手数料 */
+	private const HANDLING_FEE = 1;
+	/** 販売者の売上 */
+	private const SELLER_PROFIT = 2;
+	/** アフィリエイト報酬 */
+	private const AFFILIATE_REWARD = 3;
+
+	private function __construct( int $unlock_paywall_transfer_type_value ) {
+		self::checkValidTransferTypeID( $unlock_paywall_transfer_type_value );
+		$this->value = $unlock_paywall_transfer_type_value;
 	}
 
-	private int $id;
+	private int $value;
 
-	public function id(): int {
-		return $this->id;
+	public function value(): int {
+		return $this->value;
 	}
 
-	public static function from( int $unlock_paywall_transfer_type_id ): self {
-		return new self( $unlock_paywall_transfer_type_id );
+	public static function from( int $unlock_paywall_transfer_type_value ): self {
+		return new self( $unlock_paywall_transfer_type_value );
 	}
 
-	private static function checkValidTransferTypeID( int $unlock_paywall_transfer_type_id ): void {
-		if ( ! in_array( $unlock_paywall_transfer_type_id, self::allTransferTypeIDs(), true ) ) {
-			throw new \InvalidArgumentException( '[F468C1FA] Invalid unlock paywall transfer type ID: ' . $unlock_paywall_transfer_type_id );
+	private static function checkValidTransferTypeID( int $unlock_paywall_transfer_type_value ): void {
+		if ( $unlock_paywall_transfer_type_value < self::HANDLING_FEE || $unlock_paywall_transfer_type_value > self::AFFILIATE_REWARD ) {
+			throw new \InvalidArgumentException( '[F468C1FA] Invalid unlock paywall transfer type ID: ' . $unlock_paywall_transfer_type_value );
 		}
-	}
-
-	private function allTransferTypeIDs(): array {
-		$reflection = new \ReflectionClass( UnlockPaywallTransferTypeID::class );
-		$constants  = $reflection->getConstants();
-		/** @var int[] */
-		$all_transfer_type_ids = array_values( $constants );
-		return $all_transfer_type_ids;
 	}
 }

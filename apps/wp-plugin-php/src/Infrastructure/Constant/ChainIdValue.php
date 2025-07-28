@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Constant;
+namespace Cornix\Serendipity\Core\Infrastructure\Constant;
 
 final class ChainIdValue {
 	// ==================== Mainnet ====================
