@@ -65,7 +65,6 @@ class RootValue {
 			'setSellerAgreedTerms'      => $container->get( SetSellerAgreedTermsResolver::class ),
 			'setRpcUrl'                 => $container->get( SetRpcUrlResolver::class ),
 			'setConfirmations'          => $container->get( SetConfirmationsResolver::class ),
-			// React-Adminの都合によりMutation
 		);
 
 		$result = array();
