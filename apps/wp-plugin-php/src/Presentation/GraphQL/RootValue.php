@@ -48,6 +48,7 @@ class RootValue {
 			// Query
 			'consumerTermsVersion'      => $container->get( ConsumerTermsVersionResolver::class ),
 			'currentSellerTerms'        => $container->get( CurrentSellerTermsResolver::class ),
+			'networkCategories'         => $container->get( NetworkCategoriesResolver::class ),
 			'post'                      => $container->get( PostResolver::class ),
 			'seller'                    => $container->get( SellerResolver::class ),
 			'serverSigner'              => $container->get( ServerSignerResolver::class ),
@@ -62,7 +63,6 @@ class RootValue {
 			'setRpcUrl'                 => $container->get( SetRpcUrlResolver::class ),
 			'setConfirmations'          => $container->get( SetConfirmationsResolver::class ),
 			// React-Adminの都合によりMutation
-			'networkCategories'         => $container->get( NetworkCategoriesResolver::class ),
 			'chains'                    => $container->get( ChainsResolver::class ),
 			'tokens'                    => $container->get( TokensResolver::class ),
 			'salesHistories'            => $container->get( SalesHistoriesResolver::class ),
