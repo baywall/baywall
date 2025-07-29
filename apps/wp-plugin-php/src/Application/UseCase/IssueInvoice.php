@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\SellerService;
+use Cornix\Serendipity\Core\Domain\Service\TokenAmountConverter;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
@@ -17,16 +18,18 @@ use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 
 class IssueInvoice {
-	public function __construct( TokenRepository $token_repository, InvoiceRepository $invoice_repository, PostRepository $post_repository, SellerService $seller_service ) {
-		$this->token_repository   = $token_repository;
-		$this->invoice_repository = $invoice_repository;
-		$this->post_repository    = $post_repository;
-		$this->seller_service     = $seller_service;
+	public function __construct( TokenRepository $token_repository, InvoiceRepository $invoice_repository, PostRepository $post_repository, SellerService $seller_service, TokenAmountConverter $token_amount_converter ) {
+		$this->token_repository       = $token_repository;
+		$this->invoice_repository     = $invoice_repository;
+		$this->post_repository        = $post_repository;
+		$this->seller_service         = $seller_service;
+		$this->token_amount_converter = $token_amount_converter;
 	}
 	private TokenRepository $token_repository;
 	private InvoiceRepository $invoice_repository;
 	private PostRepository $post_repository;
 	private SellerService $seller_service;
+	private TokenAmountConverter $token_amount_converter;
 
 	public function handle( int $post_ID, ChainID $chain_ID, Address $payment_token_address, Address $consumer_address ): Invoice {
 		$payment_token  = ( new GetPaymentToken( $this->token_repository ) )->handle( $chain_ID, $payment_token_address ); // 支払トークン
@@ -40,7 +43,7 @@ class IssueInvoice {
 		// ※ これは`1ETH`等の価格を表現するオブジェクトであり、実際に支払う数量(wei等)ではないことに注意
 		$payment_price = ( new PriceExchange() )->convert( $selling_price, $payment_token->symbol()->value() );
 		// 支払うトークン量を取得
-		$payment_amount = $payment_price->toTokenAmount( $chain_ID );
+		$payment_amount = $this->token_amount_converter->convertPriceToBaseUnit( $payment_price, $chain_ID );
 
 		$invoice = new Invoice(
 			InvoiceID::generate(), // 新規請求書ID
