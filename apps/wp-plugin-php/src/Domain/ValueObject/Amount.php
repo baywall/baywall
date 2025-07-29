@@ -42,6 +42,35 @@ final class Amount {
 		return $this->value();
 	}
 
+	/** 指定した小数点桁数に丸めます。（四捨五入）
+	 *
+	 * @param Decimals $decimals 小数点以下の桁数
+	 * @return self 丸めた結果の新しいAmountインスタンス
+	 */
+	public function round( Decimals $decimals ): self {
+		$decimals_text = explode( '.', $this->amount_text )[1] ?? null;
+
+		if ( is_null( $decimals_text ) || strlen( $decimals_text ) <= $decimals->value() ) {
+			// 小数点以下の桁数が指定された桁数以下の場合はそのまま返す
+			return new self( $this->amount_text );
+		} else {
+			$target_value  = (int) substr( $decimals_text, $decimals->value(), 1 ); // 四捨五入の判定を行う数値
+			$int_text      = explode( '.', $this->amount_text )[0];    // 整数部分の値
+			$decimals_text = substr( $decimals_text, 0, $decimals->value() );     // 丸め処理前の小数点以下の値
+			if ( $target_value < 5 ) {
+				return new self( $int_text . '.' . $decimals_text );
+			} else {
+				$is_negative = strpos( $this->amount_text, '-' ) === 0;
+				// 桁の繰上りがある場合、一旦小数点を消した値をBigIntegerに変換し、1を加算する（マイナスの場合は絶対値の丸めと同等になるように1を減算する）
+				$non_decimal_text = ( new BigInteger( $int_text . $decimals_text, 10 ) )->add( new BigInteger( $is_negative ? '-1' : '1', 10 ) )->toString();
+				// その後、整数部分と小数点以下の値に分割
+				$int_len = strlen( $non_decimal_text ) - $decimals->value(); // 整数部分の長さを取得
+
+				return new self( substr( $non_decimal_text, 0, $int_len ) . '.' . substr( $non_decimal_text, $int_len ) );
+			}
+		}
+	}
+
 	public function mul( self $other ): self {
 		$this_decimals  = strpos( $this->amount_text, '.' ) !== false
 			? strlen( substr( strrchr( $this->amount_text, '.' ), 1 ) )
