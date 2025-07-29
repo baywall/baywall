@@ -4,15 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class Price {
 	public function __construct( Amount $amount, Symbol $symbol ) {
-		Validate::checkSymbolObject( $symbol );
-
 		$this->amount = $amount;
 		$this->symbol = $symbol;
 	}
