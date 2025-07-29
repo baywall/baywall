@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
+use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
@@ -82,11 +83,11 @@ class PriceExchange {
 	 * 指定した通貨シンボルの最大小数点以下桁数を取得します。
 	 * ※ ネットワークを跨いだ比較を行い、最大値を取得します。
 	 */
-	private function getMaxDecimals( string $symbol ): int {
+	private function getMaxDecimals( string $symbol ): Decimals {
 		$tokens_filter = ( new TokensFilter() )->bySymbol( new Symbol( $symbol ) );
 		$tokens        = $tokens_filter->apply( ( new TokenRepositoryImpl() )->all() );
 		$decimals      = array_map( fn( Token $token ) => $token->decimals()->value(), $tokens );
-		return max( $decimals );
+		return new Decimals( max( $decimals ) );
 	}
 
 	/**

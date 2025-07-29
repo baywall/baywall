@@ -102,10 +102,10 @@ final class Amount {
 
 	/**
 	 *
-	 * @param Amount   $other
-	 * @param null|int $accuracy_decimals 最大精度。割り切れない場合は、指定した精度までの値を返す。
+	 * @param Amount        $other
+	 * @param null|Decimals $accuracy_decimals 最大精度。割り切れない場合は、指定した精度までの値を返す。
 	 */
-	public function div( self $other, int $accuracy_decimals ): self {
+	public function div( self $other, Decimals $accuracy_decimals ): self {
 		$this_decimals  = strpos( $this->amount_text, '.' ) !== false
 			? strlen( substr( strrchr( $this->amount_text, '.' ), 1 ) )
 			: 0;
@@ -120,11 +120,11 @@ final class Amount {
 		}
 
 		// 一旦、有効桁数まで求められるように、分子の桁数を調整
-		$this_int = $this_int->multiply( new BigInteger( '1' . str_repeat( '0', $accuracy_decimals ), 10 ) );
+		$this_int = $this_int->multiply( new BigInteger( '1' . str_repeat( '0', $accuracy_decimals->value() ), 10 ) );
 		// 割り算を行う
 		/** @var BigInteger */
 		$divided_quotient = $this_int->divide( $other_int )[0]; // 商を取得
-		$total_decimals   = $this_decimals - $other_decimals + $accuracy_decimals;
+		$total_decimals   = $this_decimals - $other_decimals + $accuracy_decimals->value();
 		if ( 0 === $total_decimals ) {
 			// 小数点以下がない場合はそのまま返す
 			return new self( $divided_quotient->toString() );
@@ -139,8 +139,8 @@ final class Amount {
 		$integer_part    = $integer_part === '' ? '0' : $integer_part; // 整数部分が空の場合は0にする
 		$fractional_part = substr( $divided_quotient_text, -$total_decimals );
 		// 最大精度以上の桁数がある場合は切り捨て
-		if ( strlen( $fractional_part ) > $accuracy_decimals ) {
-			$fractional_part = substr( $fractional_part, 0, $accuracy_decimals );
+		if ( strlen( $fractional_part ) > $accuracy_decimals->value() ) {
+			$fractional_part = substr( $fractional_part, 0, $accuracy_decimals->value() );
 		}
 		$result_text_tmp = $integer_part . '.' . $fractional_part;
 
