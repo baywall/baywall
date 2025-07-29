@@ -85,7 +85,7 @@ class PriceExchange {
 	private function getMaxDecimals( string $symbol ): int {
 		$tokens_filter = ( new TokensFilter() )->bySymbol( new Symbol( $symbol ) );
 		$tokens        = $tokens_filter->apply( ( new TokenRepositoryImpl() )->all() );
-		$decimals      = array_map( fn( Token $token ) => $token->decimals(), $tokens );
+		$decimals      = array_map( fn( Token $token ) => $token->decimals()->value(), $tokens );
 		return max( $decimals );
 	}
 
