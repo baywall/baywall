@@ -3,14 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class SymbolPair {
 	public function __construct( Symbol $base_symbol, Symbol $quote_symbol ) {
-		Validate::checkSymbolObject( $base_symbol );
-		Validate::checkSymbolObject( $quote_symbol );
-
 		$this->base_symbol  = $base_symbol;
 		$this->quote_symbol = $quote_symbol;
 	}

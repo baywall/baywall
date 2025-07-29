@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\TokenTableRecord;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
@@ -13,8 +12,6 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 class Token {
 
 	public function __construct( ChainID $chain_ID, Address $address, Symbol $symbol, Decimals $decimals, bool $is_payable ) {
-		Validate::checkSymbolObject( $symbol );
-
 		$this->chain_ID   = $chain_ID;
 		$this->address    = $address;
 		$this->symbol     = $symbol;
