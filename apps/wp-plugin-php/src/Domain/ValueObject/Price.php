@@ -47,6 +47,6 @@ class Price {
 
 		$token_decimals = $token->decimals();
 
-		return $this->amount->mul( Amount::from( (string) ( 10 ** $token_decimals ) ) );
+		return $this->amount->mul( Amount::from( (string) ( 10 ** $token_decimals->value() ) ) );
 	}
 }
