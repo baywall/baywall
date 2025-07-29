@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use phpseclib\Math\BigInteger;
@@ -18,7 +19,7 @@ class TokenClient {
 	/**
 	 * トークンの小数点以下桁数を取得します。
 	 */
-	public function decimals(): int {
+	public function decimals(): Decimals {
 		/** @var int|null */
 		$result = null;
 		$this->token->call(
@@ -34,7 +35,7 @@ class TokenClient {
 		);
 
 		assert( is_int( $result ) );
-		return $result;
+		return new Decimals( $result );
 	}
 
 	/**
