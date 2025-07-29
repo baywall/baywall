@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
@@ -39,7 +40,7 @@ class TokenClient {
 	/**
 	 * トークンの通貨シンボルを取得します。
 	 */
-	public function symbol(): string {
+	public function symbol(): Symbol {
 		/** @var string|null */
 		$result = null;
 		$this->token->call(
@@ -55,7 +56,7 @@ class TokenClient {
 		);
 
 		assert( is_string( $result ) );
-		return $result;
+		return new Symbol( $result );
 	}
 }
 
