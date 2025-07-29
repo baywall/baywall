@@ -59,7 +59,7 @@ class GetERC20InfoResolver extends ResolverBase {
 
 		$token_client = new TokenClient( $chain->rpcURL(), $address );
 
-		$symbol = new Symbol( $token_client->symbol() );
+		$symbol = $token_client->symbol();
 
 		$symbol_callback = function () use ( $symbol ) {
 			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
