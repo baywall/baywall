@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
 class TokenClient {
-	public function __construct( string $rpc_url, Address $contract_address ) {
+	public function __construct( RpcUrl $rpc_url, Address $contract_address ) {
 		$this->token = ( new ContractFactory() )->create( $rpc_url, ( new TokenAbi() )->get(), $contract_address );
 	}
 	private Contract $token;
