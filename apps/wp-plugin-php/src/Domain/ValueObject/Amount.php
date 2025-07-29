@@ -106,25 +106,28 @@ final class Amount {
 	 * @param null|Decimals $accuracy_decimals 最大精度。割り切れない場合は、指定した精度までの値を返す。
 	 */
 	public function div( self $other, Decimals $accuracy_decimals ): self {
-		$this_decimals  = strpos( $this->amount_text, '.' ) !== false
+		// 割られる数の小数点以下桁数
+		$this_decimals = strpos( $this->amount_text, '.' ) !== false
 			? strlen( substr( strrchr( $this->amount_text, '.' ), 1 ) )
 			: 0;
+		// 割る数の小数点以下桁数
 		$other_decimals = strpos( $other->amount_text, '.' ) !== false
 			? strlen( substr( strrchr( $other->amount_text, '.' ), 1 ) )
 			: 0;
-		$this_int       = new BigInteger( str_replace( '.', '', $this->amount_text ), 10 );
-		$other_int      = new BigInteger( str_replace( '.', '', $other->amount_text ), 10 );
+		// 小数点を削除した文字列を数値としたBigIntegerを生成
+		$this_int  = new BigInteger( str_replace( '.', '', $this->amount_text ), 10 );
+		$other_int = new BigInteger( str_replace( '.', '', $other->amount_text ), 10 );
 
 		if ( '0' === $other_int->toString() ) {
 			throw new \InvalidArgumentException( '[2D246909] Division by zero is not allowed.' );
 		}
 
-		// 一旦、有効桁数まで求められるように、分子の桁数を調整
-		$this_int = $this_int->multiply( new BigInteger( '1' . str_repeat( '0', $accuracy_decimals->value() ), 10 ) );
+		// 有効桁数まで求められるように、分子の桁数を調整(ここで増やした桁数だけ後で減らす)
+		$this_int = $this_int->multiply( new BigInteger( '1' . str_repeat( '0', $other_decimals + $accuracy_decimals->value() ), 10 ) );
 		// 割り算を行う
 		/** @var BigInteger */
 		$divided_quotient = $this_int->divide( $other_int )[0]; // 商を取得
-		$total_decimals   = $this_decimals - $other_decimals + $accuracy_decimals->value();
+		$total_decimals   = $this_decimals - $other_decimals + ( $other_decimals + $accuracy_decimals->value() ); // 後ろの括弧の部分が上で増やした桁数
 		if ( 0 === $total_decimals ) {
 			// 小数点以下がない場合はそのまま返す
 			return new self( $divided_quotient->toString() );
