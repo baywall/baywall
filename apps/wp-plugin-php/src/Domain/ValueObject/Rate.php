@@ -25,4 +25,22 @@ class Rate {
 	public function amount(): Amount {
 		return $this->amount;
 	}
+
+	/**
+	 * レートを反転します。
+	 * 例: ETH/USD (rate: 2000) → USD/ETH (rate: 0.0005)
+	 *
+	 * @param Decimals $max_decimals 割り切れない時の小数点以下桁数の最大精度
+	 * @return Rate 反転されたレート
+	 */
+	public function invert( Decimals $max_decimals ): Rate {
+		// 通貨ペアを逆転 (base ↔ quote)
+		$inverted_symbol_pair = new SymbolPair( $this->symbol_pair->quote(), $this->symbol_pair->base() );
+
+		// レート値を逆数計算 (1 / rate)
+		$one             = Amount::from( '1' );
+		$inverted_amount = $one->div( $this->amount, $max_decimals );
+
+		return new Rate( $inverted_symbol_pair, $inverted_amount );
+	}
 }
