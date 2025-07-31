@@ -4,11 +4,15 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
+use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Infrastructure\Database\Entity\AppContractImpl;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\AppContractTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\AppContractTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
 
 class AppContractRepositoryImpl implements AppContractRepository {
 	public function __construct( AppContractTable $app_contract_table, ChainRepository $chain_repository ) {
@@ -27,7 +31,7 @@ class AppContractRepositoryImpl implements AppContractRepository {
 		);
 		assert( count( $records ) <= 1, '[68E05B97] should return at most one record.' );
 
-		return empty( $records ) ? null : AppContractImpl::fromTableRecord(
+		return empty( $records ) ? null : new AppContractImpl(
 			$this->chain_repository->get( $chain_id ),
 			array_values( $records )[0]
 		);
@@ -36,5 +40,17 @@ class AppContractRepositoryImpl implements AppContractRepository {
 	/** @inheritdoc */
 	public function save( AppContract $app_contract ): void {
 		$this->app_contract_table->save( $app_contract );
+	}
+}
+
+/** @internal */
+class AppContractImpl extends AppContract {
+	public function __construct( Chain $chain, AppContractTableRecord $record ) {
+		parent::__construct(
+			$chain,
+			Address::from( $record->addressValue() ),
+			BlockNumber::from( $record->crawledBlockNumberValue() ),
+			UnixTimestampFormat::fromMySQL( $record->crawledBlockNumberUpdatedAtValue() )
+		);
 	}
 }
