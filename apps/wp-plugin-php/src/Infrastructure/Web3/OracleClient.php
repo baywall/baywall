@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\ContractFactory;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 

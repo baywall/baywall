@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3;
+namespace Cornix\Serendipity\Core\Infrastructure\Web3\Factory;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 
 /** @deprecated Use BlockchainClientServiceFactory */
 class BlockchainClientFactory {
