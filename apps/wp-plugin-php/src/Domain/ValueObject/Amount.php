@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use DivisionByZeroError;
 use InvalidArgumentException;
 
 /**
@@ -76,8 +77,13 @@ final class Amount {
 	 *
 	 * @param Amount        $other
 	 * @param null|Decimals $accuracy_decimals 最大精度。割り切れない場合は、指定した精度で切り捨て。
+	 * @throws DivisionByZeroError
 	 */
 	public function div( self $other, Decimals $accuracy_decimals ): self {
+		if ( '0' === $other->amount_text ) {
+			throw new DivisionByZeroError( "[B3F404A6] The expression is invalid: {$this->amount_text} / {$other->amount_text}" );
+		}
+
 		return new self( bcdiv( $this->amount_text, $other->amount_text, $accuracy_decimals->value() ) );
 	}
 
