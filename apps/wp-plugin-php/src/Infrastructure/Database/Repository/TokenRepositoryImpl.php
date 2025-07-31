@@ -11,8 +11,8 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class TokenRepositoryImpl implements TokenRepository {
 
-	public function __construct( ?TokenTable $token_table = null ) {
-		$this->token_table = $token_table ?? new TokenTable( $GLOBALS['wpdb'] );
+	public function __construct( TokenTable $token_table ) {
+		$this->token_table = $token_table;
 	}
 
 	private TokenTable $token_table;

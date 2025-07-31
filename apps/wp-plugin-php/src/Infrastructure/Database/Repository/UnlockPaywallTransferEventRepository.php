@@ -10,12 +10,12 @@ use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 
 class UnlockPaywallTransferEventRepository {
 
-	public function __construct( \wpdb $wpdb ) {
-		$this->table = new UnlockPaywallTransferEventTable( $wpdb );
+	public function __construct( UnlockPaywallTransferEventTable $unlock_paywall_transfer_event_table ) {
+		$this->unlock_paywall_transfer_event_table = $unlock_paywall_transfer_event_table;
 	}
-	private UnlockPaywallTransferEventTable $table;
+	private UnlockPaywallTransferEventTable $unlock_paywall_transfer_event_table;
 
 	public function save( InvoiceID $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, int $transfer_type ): void {
-		$this->table->save( $invoice_id, $log_index, $from, $to, $token_address, $amount, $transfer_type );
+		$this->unlock_paywall_transfer_event_table->save( $invoice_id, $log_index, $from, $to, $token_address, $amount, $transfer_type );
 	}
 }
