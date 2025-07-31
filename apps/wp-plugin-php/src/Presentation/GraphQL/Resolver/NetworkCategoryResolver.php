@@ -5,22 +5,25 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
+use Cornix\Serendipity\Core\Domain\Service\SymbolService;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
-use Cornix\Serendipity\Core\Repository\SellableSymbols;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class NetworkCategoryResolver extends ResolverBase {
 
 	public function __construct(
 		ChainService $chain_service,
-		UserAccessChecker $user_access_checker
+		UserAccessChecker $user_access_checker,
+		SymbolService $symbol_service
 	) {
 		$this->chain_service       = $chain_service;
 		$this->user_access_checker = $user_access_checker;
+		$this->symbol_service      = $symbol_service;
 	}
 	private ChainService $chain_service;
 	private UserAccessChecker $user_access_checker;
+	private SymbolService $symbol_service;
 
 	/**
 	 * #[\Override]
@@ -30,9 +33,13 @@ class NetworkCategoryResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		$network_category_id = new NetworkCategoryID( $args['networkCategoryID'] );
 
-		$sellable_symbols_callback = function () use ( $network_category_id ) {
+		$sellable_symbols_callback = function () {
 			$this->user_access_checker->checkCanCreatePost();   // 投稿を新規作成できる権限が必要
-			return ( new SellableSymbols() )->get( $network_category_id );
+
+			return array_map(
+				fn( Symbol $symbol ) => $symbol->value(),
+				$this->symbol_service->getSellableSymbols()
+			);
 		};
 
 		// ネットワークカテゴリで絞り込んだチェーン一覧を取得

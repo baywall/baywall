@@ -3,11 +3,16 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Database\Repository;
 
+use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Domain\Entity\Post;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Infrastructure\Database\Entity\PostImpl;
+use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\PaidContentTableRecord;
 
 class PostRepositoryImpl implements PostRepository {
 
@@ -27,7 +32,7 @@ class PostRepositoryImpl implements PostRepository {
 		// テーブルから有料記事情報を取得
 		$record = $this->paid_content_table->select( $post_id );
 
-		return $record ? PostImpl::fromTableRecord( $record ) : new Post( $post_id, null, null, null );
+		return $record ? new PostImpl( $record ) : new Post( $post_id, null, null, null );
 	}
 
 	/** @inheritdoc */
@@ -44,6 +49,29 @@ class PostRepositoryImpl implements PostRepository {
 				$post->sellingNetworkCategoryID(),
 				$post->sellingPrice()
 			);
+		}
+	}
+}
+
+/** @internal */
+class PostImpl extends Post {
+
+	public function __construct( PaidContentTableRecord $record ) {
+		parent::__construct(
+			new PostId( $record->postIdValue() ),
+			PaidContent::from( $record->paidContentValue() ),
+			NetworkCategoryID::from( $record->sellingNetworkCategoryIdValue() ),
+			$this->getPriceFromRecord( $record ),
+		);
+	}
+
+	private function getPriceFromRecord( PaidContentTableRecord $record ): ?Price {
+		$selling_amount_value = $record->sellingAmountValue();
+		$selling_symbol       = $record->sellingSymbolValue();
+		if ( null === $selling_amount_value || null === $selling_symbol ) {
+			return null;
+		} else {
+			return new Price( Amount::from( $selling_amount_value ), new Symbol( $selling_symbol ) );
 		}
 	}
 }
