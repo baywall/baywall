@@ -14,7 +14,7 @@ use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
-use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
 
 /**
  * wp_cronを利用した処理を登録するクラス。

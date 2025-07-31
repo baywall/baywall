@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3;
+namespace Cornix\Serendipity\Core\Infrastructure\Web3\Factory;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
+use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainRetryer;
 use Web3\Contract;
 use Web3\Providers\HttpProvider;
 
