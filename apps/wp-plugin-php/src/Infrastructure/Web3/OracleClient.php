@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
+use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
@@ -17,7 +18,7 @@ class OracleClient {
 	/**
 	 * レートの小数点以下桁数を取得します。
 	 */
-	public function decimals(): int {
+	public function decimals(): Decimals {
 		/** @var int|null */
 		$result = null;
 		$this->oracle_contract->call(
@@ -33,7 +34,7 @@ class OracleClient {
 		);
 
 		assert( is_int( $result ) );
-		return $result;
+		return new Decimals( $result );
 	}
 
 	/**
