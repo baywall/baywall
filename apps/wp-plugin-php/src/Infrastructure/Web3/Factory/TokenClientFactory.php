@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3;
+namespace Cornix\Serendipity\Core\Infrastructure\Web3\Factory;
 
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;
 
 class TokenClientFactory {
 	/**
@@ -17,6 +18,6 @@ class TokenClientFactory {
 		$rpc_url = $chain->rpcURL();
 		assert( ! is_null( $rpc_url ), '[2CF9717C] RPC URL is not found. - ' . $chain_ID );
 
-		return new TokenClient( $rpc_url->value(), $contract_address );
+		return new TokenClient( $rpc_url, $contract_address );
 	}
 }

@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Infrastructure\Database\Repository\UnlockPaywallTran
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\UnlockPaywallTransferEventRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
-use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
