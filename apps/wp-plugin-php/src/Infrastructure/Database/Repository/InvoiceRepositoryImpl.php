@@ -5,9 +5,15 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
-use Cornix\Serendipity\Core\Infrastructure\Database\Entity\InvoiceImpl;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
+use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\InvoiceTableRecord;
 
 class InvoiceRepositoryImpl implements InvoiceRepository {
 
@@ -26,6 +32,26 @@ class InvoiceRepositoryImpl implements InvoiceRepository {
 	/** @inheritdoc */
 	public function get( InvoiceID $invoice_ID ): ?Invoice {
 		$invoice_record = $this->invoice_table->select( $invoice_ID );
-		return is_null( $invoice_record ) ? null : InvoiceImpl::fromTableRecord( $invoice_record );
+		return is_null( $invoice_record ) ? null : new InvoiceImpl( $invoice_record );
+	}
+}
+
+/** @internal */
+class InvoiceImpl extends Invoice {
+	public function __construct( InvoiceTableRecord $invoice_record ) {
+		parent::__construct(
+			InvoiceID::from( $invoice_record->idValue() ),
+			$invoice_record->postIdValue(),
+			new ChainID( $invoice_record->chainIdValue() ),
+			new Price(
+				Amount::from( $invoice_record->sellingAmountValue() ),
+				new Symbol( $invoice_record->sellingSymbolValue() )
+			),
+			Address::from( $invoice_record->sellerAddressValue() ),
+			Address::from( $invoice_record->paymentTokenAddressValue() ),
+			Amount::from( $invoice_record->paymentAmountValue() ),
+			Address::from( $invoice_record->consumerAddressValue() ),
+			$invoice_record->nonceValue() ? new InvoiceNonce( $invoice_record->nonceValue() ) : null
+		);
 	}
 }
