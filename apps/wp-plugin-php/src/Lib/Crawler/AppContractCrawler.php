@@ -24,20 +24,22 @@ use stdClass;
  * Appコントラクトのログを取得し、DBに保存するクラス
  */
 class AppContractCrawler {
-	public function __construct( \wpdb $wpdb ) {
-		$this->app_abi = new AppContractAbi();
-		$this->wpdb    = $wpdb;
+	public function __construct( AppContractAbi $app_abi, UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository, UnlockPaywallTransactionRepository $unlock_paywall_transaction_repository ) {
+		$this->app_abi                                  = $app_abi;
+		$this->unlock_paywall_transfer_event_repository = $unlock_paywall_transfer_event_repository;
+		$this->unlock_paywall_transaction_repository    = $unlock_paywall_transaction_repository;
 	}
 	private AppContractAbi $app_abi;
-	private \wpdb $wpdb;
+	private UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository;
+	private UnlockPaywallTransactionRepository $unlock_paywall_transaction_repository;
 
 	public function crawl( ChainID $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): void {
 		// UnlockPaywallTransferイベントのログを取得
 		$transfer_logs = $this->getUnlockPaywallTransferLogs( $chain_ID, $from_block, $to_block );
 		// トランザクション情報をDBに保存
-		$this->saveUnlockPaywallTransaction( $this->wpdb, $chain_ID, $transfer_logs );
+		$this->saveUnlockPaywallTransaction( $chain_ID, $transfer_logs );
 		// UnlockPaywallTransferイベントのログをDBに保存
-		$this->saveUnlockPaywallTransfer( $this->wpdb, $transfer_logs );
+		$this->saveUnlockPaywallTransfer( $transfer_logs );
 	}
 
 	/**
@@ -50,9 +52,7 @@ class AppContractCrawler {
 	/**
 	 * UnlockPaywallTransferイベントが発生した時のトランザクション情報をDBに保存します。
 	 */
-	private function saveUnlockPaywallTransaction( \wpdb $wpdb, ChainID $chain_ID, array $unlock_paywall_transfer_logs ): void {
-		$transaction_repository = new UnlockPaywallTransactionRepository( $wpdb );
-
+	private function saveUnlockPaywallTransaction( ChainID $chain_ID, array $unlock_paywall_transfer_logs ): void {
 		/** @var string[] */
 		$saved_invoice_id_hex_array = array(); // DBに保存済みのinvoiceIDのリスト(DBへのアクセス回数を減らすために使用)
 
@@ -76,7 +76,7 @@ class AppContractCrawler {
 			$block_number_hex = $unlock_paywall_transfer_log->blockNumber;
 			assert( Validate::isHex( $block_number_hex ), '[067CCE00] blockNumber is not hex. ' . var_export( $block_number_hex, true ) );
 
-			$transaction_repository->save(
+			$this->unlock_paywall_transaction_repository->save(
 				$invoice_ID,
 				$chain_ID,
 				BlockNumber::from( $block_number_hex ),
@@ -88,9 +88,7 @@ class AppContractCrawler {
 	/**
 	 * UnlockPaywallTransferイベントのログをDBに保存します。
 	 */
-	private function saveUnlockPaywallTransfer( \wpdb $wpdb, array $unlock_paywall_transfer_logs ): void {
-
-		$transfer_event_repository = new UnlockPaywallTransferEventRepository( $wpdb );
+	private function saveUnlockPaywallTransfer( array $unlock_paywall_transfer_logs ): void {
 
 		foreach ( $unlock_paywall_transfer_logs as $unlock_paywall_transfer_log ) {
 			$event_args = $this->app_abi->decodeEventParameters( $unlock_paywall_transfer_log );
@@ -110,7 +108,7 @@ class AppContractCrawler {
 			/** @var string */
 			$log_index_hex = $unlock_paywall_transfer_log->logIndex;
 
-			$transfer_event_repository->save(
+			$this->unlock_paywall_transfer_event_repository->save(
 				InvoiceID::from( $invoice_ID_bi ),
 				HexFormat::toInt( $log_index_hex ),
 				$from,

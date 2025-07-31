@@ -11,13 +11,13 @@ use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
 
 class UnlockPaywallTransactionRepository {
 
-	public function __construct( \wpdb $wpdb ) {
-		$this->table = new UnlockPaywallTransactionTable( $wpdb );
+	public function __construct( UnlockPaywallTransactionTable $unlock_paywall_transaction_table ) {
+		$this->unlock_paywall_transaction_table = $unlock_paywall_transaction_table;
 	}
 
-	private UnlockPaywallTransactionTable $table;
+	private UnlockPaywallTransactionTable $unlock_paywall_transaction_table;
 
 	public function save( InvoiceID $invoice_id, ChainID $chain_id, BlockNumber $block_number, TransactionHash $transaction_hash ): void {
-		$this->table->save( $invoice_id, $chain_id, $block_number, $transaction_hash );
+		$this->unlock_paywall_transaction_table->save( $invoice_id, $chain_id, $block_number, $transaction_hash );
 	}
 }
