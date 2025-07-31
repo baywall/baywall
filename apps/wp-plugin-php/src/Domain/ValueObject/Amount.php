@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use InvalidArgumentException;
-use phpseclib\Math\BigInteger;
 
 /**
  * 数量等を表すクラス
@@ -42,112 +41,30 @@ final class Amount {
 		return $this->value();
 	}
 
-	/** 指定した小数点桁数に丸めます。（四捨五入）
+	/**
+	 * 指定した小数点桁数に切り捨てます。
 	 *
 	 * @param Decimals $decimals 小数点以下の桁数
-	 * @return self 丸めた結果の新しいAmountインスタンス
+	 * @return self 切り捨てた結果の新しいAmountインスタンス
 	 */
-	public function round( Decimals $decimals ): self {
-		$decimals_text = explode( '.', $this->amount_text )[1] ?? null;
-
-		if ( is_null( $decimals_text ) || strlen( $decimals_text ) <= $decimals->value() ) {
-			// 小数点以下の桁数が指定された桁数以下の場合はそのまま返す
-			return new self( $this->amount_text );
-		} else {
-			$target_value  = (int) substr( $decimals_text, $decimals->value(), 1 ); // 四捨五入の判定を行う数値
-			$int_text      = explode( '.', $this->amount_text )[0];    // 整数部分の値
-			$decimals_text = substr( $decimals_text, 0, $decimals->value() );     // 丸め処理前の小数点以下の値
-			if ( $target_value < 5 ) {
-				return new self( $int_text . '.' . $decimals_text );
-			} else {
-				$is_negative = strpos( $this->amount_text, '-' ) === 0;
-				// 桁の繰上りがある場合、一旦小数点を消した値をBigIntegerに変換し、1を加算する（マイナスの場合は絶対値の丸めと同等になるように1を減算する）
-				$non_decimal_text = ( new BigInteger( $int_text . $decimals_text, 10 ) )->add( new BigInteger( $is_negative ? '-1' : '1', 10 ) )->toString();
-				// その後、整数部分と小数点以下の値に分割
-				$int_len = strlen( $non_decimal_text ) - $decimals->value(); // 整数部分の長さを取得
-
-				return new self( substr( $non_decimal_text, 0, $int_len ) . '.' . substr( $non_decimal_text, $int_len ) );
-			}
-		}
+	public function floor( Decimals $decimals ): self {
+		return new self( bcdiv( $this->amount_text, '1', $decimals->value() ) );
 	}
 
 	public function mul( self $other ): self {
-		$this_decimals  = strpos( $this->amount_text, '.' ) !== false
-			? strlen( substr( strrchr( $this->amount_text, '.' ), 1 ) )
-			: 0;
-		$other_decimals = strpos( $other->amount_text, '.' ) !== false
-			? strlen( substr( strrchr( $other->amount_text, '.' ), 1 ) )
-			: 0;
-		$this_int       = new BigInteger( str_replace( '.', '', $this->amount_text ), 10 );
-		$other_int      = new BigInteger( str_replace( '.', '', $other->amount_text ), 10 );
+		$this_decimals  = strlen( explode( '.', $this->amount_text )[1] ?? '' );
+		$other_decimals = strlen( explode( '.', $other->amount_text )[1] ?? '' );
 
-		$result_int_text = $this_int->multiply( $other_int )->toString();
-		$result_decimals = $this_decimals + $other_decimals;
-		if ( 0 === $result_decimals ) {
-			// 小数点以下がない場合はそのまま返す
-			return new self( $result_int_text );
-		} else {
-			$is_negative     = strpos( $result_int_text, '-' ) === 0;
-			$result_int_text = ltrim( $result_int_text, '-' );
-			if ( strlen( $result_int_text ) <= $result_decimals ) {
-				$result_int_text = str_repeat( '0', $result_decimals - strlen( $result_int_text ) + 1 ) . $result_int_text;
-			}
-			$integer_part    = substr( $result_int_text, 0, -$result_decimals );
-			$fractional_part = substr( $result_int_text, -$result_decimals );
-			$result_text_tmp = $integer_part . '.' . $fractional_part;
-
-			return new self( $is_negative ? '-' . $result_text_tmp : $result_text_tmp );
-		}
+		return new self( bcmul( $this->amount_text, $other->amount_text, ( $this_decimals + $other_decimals ) ) );
 	}
 
 	/**
 	 *
 	 * @param Amount        $other
-	 * @param null|Decimals $accuracy_decimals 最大精度。割り切れない場合は、指定した精度までの値を返す。
+	 * @param null|Decimals $accuracy_decimals 最大精度。割り切れない場合は、指定した精度で切り捨て。
 	 */
 	public function div( self $other, Decimals $accuracy_decimals ): self {
-		// 割られる数の小数点以下桁数
-		$this_decimals = strpos( $this->amount_text, '.' ) !== false
-			? strlen( substr( strrchr( $this->amount_text, '.' ), 1 ) )
-			: 0;
-		// 割る数の小数点以下桁数
-		$other_decimals = strpos( $other->amount_text, '.' ) !== false
-			? strlen( substr( strrchr( $other->amount_text, '.' ), 1 ) )
-			: 0;
-		// 小数点を削除した文字列を数値としたBigIntegerを生成
-		$this_int  = new BigInteger( str_replace( '.', '', $this->amount_text ), 10 );
-		$other_int = new BigInteger( str_replace( '.', '', $other->amount_text ), 10 );
-
-		if ( '0' === $other_int->toString() ) {
-			throw new \InvalidArgumentException( '[2D246909] Division by zero is not allowed.' );
-		}
-
-		// 有効桁数まで求められるように、分子の桁数を調整(ここで増やした桁数だけ後で減らす)
-		$this_int = $this_int->multiply( new BigInteger( '1' . str_repeat( '0', $other_decimals + $accuracy_decimals->value() ), 10 ) );
-		// 割り算を行う
-		/** @var BigInteger */
-		$divided_quotient = $this_int->divide( $other_int )[0]; // 商を取得
-		$total_decimals   = $this_decimals - $other_decimals + ( $other_decimals + $accuracy_decimals->value() ); // 後ろの括弧の部分が上で増やした桁数
-		if ( 0 === $total_decimals ) {
-			// 小数点以下がない場合はそのまま返す
-			return new self( $divided_quotient->toString() );
-		}
-
-		$divided_quotient_text = $divided_quotient->toString();
-		if ( strlen( $divided_quotient_text ) <= $total_decimals ) {
-			// 小数点以下の桁数が足りない場合は0を追加
-			$divided_quotient_text = str_repeat( '0', $total_decimals - strlen( $divided_quotient_text ) + 1 ) . $divided_quotient_text;
-		}
-		$integer_part    = substr( $divided_quotient_text, 0, -$total_decimals );
-		$integer_part    = $integer_part === '' ? '0' : $integer_part; // 整数部分が空の場合は0にする
-		$fractional_part = substr( $divided_quotient_text, -$total_decimals );
-		// 最大精度以上の桁数がある場合は切り捨て
-		if ( strlen( $fractional_part ) > $accuracy_decimals->value() ) {
-			$fractional_part = substr( $fractional_part, 0, $accuracy_decimals->value() );
-		}
-		$result_text_tmp = $integer_part . '.' . $fractional_part;
-
-		return new self( $result_text_tmp );
+		return new self( bcdiv( $this->amount_text, $other->amount_text, $accuracy_decimals->value() ) );
 	}
 
 	private static function checkAmountText( string $amount_text ): void {
