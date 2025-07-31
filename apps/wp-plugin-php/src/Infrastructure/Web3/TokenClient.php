@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
+use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
 class TokenClient {
-	public function __construct( string $rpc_url, Address $contract_address ) {
+	public function __construct( RpcUrl $rpc_url, Address $contract_address ) {
 		$this->token = ( new ContractFactory() )->create( $rpc_url, ( new TokenAbi() )->get(), $contract_address );
 	}
 	private Contract $token;
@@ -16,7 +19,7 @@ class TokenClient {
 	/**
 	 * トークンの小数点以下桁数を取得します。
 	 */
-	public function decimals(): int {
+	public function decimals(): Decimals {
 		/** @var int|null */
 		$result = null;
 		$this->token->call(
@@ -32,13 +35,13 @@ class TokenClient {
 		);
 
 		assert( is_int( $result ) );
-		return $result;
+		return new Decimals( $result );
 	}
 
 	/**
 	 * トークンの通貨シンボルを取得します。
 	 */
-	public function symbol(): string {
+	public function symbol(): Symbol {
 		/** @var string|null */
 		$result = null;
 		$this->token->call(
@@ -54,7 +57,7 @@ class TokenClient {
 		);
 
 		assert( is_string( $result ) );
-		return $result;
+		return new Symbol( $result );
 	}
 }
 

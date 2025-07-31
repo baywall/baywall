@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use DivisionByZeroError;
 use InvalidArgumentException;
-use phpseclib\Math\BigInteger;
 
 /**
  * 数量等を表すクラス
@@ -30,6 +30,20 @@ final class Amount {
 		return null !== $amount_text ? new self( $amount_text ) : null;
 	}
 
+	/**
+	 * 基本単位からAmountを生成します。
+	 *
+	 * 例: 1000000000を10桁の小数点以下を持つAmountに変換する場合、1000000000を10^10で割る。
+	 *
+	 * @param string $base_unit 基本単位の値
+	 * @return self 基本単位から生成されたAmountインスタンス
+	 */
+	public static function fromBaseUnitAndDecimals( string $base_unit, Decimals $decimals ): self {
+		// 基本単位から小数点以下の桁数を考慮してAmountを生成
+		$multiplier = (string) ( 10 ** $decimals->value() );
+		return new self( bcdiv( $base_unit, $multiplier, 0 ) );
+	}
+
 	public function equals( self $other ): bool {
 		return $this->amount_text === $other->amount_text;
 	}
@@ -42,80 +56,35 @@ final class Amount {
 		return $this->value();
 	}
 
+	/**
+	 * 指定した小数点桁数に切り捨てます。
+	 *
+	 * @param Decimals $decimals 小数点以下の桁数
+	 * @return self 切り捨てた結果の新しいAmountインスタンス
+	 */
+	public function floor( Decimals $decimals ): self {
+		return new self( bcdiv( $this->amount_text, '1', $decimals->value() ) );
+	}
+
 	public function mul( self $other ): self {
-		$this_decimals  = strpos( $this->amount_text, '.' ) !== false
-			? strlen( substr( strrchr( $this->amount_text, '.' ), 1 ) )
-			: 0;
-		$other_decimals = strpos( $other->amount_text, '.' ) !== false
-			? strlen( substr( strrchr( $other->amount_text, '.' ), 1 ) )
-			: 0;
-		$this_int       = new BigInteger( str_replace( '.', '', $this->amount_text ), 10 );
-		$other_int      = new BigInteger( str_replace( '.', '', $other->amount_text ), 10 );
+		$this_decimals  = strlen( explode( '.', $this->amount_text )[1] ?? '' );
+		$other_decimals = strlen( explode( '.', $other->amount_text )[1] ?? '' );
 
-		$result_int_text = $this_int->multiply( $other_int )->toString();
-		$result_decimals = $this_decimals + $other_decimals;
-		if ( 0 === $result_decimals ) {
-			// 小数点以下がない場合はそのまま返す
-			return new self( $result_int_text );
-		} else {
-			$is_negative     = strpos( $result_int_text, '-' ) === 0;
-			$result_int_text = ltrim( $result_int_text, '-' );
-			if ( strlen( $result_int_text ) <= $result_decimals ) {
-				$result_int_text = str_repeat( '0', $result_decimals - strlen( $result_int_text ) + 1 ) . $result_int_text;
-			}
-			$integer_part    = substr( $result_int_text, 0, -$result_decimals );
-			$fractional_part = substr( $result_int_text, -$result_decimals );
-			$result_text_tmp = $integer_part . '.' . $fractional_part;
-
-			return new self( $is_negative ? '-' . $result_text_tmp : $result_text_tmp );
-		}
+		return new self( bcmul( $this->amount_text, $other->amount_text, ( $this_decimals + $other_decimals ) ) );
 	}
 
 	/**
 	 *
-	 * @param Amount   $other
-	 * @param null|int $accuracy_decimals 最大精度。割り切れない場合は、指定した精度までの値を返す。
+	 * @param Amount        $other
+	 * @param null|Decimals $accuracy_decimals 最大精度。割り切れない場合は、指定した精度で切り捨て。
+	 * @throws DivisionByZeroError
 	 */
-	public function div( self $other, int $accuracy_decimals ): self {
-		$this_decimals  = strpos( $this->amount_text, '.' ) !== false
-			? strlen( substr( strrchr( $this->amount_text, '.' ), 1 ) )
-			: 0;
-		$other_decimals = strpos( $other->amount_text, '.' ) !== false
-			? strlen( substr( strrchr( $other->amount_text, '.' ), 1 ) )
-			: 0;
-		$this_int       = new BigInteger( str_replace( '.', '', $this->amount_text ), 10 );
-		$other_int      = new BigInteger( str_replace( '.', '', $other->amount_text ), 10 );
-
-		if ( '0' === $other_int->toString() ) {
-			throw new \InvalidArgumentException( '[2D246909] Division by zero is not allowed.' );
+	public function div( self $other, Decimals $accuracy_decimals ): self {
+		if ( '0' === $other->amount_text ) {
+			throw new DivisionByZeroError( "[B3F404A6] The expression is invalid: {$this->amount_text} / {$other->amount_text}" );
 		}
 
-		// 一旦、有効桁数まで求められるように、分子の桁数を調整
-		$this_int = $this_int->multiply( new BigInteger( '1' . str_repeat( '0', $accuracy_decimals ), 10 ) );
-		// 割り算を行う
-		/** @var BigInteger */
-		$divided_quotient = $this_int->divide( $other_int )[0]; // 商を取得
-		$total_decimals   = $this_decimals - $other_decimals + $accuracy_decimals;
-		if ( 0 === $total_decimals ) {
-			// 小数点以下がない場合はそのまま返す
-			return new self( $divided_quotient->toString() );
-		}
-
-		$divided_quotient_text = $divided_quotient->toString();
-		if ( strlen( $divided_quotient_text ) <= $total_decimals ) {
-			// 小数点以下の桁数が足りない場合は0を追加
-			$divided_quotient_text = str_repeat( '0', $total_decimals - strlen( $divided_quotient_text ) + 1 ) . $divided_quotient_text;
-		}
-		$integer_part    = substr( $divided_quotient_text, 0, -$total_decimals );
-		$integer_part    = $integer_part === '' ? '0' : $integer_part; // 整数部分が空の場合は0にする
-		$fractional_part = substr( $divided_quotient_text, -$total_decimals );
-		// 最大精度以上の桁数がある場合は切り捨て
-		if ( strlen( $fractional_part ) > $accuracy_decimals ) {
-			$fractional_part = substr( $fractional_part, 0, $accuracy_decimals );
-		}
-		$result_text_tmp = $integer_part . '.' . $fractional_part;
-
-		return new self( $result_text_tmp );
+		return new self( bcdiv( $this->amount_text, $other->amount_text, $accuracy_decimals->value() ) );
 	}
 
 	private static function checkAmountText( string $amount_text ): void {
