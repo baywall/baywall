@@ -29,7 +29,7 @@ class AppContractClient {
 		$this->app_contract      = $app_contract;
 		$this->abi               = $app_contract_abi ?? new AppContractAbi();
 		$this->contract          = ( new ContractFactory() )->create(
-			$app_contract->chain()->rpcURL()->value(),
+			$app_contract->chain()->rpcURL(),
 			$this->abi->get(),
 			$app_contract->address()
 		);

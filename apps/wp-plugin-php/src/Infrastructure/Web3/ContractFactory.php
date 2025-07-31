@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use Web3\Contract;
 use Web3\Providers\HttpProvider;
 
@@ -12,8 +13,8 @@ class ContractFactory {
 	/**
 	 * コントラクトのインスタンスを生成します。
 	 */
-	public function create( string $rpc_url, array $abi, Address $address, string $default_block = 'latest' ): Contract {
-		$provider = new HttpProvider( $rpc_url, Config::BLOCKCHAIN_REQUEST_TIMEOUT );
+	public function create( RpcUrl $rpc_url, array $abi, Address $address, string $default_block = 'latest' ): Contract {
+		$provider = new HttpProvider( $rpc_url->value(), Config::BLOCKCHAIN_REQUEST_TIMEOUT );
 
 		return ( new RetryContract( $provider, $abi, $default_block ) )->at( $address->value() );
 	}

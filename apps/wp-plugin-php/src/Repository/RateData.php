@@ -39,10 +39,10 @@ class OracleRate {
 		}
 
 		// Oracleコントラクトから値を取得
-		$oracle_client = new OracleClient( $connectable_oracle->chain()->rpcURL()->value(), $connectable_oracle );
+		$oracle_client = new OracleClient( $connectable_oracle );
 		$decimals      = $oracle_client->decimals();
 		$answer_amount = Amount::from( $oracle_client->latestAnswer()->toString() );
-		$rate_amount   = $answer_amount->mul( Amount::from( (string) ( 10 ** $decimals ) ) );
+		$rate_amount   = $answer_amount->mul( Amount::from( (string) ( 10 ** $decimals->value() ) ) );
 
 		return new Rate( $symbol_pair, $rate_amount );
 	}
