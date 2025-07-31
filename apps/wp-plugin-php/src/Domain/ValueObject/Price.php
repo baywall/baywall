@@ -24,6 +24,12 @@ class Price {
 		return $this->symbol;
 	}
 
+
+	/** 現在の Price オブジェクトが別の Price オブジェクトと等しいかどうかを判定します。 */
+	public function equals( self $other ): bool {
+		return $this->amount->equals( $other->amount ) && $this->symbol->equals( $other->symbol );
+	}
+
 	public function __toString(): string {
 		return "{$this->amount->value()} {$this->symbol->value()}";
 	}
