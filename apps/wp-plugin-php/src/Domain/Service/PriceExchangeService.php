@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Service;
 
+use Cornix\Serendipity\Core\Domain\Exception\PriceExchangeException;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
@@ -52,7 +53,7 @@ class PriceExchangeService {
 		}
 
 		// ETH,USDを経由して変換可能な場合, USD,ETHを経由して変換可能な場合は現時点で実装しない
-		throw new \Exception( '[2E9C84B0] Not implemented' );
+		throw new PriceExchangeException( "[2E9C84B0] Rate conversion failed. {$price->symbol()->value()} => {$to_symbol->value()}" );
 	}
 
 	private function calculatePrice( Price $price, Rate $rate ): Price {
