@@ -5,13 +5,12 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
-use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
 class OracleClient {
-	public function __construct( RpcUrl $rpc_url, Oracle $oracle ) {
-		$this->oracle_contract = ( new ContractFactory() )->create( $rpc_url, ( new OracleAbi() )->get(), $oracle->address() );
+	public function __construct( Oracle $oracle ) {
+		$this->oracle_contract = ( new ContractFactory() )->create( $oracle->chain()->rpcURL(), ( new OracleAbi() )->get(), $oracle->address() );
 	}
 	private Contract $oracle_contract;
 
