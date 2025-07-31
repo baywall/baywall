@@ -29,6 +29,20 @@ final class Amount {
 		return null !== $amount_text ? new self( $amount_text ) : null;
 	}
 
+	/**
+	 * 基本単位からAmountを生成します。
+	 *
+	 * 例: 1000000000を10桁の小数点以下を持つAmountに変換する場合、1000000000を10^10で割る。
+	 *
+	 * @param string $base_unit 基本単位の値
+	 * @return self 基本単位から生成されたAmountインスタンス
+	 */
+	public static function fromBaseUnitAndDecimals( string $base_unit, Decimals $decimals ): self {
+		// 基本単位から小数点以下の桁数を考慮してAmountを生成
+		$multiplier = (string) ( 10 ** $decimals->value() );
+		return new self( bcdiv( $base_unit, $multiplier, 0 ) );
+	}
+
 	public function equals( self $other ): bool {
 		return $this->amount_text === $other->amount_text;
 	}
