@@ -25,9 +25,15 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
  */
 class CronHook {
 
+	public function __construct( AppContractCrawlCron $app_contract_crawl_cron ) {
+		$this->app_contract_crawl_cron = $app_contract_crawl_cron;
+	}
+
+	private AppContractCrawlCron $app_contract_crawl_cron;
+
 	public function register(): void {
 		// コントラクトのイベントログをクロールするCronを登録
-		( new AppContractCrawlCron() )->register();
+		$this->app_contract_crawl_cron->register();
 	}
 }
 
@@ -35,6 +41,12 @@ class CronHook {
  * AppコントラクトのログをクロールするCronを登録するクラス。
  */
 class AppContractCrawlCron {
+
+	public function __construct( AppContractCrawlCronProcedure $app_contract_crawl_cron_procedure ) {
+		$this->app_contract_crawl_cron_procedure = $app_contract_crawl_cron_procedure;
+	}
+	private AppContractCrawlCronProcedure $app_contract_crawl_cron_procedure;
+
 	public function register(): void {
 		// Cronアクション名を取得
 		$action_name = CronActionName::appContractCrawl();
@@ -77,15 +89,21 @@ class AppContractCrawlCron {
 	}
 
 	public function execute(): void {
-		( new AppContractCrawlCronProcedure() )->execute( 'latest' );
+		$this->app_contract_crawl_cron_procedure->execute( 'latest' );
 	}
 }
 
 class AppContractCrawlCronProcedure {
-	public function execute( string $block_tag ): void {
-		global $wpdb;
-		$crawler = new AppContractCrawler( $wpdb );
 
+	public function __construct( AppContractCrawler $app_contract_crawler, BlockchainClientFactory $blockchain_client_factory ) {
+		$this->app_contract_crawler      = $app_contract_crawler;
+		$this->blockchain_client_factory = $blockchain_client_factory;
+	}
+
+	private AppContractCrawler $app_contract_crawler;
+	private BlockchainClientFactory $blockchain_client_factory;
+
+	public function execute( string $block_tag ): void {
 		// クロール対象のチェーンID一覧を取得
 		$crawlable_chain_ids = ( new AppContractCrawlableChainIDs() )->get();
 
@@ -93,7 +111,7 @@ class AppContractCrawlCronProcedure {
 		// (ループ中に取得し直すとブロック番号が増えて終了しない可能性が出てくるため、先に取得しておく)
 		$end_block_number_array = array();
 		foreach ( $crawlable_chain_ids as $chain_ID ) {
-			$end_block_number_array[ $chain_ID ] = ( new BlockchainClientFactory() )->create( $chain_ID )->getBlockNumber( $block_tag );
+			$end_block_number_array[ $chain_ID ] = $this->blockchain_client_factory->create( $chain_ID )->getBlockNumber( $block_tag );
 		}
 
 		$crawl_failed_chain_ids = array(); // クロールに失敗したチェーンID一覧
@@ -146,7 +164,7 @@ class AppContractCrawlCronProcedure {
 
 				try {
 					// クロール実行
-					$crawler->crawl( $chain_ID, $from_block_number, $to_block_number );
+					$this->app_contract_crawler->crawl( $chain_ID, $from_block_number, $to_block_number );
 					// クロールしたブロック番号を保存
 					( new CrawledBlockNumber() )->set( $chain_ID, $block_tag, $to_block_number );
 				} catch ( \Throwable $e ) {

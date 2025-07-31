@@ -16,8 +16,8 @@ use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\PaidContentTable
 
 class PostRepositoryImpl implements PostRepository {
 
-	public function __construct( ?PaidContentTable $paid_content_table = null ) {
-		$this->paid_content_table = $paid_content_table ?? new PaidContentTable( $GLOBALS['wpdb'] );
+	public function __construct( PaidContentTable $paid_content_table ) {
+		$this->paid_content_table = $paid_content_table;
 	}
 
 	private PaidContentTable $paid_content_table;
