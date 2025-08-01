@@ -36,16 +36,16 @@ class PriceExchangeService {
 			return $this->calculatePrice( $price, $direct_rate );
 		}
 
-		$fromUsd = $this->resolveRate( $price->symbol(), new Symbol( 'USD' ) );
-		$usdTo   = $this->resolveRate( new Symbol( 'USD' ), $to_symbol );
+		$fromUsd = $this->resolveRate( $price->symbol(), Symbol::from( 'USD' ) );
+		$usdTo   = $this->resolveRate( Symbol::from( 'USD' ), $to_symbol );
 		if ( ! is_null( $fromUsd ) && ! is_null( $usdTo ) ) {
 			// USDを経由して変換可能な場合
 			$usd_price = $this->calculatePrice( $price, $fromUsd );
 			return $this->calculatePrice( $usd_price, $usdTo );
 		}
 
-		$fromEth = $this->resolveRate( $price->symbol(), new Symbol( 'ETH' ) );
-		$ethTo   = $this->resolveRate( new Symbol( 'ETH' ), $to_symbol );
+		$fromEth = $this->resolveRate( $price->symbol(), Symbol::from( 'ETH' ) );
+		$ethTo   = $this->resolveRate( Symbol::from( 'ETH' ), $to_symbol );
 		if ( ! is_null( $fromEth ) && ! is_null( $ethTo ) ) {
 			// ETHを経由して変換可能な場合
 			$eth_price = $this->calculatePrice( $price, $fromEth );
@@ -64,7 +64,7 @@ class PriceExchangeService {
 
 		// レートを使って通貨変換を実行
 		$amount = $price->amount()->mul( $rate->amount() );
-		return new Price( $amount, $rate->symbolPair()->quote() );
+		return Price::from( $amount, $rate->symbolPair()->quote() );
 	}
 
 	/**
@@ -73,13 +73,13 @@ class PriceExchangeService {
 	 */
 	private function resolveRate( Symbol $from_symbol, Symbol $to_symbol ): ?Rate {
 		// 直接的なレートを取得を試す
-		$rate = $this->rate_provider->getRate( new SymbolPair( $from_symbol, $to_symbol ) );
+		$rate = $this->rate_provider->getRate( SymbolPair::from( $from_symbol, $to_symbol ) );
 		if ( ! is_null( $rate ) ) {
 			return $rate;
 		}
 
 		// 逆方向のレートを取得してinvert()する
-		$reverse_rate = $this->rate_provider->getRate( new SymbolPair( $to_symbol, $from_symbol ) );
-		return ! is_null( $reverse_rate ) ? $reverse_rate->invert( new Decimals( self::ACCURACY_DECIMALS ) ) : null;
+		$reverse_rate = $this->rate_provider->getRate( SymbolPair::from( $to_symbol, $from_symbol ) );
+		return ! is_null( $reverse_rate ) ? $reverse_rate->invert( Decimals::from( self::ACCURACY_DECIMALS ) ) : null;
 	}
 }

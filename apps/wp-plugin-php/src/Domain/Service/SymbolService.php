@@ -41,7 +41,7 @@ class SymbolService {
 
 		// Symbol型に変換してから返す
 		return array_map(
-			fn( string $symbol ) => new Symbol( $symbol ),
+			fn( string $symbol ) => Symbol::from( $symbol ),
 			$symbols
 		);
 	}

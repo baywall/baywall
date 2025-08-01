@@ -28,7 +28,7 @@ class SetSellerAgreedTermsResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
 		$version   = $args['version'];
-		$signature = new Signature( $args['signature'] );
+		$signature = Signature::from( $args['signature'] );
 
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 

@@ -31,7 +31,7 @@ class NetworkCategoriesResolver extends ResolverBase {
 
 		/** @var array */
 		$filter                  = $args['filter'] ?? null;
-		$filter_network_category = NetworkCategoryID::from( $filter['networkCategoryID'] ?? null );
+		$filter_network_category = NetworkCategoryID::fromNullable( $filter['networkCategoryID'] ?? null );
 
 		// ネットワークカテゴリIDが指定されていない場合は全てのネットワークカテゴリを取得
 		$network_category_ids = is_null( $filter_network_category )

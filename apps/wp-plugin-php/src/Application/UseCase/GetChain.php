@@ -17,6 +17,6 @@ class GetChain {
 	private ChainRepository $chain_repository;
 
 	public function handle( int $chain_id ): ChainDto {
-		return ChainDto::fromEntity( $this->chain_repository->get( new ChainID( $chain_id ) ) );
+		return ChainDto::fromEntity( $this->chain_repository->get( ChainID::from( $chain_id ) ) );
 	}
 }

@@ -18,7 +18,7 @@ class GetPost {
 	private PostTitleProvider $post_title_provider;
 
 	public function handle( int $post_id ): ?PostDto {
-		$post = $this->post_repository->get( new PostId( $post_id ) );
-		return null !== $post ? PostDto::fromEntity( $post, $this->post_title_provider->getPostTitle( new PostId( $post_id ) ) ) : null;
+		$post = $this->post_repository->get( PostId::from( $post_id ) );
+		return null !== $post ? PostDto::fromEntity( $post, $this->post_title_provider->getPostTitle( PostId::from( $post_id ) ) ) : null;
 	}
 }

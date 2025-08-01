@@ -36,7 +36,7 @@ class TokensResolver extends ResolverBase {
 
 		$filter          = $args['filter'] ?? null;
 		$filter_chain_id = ChainID::fromNullableValue( $filter['chainID'] ?? null );
-		$filter_address  = Address::from( $filter['address'] ?? null );
+		$filter_address  = Address::fromNullable( $filter['address'] ?? null );
 
 		$tokens_filter = new TokensFilter();
 		if ( null !== $filter_chain_id ) {

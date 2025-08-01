@@ -101,7 +101,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$get_block_by_number_result = new GetBlockResult( $res );
+						$get_block_by_number_result = GetBlockResult::from( $res );
 					}
 				);
 			}

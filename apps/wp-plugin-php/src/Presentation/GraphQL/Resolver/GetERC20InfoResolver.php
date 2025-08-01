@@ -41,8 +41,8 @@ class GetERC20InfoResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$chain_ID = new ChainID( $args['chainID'] );
-		$address  = new Address( $args['address'] );
+		$chain_ID = ChainID::from( $args['chainID'] );
+		$address  = Address::from( $args['address'] );
 
 		if ( $address === Ethers::zeroAddress() ) {
 			// ERC20トークンの情報を取得するResolverのため、アドレスゼロも不許可
@@ -75,7 +75,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			$quote_symbols = array( 'USD', 'ETH' );
 			foreach ( $quote_symbols as $quote_symbol ) {
 				$filtered_oracles = ( new OraclesFilter() )
-					->bySymbolPair( new SymbolPair( $symbol, new Symbol( $quote_symbol ) ) )
+					->bySymbolPair( SymbolPair::from( $symbol, Symbol::from( $quote_symbol ) ) )
 					->byConnectable()
 					->apply( $oracles );
 				if ( count( $filtered_oracles ) > 0 ) {

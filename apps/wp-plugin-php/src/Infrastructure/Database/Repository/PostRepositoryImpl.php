@@ -58,9 +58,9 @@ class PostImpl extends Post {
 
 	public function __construct( PaidContentTableRecord $record ) {
 		parent::__construct(
-			new PostId( $record->postIdValue() ),
+			PostId::from( $record->postIdValue() ),
 			PaidContent::from( $record->paidContentValue() ),
-			NetworkCategoryID::from( $record->sellingNetworkCategoryIdValue() ),
+			NetworkCategoryID::fromNullable( $record->sellingNetworkCategoryIdValue() ),
 			$this->getPriceFromRecord( $record ),
 		);
 	}
@@ -71,7 +71,7 @@ class PostImpl extends Post {
 		if ( null === $selling_amount_value || null === $selling_symbol ) {
 			return null;
 		} else {
-			return new Price( Amount::from( $selling_amount_value ), new Symbol( $selling_symbol ) );
+			return Price::from( Amount::from( $selling_amount_value ), Symbol::from( $selling_symbol ) );
 		}
 	}
 }

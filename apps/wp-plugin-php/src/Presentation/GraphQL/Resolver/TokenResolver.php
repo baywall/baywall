@@ -21,12 +21,8 @@ class TokenResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$chain_id = new ChainID( $args['chainID'] );
-		$address  = Address::from( $args['address'] ?? null );
-
-		if ( null === $address ) {
-			throw new \InvalidArgumentException( '[C0B26B53] Invalid address provided.' );
-		}
+		$chain_id = ChainID::from( $args['chainID'] );
+		$address  = Address::from( $args['address'] );
 
 		$token = $this->token_repository->get( $chain_id, $address );
 
