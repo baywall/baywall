@@ -34,7 +34,7 @@ class SellerTermsRepository {
 		if ( is_null( $version_value ) ) {
 			return null;  // 利用規約に同意していない
 		}
-		$signature = new Signature( $option_factory->sellerAgreedTermsSignature()->get() );
+		$signature = Signature::from( $option_factory->sellerAgreedTermsSignature()->get() );
 		$message   = $this->message( new TermsVersion( $version_value ) );
 		return new SignedTerms( new Terms( new TermsVersion( $version_value ), $message ), $signature );
 	}
