@@ -116,7 +116,7 @@ class AppContractCrawler {
 				$from,
 				$to,
 				$token_address,
-				Amount::from( $amount->toString() ),
+				Amount::fromNullable( $amount->toString() ),
 				HexFormat::toInt( '0x' . $transfer_type->toHex() ),
 			);
 		}
