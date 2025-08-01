@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
-use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
@@ -182,27 +182,25 @@ class BlockchainClient {
 	/**
 	 * アカウントの残高を取得します。
 	 */
-	public function getBalanceHex( Address $address ): string {
+	public function getBalance( Address $address ): Amount {
 
-		/** @var string|null */
-		$balance_hex = null;
+		/** @var Amount|null */
+		$balance = null;
 		$this->retryer->execute(
-			function () use ( $address, &$balance_hex ) {
+			function () use ( $address, &$balance ) {
 				$this->eth()->getBalance(
 					$address->value(),
-					function ( $err, BigInteger $res ) use ( &$balance_hex ) {
+					function ( $err, BigInteger $res ) use ( &$balance ) {
 						if ( $err ) {
 							throw $err;
 						}
-						$balance_hex = HexFormat::toHex( $res );
+						$balance = Amount::from( $res->toString() );
 					}
 				);
 			}
 		);
-		assert( ! is_null( $balance_hex ), '[72C38938] Failed to get balance.' );
-		Validate::checkAmountHex( $balance_hex );
 
-		return $balance_hex;
+		return $balance;
 	}
 
 	public function getLogs( ...$args ) {
