@@ -63,7 +63,7 @@ class Token {
 	public static function fromTableRecord( TokenTableRecord $record ): self {
 		return new self(
 			new ChainID( $record->chainIdValue() ),
-			Address::from( $record->addressValue() ),
+			Address::fromNullable( $record->addressValue() ),
 			new Symbol( $record->symbolValue() ),
 			new Decimals( $record->decimalsValue() ),
 			$record->isPayableValue()

@@ -97,9 +97,9 @@ class AppContractCrawler {
 			assert( is_array( $event_args ), '[66C28129] event_args is not array' );
 
 			// イベント発行時の引数を取得
-			$from          = Address::from( $event_args['from'] ?? null );
-			$to            = Address::from( $event_args['to'] ?? null );
-			$token_address = Address::from( $event_args['token'] );
+			$from          = Address::fromNullable( $event_args['from'] ?? null );
+			$to            = Address::fromNullable( $event_args['to'] ?? null );
+			$token_address = Address::fromNullable( $event_args['token'] );
 			/** @var BigInteger */
 			$amount = $event_args['amount'];
 			/** @var BigInteger */

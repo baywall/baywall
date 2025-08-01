@@ -26,7 +26,7 @@ class ServerSignerPrivateKeyRepository {
 	}
 	public function address(): ?Address {
 		$record = $this->server_signer_table->get();
-		return is_null( $record ) ? null : Address::from( $record->addressValue() );
+		return is_null( $record ) ? null : Address::fromNullable( $record->addressValue() );
 	}
 
 	/**

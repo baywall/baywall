@@ -199,7 +199,7 @@ class AppContractAbi {
 	 */
 	private function correctDecodedValue( string $type, $value ) {
 		if ( $type === 'address' ) {
-			return Address::from( $value )->value(); // チェックサムアドレスに変換
+			return Address::fromNullable( $value )->value(); // チェックサムアドレスに変換
 		}
 
 		return $value;

@@ -18,7 +18,7 @@ final class Address {
 	}
 	private string $address_value;
 
-	public static function from( ?string $address_value ): ?self {
+	public static function fromNullable( ?string $address_value ): ?self {
 		return is_null( $address_value ) ? null : new self( $address_value );
 	}
 
