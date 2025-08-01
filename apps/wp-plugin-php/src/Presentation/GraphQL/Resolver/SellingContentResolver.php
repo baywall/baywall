@@ -34,7 +34,7 @@ class SellingContentResolver extends ResolverBase {
 		$this->user_access_checker->checkCanViewPost( $post_ID );
 
 		// 有料部分のコンテンツを取得
-		$paid_content = $this->post_repository->get( new PostId( $post_ID ) )->paidContent();
+		$paid_content = $this->post_repository->get( PostId::from( $post_ID ) )->paidContent();
 
 		// 有料部分のコンテンツが取得できなかった場合はnullを返す
 		if ( null === $paid_content ) {

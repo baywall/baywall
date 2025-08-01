@@ -34,7 +34,7 @@ class SellingPriceResolver extends ResolverBase {
 		$this->user_access_checker->checkCanViewPost( $post_ID );
 
 		// 販売価格をテーブルから取得して返す
-		$selling_price = $this->post_repository->get( new PostId( $post_ID ) )->sellingPrice();
+		$selling_price = $this->post_repository->get( PostId::from( $post_ID ) )->sellingPrice();
 
 		if ( is_null( $selling_price ) ) {
 			DeprecatedLogger::warn( '[57B6E802] Selling price is null for post ID: ' . $post_ID );

@@ -27,7 +27,7 @@ class GetPayableTokens {
 	/** @return TokenDto[] */
 	public function handle( int $post_id ): array {
 		// 投稿の販売ネットワークを取得
-		$post                     = $this->post_repository->get( new PostId( $post_id ) );
+		$post                     = $this->post_repository->get( PostId::from( $post_id ) );
 		$selling_network_category = $post->sellingNetworkCategoryID();
 		if ( is_null( $selling_network_category ) ) {
 			DeprecatedLogger::warn( '[666BFD5D] Selling network category is null for post ID: ' . $post_id );

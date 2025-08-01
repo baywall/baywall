@@ -58,7 +58,7 @@ class PostImpl extends Post {
 
 	public function __construct( PaidContentTableRecord $record ) {
 		parent::__construct(
-			new PostId( $record->postIdValue() ),
+			PostId::from( $record->postIdValue() ),
 			PaidContent::from( $record->paidContentValue() ),
 			NetworkCategoryID::fromNullable( $record->sellingNetworkCategoryIdValue() ),
 			$this->getPriceFromRecord( $record ),
