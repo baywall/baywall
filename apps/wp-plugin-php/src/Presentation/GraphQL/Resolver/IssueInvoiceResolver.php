@@ -37,7 +37,7 @@ class IssueInvoiceResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
 		$post_ID          = $args['postID'];
-		$chain_ID         = new ChainID( $args['chainID'] );
+		$chain_ID         = ChainID::from( $args['chainID'] );
 		$token_address    = Address::from( $args['tokenAddress'] );
 		$consumer_address = Address::from( $args['consumerAddress'] ); // 購入者のアドレス
 

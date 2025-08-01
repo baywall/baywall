@@ -20,7 +20,7 @@ class GetTokensByChainId {
 	/** @return TokenDto[] */
 	public function handle( int $chain_id ): array {
 		$tokens = ( new TokensFilter() )
-			->byChainID( new ChainID( $chain_id ) )
+			->byChainID( ChainID::from( $chain_id ) )
 			->apply( $this->token_repository->all() );
 
 		return array_map( fn( $token ) => TokenDto::fromEntity( $token ), $tokens );

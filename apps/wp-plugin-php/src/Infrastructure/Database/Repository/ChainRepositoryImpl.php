@@ -48,7 +48,7 @@ class ChainRepositoryImpl implements ChainRepository {
 class ChainImpl extends Chain {
 	public function __construct( ChainTableRecord $record ) {
 		parent::__construct(
-			new ChainID( $record->chainIdValue() ),
+			ChainID::from( $record->chainIdValue() ),
 			$record->nameValue(),
 			new NetworkCategoryID( $record->networkCategoryIdValue() ),
 			RpcUrl::from( $record->rpcUrlValue() ),

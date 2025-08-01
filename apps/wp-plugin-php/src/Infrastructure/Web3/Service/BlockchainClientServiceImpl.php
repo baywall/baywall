@@ -59,7 +59,7 @@ class BlockchainClientServiceImpl implements BlockchainClientService {
 						if ( $err ) {
 							throw $err;
 						}
-						$result = new ChainID( hexdec( $res->toHex() ) );
+						$result = ChainID::from( hexdec( $res->toHex() ) );
 					}
 				);
 			}

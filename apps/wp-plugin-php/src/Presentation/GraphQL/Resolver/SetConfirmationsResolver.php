@@ -30,7 +30,7 @@ class SetConfirmationsResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$chain_ID = new ChainID( $args['chainID'] );
+		$chain_ID = ChainID::from( $args['chainID'] );
 		/** @var string|null */
 		$confirmations_input = $args['confirmations'] ?? null;
 

@@ -21,7 +21,7 @@ class TokenResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$chain_id = new ChainID( $args['chainID'] );
+		$chain_id = ChainID::from( $args['chainID'] );
 		$address  = Address::from( $args['address'] );
 
 		$token = $this->token_repository->get( $chain_id, $address );
