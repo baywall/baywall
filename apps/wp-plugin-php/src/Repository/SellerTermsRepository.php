@@ -36,7 +36,7 @@ class SellerTermsRepository {
 		}
 		$signature = Signature::from( $option_factory->sellerAgreedTermsSignature()->get() );
 		$message   = $this->message( new TermsVersion( $version_value ) );
-		return SignedTerms::from( new Terms( new TermsVersion( $version_value ), $message ), $signature );
+		return SignedTerms::from( Terms::from( new TermsVersion( $version_value ), $message ), $signature );
 	}
 
 	public function currentTerms(): Terms {
@@ -46,7 +46,7 @@ class SellerTermsRepository {
 		$message = $this->message( $current_version );
 
 		// Termsオブジェクトを生成して返す
-		return new Terms( $current_version, $message );
+		return Terms::from( $current_version, $message );
 	}
 
 	/**
