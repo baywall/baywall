@@ -53,7 +53,7 @@ class SetRpcUrlResolver extends ResolverBase {
 
 			// リポジトリからチェーン情報を取得、RPC URLを設定して保存
 			$chain = $this->chain_repository->get( $chain_ID );
-			$chain->setRpcURL( $rpc_url ? new RpcUrl( $rpc_url ) : null );
+			$chain->setRpcURL( RpcUrl::fromNullable( $rpc_url ) );
 			$this->chain_repository->save( $chain );
 
 			$wpdb->query( 'COMMIT' );

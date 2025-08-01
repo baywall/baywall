@@ -51,7 +51,7 @@ class ChainImpl extends Chain {
 			ChainID::from( $record->chainIdValue() ),
 			$record->nameValue(),
 			NetworkCategoryID::from( $record->networkCategoryIdValue() ),
-			RpcUrl::from( $record->rpcUrlValue() ),
+			RpcUrl::fromNullable( $record->rpcUrlValue() ),
 			Confirmations::from( $record->confirmationsValue() ),
 			$record->blockExplorerUrlValue()
 		);
