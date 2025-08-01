@@ -48,7 +48,7 @@ class AppContractImpl extends AppContract {
 	public function __construct( Chain $chain, AppContractTableRecord $record ) {
 		parent::__construct(
 			$chain,
-			new Address( $record->addressValue() ),
+			Address::from( $record->addressValue() ),
 			BlockNumber::from( $record->crawledBlockNumberValue() ),
 			UnixTimestampFormat::fromMySQL( $record->crawledBlockNumberUpdatedAtValue() )
 		);

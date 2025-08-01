@@ -38,8 +38,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		/** @var int */
 		$post_ID          = $args['postID'];
 		$chain_ID         = new ChainID( $args['chainID'] );
-		$token_address    = new Address( $args['tokenAddress'] );
-		$consumer_address = new Address( $args['consumerAddress'] ); // 購入者のアドレス
+		$token_address    = Address::from( $args['tokenAddress'] );
+		$consumer_address = Address::from( $args['consumerAddress'] ); // 購入者のアドレス
 
 		// 投稿を閲覧できる権限があることをチェック
 		$this->user_access_checker->checkCanViewPost( $post_ID );
