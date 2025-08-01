@@ -37,7 +37,7 @@ class Rate {
 	 * @param Decimals $max_decimals 割り切れない時の小数点以下桁数の最大精度
 	 * @return Rate 反転されたレート
 	 */
-	public function invert( Decimals $max_decimals ): Rate {
+	public function invert( Decimals $max_decimals ): self {
 		// 通貨ペアを逆転 (base ↔ quote)
 		$inverted_symbol_pair = SymbolPair::from( $this->symbol_pair->quote(), $this->symbol_pair->base() );
 

@@ -29,7 +29,7 @@ final class BlockTag {
 		return $this->tag;
 	}
 
-	public function equals( BlockTag $other ): bool {
+	public function equals( self $other ): bool {
 		return $this->tag === $other->tag;
 	}
 

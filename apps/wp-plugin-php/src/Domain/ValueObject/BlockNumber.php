@@ -43,14 +43,14 @@ class BlockNumber {
 	/**
 	 * 現在のブロック番号に引数の値を加算した新しいインスタンスを取得します。
 	 */
-	public function add( int $addend ): BlockNumber {
+	public function add( int $addend ): self {
 		return new self( $this->block_number->add( new BigInteger( $addend, 10 ) ) );
 	}
 
 	/**
 	 * 現在のブロック番号から引数の値を減算した新しいインスタンスを取得します。
 	 */
-	public function sub( int $subtrahend ): BlockNumber {
+	public function sub( int $subtrahend ): self {
 		return new self( $this->block_number->subtract( new BigInteger( $subtrahend, 10 ) ) );
 	}
 
@@ -61,7 +61,7 @@ class BlockNumber {
 	 * $x < $y: $x->compare($y) < 0
 	 * $x == $y: $x->compare($y) == 0
 	 */
-	public function compare( BlockNumber $other ): int {
+	public function compare( self $other ): int {
 		return $this->block_number->compare( $other->block_number );
 	}
 
