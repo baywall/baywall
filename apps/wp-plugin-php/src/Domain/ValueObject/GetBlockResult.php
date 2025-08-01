@@ -13,6 +13,10 @@ class GetBlockResult {
 
 	private stdClass $response;
 
+	public static function from( stdClass $get_block_by_number_response ): self {
+		return new self( $get_block_by_number_response );
+	}
+
 	public function blockNumber(): BlockNumber {
 		return BlockNumber::from( $this->response->number );
 	}
