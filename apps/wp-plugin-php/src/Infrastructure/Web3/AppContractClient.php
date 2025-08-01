@@ -108,10 +108,10 @@ class AppContractClient {
 						hexdec( $log->logIndex ), // log_index
 						TransactionHash::from( $log->transactionHash ), // transaction_hash
 						InvoiceID::from( $decoded_event_parameters['invoiceID'] ), // invoice_id
-						Address::fromNullable( $decoded_event_parameters['signer'] ), // server_signer_address
-						Address::fromNullable( $decoded_event_parameters['from'] ), // from_address
-						Address::fromNullable( $decoded_event_parameters['to'] ), // to_address
-						Address::fromNullable( $decoded_event_parameters['token'] ), // token_address
+						new Address( $decoded_event_parameters['signer'] ), // server_signer_address
+						new Address( $decoded_event_parameters['from'] ), // from_address
+						new Address( $decoded_event_parameters['to'] ), // to_address
+						new Address( $decoded_event_parameters['token'] ), // token_address
 						Amount::from( $decoded_event_parameters['amount']->toString() ), // amount
 						UnlockPaywallTransferType::from( (int) ( $decoded_event_parameters['transferType'] )->toString() ) // transfer_type
 					);
