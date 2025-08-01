@@ -75,7 +75,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			$quote_symbols = array( 'USD', 'ETH' );
 			foreach ( $quote_symbols as $quote_symbol ) {
 				$filtered_oracles = ( new OraclesFilter() )
-					->bySymbolPair( new SymbolPair( $symbol, Symbol::from( $quote_symbol ) ) )
+					->bySymbolPair( SymbolPair::from( $symbol, Symbol::from( $quote_symbol ) ) )
 					->byConnectable()
 					->apply( $oracles );
 				if ( count( $filtered_oracles ) > 0 ) {

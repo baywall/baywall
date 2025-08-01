@@ -39,7 +39,7 @@ class Rate {
 	 */
 	public function invert( Decimals $max_decimals ): Rate {
 		// 通貨ペアを逆転 (base ↔ quote)
-		$inverted_symbol_pair = new SymbolPair( $this->symbol_pair->quote(), $this->symbol_pair->base() );
+		$inverted_symbol_pair = SymbolPair::from( $this->symbol_pair->quote(), $this->symbol_pair->base() );
 
 		// レート値を逆数計算 (1 / rate)
 		$one             = Amount::from( '1' );
