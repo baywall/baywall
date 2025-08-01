@@ -66,7 +66,7 @@ class AppContractClient {
 				assert( $invoice_ID instanceof BigInteger );
 				assert( $unlocked_block_number instanceof BigInteger );
 
-				$result = new GetPaywallStatusResult( $is_unlocked, InvoiceID::from( $invoice_ID ), BlockNumber::from( $unlocked_block_number ) );
+				$result = new GetPaywallStatusResult( $is_unlocked, InvoiceID::from( $invoice_ID ), BlockNumber::fromNullable( $unlocked_block_number ) );
 			}
 		);
 
@@ -104,7 +104,7 @@ class AppContractClient {
 				foreach ( $logs as $log ) {
 					$decoded_event_parameters = $this->abi->decodeEventParameters( $log );
 					$results[]                = new UnlockPaywallTransferEvent(
-						BlockNumber::from( $log->blockNumber ), // block_number
+						BlockNumber::fromNullable( $log->blockNumber ), // block_number
 						hexdec( $log->logIndex ), // log_index
 						TransactionHash::from( $log->transactionHash ), // transaction_hash
 						InvoiceID::from( $decoded_event_parameters['invoiceID'] ), // invoice_id

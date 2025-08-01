@@ -21,7 +21,7 @@ class BlockNumber {
 	/**
 	 * @param null|int|string|BigInteger $block_number
 	 */
-	public static function from( $block_number ): ?BlockNumber {
+	public static function fromNullable( $block_number ): ?BlockNumber {
 		if ( null === $block_number ) {
 			return null;
 		} elseif ( is_int( $block_number ) ) {

@@ -81,7 +81,7 @@ class AppContractCrawler {
 			$this->unlock_paywall_transaction_repository->save(
 				$invoice_ID,
 				$chain_ID,
-				BlockNumber::from( $block_number_hex ),
+				BlockNumber::fromNullable( $block_number_hex ),
 				$transaction_hash,
 			);
 		}
