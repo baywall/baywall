@@ -54,6 +54,6 @@ class SellerTermsRepository {
 	 * ※※※ 過去のバージョンが引数として渡される可能性があるため、過去バージョンでのメッセージが壊れないように注意してください。
 	 */
 	private function message( TermsVersion $version ): SigningMessage {
-		return new SigningMessage( 'I agree to the seller\'s terms of service v' . $version->value() );
+		return SigningMessage::from( 'I agree to the seller\'s terms of service v' . $version->value() );
 	}
 }

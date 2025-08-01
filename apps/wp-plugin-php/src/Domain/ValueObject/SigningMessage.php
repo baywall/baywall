@@ -6,8 +6,11 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /** 署名のためのメッセージ */
 class SigningMessage {
 
-	public function __construct( string $signing_message_value ) {
+	private function __construct( string $signing_message_value ) {
 		$this->signing_message_value = $signing_message_value;
+	}
+	public static function from( string $signing_message_value ): self {
+		return new self( $signing_message_value );
 	}
 
 	private string $signing_message_value;

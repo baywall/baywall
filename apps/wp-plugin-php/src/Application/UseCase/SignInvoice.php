@@ -22,7 +22,7 @@ class SignInvoice {
 	public function handle( Invoice $invoice ): SingInvoiceResult {
 
 		// 署名用ウォレットで署名を行うためのメッセージを作成
-		$server_message = new SigningMessage(
+		$server_message = SigningMessage::from(
 			SolidityStrings::valueToHexString( $invoice->chainID()->value() )
 			. SolidityStrings::addressToHexString( $invoice->sellerAddress() )
 			. SolidityStrings::addressToHexString( $invoice->consumerAddress() )
