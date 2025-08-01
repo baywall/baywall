@@ -34,7 +34,7 @@ class OracleClient {
 		);
 
 		assert( is_int( $result ) );
-		return new Decimals( $result );
+		return Decimals::from( $result );
 	}
 
 	/**
