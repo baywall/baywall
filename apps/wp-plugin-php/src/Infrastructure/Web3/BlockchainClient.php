@@ -10,6 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
+use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
 use Web3\Eth;
@@ -22,17 +23,17 @@ use Web3\Methods\EthMethod;
 
 /** @deprecated Use BlockchainClientService */
 class BlockchainClient {
-	public function __construct( string $rpc_url ) {
+	public function __construct( RpcUrl $rpc_url ) {
 		$this->rpc_url = $rpc_url;
 		$this->timeout = Config::BLOCKCHAIN_REQUEST_TIMEOUT;
 		$this->retryer = new BlockchainRetryer();
 	}
-	private string $rpc_url;
+	private RpcUrl $rpc_url;
 	private float $timeout;
 	private BlockchainRetryer $retryer;
 
 	private function eth(): Eth {
-		return new Eth( $this->rpc_url, $this->timeout );
+		return new Eth( $this->rpc_url->value(), $this->timeout );
 	}
 
 	/**

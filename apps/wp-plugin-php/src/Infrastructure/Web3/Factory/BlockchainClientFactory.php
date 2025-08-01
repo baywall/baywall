@@ -26,6 +26,6 @@ class BlockchainClientFactory {
 			throw new \Exception( '[4513DF1F] RPC URL is not found. - ' . $chain_ID );
 		}
 
-		return new BlockchainClient( $rpc_url->value() );
+		return new BlockchainClient( $rpc_url );
 	}
 }
