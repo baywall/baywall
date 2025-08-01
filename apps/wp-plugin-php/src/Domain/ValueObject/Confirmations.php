@@ -20,7 +20,7 @@ final class Confirmations {
 	 * @param int|string|null $confirmations_value
 	 * @return Confirmations|null
 	 */
-	public static function from( $confirmations_value ): ?self {
+	public static function fromNullable( $confirmations_value ): ?self {
 		if ( null === $confirmations_value ) {
 			return null;
 		} elseif ( is_string( $confirmations_value ) && 1 === preg_match( '/^-?\d+$/', $confirmations_value ) ) {
