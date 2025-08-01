@@ -11,14 +11,18 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
  */
 final class Address {
 
-	public function __construct( string $address_value ) {
+	private function __construct( string $address_value ) {
 		self::checkValidAddressFormat( $address_value );
 		// アドレスは常にチェックサムアドレスで保持する
 		$this->address_value = \Web3\Utils::toChecksumAddress( $address_value );
 	}
 	private string $address_value;
 
-	public static function from( ?string $address_value ): ?self {
+	public static function from( string $address_value ): self {
+		return new self( $address_value );
+	}
+
+	public static function fromNullable( ?string $address_value ): ?self {
 		return is_null( $address_value ) ? null : new self( $address_value );
 	}
 

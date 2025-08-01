@@ -8,7 +8,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
  */
 class Decimals {
 
-	public function __construct( int $decimals_value ) {
+	private function __construct( int $decimals_value ) {
 		if ( $decimals_value < 0 ) {
 			throw new \InvalidArgumentException( '[7CE0FCDE] Decimals must be a non-negative integer.' );
 		}
@@ -18,6 +18,10 @@ class Decimals {
 
 	public function value(): int {
 		return $this->decimals_value;
+	}
+
+	public static function from( int $decimals_value ): self {
+		return new self( $decimals_value );
 	}
 
 	public function equals( self $other ): bool {

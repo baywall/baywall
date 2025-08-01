@@ -6,9 +6,12 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class SymbolPair {
-	public function __construct( Symbol $base_symbol, Symbol $quote_symbol ) {
+	private function __construct( Symbol $base_symbol, Symbol $quote_symbol ) {
 		$this->base_symbol  = $base_symbol;
 		$this->quote_symbol = $quote_symbol;
+	}
+	public static function from( Symbol $base_symbol, Symbol $quote_symbol ): self {
+		return new self( $base_symbol, $quote_symbol );
 	}
 
 	private Symbol $base_symbol;

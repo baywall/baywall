@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 class TransactionHash {
-	public function __construct( string $hash ) {
+	private function __construct( string $hash ) {
 		$this->hash = $hash;
 	}
 

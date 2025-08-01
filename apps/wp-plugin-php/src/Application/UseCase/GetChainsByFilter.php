@@ -31,7 +31,7 @@ class GetChainsByFilter {
 		// フィルタ処理
 		$chains_filter = new ChainsFilter();
 		// チェーンIDでフィルタ
-		$chains_filter = null !== $filter_chain_id ? $chains_filter->byChainID( new ChainID( $filter_chain_id ) ) : $chains_filter;
+		$chains_filter = null !== $filter_chain_id ? $chains_filter->byChainID( ChainID::from( $filter_chain_id ) ) : $chains_filter;
 		// 接続可能なチェーンでフィルタ
 		$chains_filter = null !== $filter_is_connectable ? $chains_filter->byConnectable( $filter_is_connectable ) : $chains_filter;
 

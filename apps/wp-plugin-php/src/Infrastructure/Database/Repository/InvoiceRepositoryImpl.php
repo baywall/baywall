@@ -42,16 +42,16 @@ class InvoiceImpl extends Invoice {
 		parent::__construct(
 			InvoiceID::from( $invoice_record->idValue() ),
 			$invoice_record->postIdValue(),
-			new ChainID( $invoice_record->chainIdValue() ),
-			new Price(
+			ChainID::from( $invoice_record->chainIdValue() ),
+			Price::from(
 				Amount::from( $invoice_record->sellingAmountValue() ),
-				new Symbol( $invoice_record->sellingSymbolValue() )
+				Symbol::from( $invoice_record->sellingSymbolValue() )
 			),
 			Address::from( $invoice_record->sellerAddressValue() ),
 			Address::from( $invoice_record->paymentTokenAddressValue() ),
 			Amount::from( $invoice_record->paymentAmountValue() ),
 			Address::from( $invoice_record->consumerAddressValue() ),
-			$invoice_record->nonceValue() ? new InvoiceNonce( $invoice_record->nonceValue() ) : null
+			InvoiceNonce::from( $invoice_record->nonceValue() ),
 		);
 	}
 }

@@ -31,7 +31,7 @@ class NetworkCategoryResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$network_category_id = new NetworkCategoryID( $args['networkCategoryID'] );
+		$network_category_id = NetworkCategoryID::from( $args['networkCategoryID'] );
 
 		$sellable_symbols_callback = function () {
 			$this->user_access_checker->checkCanCreatePost();   // 投稿を新規作成できる権限が必要

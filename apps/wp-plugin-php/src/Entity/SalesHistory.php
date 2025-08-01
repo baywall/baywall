@@ -84,9 +84,9 @@ class SalesHistory {
 
 	/** 販売価格 */
 	public function sellingPrice(): Price {
-		return new Price(
+		return Price::from(
 			Amount::from( (string) $this->record[ self::COLUMN_SELLING_AMOUNT ] ),
-			new Symbol( (string) $this->record[ self::COLUMN_SELLING_SYMBOL ] )
+			Symbol::from( (string) $this->record[ self::COLUMN_SELLING_SYMBOL ] )
 		);
 	}
 
@@ -97,9 +97,9 @@ class SalesHistory {
 
 	/** 支払い金額 */
 	public function paymentPrice(): Price {
-		return new Price(
+		return Price::from(
 			Amount::from( (string) $this->record[ self::COLUMN_PAYMENT_AMOUNT ] ),
-			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
+			Symbol::from( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
 
@@ -125,22 +125,22 @@ class SalesHistory {
 
 	/** 販売者の利益 */
 	public function sellerProfitPrice(): Price {
-		return new Price(
+		return Price::from(
 			Amount::from( (string) $this->record[ self::COLUMN_SELLER_PROFIT_AMOUNT ] ),
-			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
+			Symbol::from( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
 
 	/** 手数料 */
 	public function handlingFeePrice(): Price {
-		return new Price(
+		return Price::from(
 			Amount::from( (string) $this->record[ self::COLUMN_HANDLING_FEE_AMOUNT ] ),
-			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
+			Symbol::from( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
 
 	/** 支払いトークン */
 	public function paymentToken(): Token {
-		return ( new TokenRepositoryImpl() )->get( new ChainID( (int) $this->record[ self::COLUMN_CHAIN_ID ] ), Address::from( (string) $this->record[ self::COLUMN_TOKEN_ADDRESS ] ) );
+		return ( new TokenRepositoryImpl() )->get( ChainID::from( (int) $this->record[ self::COLUMN_CHAIN_ID ] ), Address::from( (string) $this->record[ self::COLUMN_TOKEN_ADDRESS ] ) );
 	}
 }

@@ -8,14 +8,17 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
  */
 final class Symbol {
 
-	public function __construct( string $symbol_value ) {
+	private function __construct( string $symbol_value ) {
 		self::checkValidSymbolFormat( $symbol_value );
 		$this->symbol_value = $symbol_value;
 	}
 
 	private string $symbol_value;
 
-	public static function from( ?string $symbol_value ): ?self {
+	public static function from( string $symbol_value ): self {
+		return new self( $symbol_value );
+	}
+	public static function fromNullable( ?string $symbol_value ): ?self {
 		return is_null( $symbol_value ) ? null : new self( $symbol_value );
 	}
 

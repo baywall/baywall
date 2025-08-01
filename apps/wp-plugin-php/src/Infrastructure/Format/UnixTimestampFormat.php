@@ -23,6 +23,6 @@ class UnixTimestampFormat {
 		if ( false === $datetime ) {
 			throw new \InvalidArgumentException( '[5D7C87DE] Invalid MySQL DATETIME format: ' . $mysql_datetime );
 		}
-		return new UnixTimestamp( $datetime->getTimestamp() );
+		return UnixTimestamp::from( $datetime->getTimestamp() );
 	}
 }

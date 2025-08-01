@@ -15,8 +15,12 @@ final class InvoiceNonce extends NonceBase {
 	/**
 	 * 請求書に紐づくnonceインスタンスを生成します。
 	 */
-	public function __construct( string $invoice_nonce_value ) {
+	private function __construct( string $invoice_nonce_value ) {
 		parent::__construct( $invoice_nonce_value );
+	}
+
+	public static function from( string $invoice_nonce_value ): self {
+		return new self( $invoice_nonce_value );
 	}
 
 	/** @inheritdoc */

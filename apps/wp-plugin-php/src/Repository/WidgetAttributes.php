@@ -44,19 +44,19 @@ class WidgetAttributes {
 
 	/** 販売対象のネットワークカテゴリを取得します。 */
 	public function sellingNetworkCategoryID(): ?NetworkCategoryID {
-		return NetworkCategoryID::from( $this->attrs[ self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID ] ?? null );
+		return NetworkCategoryID::fromNullable( $this->attrs[ self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID ] ?? null );
 	}
 
 	/** 販売価格を取得します。 */
 	public function sellingPrice(): ?Price {
-		$amount = Amount::from( $this->sellingAmount() );
-		$symbol = Symbol::from( $this->sellingSymbol() );
+		$amount = Amount::fromNullable( $this->sellingAmount() );
+		$symbol = Symbol::fromNullable( $this->sellingSymbol() );
 
 		if ( is_null( $amount ) || is_null( $symbol ) ) {
 			return null;
 		}
 
-		return new Price( $amount, $symbol );
+		return Price::from( $amount, $symbol );
 	}
 
 	/** 販売価格を取得します */

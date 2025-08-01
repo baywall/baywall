@@ -15,10 +15,10 @@ class OracleImpl extends Oracle {
 	private function __construct( OracleTableRecord $oracle_record, ChainTableRecord $chain_record ) {
 		parent::__construct(
 			ChainImpl::fromTableRecord( $chain_record ),
-			new Address( $oracle_record->addressValue() ),
-			new SymbolPair(
-				new Symbol( $oracle_record->baseSymbolValue() ),
-				new Symbol( $oracle_record->quoteSymbolValue() )
+			Address::from( $oracle_record->addressValue() ),
+			SymbolPair::from(
+				Symbol::from( $oracle_record->baseSymbolValue() ),
+				Symbol::from( $oracle_record->quoteSymbolValue() )
 			)
 		);
 	}

@@ -36,7 +36,7 @@ class TokenClient {
 		);
 
 		assert( is_int( $result ) );
-		return new Decimals( $result );
+		return Decimals::from( $result );
 	}
 
 	/**
@@ -58,7 +58,7 @@ class TokenClient {
 		);
 
 		assert( is_string( $result ) );
-		return new Symbol( $result );
+		return Symbol::from( $result );
 	}
 }
 

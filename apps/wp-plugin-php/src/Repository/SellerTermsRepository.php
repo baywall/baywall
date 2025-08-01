@@ -34,19 +34,19 @@ class SellerTermsRepository {
 		if ( is_null( $version_value ) ) {
 			return null;  // 利用規約に同意していない
 		}
-		$signature = new Signature( $option_factory->sellerAgreedTermsSignature()->get() );
-		$message   = $this->message( new TermsVersion( $version_value ) );
-		return new SignedTerms( new Terms( new TermsVersion( $version_value ), $message ), $signature );
+		$signature = Signature::from( $option_factory->sellerAgreedTermsSignature()->get() );
+		$message   = $this->message( TermsVersion::from( $version_value ) );
+		return SignedTerms::from( Terms::from( TermsVersion::from( $version_value ), $message ), $signature );
 	}
 
 	public function currentTerms(): Terms {
-		$current_version = new TermsVersion( self::CURRENT_SELLER_TERMS_VERSION );
+		$current_version = TermsVersion::from( self::CURRENT_SELLER_TERMS_VERSION );
 
 		// 利用規約のメッセージを取得
 		$message = $this->message( $current_version );
 
 		// Termsオブジェクトを生成して返す
-		return new Terms( $current_version, $message );
+		return Terms::from( $current_version, $message );
 	}
 
 	/**
@@ -54,6 +54,6 @@ class SellerTermsRepository {
 	 * ※※※ 過去のバージョンが引数として渡される可能性があるため、過去バージョンでのメッセージが壊れないように注意してください。
 	 */
 	private function message( TermsVersion $version ): SigningMessage {
-		return new SigningMessage( 'I agree to the seller\'s terms of service v' . $version->value() );
+		return SigningMessage::from( 'I agree to the seller\'s terms of service v' . $version->value() );
 	}
 }

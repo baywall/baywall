@@ -7,11 +7,15 @@ use stdClass;
 
 class GetBlockResult {
 
-	public function __construct( stdClass $get_block_by_number_response ) {
+	private function __construct( stdClass $get_block_by_number_response ) {
 		$this->response = $get_block_by_number_response;
 	}
 
 	private stdClass $response;
+
+	public static function from( stdClass $get_block_by_number_response ): self {
+		return new self( $get_block_by_number_response );
+	}
 
 	public function blockNumber(): BlockNumber {
 		return BlockNumber::from( $this->response->number );
@@ -19,6 +23,6 @@ class GetBlockResult {
 
 	public function timestamp(): UnixTimestamp {
 		// タイムスタンプはUNIX時間
-		return new UnixTimestamp( hexdec( $this->response->timestamp ) );
+		return UnixTimestamp::from( hexdec( $this->response->timestamp ) );
 	}
 }

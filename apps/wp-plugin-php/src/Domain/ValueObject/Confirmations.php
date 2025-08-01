@@ -17,13 +17,11 @@ final class Confirmations {
 	private $confirmations_value;
 
 	/**
-	 * @param int|string|null $confirmations_value
-	 * @return Confirmations|null
+	 * @param int|string $confirmations_value
+	 * @return Confirmations
 	 */
-	public static function from( $confirmations_value ): ?self {
-		if ( null === $confirmations_value ) {
-			return null;
-		} elseif ( is_string( $confirmations_value ) && 1 === preg_match( '/^-?\d+$/', $confirmations_value ) ) {
+	public static function from( $confirmations_value ): self {
+		if ( is_string( $confirmations_value ) && 1 === preg_match( '/^-?\d+$/', $confirmations_value ) ) {
 			// '1'のような数値の文字列が来た場合はint型に変換してインスタンスを生成
 			return new self( (int) $confirmations_value );
 		} elseif ( is_string( $confirmations_value ) ) {
