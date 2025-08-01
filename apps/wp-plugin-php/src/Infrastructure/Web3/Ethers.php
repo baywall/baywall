@@ -116,7 +116,7 @@ class Ethers {
 		$s = str_pad( $signature->s->toString( 16 ), 64, '0', STR_PAD_LEFT );
 		$v = dechex( $signature->recoveryParam + 27 );
 
-		$signature = new Signature( "0x$r$s$v" );
+		$signature = Signature::from( "0x$r$s$v" );
 
 		return $signature;
 	}
