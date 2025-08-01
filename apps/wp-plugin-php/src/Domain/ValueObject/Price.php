@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 class Price {
-	public function __construct( Amount $amount, Symbol $symbol ) {
+	private function __construct( Amount $amount, Symbol $symbol ) {
 		$this->amount = $amount;
 		$this->symbol = $symbol;
 	}
@@ -24,6 +24,9 @@ class Price {
 		return $this->symbol;
 	}
 
+	public static function from( Amount $amount, Symbol $symbol ): self {
+		return new self( $amount, $symbol );
+	}
 
 	/** 現在の Price オブジェクトが別の Price オブジェクトと等しいかどうかを判定します。 */
 	public function equals( self $other ): bool {

@@ -71,7 +71,7 @@ class PostImpl extends Post {
 		if ( null === $selling_amount_value || null === $selling_symbol ) {
 			return null;
 		} else {
-			return new Price( Amount::from( $selling_amount_value ), new Symbol( $selling_symbol ) );
+			return Price::from( Amount::from( $selling_amount_value ), new Symbol( $selling_symbol ) );
 		}
 	}
 }

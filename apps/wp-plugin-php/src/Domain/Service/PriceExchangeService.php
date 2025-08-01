@@ -64,7 +64,7 @@ class PriceExchangeService {
 
 		// レートを使って通貨変換を実行
 		$amount = $price->amount()->mul( $rate->amount() );
-		return new Price( $amount, $rate->symbolPair()->quote() );
+		return Price::from( $amount, $rate->symbolPair()->quote() );
 	}
 
 	/**
