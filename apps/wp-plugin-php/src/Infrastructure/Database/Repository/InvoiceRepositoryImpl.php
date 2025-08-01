@@ -45,7 +45,7 @@ class InvoiceImpl extends Invoice {
 			ChainID::from( $invoice_record->chainIdValue() ),
 			Price::from(
 				Amount::from( $invoice_record->sellingAmountValue() ),
-				new Symbol( $invoice_record->sellingSymbolValue() )
+				Symbol::from( $invoice_record->sellingSymbolValue() )
 			),
 			Address::from( $invoice_record->sellerAddressValue() ),
 			Address::from( $invoice_record->paymentTokenAddressValue() ),

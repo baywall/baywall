@@ -58,7 +58,7 @@ class TokenClient {
 		);
 
 		assert( is_string( $result ) );
-		return new Symbol( $result );
+		return Symbol::from( $result );
 	}
 }
 

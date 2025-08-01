@@ -17,8 +17,8 @@ class OracleImpl extends Oracle {
 			ChainImpl::fromTableRecord( $chain_record ),
 			Address::from( $oracle_record->addressValue() ),
 			new SymbolPair(
-				new Symbol( $oracle_record->baseSymbolValue() ),
-				new Symbol( $oracle_record->quoteSymbolValue() )
+				Symbol::from( $oracle_record->baseSymbolValue() ),
+				Symbol::from( $oracle_record->quoteSymbolValue() )
 			)
 		);
 	}
