@@ -56,7 +56,7 @@ class WidgetAttributes {
 			return null;
 		}
 
-		return new Price( $amount, $symbol );
+		return Price::from( $amount, $symbol );
 	}
 
 	/** 販売価格を取得します */
