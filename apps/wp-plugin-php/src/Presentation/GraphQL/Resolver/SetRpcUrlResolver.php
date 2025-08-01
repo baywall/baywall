@@ -30,7 +30,7 @@ class SetRpcUrlResolver extends ResolverBase {
 	 * @return bool
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$chain_ID = new ChainID( $args['chainID'] );
+		$chain_ID = ChainID::from( $args['chainID'] );
 		/** @var string|null */
 		$rpc_url = $args['rpcURL'] ?? null;
 

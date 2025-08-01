@@ -42,7 +42,7 @@ class InvoiceImpl extends Invoice {
 		parent::__construct(
 			InvoiceID::from( $invoice_record->idValue() ),
 			$invoice_record->postIdValue(),
-			new ChainID( $invoice_record->chainIdValue() ),
+			ChainID::from( $invoice_record->chainIdValue() ),
 			new Price(
 				Amount::from( $invoice_record->sellingAmountValue() ),
 				new Symbol( $invoice_record->sellingSymbolValue() )
