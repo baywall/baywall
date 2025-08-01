@@ -36,7 +36,7 @@ class SellerTermsRepository {
 		}
 		$signature = Signature::from( $option_factory->sellerAgreedTermsSignature()->get() );
 		$message   = $this->message( new TermsVersion( $version_value ) );
-		return new SignedTerms( new Terms( new TermsVersion( $version_value ), $message ), $signature );
+		return SignedTerms::from( new Terms( new TermsVersion( $version_value ), $message ), $signature );
 	}
 
 	public function currentTerms(): Terms {
