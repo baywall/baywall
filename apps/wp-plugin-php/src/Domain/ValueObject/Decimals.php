@@ -20,6 +20,10 @@ class Decimals {
 		return $this->decimals_value;
 	}
 
+	public static function from( int $decimals_value ): self {
+		return new self( $decimals_value );
+	}
+
 	public function equals( self $other ): bool {
 		return $this->decimals_value === $other->value();
 	}
