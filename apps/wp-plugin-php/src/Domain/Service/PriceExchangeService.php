@@ -73,13 +73,13 @@ class PriceExchangeService {
 	 */
 	private function resolveRate( Symbol $from_symbol, Symbol $to_symbol ): ?Rate {
 		// 直接的なレートを取得を試す
-		$rate = $this->rate_provider->getRate( new SymbolPair( $from_symbol, $to_symbol ) );
+		$rate = $this->rate_provider->getRate( SymbolPair::from( $from_symbol, $to_symbol ) );
 		if ( ! is_null( $rate ) ) {
 			return $rate;
 		}
 
 		// 逆方向のレートを取得してinvert()する
-		$reverse_rate = $this->rate_provider->getRate( new SymbolPair( $to_symbol, $from_symbol ) );
+		$reverse_rate = $this->rate_provider->getRate( SymbolPair::from( $to_symbol, $from_symbol ) );
 		return ! is_null( $reverse_rate ) ? $reverse_rate->invert( Decimals::from( self::ACCURACY_DECIMALS ) ) : null;
 	}
 }
