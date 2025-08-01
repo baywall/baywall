@@ -90,7 +90,7 @@ class BlockchainClientServiceImpl implements BlockchainClientService {
 						if ( $err ) {
 							throw $err;
 						}
-						$result = new GetBlockResult( $res );
+						$result = GetBlockResult::from( $res );
 					}
 				);
 			}
