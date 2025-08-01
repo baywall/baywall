@@ -21,6 +21,10 @@ class PostId {
 		return $this->post_id;
 	}
 
+	public static function from( int $post_id ): self {
+		return new self( $post_id );
+	}
+
 	public function equals( PostId $other ): bool {
 		return $this->post_id === $other->value();
 	}
@@ -30,6 +34,6 @@ class PostId {
 	}
 
 	public static function fromNullableValue( ?int $post_id ): ?PostId {
-		return $post_id === null ? null : new PostId( $post_id );
+		return $post_id === null ? null : self::from( $post_id );
 	}
 }
