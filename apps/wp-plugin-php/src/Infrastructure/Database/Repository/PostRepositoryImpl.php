@@ -60,7 +60,7 @@ class PostImpl extends Post {
 		parent::__construct(
 			new PostId( $record->postIdValue() ),
 			PaidContent::from( $record->paidContentValue() ),
-			NetworkCategoryID::from( $record->sellingNetworkCategoryIdValue() ),
+			NetworkCategoryID::fromNullable( $record->sellingNetworkCategoryIdValue() ),
 			$this->getPriceFromRecord( $record ),
 		);
 	}

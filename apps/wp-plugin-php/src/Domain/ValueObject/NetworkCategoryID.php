@@ -33,7 +33,7 @@ final class NetworkCategoryID {
 	 * ネットワークカテゴリID(数値)からインスタンスを取得します。
 	 * 引数がnullの場合はnullを返します。
 	 */
-	public static function from( ?int $network_category_id_value ): ?NetworkCategoryID {
+	public static function fromNullable( ?int $network_category_id_value ): ?NetworkCategoryID {
 		return is_null( $network_category_id_value ) ? null : new self( $network_category_id_value );
 	}
 
