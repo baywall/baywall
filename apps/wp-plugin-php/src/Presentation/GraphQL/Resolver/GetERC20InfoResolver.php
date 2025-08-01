@@ -42,7 +42,7 @@ class GetERC20InfoResolver extends ResolverBase {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		$chain_ID = new ChainID( $args['chainID'] );
-		$address  = new Address( $args['address'] );
+		$address  = Address::from( $args['address'] );
 
 		if ( $address === Ethers::zeroAddress() ) {
 			// ERC20トークンの情報を取得するResolverのため、アドレスゼロも不許可

@@ -31,7 +31,7 @@ class RegisterERC20TokenResolver extends ResolverBase {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		$chain_ID = new ChainID( $args['chainID'] );
-		$address  = new Address( (string) $args['address'] );
+		$address  = Address::from( (string) $args['address'] );
 		/** @var bool */
 		$is_payable = $args['isPayable'] ?? null;
 

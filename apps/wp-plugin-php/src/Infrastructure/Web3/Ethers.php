@@ -13,7 +13,7 @@ use kornrunner\Keccak;
 class Ethers {
 
 	public static function zeroAddress(): Address {
-		return new Address( '0x0000000000000000000000000000000000000000' );
+		return Address::from( '0x0000000000000000000000000000000000000000' );
 	}
 
 	/**
@@ -93,7 +93,7 @@ class Ethers {
 	 */
 	public static function computeAddress( \Elliptic\Curve\ShortCurve\Point $public_key ): Address {
 		$address_value = \Web3\Utils::toChecksumAddress( substr( Keccak::hash( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ), 256 ), 24 ) );
-		return new Address( $address_value );
+		return Address::from( $address_value );
 	}
 
 	/**

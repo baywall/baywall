@@ -141,6 +141,6 @@ class SalesHistory {
 
 	/** 支払いトークン */
 	public function paymentToken(): Token {
-		return ( new TokenRepositoryImpl() )->get( new ChainID( (int) $this->record[ self::COLUMN_CHAIN_ID ] ), new Address( (string) $this->record[ self::COLUMN_TOKEN_ADDRESS ] ) );
+		return ( new TokenRepositoryImpl() )->get( new ChainID( (int) $this->record[ self::COLUMN_CHAIN_ID ] ), Address::from( (string) $this->record[ self::COLUMN_TOKEN_ADDRESS ] ) );
 	}
 }

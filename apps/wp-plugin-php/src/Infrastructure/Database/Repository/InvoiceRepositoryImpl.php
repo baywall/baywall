@@ -47,10 +47,10 @@ class InvoiceImpl extends Invoice {
 				Amount::from( $invoice_record->sellingAmountValue() ),
 				new Symbol( $invoice_record->sellingSymbolValue() )
 			),
-			new Address( $invoice_record->sellerAddressValue() ),
-			new Address( $invoice_record->paymentTokenAddressValue() ),
+			Address::from( $invoice_record->sellerAddressValue() ),
+			Address::from( $invoice_record->paymentTokenAddressValue() ),
 			Amount::from( $invoice_record->paymentAmountValue() ),
-			new Address( $invoice_record->consumerAddressValue() ),
+			Address::from( $invoice_record->consumerAddressValue() ),
 			$invoice_record->nonceValue() ? new InvoiceNonce( $invoice_record->nonceValue() ) : null
 		);
 	}
