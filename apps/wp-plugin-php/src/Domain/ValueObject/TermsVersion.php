@@ -5,9 +5,12 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 /** 利用規約バージョン */
 class TermsVersion {
-	public function __construct( int $version_value ) {
+	private function __construct( int $version_value ) {
 		assert( $version_value > 0, '[1AA762E9] TermsVersion must be greater than 0' );
 		$this->version_value = $version_value;
+	}
+	public static function from( int $version_value ): self {
+		return new self( $version_value );
 	}
 
 	private int $version_value;
