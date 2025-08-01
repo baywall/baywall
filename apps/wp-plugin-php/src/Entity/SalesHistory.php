@@ -85,7 +85,7 @@ class SalesHistory {
 	/** 販売価格 */
 	public function sellingPrice(): Price {
 		return new Price(
-			Amount::from( (string) $this->record[ self::COLUMN_SELLING_AMOUNT ] ),
+			Amount::fromNullable( (string) $this->record[ self::COLUMN_SELLING_AMOUNT ] ),
 			new Symbol( (string) $this->record[ self::COLUMN_SELLING_SYMBOL ] )
 		);
 	}
@@ -98,7 +98,7 @@ class SalesHistory {
 	/** 支払い金額 */
 	public function paymentPrice(): Price {
 		return new Price(
-			Amount::from( (string) $this->record[ self::COLUMN_PAYMENT_AMOUNT ] ),
+			Amount::fromNullable( (string) $this->record[ self::COLUMN_PAYMENT_AMOUNT ] ),
 			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
@@ -126,7 +126,7 @@ class SalesHistory {
 	/** 販売者の利益 */
 	public function sellerProfitPrice(): Price {
 		return new Price(
-			Amount::from( (string) $this->record[ self::COLUMN_SELLER_PROFIT_AMOUNT ] ),
+			Amount::fromNullable( (string) $this->record[ self::COLUMN_SELLER_PROFIT_AMOUNT ] ),
 			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
@@ -134,7 +134,7 @@ class SalesHistory {
 	/** 手数料 */
 	public function handlingFeePrice(): Price {
 		return new Price(
-			Amount::from( (string) $this->record[ self::COLUMN_HANDLING_FEE_AMOUNT ] ),
+			Amount::fromNullable( (string) $this->record[ self::COLUMN_HANDLING_FEE_AMOUNT ] ),
 			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}

@@ -112,7 +112,7 @@ class AppContractClient {
 						new Address( $decoded_event_parameters['from'] ), // from_address
 						new Address( $decoded_event_parameters['to'] ), // to_address
 						new Address( $decoded_event_parameters['token'] ), // token_address
-						Amount::from( $decoded_event_parameters['amount']->toString() ), // amount
+						Amount::fromNullable( $decoded_event_parameters['amount']->toString() ), // amount
 						UnlockPaywallTransferType::from( (int) ( $decoded_event_parameters['transferType'] )->toString() ) // transfer_type
 					);
 				}

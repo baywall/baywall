@@ -48,6 +48,6 @@ class TokenAmountConverter {
 
 	/** 小数点桁数から基本単位への変換倍数を計算します */
 	private function calculateBaseUnitMultiplier( Decimals $decimals ): Amount {
-		return Amount::from( (string) ( 10 ** $decimals->value() ) );
+		return Amount::fromNullable( (string) ( 10 ** $decimals->value() ) );
 	}
 }
