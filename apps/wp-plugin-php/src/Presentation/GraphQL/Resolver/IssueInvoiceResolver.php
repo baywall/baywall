@@ -15,16 +15,19 @@ class IssueInvoiceResolver extends ResolverBase {
 	public function __construct(
 		IssueInvoice $issue_invoice,
 		InitCrawledBlockNumber $init_crawled_block_number,
-		UserAccessChecker $user_access_checker
+		UserAccessChecker $user_access_checker,
+		SignInvoice $sign_invoice
 	) {
 		$this->issue_invoice             = $issue_invoice;
 		$this->init_crawled_block_number = $init_crawled_block_number;
 		$this->user_access_checker       = $user_access_checker;
+		$this->sign_invoice              = $sign_invoice;
 	}
 
 	private IssueInvoice $issue_invoice;
 	private InitCrawledBlockNumber $init_crawled_block_number;
 	private UserAccessChecker $user_access_checker;
+	private SignInvoice $sign_invoice;
 
 	/**
 	 * #[\Override]
@@ -48,7 +51,7 @@ class IssueInvoiceResolver extends ResolverBase {
 			// invoiceを発行
 			$invoice = $this->issue_invoice->handle( $post_ID, $chain_ID, $token_address, $consumer_address );
 			// 発行したinvoiceに署名を行う
-			$signed_data = ( new SignInvoice( $wpdb ) )->handle( $invoice );
+			$signed_data = $this->sign_invoice->handle( $invoice );
 			// クロール済みブロック番号を初期化
 			$this->init_crawled_block_number->handle( $chain_ID );
 			$wpdb->query( 'COMMIT' );
