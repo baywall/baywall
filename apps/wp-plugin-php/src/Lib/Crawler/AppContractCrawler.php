@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Crawler;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
+use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\UnlockPaywallTransactionRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\UnlockPaywallTransferEventRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
@@ -24,14 +24,16 @@ use stdClass;
  * Appコントラクトのログを取得し、DBに保存するクラス
  */
 class AppContractCrawler {
-	public function __construct( AppContractAbi $app_abi, UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository, UnlockPaywallTransactionRepository $unlock_paywall_transaction_repository ) {
+	public function __construct( AppContractAbi $app_abi, UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository, UnlockPaywallTransactionRepository $unlock_paywall_transaction_repository, UnlockPaywallTransferCrawler $unlock_paywall_transfer_crawler ) {
 		$this->app_abi                                  = $app_abi;
 		$this->unlock_paywall_transfer_event_repository = $unlock_paywall_transfer_event_repository;
 		$this->unlock_paywall_transaction_repository    = $unlock_paywall_transaction_repository;
+		$this->unlock_paywall_transfer_crawler          = $unlock_paywall_transfer_crawler;
 	}
 	private AppContractAbi $app_abi;
 	private UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository;
 	private UnlockPaywallTransactionRepository $unlock_paywall_transaction_repository;
+	private UnlockPaywallTransferCrawler $unlock_paywall_transfer_crawler;
 
 	public function crawl( ChainID $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): void {
 		// UnlockPaywallTransferイベントのログを取得
@@ -46,7 +48,7 @@ class AppContractCrawler {
 	 * UnlockPaywallTransferイベントのログを取得します。
 	 */
 	private function getUnlockPaywallTransferLogs( ChainID $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
-		return ( new UnlockPaywallTransferCrawler() )->execute( $chain_ID, $from_block, $to_block );
+		return $this->unlock_paywall_transfer_crawler->execute( $chain_ID, $from_block, $to_block );
 	}
 
 	/**
@@ -128,21 +130,25 @@ class AppContractCrawler {
  */
 class UnlockPaywallTransferCrawler {
 
-	public function __construct() {
+	public function __construct( AppContractRepository $app_contract_repository, ServerSignerService $server_signer_service, BlockchainClientFactory $blockchain_client_factory ) {
 		// UnlockPaywallTransferイベントのtopic
 		$topic_hash = ( new AppContractAbi() )->topicHash( 'UnlockPaywallTransfer' );
 
 		// サーバーの署名用ウォレットアドレス
-		$server_signer                 = ( new ServerSignerServiceFactory() )->create()->getServerSigner();
+		$server_signer                 = $server_signer_service->getServerSigner();
 		$server_signer_address_bytes32 = $server_signer->address()->toBytes32Hex();
 
-		$this->topics = array(
+		$this->topics                    = array(
 			$topic_hash,
 			$server_signer_address_bytes32,
 		);
+		$this->app_contract_repository   = $app_contract_repository;
+		$this->blockchain_client_factory = $blockchain_client_factory;
 	}
 
 	private array $topics;
+	private AppContractRepository $app_contract_repository;
+	private BlockchainClientFactory $blockchain_client_factory;
 
 	/**
 	 * このサーバーに関係するUnlockPaywallTransferイベントのログを取得します。
@@ -150,7 +156,7 @@ class UnlockPaywallTransferCrawler {
 	 * @return stdClass[]
 	 */
 	public function execute( ChainID $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
-		$blockchain_client = ( new BlockchainClientFactory() )->create( $chain_ID );
+		$blockchain_client = $this->blockchain_client_factory->create( $chain_ID );
 
 		/** @var array|null */
 		$logs_result = null;
@@ -158,7 +164,7 @@ class UnlockPaywallTransferCrawler {
 			array(
 				'fromBlock' => $from_block->hex(),
 				'toBlock'   => $to_block->hex(),
-				'address'   => ( new AppContractRepositoryFactory() )->create()->get( $chain_ID )->address()->value(),
+				'address'   => $this->app_contract_repository->get( $chain_ID )->address()->value(),
 				'topics'    => $this->topics,
 			),
 			function ( $err, $logs ) use ( &$logs_result ) {
