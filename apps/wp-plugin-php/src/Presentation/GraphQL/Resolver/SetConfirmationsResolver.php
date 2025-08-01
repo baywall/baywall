@@ -35,7 +35,7 @@ class SetConfirmationsResolver extends ResolverBase {
 		$confirmations_input = $args['confirmations'] ?? null;
 
 		// Confirmationsオブジェクトを作成
-		$confirmations = Confirmations::fromNullable( is_null( $confirmations_input ) ? Config::MIN_CONFIRMATIONS : $confirmations_input );
+		$confirmations = Confirmations::from( is_null( $confirmations_input ) ? Config::MIN_CONFIRMATIONS : $confirmations_input );
 
 		// confirmationsを保存
 		try {
