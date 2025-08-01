@@ -10,13 +10,13 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
  */
 final class RpcUrl {
 
-	public function __construct( string $rpc_url_value ) {
+	private function __construct( string $rpc_url_value ) {
 		self::checkValidRpcUrlFormat( $rpc_url_value );
 		$this->rpc_url_value = $rpc_url_value;
 	}
 	private string $rpc_url_value;
 
-	public static function from( ?string $rpc_url_value ): ?self {
+	public static function fromNullable( ?string $rpc_url_value ): ?self {
 		return is_null( $rpc_url_value ) ? null : new self( $rpc_url_value );
 	}
 
