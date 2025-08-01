@@ -14,7 +14,7 @@ final class NetworkCategoryID {
 	/** プライベートネット(Ganache、Hardhat等) */
 	private const PRIVATENET = 3;
 
-	public function __construct( int $network_category_id_value ) {
+	private function __construct( int $network_category_id_value ) {
 		if ( $network_category_id_value < self::MAINNET || self::PRIVATENET < $network_category_id_value ) {
 			throw new \InvalidArgumentException( '[6AD1DCA2] Invalid network category ID: ' . $network_category_id_value );
 		}
@@ -27,6 +27,10 @@ final class NetworkCategoryID {
 	/** ネットワークカテゴリIDを数値で取得します。 */
 	public function value(): int {
 		return $this->value;
+	}
+
+	public static function from( int $network_category_id_value ): self {
+		return new self( $network_category_id_value );
 	}
 
 	/**
