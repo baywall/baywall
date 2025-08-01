@@ -80,6 +80,6 @@ class PriceExchangeService {
 
 		// 逆方向のレートを取得してinvert()する
 		$reverse_rate = $this->rate_provider->getRate( new SymbolPair( $to_symbol, $from_symbol ) );
-		return ! is_null( $reverse_rate ) ? $reverse_rate->invert( new Decimals( self::ACCURACY_DECIMALS ) ) : null;
+		return ! is_null( $reverse_rate ) ? $reverse_rate->invert( Decimals::from( self::ACCURACY_DECIMALS ) ) : null;
 	}
 }
