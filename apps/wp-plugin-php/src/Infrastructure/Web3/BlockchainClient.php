@@ -135,7 +135,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$block_number = BlockNumber::fromNullable( $res );
+						$block_number = BlockNumber::from( $res );
 					}
 				);
 			}
@@ -175,7 +175,7 @@ class BlockchainClient {
 			}
 		);
 
-		return BlockNumber::fromNullable( $block_number_hex );
+		return BlockNumber::from( $block_number_hex );
 	}
 
 

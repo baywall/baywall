@@ -14,7 +14,7 @@ class GetBlockResult {
 	private stdClass $response;
 
 	public function blockNumber(): BlockNumber {
-		return BlockNumber::fromNullable( $this->response->number );
+		return BlockNumber::from( $this->response->number );
 	}
 
 	public function timestamp(): UnixTimestamp {
