@@ -10,13 +10,17 @@ class Rate {
 	 * @param SymbolPair $symbol_pair 通貨ペア
 	 * @param Amount     $amount レートの数量
 	 */
-	public function __construct( SymbolPair $symbol_pair, Amount $amount ) {
+	private function __construct( SymbolPair $symbol_pair, Amount $amount ) {
 		$this->symbol_pair = $symbol_pair;
 		$this->amount      = $amount;
 	}
 
 	private SymbolPair $symbol_pair;
 	private Amount $amount;
+
+	public static function from( SymbolPair $symbol_pair, Amount $amount ): self {
+		return new self( $symbol_pair, $amount );
+	}
 
 	public function symbolPair(): SymbolPair {
 		return $this->symbol_pair;
@@ -41,6 +45,6 @@ class Rate {
 		$one             = Amount::from( '1' );
 		$inverted_amount = $one->div( $this->amount, $max_decimals );
 
-		return new Rate( $inverted_symbol_pair, $inverted_amount );
+		return self::from( $inverted_symbol_pair, $inverted_amount );
 	}
 }

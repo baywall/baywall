@@ -35,7 +35,7 @@ class OracleRateProviderImpl implements RateProvider {
 		$answer   = $oracle_client->latestAnswer();
 
 		$rate_amount = Amount::fromBaseUnitAndDecimals( $answer->toString(), $decimals );
-		return new Rate( $symbol_pair, $rate_amount );
+		return Rate::from( $symbol_pair, $rate_amount );
 	}
 
 	/**
