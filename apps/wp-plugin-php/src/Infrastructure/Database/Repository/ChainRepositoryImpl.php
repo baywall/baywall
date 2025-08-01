@@ -50,7 +50,7 @@ class ChainImpl extends Chain {
 		parent::__construct(
 			ChainID::from( $record->chainIdValue() ),
 			$record->nameValue(),
-			new NetworkCategoryID( $record->networkCategoryIdValue() ),
+			NetworkCategoryID::from( $record->networkCategoryIdValue() ),
 			RpcUrl::from( $record->rpcUrlValue() ),
 			Confirmations::from( $record->confirmationsValue() ),
 			$record->blockExplorerUrlValue()
