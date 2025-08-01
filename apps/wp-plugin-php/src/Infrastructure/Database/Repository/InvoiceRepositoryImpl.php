@@ -51,7 +51,7 @@ class InvoiceImpl extends Invoice {
 			Address::from( $invoice_record->paymentTokenAddressValue() ),
 			Amount::from( $invoice_record->paymentAmountValue() ),
 			Address::from( $invoice_record->consumerAddressValue() ),
-			$invoice_record->nonceValue() ? new InvoiceNonce( $invoice_record->nonceValue() ) : null
+			InvoiceNonce::from( $invoice_record->nonceValue() ),
 		);
 	}
 }
