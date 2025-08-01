@@ -23,6 +23,6 @@ class GetBlockResult {
 
 	public function timestamp(): UnixTimestamp {
 		// タイムスタンプはUNIX時間
-		return new UnixTimestamp( hexdec( $this->response->timestamp ) );
+		return UnixTimestamp::from( hexdec( $this->response->timestamp ) );
 	}
 }

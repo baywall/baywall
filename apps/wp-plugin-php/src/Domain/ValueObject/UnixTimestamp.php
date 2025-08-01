@@ -6,8 +6,11 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 use DateTimeImmutable;
 
 class UnixTimestamp {
-	public function __construct( int $timestamp ) {
+	private function __construct( int $timestamp ) {
 		$this->timestamp = $timestamp;
+	}
+	public static function from( int $timestamp ): self {
+		return new self( $timestamp );
 	}
 
 	private int $timestamp;
