@@ -38,7 +38,7 @@ class Rate {
 		$inverted_symbol_pair = new SymbolPair( $this->symbol_pair->quote(), $this->symbol_pair->base() );
 
 		// レート値を逆数計算 (1 / rate)
-		$one             = Amount::fromNullable( '1' );
+		$one             = Amount::from( '1' );
 		$inverted_amount = $one->div( $this->amount, $max_decimals );
 
 		return new Rate( $inverted_symbol_pair, $inverted_amount );

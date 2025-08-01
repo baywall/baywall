@@ -44,12 +44,12 @@ class InvoiceImpl extends Invoice {
 			$invoice_record->postIdValue(),
 			new ChainID( $invoice_record->chainIdValue() ),
 			new Price(
-				Amount::fromNullable( $invoice_record->sellingAmountValue() ),
+				Amount::from( $invoice_record->sellingAmountValue() ),
 				new Symbol( $invoice_record->sellingSymbolValue() )
 			),
 			new Address( $invoice_record->sellerAddressValue() ),
 			new Address( $invoice_record->paymentTokenAddressValue() ),
-			Amount::fromNullable( $invoice_record->paymentAmountValue() ),
+			Amount::from( $invoice_record->paymentAmountValue() ),
 			new Address( $invoice_record->consumerAddressValue() ),
 			$invoice_record->nonceValue() ? new InvoiceNonce( $invoice_record->nonceValue() ) : null
 		);
