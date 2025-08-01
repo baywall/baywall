@@ -35,12 +35,12 @@ class SellerTermsRepository {
 			return null;  // 利用規約に同意していない
 		}
 		$signature = Signature::from( $option_factory->sellerAgreedTermsSignature()->get() );
-		$message   = $this->message( new TermsVersion( $version_value ) );
-		return SignedTerms::from( Terms::from( new TermsVersion( $version_value ), $message ), $signature );
+		$message   = $this->message( TermsVersion::from( $version_value ) );
+		return SignedTerms::from( Terms::from( TermsVersion::from( $version_value ), $message ), $signature );
 	}
 
 	public function currentTerms(): Terms {
-		$current_version = new TermsVersion( self::CURRENT_SELLER_TERMS_VERSION );
+		$current_version = TermsVersion::from( self::CURRENT_SELLER_TERMS_VERSION );
 
 		// 利用規約のメッセージを取得
 		$message = $this->message( $current_version );
