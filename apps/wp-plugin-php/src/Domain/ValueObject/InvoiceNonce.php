@@ -19,6 +19,10 @@ final class InvoiceNonce extends NonceBase {
 		parent::__construct( $invoice_nonce_value );
 	}
 
+	public static function from( string $invoice_nonce_value ): self {
+		return new self( $invoice_nonce_value );
+	}
+
 	/** @inheritdoc */
 	protected function isNonceValueFormat( string $nonce_value ): bool {
 		return 1 === preg_match( '/^[0-9a-f]{32}$/i', $nonce_value );
