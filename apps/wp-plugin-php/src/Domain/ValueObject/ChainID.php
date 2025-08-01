@@ -19,7 +19,7 @@ class ChainID {
 		return $this->chain_id_value;
 	}
 
-	public function equals( ChainID $other ): bool {
+	public function equals( self $other ): bool {
 		return $this->chain_id_value === $other->value();
 	}
 
@@ -31,24 +31,24 @@ class ChainID {
 		return new self( $chain_id_value );
 	}
 
-	public static function fromNullableValue( ?int $chain_id_value ): ?ChainID {
+	public static function fromNullableValue( ?int $chain_id_value ): ?self {
 		return $chain_id_value === null ? null : self::from( $chain_id_value );
 	}
 
 	/** イーサリアムメインネット(L1) */
 	private const ETH_MAINNET = 1;
-	public static function ethMainnet(): ChainID {
+	public static function ethMainnet(): self {
 		return self::from( self::ETH_MAINNET );
 	}
 
 	/** PrivatenetL1に位置付けられたチェーンID */
 	private const PRIVATENET_L1 = 31337; // 0x7a69
-	public static function privatenet1(): ChainID {
+	public static function privatenet1(): self {
 		return self::from( self::PRIVATENET_L1 );
 	}
 	/** PrivatenetL2に位置付けられたチェーンID(L2) ※実際はロールアップを行っていない、単に独立したネットワーク */
 	private const PRIVATENET_L2 = 1337;  // 0x539
-	public static function privatenet2(): ChainID {
+	public static function privatenet2(): self {
 		return self::from( self::PRIVATENET_L2 );
 	}
 }

@@ -38,7 +38,7 @@ final class Address {
 		return $this->address_value;
 	}
 
-	public function equals( Address $other ): bool {
+	public function equals( self $other ): bool {
 		return $this->address_value === $other->address_value;
 	}
 

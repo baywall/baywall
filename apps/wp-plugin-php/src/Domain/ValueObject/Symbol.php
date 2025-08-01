@@ -26,7 +26,7 @@ final class Symbol {
 		return $this->symbol_value;
 	}
 
-	public function equals( Symbol $other ): bool {
+	public function equals( self $other ): bool {
 		return $this->symbol_value === $other->symbol_value;
 	}
 

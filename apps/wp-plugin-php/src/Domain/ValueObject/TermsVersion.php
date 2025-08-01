@@ -19,7 +19,7 @@ class TermsVersion {
 		return $this->version_value;
 	}
 
-	public function equals( TermsVersion $other ): bool {
+	public function equals( self $other ): bool {
 		return $this->version_value === $other->value();
 	}
 }

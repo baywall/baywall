@@ -28,7 +28,7 @@ final class RpcUrl {
 		return $this->rpc_url_value;
 	}
 
-	public function equals( RpcUrl $other ): bool {
+	public function equals( self $other ): bool {
 		return $this->rpc_url_value === $other->rpc_url_value;
 	}
 

@@ -25,7 +25,7 @@ class SymbolPair {
 		return $this->quote_symbol;
 	}
 
-	public function equals( SymbolPair $other ): bool {
+	public function equals( self $other ): bool {
 		return $this->base_symbol->equals( $other->base_symbol ) && $this->quote_symbol->equals( $other->quote_symbol );
 	}
 

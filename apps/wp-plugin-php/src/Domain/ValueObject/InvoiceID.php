@@ -22,11 +22,11 @@ class InvoiceID {
 	 *
 	 * @param string|BigInteger $invoice_ID_val 請求書ID
 	 */
-	public static function from( $invoice_ID_val ): InvoiceID {
+	public static function from( $invoice_ID_val ): self {
 		if ( is_string( $invoice_ID_val ) ) {
-			return new InvoiceID( Ulid::from( $invoice_ID_val ) );
+			return new self( Ulid::from( $invoice_ID_val ) );
 		} elseif ( $invoice_ID_val instanceof BigInteger ) {
-			return new InvoiceID( Ulid::from( HexFormat::toHex( $invoice_ID_val ) ) );
+			return new self( Ulid::from( HexFormat::toHex( $invoice_ID_val ) ) );
 		}
 		throw new \InvalidArgumentException( '[DEE2905B] Invalid invoice ID. ' . var_export( $invoice_ID_val, true ) );
 	}
@@ -34,8 +34,8 @@ class InvoiceID {
 	/**
 	 * 新しい請求書IDを生成します。
 	 */
-	public static function generate(): InvoiceID {
-		return new InvoiceID( new Ulid() );
+	public static function generate(): self {
+		return new self( new Ulid() );
 	}
 
 	/**
