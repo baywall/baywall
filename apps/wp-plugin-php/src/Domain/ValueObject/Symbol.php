@@ -15,7 +15,7 @@ final class Symbol {
 
 	private string $symbol_value;
 
-	public static function from( ?string $symbol_value ): ?self {
+	public static function fromNullable( ?string $symbol_value ): ?self {
 		return is_null( $symbol_value ) ? null : new self( $symbol_value );
 	}
 

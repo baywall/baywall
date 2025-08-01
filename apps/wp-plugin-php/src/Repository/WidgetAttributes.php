@@ -50,7 +50,7 @@ class WidgetAttributes {
 	/** 販売価格を取得します。 */
 	public function sellingPrice(): ?Price {
 		$amount = Amount::fromNullable( $this->sellingAmount() );
-		$symbol = Symbol::from( $this->sellingSymbol() );
+		$symbol = Symbol::fromNullable( $this->sellingSymbol() );
 
 		if ( is_null( $amount ) || is_null( $symbol ) ) {
 			return null;
