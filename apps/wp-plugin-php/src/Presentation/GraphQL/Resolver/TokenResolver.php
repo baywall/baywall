@@ -22,7 +22,7 @@ class TokenResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		$chain_id = new ChainID( $args['chainID'] );
-		$address  = Address::from( $args['address'] ?? null );
+		$address  = Address::fromNullable( $args['address'] ?? null );
 
 		if ( null === $address ) {
 			throw new \InvalidArgumentException( '[C0B26B53] Invalid address provided.' );
