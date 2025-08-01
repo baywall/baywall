@@ -64,7 +64,7 @@ class Token {
 		return new self(
 			ChainID::from( $record->chainIdValue() ),
 			Address::from( $record->addressValue() ),
-			new Symbol( $record->symbolValue() ),
+			Symbol::from( $record->symbolValue() ),
 			Decimals::from( $record->decimalsValue() ),
 			$record->isPayableValue()
 		);

@@ -36,16 +36,16 @@ class PriceExchangeService {
 			return $this->calculatePrice( $price, $direct_rate );
 		}
 
-		$fromUsd = $this->resolveRate( $price->symbol(), new Symbol( 'USD' ) );
-		$usdTo   = $this->resolveRate( new Symbol( 'USD' ), $to_symbol );
+		$fromUsd = $this->resolveRate( $price->symbol(), Symbol::from( 'USD' ) );
+		$usdTo   = $this->resolveRate( Symbol::from( 'USD' ), $to_symbol );
 		if ( ! is_null( $fromUsd ) && ! is_null( $usdTo ) ) {
 			// USDを経由して変換可能な場合
 			$usd_price = $this->calculatePrice( $price, $fromUsd );
 			return $this->calculatePrice( $usd_price, $usdTo );
 		}
 
-		$fromEth = $this->resolveRate( $price->symbol(), new Symbol( 'ETH' ) );
-		$ethTo   = $this->resolveRate( new Symbol( 'ETH' ), $to_symbol );
+		$fromEth = $this->resolveRate( $price->symbol(), Symbol::from( 'ETH' ) );
+		$ethTo   = $this->resolveRate( Symbol::from( 'ETH' ), $to_symbol );
 		if ( ! is_null( $fromEth ) && ! is_null( $ethTo ) ) {
 			// ETHを経由して変換可能な場合
 			$eth_price = $this->calculatePrice( $price, $fromEth );

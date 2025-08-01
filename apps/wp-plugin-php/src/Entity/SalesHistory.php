@@ -86,7 +86,7 @@ class SalesHistory {
 	public function sellingPrice(): Price {
 		return Price::from(
 			Amount::from( (string) $this->record[ self::COLUMN_SELLING_AMOUNT ] ),
-			new Symbol( (string) $this->record[ self::COLUMN_SELLING_SYMBOL ] )
+			Symbol::from( (string) $this->record[ self::COLUMN_SELLING_SYMBOL ] )
 		);
 	}
 
@@ -99,7 +99,7 @@ class SalesHistory {
 	public function paymentPrice(): Price {
 		return Price::from(
 			Amount::from( (string) $this->record[ self::COLUMN_PAYMENT_AMOUNT ] ),
-			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
+			Symbol::from( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
 
@@ -127,7 +127,7 @@ class SalesHistory {
 	public function sellerProfitPrice(): Price {
 		return Price::from(
 			Amount::from( (string) $this->record[ self::COLUMN_SELLER_PROFIT_AMOUNT ] ),
-			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
+			Symbol::from( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
 
@@ -135,7 +135,7 @@ class SalesHistory {
 	public function handlingFeePrice(): Price {
 		return Price::from(
 			Amount::from( (string) $this->record[ self::COLUMN_HANDLING_FEE_AMOUNT ] ),
-			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
+			Symbol::from( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
 
