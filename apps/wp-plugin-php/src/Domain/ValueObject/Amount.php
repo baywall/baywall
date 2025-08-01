@@ -48,6 +48,10 @@ final class Amount {
 		return new self( bcdiv( $base_unit, $multiplier, 0 ) );
 	}
 
+	public function isZero(): bool {
+		return '0' === $this->amount_text;
+	}
+
 	public function equals( self $other ): bool {
 		return $this->amount_text === $other->amount_text;
 	}
