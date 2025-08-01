@@ -8,10 +8,10 @@ use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
-use stdClass;
 use Web3\Eth;
 use Web3\Formatters\BigNumberFormatter;
 use Web3\Methods\EthMethod;
@@ -38,7 +38,7 @@ class BlockchainClient {
 	/**
 	 * チェーンIDを取得します。
 	 */
-	public function getChainIDHex(): string {
+	public function getChainId(): ChainID {
 		$eth = $this->eth();
 
 		// Ethオブジェクトの内容を操作することで`eth_chainId`メソッドの追加を行う
@@ -59,24 +59,23 @@ class BlockchainClient {
 			$methods_property->setValue( $eth, $methods );
 		}
 
-		/** @var string|null */
-		$chain_ID_hex = null;
+		/** @var ChainID|null */
+		$chain_id = null;
 		$this->retryer->execute(
-			function () use ( $eth, &$chain_ID_hex ) {
+			function () use ( $eth, &$chain_id ) {
 				$eth->chainId(
-					function ( $err, BigInteger $res ) use ( &$chain_ID_hex ) {
+					function ( $err, BigInteger $res ) use ( &$chain_id ) {
 						if ( $err ) {
 							throw $err;
 						}
-						$chain_ID_hex = HexFormat::toHex( $res );
+						$chain_id = ChainID::from( (int) $res->toString() );
 					}
 				);
 			}
 		);
-		assert( ! is_null( $chain_ID_hex ), '[1BAA2783] Failed to get chain ID.' );
-		Validate::checkAmountHex( $chain_ID_hex );
+		assert( ! is_null( $chain_id ), '[1BAA2783] Failed to get chain ID.' );
 
-		return $chain_ID_hex;
+		return $chain_id;
 	}
 
 	/**
