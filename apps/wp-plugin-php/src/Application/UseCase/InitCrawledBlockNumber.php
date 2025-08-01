@@ -60,7 +60,7 @@ class GetSafetyCrawledBlockNumber {
 		$latest_timestamp    = $res->timestamp();
 
 		// 1000ブロック前の情報を取得
-		$target_block_number = BlockNumber::fromNullable( max( $latest_block_number->int() - 1000, 1 ) ); // マイナスにならないように調整
+		$target_block_number = BlockNumber::from( max( $latest_block_number->int() - 1000, 1 ) ); // マイナスにならないように調整
 		$prev_res            = $client->getBlockByNumber( $target_block_number );
 		$prev_block_number   = $prev_res->blockNumber();
 		$prev_timestamp      = $prev_res->timestamp();
@@ -69,7 +69,7 @@ class GetSafetyCrawledBlockNumber {
 		$average_block_time = ( $latest_timestamp->value() - $prev_timestamp->value() ) / ( $latest_block_number->int() - $prev_block_number->int() );
 
 		// マージンを取ったブロック番号を計算
-		$safety_block_number = BlockNumber::fromNullable(
+		$safety_block_number = BlockNumber::from(
 			// マイナスにならないように調整
 			max( $latest_block_number->int() - (int) ceil( self::SAFETY_MARGIN_SECONDS / $average_block_time ), 1 )
 		);
@@ -78,7 +78,7 @@ class GetSafetyCrawledBlockNumber {
 		$confirmations       = $chain->confirmations();
 		$confirmations_value = $confirmations->value();
 		if ( is_int( $confirmations_value ) ) {
-			$safety_block_number = BlockNumber::fromNullable(
+			$safety_block_number = BlockNumber::from(
 				max( $safety_block_number->int() - $confirmations_value, 1 ) // マイナスにならないように調整
 			);
 		} else {

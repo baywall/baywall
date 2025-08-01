@@ -19,7 +19,7 @@ class CrawledBlockNumber {
 		assert( Validate::isBlockTagName( $block_tag ), "[4306F5FA] Invalid block tag. - block_tag: {$block_tag}" );
 
 		$block_number_hex = ( new OptionFactory() )->crawledBlockNumberHex( $chain_ID, $block_tag )->get();
-		return is_null( $block_number_hex ) ? null : BlockNumber::fromNullable( $block_number_hex );
+		return BlockNumber::fromNullable( $block_number_hex );
 	}
 
 	/**

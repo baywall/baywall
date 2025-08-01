@@ -21,7 +21,7 @@ class BlockNumberActiveSince {
 	public function get( ChainID $chain_ID ): ?BlockNumber {
 		$block_number_hex = ( new OptionFactory() )->activeSinceBlockNumberHex( $chain_ID )->get();
 		assert( is_null( $block_number_hex ) || Validate::isHex( $block_number_hex ), "[FF97B758] Invalid block number. - block_number_hex: {$block_number_hex}" );
-		return is_null( $block_number_hex ) ? null : BlockNumber::fromNullable( $block_number_hex );
+		return is_null( $block_number_hex ) ? null : BlockNumber::from( $block_number_hex );
 	}
 
 	/**
