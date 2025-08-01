@@ -3,18 +3,19 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use wpdb;
 
 /**
  * 売上データを取得するクラス
  */
 class SalesHistoryService {
-	public function __construct( wpdb $wpdb = null ) {
-		$this->wpdb = $wpdb ?? $GLOBALS['wpdb'];
+	public function __construct( wpdb $wpdb, AppContractTmpTable $app_contract_tmp_table ) {
+		$this->wpdb                   = $wpdb ?? $GLOBALS['wpdb'];
+		$this->app_contract_tmp_table = $app_contract_tmp_table;
 
 		$table_name                      = new TableName();
 		$this->token_table_name          = $table_name->token();
@@ -28,14 +29,15 @@ class SalesHistoryService {
 	private string $invoice_table_name;
 	private string $transaction_table_name;
 	private string $transfer_event_table_name;
+	private AppContractTmpTable $app_contract_tmp_table;
 
 	/**
 	 *
 	 * @return SalesHistory[]
 	 */
 	public function select( ?string $invoice_id = null ): array {
-		( new AppContractTmpTable( $this->wpdb ) )->create();
-		$app_contract_table_name = ( new AppContractTmpTable( $this->wpdb ) )->tableName();
+		$this->app_contract_tmp_table->create();    // 一時テーブルを作成
+		$app_contract_table_name = $this->app_contract_tmp_table->tableName();
 
 		$sql = <<<SQL
 			SELECT
@@ -87,11 +89,15 @@ class SalesHistoryService {
 
 class AppContractTmpTable {
 
-	public function __construct( wpdb $wpdb ) {
-		$this->wpdb = $wpdb;
+	public function __construct( wpdb $wpdb, AppContractRepository $app_contract_repository, ChainRepository $chain_repository ) {
+		$this->wpdb                    = $wpdb;
+		$this->app_contract_repository = $app_contract_repository;
+		$this->chain_repository        = $chain_repository;
 	}
 
 	private wpdb $wpdb;
+	private AppContractRepository $app_contract_repository;
+	private ChainRepository $chain_repository;
 
 	public function create(): void {
 		$table_name = $this->tableName();
@@ -113,9 +119,9 @@ class AppContractTmpTable {
 		);
 
 		// テーブルにデータを挿入
-		$chains = ( new ChainServiceFactory() )->create()->getAllChains();
+		$chains = $this->chain_repository->all();
 		foreach ( $chains as $chain ) {
-			$app_contract = ( new AppContractRepositoryFactory() )->create()->get( $chain->id() );
+			$app_contract = $this->app_contract_repository->get( $chain->id() );
 			if ( is_null( $app_contract ) ) {
 				continue;   // アプリケーションコントラクトが取得できないチェーンはスキップ
 			}

@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\versions\_0_0_1;
 
+use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ServerSignerPrivateKeyRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ServerSignerTable;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 
 return new class() extends DatabaseMigrationBase {
 
@@ -59,7 +61,9 @@ return new class() extends DatabaseMigrationBase {
 			throw new \RuntimeException( '[FB57DCDE] Server signer table already has data. Cannot initialize.' );
 		}
 
-		$server_signer_data = ( new ServerSignerServiceFactory() )->create()->generateServerSignerData();
+		// TODO: DIコンテナから取得するように変更
+		global $wpdb;
+		$server_signer_data = ( new ServerSignerService( new ServerSignerPrivateKeyRepository( new ServerSignerTable( $wpdb ) ) ) )->generateServerSignerData();
 
 		// テーブルにデータを挿入
 		$result = $this->wpdb()->insert(
