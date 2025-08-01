@@ -7,7 +7,7 @@ use stdClass;
 
 class GetBlockResult {
 
-	public function __construct( stdClass $get_block_by_number_response ) {
+	private function __construct( stdClass $get_block_by_number_response ) {
 		$this->response = $get_block_by_number_response;
 	}
 
