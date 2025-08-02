@@ -56,7 +56,7 @@ class GetSafetyCrawledBlockNumber {
 		$client = ( new BlockchainClient( $chain->rpcURL() ) );
 
 		// 最新のブロック情報を取得
-		$res                 = $client->getBlockByNumber( BlockTag::from( 'latest' ) );
+		$res                 = $client->getBlockByNumber( BlockTag::latest() );
 		$latest_block_number = $res->number();
 		$latest_timestamp    = $res->timestamp();
 
