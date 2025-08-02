@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
-use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
+use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\GetBlockResult;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
