@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Application\UseCase;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 
@@ -52,17 +53,17 @@ class GetSafetyCrawledBlockNumber {
 
 	public function handle( ChainID $chain_id ): BlockNumber {
 		$chain  = $this->chain_repository->get( $chain_id );
-		$client = ( new BlockchainClient( $chain->rpcURL()->value() ) );
+		$client = ( new BlockchainClient( $chain->rpcURL() ) );
 
 		// 最新のブロック情報を取得
-		$res                 = $client->getBlockByNumber( 'latest' );
-		$latest_block_number = $res->blockNumber();
+		$res                 = $client->getBlockByNumber( BlockTag::from( 'latest' ) );
+		$latest_block_number = $res->number();
 		$latest_timestamp    = $res->timestamp();
 
 		// 1000ブロック前の情報を取得
 		$target_block_number = BlockNumber::from( max( $latest_block_number->int() - 1000, 1 ) ); // マイナスにならないように調整
 		$prev_res            = $client->getBlockByNumber( $target_block_number );
-		$prev_block_number   = $prev_res->blockNumber();
+		$prev_block_number   = $prev_res->number();
 		$prev_timestamp      = $prev_res->timestamp();
 
 		// ブロックの平均生成時間を計算(ゼロ除算は発生し得ないためチェック不要)

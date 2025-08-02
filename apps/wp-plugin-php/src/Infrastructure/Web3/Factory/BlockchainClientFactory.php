@@ -7,7 +7,6 @@ use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 
-/** @deprecated Use BlockchainClientServiceFactory */
 class BlockchainClientFactory {
 
 	public function __construct( ChainRepository $chain_repository ) {
@@ -26,6 +25,6 @@ class BlockchainClientFactory {
 			throw new \Exception( '[4513DF1F] RPC URL is not found. - ' . $chain_ID );
 		}
 
-		return new BlockchainClient( $rpc_url->value() );
+		return new BlockchainClient( $rpc_url );
 	}
 }

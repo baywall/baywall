@@ -33,7 +33,7 @@ class AppContractClient {
 			$this->abi->get(),
 			$app_contract->address()
 		);
-		$this->blockchain_client = new BlockchainClient( $app_contract->chain()->rpcURL()->value() );
+		$this->blockchain_client = new BlockchainClient( $app_contract->chain()->rpcURL() );
 	}
 	private Contract $contract;
 	private AppContractAbi $abi;

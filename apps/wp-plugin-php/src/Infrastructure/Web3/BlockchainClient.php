@@ -3,15 +3,17 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
-use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\EthBlock;
+use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
-use stdClass;
 use Web3\Eth;
 use Web3\Formatters\BigNumberFormatter;
 use Web3\Methods\EthMethod;
@@ -20,25 +22,24 @@ use Web3\Methods\EthMethod;
 // Ethを継承してリトライを行うクラスを作成する方法は、名前空間やクラス名がEthクラス内部で使用されておりややこしくなるため不採用
 // ここでは各メソッドでリトライオブジェクトを使用するように実装している
 
-/** @deprecated Use BlockchainClientService */
 class BlockchainClient {
-	public function __construct( string $rpc_url ) {
+	public function __construct( RpcUrl $rpc_url ) {
 		$this->rpc_url = $rpc_url;
 		$this->timeout = Config::BLOCKCHAIN_REQUEST_TIMEOUT;
 		$this->retryer = new BlockchainRetryer();
 	}
-	private string $rpc_url;
+	private RpcUrl $rpc_url;
 	private float $timeout;
 	private BlockchainRetryer $retryer;
 
 	private function eth(): Eth {
-		return new Eth( $this->rpc_url, $this->timeout );
+		return new Eth( $this->rpc_url->value(), $this->timeout );
 	}
 
 	/**
 	 * チェーンIDを取得します。
 	 */
-	public function getChainIDHex(): string {
+	public function getChainId(): ChainID {
 		$eth = $this->eth();
 
 		// Ethオブジェクトの内容を操作することで`eth_chainId`メソッドの追加を行う
@@ -59,54 +60,56 @@ class BlockchainClient {
 			$methods_property->setValue( $eth, $methods );
 		}
 
-		/** @var string|null */
-		$chain_ID_hex = null;
+		/** @var ChainID|null */
+		$chain_id = null;
 		$this->retryer->execute(
-			function () use ( $eth, &$chain_ID_hex ) {
+			function () use ( $eth, &$chain_id ) {
 				$eth->chainId(
-					function ( $err, BigInteger $res ) use ( &$chain_ID_hex ) {
+					function ( $err, BigInteger $res ) use ( &$chain_id ) {
 						if ( $err ) {
 							throw $err;
 						}
-						$chain_ID_hex = HexFormat::toHex( $res );
+						$chain_id = ChainID::from( (int) $res->toString() );
 					}
 				);
 			}
 		);
-		assert( ! is_null( $chain_ID_hex ), '[1BAA2783] Failed to get chain ID.' );
-		Validate::checkAmountHex( $chain_ID_hex );
+		assert( ! is_null( $chain_id ), '[1BAA2783] Failed to get chain ID.' );
 
-		return $chain_ID_hex;
+		return $chain_id;
 	}
 
 	/**
-	 * @param string|BlockNumber $block_number_or_tag
+	 * @param string|BlockNumber|BlockTag $block_number_or_tag
 	 */
-	public function getBlockByNumber( $block_number_or_tag ): GetBlockResult {
-		/** @var null|GetBlockResult */
-		$get_block_by_number_result = null;
-		$this->retryer->execute(
-			function () use ( $block_number_or_tag, &$get_block_by_number_result ) {
-				// $block_number_or_tagがBlockNumberインスタンスの場合は16進数に変換
-				if ( $block_number_or_tag instanceof BlockNumber ) {
-					$block_number_or_tag = $block_number_or_tag->hex();
-				} elseif ( ! is_string( $block_number_or_tag ) ) {
-					throw new \InvalidArgumentException( '[D696B5F0] $block_number_or_tag must be a string or BlockNumber instance.' );
-				}
+	public function getBlockByNumber( $block_number_or_tag ): EthBlock {
+		if ( $block_number_or_tag instanceof BlockNumber ) {
+			$block_number = $block_number_or_tag->hex();
+		} elseif ( $block_number_or_tag instanceof BlockTag ) {
+			$block_number = $block_number_or_tag->value();
+		} else {
+			throw new \InvalidArgumentException( '[FDB7CEF6] Invalid argument type. Expected BlockNumber or BlockTag. - ' . var_export( $block_number_or_tag, true ) );
+		}
 
+		/** @var null|EthBlock */
+		$result = null;
+		$this->retryer->execute(
+			function () use ( $block_number, &$result ) {
 				$this->eth()->getBlockByNumber(
-					$block_number_or_tag,
+					$block_number,
 					false, // false: トランザクションの詳細を取得しない
-					function ( $err, $res ) use ( &$get_block_by_number_result ) {
+					function ( $err, $res ) use ( &$result ) {
 						if ( $err ) {
 							throw $err;
 						}
-						$get_block_by_number_result = GetBlockResult::from( $res );
+						$result = EthBlock::from( $res );
 					}
 				);
 			}
 		);
-		return $get_block_by_number_result;
+		assert( null !== $result, '[F6805A68] Result should not be null after retry.' );
+
+		return $result;
 	}
 
 	/**
@@ -182,27 +185,25 @@ class BlockchainClient {
 	/**
 	 * アカウントの残高を取得します。
 	 */
-	public function getBalanceHex( Address $address ): string {
+	public function getBalance( Address $address ): Amount {
 
-		/** @var string|null */
-		$balance_hex = null;
+		/** @var Amount|null */
+		$balance = null;
 		$this->retryer->execute(
-			function () use ( $address, &$balance_hex ) {
+			function () use ( $address, &$balance ) {
 				$this->eth()->getBalance(
 					$address->value(),
-					function ( $err, BigInteger $res ) use ( &$balance_hex ) {
+					function ( $err, BigInteger $res ) use ( &$balance ) {
 						if ( $err ) {
 							throw $err;
 						}
-						$balance_hex = HexFormat::toHex( $res );
+						$balance = Amount::from( $res->toString() );
 					}
 				);
 			}
 		);
-		assert( ! is_null( $balance_hex ), '[72C38938] Failed to get balance.' );
-		Validate::checkAmountHex( $balance_hex );
 
-		return $balance_hex;
+		return $balance;
 	}
 
 	public function getLogs( ...$args ) {
@@ -215,18 +216,10 @@ class BlockchainClient {
 }
 
 
-/**
- * @internal
- */
+/** @internal */
 class ChainIdMethod extends EthMethod {
-
-	protected $validators = array();
-
-	protected $inputFormatters = array();
-
-	protected $outputFormatters = array(
-		BigNumberFormatter::class,
-	);
-
-	protected $defaultValues = array();
+	protected $validators       = array();
+	protected $inputFormatters  = array();
+	protected $outputFormatters = array( BigNumberFormatter::class );
+	protected $defaultValues    = array();
 }
