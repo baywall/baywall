@@ -57,13 +57,13 @@ class GetSafetyCrawledBlockNumber {
 
 		// 最新のブロック情報を取得
 		$res                 = $client->getBlockByNumber( BlockTag::from( 'latest' ) );
-		$latest_block_number = $res->blockNumber();
+		$latest_block_number = $res->number();
 		$latest_timestamp    = $res->timestamp();
 
 		// 1000ブロック前の情報を取得
 		$target_block_number = BlockNumber::from( max( $latest_block_number->int() - 1000, 1 ) ); // マイナスにならないように調整
 		$prev_res            = $client->getBlockByNumber( $target_block_number );
-		$prev_block_number   = $prev_res->blockNumber();
+		$prev_block_number   = $prev_res->number();
 		$prev_timestamp      = $prev_res->timestamp();
 
 		// ブロックの平均生成時間を計算(ゼロ除算は発生し得ないためチェック不要)
