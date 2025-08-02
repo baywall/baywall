@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\Service;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
-use Cornix\Serendipity\Core\Repository\Environment;
+use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use wpdb;
 
 class DatabaseMigrationService {

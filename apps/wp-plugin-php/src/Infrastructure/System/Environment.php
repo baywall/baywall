@@ -1,16 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Infrastructure\System;
 
 use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 
 /**
  * インストールされている環境から情報を取得するクラス。
  * マシンに配置されているファイルやインストール済みのデータベースなど、実行環境によって異なる情報を取得する場合に使用します。
  */
 class Environment {
+
+	/** developmentモードを判定するためのファイルパス */
+	private const DEVELOPMENT_MODE_CHECK_FILE = Config::ROOT_DIR . '/package.json';
 
 	/**
 	 * 開発モードかどうかを取得します。
@@ -22,22 +24,12 @@ class Environment {
 	 * また、以下の状態の場合はfalseを返します。
 	 * - 本番環境での運用時(zipファイルからインストールした場合)
 	 */
-	public function isDevelopmentMode(): bool {
-		$option = ( new OptionFactory() )->isDevelopmentMode();
-		/** @var bool|null */
-		$is_development_mode = $option->get( null );
-
-		if ( is_null( $is_development_mode ) ) {
-			$package_json_path   = Config::ROOT_DIR . '/package.json';
-			$is_development_mode = file_exists( $package_json_path );
-			$option->update( $is_development_mode );    // '0'や'1'のような文字列で保存される
-		}
-
-		return $is_development_mode;
+	public function isDevelopment(): bool {
+		return file_exists( self::DEVELOPMENT_MODE_CHECK_FILE );
 	}
 
 	/**
-	 * ユニットテスト実施中かどうかを取得します。
+	 * PHPUnitのテスト中かどうかを取得します。
 	 */
 	public function isTesting(): bool {
 		return 'testing' === getenv( 'APP_ENV' );

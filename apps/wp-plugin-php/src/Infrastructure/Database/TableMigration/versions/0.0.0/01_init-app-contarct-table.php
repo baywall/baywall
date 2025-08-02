@@ -62,7 +62,7 @@ return new class() extends DatabaseMigrationBase {
 		);
 
 		// 開発モード時は開発用のコントラクトアドレスを使用(テストネットのアドレスは上書き)
-		if ( $this->environment()->isDevelopmentMode() ) {
+		if ( $this->environment()->isDevelopment() ) {
 			$insert_data[ ChainIdValue::PRIVATENET_L1 ]  = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 			$insert_data[ ChainIdValue::PRIVATENET_L2 ]  = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 			$insert_data[ ChainIdValue::SEPOLIA ]        = '0x6e98081f56608E3a9414823239f65c0e6399561d';

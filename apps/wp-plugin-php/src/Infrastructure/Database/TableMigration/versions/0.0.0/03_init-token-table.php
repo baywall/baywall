@@ -90,7 +90,7 @@ return new class() extends DatabaseMigrationBase {
 		$records[] = new $Record( ChainIdValue::SONEIUM_MINATO, $zero_address, 'ETH', 18, false );
 
 		// 開発モード時はプライベートネットのネイティブトークンを登録
-		if ( $this->environment()->isDevelopmentMode() ) {
+		if ( $this->environment()->isDevelopment() ) {
 			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, $zero_address, 'ETH', 18, true );
 			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, $zero_address, 'MATIC', 18, true );
 		}
