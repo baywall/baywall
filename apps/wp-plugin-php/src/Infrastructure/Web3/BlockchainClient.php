@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
@@ -21,7 +22,6 @@ use Web3\Methods\EthMethod;
 // Ethを継承してリトライを行うクラスを作成する方法は、名前空間やクラス名がEthクラス内部で使用されておりややこしくなるため不採用
 // ここでは各メソッドでリトライオブジェクトを使用するように実装している
 
-/** @deprecated Use BlockchainClientService */
 class BlockchainClient {
 	public function __construct( RpcUrl $rpc_url ) {
 		$this->rpc_url = $rpc_url;
@@ -80,33 +80,36 @@ class BlockchainClient {
 	}
 
 	/**
-	 * @param string|BlockNumber $block_number_or_tag
+	 * @param string|BlockNumber|BlockTag $block_number_or_tag
 	 */
 	public function getBlockByNumber( $block_number_or_tag ): GetBlockResult {
-		/** @var null|GetBlockResult */
-		$get_block_by_number_result = null;
-		$this->retryer->execute(
-			function () use ( $block_number_or_tag, &$get_block_by_number_result ) {
-				// $block_number_or_tagがBlockNumberインスタンスの場合は16進数に変換
-				if ( $block_number_or_tag instanceof BlockNumber ) {
-					$block_number_or_tag = $block_number_or_tag->hex();
-				} elseif ( ! is_string( $block_number_or_tag ) ) {
-					throw new \InvalidArgumentException( '[D696B5F0] $block_number_or_tag must be a string or BlockNumber instance.' );
-				}
+		if ( $block_number_or_tag instanceof BlockNumber ) {
+			$block_number = $block_number_or_tag->hex();
+		} elseif ( $block_number_or_tag instanceof BlockTag ) {
+			$block_number = $block_number_or_tag->value();
+		} else {
+			throw new \InvalidArgumentException( '[FDB7CEF6] Invalid argument type. Expected BlockNumber or BlockTag. - ' . var_export( $block_number_or_tag, true ) );
+		}
 
+		/** @var null|GetBlockResult */
+		$result = null;
+		$this->retryer->execute(
+			function () use ( $block_number, &$result ) {
 				$this->eth()->getBlockByNumber(
-					$block_number_or_tag,
+					$block_number,
 					false, // false: トランザクションの詳細を取得しない
-					function ( $err, $res ) use ( &$get_block_by_number_result ) {
+					function ( $err, $res ) use ( &$result ) {
 						if ( $err ) {
 							throw $err;
 						}
-						$get_block_by_number_result = GetBlockResult::from( $res );
+						$result = GetBlockResult::from( $res );
 					}
 				);
 			}
 		);
-		return $get_block_by_number_result;
+		assert( null !== $result, '[F6805A68] Result should not be null after retry.' );
+
+		return $result;
 	}
 
 	/**
@@ -213,18 +216,10 @@ class BlockchainClient {
 }
 
 
-/**
- * @internal
- */
+/** @internal */
 class ChainIdMethod extends EthMethod {
-
-	protected $validators = array();
-
-	protected $inputFormatters = array();
-
-	protected $outputFormatters = array(
-		BigNumberFormatter::class,
-	);
-
-	protected $defaultValues = array();
+	protected $validators       = array();
+	protected $inputFormatters  = array();
+	protected $outputFormatters = array( BigNumberFormatter::class );
+	protected $defaultValues    = array();
 }
