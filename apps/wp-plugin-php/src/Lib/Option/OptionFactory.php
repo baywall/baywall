@@ -31,13 +31,6 @@ class OptionFactory {
 	}
 
 	/**
-	 * 本プラグインが開発モードで動作しているかどうかを取得または保存するオブジェクトを取得します。
-	 */
-	public function isDevelopmentMode(): BoolOption {
-		return new BoolOption( $this->getOptionKeyName( 'is_development_mode' ) );
-	}
-
-	/**
 	 * 販売者が同意した利用規約に関する情報を保存する際のキーのプレフィックスを取得します。
 	 */
 	private function sellerAgreedTermsKeyPrefix(): string {
