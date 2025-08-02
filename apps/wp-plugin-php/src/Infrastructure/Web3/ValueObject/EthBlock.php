@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use stdClass;
 
-class GetBlockResult {
+class EthBlock {
 
 	private function __construct( stdClass $get_block_by_number_response ) {
 		$this->response = $get_block_by_number_response;

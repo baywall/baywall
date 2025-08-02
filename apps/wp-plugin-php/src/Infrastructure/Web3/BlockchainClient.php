@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
-use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\GetBlockResult;
+use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\EthBlock;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
@@ -82,7 +82,7 @@ class BlockchainClient {
 	/**
 	 * @param string|BlockNumber|BlockTag $block_number_or_tag
 	 */
-	public function getBlockByNumber( $block_number_or_tag ): GetBlockResult {
+	public function getBlockByNumber( $block_number_or_tag ): EthBlock {
 		if ( $block_number_or_tag instanceof BlockNumber ) {
 			$block_number = $block_number_or_tag->hex();
 		} elseif ( $block_number_or_tag instanceof BlockTag ) {
@@ -91,7 +91,7 @@ class BlockchainClient {
 			throw new \InvalidArgumentException( '[FDB7CEF6] Invalid argument type. Expected BlockNumber or BlockTag. - ' . var_export( $block_number_or_tag, true ) );
 		}
 
-		/** @var null|GetBlockResult */
+		/** @var null|EthBlock */
 		$result = null;
 		$this->retryer->execute(
 			function () use ( $block_number, &$result ) {
@@ -102,7 +102,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$result = GetBlockResult::from( $res );
+						$result = EthBlock::from( $res );
 					}
 				);
 			}
