@@ -17,7 +17,7 @@ class GetBlockResult {
 		return new self( $get_block_by_number_response );
 	}
 
-	public function blockNumber(): BlockNumber {
+	public function number(): BlockNumber {
 		return BlockNumber::from( $this->response->number );
 	}
 
