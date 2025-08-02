@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base;
 
-use InvalidArgumentException;
+use DI\Container;
 use RuntimeException;
 use Throwable;
 use wpdb;
@@ -20,20 +20,23 @@ abstract class MigratorBase {
 	}
 	private wpdb $wpdb;
 	private string $table_name;
+	private Container $container;
+
+	public function setContainer( Container $container ): void {
+		$this->container = $container;
+	}
 
 	/**
 	 * テーブル更新対象のバージョンと使用するクラスのマッピングを定義します。
 	 *
-	 * @return array<int,array{0:string,1:string}> キーがバージョン番号、値がクラス名の連想配列
-	 * ※ `class-string`はPHP8.0以降で使用可能なので、現時点ではstring型で定義
+	 * @return array<int,array{0:string,1:class-string}> キーがバージョン番号、値がクラス名の連想配列
 	 */
 	abstract protected function versions(): array;
 
 	private function createMigration( string $class_name ): MigrationBase {
-		$instance = new $class_name();
-		if ( ! $instance instanceof MigrationBase ) {
-			throw new InvalidArgumentException( "[1E79EFED] Invalid class name: {$class_name}" );
-		}
+		$instance = $this->container->get( $class_name );
+		assert( $instance instanceof MigrationBase, "[1E79EFED] Invalid class: {$class_name}" );
+
 		$instance->initialize( $this->wpdb, $this->table_name );
 		return $instance;
 	}
