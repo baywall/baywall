@@ -1,11 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject;
+namespace Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use stdClass;
 
-class GetBlockResult {
+class EthBlock {
 
 	private function __construct( stdClass $get_block_by_number_response ) {
 		$this->response = $get_block_by_number_response;
@@ -17,7 +19,7 @@ class GetBlockResult {
 		return new self( $get_block_by_number_response );
 	}
 
-	public function blockNumber(): BlockNumber {
+	public function number(): BlockNumber {
 		return BlockNumber::from( $this->response->number );
 	}
 
