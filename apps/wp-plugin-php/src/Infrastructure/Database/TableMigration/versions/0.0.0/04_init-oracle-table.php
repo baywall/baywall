@@ -84,7 +84,7 @@ return new class() extends DatabaseMigrationBase {
 		// ■ Fiat
 		// 以下のコマンドでFiatのOracleアドレスを確認可能
 		// curl -s https://reference-data-directory.vercel.app/feeds-mainnet.json | jq '.[] | select(.docs.assetClass == "Fiat")'
-		if ( 'ja' === substr( get_locale(), 0, 2 ) || $this->environment()->isDevelopmentMode() ) {
+		if ( 'ja' === substr( get_locale(), 0, 2 ) || $this->environment()->isDevelopment() ) {
 			// サイトの言語が日本語の場合、もしくは開発モード時は、`JPY / USD`を登録
 			$records[] = new $Record( ChainIdValue::ETH_MAINNET, '0xBcE206caE7f0ec07b545EddE332A47C2F75bbeb3', 'JPY', 'USD' );
 		}
