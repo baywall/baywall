@@ -15,7 +15,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockchainClientServiceImpl;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
 
@@ -25,14 +25,16 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		InvoiceRepository $invoice_repository,
 		PostRepository $post_repository,
 		ServerSignerService $server_signer_service,
-		UserAccessChecker $user_access_checker
+		UserAccessChecker $user_access_checker,
+		BlockchainClientFactory $blockchain_client_factory
 	) {
-		$this->app_contract_repository = $app_contract_repository;
-		$this->chain_service           = $chain_service;
-		$this->invoice_repository      = $invoice_repository;
-		$this->post_repository         = $post_repository;
-		$this->server_signer_service   = $server_signer_service;
-		$this->user_access_checker     = $user_access_checker;
+		$this->app_contract_repository   = $app_contract_repository;
+		$this->chain_service             = $chain_service;
+		$this->invoice_repository        = $invoice_repository;
+		$this->post_repository           = $post_repository;
+		$this->server_signer_service     = $server_signer_service;
+		$this->user_access_checker       = $user_access_checker;
+		$this->blockchain_client_factory = $blockchain_client_factory;
 	}
 
 	private AppContractRepository $app_contract_repository;
@@ -41,6 +43,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	private PostRepository $post_repository;
 	private ServerSignerService $server_signer_service;
 	private UserAccessChecker $user_access_checker;
+	private BlockchainClientFactory $blockchain_client_factory;
 
 	// ここの定数は、GraphQLのエラーコードと一致させること
 	private const ERROR_CODE_INVALID_NONCE           = 'INVALID_NONCE';
@@ -129,7 +132,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 
 		if ( is_int( $confirmations_value ) ) {
 			// 最新のブロック番号を取得
-			$latest_block        = ( new BlockchainClientServiceImpl( $chain ) )->getBlockByNumber( BlockTag::latest() );
+			$latest_block        = $this->blockchain_client_factory->create( $chain->id() )->getBlockByNumber( BlockTag::latest() );
 			$latest_block_number = $latest_block->blockNumber();
 			// 基準となるブロック番号を計算(「ペイウォール解除時のブロック番号」<=「基準ブロック番号」となる場合、待機済み)
 			$reference_block = $latest_block_number->sub( max( $confirmations_value - 1, 0 ) );

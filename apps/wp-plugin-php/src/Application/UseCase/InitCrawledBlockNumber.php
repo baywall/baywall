@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Application\UseCase;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 
@@ -55,7 +56,7 @@ class GetSafetyCrawledBlockNumber {
 		$client = ( new BlockchainClient( $chain->rpcURL() ) );
 
 		// 最新のブロック情報を取得
-		$res                 = $client->getBlockByNumber( 'latest' );
+		$res                 = $client->getBlockByNumber( BlockTag::from( 'latest' ) );
 		$latest_block_number = $res->blockNumber();
 		$latest_timestamp    = $res->timestamp();
 
