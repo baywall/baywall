@@ -92,7 +92,7 @@ return new class() extends DatabaseMigrationBase {
 			new $Record( ChainIdValue::SONEIUM_MINATO, 'Soneium Testnet Minato', NetworkCategoryID::testnet(), null, '1', InitialBlockExplorerURL::SONEIUM_MINATO ),
 		);
 		// 開発モード時はプライベートネットのチェーン情報も登録
-		if ( $this->environment()->isDevelopmentMode() ) {
+		if ( $this->environment()->isDevelopment() ) {
 			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, 'Privatenet1', NetworkCategoryID::privatenet(), $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L1 ), '1', InitialBlockExplorerURL::PRIVATENET_L1 );
 			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, 'Privatenet2', NetworkCategoryID::privatenet(), $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L2 ), '1', InitialBlockExplorerURL::PRIVATENET_L2 );
 		}

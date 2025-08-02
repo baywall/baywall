@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\GraphQL;
 
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
-use Cornix\Serendipity\Core\Repository\Environment;
+use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use GraphQL\Language\Parser;
 use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;
@@ -15,7 +15,7 @@ class PluginSchema {
 		$cache_file_path = ( new ProjectFile( 'includes/cache/graphql-schema.php' ) )->toLocalPath();
 
 		// 開発中は、スキーマ等が更新される可能性があるので、キャッシュファイルが古い場合はキャッシュファイルを削除
-		if ( ( new Environment() )->isDevelopmentMode() ) {
+		if ( ( new Environment() )->isDevelopment() ) {
 			$this->deleteCacheFileIfOutdated( $cache_file_path );
 		}
 

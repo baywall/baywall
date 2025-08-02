@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\MySQLiFactory;
-use Cornix\Serendipity\Core\Repository\Environment;
+use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use mysqli;
 use wpdb;
 
