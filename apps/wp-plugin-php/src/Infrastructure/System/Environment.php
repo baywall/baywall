@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Infrastructure\System;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
