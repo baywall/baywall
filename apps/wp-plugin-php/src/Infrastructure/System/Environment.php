@@ -22,7 +22,7 @@ class Environment {
 	 * また、以下の状態の場合はfalseを返します。
 	 * - 本番環境での運用時(zipファイルからインストールした場合)
 	 */
-	public function isDevelopmentMode(): bool {
+	public function isDevelopment(): bool {
 		$option = ( new OptionFactory() )->isDevelopmentMode();
 		/** @var bool|null */
 		$is_development_mode = $option->get( null );
