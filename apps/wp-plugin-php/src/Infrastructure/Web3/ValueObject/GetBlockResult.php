@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject;
+namespace Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use stdClass;
 
 class GetBlockResult {
