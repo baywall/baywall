@@ -33,6 +33,6 @@ class LogLevelProviderImpl implements LogLevelProvider {
 	}
 
 	private function getOptionName( LogCategory $category ): string {
-		return $this->prefix_provider->getOptionNamePrefix() . 'log_level_' . $category->name();
+		return $this->prefix_provider->optionKey() . 'log_level_' . $category->name();
 	}
 }
