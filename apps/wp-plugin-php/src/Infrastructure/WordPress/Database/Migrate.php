@@ -35,7 +35,16 @@ class Migrate {
 
 	/** @return MigratorBase[] */
 	public function seed( ?string $from_version, string $to_version ): array {
-		return $this->migrate( $this->seedClasses(), $from_version, $to_version );
+		global $wpdb;
+		try {
+			$wpdb->query( 'START TRANSACTION' );
+			$migrators = $this->migrate( $this->seedClasses(), $from_version, $to_version );
+			$wpdb->query( 'COMMIT' );
+			return $migrators;
+		} catch ( Throwable $e ) {
+			$wpdb->query( 'ROLLBACK' );
+			throw $e;
+		}
 	}
 
 	/**
