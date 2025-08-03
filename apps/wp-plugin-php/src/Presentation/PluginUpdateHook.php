@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\OptionGateway\PluginVersionOption;
-use Cornix\Serendipity\Core\Infrastructure\Database\Service\DatabaseMigrationService;
-use Cornix\Serendipity\Core\Infrastructure\System\Environment;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrate;
 use Cornix\Serendipity\Core\Repository\PluginInfo;
+use DI\Container;
+use Throwable;
 
 // ■プラグインがインストールされた時や更新時のhookに関して
 // - `update_plugins_{$host_name}`
@@ -28,33 +29,37 @@ use Cornix\Serendipity\Core\Repository\PluginInfo;
 
 class PluginUpdateHook {
 
+	public function __construct( Container $container ) {
+		$this->container = $container;
+	}
+	private Container $container;
+
 	public function register(): void {
 		add_action( 'admin_init', array( $this, 'addActionAdminInit' ) );
 	}
 
 	public function addActionAdminInit(): void {
 		assert( is_admin() );
-
 		try {
-			$db_plugin_version = ( new PluginVersionOption() )->get();    // DBに記録されているプラグインバージョン
-			$plugin_version    = ( new PluginInfo() )->version();          // 現在のプラグインバージョン
+			$plugin_version_option = $this->container->get( PluginVersionOption::class );
+			$plugin_info           = $this->container->get( PluginInfo::class );
+			// バージョンチェック
+			$from_version = $plugin_version_option->get();
+			$to_version   = $plugin_info->version();
+			if ( version_compare( $from_version ?? '0.0.0', $to_version, '<' ) ) {
+				// マイグレーション実行
+				( new Migrate( $this->container ) )->run( $from_version, $to_version );
 
-			if ( is_null( $db_plugin_version ) || version_compare( $db_plugin_version, $plugin_version, '<' ) ) {
-				// プラグインのバージョンが更新されている場合、または取得できない(新規インストール)場合はアップグレード処理を実行
-				( new DatabaseMigrationService( $GLOBALS['wpdb'], new Environment() ) )->migrate( $db_plugin_version );
-
-				// DBに記録されているプラグインのバージョンを更新
-				// ※ 管理画面でのみ必要となる項目のため、autoloadはfalseに設定
-				( new PluginVersionOption() )->update( $plugin_version, false );
+				// プラグインのバージョンを更新
+				$plugin_version_option->update( $to_version, false );
 			}
-		} catch ( \Throwable $e ) {
+		} catch ( Throwable $e ) {
 			// アップデートに失敗した場合はプラグインを無効化
 			$this->deactivatePlugin();
 			// wp_redirect( admin_url( 'plugins.php' ) ); // プラグイン一覧ページにリダイレクト
 
-			// エラー内容を画面に表示
-			echo (string) $e;
-			exit;
+			// エラー内容を画面に表示して終了
+			wp_die( (string) $e, '', array( 'back_link' => true ) );
 		}
 	}
 
