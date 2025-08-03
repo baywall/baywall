@@ -6,6 +6,8 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\AppContractTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\AppContractTableSeed;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\ChainTableSchema;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\ChainTableSeed;
 use DI\Container;
 use Throwable;
 
@@ -33,12 +35,14 @@ class Migrate {
 	private function schemaClasses(): array {
 		return array(
 			AppContractTableSchema::class,
+			ChainTableSchema::class,
 			// 他のスキーマクラスを追加する場合はここに記述
 		);
 	}
 	private function seedClasses(): array {
 		return array(
 			AppContractTableSeed::class,
+			ChainTableSeed::class,
 			// 他のシードクラスを追加する場合はここに記述
 		);
 	}
