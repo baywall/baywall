@@ -9,7 +9,7 @@ class PrefixProvider {
 
 	// TODO: Prefixクラスから処理をこのクラスへ移動
 
-	public function getOptionNamePrefix(): string {
+	public function optionKey(): string {
 		return ( new Prefix() )->optionKeyPrefix();
 	}
 }
