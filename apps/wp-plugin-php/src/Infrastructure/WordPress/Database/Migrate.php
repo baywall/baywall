@@ -8,6 +8,8 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\AppCont
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\ChainTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\ChainTableSeed;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\OracleTableSchema;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\OracleTableSeed;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\TokenTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\TokenTableSeed;
 use DI\Container;
@@ -39,6 +41,7 @@ class Migrate {
 			AppContractTableSchema::class,
 			ChainTableSchema::class,
 			TokenTableSchema::class,
+			OracleTableSchema::class,
 			// 他のスキーマクラスを追加する場合はここに記述
 		);
 	}
@@ -47,6 +50,7 @@ class Migrate {
 			AppContractTableSeed::class,
 			ChainTableSeed::class,
 			TokenTableSeed::class,
+			OracleTableSeed::class,
 			// 他のシードクラスを追加する場合はここに記述
 		);
 	}
