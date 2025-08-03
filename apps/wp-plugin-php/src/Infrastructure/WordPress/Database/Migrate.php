@@ -15,6 +15,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\PaidCon
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\TokenTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\TokenTableSeed;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\UnlockPaywallTransactionTableSchema;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\UnlockPaywallTransferEventTableSchema;
 use DI\Container;
 use Throwable;
 
@@ -48,6 +49,7 @@ class Migrate {
 			PaidContentTableSchema::class,
 			InvoiceTableSchema::class,
 			UnlockPaywallTransactionTableSchema::class,
+			UnlockPaywallTransferEventTableSchema::class,
 			// 他のスキーマクラスを追加する場合はここに記述
 		);
 	}
