@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\Signer;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Infrastructure\System\OpenSslChecker;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ServerSignerPrivateKeyRepository;
@@ -57,7 +58,7 @@ class ServerSignerService {
 		}
 
 		return new GeneratedServerSignerData(
-			$server_signer->address()->value(),
+			$server_signer->address(),
 			$private_key_data,
 			$key,
 			$iv
@@ -94,19 +95,19 @@ class ServerSignerService {
 }
 
 class GeneratedServerSignerData {
-	public function __construct( string $address, string $private_key_data, ?string $encryption_key, ?string $encryption_iv ) {
+	public function __construct( Address $address, string $private_key_data, ?string $encryption_key, ?string $encryption_iv ) {
 		$this->address          = $address;
 		$this->private_key_data = $private_key_data;
 		$this->encryption_key   = $encryption_key;
 		$this->encryption_iv    = $encryption_iv;
 	}
 
-	private string $address;
+	private Address $address;
 	private string $private_key_data;
 	private ?string $encryption_key;
 	private ?string $encryption_iv;
 
-	public function address(): string {
+	public function address(): Address {
 		return $this->address;
 	}
 
