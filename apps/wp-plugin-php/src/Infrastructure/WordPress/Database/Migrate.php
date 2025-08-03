@@ -14,6 +14,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\OracleT
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\PaidContentTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\TokenTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\TokenTableSeed;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\UnlockPaywallTransactionTableSchema;
 use DI\Container;
 use Throwable;
 
@@ -46,6 +47,7 @@ class Migrate {
 			OracleTableSchema::class,
 			PaidContentTableSchema::class,
 			InvoiceTableSchema::class,
+			UnlockPaywallTransactionTableSchema::class,
 			// 他のスキーマクラスを追加する場合はここに記述
 		);
 	}
