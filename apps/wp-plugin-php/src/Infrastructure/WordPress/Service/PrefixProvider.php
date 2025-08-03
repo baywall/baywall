@@ -12,4 +12,9 @@ class PrefixProvider {
 	public function optionKey(): string {
 		return ( new Prefix() )->optionKeyPrefix();
 	}
+
+
+	public function tableName(): string {
+		return ( new Prefix() )->tableNamePrefix();
+	}
 }
