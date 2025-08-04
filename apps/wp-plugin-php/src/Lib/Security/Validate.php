@@ -52,7 +52,7 @@ class Validate {
 	}
 
 	/** 文字列が有効なURLでない場合は例外をスローします。 */
-	public static function checkURL( string $url ): void {
+	public static function checkUrl( string $url ): void {
 		if ( ! self::isUrl( $url ) ) {
 			throw new \InvalidArgumentException( '[67D57E5E] Invalid URL. - url: ' . $url );
 		}
