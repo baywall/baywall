@@ -45,7 +45,7 @@ final class Amount {
 	public static function fromBaseUnitAndDecimals( string $base_unit, Decimals $decimals ): self {
 		// 基本単位から小数点以下の桁数を考慮してAmountを生成
 		$multiplier = (string) ( 10 ** $decimals->value() );
-		return new self( bcdiv( $base_unit, $multiplier, 0 ) );
+		return new self( bcdiv( $base_unit, $multiplier, $decimals->value() ) );
 	}
 
 	public function isZero(): bool {
