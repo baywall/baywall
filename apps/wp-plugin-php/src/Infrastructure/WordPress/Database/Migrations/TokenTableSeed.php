@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations;
 
-use Cornix\Serendipity\Core\Infrastructure\Constant\ChainIdValue;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Registry\ChainIdRegistry;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
@@ -30,7 +34,27 @@ class TokenTableSeed extends MigratorBase {
 // --------------------------------------------------------------------------------
 
 /** @internal */
-class TokenTableSeed_0_0_1 extends MigrationBase {
+abstract class TokenTableSeedBase extends MigrationBase {
+	protected function add( ChainID $chain_id, string $address_value, string $symbol_value, int $decimals_value, bool $is_payable ): void {
+		$address  = Address::from( $address_value );
+		$symbol   = Symbol::from( $symbol_value );
+		$decimals = Decimals::from( $decimals_value );
+
+		$this->insert(
+			$this->tableName(),
+			array(
+				'chain_id'   => $chain_id->value(),
+				'address'    => $address->value(),
+				'symbol'     => $symbol->value(),
+				'decimals'   => $decimals->value(),
+				'is_payable' => (int) $is_payable,
+			)
+		);
+	}
+}
+
+/** @internal */
+class TokenTableSeed_0_0_1 extends TokenTableSeedBase {
 
 	public function __construct( Environment $environment ) {
 		$this->environment = $environment;
@@ -38,55 +62,20 @@ class TokenTableSeed_0_0_1 extends MigrationBase {
 	private Environment $environment;
 
 	public function up(): void {
-
+		// ネイティブトークンのアドレスは0x00とする
 		$zero_address = Ethers::zeroAddress()->value();
-		$Record       = new class( 0, '', '', 0, false ) {
-			public function __construct(
-				int $chain_id,
-				string $address,
-				string $symbol,
-				int $decimals,
-				bool $is_payable
-			) {
-				$this->chain_id   = $chain_id;
-				$this->address    = $address;
-				$this->symbol     = $symbol;
-				$this->decimals   = $decimals;
-				$this->is_payable = $is_payable;
-			}
-			public int $chain_id;
-			public string $address;
-			public string $symbol;
-			public int $decimals;
-			public bool $is_payable;
-		};
-
-		$records = array();
 
 		// メインネットのネイティブトークンを登録(Ethereum Mainnetのみ支払可能として指定)
-		$records[] = new $Record( ChainIdValue::ETH_MAINNET, $zero_address, 'ETH', 18, true );
+		$this->add( ChainIdRegistry::ethMainnet(), $zero_address, 'ETH', 18, true );
 
 		// テストネットのネイティブトークンを登録(Sepoliaのみ支払可能として指定)
-		$records[] = new $Record( ChainIdValue::SEPOLIA, $zero_address, 'ETH', 18, true );
-		$records[] = new $Record( ChainIdValue::SONEIUM_MINATO, $zero_address, 'ETH', 18, false );
+		$this->add( ChainIdRegistry::sepolia(), $zero_address, 'ETH', 18, true );
+		$this->add( ChainIdRegistry::soneiumMinato(), $zero_address, 'ETH', 18, false );
 
 		// 開発モード時はプライベートネットのネイティブトークンを登録
 		if ( $this->environment->isDevelopment() ) {
-			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, $zero_address, 'ETH', 18, true );
-			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, $zero_address, 'MATIC', 18, true );
-		}
-
-		foreach ( $records as $record ) {
-			$this->insert(
-				$this->tableName(),
-				array(
-					'chain_id'   => $record->chain_id,
-					'address'    => $record->address,
-					'symbol'     => $record->symbol,
-					'decimals'   => $record->decimals,
-					'is_payable' => $record->is_payable,
-				)
-			);
+			$this->add( ChainIdRegistry::privatenetL1(), $zero_address, 'ETH', 18, true );
+			$this->add( ChainIdRegistry::privatenetL2(), $zero_address, 'MATIC', 18, false );
 		}
 	}
 
