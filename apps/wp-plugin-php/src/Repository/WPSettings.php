@@ -12,10 +12,10 @@ class WPSettings {
 	/**
 	 * 指定したIDの投稿が公開されているかどうかを返します。
 	 *
-	 * @param PostId $post_ID
+	 * @param PostId $post_id
 	 */
-	public function isPublished( PostId $post_ID ): bool {
-		return get_post_status( $post_ID->value() ) === 'publish';
+	public function isPublished( PostId $post_id ): bool {
+		return get_post_status( $post_id->value() ) === 'publish';
 	}
 
 

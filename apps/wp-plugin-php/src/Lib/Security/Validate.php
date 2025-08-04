@@ -15,20 +15,20 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
 class Validate {
 
 	/** 指定された値が投稿IDであるかどうかを取得します。 */
-	private static function isPostID( int $post_ID ): bool {
+	private static function isPostId( int $post_id ): bool {
 		// 投稿の状態を取得できれば有効なIDとみなす。
-		return false !== get_post_status( $post_ID );
+		return false !== get_post_status( $post_id );
 	}
 
 	/**
 	 * 投稿IDが有効でない場合は例外をスローします。
 	 *
-	 * @param int $post_ID 投稿ID
+	 * @param int $post_id 投稿ID
 	 * @throws \InvalidArgumentException
 	 */
-	public static function checkPostID( int $post_ID ): void {
-		if ( ! self::isPostID( $post_ID ) ) {
-			throw new \InvalidArgumentException( '[C1D3D3A4] Invalid post ID. - post_ID: ' . $post_ID );
+	public static function checkPostId( int $post_id ): void {
+		if ( ! self::isPostId( $post_id ) ) {
+			throw new \InvalidArgumentException( '[C1D3D3A4] Invalid post ID. - post_id: ' . $post_id );
 		}
 	}
 

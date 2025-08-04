@@ -48,7 +48,7 @@ class SalesHistoriesResolver extends ResolverBase {
 						return $root_value['post'](
 							$root_value,
 							array(
-								'postID' => $sales_data->postID(),
+								'postID' => $sales_data->postId(),
 							)
 						);
 					},

@@ -33,12 +33,12 @@ class IssueInvoice {
 	private TokenAmountConverter $token_amount_converter;
 	private PriceExchangeService $price_exchange_service;
 
-	public function handle( int $post_ID, ChainId $chain_id, Address $payment_token_address, Address $consumer_address ): Invoice {
+	public function handle( int $post_id, ChainId $chain_id, Address $payment_token_address, Address $consumer_address ): Invoice {
 		$payment_token  = ( new GetPaymentToken( $this->token_repository ) )->handle( $chain_id, $payment_token_address ); // 支払トークン
 		$seller_address = $this->seller_service->getSellerAddress();  // 販売者アドレス
-		$selling_price  = $this->post_repository->get( PostId::from( $post_ID ) )->sellingPrice();
+		$selling_price  = $this->post_repository->get( PostId::from( $post_id ) )->sellingPrice();
 		if ( is_null( $selling_price ) ) {
-			throw new \InvalidArgumentException( '[8AF88CAF] Selling price is null for post ID: ' . $post_ID );
+			throw new \InvalidArgumentException( '[8AF88CAF] Selling price is null for post ID: ' . $post_id );
 		}
 
 		// 支払うトークンにおける価格を計算
@@ -49,7 +49,7 @@ class IssueInvoice {
 
 		$invoice = new Invoice(
 			InvoiceID::generate(), // 新規請求書ID
-			PostId::from( $post_ID ),
+			PostId::from( $post_id ),
 			$chain_id,
 			$selling_price,
 			$seller_address,

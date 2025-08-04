@@ -44,14 +44,14 @@ class AppContractClient {
 		return $this->contract;
 	}
 
-	public function getPaywallStatus( Address $signer_address, PostId $post_ID, Address $consumer_address ): GetPaywallStatusResult {
+	public function getPaywallStatus( Address $signer_address, PostId $post_id, Address $consumer_address ): GetPaywallStatusResult {
 
 		/** @var GetPaywallStatusResult|null */
 		$result = null;
 		$this->contract->call(
 			'getPaywallStatus',
 			$signer_address->value(),
-			$post_ID->value(),
+			$post_id->value(),
 			$consumer_address->value(),
 			function ( $err, $res ) use ( &$result ) {
 				if ( $err ) {
