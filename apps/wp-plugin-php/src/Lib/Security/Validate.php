@@ -11,26 +11,9 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
  *
  * 参考: Ownable.sol#_checkOwner
  * https://github.com/OpenZeppelin/openzeppelin-contracts/blob/1edc2ae004974ebf053f4eba26b45469937b9381/contracts/access/Ownable.sol#L63-L67
+ * @deprecated
  */
 class Validate {
-
-	/** 指定された値が投稿IDであるかどうかを取得します。 */
-	private static function isPostId( int $post_id ): bool {
-		// 投稿の状態を取得できれば有効なIDとみなす。
-		return false !== get_post_status( $post_id );
-	}
-
-	/**
-	 * 投稿IDが有効でない場合は例外をスローします。
-	 *
-	 * @param int $post_id 投稿ID
-	 * @throws \InvalidArgumentException
-	 */
-	public static function checkPostId( int $post_id ): void {
-		if ( ! self::isPostId( $post_id ) ) {
-			throw new \InvalidArgumentException( '[C1D3D3A4] Invalid post ID. - post_id: ' . $post_id );
-		}
-	}
 
 	/**
 	 * 文字列が16進数表記でない場合は例外をスローします。
@@ -51,51 +34,11 @@ class Validate {
 		return Strings::starts_with( $hex, '0x' ) && \Web3\Utils::isHex( $hex );
 	}
 
-	/** 文字列が有効なURLでない場合は例外をスローします。 */
-	public static function checkUrl( string $url ): void {
-		if ( ! self::isUrl( $url ) ) {
-			throw new \InvalidArgumentException( '[67D57E5E] Invalid URL. - url: ' . $url );
-		}
-	}
-
 	/**
 	 * 文字列がURLの形式かどうかを返します。
 	 */
 	public static function isUrl( string $url ): bool {
 		return filter_var( $url, FILTER_VALIDATE_URL ) !== false && Strings::starts_with( $url, 'http' );
-	}
-
-	/**
-	 * 数量として有効な16進数表記でない場合は例外をスローします。
-	 *
-	 * @param string $hex 16進数表記の数量
-	 * @throws InvalidArgumentException
-	 */
-	public static function checkAmountHex( string $hex ): void {
-		if ( ! self::isAmountHex( $hex ) ) {
-			throw new \InvalidArgumentException( '[9D226886] Invalid hex. - hex: ' . $hex );
-		}
-	}
-	private static function isAmountHex( string $hex ): bool {
-		// 本プラグインにおいてuint256を超える値は扱わない。また、大文字小文字を混在させる必要はないため小文字固定とする。
-		// uint256_max: 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-		return self::isHex( $hex ) && strlen( $hex ) <= ( 2 + 64 );
-	}
-
-	/**
-	 * 数量の小数点以下桁数として有効な値でない場合は例外をスローします。
-	 *
-	 * @param int $decimals 小数点以下桁数
-	 * @throws InvalidArgumentException
-	 */
-	public static function checkDecimals( int $decimals ): void {
-		if ( ! self::isDecimals( $decimals ) ) {
-			throw new \InvalidArgumentException( '[24FF24F8] Invalid decimals. - decimals: ' . $decimals );
-		}
-	}
-	public static function isDecimals( int $decimals ): bool {
-		// 小数点以下の桁数は0以上。
-		return 0 <= $decimals;
 	}
 
 	/** 指定した文字列がブロックのタグ名であるかどうかを判定します。 */
