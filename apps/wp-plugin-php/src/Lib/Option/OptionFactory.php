@@ -56,7 +56,7 @@ class OptionFactory {
 	/**
 	 * 販売者が利用規約に同意した際のユーザーIDを取得または保存するオブジェクトを取得します。
 	 */
-	public function sellerAgreedTermsUserID(): IntOption {
+	public function sellerAgreedTermsUserId(): IntOption {
 		$prefix = $this->sellerAgreedTermsKeyPrefix();
 		return new IntOption( $this->getOptionKeyName( $prefix . 'user_id' ) );
 	}
