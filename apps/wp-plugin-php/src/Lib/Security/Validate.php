@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
  *
  * 参考: Ownable.sol#_checkOwner
  * https://github.com/OpenZeppelin/openzeppelin-contracts/blob/1edc2ae004974ebf053f4eba26b45469937b9381/contracts/access/Ownable.sol#L63-L67
+ *
  * @deprecated
  */
 class Validate {
@@ -40,19 +41,6 @@ class Validate {
 	public static function isUrl( string $url ): bool {
 		return filter_var( $url, FILTER_VALIDATE_URL ) !== false && Strings::starts_with( $url, 'http' );
 	}
-
-	/** 指定した文字列がブロックのタグ名であるかどうかを判定します。 */
-	public static function isBlockTagName( string $block_tag ): bool {
-		// 参考: https://www.alchemy.com/overviews/ethereum-commitment-levels
-		return in_array( $block_tag, array( 'latest', 'safe', 'finalized' ), true );
-	}
-	/** 指定した文字列がブロックのタグ名であることをチェックし、不正な文字列の場合は例外をスローします。 */
-	public static function checkBlockTagName( string $block_tag ): void {
-		if ( ! self::isBlockTagName( $block_tag ) ) {
-			throw new \InvalidArgumentException( '[5B634FE3] Invalid tag. tag: ' . $block_tag );
-		}
-	}
-
 
 	/** 指定した文字列が請求書に紐づくnonce値のフォーマットであるかどうかを判定します。 */
 	public static function isInvoiceNonceValueFormat( string $invoice_nonce_value ): bool {

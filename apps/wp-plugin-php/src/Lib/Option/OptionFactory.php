@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Option;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
@@ -26,8 +27,8 @@ class OptionFactory {
 	/**
 	 * 指定されたチェーン、ブロックタグで最後にクロールしたブロック番号を取得または保存するオブジェクトを取得します。
 	 */
-	public function crawledBlockNumberHex( ChainId $chain_id, string $block_tag ): StringOption {
-		return new StringOption( $this->getOptionKeyName( 'crawled_block_number_hex_' . $block_tag . '_' . $chain_id->value() ) );
+	public function crawledBlockNumberHex( ChainId $chain_id, BlockTag $block_tag ): StringOption {
+		return new StringOption( $this->getOptionKeyName( "crawled_block_number_hex_{$block_tag}_{$chain_id}" ) );
 	}
 
 	/**

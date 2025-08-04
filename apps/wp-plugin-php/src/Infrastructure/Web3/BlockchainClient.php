@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
@@ -115,10 +114,10 @@ class BlockchainClient {
 	/**
 	 * ブロック番号を取得します。
 	 */
-	public function getBlockNumber( string $tag = 'latest' ): BlockNumber {
-		Validate::checkBlockTagName( $tag );
+	public function getBlockNumber( ?BlockTag $tag = null ): BlockNumber {
+		$tag = $tag ?? BlockTag::latest(); // デフォルトは最新のブロックタグ
 
-		if ( $tag === 'latest' ) {
+		if ( $tag->equals( BlockTag::latest() ) ) {
 			return $this->getLatestBlockNumber();
 		} else {
 			return $this->getBlockNumberByTag( $tag );
