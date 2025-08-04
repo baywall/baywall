@@ -17,4 +17,8 @@ class PrefixProvider {
 	public function tableName(): string {
 		return ( new Prefix() )->tableNamePrefix();
 	}
+
+	public function transientKey(): string {
+		return ( new Prefix() )->transientKeyPrefix();
+	}
 }
