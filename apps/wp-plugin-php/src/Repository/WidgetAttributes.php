@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use WP_Block_Parser_Block;
@@ -19,7 +19,7 @@ class WidgetAttributes {
 		$this->attrs = $attrs;
 	}
 
-	public static function from( ?NetworkCategoryID $network_category_id, ?Price $selling_price ): WidgetAttributes {
+	public static function from( ?NetworkCategoryId $network_category_id, ?Price $selling_price ): WidgetAttributes {
 		return new self(
 			array(
 				self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID => $network_category_id ? $network_category_id->value() : null,
@@ -43,8 +43,8 @@ class WidgetAttributes {
 
 
 	/** 販売対象のネットワークカテゴリを取得します。 */
-	public function sellingNetworkCategoryID(): ?NetworkCategoryID {
-		return NetworkCategoryID::fromNullable( $this->attrs[ self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID ] ?? null );
+	public function sellingNetworkCategoryId(): ?NetworkCategoryId {
+		return NetworkCategoryId::fromNullable( $this->attrs[ self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID ] ?? null );
 	}
 
 	/** 販売価格を取得します。 */

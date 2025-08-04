@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Registry\ChainIdRegistry;
@@ -33,7 +33,7 @@ class ChainTableSeed extends MigratorBase {
 // --------------------------------------------------------------------------------
 
 abstract class ChainTableSeedBase extends MigrationBase {
-	protected function insertChainRecord( ChainID $chain_id, string $name, NetworkCategoryID $network_category_id, ?RpcUrl $rpc_url, string $block_explorer_url ): void {
+	protected function insertChainRecord( ChainID $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, string $block_explorer_url ): void {
 		$confirmations = Confirmations::from( 1 ); // 初期値として設定する確認数は1
 		$this->insert(
 			$this->tableName(),
@@ -60,19 +60,19 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 
 	public function up(): void {
 		// Mainnet
-		$mainnet         = NetworkCategoryID::mainnet();
+		$mainnet         = NetworkCategoryId::mainnet();
 		$mainnet_rpc_url = null; // Mainnetの場合、RPC URLの初期値はnull
 		$this->insertChainRecord( ChainIdRegistry::ethMainnet(), 'Ethereum Mainnet', $mainnet, $mainnet_rpc_url, 'https://etherscan.io' );
 
 		// Testnet
-		$testnet         = NetworkCategoryID::testnet();
+		$testnet         = NetworkCategoryId::testnet();
 		$testnet_rpc_url = null; // Testnetの場合、RPC URLの初期値はnull
 		$this->insertChainRecord( ChainIdRegistry::sepolia(), 'Sepolia', $testnet, $testnet_rpc_url, 'https://sepolia.etherscan.io' );
 		$this->insertChainRecord( ChainIdRegistry::soneiumMinato(), 'Soneium Testnet Minato', $testnet, $testnet_rpc_url, 'https://soneium-minato.blockscout.com' );
 
 		// 開発モード時はプライベートネットのチェーン情報も登録
 		if ( $this->environment->isDevelopment() ) {
-			$privatenet           = NetworkCategoryID::privatenet();
+			$privatenet           = NetworkCategoryId::privatenet();
 			$privatenet_rpc_url_1 = $this->getPrivatenetRpcURL( ChainIdRegistry::privatenetL1() );
 			$privatenet_rpc_url_2 = $this->getPrivatenetRpcURL( ChainIdRegistry::privatenetL2() );
 

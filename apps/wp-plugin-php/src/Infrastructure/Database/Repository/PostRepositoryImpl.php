@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Domain\Entity\Post;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
@@ -46,7 +46,7 @@ class PostRepositoryImpl implements PostRepository {
 			$this->paid_content_table->set(
 				$post->id(),
 				$post->paidContent(),
-				$post->sellingNetworkCategoryID(),
+				$post->sellingNetworkCategoryId(),
 				$post->sellingPrice()
 			);
 		}
@@ -60,7 +60,7 @@ class PostImpl extends Post {
 		parent::__construct(
 			PostId::from( $record->postIdValue() ),
 			PaidContent::from( $record->paidContentValue() ),
-			NetworkCategoryID::fromNullable( $record->sellingNetworkCategoryIdValue() ),
+			NetworkCategoryId::fromNullable( $record->sellingNetworkCategoryIdValue() ),
 			$this->getPriceFromRecord( $record ),
 		);
 	}

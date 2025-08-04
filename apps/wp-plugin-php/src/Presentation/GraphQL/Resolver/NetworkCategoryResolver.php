@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\Service\SymbolService;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class NetworkCategoryResolver extends ResolverBase {
@@ -31,7 +31,7 @@ class NetworkCategoryResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$network_category_id = NetworkCategoryID::from( $args['networkCategoryID'] );
+		$network_category_id = NetworkCategoryId::from( $args['networkCategoryID'] );
 
 		$sellable_symbols_callback = function () {
 			$this->user_access_checker->checkCanCreatePost();   // 投稿を新規作成できる権限が必要
@@ -43,7 +43,7 @@ class NetworkCategoryResolver extends ResolverBase {
 		};
 
 		// ネットワークカテゴリで絞り込んだチェーン一覧を取得
-		$chains_filter = ( new ChainsFilter() )->byNetworkCategoryID( $network_category_id );
+		$chains_filter = ( new ChainsFilter() )->byNetworkCategoryId( $network_category_id );
 		$chains        = $chains_filter->apply( $this->chain_service->getAllChains() );
 
 		$chains_callback = function () use ( $root_value, $chains ) {

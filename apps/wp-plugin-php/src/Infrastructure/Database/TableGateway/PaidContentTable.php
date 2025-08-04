@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\PaidContentTableRecord;
@@ -40,7 +40,7 @@ class PaidContentTable extends TableBase {
 		return is_null( $row ) ? null : new PaidContentTableRecord( $row );
 	}
 
-	public function set( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryID $selling_network_category_id, ?Price $selling_price ): void {
+	public function set( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryId $selling_network_category_id, ?Price $selling_price ): void {
 		$sql = <<<SQL
 			INSERT INTO `{$this->tableName()}` (
 				`post_id`,
