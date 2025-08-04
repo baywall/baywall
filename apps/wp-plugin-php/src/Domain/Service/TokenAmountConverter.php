@@ -29,7 +29,8 @@ class TokenAmountConverter {
 		// 基本単位への変換倍率を取得
 		$multiplier = $this->calculateBaseUnitMultiplier( $token->decimals() );
 
-		return $price->amount()->mul( $multiplier );
+		// 計算結果を返す(小数点以下切り捨て)
+		return $price->amount()->mul( $multiplier )->div( Amount::from( '1' ), Decimals::from( 0 ) );
 	}
 
 	/** チェーンIDとシンボルに合致するトークン情報を検索します */
