@@ -5,13 +5,13 @@ namespace Cornix\Serendipity\Core\Domain\Specification;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 class ChainsFilter {
 
 	private array $filters = array();
 
-	public function byChainID( ChainID $chain_id ): self {
+	public function byChainId( ChainId $chain_id ): self {
 		$this->filters[] = fn ( Chain $chain ) => $chain->id()->equals( $chain_id );
 		return $this;
 	}

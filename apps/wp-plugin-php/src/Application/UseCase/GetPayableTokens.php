@@ -47,7 +47,7 @@ class GetPayableTokens {
 		$all_tokens = $this->token_repository->all();
 		foreach ( $payable_chains as $chain ) {
 			$payable_tokens = ( new TokensFilter() )
-				->byChainID( $chain->id() )
+				->byChainId( $chain->id() )
 				->byIsPayable( true )
 				->apply( $all_tokens );
 

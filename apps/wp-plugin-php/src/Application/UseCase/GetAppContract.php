@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Dto\AppContractDto;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /** 指定したチェーンIDのAppコントラクト情報を取得します */
 class GetAppContract {
@@ -17,7 +17,7 @@ class GetAppContract {
 	private AppContractRepository $app_contract_repository;
 
 	public function handle( int $chain_id ): ?AppContractDto {
-		$app_contract = $this->app_contract_repository->get( ChainID::from( $chain_id ) );
+		$app_contract = $this->app_contract_repository->get( ChainId::from( $chain_id ) );
 		return null !== $app_contract ? AppContractDto::fromEntity( $app_contract ) : null;
 	}
 }

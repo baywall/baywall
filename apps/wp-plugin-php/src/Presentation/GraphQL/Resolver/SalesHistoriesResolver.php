@@ -40,7 +40,7 @@ class SalesHistoriesResolver extends ResolverBase {
 						return $root_value['chain'](
 							$root_value,
 							array(
-								'chainID' => $sales_data->chainID(),
+								'chainID' => $sales_data->chainId(),
 							)
 						);
 					},
@@ -66,7 +66,7 @@ class SalesHistoriesResolver extends ResolverBase {
 						return $root_value['chain'](
 							$root_value,
 							array(
-								'chainID' => $sales_data->chainID(),
+								'chainID' => $sales_data->chainId(),
 							)
 						);
 					},

@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
 
@@ -85,7 +85,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		$post_ID          = $invoice->postID();
-		$chain            = $this->chain_service->getChain( $invoice->chainID() );
+		$chain            = $this->chain_service->getChain( $invoice->chainId() );
 		$consumer_address = $invoice->consumerAddress();
 
 		// 投稿を閲覧できる権限があることをチェック
@@ -125,9 +125,9 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	/**
 	 * トランザクションが待機済みかどうかを判定します。
 	 */
-	private function isConfirmed( ChainID $chain_ID, BlockNumber $unlocked_block_number ): bool {
+	private function isConfirmed( ChainId $chain_id, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		$chain               = $this->chain_service->getChain( $chain_ID );
+		$chain               = $this->chain_service->getChain( $chain_id );
 		$confirmations_value = $chain->confirmations()->value();
 
 		if ( is_int( $confirmations_value ) ) {

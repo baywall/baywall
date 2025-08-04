@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Oracle;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\OracleTable;
@@ -32,7 +32,7 @@ class OracleRepositoryImpl implements OracleRepository {
 	public function all(): array {
 		return array_map(
 			function ( OracleTableRecord $record ) {
-				$chain = $this->chain_repository->get( ChainID::from( $record->chainIdValue() ) );
+				$chain = $this->chain_repository->get( ChainId::from( $record->chainIdValue() ) );
 				assert( $chain !== null, '[890CB3D8] Chain record not found for Oracle: ' . $record->chainIdValue() );
 				return new OracleImpl( $record, $chain );
 			},

@@ -34,7 +34,7 @@ class Oracle {
 	public function __toString() {
 		return json_encode(
 			array(
-				'chain_ID'     => $this->chain,
+				'chain'        => $this->chain,
 				'address'      => $this->address,
 				'base_symbol'  => $this->symbol_pair->base()->value(),
 				'quote_symbol' => $this->symbol_pair->quote()->value(),

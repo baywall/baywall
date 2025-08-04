@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Domain\Service\PriceExchangeService;
 use Cornix\Serendipity\Core\Domain\Service\SellerService;
 use Cornix\Serendipity\Core\Domain\Service\TokenAmountConverter;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
@@ -33,8 +33,8 @@ class IssueInvoice {
 	private TokenAmountConverter $token_amount_converter;
 	private PriceExchangeService $price_exchange_service;
 
-	public function handle( int $post_ID, ChainID $chain_ID, Address $payment_token_address, Address $consumer_address ): Invoice {
-		$payment_token  = ( new GetPaymentToken( $this->token_repository ) )->handle( $chain_ID, $payment_token_address ); // 支払トークン
+	public function handle( int $post_ID, ChainId $chain_id, Address $payment_token_address, Address $consumer_address ): Invoice {
+		$payment_token  = ( new GetPaymentToken( $this->token_repository ) )->handle( $chain_id, $payment_token_address ); // 支払トークン
 		$seller_address = $this->seller_service->getSellerAddress();  // 販売者アドレス
 		$selling_price  = $this->post_repository->get( PostId::from( $post_ID ) )->sellingPrice();
 		if ( is_null( $selling_price ) ) {
@@ -45,12 +45,12 @@ class IssueInvoice {
 		// ※ これは`1ETH`等の価格を表現するオブジェクトであり、実際に支払う数量(wei等)ではないことに注意
 		$payment_price = $this->price_exchange_service->exchange( $selling_price, $payment_token->symbol() );
 		// 支払うトークン量を取得
-		$payment_amount = $this->token_amount_converter->convertPriceToBaseUnit( $payment_price, $chain_ID );
+		$payment_amount = $this->token_amount_converter->convertPriceToBaseUnit( $payment_price, $chain_id );
 
 		$invoice = new Invoice(
 			InvoiceID::generate(), // 新規請求書ID
 			PostId::from( $post_ID ),
-			$chain_ID,
+			$chain_id,
 			$selling_price,
 			$seller_address,
 			$payment_token_address,
@@ -79,8 +79,8 @@ class GetPaymentToken {
 
 	private TokenRepository $token_repository;
 
-	public function handle( ChainID $chain_ID, Address $token_address ): Token {
-		$token = $this->token_repository->get( $chain_ID, $token_address );
+	public function handle( ChainId $chain_id, Address $token_address ): Token {
+		$token = $this->token_repository->get( $chain_id, $token_address );
 		if ( is_null( $token ) || ! $token->isPayable() ) {
 			throw new \InvalidArgumentException( '[9213F631] The specified token is not payable.' );
 		}

@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
@@ -42,7 +42,7 @@ class InvoiceImpl extends Invoice {
 		parent::__construct(
 			InvoiceID::from( $invoice_record->idValue() ),
 			$invoice_record->postIdValue(),
-			ChainID::from( $invoice_record->chainIdValue() ),
+			ChainId::from( $invoice_record->chainIdValue() ),
 			Price::from(
 				Amount::from( $invoice_record->sellingAmountValue() ),
 				Symbol::from( $invoice_record->sellingSymbolValue() )

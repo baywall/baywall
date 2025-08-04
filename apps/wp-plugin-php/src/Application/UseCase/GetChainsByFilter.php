@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Application\UseCase;
 use Cornix\Serendipity\Core\Application\Dto\ChainDto;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /** フィルタに合致するチェーン情報一覧を取得します */
 class GetChainsByFilter {
@@ -31,7 +31,7 @@ class GetChainsByFilter {
 		// フィルタ処理
 		$chains_filter = new ChainsFilter();
 		// チェーンIDでフィルタ
-		$chains_filter = null !== $filter_chain_id ? $chains_filter->byChainID( ChainID::from( $filter_chain_id ) ) : $chains_filter;
+		$chains_filter = null !== $filter_chain_id ? $chains_filter->byChainId( ChainId::from( $filter_chain_id ) ) : $chains_filter;
 		// 接続可能なチェーンでフィルタ
 		$chains_filter = null !== $filter_is_connectable ? $chains_filter->byConnectable( $filter_is_connectable ) : $chains_filter;
 

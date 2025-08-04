@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 class TokenRepositoryImpl implements TokenRepository {
 
@@ -33,10 +33,10 @@ class TokenRepositoryImpl implements TokenRepository {
 	}
 
 	/** @inheritdoc */
-	public function get( ChainID $chain_ID, Address $address ): ?Token {
+	public function get( ChainId $chain_id, Address $address ): ?Token {
 		$tokens = array_filter(
 			$this->all(),
-			fn( Token $token ) => $token->chainID()->equals( $chain_ID ) && $token->address()->equals( $address )
+			fn( Token $token ) => $token->chainId()->equals( $chain_id ) && $token->address()->equals( $address )
 		);
 		assert( is_array( $tokens ) && count( $tokens ) <= 1, '[A236DEBB] Expected at most one token for the given chain ID and address.' );
 

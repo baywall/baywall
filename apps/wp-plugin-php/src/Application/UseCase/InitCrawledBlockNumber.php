@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 
 /**
@@ -22,7 +22,7 @@ class InitCrawledBlockNumber {
 	private AppContractRepository $app_contract_repository;
 	private ChainRepository $chain_repository;
 
-	public function handle( ChainID $chain_id ): void {
+	public function handle( ChainId $chain_id ): void {
 		$app_contract = $this->app_contract_repository->get( $chain_id );
 		if ( null !== $app_contract->crawledBlockNumber() ) {
 			return; // 初期化済みの場合は何もしない
@@ -51,7 +51,7 @@ class GetSafetyCrawledBlockNumber {
 
 	private ChainRepository $chain_repository;
 
-	public function handle( ChainID $chain_id ): BlockNumber {
+	public function handle( ChainId $chain_id ): BlockNumber {
 		$chain  = $this->chain_repository->get( $chain_id );
 		$client = ( new BlockchainClient( $chain->rpcURL() ) );
 
