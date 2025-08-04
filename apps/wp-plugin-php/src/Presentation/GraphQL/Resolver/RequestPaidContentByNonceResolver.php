@@ -84,12 +84,12 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			return $error_result_callback( self::ERROR_CODE_INVALID_NONCE );
 		}
 
-		$post_ID          = $invoice->postID();
+		$post_id          = $invoice->postId();
 		$chain            = $this->chain_service->getChain( $invoice->chainId() );
 		$consumer_address = $invoice->consumerAddress();
 
 		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_ID->value() );
+		$this->user_access_checker->checkCanViewPost( $post_id->value() );
 
 		if ( ! $chain->connectable() ) {
 			// 指定されたチェーンIDが接続可能でない場合はドメインエラーとして返す
@@ -101,7 +101,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		$app_contract   = $this->app_contract_repository->get( $chain->id() );
 		$app            = new AppContractClient( $app_contract );
 		$server_signer  = $this->server_signer_service->getServerSigner();
-		$payment_status = $app->getPaywallStatus( $server_signer->address(), $post_ID, $consumer_address );
+		$payment_status = $app->getPaywallStatus( $server_signer->address(), $post_id, $consumer_address );
 
 		if ( ! $payment_status->isUnlocked() ) {
 			// 最新のブロックでもペイウォールの解除が確認できなかった場合
@@ -113,7 +113,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// 有料部分のコンテンツを取得
-		$paid_content = $this->post_repository->get( $post_ID )->paidContent();
+		$paid_content = $this->post_repository->get( $post_id )->paidContent();
 		assert( ! is_null( $paid_content ), '[391C0A77] Paid content should not be null.' );
 
 		return array(

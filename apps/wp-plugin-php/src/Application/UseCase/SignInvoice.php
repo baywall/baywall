@@ -27,7 +27,7 @@ class SignInvoice {
 			. SolidityStrings::addressToHexString( $invoice->sellerAddress() )
 			. SolidityStrings::addressToHexString( $invoice->consumerAddress() )
 			. SolidityStrings::valueToHexString( $invoice->id()->hex() )
-			. SolidityStrings::valueToHexString( $invoice->postID()->value() )
+			. SolidityStrings::valueToHexString( $invoice->postId()->value() )
 			. SolidityStrings::addressToHexString( $invoice->paymentTokenAddress() )
 			. SolidityStrings::valueToHexString( new BigInteger( $invoice->paymentAmount()->value() ) )
 			. SolidityStrings::valueToHexString( ( new ConsumerTerms() )->currentVersion() )

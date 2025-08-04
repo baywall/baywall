@@ -73,7 +73,7 @@ class SalesHistory {
 	}
 
 	/** 投稿ID */
-	public function postID(): int {
+	public function postId(): int {
 		return (int) $this->record[ self::COLUMN_POST_ID ];
 	}
 
