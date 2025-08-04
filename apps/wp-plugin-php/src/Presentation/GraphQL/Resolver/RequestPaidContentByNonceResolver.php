@@ -14,7 +14,7 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
@@ -58,13 +58,13 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var string */
-		$invoice_ID_hex = $args['invoiceID'];
+		$invoice_id_hex = $args['invoiceID'];
 		/** @var string */
 		$nonce = $args['nonce'];
 
-		Validate::checkHex( $invoice_ID_hex );
+		Validate::checkHex( $invoice_id_hex );
 		Validate::checkInvoiceNonceValueFormat( $nonce );
-		$invoice_ID = InvoiceID::from( $invoice_ID_hex );
+		$invoice_id = InvoiceId::from( $invoice_id_hex );
 
 		// エラー時の結果を返すコールバック関数
 		$error_result_callback = fn( $error_code ) => array(
@@ -72,10 +72,10 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			'errorCode' => $error_code,
 		);
 
-		$invoice = $this->invoice_repository->get( $invoice_ID );
+		$invoice = $this->invoice_repository->get( $invoice_id );
 		if ( is_null( $invoice ) ) {
 			// 通常、ここは通らない
-			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_ID_hex );
+			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_id_hex );
 		}
 
 		$db_nonce = $invoice->nonce(); // DBから取得したnonce

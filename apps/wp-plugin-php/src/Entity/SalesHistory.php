@@ -68,7 +68,7 @@ class SalesHistory {
 	}
 
 	/** 請求書ID */
-	public function invoiceID(): string {
+	public function invoiceId(): string {
 		return (string) $this->record[ self::COLUMN_INVOICE_ID ];
 	}
 

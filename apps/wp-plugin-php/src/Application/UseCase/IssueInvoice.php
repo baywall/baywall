@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\Domain\Service\SellerService;
 use Cornix\Serendipity\Core\Domain\Service\TokenAmountConverter;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 
@@ -48,7 +48,7 @@ class IssueInvoice {
 		$payment_amount = $this->token_amount_converter->convertPriceToBaseUnit( $payment_price, $chain_id );
 
 		$invoice = new Invoice(
-			InvoiceID::generate(), // 新規請求書ID
+			InvoiceId::generate(), // 新規請求書ID
 			PostId::from( $post_id ),
 			$chain_id,
 			$selling_price,
