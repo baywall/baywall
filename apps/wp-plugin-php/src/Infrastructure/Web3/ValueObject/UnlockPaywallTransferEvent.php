@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
 
@@ -15,7 +15,7 @@ class UnlockPaywallTransferEvent {
 		BlockNumber $block_number,
 		int $log_index,
 		TransactionHash $transaction_hash,
-		InvoiceID $invoice_id,
+		InvoiceId $invoice_id,
 		Address $server_signer_address,
 		Address $from_address,
 		Address $to_address,
@@ -37,7 +37,7 @@ class UnlockPaywallTransferEvent {
 	private BlockNumber $block_number;
 	private int $log_index;
 	private TransactionHash $transaction_hash;
-	private InvoiceID $invoice_id;
+	private InvoiceId $invoice_id;
 	private Address $server_signer_address;
 	private Address $from_address;
 	private Address $to_address;
@@ -54,7 +54,7 @@ class UnlockPaywallTransferEvent {
 	public function transactionHash(): TransactionHash {
 		return $this->transaction_hash;
 	}
-	public function invoiceId(): InvoiceID {
+	public function invoiceId(): InvoiceId {
 		return $this->invoice_id;
 	}
 	public function serverSignerAddress(): Address {

@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\ContractFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
@@ -59,14 +59,14 @@ class AppContractClient {
 				}
 
 				$is_unlocked           = $res['isUnlocked'];
-				$invoice_ID            = $res['invoiceID'];
+				$invoice_id            = $res['invoiceID'];
 				$unlocked_block_number = $res['unlockedBlockNumber'];
 
 				assert( is_bool( $is_unlocked ) );
-				assert( $invoice_ID instanceof BigInteger );
+				assert( $invoice_id instanceof BigInteger );
 				assert( $unlocked_block_number instanceof BigInteger );
 
-				$result = new GetPaywallStatusResult( $is_unlocked, InvoiceID::from( $invoice_ID ), BlockNumber::from( $unlocked_block_number ) );
+				$result = new GetPaywallStatusResult( $is_unlocked, InvoiceId::from( $invoice_id ), BlockNumber::from( $unlocked_block_number ) );
 			}
 		);
 
@@ -107,7 +107,7 @@ class AppContractClient {
 						BlockNumber::from( $log->blockNumber ), // block_number
 						hexdec( $log->logIndex ), // log_index
 						TransactionHash::from( $log->transactionHash ), // transaction_hash
-						InvoiceID::from( $decoded_event_parameters['invoiceID'] ), // invoice_id
+						InvoiceId::from( $decoded_event_parameters['invoiceID'] ), // invoice_id
 						Address::from( $decoded_event_parameters['signer'] ), // server_signer_address
 						Address::from( $decoded_event_parameters['from'] ), // from_address
 						Address::from( $decoded_event_parameters['to'] ), // to_address

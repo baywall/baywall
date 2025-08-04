@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\Repository;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 
 class UnlockPaywallTransferEventRepository {
 
@@ -15,7 +15,7 @@ class UnlockPaywallTransferEventRepository {
 	}
 	private UnlockPaywallTransferEventTable $unlock_paywall_transfer_event_table;
 
-	public function save( InvoiceID $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, int $transfer_type ): void {
+	public function save( InvoiceId $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, int $transfer_type ): void {
 		$this->unlock_paywall_transfer_event_table->save( $invoice_id, $log_index, $from, $to, $token_address, $amount, $transfer_type );
 	}
 }

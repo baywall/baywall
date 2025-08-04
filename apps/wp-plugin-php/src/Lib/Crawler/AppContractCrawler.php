@@ -15,7 +15,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
 use phpseclib\Math\BigInteger;
 use stdClass;
@@ -62,15 +62,15 @@ class AppContractCrawler {
 			$event_args = $this->app_abi->decodeEventParameters( $unlock_paywall_transfer_log );
 			assert( is_array( $event_args ), '[80A37466] event_args is not array' );
 			/** @var BigInteger */
-			$invoice_ID_bi = $event_args['invoiceID'];
-			assert( $invoice_ID_bi instanceof BigInteger, '[9A2B802E] invoice_ID is not BigInteger. ' . var_export( $invoice_ID_bi, true ) );
-			$invoice_ID = InvoiceID::from( $invoice_ID_bi );
+			$invoice_id_bi = $event_args['invoiceID'];
+			assert( $invoice_id_bi instanceof BigInteger, '[9A2B802E] invoice_id is not BigInteger. ' . var_export( $invoice_id_bi, true ) );
+			$invoice_id = InvoiceId::from( $invoice_id_bi );
 
 			// 既に保存済みのinvoiceIDの場合はスキップ
-			if ( in_array( $invoice_ID->hex(), $saved_invoice_id_hex_array, true ) ) {
+			if ( in_array( $invoice_id->hex(), $saved_invoice_id_hex_array, true ) ) {
 				continue;
 			} else {
-				$saved_invoice_id_hex_array[] = $invoice_ID->hex();
+				$saved_invoice_id_hex_array[] = $invoice_id->hex();
 			}
 
 			$transaction_hash = TransactionHash::from( $unlock_paywall_transfer_log->transactionHash );
@@ -79,7 +79,7 @@ class AppContractCrawler {
 			assert( Validate::isHex( $block_number_hex ), '[067CCE00] blockNumber is not hex. ' . var_export( $block_number_hex, true ) );
 
 			$this->unlock_paywall_transaction_repository->save(
-				$invoice_ID,
+				$invoice_id,
 				$chain_id,
 				BlockNumber::from( $block_number_hex ),
 				$transaction_hash,
@@ -103,7 +103,7 @@ class AppContractCrawler {
 			/** @var BigInteger */
 			$amount = $event_args['amount'];
 			/** @var BigInteger */
-			$invoice_ID_bi = $event_args['invoiceID'];
+			$invoice_id_bi = $event_args['invoiceID'];
 			/** @var BigInteger */
 			$transfer_type = $event_args['transferType'];
 
@@ -111,7 +111,7 @@ class AppContractCrawler {
 			$log_index_hex = $unlock_paywall_transfer_log->logIndex;
 
 			$this->unlock_paywall_transfer_event_repository->save(
-				InvoiceID::from( $invoice_ID_bi ),
+				InvoiceId::from( $invoice_id_bi ),
 				HexFormat::toInt( $log_index_hex ),
 				$from,
 				$to,
