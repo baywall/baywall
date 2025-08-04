@@ -57,7 +57,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[84752B42] not connectable. chain id: ' . $chain_id );
 		}
 
-		$token_client = new TokenClient( $chain->rpcURL(), $address );
+		$token_client = new TokenClient( $chain->rpcUrl(), $address );
 
 		$symbol = $token_client->symbol();
 

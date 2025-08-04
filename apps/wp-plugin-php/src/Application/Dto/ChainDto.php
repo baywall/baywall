@@ -34,7 +34,7 @@ class ChainDto {
 	public static function fromEntity( Chain $chain ): self {
 		return new self(
 			$chain->id()->value(),
-			$chain->rpcURL() ? $chain->rpcURL()->value() : null,
+			$chain->rpcUrl() ? $chain->rpcUrl()->value() : null,
 			(string) $chain->confirmations()->value(),
 			$chain->networkCategoryId()->value(),
 		);

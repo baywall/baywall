@@ -73,8 +73,8 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 		// 開発モード時はプライベートネットのチェーン情報も登録
 		if ( $this->environment->isDevelopment() ) {
 			$privatenet           = NetworkCategoryId::privatenet();
-			$privatenet_rpc_url_1 = $this->getPrivatenetRpcURL( ChainIdRegistry::privatenetL1() );
-			$privatenet_rpc_url_2 = $this->getPrivatenetRpcURL( ChainIdRegistry::privatenetL2() );
+			$privatenet_rpc_url_1 = $this->getPrivatenetRpcUrl( ChainIdRegistry::privatenetL1() );
+			$privatenet_rpc_url_2 = $this->getPrivatenetRpcUrl( ChainIdRegistry::privatenetL2() );
 
 			$this->insertChainRecord( ChainIdRegistry::privatenetL1(), 'Privatenet1', $privatenet, $privatenet_rpc_url_1, 'http://localhost:10101' );
 			$this->insertChainRecord( ChainIdRegistry::privatenetL2(), 'Privatenet2', $privatenet, $privatenet_rpc_url_2, 'http://localhost:10102' );
@@ -84,7 +84,7 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 	/**
 	 * 指定されたプライベートネットのチェーンIDに対応するRPC URLを取得します。
 	 */
-	private function getPrivatenetRpcURL( ChainId $chain_id ): RpcUrl {
+	private function getPrivatenetRpcUrl( ChainId $chain_id ): RpcUrl {
 		// プライベートネットのURLを取得する関数
 		$privatenet = function ( int $number ): RpcUrl {
 			assert( in_array( $number, array( 1, 2 ), true ) );

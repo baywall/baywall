@@ -40,10 +40,10 @@ class Chain {
 	public function name(): string {
 		return $this->name;
 	}
-	public function rpcURL(): ?RpcUrl {
+	public function rpcUrl(): ?RpcUrl {
 		return $this->rpc_url;
 	}
-	public function setRpcURL( ?RpcUrl $rpc_url ): void {
+	public function setRpcUrl( ?RpcUrl $rpc_url ): void {
 		$this->rpc_url = $rpc_url;
 	}
 	/**
@@ -53,7 +53,7 @@ class Chain {
 		return $this->confirmations;
 	}
 
-	public function blockExplorerURL(): ?string {
+	public function blockExplorerUrl(): ?string {
 		return $this->block_explorer_url;
 	}
 
