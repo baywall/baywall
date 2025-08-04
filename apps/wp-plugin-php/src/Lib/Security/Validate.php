@@ -35,13 +35,6 @@ class Validate {
 		return Strings::starts_with( $hex, '0x' ) && \Web3\Utils::isHex( $hex );
 	}
 
-	/**
-	 * 文字列がURLの形式かどうかを返します。
-	 */
-	public static function isUrl( string $url ): bool {
-		return filter_var( $url, FILTER_VALIDATE_URL ) !== false && Strings::starts_with( $url, 'http' );
-	}
-
 	/** 指定した文字列が請求書に紐づくnonce値のフォーマットであるかどうかを判定します。 */
 	public static function isInvoiceNonceValueFormat( string $invoice_nonce_value ): bool {
 		// 請求書に紐づくnonceは、128bitのHEX(`0x`プレフィックス無し)文字列

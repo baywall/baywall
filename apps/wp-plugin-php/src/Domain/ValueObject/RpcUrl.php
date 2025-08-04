@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 /**
  * RPC URLを表すValueObjectクラス
@@ -36,13 +37,9 @@ final class RpcUrl {
 	}
 
 	private static function checkValidRpcUrlFormat( string $rpc_url_value ): void {
-		if ( ! Validate::isUrl( $rpc_url_value ) ) {
+		$is_url = filter_var( $rpc_url_value, FILTER_VALIDATE_URL ) !== false && Strings::starts_with( $rpc_url_value, 'http' );
+		if ( ! $is_url ) {
 			throw new \InvalidArgumentException( '[A8D0FAC8] Invalid RPC URL format. ' . $rpc_url_value );
-		}
-
-		// RPC URLはHTTPまたはHTTPSである必要がある
-		if ( ! ( str_starts_with( $rpc_url_value, 'http://' ) || str_starts_with( $rpc_url_value, 'https://' ) ) ) {
-			throw new \InvalidArgumentException( '[81E9BE6D] RPC URL must be HTTP or HTTPS. ' . $rpc_url_value );
 		}
 	}
 }
