@@ -24,12 +24,15 @@ use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\OracleRateProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\RateTransient;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\LogLevelProviderImpl;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\CachedRateProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PostTitleProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\UserAccessProviderImpl;
 use wpdb;
 
 use function DI\autowire;
+use function DI\get;
 
 final class ContainerDefinitions {
 	public static function getDefinitions(): array {
@@ -50,7 +53,11 @@ final class ContainerDefinitions {
 			// Service
 			WalletService::class         => autowire( WalletServiceImpl::class ),
 			PostTitleProvider::class     => autowire( PostTitleProviderImpl::class ),
-			RateProvider::class          => autowire( OracleRateProviderImpl::class ),
+			RateProvider::class          => get( CachedRateProvider::class ),
+			CachedRateProvider::class    => autowire()->constructor(
+				get( RateTransient::class ),
+				get( OracleRateProviderImpl::class )
+			),
 			UserAccessProvider::class    => autowire( UserAccessProviderImpl::class ),
 
 			// Logging
