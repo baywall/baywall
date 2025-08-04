@@ -42,14 +42,14 @@ class VerifiableChainsResolver extends ResolverBase {
 		// 投稿を閲覧できる権限があることをチェック
 		$this->user_access_checker->checkCanViewPost( $post_ID );
 
-		$selling_network_category_id = $this->post_repository->get( PostId::from( $post_ID ) )->sellingNetworkCategoryID();
+		$selling_network_category_id = $this->post_repository->get( PostId::from( $post_ID ) )->sellingNetworkCategoryId();
 		if ( is_null( $selling_network_category_id ) ) {
 			DeprecatedLogger::warn( '[B4FC6E2A] Selling network category is null for post ID: ' . $post_ID );
 			return array();  // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
 		}
 
 		// 投稿の販売ネットワークカテゴリに属するチェーン一覧を取得
-		$chains_filter = ( new ChainsFilter() )->byNetworkCategoryID( $selling_network_category_id );
+		$chains_filter = ( new ChainsFilter() )->byNetworkCategoryId( $selling_network_category_id );
 		$chains        = $chains_filter->apply( $this->chain_service->getAllChains() );
 
 		$result = array();

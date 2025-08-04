@@ -36,7 +36,7 @@ class ChainDto {
 			$chain->id()->value(),
 			$chain->rpcURL() ? $chain->rpcURL()->value() : null,
 			(string) $chain->confirmations()->value(),
-			$chain->networkCategoryID()->value(),
+			$chain->networkCategoryId()->value(),
 		);
 	}
 }

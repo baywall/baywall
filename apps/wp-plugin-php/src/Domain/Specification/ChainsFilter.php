@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\Specification;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class ChainsFilter {
@@ -16,8 +16,8 @@ class ChainsFilter {
 		return $this;
 	}
 
-	public function byNetworkCategoryID( NetworkCategoryID $network_category_id ): self {
-		$this->filters[] = fn ( Chain $chain ) => $chain->networkCategoryID()->value() === $network_category_id->value();
+	public function byNetworkCategoryId( NetworkCategoryId $network_category_id ): self {
+		$this->filters[] = fn ( Chain $chain ) => $chain->networkCategoryId()->value() === $network_category_id->value();
 		return $this;
 	}
 
