@@ -16,6 +16,9 @@ final class RpcUrl {
 	}
 	private string $rpc_url_value;
 
+	public static function from( string $rpc_url_value ): self {
+		return new self( $rpc_url_value );
+	}
 	public static function fromNullable( ?string $rpc_url_value ): ?self {
 		return is_null( $rpc_url_value ) ? null : new self( $rpc_url_value );
 	}
