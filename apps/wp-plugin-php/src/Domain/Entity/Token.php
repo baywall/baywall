@@ -5,28 +5,28 @@ namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\TokenTableRecord;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class Token {
 
-	public function __construct( ChainID $chain_ID, Address $address, Symbol $symbol, Decimals $decimals, bool $is_payable ) {
-		$this->chain_ID   = $chain_ID;
+	public function __construct( ChainId $chain_id, Address $address, Symbol $symbol, Decimals $decimals, bool $is_payable ) {
+		$this->chain_id   = $chain_id;
 		$this->address    = $address;
 		$this->symbol     = $symbol;
 		$this->decimals   = $decimals;
 		$this->is_payable = $is_payable;
 	}
 
-	private ChainID $chain_ID;
+	private ChainId $chain_id;
 	private Address $address;
 	private Symbol $symbol;
 	private Decimals $decimals;
 	private bool $is_payable;
 
-	public function chainID(): ChainID {
-		return $this->chain_ID;
+	public function chainId(): ChainId {
+		return $this->chain_id;
 	}
 
 	public function address(): Address {
@@ -51,7 +51,7 @@ class Token {
 	public function __toString() {
 		return json_encode(
 			array(
-				'chain_ID'   => $this->chain_ID->value(),
+				'chain_id'   => $this->chain_id->value(),
 				'address'    => (string) $this->address,
 				'symbol'     => $this->symbol->value(),
 				'decimals'   => $this->decimals,
@@ -62,7 +62,7 @@ class Token {
 
 	public static function fromTableRecord( TokenTableRecord $record ): self {
 		return new self(
-			ChainID::from( $record->chainIdValue() ),
+			ChainId::from( $record->chainIdValue() ),
 			Address::from( $record->addressValue() ),
 			Symbol::from( $record->symbolValue() ),
 			Decimals::from( $record->decimalsValue() ),

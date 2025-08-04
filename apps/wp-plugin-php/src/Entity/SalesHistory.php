@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use DateTime;
@@ -78,7 +78,7 @@ class SalesHistory {
 	}
 
 	/** 取引されるチェーンID */
-	public function chainID(): int {
+	public function chainId(): int {
 		return (int) $this->record[ self::COLUMN_CHAIN_ID ];
 	}
 
@@ -141,6 +141,6 @@ class SalesHistory {
 
 	/** 支払いトークン */
 	public function paymentToken(): Token {
-		return ( new TokenRepositoryImpl() )->get( ChainID::from( (int) $this->record[ self::COLUMN_CHAIN_ID ] ), Address::from( (string) $this->record[ self::COLUMN_TOKEN_ADDRESS ] ) );
+		return ( new TokenRepositoryImpl() )->get( ChainId::from( (int) $this->record[ self::COLUMN_CHAIN_ID ] ), Address::from( (string) $this->record[ self::COLUMN_TOKEN_ADDRESS ] ) );
 	}
 }

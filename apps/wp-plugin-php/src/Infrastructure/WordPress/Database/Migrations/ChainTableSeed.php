@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
@@ -33,7 +33,7 @@ class ChainTableSeed extends MigratorBase {
 // --------------------------------------------------------------------------------
 
 abstract class ChainTableSeedBase extends MigrationBase {
-	protected function insertChainRecord( ChainID $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, string $block_explorer_url ): void {
+	protected function insertChainRecord( ChainId $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, string $block_explorer_url ): void {
 		$confirmations = Confirmations::from( 1 ); // 初期値として設定する確認数は1
 		$this->insert(
 			$this->tableName(),
@@ -84,7 +84,7 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 	/**
 	 * 指定されたプライベートネットのチェーンIDに対応するRPC URLを取得します。
 	 */
-	private function getPrivatenetRpcURL( ChainID $chain_id ): RpcUrl {
+	private function getPrivatenetRpcURL( ChainId $chain_id ): RpcUrl {
 		// プライベートネットのURLを取得する関数
 		$privatenet = function ( int $number ): RpcUrl {
 			assert( in_array( $number, array( 1, 2 ), true ) );

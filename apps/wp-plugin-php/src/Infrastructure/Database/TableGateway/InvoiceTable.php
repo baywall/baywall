@@ -55,7 +55,7 @@ class InvoiceTable extends TableBase {
 			array(
 				'id'                    => $invoice->id()->ulid(),
 				'post_id'               => $invoice->postID()->value(),
-				'chain_id'              => $invoice->chainID()->value(),
+				'chain_id'              => $invoice->chainId()->value(),
 				'selling_amount'        => $invoice->sellingPrice()->amount()->value(),
 				'selling_symbol'        => $invoice->sellingPrice()->symbol()->value(),
 				'seller_address'        => $invoice->sellerAddress()->value(),

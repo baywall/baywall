@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Registry\ChainIdRegistry;
@@ -40,7 +40,7 @@ class OracleTableSeed extends MigratorBase {
 
 /** @internal */
 abstract class OracleTableSeedBase extends MigrationBase {
-	protected function add( ChainID $chain_id, string $address_value, string $base_symbol_value, string $quote_symbol_value ): void {
+	protected function add( ChainId $chain_id, string $address_value, string $base_symbol_value, string $quote_symbol_value ): void {
 		// Address, Symbolオブジェクトを経由することでフォーマットチェックを実施
 		$address      = Address::from( $address_value );
 		$base_symbol  = Symbol::from( $base_symbol_value );

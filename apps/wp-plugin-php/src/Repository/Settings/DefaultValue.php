@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\Settings;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /**
  * ユーザーが設定を行っていない場合のデフォルト値を取得するためのクラス
@@ -13,7 +13,7 @@ class DefaultValue {
 	/**
 	 * `eth_getLogs`呼び出しで取得するブロック数の最大値
 	 */
-	public function getLogsMaxRange( ChainID $chain_ID ): int {
+	public function getLogsMaxRange( ChainId $chain_id ): int {
 		// 以下のスレッドで以下の制限があるとの記述あり
 		// https://github.com/bnb-chain/bsc/issues/113
 		// - BSC: 5000
