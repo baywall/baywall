@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
-use Cornix\Serendipity\Core\Infrastructure\Constant\ChainIdValue;
-use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\Config\InitialBlockExplorerURL;
+use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Registry\ChainIdRegistry;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
@@ -30,85 +32,72 @@ class ChainTableSeed extends MigratorBase {
 
 // --------------------------------------------------------------------------------
 
+abstract class ChainTableSeedBase extends MigrationBase {
+	protected function insertChainRecord( ChainID $chain_id, string $name, NetworkCategoryID $network_category_id, ?RpcUrl $rpc_url, string $block_explorer_url ): void {
+		$confirmations = Confirmations::from( 1 ); // 初期値として設定する確認数は1
+		$this->insert(
+			$this->tableName(),
+			array(
+				'chain_id'            => $chain_id->value(),
+				'name'                => $name,
+				'network_category_id' => $network_category_id->value(),
+				'rpc_url'             => $rpc_url ? $rpc_url->value() : null,
+				'confirmations'       => (string) $confirmations,
+				'block_explorer_url'  => $block_explorer_url,
+			)
+		);
+	}
+}
+
 /** @internal */
-class ChainTableSeed_0_0_1 extends MigrationBase {
+class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 
 	public function __construct( Environment $environment ) {
 		$this->environment = $environment;
 	}
+
 	private Environment $environment;
 
 	public function up(): void {
-		$Record = new class( 1, '', NetworkCategoryID::mainnet(), null, '', '' ) {
-			public function __construct(
-				int $chain_id,
-				string $name,
-				NetworkCategoryID $network_category_id,
-				?string $rpc_url,
-				string $confirmations,
-				?string $block_explorer_url
-			) {
-				$this->chain_id            = $chain_id;
-				$this->name                = $name;
-				$this->network_category_id = $network_category_id;
-				$this->rpc_url             = $rpc_url;
-				$this->confirmations       = $confirmations;
-				$this->block_explorer_url  = $block_explorer_url;
-			}
-			public int $chain_id;
-			public string $name;
-			public NetworkCategoryID $network_category_id;
-			public ?string $rpc_url;
-			public string $confirmations;
-			public ?string $block_explorer_url;
-		};
+		// Mainnet
+		$mainnet         = NetworkCategoryID::mainnet();
+		$mainnet_rpc_url = null; // Mainnetの場合、RPC URLの初期値はnull
+		$this->insertChainRecord( ChainIdRegistry::ethMainnet(), 'Ethereum Mainnet', $mainnet, $mainnet_rpc_url, 'https://etherscan.io' );
 
-		$records = array(
-			new $Record( ChainIdValue::ETH_MAINNET, 'Ethereum Mainnet', NetworkCategoryID::mainnet(), null, '1', InitialBlockExplorerURL::ETH_MAINNET ),
-			new $Record( ChainIdValue::SEPOLIA, 'Sepolia', NetworkCategoryID::testnet(), null, '1', InitialBlockExplorerURL::SEPOLIA ),
-			new $Record( ChainIdValue::SONEIUM_MINATO, 'Soneium Testnet Minato', NetworkCategoryID::testnet(), null, '1', InitialBlockExplorerURL::SONEIUM_MINATO ),
-		);
+		// Testnet
+		$testnet         = NetworkCategoryID::testnet();
+		$testnet_rpc_url = null; // Testnetの場合、RPC URLの初期値はnull
+		$this->insertChainRecord( ChainIdRegistry::sepolia(), 'Sepolia', $testnet, $testnet_rpc_url, 'https://sepolia.etherscan.io' );
+		$this->insertChainRecord( ChainIdRegistry::soneiumMinato(), 'Soneium Testnet Minato', $testnet, $testnet_rpc_url, 'https://soneium-minato.blockscout.com' );
+
 		// 開発モード時はプライベートネットのチェーン情報も登録
 		if ( $this->environment->isDevelopment() ) {
-			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, 'Privatenet1', NetworkCategoryID::privatenet(), $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L1 ), '1', InitialBlockExplorerURL::PRIVATENET_L1 );
-			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, 'Privatenet2', NetworkCategoryID::privatenet(), $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L2 ), '1', InitialBlockExplorerURL::PRIVATENET_L2 );
-		}
+			$privatenet           = NetworkCategoryID::privatenet();
+			$privatenet_rpc_url_1 = $this->getPrivatenetRpcURL( ChainIdRegistry::privatenetL1() );
+			$privatenet_rpc_url_2 = $this->getPrivatenetRpcURL( ChainIdRegistry::privatenetL2() );
 
-		foreach ( $records as $record ) {
-			$this->insert(
-				$this->tableName(),
-				array(
-					'chain_id'            => $record->chain_id,
-					'name'                => $record->name,
-					'network_category_id' => $record->network_category_id->value(),
-					'rpc_url'             => $record->rpc_url,
-					'confirmations'       => $record->confirmations,
-					'block_explorer_url'  => $record->block_explorer_url,
-				)
-			);
+			$this->insertChainRecord( ChainIdRegistry::privatenetL1(), 'Privatenet1', $privatenet, $privatenet_rpc_url_1, 'http://localhost:10101' );
+			$this->insertChainRecord( ChainIdRegistry::privatenetL2(), 'Privatenet2', $privatenet, $privatenet_rpc_url_2, 'http://localhost:10102' );
 		}
 	}
 
 	/**
-	 * 指定されたチェーンIDに対応するプライベートネットのRPC URLを取得します。
-	 *
-	 * @param int $chain_ID
+	 * 指定されたプライベートネットのチェーンIDに対応するRPC URLを取得します。
 	 */
-	private function getPrivatenetRpcURL( int $chain_ID ): ?string {
+	private function getPrivatenetRpcURL( ChainID $chain_id ): RpcUrl {
 		// プライベートネットのURLを取得する関数
-		$privatenet = function ( int $number ): string {
+		$privatenet = function ( int $number ): RpcUrl {
 			assert( in_array( $number, array( 1, 2 ), true ) );
 			$prefix = $this->environment->isTesting() ? 'tests-' : '';
-			return "http://{$prefix}privatenet-{$number}.local";
+			return RpcUrl::from( "http://{$prefix}privatenet-{$number}.local" );
 		};
 
-		switch ( $chain_ID ) {
-			case ChainIdValue::PRIVATENET_L1:
-				return $privatenet( 1 );
-			case ChainIdValue::PRIVATENET_L2:
-				return $privatenet( 2 );
-			default:
-				throw new \InvalidArgumentException( '[9739363E] Invalid chain ID. ' . $chain_ID );
+		if ( $chain_id->equals( ChainIdRegistry::privatenetL1() ) ) {
+			return $privatenet( 1 );
+		} elseif ( $chain_id->equals( ChainIdRegistry::privatenetL2() ) ) {
+			return $privatenet( 2 );
+		} else {
+			throw new \InvalidArgumentException( "[11301D24] Invalid chain ID. {$chain_id}" );
 		}
 	}
 
