@@ -24,7 +24,7 @@ class SellerTermsRepository {
 		$option_factory->sellerAgreedTermsSignature()->update( $singed_terms->signature()->value() );
 		// 今後、アップデートでWordPressのユーザーIDとウォレットを紐づけることが発生したときに
 		// マイグレーションを行いやすいように登録ボタンを押下したユーザーIDを保存しておく
-		$option_factory->sellerAgreedTermsUserID()->update( get_current_user_id(), false );  // 普段は使用しないため`autoload`は`false`
+		$option_factory->sellerAgreedTermsUserId()->update( get_current_user_id(), false );  // 普段は使用しないため`autoload`は`false`
 	}
 
 	/** 保存されている署名済みの販売者向け利用規約情報を取得します */

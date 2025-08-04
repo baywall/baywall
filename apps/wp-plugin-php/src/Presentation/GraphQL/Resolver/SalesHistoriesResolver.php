@@ -34,13 +34,13 @@ class SalesHistoriesResolver extends ResolverBase {
 		$ret = array_map(
 			fn ( SalesHistory $sales_data ) => array(
 				'invoice'                  => array(
-					'id'        => $sales_data->invoiceID(),
+					'id'        => $sales_data->invoiceId(),
 					'createdAt' => $sales_data->createdAt()->format( 'c' ),
 					'chain'     => function () use ( $root_value, $sales_data ) {
 						return $root_value['chain'](
 							$root_value,
 							array(
-								'chainID' => $sales_data->chainID(),
+								'chainID' => $sales_data->chainId(),
 							)
 						);
 					},
@@ -48,7 +48,7 @@ class SalesHistoriesResolver extends ResolverBase {
 						return $root_value['post'](
 							$root_value,
 							array(
-								'postID' => $sales_data->postID(),
+								'postID' => $sales_data->postId(),
 							)
 						);
 					},
@@ -66,7 +66,7 @@ class SalesHistoriesResolver extends ResolverBase {
 						return $root_value['chain'](
 							$root_value,
 							array(
-								'chainID' => $sales_data->chainID(),
+								'chainID' => $sales_data->chainId(),
 							)
 						);
 					},

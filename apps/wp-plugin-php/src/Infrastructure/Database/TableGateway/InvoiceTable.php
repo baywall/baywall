@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\InvoiceTableRecord;
 
 /**
@@ -18,10 +18,10 @@ class InvoiceTable extends TableBase {
 
 	/**
 	 *
-	 * @param InvoiceID $invoice_ID
+	 * @param InvoiceId $invoice_id
 	 * @return null|InvoiceTableRecord
 	 */
-	public function select( InvoiceID $invoice_ID ) {
+	public function select( InvoiceId $invoice_id ) {
 		$sql = <<<SQL
 			SELECT
 				`id`,
@@ -38,7 +38,7 @@ class InvoiceTable extends TableBase {
 			WHERE `id` = %s
 		SQL;
 
-		$sql = $this->wpdb()->prepare( $sql, $invoice_ID->ulid() );
+		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid() );
 
 		$record = $this->wpdb()->get_row( $sql );
 		if ( null !== $record ) {
@@ -54,8 +54,8 @@ class InvoiceTable extends TableBase {
 			$this->tableName(),
 			array(
 				'id'                    => $invoice->id()->ulid(),
-				'post_id'               => $invoice->postID()->value(),
-				'chain_id'              => $invoice->chainID()->value(),
+				'post_id'               => $invoice->postId()->value(),
+				'chain_id'              => $invoice->chainId()->value(),
 				'selling_amount'        => $invoice->sellingPrice()->amount()->value(),
 				'selling_symbol'        => $invoice->sellingPrice()->symbol()->value(),
 				'seller_address'        => $invoice->sellerAddress()->value(),

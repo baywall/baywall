@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * ネットワークカテゴリIDを表すクラス
  */
-final class NetworkCategoryID {
+final class NetworkCategoryId {
 	/** メインネット(Ethereumメインネット、Polygonメインネット等) */
 	private const MAINNET = 1;
 	/** テストネット(Ethereum Sepolia等) */

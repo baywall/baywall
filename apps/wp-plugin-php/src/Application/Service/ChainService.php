@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
 use InvalidArgumentException;
 
@@ -19,7 +19,7 @@ class ChainService {
 	private ChainRepository $repository;
 
 	/** @deprecated Use ChainRepository::get */
-	public function getChain( ChainID $chain_id ): ?Chain {
+	public function getChain( ChainId $chain_id ): ?Chain {
 		return $this->repository->get( $chain_id );
 	}
 
@@ -46,10 +46,10 @@ class ChainService {
 	/**
 	 * 指定したチェーンの情報を更新し、保存します。
 	 *
-	 * @param ChainID              $chain_id
+	 * @param ChainId              $chain_id
 	 * @param callback(Chain):void $updater
 	 */
-	private function updatePropertyAndSave( ChainID $chain_id, $updater ): void {
+	private function updatePropertyAndSave( ChainId $chain_id, $updater ): void {
 		$chain = $this->getChain( $chain_id );
 		if ( $chain === null ) {
 			throw new \InvalidArgumentException( "[465AB29B] Chain with ID {$chain_id->value()} does not exist." );
@@ -60,11 +60,11 @@ class ChainService {
 
 	/**
 	 *
-	 * @param ChainID       $chain_id
+	 * @param ChainId       $chain_id
 	 * @param Confirmations $confirmations
 	 * @deprecated Use ChainRepository::save
 	 */
-	public function saveConfirmations( ChainID $chain_id, Confirmations $confirmations ): void {
+	public function saveConfirmations( ChainId $chain_id, Confirmations $confirmations ): void {
 		$this->updatePropertyAndSave( $chain_id, fn( Chain $chain ) => $chain->setConfirmations( $confirmations ) );
 	}
 }

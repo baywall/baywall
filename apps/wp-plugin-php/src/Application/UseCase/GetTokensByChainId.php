@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Application\UseCase;
 use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /** 指定したチェーンIDに存在するトークン一覧を取得します */
 class GetTokensByChainId {
@@ -20,7 +20,7 @@ class GetTokensByChainId {
 	/** @return TokenDto[] */
 	public function handle( int $chain_id ): array {
 		$tokens = ( new TokensFilter() )
-			->byChainID( ChainID::from( $chain_id ) )
+			->byChainId( ChainId::from( $chain_id ) )
 			->apply( $this->token_repository->all() );
 
 		return array_map( fn( $token ) => TokenDto::fromEntity( $token ), $tokens );

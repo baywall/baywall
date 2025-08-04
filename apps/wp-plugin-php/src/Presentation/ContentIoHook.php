@@ -175,7 +175,7 @@ class ContentIoHook {
 			// ウィジェットが含まれている場合は有料記事の情報を設定
 			$post->setPaidContent(
 				PaidContent::from( $paid_content_text ),
-				$attributes->sellingNetworkCategoryID(),
+				$attributes->sellingNetworkCategoryId(),
 				$attributes->sellingPrice()
 			);
 		}
@@ -254,7 +254,7 @@ class WidgetContentBuilder {
 	public function build( int $post_id ): string {
 		$post_data  = $this->post_repository->get( PostId::from( $post_id ) );
 		$block_name = ( new BlockName() )->get();
-		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategoryID(), $post_data->sellingPrice() )->toArray();
+		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategoryId(), $post_data->sellingPrice() )->toArray();
 		$attrs_str  = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 		$class_name = ( new ClassName() )->getBlock();
 		return "<!-- wp:{$block_name} {$attrs_str} -->\n"

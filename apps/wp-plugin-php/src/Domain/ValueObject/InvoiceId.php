@@ -10,7 +10,7 @@ use yamaneyuta\Ulid;
 /**
  * 請求書IDを表すクラス
  */
-class InvoiceID {
+class InvoiceId {
 
 	private function __construct( Ulid $ulid ) {
 		$this->ulid = $ulid;
@@ -20,15 +20,15 @@ class InvoiceID {
 	/**
 	 * 文字列(HEX/ULID)の請求書IDをオブジェクトに変換します。
 	 *
-	 * @param string|BigInteger $invoice_ID_val 請求書ID
+	 * @param string|BigInteger $invoice_id_val 請求書ID
 	 */
-	public static function from( $invoice_ID_val ): self {
-		if ( is_string( $invoice_ID_val ) ) {
-			return new self( Ulid::from( $invoice_ID_val ) );
-		} elseif ( $invoice_ID_val instanceof BigInteger ) {
-			return new self( Ulid::from( HexFormat::toHex( $invoice_ID_val ) ) );
+	public static function from( $invoice_id_val ): self {
+		if ( is_string( $invoice_id_val ) ) {
+			return new self( Ulid::from( $invoice_id_val ) );
+		} elseif ( $invoice_id_val instanceof BigInteger ) {
+			return new self( Ulid::from( HexFormat::toHex( $invoice_id_val ) ) );
 		}
-		throw new \InvalidArgumentException( '[DEE2905B] Invalid invoice ID. ' . var_export( $invoice_ID_val, true ) );
+		throw new \InvalidArgumentException( '[DEE2905B] Invalid invoice ID. ' . var_export( $invoice_id_val, true ) );
 	}
 
 	/**

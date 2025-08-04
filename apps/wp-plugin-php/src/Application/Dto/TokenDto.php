@@ -23,7 +23,7 @@ class TokenDto {
 
 	public static function fromEntity( Token $token ): self {
 		return new self(
-			$token->chainID()->value(),
+			$token->chainId()->value(),
 			$token->address()->value(),
 		);
 	}

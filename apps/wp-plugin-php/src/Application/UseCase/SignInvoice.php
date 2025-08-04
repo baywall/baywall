@@ -23,11 +23,11 @@ class SignInvoice {
 
 		// 署名用ウォレットで署名を行うためのメッセージを作成
 		$server_message = SigningMessage::from(
-			SolidityStrings::valueToHexString( $invoice->chainID()->value() )
+			SolidityStrings::valueToHexString( $invoice->chainId()->value() )
 			. SolidityStrings::addressToHexString( $invoice->sellerAddress() )
 			. SolidityStrings::addressToHexString( $invoice->consumerAddress() )
 			. SolidityStrings::valueToHexString( $invoice->id()->hex() )
-			. SolidityStrings::valueToHexString( $invoice->postID()->value() )
+			. SolidityStrings::valueToHexString( $invoice->postId()->value() )
 			. SolidityStrings::addressToHexString( $invoice->paymentTokenAddress() )
 			. SolidityStrings::valueToHexString( new BigInteger( $invoice->paymentAmount()->value() ) )
 			. SolidityStrings::valueToHexString( ( new ConsumerTerms() )->currentVersion() )

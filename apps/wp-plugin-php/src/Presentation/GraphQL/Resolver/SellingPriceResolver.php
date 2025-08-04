@@ -28,16 +28,16 @@ class SellingPriceResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$post_ID = $args['postID'];
+		$post_id = $args['postID'];
 
 		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_ID );
+		$this->user_access_checker->checkCanViewPost( $post_id );
 
 		// 販売価格をテーブルから取得して返す
-		$selling_price = $this->post_repository->get( PostId::from( $post_ID ) )->sellingPrice();
+		$selling_price = $this->post_repository->get( PostId::from( $post_id ) )->sellingPrice();
 
 		if ( is_null( $selling_price ) ) {
-			DeprecatedLogger::warn( '[57B6E802] Selling price is null for post ID: ' . $post_ID );
+			DeprecatedLogger::warn( '[57B6E802] Selling price is null for post ID: ' . $post_id );
 		}
 
 		return is_null( $selling_price ) ? null : array(

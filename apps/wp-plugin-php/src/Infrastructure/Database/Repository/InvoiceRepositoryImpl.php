@@ -7,9 +7,9 @@ use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceTable;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
@@ -30,8 +30,8 @@ class InvoiceRepositoryImpl implements InvoiceRepository {
 	}
 
 	/** @inheritdoc */
-	public function get( InvoiceID $invoice_ID ): ?Invoice {
-		$invoice_record = $this->invoice_table->select( $invoice_ID );
+	public function get( InvoiceId $invoice_id ): ?Invoice {
+		$invoice_record = $this->invoice_table->select( $invoice_id );
 		return is_null( $invoice_record ) ? null : new InvoiceImpl( $invoice_record );
 	}
 }
@@ -40,9 +40,9 @@ class InvoiceRepositoryImpl implements InvoiceRepository {
 class InvoiceImpl extends Invoice {
 	public function __construct( InvoiceTableRecord $invoice_record ) {
 		parent::__construct(
-			InvoiceID::from( $invoice_record->idValue() ),
+			InvoiceId::from( $invoice_record->idValue() ),
 			$invoice_record->postIdValue(),
-			ChainID::from( $invoice_record->chainIdValue() ),
+			ChainId::from( $invoice_record->chainIdValue() ),
 			Price::from(
 				Amount::from( $invoice_record->sellingAmountValue() ),
 				Symbol::from( $invoice_record->sellingSymbolValue() )

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
@@ -35,7 +35,7 @@ class TokenTableSeed extends MigratorBase {
 
 /** @internal */
 abstract class TokenTableSeedBase extends MigrationBase {
-	protected function add( ChainID $chain_id, string $address_value, string $symbol_value, int $decimals_value, bool $is_payable ): void {
+	protected function add( ChainId $chain_id, string $address_value, string $symbol_value, int $decimals_value, bool $is_payable ): void {
 		$address  = Address::from( $address_value );
 		$symbol   = Symbol::from( $symbol_value );
 		$decimals = Decimals::from( $decimals_value );

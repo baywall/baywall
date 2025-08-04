@@ -7,9 +7,9 @@ use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
 
@@ -22,9 +22,9 @@ class ChainRepositoryImpl implements ChainRepository {
 	private ChainTable $chain_table;
 
 	/** @inheritdoc */
-	public function get( ChainID $chain_id ): ?Chain {
+	public function get( ChainId $chain_id ): ?Chain {
 		$filtered_chains = ( new ChainsFilter() )
-			->byChainID( $chain_id )
+			->byChainId( $chain_id )
 			->apply( $this->all() );
 		assert( count( $filtered_chains ) <= 1, '[BB8A90CF] should return at most one record.' );
 		return empty( $filtered_chains ) ? null : array_values( $filtered_chains )[0];
@@ -48,9 +48,9 @@ class ChainRepositoryImpl implements ChainRepository {
 class ChainImpl extends Chain {
 	public function __construct( ChainTableRecord $record ) {
 		parent::__construct(
-			ChainID::from( $record->chainIdValue() ),
+			ChainId::from( $record->chainIdValue() ),
 			$record->nameValue(),
-			NetworkCategoryID::from( $record->networkCategoryIdValue() ),
+			NetworkCategoryId::from( $record->networkCategoryIdValue() ),
 			RpcUrl::fromNullable( $record->rpcUrlValue() ),
 			Confirmations::from( $record->confirmationsValue() ),
 			$record->blockExplorerUrlValue()

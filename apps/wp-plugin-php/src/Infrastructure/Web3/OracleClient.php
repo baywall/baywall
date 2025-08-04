@@ -11,7 +11,7 @@ use Web3\Contract;
 
 class OracleClient {
 	public function __construct( Oracle $oracle ) {
-		$this->oracle_contract = ( new ContractFactory() )->create( $oracle->chain()->rpcURL(), ( new OracleAbi() )->get(), $oracle->address() );
+		$this->oracle_contract = ( new ContractFactory() )->create( $oracle->chain()->rpcUrl(), ( new OracleAbi() )->get(), $oracle->address() );
 	}
 	private Contract $oracle_contract;
 
@@ -81,19 +81,19 @@ class OracleClient {
 					throw $err;
 				}
 
-				$round_ID          = $res['roundId'];
+				$round_id          = $res['roundId'];
 				$answer            = $res['answer'];
 				$started_at        = $res['startedAt'];
 				$updated_at        = $res['updatedAt'];
 				$answered_in_round = $res['answeredInRound'];
 
-				assert( $round_ID instanceof BigInteger );
+				assert( $round_id instanceof BigInteger );
 				assert( $answer instanceof BigInteger );
 				assert( $started_at instanceof BigInteger );
 				assert( $updated_at instanceof BigInteger );
 				assert( $answered_in_round instanceof BigInteger );
 
-				$result = new OracleRoundData( $round_ID, $answer, $started_at, $updated_at, $answered_in_round );
+				$result = new OracleRoundData( $round_id, $answer, $started_at, $updated_at, $answered_in_round );
 			}
 		);
 
@@ -181,22 +181,22 @@ class OracleAbi {
 
 /** @internal */
 class OracleRoundData {
-	public function __construct( BigInteger $round_ID, BigInteger $answer, BigInteger $started_at, BigInteger $updated_at, BigInteger $answered_in_round ) {
-		$this->round_ID          = $round_ID;
+	public function __construct( BigInteger $round_id, BigInteger $answer, BigInteger $started_at, BigInteger $updated_at, BigInteger $answered_in_round ) {
+		$this->round_id          = $round_id;
 		$this->answer            = $answer;
 		$this->started_at        = $started_at;
 		$this->updated_at        = $updated_at;
 		$this->answered_in_round = $answered_in_round;
 	}
 
-	private BigInteger $round_ID;
+	private BigInteger $round_id;
 	private BigInteger $answer;
 	private BigInteger $started_at;
 	private BigInteger $updated_at;
 	private BigInteger $answered_in_round;
 
-	public function roundID(): BigInteger {
-		return $this->round_ID;
+	public function roundId(): BigInteger {
+		return $this->round_id;
 	}
 
 	public function answer(): BigInteger {

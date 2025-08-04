@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 class TokensResolver extends ResolverBase {
 
@@ -35,12 +35,12 @@ class TokensResolver extends ResolverBase {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		$filter          = $args['filter'] ?? null;
-		$filter_chain_id = ChainID::fromNullableValue( $filter['chainID'] ?? null );
+		$filter_chain_id = ChainId::fromNullableValue( $filter['chainID'] ?? null );
 		$filter_address  = Address::fromNullable( $filter['address'] ?? null );
 
 		$tokens_filter = new TokensFilter();
 		if ( null !== $filter_chain_id ) {
-			$tokens_filter = $tokens_filter->byChainID( $filter_chain_id );
+			$tokens_filter = $tokens_filter->byChainId( $filter_chain_id );
 		}
 		if ( null !== $filter_address ) {
 			$tokens_filter = $tokens_filter->byAddress( $filter_address );
@@ -51,7 +51,7 @@ class TokensResolver extends ResolverBase {
 			fn( Token $token ) => $root_value['token'](
 				$root_value,
 				array(
-					'chainID' => $token->chainID()->value(),
+					'chainID' => $token->chainId()->value(),
 					'address' => $token->address()->value(),
 				)
 			),

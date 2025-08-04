@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\AppContractTable;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\AppContractTableRecord;
 use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
 
@@ -23,7 +23,7 @@ class AppContractRepositoryImpl implements AppContractRepository {
 	private ChainRepository $chain_repository;
 
 	/** @inheritdoc */
-	public function get( ChainID $chain_id ): ?AppContract {
+	public function get( ChainId $chain_id ): ?AppContract {
 		$records = $this->app_contract_table->all();
 		$records = array_filter(
 			$records,

@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
@@ -41,7 +41,7 @@ class GetERC20InfoResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$chain_ID = ChainID::from( $args['chainID'] );
+		$chain_id = ChainId::from( $args['chainID'] );
 		$address  = Address::from( $args['address'] );
 
 		if ( $address === Ethers::zeroAddress() ) {
@@ -49,15 +49,15 @@ class GetERC20InfoResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
 		}
 
-		$chain = $this->chain_service->getChain( $chain_ID );
+		$chain = $this->chain_service->getChain( $chain_id );
 		if ( is_null( $chain ) ) {
-			throw new \InvalidArgumentException( '[DC8E36E6] chain data is not found. chain id: ' . $chain_ID );
+			throw new \InvalidArgumentException( '[DC8E36E6] chain data is not found. chain id: ' . $chain_id );
 		} elseif ( ! $chain->connectable() ) {
 			// チェーンが接続可能でない場合は例外を投げる
-			throw new \InvalidArgumentException( '[84752B42] not connectable. chain id: ' . $chain_ID );
+			throw new \InvalidArgumentException( '[84752B42] not connectable. chain id: ' . $chain_id );
 		}
 
-		$token_client = new TokenClient( $chain->rpcURL(), $address );
+		$token_client = new TokenClient( $chain->rpcUrl(), $address );
 
 		$symbol = $token_client->symbol();
 

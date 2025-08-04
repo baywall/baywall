@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /**
  * 最後にクロールしたブロック番号を取得または保存するためのクラス
@@ -15,19 +15,19 @@ class CrawledBlockNumber {
 	/**
 	 * 指定したチェーン、ブロックタグで最後にクロールしたブロック番号を取得します。
 	 */
-	public function get( ChainID $chain_ID, string $block_tag ): ?BlockNumber {
+	public function get( ChainId $chain_id, string $block_tag ): ?BlockNumber {
 		assert( Validate::isBlockTagName( $block_tag ), "[4306F5FA] Invalid block tag. - block_tag: {$block_tag}" );
 
-		$block_number_hex = ( new OptionFactory() )->crawledBlockNumberHex( $chain_ID, $block_tag )->get();
+		$block_number_hex = ( new OptionFactory() )->crawledBlockNumberHex( $chain_id, $block_tag )->get();
 		return BlockNumber::fromNullable( $block_number_hex );
 	}
 
 	/**
 	 * 指定したチェーン、ブロックタグで最後にクロールしたブロック番号を保存します。
 	 */
-	public function set( ChainID $chain_ID, string $block_tag, BlockNumber $block_number ): void {
+	public function set( ChainId $chain_id, string $block_tag, BlockNumber $block_number ): void {
 		Validate::checkBlockTagName( $block_tag );
 
-		( new OptionFactory() )->crawledBlockNumberHex( $chain_ID, $block_tag )->update( $block_number->hex() );
+		( new OptionFactory() )->crawledBlockNumberHex( $chain_id, $block_tag )->update( $block_number->hex() );
 	}
 }

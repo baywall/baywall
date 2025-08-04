@@ -5,18 +5,18 @@ namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 
 class Invoice {
 
-	public function __construct( InvoiceID $id, PostId $post_ID, ChainID $chain_ID, Price $selling_price, Address $seller_address, Address $payment_token_address, Amount $payment_amount, Address $consumer_address, ?InvoiceNonce $nonce = null ) {
+	public function __construct( InvoiceId $id, PostId $post_id, ChainId $chain_id, Price $selling_price, Address $seller_address, Address $payment_token_address, Amount $payment_amount, Address $consumer_address, ?InvoiceNonce $nonce = null ) {
 		$this->id                    = $id;
-		$this->post_ID               = $post_ID;
-		$this->chain_ID              = $chain_ID;
+		$this->post_id               = $post_id;
+		$this->chain_id              = $chain_id;
 		$this->selling_price         = $selling_price;
 		$this->seller_address        = $seller_address;
 		$this->payment_token_address = $payment_token_address;
@@ -25,9 +25,9 @@ class Invoice {
 		$this->nonce                 = $nonce;
 	}
 
-	private InvoiceID $id;
-	private PostId $post_ID;
-	private ChainID $chain_ID;
+	private InvoiceId $id;
+	private PostId $post_id;
+	private ChainId $chain_id;
 	private Price $selling_price;
 	private Address $seller_address;
 	private Address $payment_token_address;
@@ -35,14 +35,14 @@ class Invoice {
 	private Address $consumer_address;
 	private ?InvoiceNonce $nonce;
 
-	public function id(): InvoiceID {
+	public function id(): InvoiceId {
 		return $this->id;
 	}
-	public function postID(): PostId {
-		return $this->post_ID;
+	public function postId(): PostId {
+		return $this->post_id;
 	}
-	public function chainID(): ChainID {
-		return $this->chain_ID;
+	public function chainId(): ChainId {
+		return $this->chain_id;
 	}
 	public function sellingPrice(): Price {
 		return $this->selling_price;

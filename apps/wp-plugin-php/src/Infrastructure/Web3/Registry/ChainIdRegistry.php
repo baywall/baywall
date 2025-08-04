@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3\Registry;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 final class ChainIdRegistry {
 	// ==================== Mainnet ====================
@@ -24,38 +24,38 @@ final class ChainIdRegistry {
 	// ==================== Mainnet ====================
 
 	/** イーサリアムメインネット */
-	public static function ethMainnet(): ChainID {
-		return ChainID::from( self::ETH_MAINNET );
+	public static function ethMainnet(): ChainId {
+		return ChainId::from( self::ETH_MAINNET );
 	}
 	/** Polygon zkEVM メインネット */
-	public static function polygonZkEvm(): ChainID {
-		return ChainID::from( self::POLYGON_ZK_EVM );
+	public static function polygonZkEvm(): ChainId {
+		return ChainId::from( self::POLYGON_ZK_EVM );
 	}
 
 	// ==================== Testnet ====================
 
 	/** イーサリアムSepoliaテストネット */
-	public static function sepolia(): ChainID {
-		return ChainID::from( self::SEPOLIA );
+	public static function sepolia(): ChainId {
+		return ChainId::from( self::SEPOLIA );
 	}
 	/** Polygon zkEVM テストネット */
-	public static function polygonZkEvmCardona(): ChainID {
-		return ChainID::from( self::POLYGON_ZK_EVM_CARDONA );
+	public static function polygonZkEvmCardona(): ChainId {
+		return ChainId::from( self::POLYGON_ZK_EVM_CARDONA );
 	}
 	/** Soneium テストネット */
-	public static function soneiumMinato(): ChainID {
-		return ChainID::from( self::SONEIUM_MINATO );
+	public static function soneiumMinato(): ChainId {
+		return ChainId::from( self::SONEIUM_MINATO );
 	}
 
 	// ==================== Privatenet ====================
 
 	/** Privatenet L1 */
-	public static function privatenetL1(): ChainID {
-		return ChainID::from( self::PRIVATENET_L1 );
+	public static function privatenetL1(): ChainId {
+		return ChainId::from( self::PRIVATENET_L1 );
 	}
 	/** Privatenet L2 */
-	public static function privatenetL2(): ChainID {
-		return ChainID::from( self::PRIVATENET_L2 );
+	public static function privatenetL2(): ChainId {
+		return ChainId::from( self::PRIVATENET_L2 );
 	}
 
 	private function __construct() {} // インスタンス生成禁止

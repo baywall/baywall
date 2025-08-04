@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 interface ChainRepository {
 
 	/** 指定したチェーンIDに合致するチェーン情報を取得します。 */
-	public function get( ChainID $chain_id ): ?Chain;
+	public function get( ChainId $chain_id ): ?Chain;
 
 	/**
 	 * データが存在するチェーン一覧(すべて)を取得します。
