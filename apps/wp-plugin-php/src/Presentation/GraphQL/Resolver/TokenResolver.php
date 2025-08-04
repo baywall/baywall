@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 class TokenResolver extends ResolverBase {
 
@@ -21,7 +21,7 @@ class TokenResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$chain_id = ChainID::from( $args['chainID'] );
+		$chain_id = ChainId::from( $args['chainID'] );
 		$address  = Address::from( $args['address'] );
 
 		$token = $this->token_repository->get( $chain_id, $address );

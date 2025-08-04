@@ -13,8 +13,8 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
@@ -58,13 +58,13 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var string */
-		$invoice_ID_hex = $args['invoiceID'];
+		$invoice_id_hex = $args['invoiceID'];
 		/** @var string */
 		$nonce = $args['nonce'];
 
-		Validate::checkHex( $invoice_ID_hex );
+		Validate::checkHex( $invoice_id_hex );
 		Validate::checkInvoiceNonceValueFormat( $nonce );
-		$invoice_ID = InvoiceID::from( $invoice_ID_hex );
+		$invoice_id = InvoiceId::from( $invoice_id_hex );
 
 		// エラー時の結果を返すコールバック関数
 		$error_result_callback = fn( $error_code ) => array(
@@ -72,10 +72,10 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			'errorCode' => $error_code,
 		);
 
-		$invoice = $this->invoice_repository->get( $invoice_ID );
+		$invoice = $this->invoice_repository->get( $invoice_id );
 		if ( is_null( $invoice ) ) {
 			// 通常、ここは通らない
-			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_ID_hex );
+			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_id_hex );
 		}
 
 		$db_nonce = $invoice->nonce(); // DBから取得したnonce
@@ -84,12 +84,12 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			return $error_result_callback( self::ERROR_CODE_INVALID_NONCE );
 		}
 
-		$post_ID          = $invoice->postID();
-		$chain            = $this->chain_service->getChain( $invoice->chainID() );
+		$post_id          = $invoice->postId();
+		$chain            = $this->chain_service->getChain( $invoice->chainId() );
 		$consumer_address = $invoice->consumerAddress();
 
 		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_ID->value() );
+		$this->user_access_checker->checkCanViewPost( $post_id->value() );
 
 		if ( ! $chain->connectable() ) {
 			// 指定されたチェーンIDが接続可能でない場合はドメインエラーとして返す
@@ -101,7 +101,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		$app_contract   = $this->app_contract_repository->get( $chain->id() );
 		$app            = new AppContractClient( $app_contract );
 		$server_signer  = $this->server_signer_service->getServerSigner();
-		$payment_status = $app->getPaywallStatus( $server_signer->address(), $post_ID, $consumer_address );
+		$payment_status = $app->getPaywallStatus( $server_signer->address(), $post_id, $consumer_address );
 
 		if ( ! $payment_status->isUnlocked() ) {
 			// 最新のブロックでもペイウォールの解除が確認できなかった場合
@@ -113,7 +113,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// 有料部分のコンテンツを取得
-		$paid_content = $this->post_repository->get( $post_ID )->paidContent();
+		$paid_content = $this->post_repository->get( $post_id )->paidContent();
 		assert( ! is_null( $paid_content ), '[391C0A77] Paid content should not be null.' );
 
 		return array(
@@ -125,9 +125,9 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	/**
 	 * トランザクションが待機済みかどうかを判定します。
 	 */
-	private function isConfirmed( ChainID $chain_ID, BlockNumber $unlocked_block_number ): bool {
+	private function isConfirmed( ChainId $chain_id, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		$chain               = $this->chain_service->getChain( $chain_ID );
+		$chain               = $this->chain_service->getChain( $chain_id );
 		$confirmations_value = $chain->confirmations()->value();
 
 		if ( is_int( $confirmations_value ) ) {

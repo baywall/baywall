@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 
 class Post {
 
-	public function __construct( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryID $selling_network_category_id, ?Price $selling_price ) {
+	public function __construct( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryId $selling_network_category_id, ?Price $selling_price ) {
 		$this->post_id                     = $post_id;
 		$this->paid_content                = $paid_content;
 		$this->selling_network_category_id = $selling_network_category_id;
@@ -19,7 +19,7 @@ class Post {
 	private PostId $post_id;
 	private ?PaidContent $paid_content;
 	private ?Price $selling_price;
-	private ?NetworkCategoryID $selling_network_category_id;
+	private ?NetworkCategoryId $selling_network_category_id;
 
 	public function id(): PostId {
 		return $this->post_id;
@@ -27,14 +27,14 @@ class Post {
 	public function paidContent(): ?PaidContent {
 		return $this->paid_content;
 	}
-	public function sellingNetworkCategoryID(): ?NetworkCategoryID {
+	public function sellingNetworkCategoryId(): ?NetworkCategoryId {
 		return $this->selling_network_category_id;
 	}
 	public function sellingPrice(): ?Price {
 		return $this->selling_price;
 	}
 
-	public function setPaidContent( PaidContent $paid_content, ?NetworkCategoryID $selling_network_category_id, ?Price $selling_price ): void {
+	public function setPaidContent( PaidContent $paid_content, ?NetworkCategoryId $selling_network_category_id, ?Price $selling_price ): void {
 		$this->paid_content                = $paid_content;
 		$this->selling_network_category_id = $selling_network_category_id;
 		$this->selling_price               = $selling_price;

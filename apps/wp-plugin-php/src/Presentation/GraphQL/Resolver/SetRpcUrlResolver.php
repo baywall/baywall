@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 
 class SetRpcUrlResolver extends ResolverBase {
@@ -28,7 +28,7 @@ class SetRpcUrlResolver extends ResolverBase {
 	 * @return bool
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$chain_ID = ChainID::from( $args['chainID'] );
+		$chain_id = ChainId::from( $args['chainID'] );
 		$rpc_url  = RpcUrl::fromNullable( $args['rpcURL'] ?? null );
 
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
@@ -37,8 +37,8 @@ class SetRpcUrlResolver extends ResolverBase {
 		// 引数のチェーンIDと一致していることを確認する
 		if ( ! is_null( $rpc_url ) ) {
 			$actual_chain_id = ( new BlockchainClient( $rpc_url ) )->getChainId();
-			if ( ! $chain_ID->equals( $actual_chain_id ) ) {
-				throw new \InvalidArgumentException( "[0AD91082] Invalid chain ID. expected: {$chain_ID}, actual: {$actual_chain_id}" );
+			if ( ! $chain_id->equals( $actual_chain_id ) ) {
+				throw new \InvalidArgumentException( "[0AD91082] Invalid chain ID. expected: {$chain_id}, actual: {$actual_chain_id}" );
 			}
 		}
 
@@ -48,8 +48,8 @@ class SetRpcUrlResolver extends ResolverBase {
 			$wpdb->query( 'START TRANSACTION' );
 
 			// リポジトリからチェーン情報を取得、RPC URLを設定して保存
-			$chain = $this->chain_repository->get( $chain_ID );
-			$chain->setRpcURL( $rpc_url );
+			$chain = $this->chain_repository->get( $chain_id );
+			$chain->setRpcUrl( $rpc_url );
 			$this->chain_repository->save( $chain );
 
 			$wpdb->query( 'COMMIT' );

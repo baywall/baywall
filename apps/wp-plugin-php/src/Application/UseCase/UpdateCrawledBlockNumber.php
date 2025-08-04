@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /**
  * ペイウォール解除イベントのクロール済みブロック番号を更新します
@@ -17,7 +17,7 @@ class UpdateUnlockPaywallEventCrawledBlockNumber {
 
 	private AppContractRepository $app_contract_repository;
 
-	public function handle( ChainID $chain_id, BlockNumber $crawled_block_number ): void {
+	public function handle( ChainId $chain_id, BlockNumber $crawled_block_number ): void {
 		$app_contract = $this->app_contract_repository->get( $chain_id );
 
 		// 現在のブロック番号をクロール済みとして更新する

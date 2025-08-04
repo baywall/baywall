@@ -5,15 +5,15 @@ namespace Cornix\Serendipity\Core\Domain\Specification;
 
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class TokensFilter {
 
 	private array $filters = array();
 
-	public function byChainID( ChainID $chain_id ): self {
-		$this->filters[] = fn ( Token $token ) => $token->chainID()->value() === $chain_id->value();
+	public function byChainId( ChainId $chain_id ): self {
+		$this->filters[] = fn ( Token $token ) => $token->chainId()->value() === $chain_id->value();
 		return $this;
 	}
 

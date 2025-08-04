@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
 use Cornix\Serendipity\Core\Application\UseCase\IssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\SignInvoice;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 class IssueInvoiceResolver extends ResolverBase {
 
@@ -36,24 +36,24 @@ class IssueInvoiceResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$post_ID          = $args['postID'];
-		$chain_ID         = ChainID::from( $args['chainID'] );
+		$post_id          = $args['postID'];
+		$chain_id         = ChainId::from( $args['chainID'] );
 		$token_address    = Address::from( $args['tokenAddress'] );
 		$consumer_address = Address::from( $args['consumerAddress'] ); // 購入者のアドレス
 
 		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_ID );
+		$this->user_access_checker->checkCanViewPost( $post_id );
 
 		// 請求書番号を発行(+現在の販売価格を記録)
 		global $wpdb;
 		try {
 			$wpdb->query( 'START TRANSACTION' );
 			// invoiceを発行
-			$invoice = $this->issue_invoice->handle( $post_ID, $chain_ID, $token_address, $consumer_address );
+			$invoice = $this->issue_invoice->handle( $post_id, $chain_id, $token_address, $consumer_address );
 			// 発行したinvoiceに署名を行う
 			$signed_data = $this->sign_invoice->handle( $invoice );
 			// クロール済みブロック番号を初期化
-			$this->init_crawled_block_number->handle( $chain_ID );
+			$this->init_crawled_block_number->handle( $chain_id );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );

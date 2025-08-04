@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\SaveERC20Token;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /**
  * ERC20トークンの情報をサーバーに登録します。
@@ -30,13 +30,13 @@ class RegisterERC20TokenResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$chain_ID = ChainID::from( $args['chainID'] );
+		$chain_id = ChainId::from( $args['chainID'] );
 		$address  = Address::from( (string) $args['address'] );
 		/** @var bool */
 		$is_payable = $args['isPayable'] ?? null;
 
 		// トークン情報を保存
-		$this->save_erc20_token->handle( $chain_ID, $address, $is_payable );
+		$this->save_erc20_token->handle( $chain_id, $address, $is_payable );
 
 		return true;
 	}

@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 
 class NetworkCategoriesResolver extends ResolverBase {
 
@@ -31,7 +31,7 @@ class NetworkCategoriesResolver extends ResolverBase {
 
 		/** @var array */
 		$filter                  = $args['filter'] ?? null;
-		$filter_network_category = NetworkCategoryID::fromNullable( $filter['networkCategoryID'] ?? null );
+		$filter_network_category = NetworkCategoryId::fromNullable( $filter['networkCategoryID'] ?? null );
 
 		// ネットワークカテゴリIDが指定されていない場合は全てのネットワークカテゴリを取得
 		$network_category_ids = is_null( $filter_network_category )
@@ -52,13 +52,13 @@ class GetAllNetworkCategoryIDs {
 	}
 	private ChainRepository $chain_repository;
 
-	/** @return NetworkCategoryID[] */
+	/** @return NetworkCategoryId[] */
 	public function handle(): array {
 		$all_chains = $this->chain_repository->all();
 
 		$network_categories = array();
 		foreach ( $all_chains as $chain ) {
-			$network_categories[ $chain->networkCategoryID()->value() ] = $chain->networkCategoryID();
+			$network_categories[ $chain->networkCategoryId()->value() ] = $chain->networkCategoryId();
 		}
 
 		return array_values( $network_categories );

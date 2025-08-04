@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\EthBlock;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use phpseclib\Math\BigInteger;
@@ -39,7 +39,7 @@ class BlockchainClient {
 	/**
 	 * チェーンIDを取得します。
 	 */
-	public function getChainId(): ChainID {
+	public function getChainId(): ChainId {
 		$eth = $this->eth();
 
 		// Ethオブジェクトの内容を操作することで`eth_chainId`メソッドの追加を行う
@@ -60,7 +60,7 @@ class BlockchainClient {
 			$methods_property->setValue( $eth, $methods );
 		}
 
-		/** @var ChainID|null */
+		/** @var ChainId|null */
 		$chain_id = null;
 		$this->retryer->execute(
 			function () use ( $eth, &$chain_id ) {
@@ -69,7 +69,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$chain_id = ChainID::from( (int) $res->toString() );
+						$chain_id = ChainId::from( (int) $res->toString() );
 					}
 				);
 			}

@@ -14,8 +14,8 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
 use phpseclib\Math\BigInteger;
 use stdClass;
@@ -35,11 +35,11 @@ class AppContractCrawler {
 	private UnlockPaywallTransactionRepository $unlock_paywall_transaction_repository;
 	private UnlockPaywallTransferCrawler $unlock_paywall_transfer_crawler;
 
-	public function crawl( ChainID $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): void {
+	public function crawl( ChainId $chain_id, BlockNumber $from_block, BlockNumber $to_block ): void {
 		// UnlockPaywallTransferイベントのログを取得
-		$transfer_logs = $this->getUnlockPaywallTransferLogs( $chain_ID, $from_block, $to_block );
+		$transfer_logs = $this->getUnlockPaywallTransferLogs( $chain_id, $from_block, $to_block );
 		// トランザクション情報をDBに保存
-		$this->saveUnlockPaywallTransaction( $chain_ID, $transfer_logs );
+		$this->saveUnlockPaywallTransaction( $chain_id, $transfer_logs );
 		// UnlockPaywallTransferイベントのログをDBに保存
 		$this->saveUnlockPaywallTransfer( $transfer_logs );
 	}
@@ -47,14 +47,14 @@ class AppContractCrawler {
 	/**
 	 * UnlockPaywallTransferイベントのログを取得します。
 	 */
-	private function getUnlockPaywallTransferLogs( ChainID $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
-		return $this->unlock_paywall_transfer_crawler->execute( $chain_ID, $from_block, $to_block );
+	private function getUnlockPaywallTransferLogs( ChainId $chain_id, BlockNumber $from_block, BlockNumber $to_block ): array {
+		return $this->unlock_paywall_transfer_crawler->execute( $chain_id, $from_block, $to_block );
 	}
 
 	/**
 	 * UnlockPaywallTransferイベントが発生した時のトランザクション情報をDBに保存します。
 	 */
-	private function saveUnlockPaywallTransaction( ChainID $chain_ID, array $unlock_paywall_transfer_logs ): void {
+	private function saveUnlockPaywallTransaction( ChainId $chain_id, array $unlock_paywall_transfer_logs ): void {
 		/** @var string[] */
 		$saved_invoice_id_hex_array = array(); // DBに保存済みのinvoiceIDのリスト(DBへのアクセス回数を減らすために使用)
 
@@ -62,15 +62,15 @@ class AppContractCrawler {
 			$event_args = $this->app_abi->decodeEventParameters( $unlock_paywall_transfer_log );
 			assert( is_array( $event_args ), '[80A37466] event_args is not array' );
 			/** @var BigInteger */
-			$invoice_ID_bi = $event_args['invoiceID'];
-			assert( $invoice_ID_bi instanceof BigInteger, '[9A2B802E] invoice_ID is not BigInteger. ' . var_export( $invoice_ID_bi, true ) );
-			$invoice_ID = InvoiceID::from( $invoice_ID_bi );
+			$invoice_id_bi = $event_args['invoiceID'];
+			assert( $invoice_id_bi instanceof BigInteger, '[9A2B802E] invoice_id is not BigInteger. ' . var_export( $invoice_id_bi, true ) );
+			$invoice_id = InvoiceId::from( $invoice_id_bi );
 
 			// 既に保存済みのinvoiceIDの場合はスキップ
-			if ( in_array( $invoice_ID->hex(), $saved_invoice_id_hex_array, true ) ) {
+			if ( in_array( $invoice_id->hex(), $saved_invoice_id_hex_array, true ) ) {
 				continue;
 			} else {
-				$saved_invoice_id_hex_array[] = $invoice_ID->hex();
+				$saved_invoice_id_hex_array[] = $invoice_id->hex();
 			}
 
 			$transaction_hash = TransactionHash::from( $unlock_paywall_transfer_log->transactionHash );
@@ -79,8 +79,8 @@ class AppContractCrawler {
 			assert( Validate::isHex( $block_number_hex ), '[067CCE00] blockNumber is not hex. ' . var_export( $block_number_hex, true ) );
 
 			$this->unlock_paywall_transaction_repository->save(
-				$invoice_ID,
-				$chain_ID,
+				$invoice_id,
+				$chain_id,
 				BlockNumber::from( $block_number_hex ),
 				$transaction_hash,
 			);
@@ -103,7 +103,7 @@ class AppContractCrawler {
 			/** @var BigInteger */
 			$amount = $event_args['amount'];
 			/** @var BigInteger */
-			$invoice_ID_bi = $event_args['invoiceID'];
+			$invoice_id_bi = $event_args['invoiceID'];
 			/** @var BigInteger */
 			$transfer_type = $event_args['transferType'];
 
@@ -111,7 +111,7 @@ class AppContractCrawler {
 			$log_index_hex = $unlock_paywall_transfer_log->logIndex;
 
 			$this->unlock_paywall_transfer_event_repository->save(
-				InvoiceID::from( $invoice_ID_bi ),
+				InvoiceId::from( $invoice_id_bi ),
 				HexFormat::toInt( $log_index_hex ),
 				$from,
 				$to,
@@ -155,8 +155,8 @@ class UnlockPaywallTransferCrawler {
 	 *
 	 * @return stdClass[]
 	 */
-	public function execute( ChainID $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
-		$blockchain_client = $this->blockchain_client_factory->create( $chain_ID );
+	public function execute( ChainId $chain_id, BlockNumber $from_block, BlockNumber $to_block ): array {
+		$blockchain_client = $this->blockchain_client_factory->create( $chain_id );
 
 		/** @var array|null */
 		$logs_result = null;
@@ -164,7 +164,7 @@ class UnlockPaywallTransferCrawler {
 			array(
 				'fromBlock' => $from_block->hex(),
 				'toBlock'   => $to_block->hex(),
-				'address'   => $this->app_contract_repository->get( $chain_ID )->address()->value(),
+				'address'   => $this->app_contract_repository->get( $chain_id )->address()->value(),
 				'topics'    => $this->topics,
 			),
 			function ( $err, $logs ) use ( &$logs_result ) {
