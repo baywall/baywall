@@ -52,6 +52,11 @@ final class Amount {
 		return '0' === $this->amount_text;
 	}
 
+	/** 小数点以下の桁数を取得します */
+	private function decimals(): Decimals {
+		return Decimals::from( strlen( explode( '.', $this->amount_text )[1] ?? '' ) );
+	}
+
 	public function equals( self $other ): bool {
 		return $this->amount_text === $other->amount_text;
 	}
@@ -74,11 +79,16 @@ final class Amount {
 		return new self( bcdiv( $this->amount_text, '1', $decimals->value() ) );
 	}
 
-	public function mul( self $other ): self {
-		$this_decimals  = strlen( explode( '.', $this->amount_text )[1] ?? '' );
-		$other_decimals = strlen( explode( '.', $other->amount_text )[1] ?? '' );
+	public function add( self $other ): self {
+		return new self( bcadd( $this->amount_text, $other->amount_text, max( $this->decimals()->value(), $other->decimals()->value() ) ) );
+	}
 
-		return new self( bcmul( $this->amount_text, $other->amount_text, ( $this_decimals + $other_decimals ) ) );
+	public function sub( self $other ): self {
+		return new self( bcsub( $this->amount_text, $other->amount_text, max( $this->decimals()->value(), $other->decimals()->value() ) ) );
+	}
+
+	public function mul( self $other ): self {
+		return new self( bcmul( $this->amount_text, $other->amount_text, ( $this->decimals()->value() + $other->decimals()->value() ) ) );
 	}
 
 	/**
