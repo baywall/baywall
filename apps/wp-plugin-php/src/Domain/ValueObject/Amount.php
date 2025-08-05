@@ -74,6 +74,20 @@ final class Amount {
 		return new self( bcdiv( $this->amount_text, '1', $decimals->value() ) );
 	}
 
+	public function add( self $other ): self {
+		$this_decimals  = strlen( explode( '.', $this->amount_text )[1] ?? '' );
+		$other_decimals = strlen( explode( '.', $other->amount_text )[1] ?? '' );
+
+		return new self( bcadd( $this->amount_text, $other->amount_text, max( $this_decimals, $other_decimals ) ) );
+	}
+
+	public function sub( self $other ): self {
+		$this_decimals  = strlen( explode( '.', $this->amount_text )[1] ?? '' );
+		$other_decimals = strlen( explode( '.', $other->amount_text )[1] ?? '' );
+
+		return new self( bcsub( $this->amount_text, $other->amount_text, max( $this_decimals, $other_decimals ) ) );
+	}
+
 	public function mul( self $other ): self {
 		$this_decimals  = strlen( explode( '.', $this->amount_text )[1] ?? '' );
 		$other_decimals = strlen( explode( '.', $other->amount_text )[1] ?? '' );
