@@ -23,6 +23,10 @@ final class InvoiceNonce extends NonceBase {
 		return new self( $invoice_nonce_value );
 	}
 
+	public function equals( self $other ): bool {
+		return $this->value() === $other->value();
+	}
+
 	/** @inheritdoc */
 	protected function isNonceValueFormat( string $nonce_value ): bool {
 		return 1 === preg_match( '/^[0-9a-f]{32}$/i', $nonce_value );
