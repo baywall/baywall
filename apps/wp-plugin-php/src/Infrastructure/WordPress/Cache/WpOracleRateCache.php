@@ -6,9 +6,10 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Cache;
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
+use Cornix\Serendipity\Core\Infrastructure\Cache\OracleRateCache;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 
-class OracleRateTransient {
+class WpOracleRateCache implements OracleRateCache {
 
 	public function __construct( TransientStorage $storage, PrefixProvider $prefix_provider, TransientExpirationProvider $expiration_provider ) {
 		$this->storage    = $storage;
