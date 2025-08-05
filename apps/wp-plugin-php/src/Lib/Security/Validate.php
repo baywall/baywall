@@ -34,17 +34,4 @@ class Validate {
 		// 本プラグインでは、`0x`プレフィックス含む文字列を16進数表記とする。
 		return Strings::starts_with( $hex, '0x' ) && \Web3\Utils::isHex( $hex );
 	}
-
-	/** 指定した文字列が請求書に紐づくnonce値のフォーマットであるかどうかを判定します。 */
-	public static function isInvoiceNonceValueFormat( string $invoice_nonce_value ): bool {
-		// 請求書に紐づくnonceは、128bitのHEX(`0x`プレフィックス無し)文字列
-		return preg_match( '/^[0-9a-f]{32}$/i', $invoice_nonce_value ) === 1;
-	}
-
-	/** 指定した文字列が請求書に紐づくnonce値のフォーマットでない場合は例外をスローします。 */
-	public static function checkInvoiceNonceValueFormat( string $invoice_nonce_value ): void {
-		if ( ! self::isInvoiceNonceValueFormat( $invoice_nonce_value ) ) {
-			throw new \InvalidArgumentException( '[8EEF9FD6] Invalid invoice nonce value format. - value: ' . $invoice_nonce_value );
-		}
-	}
 }

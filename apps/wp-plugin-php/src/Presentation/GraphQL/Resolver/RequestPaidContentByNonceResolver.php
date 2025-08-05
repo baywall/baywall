@@ -10,11 +10,11 @@ use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
@@ -57,14 +57,8 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 * @return string|null
 	 */
 	public function resolve( array $root_value, array $args ) {
-		/** @var string */
-		$invoice_id_hex = $args['invoiceID'];
-		/** @var string */
-		$nonce = $args['nonce'];
-
-		Validate::checkHex( $invoice_id_hex );
-		Validate::checkInvoiceNonceValueFormat( $nonce );
-		$invoice_id = InvoiceId::from( $invoice_id_hex );
+		$nonce      = InvoiceNonce::from( $args['nonce'] );
+		$invoice_id = InvoiceId::from( $args['invoiceID'] );
 
 		// エラー時の結果を返すコールバック関数
 		$error_result_callback = fn( $error_code ) => array(
@@ -75,11 +69,11 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		$invoice = $this->invoice_repository->get( $invoice_id );
 		if ( is_null( $invoice ) ) {
 			// 通常、ここは通らない
-			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_id_hex );
+			throw new \Exception( "[D2AAA3B6] Invoice data not found. invoice ID: {$invoice_id}" );
 		}
 
 		$db_nonce = $invoice->nonce(); // DBから取得したnonce
-		if ( is_null( $db_nonce ) || $nonce !== $db_nonce->value() ) {
+		if ( is_null( $db_nonce ) || ! $nonce->equals( $db_nonce ) ) {
 			// nonceが無効な場合はドメインエラーとして返す
 			return $error_result_callback( self::ERROR_CODE_INVALID_NONCE );
 		}

@@ -52,4 +52,8 @@ class InvoiceId {
 	public function ulid(): string {
 		return $this->ulid->toString();
 	}
+
+	public function __toString(): string {
+		return $this->ulid->toString();
+	}
 }
