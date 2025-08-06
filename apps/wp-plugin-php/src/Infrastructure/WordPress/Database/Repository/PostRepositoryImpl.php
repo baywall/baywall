@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
+use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
 use Cornix\Serendipity\Core\Domain\Entity\Post;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
