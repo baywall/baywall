@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
@@ -15,7 +16,6 @@ use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
 
@@ -26,15 +26,15 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		PostRepository $post_repository,
 		ServerSignerService $server_signer_service,
 		UserAccessChecker $user_access_checker,
-		BlockchainClientFactory $blockchain_client_factory
+		BlockNumberProvider $block_number_provider
 	) {
-		$this->app_contract_repository   = $app_contract_repository;
-		$this->chain_service             = $chain_service;
-		$this->invoice_repository        = $invoice_repository;
-		$this->post_repository           = $post_repository;
-		$this->server_signer_service     = $server_signer_service;
-		$this->user_access_checker       = $user_access_checker;
-		$this->blockchain_client_factory = $blockchain_client_factory;
+		$this->app_contract_repository = $app_contract_repository;
+		$this->chain_service           = $chain_service;
+		$this->invoice_repository      = $invoice_repository;
+		$this->post_repository         = $post_repository;
+		$this->server_signer_service   = $server_signer_service;
+		$this->user_access_checker     = $user_access_checker;
+		$this->block_number_provider   = $block_number_provider;
 	}
 
 	private AppContractRepository $app_contract_repository;
@@ -43,7 +43,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	private PostRepository $post_repository;
 	private ServerSignerService $server_signer_service;
 	private UserAccessChecker $user_access_checker;
-	private BlockchainClientFactory $blockchain_client_factory;
+	private BlockNumberProvider $block_number_provider;
 
 	// ここの定数は、GraphQLのエラーコードと一致させること
 	private const ERROR_CODE_INVALID_NONCE           = 'INVALID_NONCE';
@@ -118,6 +118,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 
 	/**
 	 * トランザクションが待機済みかどうかを判定します。
+	 * TODO: refactor: add ConfirmedChecker
 	 */
 	private function isConfirmed( ChainId $chain_id, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
@@ -126,8 +127,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 
 		if ( is_int( $confirmations_value ) ) {
 			// 最新のブロック番号を取得
-			$latest_block        = $this->blockchain_client_factory->create( $chain->id() )->ethGetBlockByNumber( BlockTag::latest() );
-			$latest_block_number = $latest_block->number();
+			$latest_block_number = $this->block_number_provider->getByChainId( $chain_id, BlockTag::latest() );
 			// 基準となるブロック番号を計算(「ペイウォール解除時のブロック番号」<=「基準ブロック番号」となる場合、待機済み)
 			$reference_block = $latest_block_number->sub( max( $confirmations_value - 1, 0 ) );
 			return $unlocked_block_number->compare( $reference_block ) <= 0;
