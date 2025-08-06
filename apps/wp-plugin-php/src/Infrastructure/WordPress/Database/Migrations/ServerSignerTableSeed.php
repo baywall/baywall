@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations;
 
 use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ServerSignerPrivateKeyRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\ServerSignerPrivateKeyRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
