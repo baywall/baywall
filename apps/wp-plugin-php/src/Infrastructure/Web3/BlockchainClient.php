@@ -114,23 +114,6 @@ class BlockchainClient {
 	}
 
 	/**
-	 * ブロック番号を取得します。
-	 *
-	 * TODO: move to BlockNumberProvider
-	 *
-	 * @deprecated use BlockNumberProvider
-	 */
-	public function getBlockNumber( ?BlockTag $tag = null ): BlockNumber {
-		$tag = $tag ?? BlockTag::latest(); // デフォルトは最新のブロックタグ
-
-		if ( $tag->equals( BlockTag::latest() ) ) {
-			return $this->ethBlockNumber();
-		} else {
-			return $this->ethGetBlockByNumber( $tag )->number();
-		}
-	}
-
-	/**
 	 * `eth_blockNumber`を呼び出します。
 	 *
 	 * 最新(latest)のブロック番号を取得します。
