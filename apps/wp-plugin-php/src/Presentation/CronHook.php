@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation;
 
+use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Lib\Crawler\AppContractCrawler;
 use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
@@ -15,7 +16,6 @@ use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\BlockchainClientFactory;
 
 /**
  * wp_cronを利用した処理を登録するクラス。
@@ -96,15 +96,15 @@ class AppContractCrawlCron {
 
 class AppContractCrawlCronProcedure {
 
-	public function __construct( AppContractCrawler $app_contract_crawler, BlockchainClientFactory $blockchain_client_factory, AppContractCrawlableChainIds $app_contract_crawlable_chain_ids ) {
+	public function __construct( AppContractCrawler $app_contract_crawler, AppContractCrawlableChainIds $app_contract_crawlable_chain_ids, BlockNumberProvider $block_number_provider ) {
 		$this->app_contract_crawler             = $app_contract_crawler;
-		$this->blockchain_client_factory        = $blockchain_client_factory;
 		$this->app_contract_crawlable_chain_ids = $app_contract_crawlable_chain_ids;
+		$this->block_number_provider            = $block_number_provider;
 	}
 
 	private AppContractCrawler $app_contract_crawler;
-	private BlockchainClientFactory $blockchain_client_factory;
 	private AppContractCrawlableChainIds $app_contract_crawlable_chain_ids;
+	private BlockNumberProvider $block_number_provider;
 
 	public function execute( BlockTag $block_tag ): void {
 		// クロール対象のチェーンID一覧を取得
@@ -114,7 +114,7 @@ class AppContractCrawlCronProcedure {
 		// (ループ中に取得し直すとブロック番号が増えて終了しない可能性が出てくるため、先に取得しておく)
 		$end_block_number_array = array();
 		foreach ( $crawlable_chain_ids as $chain_id ) {
-			$end_block_number_array[ $chain_id ] = $this->blockchain_client_factory->create( $chain_id )->getBlockNumber( $block_tag );
+			$end_block_number_array[ $chain_id ] = $this->block_number_provider->getByChainId( $chain_id, $block_tag );
 		}
 
 		$crawl_failed_chain_ids = array(); // クロールに失敗したチェーンID一覧

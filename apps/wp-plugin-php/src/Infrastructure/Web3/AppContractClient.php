@@ -93,7 +93,7 @@ class AppContractClient {
 
 		/** @var UnlockPaywallTransferEvent[] */
 		$results = array();
-		$this->blockchain_client->getLogs(
+		$this->blockchain_client->ethGetLogs(
 			$filter,
 			function ( $err, $logs ) use ( &$results ) {
 				if ( $err ) {
