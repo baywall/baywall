@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\TokenTableRecord;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
@@ -52,21 +51,11 @@ class Token {
 		return json_encode(
 			array(
 				'chain_id'   => $this->chain_id->value(),
-				'address'    => (string) $this->address,
+				'address'    => $this->address->value(),
 				'symbol'     => $this->symbol->value(),
-				'decimals'   => $this->decimals,
+				'decimals'   => $this->decimals->value(),
 				'is_payable' => $this->is_payable,
 			)
-		);
-	}
-
-	public static function fromTableRecord( TokenTableRecord $record ): self {
-		return new self(
-			ChainId::from( $record->chainIdValue() ),
-			Address::from( $record->addressValue() ),
-			Symbol::from( $record->symbolValue() ),
-			Decimals::from( $record->decimalsValue() ),
-			$record->isPayableValue()
 		);
 	}
 }

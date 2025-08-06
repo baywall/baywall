@@ -8,6 +8,8 @@ use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class TokenRepositoryImpl implements TokenRepository {
 
@@ -27,7 +29,13 @@ class TokenRepositoryImpl implements TokenRepository {
 	public function all(): array {
 		$token_records = $this->token_table->all();
 		return array_map(
-			fn( $record ) => Token::fromTableRecord( $record ),
+			fn( $record ) => new Token(
+				ChainId::from( $record->chainIdValue() ),
+				Address::from( $record->addressValue() ),
+				Symbol::from( $record->symbolValue() ),
+				Decimals::from( $record->decimalsValue() ),
+				$record->isPayableValue()
+			),
 			$token_records
 		);
 	}
