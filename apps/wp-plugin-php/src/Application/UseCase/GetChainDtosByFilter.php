@@ -4,12 +4,14 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Dto\ChainDto;
+use Cornix\Serendipity\Core\Application\Dto\ChainDtoAssembler;
+use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /** フィルタに合致するチェーン情報一覧を取得します */
-class GetChainsByFilter {
+class GetChainDtosByFilter {
 
 	public function __construct( ChainRepository $chain_repository ) {
 		$this->chain_repository = $chain_repository;
@@ -37,6 +39,6 @@ class GetChainsByFilter {
 
 		$chains = $chains_filter->apply( $this->chain_repository->all() );
 
-		return array_map( fn( $chain ) => ChainDto::fromEntity( $chain ), $chains );
+		return array_map( fn( Chain $chain ) => ChainDtoAssembler::fromEntity( $chain ), $chains );
 	}
 }
