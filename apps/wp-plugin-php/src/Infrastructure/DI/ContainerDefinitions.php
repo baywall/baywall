@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\DI;
 
+use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Application\Service\PaidContentService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
@@ -25,6 +26,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\TokenRe
 use Cornix\Serendipity\Core\Infrastructure\Logging\Handler\SimpleLogger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
@@ -62,6 +64,7 @@ final class ContainerDefinitions {
 			// ),
 			UserAccessProvider::class    => autowire( UserAccessProviderImpl::class ),
 			PaidContentService::class    => autowire( PaidContentServiceImpl::class ),
+			BlockNumberProvider::class   => autowire( BlockNumberProviderImpl::class ),
 
 			// Cache
 			OracleRateCache::class       => autowire( WpOracleRateCache::class ),
