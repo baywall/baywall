@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
+use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;

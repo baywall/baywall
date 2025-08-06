@@ -3,19 +3,23 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Application\Factory\SignerFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Signer;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\PrivateKey;
 use Cornix\Serendipity\Core\Infrastructure\System\OpenSslChecker;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\ServerSignerPrivateKeyRepository;
 
 class ServerSignerService {
 
-	public function __construct( ServerSignerPrivateKeyRepository $repository ) {
-		$this->repository = $repository;
+	public function __construct( ServerSignerPrivateKeyRepository $repository, SignerFactory $signer_factory ) {
+		$this->repository     = $repository;
+		$this->signer_factory = $signer_factory;
 	}
 
 	private ServerSignerPrivateKeyRepository $repository;
+	private SignerFactory $signer_factory;
 	private const CIPHER_ALGO       = 'AES-256-CBC';
 	private const CIPHER_KEY_LENGTH = 32; // AES-256のキー長は32バイト
 
@@ -26,11 +30,11 @@ class ServerSignerService {
 			throw new \RuntimeException( '[F0443E8A] Server signer private key already exists. Cannot generate a new one.' );
 		}
 
-		// 新しくウォレットを生成
-		$server_signer = new Signer( Ethers::generatePrivateKey() );
+		// 新しくプライベートキーを生成
+		$private_key = Ethers::generatePrivateKey();
 
 		/** @var null|string */
-		$private_key_data = $server_signer->privateKey()->value();  // 保存する秘密鍵データ(平文/暗号化済み) ここでは一旦平文を設定
+		$private_key_data = $private_key->value();  // 保存する秘密鍵データ(平文/暗号化済み) ここでは一旦平文を設定
 		/** @var null|string */
 		$key = null;                // 暗号化キー(秘密鍵を暗号化する場合は値が設定される)
 		/** @var null|string */
@@ -57,8 +61,9 @@ class ServerSignerService {
 			$iv               = base64_encode( $iv );
 		}
 
+		$address = Ethers::privateKeyToAddress( $private_key );
 		return new GeneratedServerSignerData(
-			$server_signer->address(),
+			$address,
 			$private_key_data,
 			$key,
 			$iv
@@ -87,7 +92,7 @@ class ServerSignerService {
 			}
 		}
 
-		$serverSigner = new Signer( $private_key_data );
+		$serverSigner = $this->signer_factory->create( PrivateKey::from( $private_key_data ) );
 		assert( $serverSigner->address()->equals( $this->repository->address() ), '[ED4952AA] Address mismatch between stored and generated signer.' );
 
 		return $serverSigner;

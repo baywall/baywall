@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
+use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
@@ -14,10 +15,12 @@ use phpseclib\Math\BigInteger;
 
 /** Invoiceから署名用のメッセージを作成し、署名用ウォレットで署名を行います */
 class SignInvoice {
-	public function __construct( ServerSignerService $server_signer_service ) {
+	public function __construct( ServerSignerService $server_signer_service, WalletService $wallet_service ) {
 		$this->server_signer_service = $server_signer_service;
+		$this->wallet_service        = $wallet_service;
 	}
 	private ServerSignerService $server_signer_service;
+	private WalletService $wallet_service;
 
 	public function handle( Invoice $invoice ): SingInvoiceResult {
 
@@ -37,7 +40,7 @@ class SignInvoice {
 
 		// サーバーの署名用ウォレットで署名
 		$server_signer    = $this->server_signer_service->getServerSigner();
-		$server_signature = $server_signer->signMessage( $server_message );
+		$server_signature = $this->wallet_service->signMessage( $server_signer, $server_message );
 
 		return new SingInvoiceResult( $server_message, $server_signature );
 	}
