@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
-use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
@@ -21,7 +21,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 
 	public function __construct(
 		AppContractRepository $app_contract_repository,
-		ChainService $chain_service,
+		ChainRepository $chain_repository,
 		InvoiceRepository $invoice_repository,
 		PostRepository $post_repository,
 		ServerSignerService $server_signer_service,
@@ -29,7 +29,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		BlockNumberProvider $block_number_provider
 	) {
 		$this->app_contract_repository = $app_contract_repository;
-		$this->chain_service           = $chain_service;
+		$this->chain_repository        = $chain_repository;
 		$this->invoice_repository      = $invoice_repository;
 		$this->post_repository         = $post_repository;
 		$this->server_signer_service   = $server_signer_service;
@@ -38,7 +38,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	}
 
 	private AppContractRepository $app_contract_repository;
-	private ChainService $chain_service;
+	private ChainRepository $chain_repository;
 	private InvoiceRepository $invoice_repository;
 	private PostRepository $post_repository;
 	private ServerSignerService $server_signer_service;
@@ -79,7 +79,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		$post_id          = $invoice->postId();
-		$chain            = $this->chain_service->getChain( $invoice->chainId() );
+		$chain            = $this->chain_repository->get( $invoice->chainId() );
 		$consumer_address = $invoice->consumerAddress();
 
 		// 投稿を閲覧できる権限があることをチェック
@@ -122,7 +122,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	private function isConfirmed( ChainId $chain_id, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		$chain               = $this->chain_service->getChain( $chain_id );
+		$chain               = $this->chain_repository->get( $chain_id );
 		$confirmations_value = $chain->confirmations()->value();
 
 		if ( is_int( $confirmations_value ) ) {

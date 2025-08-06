@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
@@ -20,16 +20,16 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 class GetERC20InfoResolver extends ResolverBase {
 
 	public function __construct(
-		ChainService $chain_service,
+		ChainRepository $chain_repository,
 		OracleRepository $oracle_repository,
 		UserAccessChecker $user_access_checker
 	) {
-		$this->chain_service       = $chain_service;
+		$this->chain_repository    = $chain_repository;
 		$this->oracle_repository   = $oracle_repository;
 		$this->user_access_checker = $user_access_checker;
 	}
 
-	private ChainService $chain_service;
+	private ChainRepository $chain_repository;
 	private OracleRepository $oracle_repository;
 	private UserAccessChecker $user_access_checker;
 
@@ -49,7 +49,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
 		}
 
-		$chain = $this->chain_service->getChain( $chain_id );
+		$chain = $this->chain_repository->get( $chain_id );
 		if ( is_null( $chain ) ) {
 			throw new \InvalidArgumentException( '[DC8E36E6] chain data is not found. chain id: ' . $chain_id );
 		} elseif ( ! $chain->connectable() ) {
