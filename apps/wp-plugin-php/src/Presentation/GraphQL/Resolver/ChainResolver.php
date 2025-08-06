@@ -45,7 +45,7 @@ class ChainResolver extends ResolverBase {
 		$app_contract_callback = function () use ( $chain ) {
 			// 権限チェック不要
 			$app_contract = $this->get_app_contract->handle( $chain->id() );
-			$address      = null !== $app_contract ? $app_contract->address() : null;
+			$address      = null !== $app_contract ? $app_contract->address : null;
 			return is_null( $address ) ? null : array( 'address' => $address );
 		};
 

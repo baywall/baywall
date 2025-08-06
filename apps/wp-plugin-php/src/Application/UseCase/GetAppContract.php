@@ -18,6 +18,9 @@ class GetAppContract {
 
 	public function handle( int $chain_id ): ?AppContractDto {
 		$app_contract = $this->app_contract_repository->get( ChainId::from( $chain_id ) );
-		return null !== $app_contract ? AppContractDto::fromEntity( $app_contract ) : null;
+		if ( $app_contract === null ) {
+			return null;
+		}
+		return new AppContractDto( $app_contract->address()->value() );
 	}
 }
