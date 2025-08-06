@@ -55,12 +55,12 @@ class ChainResolver extends ResolverBase {
 			$tokens = $this->get_tokens_by_chain_id->handle( $chain_id );
 
 			return array_map(
-				function ( TokenDto $token ) use ( $root_value, $chain_id ) {
+				function ( TokenDto $token_dto ) use ( $root_value, $chain_id ) {
 					return $root_value['token'](
 						$root_value,
 						array(
 							'chainID' => $chain_id,
-							'address' => $token->address(),
+							'address' => $token_dto->address,
 						)
 					);
 				},
