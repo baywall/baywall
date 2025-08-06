@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\GetPostDto;
 use Cornix\Serendipity\Core\Application\UseCase\GetPayableTokens;
@@ -35,17 +36,17 @@ class PostResolver extends ResolverBase {
 		$this->user_access_checker->checkCanViewPost( $post_dto->id );
 
 		$payable_tokens_callback = function () use ( $root_value, $post_dto ) {
-			$payable_tokens = $this->get_payable_tokens->handle( $post_dto->id );
+			$payable_token_dtos = $this->get_payable_tokens->handle( $post_dto->id );
 
 			return array_map(
-				fn( $token ) => $root_value['token'](
+				fn( TokenDto $token_dto ) => $root_value['token'](
 					$root_value,
 					array(
-						'chainID' => $token->chainId(),
-						'address' => $token->address(),
+						'chainID' => $token_dto->chain_id,
+						'address' => $token_dto->address,
 					)
 				),
-				$payable_tokens
+				$payable_token_dtos
 			);
 		};
 

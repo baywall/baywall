@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Dto\TokenDto;
+use Cornix\Serendipity\Core\Application\Dto\TokenDtoAssembler;
+use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
@@ -23,6 +25,6 @@ class GetTokensByChainId {
 			->byChainId( ChainId::from( $chain_id ) )
 			->apply( $this->token_repository->all() );
 
-		return array_map( fn( $token ) => TokenDto::fromEntity( $token ), $tokens );
+		return array_map( fn( Token $token ) => TokenDtoAssembler::fromEntity( $token ), $tokens );
 	}
 }
