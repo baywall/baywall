@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
 
+use Cornix\Serendipity\Core\Domain\Exception\RateNotFoundException;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
@@ -18,11 +19,11 @@ class CachedOracleRateProvider implements RateProvider {
 	private OracleResolver $oracle_resolver;
 	private OracleRateCache $oracle_rate_cache;
 
-	public function getRate( SymbolPair $symbol_pair ): ?Rate {
+	public function getRate( SymbolPair $symbol_pair ): Rate {
 		$oracle = $this->oracle_resolver->resolveRateOracle( $symbol_pair );
 		if ( $oracle === null ) {
-			// TODO: RateNotFoundException を投げるようにする #300
-			return null; // 利用可能なオラクルがない場合はnullを返す
+			// オラクルが見つからない場合は例外を投げる
+			throw new RateNotFoundException( "[2C1C6F2A] No available oracle for symbol pair: {$symbol_pair->base()}-{$symbol_pair->quote()}" );
 		}
 
 		// キャッシュから取得
