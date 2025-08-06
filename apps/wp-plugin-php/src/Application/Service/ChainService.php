@@ -18,11 +18,6 @@ class ChainService {
 	}
 	private ChainRepository $repository;
 
-	/** @deprecated Use ChainRepository::get */
-	public function getChain( ChainId $chain_id ): ?Chain {
-		return $this->repository->get( $chain_id );
-	}
-
 	/**
 	 * リポジトリに登録されているチェーン一覧を取得します。
 	 *
@@ -34,37 +29,17 @@ class ChainService {
 	}
 
 	/**
-	 * チェーン情報を更新します。
-	 *
-	 * @param Chain $chain
-	 * @deprecated Use ChainRepository::save
-	 */
-	private function saveChain( Chain $chain ): void {
-		$this->repository->save( $chain );
-	}
-
-	/**
-	 * 指定したチェーンの情報を更新し、保存します。
-	 *
-	 * @param ChainId              $chain_id
-	 * @param callback(Chain):void $updater
-	 */
-	private function updatePropertyAndSave( ChainId $chain_id, $updater ): void {
-		$chain = $this->getChain( $chain_id );
-		if ( $chain === null ) {
-			throw new \InvalidArgumentException( "[465AB29B] Chain with ID {$chain_id->value()} does not exist." );
-		}
-		$updater( $chain );
-		$this->saveChain( $chain );
-	}
-
-	/**
 	 *
 	 * @param ChainId       $chain_id
 	 * @param Confirmations $confirmations
 	 * @deprecated Use ChainRepository::save
 	 */
 	public function saveConfirmations( ChainId $chain_id, Confirmations $confirmations ): void {
-		$this->updatePropertyAndSave( $chain_id, fn( Chain $chain ) => $chain->setConfirmations( $confirmations ) );
+		$chain = $this->repository->get( $chain_id );
+		if ( $chain === null ) {
+			throw new InvalidArgumentException( "[86725830] Chain with ID {$chain_id} does not exist." );
+		}
+		$chain->setConfirmations( $confirmations );
+		$this->repository->save( $chain );
 	}
 }
