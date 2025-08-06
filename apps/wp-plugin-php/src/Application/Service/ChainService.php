@@ -19,16 +19,6 @@ class ChainService {
 	private ChainRepository $repository;
 
 	/**
-	 * リポジトリに登録されているチェーン一覧を取得します。
-	 *
-	 * @return Chain[]
-	 * @deprecated Use ChainRepository::all
-	 */
-	public function getAllChains(): array {
-		return $this->repository->all();
-	}
-
-	/**
 	 *
 	 * @param ChainId       $chain_id
 	 * @param Confirmations $confirmations

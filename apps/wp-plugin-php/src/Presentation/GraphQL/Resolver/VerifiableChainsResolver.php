@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
@@ -15,18 +15,18 @@ class VerifiableChainsResolver extends ResolverBase {
 
 	public function __construct(
 		AppContractRepository $app_contract_repository,
-		ChainService $chain_service,
+		ChainRepository $chain_repository,
 		PostRepository $post_repository,
 		UserAccessChecker $user_access_checker
 	) {
 		$this->app_contract_repository = $app_contract_repository;
-		$this->chain_service           = $chain_service;
+		$this->chain_repository        = $chain_repository;
 		$this->post_repository         = $post_repository;
 		$this->user_access_checker     = $user_access_checker;
 	}
 
 	private AppContractRepository $app_contract_repository;
-	private ChainService $chain_service;
+	private ChainRepository $chain_repository;
 	private PostRepository $post_repository;
 	private UserAccessChecker $user_access_checker;
 
@@ -50,7 +50,7 @@ class VerifiableChainsResolver extends ResolverBase {
 
 		// 投稿の販売ネットワークカテゴリに属するチェーン一覧を取得
 		$chains_filter = ( new ChainsFilter() )->byNetworkCategoryId( $selling_network_category_id );
-		$chains        = $chains_filter->apply( $this->chain_service->getAllChains() );
+		$chains        = $chains_filter->apply( $this->chain_repository->all() );
 
 		$result = array();
 		foreach ( $chains as $chain ) {

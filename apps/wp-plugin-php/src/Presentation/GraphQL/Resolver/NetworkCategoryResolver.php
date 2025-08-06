@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\Service\SymbolService;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
@@ -13,15 +13,15 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 class NetworkCategoryResolver extends ResolverBase {
 
 	public function __construct(
-		ChainService $chain_service,
+		ChainRepository $chain_repository,
 		UserAccessChecker $user_access_checker,
 		SymbolService $symbol_service
 	) {
-		$this->chain_service       = $chain_service;
+		$this->chain_repository    = $chain_repository;
 		$this->user_access_checker = $user_access_checker;
 		$this->symbol_service      = $symbol_service;
 	}
-	private ChainService $chain_service;
+	private ChainRepository $chain_repository;
 	private UserAccessChecker $user_access_checker;
 	private SymbolService $symbol_service;
 
@@ -44,7 +44,7 @@ class NetworkCategoryResolver extends ResolverBase {
 
 		// ネットワークカテゴリで絞り込んだチェーン一覧を取得
 		$chains_filter = ( new ChainsFilter() )->byNetworkCategoryId( $network_category_id );
-		$chains        = $chains_filter->apply( $this->chain_service->getAllChains() );
+		$chains        = $chains_filter->apply( $this->chain_repository->all() );
 
 		$chains_callback = function () use ( $root_value, $chains ) {
 			return array_map(
