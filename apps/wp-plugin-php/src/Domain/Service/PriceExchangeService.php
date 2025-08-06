@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\Service;
 
 use Cornix\Serendipity\Core\Domain\Exception\PriceExchangeException;
+use Cornix\Serendipity\Core\Domain\Exception\RateNotFoundException;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
@@ -72,14 +73,18 @@ class PriceExchangeService {
 	 * from_symbolがbaseになるように調整されたRateを返します。
 	 */
 	private function resolveRate( Symbol $from_symbol, Symbol $to_symbol ): ?Rate {
-		// 直接的なレートを取得を試す
-		$rate = $this->rate_provider->getRate( SymbolPair::from( $from_symbol, $to_symbol ) );
-		if ( ! is_null( $rate ) ) {
-			return $rate;
+		try {
+			// 直接的なレートを取得を試す
+			return $this->rate_provider->getRate( SymbolPair::from( $from_symbol, $to_symbol ) );
+		} catch ( RateNotFoundException $_ ) {
+			try {
+				// 直接的なレートが見つからない場合、逆方向のレートを取得してinvert()する
+				$reverse_rate = $this->rate_provider->getRate( SymbolPair::from( $to_symbol, $from_symbol ) );
+				return $reverse_rate->invert( Decimals::from( self::ACCURACY_DECIMALS ) );
+			} catch ( RateNotFoundException $_ ) {
+				// 逆方向のレートも見つからない場合はnullを返す
+				return null;
+			}
 		}
-
-		// 逆方向のレートを取得してinvert()する
-		$reverse_rate = $this->rate_provider->getRate( SymbolPair::from( $to_symbol, $from_symbol ) );
-		return ! is_null( $reverse_rate ) ? $reverse_rate->invert( Decimals::from( self::ACCURACY_DECIMALS ) ) : null;
 	}
 }
