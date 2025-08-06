@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base;
 
-use Cornix\Serendipity\Core\Infrastructure\Database\MySQLiFactory;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MySQLiFactory;
 use mysqli;
 use RuntimeException;
 use wpdb;

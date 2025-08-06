@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\Format\HtmlFormat;
-use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Repository\Name\ClassName;

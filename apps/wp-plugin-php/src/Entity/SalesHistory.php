@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Domain\Entity\Token;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
