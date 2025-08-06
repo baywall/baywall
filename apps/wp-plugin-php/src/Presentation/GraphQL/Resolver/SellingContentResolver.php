@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\PaidContentService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
@@ -12,14 +13,17 @@ class SellingContentResolver extends ResolverBase {
 
 	public function __construct(
 		PostRepository $post_repository,
-		UserAccessChecker $user_access_checker
+		UserAccessChecker $user_access_checker,
+		PaidContentService $paid_content_service
 	) {
-		$this->post_repository     = $post_repository;
-		$this->user_access_checker = $user_access_checker;
+		$this->post_repository      = $post_repository;
+		$this->user_access_checker  = $user_access_checker;
+		$this->paid_content_service = $paid_content_service;
 	}
 
 	private PostRepository $post_repository;
 	private UserAccessChecker $user_access_checker;
+	private PaidContentService $paid_content_service;
 
 	/**
 	 * #[\Override]
@@ -43,8 +47,8 @@ class SellingContentResolver extends ResolverBase {
 		}
 
 		return array(
-			'characterCount' => $paid_content->characterCount(),
-			'imageCount'     => $paid_content->imageCount(),
+			'characterCount' => $this->paid_content_service->getCharacterCount( $paid_content ),
+			'imageCount'     => $this->paid_content_service->getImageCount( $paid_content ),
 		);
 	}
 }
