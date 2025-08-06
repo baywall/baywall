@@ -1,0 +1,56 @@
+<?php
+declare(strict_types=1);
+
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+
+use Cornix\Serendipity\Core\Domain\Entity\AppContract;
+use Cornix\Serendipity\Core\Domain\Entity\Chain;
+use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\AppContractTable;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
+
+class AppContractRepositoryImpl implements AppContractRepository {
+	public function __construct( AppContractTable $app_contract_table, ChainRepository $chain_repository ) {
+		$this->app_contract_table = $app_contract_table;
+		$this->chain_repository   = $chain_repository;
+	}
+	private AppContractTable $app_contract_table;
+	private ChainRepository $chain_repository;
+
+	/** @inheritdoc */
+	public function get( ChainId $chain_id ): ?AppContract {
+		$records = $this->app_contract_table->all();
+		$records = array_filter(
+			$records,
+			fn( $record ) => $record->chainIdValue() === $chain_id->value()
+		);
+		assert( count( $records ) <= 1, '[68E05B97] should return at most one record.' );
+
+		return empty( $records ) ? null : new AppContractImpl(
+			$this->chain_repository->get( $chain_id ),
+			array_values( $records )[0]
+		);
+	}
+
+	/** @inheritdoc */
+	public function save( AppContract $app_contract ): void {
+		$this->app_contract_table->save( $app_contract );
+	}
+}
+
+/** @internal */
+class AppContractImpl extends AppContract {
+	public function __construct( Chain $chain, AppContractTableRecord $record ) {
+		parent::__construct(
+			$chain,
+			Address::from( $record->addressValue() ),
+			BlockNumber::fromNullable( $record->crawledBlockNumberValue() ),
+			UnixTimestampFormat::fromMySQL( $record->crawledBlockNumberUpdatedAtValue() )
+		);
+	}
+}

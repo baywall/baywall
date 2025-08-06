@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Signer;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Infrastructure\System\OpenSslChecker;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ServerSignerPrivateKeyRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\ServerSignerPrivateKeyRepository;
 
 class ServerSignerService {
 
