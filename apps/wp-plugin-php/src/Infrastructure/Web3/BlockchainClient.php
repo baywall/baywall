@@ -36,9 +36,9 @@ class BlockchainClient {
 	}
 
 	/**
-	 * チェーンIDを取得します。
+	 * `eth_chainId`を呼び出します
 	 */
-	public function getChainId(): ChainId {
+	public function ethChainId(): ChainId {
 		$eth = $this->eth();
 
 		// Ethオブジェクトの内容を操作することで`eth_chainId`メソッドの追加を行う
@@ -79,9 +79,11 @@ class BlockchainClient {
 	}
 
 	/**
+	 * `eth_getBlockByNumber`を呼び出します。
+	 *
 	 * @param string|BlockNumber|BlockTag $block_number_or_tag
 	 */
-	public function getBlockByNumber( $block_number_or_tag ): EthBlock {
+	public function ethGetBlockByNumber( $block_number_or_tag ): EthBlock {
 		if ( $block_number_or_tag instanceof BlockNumber ) {
 			$block_number = $block_number_or_tag->hex();
 		} elseif ( $block_number_or_tag instanceof BlockTag ) {
@@ -113,21 +115,27 @@ class BlockchainClient {
 
 	/**
 	 * ブロック番号を取得します。
+	 *
+	 * TODO: move to BlockNumberProvider
+	 *
+	 * @deprecated use BlockNumberProvider
 	 */
 	public function getBlockNumber( ?BlockTag $tag = null ): BlockNumber {
 		$tag = $tag ?? BlockTag::latest(); // デフォルトは最新のブロックタグ
 
 		if ( $tag->equals( BlockTag::latest() ) ) {
-			return $this->getLatestBlockNumber();
+			return $this->ethBlockNumber();
 		} else {
-			return $this->getBlockNumberByTag( $tag );
+			return $this->ethGetBlockByNumber( $tag )->number();
 		}
 	}
 
 	/**
-	 * 最新のブロック番号を取得します。
+	 * `eth_blockNumber`を呼び出します。
+	 *
+	 * 最新(latest)のブロック番号を取得します。
 	 */
-	private function getLatestBlockNumber(): BlockNumber {
+	public function ethBlockNumber(): BlockNumber {
 		/** @var BlockNumber|null */
 		$block_number = null;
 		$this->retryer->execute(
@@ -147,44 +155,11 @@ class BlockchainClient {
 	}
 
 	/**
-	 * eth_getBlockByNumberの呼び出しを行い、そのブロック番号を返します
+	 * `eth_getBalance`を呼び出します。
 	 *
-	 * @param BlockNumber|string $quantity_or_tag
-	 * @deprecated
-	 */
-	private function getBlockNumberByTag( $quantity_or_tag ): BlockNumber {
-		// @see https://docs.chainstack.com/reference/ethereum-getblockbynumber#parameters
-		assert( $quantity_or_tag instanceof BlockNumber || is_string( $quantity_or_tag ), '[6900A10E] $quantity_or_tag must be an BlockNumber or a string.' );
-		if ( $quantity_or_tag instanceof BlockNumber ) {
-			$quantity_or_tag = $quantity_or_tag->hex(); // BlockNumberインスタンスの場合は16進数に変換
-		}
-
-		/** @var string|null */
-		$block_number_hex = null;
-		$this->retryer->execute(
-			function () use ( $quantity_or_tag, &$block_number_hex ) {
-				$this->eth()->getBlockByNumber(
-					$quantity_or_tag,
-					false,  // false: トランザクションの詳細を取得しない
-					function ( $err, $res ) use ( &$block_number_hex ) {
-						if ( $err ) {
-							throw $err;
-						}
-
-						$block_number_hex = $res->number; // $res->numberは16進数の文字列
-					}
-				);
-			}
-		);
-
-		return BlockNumber::from( $block_number_hex );
-	}
-
-
-	/**
 	 * アカウントの残高を取得します。
 	 */
-	public function getBalance( Address $address ): Amount {
+	public function ethGetBalance( Address $address ): Amount {
 
 		/** @var Amount|null */
 		$balance = null;
@@ -205,7 +180,7 @@ class BlockchainClient {
 		return $balance;
 	}
 
-	public function getLogs( ...$args ) {
+	public function ethGetLogs( ...$args ) {
 		$this->retryer->execute(
 			function () use ( $args ) {
 				$this->eth()->getLogs( ...$args );

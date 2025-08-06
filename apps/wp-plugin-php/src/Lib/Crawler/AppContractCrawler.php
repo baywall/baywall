@@ -160,7 +160,7 @@ class UnlockPaywallTransferCrawler {
 
 		/** @var array|null */
 		$logs_result = null;
-		$blockchain_client->getLogs(
+		$blockchain_client->ethGetLogs(
 			array(
 				'fromBlock' => $from_block->hex(),
 				'toBlock'   => $to_block->hex(),

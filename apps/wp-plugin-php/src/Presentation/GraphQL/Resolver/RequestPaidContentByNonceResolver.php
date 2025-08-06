@@ -126,7 +126,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 
 		if ( is_int( $confirmations_value ) ) {
 			// 最新のブロック番号を取得
-			$latest_block        = $this->blockchain_client_factory->create( $chain->id() )->getBlockByNumber( BlockTag::latest() );
+			$latest_block        = $this->blockchain_client_factory->create( $chain->id() )->ethGetBlockByNumber( BlockTag::latest() );
 			$latest_block_number = $latest_block->number();
 			// 基準となるブロック番号を計算(「ペイウォール解除時のブロック番号」<=「基準ブロック番号」となる場合、待機済み)
 			$reference_block = $latest_block_number->sub( max( $confirmations_value - 1, 0 ) );

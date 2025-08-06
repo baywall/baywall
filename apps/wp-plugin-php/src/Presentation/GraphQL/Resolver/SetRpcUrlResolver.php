@@ -36,7 +36,7 @@ class SetRpcUrlResolver extends ResolverBase {
 		// RPC URLを登録する場合は実際にアクセスしてチェーンIDを取得し、
 		// 引数のチェーンIDと一致していることを確認する
 		if ( ! is_null( $rpc_url ) ) {
-			$actual_chain_id = ( new BlockchainClient( $rpc_url ) )->getChainId();
+			$actual_chain_id = ( new BlockchainClient( $rpc_url ) )->ethChainId();
 			if ( ! $chain_id->equals( $actual_chain_id ) ) {
 				throw new \InvalidArgumentException( "[0AD91082] Invalid chain ID. expected: {$chain_id}, actual: {$actual_chain_id}" );
 			}
