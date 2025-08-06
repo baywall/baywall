@@ -13,5 +13,5 @@ interface RateProvider {
 	/**
 	 * 指定した通貨ペアのレートを取得します。
 	 */
-	public function getRate( SymbolPair $symbol_pair ): ?Rate;
+	public function getRate( SymbolPair $symbol_pair ): Rate;
 }
