@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Application\UseCase\GetAppContract;
+use Cornix\Serendipity\Core\Application\UseCase\GetAppContractDto;
 use Cornix\Serendipity\Core\Application\UseCase\GetChain;
 use Cornix\Serendipity\Core\Application\UseCase\GetTokensByChainId;
 
@@ -13,18 +13,18 @@ class ChainResolver extends ResolverBase {
 
 	public function __construct(
 		GetChain $get_chain,
-		GetAppContract $get_app_contract,
+		GetAppContractDto $get_app_contract_dto,
 		GetTokensByChainId $get_tokens_by_chain_id,
 		UserAccessChecker $user_access_checker
 	) {
 		$this->get_chain              = $get_chain;
-		$this->get_app_contract       = $get_app_contract;
+		$this->get_app_contract_dto   = $get_app_contract_dto;
 		$this->get_tokens_by_chain_id = $get_tokens_by_chain_id;
 		$this->user_access_checker    = $user_access_checker;
 	}
 
 	private GetChain $get_chain;
-	private GetAppContract $get_app_contract;
+	private GetAppContractDto $get_app_contract_dto;
 	private GetTokensByChainId $get_tokens_by_chain_id;
 	private UserAccessChecker $user_access_checker;
 
@@ -44,8 +44,8 @@ class ChainResolver extends ResolverBase {
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
 		$app_contract_callback = function () use ( $chain ) {
 			// 権限チェック不要
-			$app_contract = $this->get_app_contract->handle( $chain->id() );
-			$address      = null !== $app_contract ? $app_contract->address : null;
+			$app_contract_dto = $this->get_app_contract_dto->handle( $chain->id() );
+			$address          = null !== $app_contract_dto ? $app_contract_dto->address : null;
 			return is_null( $address ) ? null : array( 'address' => $address );
 		};
 

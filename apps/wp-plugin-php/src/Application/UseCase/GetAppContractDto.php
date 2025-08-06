@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /** 指定したチェーンIDのAppコントラクト情報を取得します */
-class GetAppContract {
+class GetAppContractDto {
 
 	public function __construct( AppContractRepository $app_contract_repository ) {
 		$this->app_contract_repository = $app_contract_repository;
