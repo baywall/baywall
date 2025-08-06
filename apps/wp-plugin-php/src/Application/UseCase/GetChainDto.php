@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Dto\ChainDto;
+use Cornix\Serendipity\Core\Application\Dto\ChainDtoAssembler;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /** 指定したチェーンIDの情報を取得します */
-class GetChain {
+class GetChainDto {
 
 	public function __construct( ChainRepository $chain_repository ) {
 		$this->chain_repository = $chain_repository;
@@ -17,6 +18,7 @@ class GetChain {
 	private ChainRepository $chain_repository;
 
 	public function handle( int $chain_id ): ChainDto {
-		return ChainDto::fromEntity( $this->chain_repository->get( ChainId::from( $chain_id ) ) );
+		$chain = $this->chain_repository->get( ChainId::from( $chain_id ) );
+		return ChainDtoAssembler::fromEntity( $chain );
 	}
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Dto\TokenDto;
+use Cornix\Serendipity\Core\Application\Dto\TokenDtoAssembler;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
@@ -52,7 +53,7 @@ class GetPayableTokens {
 				->apply( $all_tokens );
 
 			foreach ( $payable_tokens as $token ) {
-				$result[] = TokenDto::fromEntity( $token );
+				$result[] = TokenDtoAssembler::fromEntity( $token );
 			}
 		}
 
