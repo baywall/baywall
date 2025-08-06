@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
 use Cornix\Serendipity\Core\Domain\Service\WalletService;
+use Cornix\Serendipity\Core\Infrastructure\Cache\OracleRateCache;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\AppContractRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ChainRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\InvoiceRepositoryImpl;
@@ -22,11 +23,10 @@ use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryIm
 use Cornix\Serendipity\Core\Infrastructure\Logging\Handler\SimpleLogger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Service\OracleRateProviderImpl;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\RateTransient;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\LogLevelProviderImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\CachedRateProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PostTitleProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\UserAccessProviderImpl;
 use wpdb;
@@ -53,12 +53,15 @@ final class ContainerDefinitions {
 			// Service
 			WalletService::class         => autowire( WalletServiceImpl::class ),
 			PostTitleProvider::class     => autowire( PostTitleProviderImpl::class ),
-			RateProvider::class          => get( CachedRateProvider::class ),
-			CachedRateProvider::class    => autowire()->constructor(
-				get( RateTransient::class ),
-				get( OracleRateProviderImpl::class )
-			),
+			RateProvider::class          => get( CachedOracleRateProvider::class ),
+			// CachedRateProvider::class    => autowire()->constructor(
+			// get( RateTransient::class ),
+			// get( OracleRateProviderImpl::class )
+			// ),
 			UserAccessProvider::class    => autowire( UserAccessProviderImpl::class ),
+
+			// Cache
+			OracleRateCache::class       => autowire( WpOracleRateCache::class ),
 
 			// Logging
 			Logger::class                => autowire( SimpleLogger::class ),
