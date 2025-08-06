@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\DI;
 
+use Cornix\Serendipity\Core\Application\Service\PaidContentService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
@@ -14,6 +15,7 @@ use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
 use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Infrastructure\Cache\OracleRateCache;
+use Cornix\Serendipity\Core\Infrastructure\Content\PaidContentServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\AppContractRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\ChainRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\InvoiceRepositoryImpl;
@@ -59,6 +61,7 @@ final class ContainerDefinitions {
 			// get( OracleRateProviderImpl::class )
 			// ),
 			UserAccessProvider::class    => autowire( UserAccessProviderImpl::class ),
+			PaidContentService::class    => autowire( PaidContentServiceImpl::class ),
 
 			// Cache
 			OracleRateCache::class       => autowire( WpOracleRateCache::class ),
