@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 
-class GetPost {
+class GetPostDto {
 	public function __construct( PostRepository $post_repository, PostTitleProvider $post_title_provider ) {
 		$this->post_repository     = $post_repository;
 		$this->post_title_provider = $post_title_provider;
@@ -19,6 +19,9 @@ class GetPost {
 
 	public function handle( int $post_id ): ?PostDto {
 		$post = $this->post_repository->get( PostId::from( $post_id ) );
-		return null !== $post ? PostDto::fromEntity( $post, $this->post_title_provider->getPostTitle( PostId::from( $post_id ) ) ) : null;
+		if ( $post === null ) {
+			return null;
+		}
+		return new PostDto( $post->id()->value(), $this->post_title_provider->getPostTitle( PostId::from( $post_id ) ) );
 	}
 }
