@@ -7,25 +7,25 @@ use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\GetAppContractDto;
 use Cornix\Serendipity\Core\Application\UseCase\GetChainDto;
-use Cornix\Serendipity\Core\Application\UseCase\GetTokensByChainId;
+use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByChainIdValue;
 
 class ChainResolver extends ResolverBase {
 
 	public function __construct(
 		GetChainDto $get_chain_dto,
 		GetAppContractDto $get_app_contract_dto,
-		GetTokensByChainId $get_tokens_by_chain_id,
+		GetTokenDtosByChainIdValue $get_token_dtos_by_chain_id_value,
 		UserAccessChecker $user_access_checker
 	) {
-		$this->get_chain_dto          = $get_chain_dto;
-		$this->get_app_contract_dto   = $get_app_contract_dto;
-		$this->get_tokens_by_chain_id = $get_tokens_by_chain_id;
-		$this->user_access_checker    = $user_access_checker;
+		$this->get_chain_dto                    = $get_chain_dto;
+		$this->get_app_contract_dto             = $get_app_contract_dto;
+		$this->get_token_dtos_by_chain_id_value = $get_token_dtos_by_chain_id_value;
+		$this->user_access_checker              = $user_access_checker;
 	}
 
 	private GetChainDto $get_chain_dto;
 	private GetAppContractDto $get_app_contract_dto;
-	private GetTokensByChainId $get_tokens_by_chain_id;
+	private GetTokenDtosByChainIdValue $get_token_dtos_by_chain_id_value;
 	private UserAccessChecker $user_access_checker;
 
 	/**
@@ -35,36 +35,31 @@ class ChainResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$chain_id = $args['chainID'];
+		$chain_id_value = $args['chainID'];
 
-		$chain_dto = $this->get_chain_dto->handle( $chain_id );
-		assert( null !== $chain_dto, '[CA31D9B5] chain data is not found. chain id: ' . $chain_id );
+		$chain_dto = $this->get_chain_dto->handle( $chain_id_value );
+		assert( null !== $chain_dto, "[CA31D9B5] chain data is not found. chain id: {$chain_id_value}" );
 
 		// `AppContractResolver`の作成を省略してコールバックを定義
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
 		$app_contract_callback = function () use ( $chain_dto ) {
 			// 権限チェック不要
 			$app_contract_dto = $this->get_app_contract_dto->handle( $chain_dto->id );
-			$address          = null !== $app_contract_dto ? $app_contract_dto->address : null;
-			return is_null( $address ) ? null : array( 'address' => $address );
+			return $app_contract_dto === null ? null : array( 'address' => $app_contract_dto->address );
 		};
 
-		$tokens_callback = function () use ( $root_value, $chain_id ) {
+		$tokens_callback = function () use ( $root_value, $chain_id_value ) {
 			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-			$tokens = $this->get_tokens_by_chain_id->handle( $chain_id );
-
 			return array_map(
-				function ( TokenDto $token_dto ) use ( $root_value, $chain_id ) {
-					return $root_value['token'](
-						$root_value,
-						array(
-							'chainID' => $chain_id,
-							'address' => $token_dto->address,
-						)
-					);
-				},
-				$tokens
+				fn( TokenDto $token_dto ) => $root_value['token'](
+					$root_value,
+					array(
+						'chainID' => $token_dto->chain_id,
+						'address' => $token_dto->address,
+					)
+				),
+				$this->get_token_dtos_by_chain_id_value->handle( $chain_id_value )
 			);
 		};
 
