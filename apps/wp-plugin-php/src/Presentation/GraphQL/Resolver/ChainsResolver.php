@@ -29,10 +29,10 @@ class ChainsResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ): array {
 		$this->user_access_checker->checkHasAdminRole();  // 管理者権限が必要
 
-		$chain_dtos = $this->get_chain_dtos_by_filter->handle(
-			$args['filter']['chainID'] ?? null,
-			$args['filter']['isConnectable'] ?? null
-		);
+		/** @var int|null */
+		$filter_chain_id_value = $args['filter']['chainID'] ?? null;
+		/** @var bool|null */
+		$filter_is_connectable = $args['filter']['isConnectable'] ?? null;
 
 		return array_map(
 			fn( ChainDto $chain_dto ) => $root_value['chain'](
@@ -41,7 +41,7 @@ class ChainsResolver extends ResolverBase {
 					'chainID' => $chain_dto->id,
 				)
 			),
-			$chain_dtos
+			$this->get_chain_dtos_by_filter->handle( $filter_chain_id_value, $filter_is_connectable )
 		);
 	}
 }
