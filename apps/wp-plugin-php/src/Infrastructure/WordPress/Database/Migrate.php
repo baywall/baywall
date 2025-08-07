@@ -19,14 +19,17 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\TokenTa
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\TokenTableSeed;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\UnlockPaywallTransactionTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\UnlockPaywallTransferEventTableSchema;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpTransactionService;
 use DI\Container;
 use Throwable;
 
 class Migrate {
 	public function __construct( Container $container ) {
-		$this->container = $container;
+		$this->container           = $container;
+		$this->transaction_service = $container->get( WpTransactionService::class );
 	}
 	private Container $container;
+	private WpTransactionService $transaction_service;
 
 	/** @return MigratorBase[] */
 	public function schema( ?string $from_version, string $to_version ): array {
@@ -35,14 +38,15 @@ class Migrate {
 
 	/** @return MigratorBase[] */
 	public function seed( ?string $from_version, string $to_version ): array {
-		global $wpdb;
 		try {
-			$wpdb->query( 'START TRANSACTION' );
+			$this->transaction_service->beginTransaction();
+
 			$migrators = $this->migrate( $this->seedClasses(), $from_version, $to_version );
-			$wpdb->query( 'COMMIT' );
+
+			$this->transaction_service->commit();
 			return $migrators;
 		} catch ( Throwable $e ) {
-			$wpdb->query( 'ROLLBACK' );
+			$this->transaction_service->rollback();
 			throw $e;
 		}
 	}
