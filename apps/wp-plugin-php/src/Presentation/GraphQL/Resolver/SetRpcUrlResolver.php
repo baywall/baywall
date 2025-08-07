@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
@@ -13,14 +14,17 @@ class SetRpcUrlResolver extends ResolverBase {
 
 	public function __construct(
 		ChainRepository $chain_repository,
-		UserAccessChecker $user_access_checker
+		UserAccessChecker $user_access_checker,
+		TransactionService $transaction_service
 	) {
 		$this->chain_repository    = $chain_repository;
 		$this->user_access_checker = $user_access_checker;
+		$this->transaction_service = $transaction_service;
 	}
 
 	private ChainRepository $chain_repository;
 	private UserAccessChecker $user_access_checker;
+	private TransactionService $transaction_service;
 
 	/**
 	 * #[\Override]
@@ -44,17 +48,16 @@ class SetRpcUrlResolver extends ResolverBase {
 
 		// RPC URLを保存
 		try {
-			global $wpdb;
-			$wpdb->query( 'START TRANSACTION' );
+			$this->transaction_service->beginTransaction();
 
 			// リポジトリからチェーン情報を取得、RPC URLを設定して保存
 			$chain = $this->chain_repository->get( $chain_id );
 			$chain->setRpcUrl( $rpc_url );
 			$this->chain_repository->save( $chain );
 
-			$wpdb->query( 'COMMIT' );
+			$this->transaction_service->commit();
 		} catch ( \Throwable $e ) {
-			$wpdb->query( 'ROLLBACK' );
+			$this->transaction_service->rollback();
 			throw $e;
 		}
 
