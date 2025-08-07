@@ -10,18 +10,13 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransfe
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\ContractFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
 class AppContractClient {
-
-	private const EVENT_NAME_UNLOCK_PAYWALL_TRANSFER = 'UnlockPaywallTransfer';
 
 	public function __construct( AppContract $app_contract, ?AppContractAbi $app_contract_abi = null ) {
 		assert( $app_contract->chain()->connectable(), '[A5ED369D]' );   // 接続可能なチェーンであること
@@ -86,7 +81,7 @@ class AppContractClient {
 			'toBlock'   => $to_block->hex(),
 			'address'   => $this->app_contract->address()->value(),
 			'topics'    => array(
-				( new AppContractAbi() )->topicHash( self::EVENT_NAME_UNLOCK_PAYWALL_TRANSFER ),
+				$this->abi->unlockPaywallTransferTopicHash(),
 				$server_signer_address->toBytes32Hex(),
 			),
 		);
@@ -95,26 +90,15 @@ class AppContractClient {
 		$results = array();
 		$this->blockchain_client->ethGetLogs(
 			$filter,
-			function ( $err, $logs ) use ( &$results ) {
+			function ( $err, array $logs ) use ( &$results ) {
 				if ( $err ) {
 					throw $err;
 				}
 
 				$results = array();
+				/** @var \stdClass[] $logs */
 				foreach ( $logs as $log ) {
-					$decoded_event_parameters = $this->abi->decodeEventParameters( $log );
-					$results[]                = new UnlockPaywallTransferEvent(
-						BlockNumber::from( $log->blockNumber ), // block_number
-						hexdec( $log->logIndex ), // log_index
-						TransactionHash::from( $log->transactionHash ), // transaction_hash
-						InvoiceId::from( $decoded_event_parameters['invoiceID'] ), // invoice_id
-						Address::from( $decoded_event_parameters['signer'] ), // server_signer_address
-						Address::from( $decoded_event_parameters['from'] ), // from_address
-						Address::from( $decoded_event_parameters['to'] ), // to_address
-						Address::from( $decoded_event_parameters['token'] ), // token_address
-						Amount::from( $decoded_event_parameters['amount']->toString() ), // amount
-						UnlockPaywallTransferType::from( (int) ( $decoded_event_parameters['transferType'] )->toString() ) // transfer_type
-					);
+					$results[] = $this->abi->decodeUnlockPaywallTransferEvent( $log );
 				}
 			}
 		);
