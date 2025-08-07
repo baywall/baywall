@@ -17,8 +17,11 @@ class GetChainDto {
 
 	private ChainRepository $chain_repository;
 
-	public function handle( int $chain_id ): ChainDto {
-		$chain = $this->chain_repository->get( ChainId::from( $chain_id ) );
+	public function handle( int $chain_id_value ): ChainDto {
+		$chain_id = ChainId::from( $chain_id_value );
+
+		$chain = $this->chain_repository->get( $chain_id );
+		assert( null !== $chain, "[A28A6F15] chain data is not found. chain id: {$chain_id_value}" );
 		return ChainDtoAssembler::fromEntity( $chain );
 	}
 }
