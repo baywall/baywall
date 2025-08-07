@@ -14,6 +14,9 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
  * クロール済みブロック番号を初期化します
  */
 class InitCrawledBlockNumber {
+
+	private const SAFETY_MARGIN_SECONDS = 60 * 5; // 5分
+
 	public function __construct( AppContractRepository $app_contract_repository, ChainRepository $chain_repository ) {
 		$this->app_contract_repository = $app_contract_repository;
 		$this->chain_repository        = $chain_repository;
@@ -22,7 +25,9 @@ class InitCrawledBlockNumber {
 	private AppContractRepository $app_contract_repository;
 	private ChainRepository $chain_repository;
 
-	public function handle( ChainId $chain_id ): void {
+	public function handle( int $chain_id_value ): void {
+		$chain_id = ChainId::from( $chain_id_value );
+
 		$app_contract = $this->app_contract_repository->get( $chain_id );
 		if ( null !== $app_contract->crawledBlockNumber() ) {
 			return; // 初期化済みの場合は何もしない
@@ -32,26 +37,17 @@ class InitCrawledBlockNumber {
 		// RPC URLのプロバイダによって誤差が生じる可能性があるため
 		// ある程度のマージンを持たせてクロール済みのブロック番号を設定する
 
-		$safe_crawled_block_number = ( new GetSafetyCrawledBlockNumber( $this->chain_repository ) )->handle( $chain_id );
+		$safe_crawled_block_number = $this->getSafetyCrawledBlockNumber( $chain_id );
 		$app_contract->setCrawledBlockNumber( $safe_crawled_block_number );
 
 		// 保存
 		$this->app_contract_repository->save( $app_contract );
 	}
-}
 
-/** クロール済みブロックとして安全なブロック番号を取得します */
-class GetSafetyCrawledBlockNumber {
-
-	private const SAFETY_MARGIN_SECONDS = 60 * 5; // 5分
-
-	public function __construct( ChainRepository $chain_repository ) {
-		$this->chain_repository = $chain_repository;
-	}
-
-	private ChainRepository $chain_repository;
-
-	public function handle( ChainId $chain_id ): BlockNumber {
+	/**
+	 * クロール済みブロックとして設定しても問題ないブロック番号を取得します
+	 */
+	private function getSafetyCrawledBlockNumber( ChainId $chain_id ): BlockNumber {
 		$chain  = $this->chain_repository->get( $chain_id );
 		$client = ( new BlockchainClient( $chain->rpcUrl() ) );
 
