@@ -7,14 +7,14 @@ use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\GetAppContractDto;
 use Cornix\Serendipity\Core\Application\UseCase\GetChainDto;
-use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByChainIdValue;
+use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByFilter;
 
 class ChainResolver extends ResolverBase {
 
 	public function __construct(
 		GetChainDto $get_chain_dto,
 		GetAppContractDto $get_app_contract_dto,
-		GetTokenDtosByChainIdValue $get_token_dtos_by_chain_id_value,
+		GetTokenDtosByFilter $get_token_dtos_by_chain_id_value,
 		UserAccessChecker $user_access_checker
 	) {
 		$this->get_chain_dto                    = $get_chain_dto;
@@ -25,7 +25,7 @@ class ChainResolver extends ResolverBase {
 
 	private GetChainDto $get_chain_dto;
 	private GetAppContractDto $get_app_contract_dto;
-	private GetTokenDtosByChainIdValue $get_token_dtos_by_chain_id_value;
+	private GetTokenDtosByFilter $get_token_dtos_by_chain_id_value;
 	private UserAccessChecker $user_access_checker;
 
 	/**
@@ -59,7 +59,7 @@ class ChainResolver extends ResolverBase {
 						'address' => $token_dto->address,
 					)
 				),
-				$this->get_token_dtos_by_chain_id_value->handle( $chain_id_value )
+				$this->get_token_dtos_by_chain_id_value->handle( $chain_id_value, null )
 			);
 		};
 

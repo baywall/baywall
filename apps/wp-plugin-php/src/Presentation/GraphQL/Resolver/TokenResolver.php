@@ -3,34 +3,36 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByFilter;
 
 class TokenResolver extends ResolverBase {
 
-	public function __construct( TokenRepository $token_repository ) {
-		$this->token_repository = $token_repository;
+	public function __construct( GetTokenDtosByFilter $get_token_dtos_by_chain_id_value ) {
+		$this->get_token_dtos_by_chain_id_value = $get_token_dtos_by_chain_id_value;
 	}
 
-	private TokenRepository $token_repository;
+	private GetTokenDtosByFilter $get_token_dtos_by_chain_id_value;
 
 	/**
 	 * #[\Override]
-	 *
-	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$chain_id = ChainId::from( $args['chainID'] );
-		$address  = Address::from( $args['address'] );
+		/** @var int */
+		$chain_id_value = $args['chainID'];
+		/** @var string */
+		$address_value = $args['address'];
 
-		$token = $this->token_repository->get( $chain_id, $address );
+		$token_dtos = $this->get_token_dtos_by_chain_id_value->handle( $chain_id_value, $address_value );
+		if ( count( $token_dtos ) !== 1 ) {
+			throw new \InvalidArgumentException( "[3716EBA8] Expected exactly one token for chain ID {$chain_id_value} and address {$address_value}, found " . count( $token_dtos ) );
+		}
+		$token_dto = array_values( $token_dtos )[0];
 
 		return array(
-			'chain'     => fn() => $root_value['chain']( $root_value, array( 'chainID' => $chain_id->value() ) ),
-			'address'   => $address->value(),
-			'symbol'    => fn() => $token->symbol()->value(),
-			'isPayable' => fn() => $token->isPayable(),
+			'chain'     => fn() => $root_value['chain']( $root_value, array( 'chainID' => $token_dto->chain_id ) ),
+			'address'   => $token_dto->address,
+			'symbol'    => $token_dto->symbol,
+			'isPayable' => $token_dto->is_payable,
 		);
 	}
 }
