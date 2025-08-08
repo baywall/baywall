@@ -32,11 +32,25 @@ class Config {
 	/**
 	 * Appコントラクトのクロール処理を行うCronの間隔(秒)
 	 */
-	public const CRON_INTERVAL_APP_CONTRACT_CRAWL = 60 * 15; // 15分
+	public const CRON_INTERVAL_APP_CONTRACT_CRAWL = 60 * 1; // 1分
 
 	/**
 	 * 最小のブロック待機数
 	 * ブロックにトランザクションが取り込まれた時点で1とカウントする
 	 */
 	public const MIN_CONFIRMATIONS = 1; // 【変更不可】
+
+	// 以下のスレッドで以下の制限があるとの記述あり
+	// https://github.com/bnb-chain/bsc/issues/113
+	// - BSC: 5000
+	// - Alchemy: 2000 => https://docs.alchemy.com/reference/eth-getlogs
+	//
+	// QuickNodeの無料プランはPolygonであっても最大5ブロックしか取得できない点に注意(有料プランであれば最大10,000ブロック)
+	// -> 10秒に1回以上リクエストしないと取得しきれないため、本アプリにおいては使い物にならない
+	// https://www.quicknode.com/docs/polygon/eth_getLogs
+
+	// 一旦、Alchemyの制限に合わせる
+	// ブロック生成速度が2s/blockの場合、1時間分程度のログ取得が可能。(Cronのインターバルが1時間であっても1回の取得で完了できる)
+	/** `eth_getLogs`呼び出しで取得するブロック数の最大値 */
+	public const GET_LOGS_MAX_RANGE = 1999;
 }
