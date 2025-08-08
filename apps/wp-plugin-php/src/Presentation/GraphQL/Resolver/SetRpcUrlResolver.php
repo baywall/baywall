@@ -3,28 +3,24 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Application\UseCase\UpdateRpcUrl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 
 class SetRpcUrlResolver extends ResolverBase {
 
-	public function __construct(
-		ChainRepository $chain_repository,
-		UserAccessChecker $user_access_checker,
-		TransactionService $transaction_service
-	) {
-		$this->chain_repository    = $chain_repository;
-		$this->user_access_checker = $user_access_checker;
-		$this->transaction_service = $transaction_service;
-	}
-
-	private ChainRepository $chain_repository;
 	private UserAccessChecker $user_access_checker;
-	private TransactionService $transaction_service;
+	private UpdateRpcUrl $update_rpc_url;
+
+	public function __construct(
+		UserAccessChecker $user_access_checker,
+		UpdateRpcUrl $update_rpc_url
+	) {
+		$this->user_access_checker = $user_access_checker;
+		$this->update_rpc_url      = $update_rpc_url;
+	}
 
 	/**
 	 * #[\Override]
@@ -32,10 +28,15 @@ class SetRpcUrlResolver extends ResolverBase {
 	 * @return bool
 	 */
 	public function resolve( array $root_value, array $args ) {
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
+
+		/** @var int */
+		$chain_id_value = $args['chainID'];
+		/** @var string|null */
+		$rpc_url_value = $args['rpcURL'];
+
 		$chain_id = ChainId::from( $args['chainID'] );
 		$rpc_url  = RpcUrl::fromNullable( $args['rpcURL'] ?? null );
-
-		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		// RPC URLを登録する場合は実際にアクセスしてチェーンIDを取得し、
 		// 引数のチェーンIDと一致していることを確認する
@@ -47,19 +48,7 @@ class SetRpcUrlResolver extends ResolverBase {
 		}
 
 		// RPC URLを保存
-		try {
-			$this->transaction_service->beginTransaction();
-
-			// リポジトリからチェーン情報を取得、RPC URLを設定して保存
-			$chain = $this->chain_repository->get( $chain_id );
-			$chain->setRpcUrl( $rpc_url );
-			$this->chain_repository->save( $chain );
-
-			$this->transaction_service->commit();
-		} catch ( \Throwable $e ) {
-			$this->transaction_service->rollback();
-			throw $e;
-		}
+		$this->update_rpc_url->handle( $chain_id_value, $rpc_url_value );
 
 		return true;
 	}
