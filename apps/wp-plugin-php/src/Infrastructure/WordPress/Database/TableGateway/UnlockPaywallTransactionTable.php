@@ -19,16 +19,20 @@ class UnlockPaywallTransactionTable extends TableBase {
 	}
 
 	public function save( InvoiceId $invoice_id, ChainId $chain_id, BlockNumber $block_number, TransactionHash $transaction_hash ): void {
-		// ※ 現時点ではreorgの影響を考慮していないため上書き処理は行わない
 		$sql = <<<SQL
 			INSERT INTO `{$this->tableName()}`
 			(`invoice_id`, `chain_id`, `block_number`, `transaction_hash`)
 			VALUES (%s, %d, %d, %s)
+			ON DUPLICATE KEY UPDATE
+				`chain_id` = VALUES(`chain_id`),
+				`block_number` = VALUES(`block_number`),
+				`transaction_hash` = VALUES(`transaction_hash`)
 		SQL;
 
 		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid(), $chain_id->value(), $block_number->int(), $transaction_hash->value() );
 
 		$result = $this->wpdb()->query( $sql );
+		assert( $result <= 1, "[C5EB0772] Failed to save unlock paywall transaction. {$result}" );
 		if ( false === $result ) {
 			throw new \RuntimeException( '[CA6349AD] Failed to save unlock paywall transaction. ' . $this->wpdb()->last_error );
 		}
