@@ -32,7 +32,7 @@ class Config {
 	/**
 	 * Appコントラクトのクロール処理を行うCronの間隔(秒)
 	 */
-	public const CRON_INTERVAL_APP_CONTRACT_CRAWL = 60 * 15; // 15分
+	public const CRON_INTERVAL_APP_CONTRACT_CRAWL = 60 * 1; // 1分
 
 	/**
 	 * 最小のブロック待機数
