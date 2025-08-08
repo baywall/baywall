@@ -1,17 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase;
+namespace Cornix\Serendipity\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
-use Cornix\Serendipity\Core\Application\Service\EthGetLogsToBlockProvider;
-use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\UnlockPaywallTransferEventRepository;
 
-class CrawlAppContract {
+class AppContractCrawlService {
 
 	private BlockNumberProvider $block_number_provider;
 	private AppContractRepository $app_contract_repository;
@@ -36,8 +33,8 @@ class CrawlAppContract {
 		$this->unlock_paywall_transfer_event_repository = $unlock_paywall_transfer_event_repository;
 	}
 
-	public function handle( int $chain_id_value ): void {
-		$chain_id     = ChainId::from( $chain_id_value );
+	public function crawl( ChainId $chain_id ): void {
+
 		$app_contract = $this->app_contract_repository->get( $chain_id );
 
 		// 現時点での最新ブロック番号を取得
