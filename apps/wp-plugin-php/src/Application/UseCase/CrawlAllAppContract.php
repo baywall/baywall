@@ -21,9 +21,9 @@ class CrawlAllAppContract {
 		AppContractCrawlService $app_contract_crawl_service,
 		TransactionService $transaction_service
 	) {
-		$this->crawlable_chains_service = $crawlable_chains_service;
+		$this->crawlable_chains_service   = $crawlable_chains_service;
 		$this->app_contract_crawl_service = $app_contract_crawl_service;
-		$this->transaction_service      = $transaction_service;
+		$this->transaction_service        = $transaction_service;
 	}
 
 	public function handle(): void {
