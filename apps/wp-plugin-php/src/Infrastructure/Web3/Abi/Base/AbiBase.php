@@ -1,126 +1,48 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3;
+namespace Cornix\Serendipity\Core\Infrastructure\Web3\Abi\Base;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use kornrunner\Keccak;
 use stdClass;
 use Web3\Contracts\Ethabi;
 
-class AppContractAbi {
-
-	/** @var array|null */
-	private $abi_cache = null;
-
+abstract class AbiBase {
 	/**
 	 * 計算済みのtopicハッシュを保持
 	 *
-	 * @var array
+	 * @var array<string,string>
 	 */
 	private $topic_hash_cache = array();
 
-	public function get(): array {
-		if ( is_null( $this->abi_cache ) ) {
-			$abi_json        = <<<JSON
-			{
-				"abi": [
-					{
-						"anonymous": false,
-						"inputs": [
-							{
-								"indexed": true,
-								"internalType": "address",
-								"name": "signer",
-								"type": "address"
-							},
-							{
-								"indexed": true,
-								"internalType": "address",
-								"name": "from",
-								"type": "address"
-							},
-							{
-								"indexed": true,
-								"internalType": "address",
-								"name": "to",
-								"type": "address"
-							},
-							{
-								"indexed": false,
-								"internalType": "address",
-								"name": "token",
-								"type": "address"
-							},
-							{
-								"indexed": false,
-								"internalType": "uint256",
-								"name": "amount",
-								"type": "uint256"
-							},
-							{
-								"indexed": false,
-								"internalType": "uint128",
-								"name": "invoiceID",
-								"type": "uint128"
-							},
-							{
-								"indexed": false,
-								"internalType": "uint32",
-								"name": "transferType",
-								"type": "uint32"
-							}
-						],
-						"name": "UnlockPaywallTransfer",
-						"type": "event"
-					},
-					{
-						"inputs": [
-							{
-								"internalType": "address",
-								"name": "signer",
-								"type": "address"
-							},
-							{
-								"internalType": "uint64",
-								"name": "postID",
-								"type": "uint64"
-							},
-							{
-								"internalType": "address",
-								"name": "consumer",
-								"type": "address"
-							}
-						],
-						"name": "getPaywallStatus",
-						"outputs": [
-							{
-								"internalType": "bool",
-								"name": "isUnlocked",
-								"type": "bool"
-							},
-							{
-								"internalType": "uint128",
-								"name": "invoiceID",
-								"type": "uint128"
-							},
-							{
-								"internalType": "uint256",
-								"name": "unlockedBlockNumber",
-								"type": "uint256"
-							}
-						],
-						"stateMutability": "view",
-						"type": "function"
-					}
-				]
-			}
-			JSON;
-			$this->abi_cache = json_decode( $abi_json, true )['abi'];
+	/**
+	 * ABIの定義を取得します。
+	 */
+	abstract public function get(): array;
+
+	/**
+	 * 指定したメソッドまたはイベントのtopic(フィルタ用のハッシュ値)を取得します。
+	 *
+	 * keccak256("UnlockPaywall(address,address,uint64,uint128,address)") のようなハッシュ値
+	 */
+	protected function topicHash( string $func_or_event_name ): string {
+		if ( ! array_key_exists( $func_or_event_name, $this->topic_hash_cache ) ) {
+			$abi    = $this->get();
+			$target = array_filter( $abi, fn( $item ) => $item['name'] === $func_or_event_name );
+			assert( count( $target ) === 1, '[841A8DFC] Invalid function or event name. ' . $func_or_event_name );
+			$target = array_values( $target )[0];
+
+			$input_types = array_map( fn( $item ) => $item['type'], $target['inputs'] );
+
+			$hash = '0x' . Keccak::hash( $func_or_event_name . '(' . implode( ',', $input_types ) . ')', 256 );
+
+			$this->topic_hash_cache[ $func_or_event_name ] = $hash;
 		}
 
-		return $this->abi_cache;
+		return $this->topic_hash_cache[ $func_or_event_name ];
 	}
+
 
 	/**
 	 * eth_getLogsで取得したログオブジェクトのイベント名を取得します。
@@ -154,7 +76,7 @@ class AppContractAbi {
 	 *
 	 * @return array<string,mixed>|null
 	 */
-	public function decodeEventParameters( stdClass $log ): ?array {
+	protected function decodeEventParameters( stdClass $log ): ?array {
 		$event_name = $this->getEventName( $log );
 		if ( is_null( $event_name ) ) {
 			assert( false, '[F88AADB9] Unknown event name.' );
@@ -203,27 +125,5 @@ class AppContractAbi {
 		}
 
 		return $value;
-	}
-
-	/**
-	 * 指定したメソッドまたはイベントのtopic(フィルタ用のハッシュ値)を取得します。
-	 *
-	 * keccak256("UnlockPaywall(address,address,uint64,uint128,address)") のようなハッシュ値
-	 */
-	public function topicHash( string $func_or_event_name ): string {
-		if ( ! array_key_exists( $func_or_event_name, $this->topic_hash_cache ) ) {
-			$abi    = $this->get();
-			$target = array_filter( $abi, fn( $item ) => $item['name'] === $func_or_event_name );
-			assert( count( $target ) === 1, '[841A8DFC] Invalid function or event name. ' . $func_or_event_name );
-			$target = array_values( $target )[0];
-
-			$input_types = array_map( fn( $item ) => $item['type'], $target['inputs'] );
-
-			$hash = '0x' . Keccak::hash( $func_or_event_name . '(' . implode( ',', $input_types ) . ')', 256 );
-
-			$this->topic_hash_cache[ $func_or_event_name ] = $hash;
-		}
-
-		return $this->topic_hash_cache[ $func_or_event_name ];
 	}
 }

@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
 
 /**
  * ペイウォール解除イベントのログ
@@ -16,16 +17,20 @@ class UnlockPaywallTransferEventTable extends TableBase {
 		parent::__construct( $wpdb, ( new TableName() )->unlockPaywallTransferEvent() );
 	}
 
-	public function save( InvoiceId $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, int $transfer_type ): void {
-		$sql = <<<SQL
-			INSERT INTO `{$this->tableName()}`
-			(`invoice_id`, `log_index`, `from_address`, `to_address`, `token_address`, `amount`, `transfer_type`)
-			VALUES (%s, %d, %s, %s, %s, %s, %d)
-		SQL;
-
-		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid(), $log_index, $from->value(), $to->value(), $token_address->value(), $amount->value(), $transfer_type );
-
-		$result = $this->wpdb()->query( $sql );
+	public function save( InvoiceId $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, UnlockPaywallTransferType $transfer_type ): void {
+		$result = $this->wpdb()->insert(
+			$this->tableName(),
+			array(
+				'invoice_id'    => $invoice_id->ulid(),
+				'log_index'     => $log_index,
+				'from_address'  => $from->value(),
+				'to_address'    => $to->value(),
+				'token_address' => $token_address->value(),
+				'amount'        => $amount->value(),
+				'transfer_type' => $transfer_type->value(),
+			)
+		);
+		assert( $result === 1, "[1C8FE9F7] Failed to save unlock paywall transfer event. {$result}" );
 		if ( false === $result ) {
 			throw new \RuntimeException( '[86C68ECA] Failed to save unlock paywall transfer event. ' . $this->wpdb()->last_error );
 		}
