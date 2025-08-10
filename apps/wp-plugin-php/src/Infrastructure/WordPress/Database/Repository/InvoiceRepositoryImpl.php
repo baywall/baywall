@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\InvoiceTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
@@ -41,7 +42,7 @@ class InvoiceImpl extends Invoice {
 	public function __construct( InvoiceTableRecord $invoice_record ) {
 		parent::__construct(
 			InvoiceId::from( $invoice_record->idValue() ),
-			$invoice_record->postIdValue(),
+			PostId::from( $invoice_record->postIdValue() ),
 			ChainId::from( $invoice_record->chainIdValue() ),
 			Price::from(
 				Amount::from( $invoice_record->sellingAmountValue() ),
