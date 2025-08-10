@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Options
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\OracleTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\OracleTableSeed;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\PaidContentTableSchema;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\SellerTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\ServerSignerTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\ServerSignerTableSeed;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\TokenTableSchema;
@@ -67,6 +68,7 @@ class Migrate {
 			UnlockPaywallTransactionTableSchema::class,
 			UnlockPaywallTransferEventTableSchema::class,
 			ServerSignerTableSchema::class,
+			SellerTableSchema::class,
 			// 他のスキーマクラスを追加する場合はここに記述
 		);
 	}
