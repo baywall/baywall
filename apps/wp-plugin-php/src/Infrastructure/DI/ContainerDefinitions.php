@@ -12,6 +12,7 @@ use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
@@ -31,6 +32,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\SellerRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\LogLevelProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PostTitleProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\UserAccessProviderImpl;
@@ -55,6 +57,7 @@ final class ContainerDefinitions {
 			OracleRepository::class      => autowire( OracleRepositoryImpl::class ),
 			PostRepository::class        => autowire( PostRepositoryImpl::class ),
 			TokenRepository::class       => autowire( TokenRepositoryImpl::class ),
+			SellerRepository::class      => autowire( SellerRepositoryImpl::class ),
 
 			// Service
 			WalletService::class         => autowire( WalletServiceImpl::class ),
