@@ -7,6 +7,8 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 class Signature {
 
 	private function __construct( string $signature ) {
+		$this->checkFormat( $signature );
+
 		$this->signature_value = $signature;
 	}
 
@@ -22,5 +24,11 @@ class Signature {
 
 	public function __toString(): string {
 		return $this->signature_value;
+	}
+
+	private function checkFormat( string $signature ): void {
+		if ( ! preg_match( '/^0x[0-9a-f]{130}$/', $signature ) ) {
+			throw new \InvalidArgumentException( "[DF154E53] Invalid signature format. '{$signature}" );
+		}
 	}
 }

@@ -60,4 +60,8 @@ class TableName {
 	public function serverSigner(): string {
 		return $this->addPrefix( 'server_signer' );
 	}
+
+	public function seller(): string {
+		return $this->addPrefix( 'seller' );
+	}
 }

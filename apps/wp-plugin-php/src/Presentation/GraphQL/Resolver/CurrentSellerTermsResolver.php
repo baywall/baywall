@@ -3,21 +3,21 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Service\TermsService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
+use Cornix\Serendipity\Core\Infrastructure\Terms\SellerTermsProvider;
 
 class CurrentSellerTermsResolver extends ResolverBase {
 
 	public function __construct(
-		TermsService $terms_service,
-		UserAccessChecker $user_access_checker
+		UserAccessChecker $user_access_checker,
+		SellerTermsProvider $seller_terms_provider
 	) {
-		$this->terms_service       = $terms_service;
-		$this->user_access_checker = $user_access_checker;
+		$this->user_access_checker   = $user_access_checker;
+		$this->seller_terms_provider = $seller_terms_provider;
 	}
 
-	private TermsService $terms_service;
 	private UserAccessChecker $user_access_checker;
+	private SellerTermsProvider $seller_terms_provider;
 
 	/**
 	 * #[\Override]
@@ -25,14 +25,15 @@ class CurrentSellerTermsResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
+		$seller_terms_current_version = $this->seller_terms_provider->currentVersion();
+		$signing_message              = $this->seller_terms_provider->getSigningMessage( $seller_terms_current_version ); // 利用規約の署名メッセージを取得
+
 		// 最新の販売者向け利用規約の情報を取得
-		$current_seller_terms = $this->terms_service->getCurrentSellerTerms();
 		return array(
-			'version' => $current_seller_terms->version()->value(),
-			'message' => $current_seller_terms->message()->value(),
+			'version' => $seller_terms_current_version->value(),
+			'message' => $signing_message->value(), // TODO: プロパティ名を`signingMessage`に変更
 		);
 	}
 }

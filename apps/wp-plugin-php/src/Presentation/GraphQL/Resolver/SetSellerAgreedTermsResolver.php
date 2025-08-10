@@ -3,21 +3,20 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Service\TermsService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
+use Cornix\Serendipity\Core\Application\UseCase\SaveSeller;
 
 class SetSellerAgreedTermsResolver extends ResolverBase {
 
 	public function __construct(
-		TermsService $terms_service,
+		SaveSeller $save_seller,
 		UserAccessChecker $user_access_checker
 	) {
-		$this->terms_service       = $terms_service;
+		$this->save_seller         = $save_seller;
 		$this->user_access_checker = $user_access_checker;
 	}
 
-	private TermsService $terms_service;
+	private SaveSeller $save_seller;
 	private UserAccessChecker $user_access_checker;
 
 	/**
@@ -26,18 +25,15 @@ class SetSellerAgreedTermsResolver extends ResolverBase {
 	 * @return bool
 	 */
 	public function resolve( array $root_value, array $args ) {
-		/** @var int */
-		$version   = $args['version'];
-		$signature = Signature::from( $args['signature'] );
-
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		//
-		// TODO: 引数にアドレスを追加し、署名を検証するロジックを追加
-		//
+		/** @var int */
+		$version_value = $args['version'];
+		/** @var string */
+		$signature_value = $args['signature'];
 
-		// 販売者の署名を保存
-		$this->terms_service->saveSellerSignature( $signature );
+		// 販売者情報を保存
+		$this->save_seller->handle( $version_value, $signature_value );
 
 		return true;
 	}
