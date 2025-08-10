@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
 use wpdb;
 
@@ -17,7 +17,7 @@ class SalesHistoryService {
 		$this->wpdb                   = $wpdb ?? $GLOBALS['wpdb'];
 		$this->app_contract_tmp_table = $app_contract_tmp_table;
 
-		$table_name                      = new TableName();
+		$table_name                      = new TableNameProvider();
 		$this->token_table_name          = $table_name->token();
 		$this->invoice_table_name        = $table_name->invoice();
 		$this->transaction_table_name    = $table_name->unlockPaywallTransaction();

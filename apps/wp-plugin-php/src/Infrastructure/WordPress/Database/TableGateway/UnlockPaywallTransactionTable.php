@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
@@ -15,7 +15,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
  */
 class UnlockPaywallTransactionTable extends TableBase {
 	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableName() )->unlockPaywallTransaction() );
+		parent::__construct( $wpdb, ( new TableNameProvider() )->unlockPaywallTransaction() );
 	}
 
 	public function save( InvoiceId $invoice_id, ChainId $chain_id, BlockNumber $block_number, TransactionHash $transaction_hash ): void {

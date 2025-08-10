@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
@@ -16,7 +16,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\PaidCo
 class PaidContentTable extends TableBase {
 
 	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableName() )->paidContent() );
+		parent::__construct( $wpdb, ( new TableNameProvider() )->paidContent() );
 	}
 
 	/**

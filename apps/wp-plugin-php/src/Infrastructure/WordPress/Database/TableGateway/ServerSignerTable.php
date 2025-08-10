@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\ServerSignerTableRecord;
 
@@ -20,7 +20,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\Server
 class ServerSignerTable extends TableBase {
 
 	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableName() )->serverSigner() );
+		parent::__construct( $wpdb, ( new TableNameProvider() )->serverSigner() );
 	}
 
 	public function get(): ?ServerSignerTableRecord {

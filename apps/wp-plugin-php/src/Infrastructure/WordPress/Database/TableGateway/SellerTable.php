@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\SellerTableRecord;
 
 /**
@@ -16,7 +16,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\Seller
 class SellerTable extends TableBase {
 
 	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableName() )->seller() );
+		parent::__construct( $wpdb, ( new TableNameProvider() )->seller() );
 	}
 
 	/**
