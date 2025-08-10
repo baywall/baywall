@@ -13,8 +13,8 @@ use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
  * ペイウォール解除イベントのログ
  */
 class UnlockPaywallTransferEventTable extends TableBase {
-	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableNameProvider() )->unlockPaywallTransferEvent() );
+	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
+		parent::__construct( $wpdb, $table_name_provider->unlockPaywallTransferEvent() );
 	}
 
 	public function save( InvoiceId $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, UnlockPaywallTransferType $transfer_type ): void {
