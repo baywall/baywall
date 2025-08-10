@@ -37,7 +37,6 @@ class SellerTableSchema_0_0_1 extends MigrationBase {
 				`seller_address`        varchar(191)            NOT NULL,
 				`agreed_terms_version`  int           unsigned  NOT NULL,
 				`signing_message`       varchar(191)            NOT NULL,
-				`signing_message_hash`  varchar(191)            NOT NULL,
 				`signature`             varchar(191)            NOT NULL,
 				PRIMARY KEY (`seller_address`)
 			) {$this->charset()};
