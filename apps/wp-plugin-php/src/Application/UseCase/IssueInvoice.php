@@ -9,9 +9,9 @@ use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\PriceExchangeService;
-use Cornix\Serendipity\Core\Domain\Service\SellerService;
 use Cornix\Serendipity\Core\Domain\Service\TokenAmountConverter;
 use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
@@ -27,10 +27,10 @@ use Cornix\Serendipity\Core\Repository\ConsumerTerms;
 use phpseclib\Math\BigInteger;
 
 class IssueInvoice {
-	public function __construct( TokenRepository $token_repository, InvoiceRepository $invoice_repository, PostRepository $post_repository, SellerService $seller_service, TokenAmountConverter $token_amount_converter, PriceExchangeService $price_exchange_service, ServerSignerService $server_signer_service, WalletService $wallet_service ) {
+	public function __construct( TokenRepository $token_repository, InvoiceRepository $invoice_repository, PostRepository $post_repository, SellerRepository $seller_repository, TokenAmountConverter $token_amount_converter, PriceExchangeService $price_exchange_service, ServerSignerService $server_signer_service, WalletService $wallet_service ) {
 		$this->invoice_repository     = $invoice_repository;
 		$this->post_repository        = $post_repository;
-		$this->seller_service         = $seller_service;
+		$this->seller_repository      = $seller_repository;
 		$this->token_amount_converter = $token_amount_converter;
 		$this->price_exchange_service = $price_exchange_service;
 		$this->server_signer_service  = $server_signer_service;
@@ -39,7 +39,7 @@ class IssueInvoice {
 	}
 	private InvoiceRepository $invoice_repository;
 	private PostRepository $post_repository;
-	private SellerService $seller_service;
+	private SellerRepository $seller_repository;
 	private TokenAmountConverter $token_amount_converter;
 	private PriceExchangeService $price_exchange_service;
 	private GetPaymentToken $get_payment_token;
@@ -70,7 +70,7 @@ class IssueInvoice {
 	private function createInvoice( PostId $post_id, ChainId $chain_id, Address $payment_token_address, Address $consumer_address ): Invoice {
 
 		$payment_token  = $this->get_payment_token->handle( $chain_id, $payment_token_address ); // 支払トークン
-		$seller_address = $this->seller_service->getSellerAddress();  // 販売者アドレス
+		$seller_address = $this->seller_repository->get()->address();
 		$selling_price  = $this->post_repository->get( $post_id )->sellingPrice();
 		if ( $selling_price === null ) {
 			throw new \InvalidArgumentException( "[8AF88CAF] Selling price is null for post ID: {$post_id}" );
