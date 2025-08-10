@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\OracleTableRecord;
 
 /**
@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\Oracle
 class OracleTable extends TableBase {
 
 	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableName() )->oracle() );
+		parent::__construct( $wpdb, ( new TableNameProvider() )->oracle() );
 	}
 
 	/**

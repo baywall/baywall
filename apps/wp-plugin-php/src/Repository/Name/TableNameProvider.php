@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository\Name;
 
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
 
-class TableName {
+class TableNameProvider {
 
 	// 定数の値(テーブル名)は変更しないでください
 	// テーブル作成済みの実環境と不整合が発生し、テストは通るが実環境でエラーが発生する、という状況になります。

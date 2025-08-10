@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
 
@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\Invoic
  */
 class InvoiceTable extends TableBase {
 	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableName() )->invoice() );
+		parent::__construct( $wpdb, ( new TableNameProvider() )->invoice() );
 	}
 
 	/**
