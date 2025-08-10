@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Bytes32;
 use Cornix\Serendipity\Core\Domain\ValueObject\PrivateKey;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
@@ -16,8 +17,8 @@ class Ethers {
 		return Address::from( '0x0000000000000000000000000000000000000000' );
 	}
 
-	public static function keccak256( string $data ): string {
-		return Keccak::hash( $data, 256 );
+	public static function keccak256( string $data ): Bytes32 {
+		return Bytes32::from( Keccak::hash( $data, 256 ) );
 	}
 
 	/**
@@ -40,7 +41,7 @@ class Ethers {
 	 */
 	public static function verifyMessage( SigningMessage $message, Signature $signature ): ?Address {
 
-		$message_hash = self::keccak256( self::eip191( $message->value() ) );
+		$message_hash = self::keccak256( self::eip191( $message->value() ) )->value();
 		$sign         = array(
 			'r' => substr( $signature->value(), 2, 64 ),
 			's' => substr( $signature->value(), 66, 64 ),
@@ -96,7 +97,7 @@ class Ethers {
 	 * @see https://github.com/simplito/elliptic-php#verifying-ethereum-signature
 	 */
 	public static function computeAddress( \Elliptic\Curve\ShortCurve\Point $public_key ): Address {
-		$address_value = \Web3\Utils::toChecksumAddress( substr( self::keccak256( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ) ), 24 ) );
+		$address_value = \Web3\Utils::toChecksumAddress( substr( self::keccak256( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ) )->value(), 24 ) );
 		return Address::from( $address_value );
 	}
 
@@ -111,7 +112,7 @@ class Ethers {
 		PrivateKey $private_key,
 		SigningMessage $message
 	): Signature {
-		$message_hash = self::keccak256( self::eip191( $message->value() ) );
+		$message_hash = self::keccak256( self::eip191( $message->value() ) )->value();
 
 		$key_pair  = self::signerPrivateKeyToEcKeyPair( $private_key );
 		$signature = $key_pair->sign( $message_hash, array( 'canonical' => true ) );
