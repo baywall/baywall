@@ -3,9 +3,15 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\Name;
 
-use Cornix\Serendipity\Core\Repository\Name\Prefix;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 
 class TableNameProvider {
+
+	private PrefixProvider $prefixProvider;
+
+	public function __construct( PrefixProvider $prefixProvider ) {
+		$this->prefixProvider = $prefixProvider;
+	}
 
 	// 定数の値(テーブル名)は変更しないでください
 	// テーブル作成済みの実環境と不整合が発生し、テストは通るが実環境でエラーが発生する、という状況になります。
@@ -15,7 +21,7 @@ class TableNameProvider {
 	 * 作成するテーブル名はこのメソッドを使用してください
 	 */
 	private function addPrefix( string $table_name ): string {
-		return ( new Prefix() )->tableNamePrefix() . $table_name;
+		return $this->prefixProvider->tableName() . $table_name;
 	}
 
 	/** 発行した請求書情報を記録するテーブル名 */
