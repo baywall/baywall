@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Domain\Service\SellerService;
+use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 
 class SellerResolver extends ResolverBase {
 
-	public function __construct( SellerService $seller_service ) {
-		$this->seller_service = $seller_service;
+	public function __construct( SellerRepository $seller_repository ) {
+		$this->seller_repository = $seller_repository;
 	}
-	private SellerService $seller_service;
+	private SellerRepository $seller_repository;
 
 	/**
 	 * #[\Override]
@@ -18,17 +18,14 @@ class SellerResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		// `agreedTerms`以外のプロパティが増えた場合はResolverを分割すること。
+		$seller = $this->seller_repository->get();
 
 		$agreed_terms = null;
-
-		$signed_seller_terms = $this->seller_service->getSellerSignedTerms();
-
-		if ( null !== $signed_seller_terms ) {
+		if ( $seller !== null ) {
 			$agreed_terms = array(
-				'version'   => $signed_seller_terms->terms()->version()->value(),
-				'message'   => $signed_seller_terms->terms()->message()->value(),
-				'signature' => $signed_seller_terms->signature()->value(),
+				'version'   => $seller->agreedTermsVersion()->value(),
+				'message'   => $seller->signingMessage()->value(),  // TODO: プロパティ名を'signingMessage'に変更
+				'signature' => $seller->signature()->value(),
 			);
 		}
 
