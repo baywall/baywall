@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Registry\ChainIdRegistry;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
-use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use wpdb;
 
 

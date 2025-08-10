@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository\Name;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database;
 
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 

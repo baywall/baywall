@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
 use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
-use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
 /**
  * Appコントラクトの情報を記録するテーブル

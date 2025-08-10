@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
 use wpdb;
 

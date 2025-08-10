@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\LogLevelProviderImpl;
-use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use wpdb;
 
 
