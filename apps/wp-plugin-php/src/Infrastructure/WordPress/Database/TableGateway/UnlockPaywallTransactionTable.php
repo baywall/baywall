@@ -14,8 +14,8 @@ use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
  * ※ トランザクションハッシュやブロック番号などの情報を保持
  */
 class UnlockPaywallTransactionTable extends TableBase {
-	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableNameProvider() )->unlockPaywallTransaction() );
+	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
+		parent::__construct( $wpdb, $table_name_provider->unlockPaywallTransaction() );
 	}
 
 	public function save( InvoiceId $invoice_id, ChainId $chain_id, BlockNumber $block_number, TransactionHash $transaction_hash ): void {

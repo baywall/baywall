@@ -19,8 +19,8 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\Server
  */
 class ServerSignerTable extends TableBase {
 
-	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableNameProvider() )->serverSigner() );
+	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
+		parent::__construct( $wpdb, $table_name_provider->serverSigner() );
 	}
 
 	public function get(): ?ServerSignerTableRecord {

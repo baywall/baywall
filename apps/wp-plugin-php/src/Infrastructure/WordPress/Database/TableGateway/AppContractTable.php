@@ -14,8 +14,8 @@ use Cornix\Serendipity\Core\Repository\Name\TableNameProvider;
  */
 class AppContractTable extends TableBase {
 
-	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableNameProvider() )->appContract() );
+	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
+		parent::__construct( $wpdb, $table_name_provider->appContract() );
 	}
 
 	/**
