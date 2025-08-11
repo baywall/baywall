@@ -3,25 +3,22 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\Entity\Token;
-use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
-use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByFilter;
 
 class TokensResolver extends ResolverBase {
 
 	public function __construct(
-		TokenRepository $token_repository,
-		UserAccessChecker $user_access_checker
+		UserAccessChecker $user_access_checker,
+		GetTokenDtosByFilter $get_token_dtos_by_filter
 	) {
-		$this->token_repository    = $token_repository;
-		$this->user_access_checker = $user_access_checker;
+		$this->user_access_checker      = $user_access_checker;
+		$this->get_token_dtos_by_filter = $get_token_dtos_by_filter;
 	}
 
-	private TokenRepository $token_repository;
 	private UserAccessChecker $user_access_checker;
+	private GetTokenDtosByFilter $get_token_dtos_by_filter;
 
 	/**
 	 * サイトに登録されているトークン一覧を取得します。
@@ -34,28 +31,18 @@ class TokensResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$filter          = $args['filter'] ?? null;
-		$filter_chain_id = ChainId::fromNullableValue( $filter['chainID'] ?? null );
-		$filter_address  = Address::fromNullable( $filter['address'] ?? null );
+		$filter_chain_id_value = $args['filter']['chainID'] ?? null;
+		$filter_address_value  = $args['filter']['address'] ?? null;
 
-		$tokens_filter = new TokensFilter();
-		if ( null !== $filter_chain_id ) {
-			$tokens_filter = $tokens_filter->byChainId( $filter_chain_id );
-		}
-		if ( null !== $filter_address ) {
-			$tokens_filter = $tokens_filter->byAddress( $filter_address );
-		}
-
-		$tokens = $tokens_filter->apply( $this->token_repository->all() );
 		return array_map(
-			fn( Token $token ) => $root_value['token'](
+			fn( TokenDto $token_dto ) => $root_value['token'](
 				$root_value,
 				array(
-					'chainID' => $token->chainId()->value(),
-					'address' => $token->address()->value(),
+					'chainID' => $token_dto->chain_id,
+					'address' => $token_dto->address,
 				)
 			),
-			$tokens
+			$this->get_token_dtos_by_filter->handle( $filter_chain_id_value, $filter_address_value )
 		);
 	}
 }
