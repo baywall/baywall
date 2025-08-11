@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
 use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
 /**
  * Appコントラクトの情報を記録するテーブル
@@ -14,8 +14,8 @@ use Cornix\Serendipity\Core\Repository\Name\TableName;
  */
 class AppContractTable extends TableBase {
 
-	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableName() )->appContract() );
+	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
+		parent::__construct( $wpdb, $table_name_provider->appContract() );
 	}
 
 	/**

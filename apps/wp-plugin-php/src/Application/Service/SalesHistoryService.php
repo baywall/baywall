@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
 use wpdb;
 
@@ -13,15 +13,14 @@ use wpdb;
  * 売上データを取得するクラス
  */
 class SalesHistoryService {
-	public function __construct( wpdb $wpdb, AppContractTmpTable $app_contract_tmp_table ) {
+	public function __construct( wpdb $wpdb, TableNameProvider $table_name_provider, AppContractTmpTable $app_contract_tmp_table ) {
 		$this->wpdb                   = $wpdb ?? $GLOBALS['wpdb'];
 		$this->app_contract_tmp_table = $app_contract_tmp_table;
 
-		$table_name                      = new TableName();
-		$this->token_table_name          = $table_name->token();
-		$this->invoice_table_name        = $table_name->invoice();
-		$this->transaction_table_name    = $table_name->unlockPaywallTransaction();
-		$this->transfer_event_table_name = $table_name->unlockPaywallTransferEvent();
+		$this->token_table_name          = $table_name_provider->token();
+		$this->invoice_table_name        = $table_name_provider->invoice();
+		$this->transaction_table_name    = $table_name_provider->unlockPaywallTransaction();
+		$this->transfer_event_table_name = $table_name_provider->unlockPaywallTransferEvent();
 	}
 
 	private wpdb $wpdb;

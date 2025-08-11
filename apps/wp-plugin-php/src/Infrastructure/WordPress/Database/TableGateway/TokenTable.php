@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\Entity\Token;
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\TokenTableRecord;
 
 /**
@@ -12,8 +12,8 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\TokenT
  */
 class TokenTable extends TableBase {
 
-	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb, ( new TableName() )->token() );
+	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
+		parent::__construct( $wpdb, $table_name_provider->token() );
 	}
 
 	/**

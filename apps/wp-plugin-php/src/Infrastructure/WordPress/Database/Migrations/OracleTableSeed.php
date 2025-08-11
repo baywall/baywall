@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Registry\ChainIdRegistry;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
-use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use wpdb;
 
 
@@ -23,7 +23,7 @@ use wpdb;
 
 class OracleTableSeed extends MigratorBase {
 
-	public function __construct( wpdb $wpdb, TableName $table_name_provider ) {
+	public function __construct( wpdb $wpdb, TableNameProvider $table_name_provider ) {
 		parent::__construct( $wpdb, $table_name_provider->oracle() );
 	}
 
