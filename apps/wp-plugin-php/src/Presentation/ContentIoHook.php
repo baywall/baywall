@@ -27,14 +27,17 @@ class ContentIoHook {
 
 	public function __construct(
 		PostRepository $post_repository,
-		UserAccessProvider $user_access_provider
+		UserAccessProvider $user_access_provider,
+		PaidContentTable $paid_content_table
 	) {
 		$this->post_repository      = $post_repository;
 		$this->user_access_provider = $user_access_provider;
+		$this->paid_content_table   = $paid_content_table;
 	}
 
 	private PostRepository $post_repository;
 	private UserAccessProvider $user_access_provider;
+	private PaidContentTable $paid_content_table;
 
 	/**
 	 * フックを登録します。
@@ -188,11 +191,10 @@ class ContentIoHook {
 	 * 投稿が削除された時のアクション。有料記事の情報も削除します。
 	 */
 	public function deletePostAction( int $post_id ): void {
-		global $wpdb;
 		// テスト実行中、テストツールによって投稿が削除される。
 		// その際、このフックが呼び出されるが、テーブル作成前に呼び出されるとエラーになるため
 		// テスト中かつテーブルが存在しない場合は何もしない
-		if ( ( new Environment() )->isTesting() && ! ( new PaidContentTable( $wpdb ) )->exists() ) {
+		if ( ( new Environment() )->isTesting() && ! $this->paid_content_table->exists() ) {
 			return; // テスト中に限り、テーブルが存在しない場合は何もしない
 		}
 
