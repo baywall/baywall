@@ -86,6 +86,6 @@ class PaidContentTable extends TableBase {
 	 * テーブルが存在するかどうかを取得します。
 	 */
 	public function exists(): bool {
-		return (bool) $this->wpdb()->get_var( "SHOW TABLES LIKE '{$this->tableName()}'" );
+		return (bool) $this->safeGetVar( "SHOW TABLES LIKE '{$this->tableName()}'" );
 	}
 }
