@@ -90,4 +90,20 @@ abstract class TableBase {
 		}
 		return $results;
 	}
+
+	/**
+	 * $wpdb->insert() を安全に呼び出すためのヘルパー関数
+	 *
+	 * @param string               $table
+	 * @param array                $data
+	 * @param string[]|string|null $format
+	 * @return int
+	 */
+	protected function safeInsert( string $table, array $data, $format = null ): int {
+		$result = $this->wpdb()->insert( $table, $data, $format );
+		if ( false === $result ) {
+			throw new RuntimeException( '[6B5F6CA6] Failed to insert data. ' . $this->wpdb()->last_error );
+		}
+		return $result;
+	}
 }
