@@ -29,7 +29,7 @@ class UnlockPaywallTransactionTable extends TableBase {
 				`transaction_hash` = VALUES(`transaction_hash`)
 		SQL;
 
-		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid(), $chain_id->value(), $block_number->int(), $transaction_hash->value() );
+		$sql = $this->prepare( $sql, $invoice_id->ulid(), $chain_id->value(), $block_number->int(), $transaction_hash->value() );
 
 		$result = $this->safeQuery( $sql );
 		assert( $result <= 1, "[C5EB0772] Failed to save unlock paywall transaction. {$result}" );
@@ -42,7 +42,7 @@ class UnlockPaywallTransactionTable extends TableBase {
 			LIMIT 1
 		SQL;
 
-		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid() );
+		$sql = $this->prepare( $sql, $invoice_id->ulid() );
 		$row = $this->safeGetRow( $sql );
 
 		return $row !== null;

@@ -59,7 +59,7 @@ class TokenTable extends TableBase {
 				`is_payable` = %d
 		SQL;
 
-		$sql = $this->wpdb()->prepare(
+		$sql = $this->prepare(
 			$sql,
 			$token->chainId()->value(),
 			$token->address()->value(),

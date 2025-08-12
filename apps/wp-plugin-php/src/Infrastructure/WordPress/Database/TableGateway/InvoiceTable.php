@@ -38,7 +38,7 @@ class InvoiceTable extends TableBase {
 			WHERE `id` = %s
 		SQL;
 
-		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid() );
+		$sql = $this->prepare( $sql, $invoice_id->ulid() );
 
 		$record = $this->safeGetRow( $sql );
 		if ( null !== $record ) {
@@ -67,7 +67,7 @@ class InvoiceTable extends TableBase {
 				`nonce` = VALUES(`nonce`)
 		SQL;
 
-		$sql = $this->wpdb()->prepare(
+		$sql = $this->prepare(
 			$sql,
 			$invoice->id()->ulid(),
 			$invoice->postId()->value(),
