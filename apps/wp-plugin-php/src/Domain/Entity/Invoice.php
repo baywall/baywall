@@ -62,4 +62,9 @@ class Invoice {
 	public function nonce(): ?InvoiceNonce {
 		return $this->nonce;
 	}
+
+	/** 新しいnonceを設定します */
+	public function setNonce( InvoiceNonce $nonce ): void {
+		$this->nonce = $nonce;
+	}
 }

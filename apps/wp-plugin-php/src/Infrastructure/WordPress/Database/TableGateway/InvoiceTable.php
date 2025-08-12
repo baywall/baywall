@@ -49,22 +49,39 @@ class InvoiceTable extends TableBase {
 		return is_null( $record ) ? null : new InvoiceTableRecord( $record );
 	}
 
-	public function insert( Invoice $invoice ): void {
-		$result = $this->wpdb()->insert(
-			$this->tableName(),
-			array(
-				'id'                    => $invoice->id()->ulid(),
-				'post_id'               => $invoice->postId()->value(),
-				'chain_id'              => $invoice->chainId()->value(),
-				'selling_amount'        => $invoice->sellingPrice()->amount()->value(),
-				'selling_symbol'        => $invoice->sellingPrice()->symbol()->value(),
-				'seller_address'        => $invoice->sellerAddress()->value(),
-				'payment_token_address' => $invoice->paymentTokenAddress()->value(),
-				'payment_amount'        => $invoice->paymentAmount()->value(),
-				'consumer_address'      => $invoice->consumerAddress()->value(),
-				'nonce'                 => $invoice->nonce() ? $invoice->nonce()->value() : null,
-			),
+	public function save( Invoice $invoice ): void {
+		$sql = <<<SQL
+			INSERT INTO `{$this->tableName()}`
+				( `id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_amount`, `consumer_address`, `nonce` )
+			VALUES
+				( %s, %d, %d, %s, %s, %s, %s, %s, %s, %s )
+			ON DUPLICATE KEY UPDATE
+				`post_id` = VALUES(`post_id`),
+				`chain_id` = VALUES(`chain_id`),
+				`selling_amount` = VALUES(`selling_amount`),
+				`selling_symbol` = VALUES(`selling_symbol`),
+				`seller_address` = VALUES(`seller_address`),
+				`payment_token_address` = VALUES(`payment_token_address`),
+				`payment_amount` = VALUES(`payment_amount`),
+				`consumer_address` = VALUES(`consumer_address`),
+				`nonce` = VALUES(`nonce`)
+		SQL;
+
+		$sql = $this->wpdb()->prepare(
+			$sql,
+			$invoice->id()->ulid(),
+			$invoice->postId()->value(),
+			$invoice->chainId()->value(),
+			$invoice->sellingPrice()->amount()->value(),
+			$invoice->sellingPrice()->symbol()->value(),
+			$invoice->sellerAddress()->value(),
+			$invoice->paymentTokenAddress()->value(),
+			$invoice->paymentAmount()->value(),
+			$invoice->consumerAddress()->value(),
+			$invoice->nonce() ? $invoice->nonce()->value() : null
 		);
+
+		$result = $this->wpdb()->query( $sql );
 		if ( false === $result || $this->wpdb()->last_error ) {
 			throw new \RuntimeException( '[5F99E86E] Failed to insert invoice. ' . $this->wpdb()->last_error );
 		}
