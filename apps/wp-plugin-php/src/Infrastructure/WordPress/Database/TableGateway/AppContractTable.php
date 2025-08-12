@@ -26,11 +26,7 @@ class AppContractTable extends TableBase {
 			SELECT `chain_id`, `address`, `crawled_block_number`, `crawled_block_number_updated_at`
 			FROM `{$this->tableName()}`
 		SQL;
-		$results = $this->wpdb()->get_results( $sql );
-
-		if ( ! is_array( $results ) ) {
-			throw new \Exception( '[0C248CD9] Failed to fetch app contract records. ' . $this->wpdb()->last_error );
-		}
+		$results = $this->safeGetResults( $sql );
 
 		return array_map(
 			function ( $record ) {

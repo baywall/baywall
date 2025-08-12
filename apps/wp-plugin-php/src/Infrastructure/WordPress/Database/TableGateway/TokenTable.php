@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\TokenTableRecord;
+use stdClass;
 
 /**
  * トークンの情報を記録するテーブル
@@ -27,23 +28,21 @@ class TokenTable extends TableBase {
 			FROM `{$this->tableName()}`
 		SQL;
 
-		$result = $this->wpdb()->get_results( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[CA8FE52D] Failed to get token data.' );
-		}
+		$result = $this->safeGetResults( $sql );
 
-		$records = array();
-		foreach ( $result as $row ) {
-			$row->chain_id   = (int) $row->chain_id;
-			$row->address    = (string) $row->address;
-			$row->symbol     = (string) $row->symbol;
-			$row->decimals   = (int) $row->decimals;
-			$row->is_payable = (bool) $row->is_payable;
+		return array_map(
+			function ( stdClass $row ) {
+				// 型をテーブル定義に一致させる
+				$row->chain_id   = (int) $row->chain_id;
+				$row->address    = (string) $row->address;
+				$row->symbol     = (string) $row->symbol;
+				$row->decimals   = (int) $row->decimals;
+				$row->is_payable = (bool) $row->is_payable;
 
-			$records[] = new TokenTableRecord( $row );
-		}
-
-		return $records;
+				return new TokenTableRecord( $row );
+			},
+			$result
+		);
 	}
 
 	/**

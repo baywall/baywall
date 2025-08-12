@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\SellerTableRecord;
+use stdClass;
 
 /**
  * 販売者情報を記録するテーブル
@@ -30,22 +31,20 @@ class SellerTable extends TableBase {
 			FROM `{$this->tableName()}`
 		SQL;
 
-		$result = $this->wpdb()->get_results( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[5ABA6967] Failed to get seller data.' );
-		}
+		$result = $this->safeGetResults( $sql );
 
-		$records = array();
-		foreach ( $result as $row ) {
-			$row->seller_address       = (string) $row->seller_address;
-			$row->agreed_terms_version = (int) $row->agreed_terms_version;
-			$row->signing_message      = (string) $row->signing_message;
-			$row->signature            = (string) $row->signature;
+		return array_map(
+			function ( stdClass $row ) {
+				// 型をテーブル定義に一致させる
+				$row->seller_address       = (string) $row->seller_address;
+				$row->agreed_terms_version = (int) $row->agreed_terms_version;
+				$row->signing_message      = (string) $row->signing_message;
+				$row->signature            = (string) $row->signature;
 
-			$records[] = new SellerTableRecord( $row );
-		}
-
-		return $records;
+				return new SellerTableRecord( $row );
+			},
+			$result
+		);
 	}
 
 	/**
