@@ -14,10 +14,6 @@ abstract class TableBase {
 	private \wpdb $wpdb;
 	private string $table_name;
 
-	protected function wpdb(): \wpdb {
-		return $this->wpdb;
-	}
-
 	protected function tableName(): string {
 		return $this->table_name;
 	}
@@ -29,7 +25,7 @@ abstract class TableBase {
 	 * @param array  ...$args
 	 */
 	protected function prepare( string $query, ...$args ): string {
-		return $this->wpdb()->prepare( $query, ...$args );
+		return $this->wpdb->prepare( $query, ...$args );
 	}
 
 	/**
@@ -50,10 +46,9 @@ abstract class TableBase {
 	 * @return int
 	 */
 	protected function safeQuery( string $query ): int {
-		$wpdb   = $this->wpdb();
-		$result = $wpdb->query( $query );
+		$result = $this->wpdb->query( $query );
 		if ( false === $result ) {
-			throw new RuntimeException( '[BF06339E] Failed to execute query. ' . $wpdb->last_error );
+			throw new RuntimeException( '[BF06339E] Failed to execute query. ' . $this->wpdb->last_error );
 		}
 		return $result;
 	}
@@ -67,10 +62,9 @@ abstract class TableBase {
 	 * @return string|null
 	 */
 	protected function safeGetVar( string $query, int $x = 0, int $y = 0 ) {
-		$wpdb   = $this->wpdb();
-		$result = $wpdb->get_var( $query, $x, $y );
-		if ( $result === null && ! empty( $wpdb->last_error ) ) {
-			throw new RuntimeException( '[10D69A0C] Failed to get variable. ' . $wpdb->last_error );
+		$result = $this->wpdb->get_var( $query, $x, $y );
+		if ( $result === null && ! empty( $this->wpdb->last_error ) ) {
+			throw new RuntimeException( '[10D69A0C] Failed to get variable. ' . $this->wpdb->last_error );
 		}
 		return $result;
 	}
@@ -84,10 +78,9 @@ abstract class TableBase {
 	 * @return array|object|null|void
 	 */
 	protected function safeGetRow( string $query, string $output = OBJECT, int $y = 0 ) {
-		$wpdb = $this->wpdb();
-		$row  = $wpdb->get_row( $query, $output, $y );
-		if ( $row === null && ! empty( $wpdb->last_error ) ) {
-			throw new RuntimeException( '[E469E738] Failed to get row. ' . $wpdb->last_error );
+		$row = $this->wpdb->get_row( $query, $output, $y );
+		if ( $row === null && ! empty( $this->wpdb->last_error ) ) {
+			throw new RuntimeException( '[E469E738] Failed to get row. ' . $this->wpdb->last_error );
 		}
 		return $row;
 	}
@@ -100,10 +93,9 @@ abstract class TableBase {
 	 * @return array|object|null
 	 */
 	protected function safeGetResults( string $query, string $output = OBJECT ) {
-		$wpdb    = $this->wpdb();
-		$results = $wpdb->get_results( $query, $output );
-		if ( ! empty( $wpdb->last_error ) ) {
-			throw new RuntimeException( '[89353F21] Failed to get results. ' . $wpdb->last_error );
+		$results = $this->wpdb->get_results( $query, $output );
+		if ( ! empty( $this->wpdb->last_error ) ) {
+			throw new RuntimeException( '[89353F21] Failed to get results. ' . $this->wpdb->last_error );
 		}
 		return $results;
 	}
@@ -117,9 +109,9 @@ abstract class TableBase {
 	 * @return int
 	 */
 	protected function safeInsert( string $table, array $data, $format = null ): int {
-		$result = $this->wpdb()->insert( $table, $data, $format );
+		$result = $this->wpdb->insert( $table, $data, $format );
 		if ( false === $result ) {
-			throw new RuntimeException( '[6B5F6CA6] Failed to insert data. ' . $this->wpdb()->last_error );
+			throw new RuntimeException( '[6B5F6CA6] Failed to insert data. ' . $this->wpdb->last_error );
 		}
 		return $result;
 	}
@@ -133,9 +125,9 @@ abstract class TableBase {
 	 * @return int
 	 */
 	protected function safeDelete( string $table, array $where, $where_format = null ): int {
-		$result = $this->wpdb()->delete( $table, $where, $where_format );
+		$result = $this->wpdb->delete( $table, $where, $where_format );
 		if ( false === $result ) {
-			throw new RuntimeException( '[7E3D8D05] Failed to delete data. ' . $this->wpdb()->last_error );
+			throw new RuntimeException( '[7E3D8D05] Failed to delete data. ' . $this->wpdb->last_error );
 		}
 		return $result;
 	}
