@@ -37,4 +37,17 @@ class UnlockPaywallTransactionTable extends TableBase {
 			throw new \RuntimeException( '[CA6349AD] Failed to save unlock paywall transaction. ' . $this->wpdb()->last_error );
 		}
 	}
+
+	public function exists( InvoiceId $invoice_id ): bool {
+		$sql = <<<SQL
+			SELECT `invoice_id` FROM `{$this->tableName()}`
+			WHERE `invoice_id` = %s
+			LIMIT 1
+		SQL;
+
+		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid() );
+		$row = $this->safeGetRow( $sql );
+
+		return $row !== null;
+	}
 }
