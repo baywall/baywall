@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
 use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use stdClass;
 
 /**
  * Appコントラクトの情報を記録するテーブル
@@ -29,15 +30,8 @@ class AppContractTable extends TableBase {
 		$results = $this->safeGetResults( $sql );
 
 		return array_map(
-			function ( $record ) {
-				// 型をテーブル定義に一致させる
-				$record->chain_id             = (int) $record->chain_id;
-				$record->crawled_block_number = null === $record->crawled_block_number ? null : (int) $record->crawled_block_number;
-
-				// AppContractTableRecordのインスタンスを返す
-				return new AppContractTableRecord( $record );
-			},
-			(array) $results
+			fn( stdClass $record ) => new AppContractTableRecord( $record ),
+			$results
 		);
 	}
 

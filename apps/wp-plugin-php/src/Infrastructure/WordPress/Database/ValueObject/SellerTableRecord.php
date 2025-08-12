@@ -7,6 +7,11 @@ use stdClass;
 
 class SellerTableRecord extends TableRecordBase {
 	public function __construct( stdClass $record ) {
+		$record->seller_address       = (string) $record->seller_address;
+		$record->agreed_terms_version = (int) $record->agreed_terms_version;
+		$record->signing_message      = (string) $record->signing_message;
+		$record->signature            = (string) $record->signature;
+
 		$this->import( $record );
 	}
 

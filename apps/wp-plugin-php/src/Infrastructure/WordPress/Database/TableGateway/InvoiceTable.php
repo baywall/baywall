@@ -41,12 +41,8 @@ class InvoiceTable extends TableBase {
 		$sql = $this->prepare( $sql, $invoice_id->ulid() );
 
 		$record = $this->safeGetRow( $sql );
-		if ( null !== $record ) {
-			$record->post_id  = (int) $record->post_id;
-			$record->chain_id = (int) $record->chain_id;
-		}
 
-		return is_null( $record ) ? null : new InvoiceTableRecord( $record );
+		return $record === null ? null : new InvoiceTableRecord( $record );
 	}
 
 	public function save( Invoice $invoice ): void {

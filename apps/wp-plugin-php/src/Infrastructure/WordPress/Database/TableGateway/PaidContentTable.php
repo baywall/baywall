@@ -30,14 +30,10 @@ class PaidContentTable extends TableBase {
 		SQL;
 
 		$sql = $this->prepare( $sql, $post_id->value() );
-		$row = $this->safeGetRow( $sql );
 
-		if ( ! is_null( $row ) ) {
-			$row->post_id                     = (int) $row->post_id;
-			$row->selling_network_category_id = is_null( $row->selling_network_category_id ) ? null : (int) $row->selling_network_category_id;
-		}
+		$record = $this->safeGetRow( $sql );
 
-		return is_null( $row ) ? null : new PaidContentTableRecord( $row );
+		return $record === null ? null : new PaidContentTableRecord( $record );
 	}
 
 	public function set( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryId $selling_network_category_id, ?Price $selling_price ): void {
