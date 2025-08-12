@@ -59,6 +59,23 @@ abstract class TableBase {
 	}
 
 	/**
+	 * $wpdb->get_var() を安全に呼び出すためのヘルパー関数
+	 *
+	 * @param string $query
+	 * @param int    $x
+	 * @param int    $y
+	 * @return string|null
+	 */
+	protected function safeGetVar( string $query, int $x = 0, int $y = 0 ) {
+		$wpdb   = $this->wpdb();
+		$result = $wpdb->get_var( $query, $x, $y );
+		if ( $result === null && ! empty( $wpdb->last_error ) ) {
+			throw new RuntimeException( '[10D69A0C] Failed to get variable. ' . $wpdb->last_error );
+		}
+		return $result;
+	}
+
+	/**
 	 * $wpdb->get_row() を安全に呼び出すためのヘルパー関数
 	 *
 	 * @param string $query
