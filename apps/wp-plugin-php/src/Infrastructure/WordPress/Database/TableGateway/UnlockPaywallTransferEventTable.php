@@ -18,7 +18,7 @@ class UnlockPaywallTransferEventTable extends TableBase {
 	}
 
 	public function save( InvoiceId $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, UnlockPaywallTransferType $transfer_type ): void {
-		$result = $this->wpdb()->insert(
+		$result = $this->safeInsert(
 			$this->tableName(),
 			array(
 				'invoice_id'    => $invoice_id->ulid(),
@@ -31,8 +31,5 @@ class UnlockPaywallTransferEventTable extends TableBase {
 			)
 		);
 		assert( $result === 1, "[1C8FE9F7] Failed to save unlock paywall transfer event. {$result}" );
-		if ( false === $result ) {
-			throw new \RuntimeException( '[86C68ECA] Failed to save unlock paywall transfer event. ' . $this->wpdb()->last_error );
-		}
 	}
 }

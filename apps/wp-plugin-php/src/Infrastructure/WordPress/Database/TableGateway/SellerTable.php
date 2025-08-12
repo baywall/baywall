@@ -51,7 +51,7 @@ class SellerTable extends TableBase {
 	 * 販売者情報を追加します。
 	 */
 	public function add( Address $seller_address, TermsVersion $agreed_terms_version, SigningMessage $signing_message, Signature $signature ): void {
-		$result = $this->wpdb()->insert(
+		$result = $this->safeInsert(
 			$this->tableName(),
 			array(
 				'seller_address'       => $seller_address->value(),
@@ -60,9 +60,7 @@ class SellerTable extends TableBase {
 				'signature'            => $signature->value(),
 			)
 		);
-		if ( false === $result ) {
-			throw new \Exception( '[67CC141B] Failed to add seller data.' );
-		}
+		assert( $result === 1, "[67195917] Failed to insert seller data. {$result}" );
 	}
 
 	public function delete( Address $seller_address ): void {
