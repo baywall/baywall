@@ -51,7 +51,7 @@ class ServerSignerTable extends TableBase {
 		?string $encryption_key,
 		?string $encryption_iv
 	): void {
-		$result = $this->wpdb()->insert(
+		$result = $this->safeInsert(
 			$this->tableName(),
 			array(
 				'address'          => $address->value(),
@@ -60,9 +60,6 @@ class ServerSignerTable extends TableBase {
 				'encryption_iv'    => $encryption_iv,
 			),
 		);
-
-		if ( false === $result ) {
-			throw new \RuntimeException( '[9EA75BCD] Failed to save server signer data: ' . $this->wpdb()->last_error );
-		}
+		assert( $result === 1, "[B5113B02] Failed to save server signer data. {$result}" );
 	}
 }
