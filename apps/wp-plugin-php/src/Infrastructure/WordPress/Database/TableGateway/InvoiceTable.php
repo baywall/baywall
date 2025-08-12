@@ -40,7 +40,7 @@ class InvoiceTable extends TableBase {
 
 		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid() );
 
-		$record = $this->wpdb()->get_row( $sql );
+		$record = $this->safeGetRow( $sql );
 		if ( null !== $record ) {
 			$record->post_id  = (int) $record->post_id;
 			$record->chain_id = (int) $record->chain_id;
