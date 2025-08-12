@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Util\NamedPlaceholder;
+use RuntimeException;
 
 abstract class TableBase {
 	public function __construct( \wpdb $wpdb, string $table_name ) {
@@ -30,5 +31,22 @@ abstract class TableBase {
 	 */
 	protected function namedPrepare( string $query, array $args ): string {
 		return ( new NamedPlaceholder( $this->wpdb ) )->prepare( $query, $args );
+	}
+
+	/**
+	 * $wpdb->get_row() を安全に呼び出すためのヘルパー関数
+	 *
+	 * @param string|null $query
+	 * @param string      $output
+	 * @param int         $y
+	 * @return array|object|null|void
+	 */
+	protected function safeGetRow( ?string $query = null, string $output = OBJECT, int $y = 0 ) {
+		$wpdb = $this->wpdb();
+		$row  = $wpdb->get_row( $query, $output, $y );
+		if ( $row === null && ! empty( $wpdb->last_error ) ) {
+			throw new RuntimeException( '[E469E738] Failed to get row. ' . $wpdb->last_error );
+		}
+		return $row;
 	}
 }
