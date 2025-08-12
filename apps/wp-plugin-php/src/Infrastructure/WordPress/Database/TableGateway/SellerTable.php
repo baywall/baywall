@@ -34,15 +34,7 @@ class SellerTable extends TableBase {
 		$result = $this->safeGetResults( $sql );
 
 		return array_map(
-			function ( stdClass $row ) {
-				// 型をテーブル定義に一致させる
-				$row->seller_address       = (string) $row->seller_address;
-				$row->agreed_terms_version = (int) $row->agreed_terms_version;
-				$row->signing_message      = (string) $row->signing_message;
-				$row->signature            = (string) $row->signature;
-
-				return new SellerTableRecord( $row );
-			},
+			fn( stdClass $record ) => new SellerTableRecord( $record ),
 			$result
 		);
 	}

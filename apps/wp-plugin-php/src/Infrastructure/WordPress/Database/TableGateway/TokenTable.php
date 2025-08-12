@@ -31,16 +31,7 @@ class TokenTable extends TableBase {
 		$result = $this->safeGetResults( $sql );
 
 		return array_map(
-			function ( stdClass $row ) {
-				// 型をテーブル定義に一致させる
-				$row->chain_id   = (int) $row->chain_id;
-				$row->address    = (string) $row->address;
-				$row->symbol     = (string) $row->symbol;
-				$row->decimals   = (int) $row->decimals;
-				$row->is_payable = (bool) $row->is_payable;
-
-				return new TokenTableRecord( $row );
-			},
+			fn( stdClass $record ) => new TokenTableRecord( $record ),
 			$result
 		);
 	}

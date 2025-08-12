@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\ChainTableRecord;
+use stdClass;
 
 /**
  * チェーンの情報を記録するテーブル
@@ -26,17 +27,9 @@ class ChainTable extends TableBase {
 		SQL;
 		$results = $this->safeGetResults( $sql );
 
-		return array_values(
-			array_map(
-				function ( $row ) {
-					// 型をテーブル定義を一致させる
-					$row->chain_id            = (int) $row->chain_id;
-					$row->network_category_id = (int) $row->network_category_id;
-
-					return new ChainTableRecord( $row );
-				},
-				$results
-			)
+		return array_map(
+			fn( stdClass $record ) => new ChainTableRecord( $record ),
+			$results
 		);
 	}
 

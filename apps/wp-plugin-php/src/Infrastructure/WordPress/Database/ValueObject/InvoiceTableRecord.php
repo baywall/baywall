@@ -7,6 +7,9 @@ use stdClass;
 
 class InvoiceTableRecord extends TableRecordBase {
 	public function __construct( stdClass $record ) {
+		$record->post_id  = (int) $record->post_id;
+		$record->chain_id = (int) $record->chain_id;
+
 		$this->import( $record );
 	}
 

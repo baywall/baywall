@@ -7,6 +7,9 @@ use stdClass;
 
 class PaidContentTableRecord extends TableRecordBase {
 	public function __construct( stdClass $record ) {
+		$record->post_id                     = (int) $record->post_id;
+		$record->selling_network_category_id = $record->selling_network_category_id === null ? null : (int) $record->selling_network_category_id;
+
 		$this->import( $record );
 	}
 

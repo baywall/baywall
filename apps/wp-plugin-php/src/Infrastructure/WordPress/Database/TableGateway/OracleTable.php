@@ -31,15 +31,7 @@ class OracleTable extends TableBase {
 		$result = $this->safeGetResults( $sql );
 
 		return array_map(
-			function ( stdClass $row ) {
-				// 型をテーブル定義に一致させる
-				$row->chain_id     = (int) $row->chain_id;
-				$row->address      = (string) $row->address;
-				$row->base_symbol  = (string) $row->base_symbol;
-				$row->quote_symbol = (string) $row->quote_symbol;
-
-				return new OracleTableRecord( $row );
-			},
+			fn( stdClass $record ) => new OracleTableRecord( $record ),
 			$result
 		);
 	}

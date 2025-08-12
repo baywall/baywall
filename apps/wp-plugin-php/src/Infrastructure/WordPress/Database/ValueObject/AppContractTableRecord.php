@@ -7,6 +7,9 @@ use stdClass;
 
 class AppContractTableRecord extends TableRecordBase {
 	public function __construct( stdClass $record ) {
+		$record->chain_id             = (int) $record->chain_id;
+		$record->crawled_block_number = $record->crawled_block_number === null ? null : (int) $record->crawled_block_number;
+
 		$this->import( $record );
 	}
 
