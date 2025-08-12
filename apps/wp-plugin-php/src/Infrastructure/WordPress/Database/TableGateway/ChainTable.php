@@ -24,8 +24,7 @@ class ChainTable extends TableBase {
 			SELECT `chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `block_explorer_url`
 			FROM `{$this->tableName()}`
 		SQL;
-		$results = $this->wpdb()->get_results( $sql );
-		assert( is_array( $results ), '[583DBBE7] Invalid result type. Expected array, got ' . gettype( $results ) );
+		$results = $this->safeGetResults( $sql );
 
 		return array_values(
 			array_map(

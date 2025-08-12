@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway
 
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\OracleTableRecord;
+use stdClass;
 
 /**
  * Oracleの情報を記録するテーブル
@@ -27,21 +28,19 @@ class OracleTable extends TableBase {
 			FROM `{$this->tableName()}`
 		SQL;
 
-		$result = $this->wpdb()->get_results( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[AE20156F] Failed to get oracle data.' );
-		}
+		$result = $this->safeGetResults( $sql );
 
-		$records = array();
-		foreach ( $result as $row ) {
-			$row->chain_id     = (int) $row->chain_id;
-			$row->address      = (string) $row->address;
-			$row->base_symbol  = (string) $row->base_symbol;
-			$row->quote_symbol = (string) $row->quote_symbol;
+		return array_map(
+			function ( stdClass $row ) {
+				// 型をテーブル定義に一致させる
+				$row->chain_id     = (int) $row->chain_id;
+				$row->address      = (string) $row->address;
+				$row->base_symbol  = (string) $row->base_symbol;
+				$row->quote_symbol = (string) $row->quote_symbol;
 
-			$records[] = new OracleTableRecord( $row );
-		}
-
-		return $records;
+				return new OracleTableRecord( $row );
+			},
+			$result
+		);
 	}
 }

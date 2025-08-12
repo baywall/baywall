@@ -29,10 +29,8 @@ class ServerSignerTable extends TableBase {
 			FROM `{$this->tableName()}`
 		SQL;
 
-		$results = $this->wpdb()->get_results( $sql );
-		if ( false === $results ) {
-			throw new \RuntimeException( '[667ACE83] Failed to get server signer data.' );
-		} elseif ( count( $results ) > 1 ) {
+		$results = $this->safeGetResults( $sql );
+		if ( count( $results ) > 1 ) {
 			// 2件以上データが存在することはない
 			throw new \RuntimeException( '[81CCE569] More than one server signer data found.' );
 		}
