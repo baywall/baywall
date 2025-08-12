@@ -34,6 +34,21 @@ abstract class TableBase {
 	}
 
 	/**
+	 * $wpdb->query() を安全に呼び出すためのヘルパー関数
+	 *
+	 * @param string $query
+	 * @return int
+	 */
+	protected function safeQuery( string $query ): int {
+		$wpdb   = $this->wpdb();
+		$result = $wpdb->query( $query );
+		if ( false === $result ) {
+			throw new RuntimeException( '[BF06339E] Failed to execute query. ' . $wpdb->last_error );
+		}
+		return $result;
+	}
+
+	/**
 	 * $wpdb->get_row() を安全に呼び出すためのヘルパー関数
 	 *
 	 * @param string $query
