@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
 
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\UnlockPaywallTransactionTable;
 
@@ -36,5 +37,13 @@ class UnlockPaywallTransferEventRepository {
 			$event->amount(),
 			$event->transferType()
 		);
+	}
+
+	/**
+	 * 購入時のトランザクション情報が記録されているかどうかを取得します
+	 */
+	public function exists( InvoiceId $invoice_id ): bool {
+		// トランザクション情報が存在するか確認
+		return $this->unlock_paywall_transaction_table->exists( $invoice_id );
 	}
 }

@@ -3,52 +3,33 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
-use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
+use Cornix\Serendipity\Core\Application\Exception\ChainConnectionException;
+use Cornix\Serendipity\Core\Application\Exception\InvoiceNonceMismatchException;
+use Cornix\Serendipity\Core\Application\Exception\PurchaseValidationException;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
-use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
+use Cornix\Serendipity\Core\Application\UseCase\GetPaidContentByNonce;
+use Cornix\Serendipity\Core\Application\UseCase\GetPostDto;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
 
 	public function __construct(
-		AppContractRepository $app_contract_repository,
-		ChainRepository $chain_repository,
-		InvoiceRepository $invoice_repository,
-		PostRepository $post_repository,
-		ServerSignerService $server_signer_service,
 		UserAccessChecker $user_access_checker,
-		BlockNumberProvider $block_number_provider
+		GetPostDto $get_post_dto,
+		GetPaidContentByNonce $get_paid_content_by_nonce
 	) {
-		$this->app_contract_repository = $app_contract_repository;
-		$this->chain_repository        = $chain_repository;
-		$this->invoice_repository      = $invoice_repository;
-		$this->post_repository         = $post_repository;
-		$this->server_signer_service   = $server_signer_service;
-		$this->user_access_checker     = $user_access_checker;
-		$this->block_number_provider   = $block_number_provider;
+		$this->user_access_checker       = $user_access_checker;
+		$this->get_post_dto              = $get_post_dto;
+		$this->get_paid_content_by_nonce = $get_paid_content_by_nonce;
 	}
 
-	private AppContractRepository $app_contract_repository;
-	private ChainRepository $chain_repository;
-	private InvoiceRepository $invoice_repository;
-	private PostRepository $post_repository;
-	private ServerSignerService $server_signer_service;
 	private UserAccessChecker $user_access_checker;
-	private BlockNumberProvider $block_number_provider;
+	private GetPostDto $get_post_dto;
+	private GetPaidContentByNonce $get_paid_content_by_nonce;
 
 	// ここの定数は、GraphQLのエラーコードと一致させること
 	private const ERROR_CODE_INVALID_NONCE           = 'INVALID_NONCE';
 	private const ERROR_CODE_INVALID_CHAIN_ID        = 'INVALID_CHAIN_ID';
-	private const ERROR_CODE_PAYWALL_LOCKED          = 'PAYWALL_LOCKED';
+	private const ERROR_CODE_PAYWALL_LOCKED          = 'PAYWALL_LOCKED'; // TODO: 削除
 	private const ERROR_CODE_TRANSACTION_UNCONFIRMED = 'TRANSACTION_UNCONFIRMED';
 
 	/**
@@ -57,88 +38,37 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 * @return string|null
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$nonce      = InvoiceNonce::from( $args['nonce'] );
-		$invoice_id = InvoiceId::from( $args['invoiceID'] );
-
-		// エラー時の結果を返すコールバック関数
-		$error_result_callback = fn( $error_code ) => array(
-			'content'   => null,
-			'errorCode' => $error_code,
-		);
-
-		$invoice = $this->invoice_repository->get( $invoice_id );
-		if ( is_null( $invoice ) ) {
-			// 通常、ここは通らない
-			throw new \Exception( "[D2AAA3B6] Invoice data not found. invoice ID: {$invoice_id}" );
-		}
-
-		$db_nonce = $invoice->nonce(); // DBから取得したnonce
-		if ( is_null( $db_nonce ) || ! $nonce->equals( $db_nonce ) ) {
-			// nonceが無効な場合はドメインエラーとして返す
-			return $error_result_callback( self::ERROR_CODE_INVALID_NONCE );
-		}
-
-		$post_id          = $invoice->postId();
-		$chain            = $this->chain_repository->get( $invoice->chainId() );
-		$consumer_address = $invoice->consumerAddress();
-
+		/** @var string */
+		$invoice_nonce_value = $args['nonce'];
+		/** @var string */
+		$invoice_id_value = $args['invoiceID'];
 		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_id->value() );
+		$this->user_access_checker->checkCanViewPost( $this->get_post_dto->handleByInvoiceId( $invoice_id_value )->id );
 
-		if ( ! $chain->connectable() ) {
-			// 指定されたチェーンIDが接続可能でない場合はドメインエラーとして返す
-			// ※ 支払い後、管理者によってチェーンが無効化された場合はここを通るため、例外を投げない
-			return $error_result_callback( self::ERROR_CODE_INVALID_CHAIN_ID );
-		}
-
-		// ブロックチェーンに問い合わせる
-		$app_contract   = $this->app_contract_repository->get( $chain->id() );
-		$app            = new AppContractClient( $app_contract );
-		$server_signer  = $this->server_signer_service->getServerSigner();
-		$payment_status = $app->getPaywallStatus( $server_signer->address(), $post_id, $consumer_address );
-
-		if ( ! $payment_status->isUnlocked() ) {
-			// 最新のブロックでもペイウォールの解除が確認できなかった場合
-			return $error_result_callback( self::ERROR_CODE_PAYWALL_LOCKED );
-		} elseif ( ! $this->isConfirmed( $chain->id(), $payment_status->unlockedBlockNumber() ) ) {
-			// 最新のブロックではペイウォールの解除が確認できたが、
-			// トランザクションの待機ブロック数が管理者が指定した数を下回っている場合
-			return $error_result_callback( self::ERROR_CODE_TRANSACTION_UNCONFIRMED );
-		}
-
-		// 有料部分のコンテンツを取得
-		$paid_content = $this->post_repository->get( $post_id )->paidContent();
-		assert( ! is_null( $paid_content ), '[391C0A77] Paid content should not be null.' );
-
-		return array(
-			'content'   => apply_filters( 'the_content', $paid_content->value() ),
-			'errorCode' => null,
-		);
-	}
-
-	/**
-	 * トランザクションが待機済みかどうかを判定します。
-	 * TODO: refactor: add ConfirmedChecker
-	 */
-	private function isConfirmed( ChainId $chain_id, BlockNumber $unlocked_block_number ): bool {
-		// トランザクションの待機ブロック数を取得
-		$chain               = $this->chain_repository->get( $chain_id );
-		$confirmations_value = $chain->confirmations()->value();
-
-		if ( is_int( $confirmations_value ) ) {
-			// 最新のブロック番号を取得
-			$latest_block_number = $this->block_number_provider->getByChainId( $chain_id, BlockTag::latest() );
-			// 基準となるブロック番号を計算(「ペイウォール解除時のブロック番号」<=「基準ブロック番号」となる場合、待機済み)
-			$reference_block = $latest_block_number->sub( max( $confirmations_value - 1, 0 ) );
-			return $unlocked_block_number->compare( $reference_block ) <= 0;
-		} elseif ( $confirmations_value === 'latest' ) {
-			// ペイウォールが解除されたブロック番号が取得できているため、当然待機済みと判定
-			return true;
-		} elseif ( $confirmations_value === 'finalized' ) {
-			// TODO: 未実装
-			throw new \Exception( '[8A320100] Finalized block number is not implemented yet.' );
-		} else {
-			throw new \Exception( '[2251BA42] Invalid confirmations value. confirmations: ' . var_export( $confirmations_value, true ) );
+		try {
+			$result = $this->get_paid_content_by_nonce->handle( $invoice_id_value, $invoice_nonce_value );
+			return array(
+				'content'   => $result->paid_content,
+				'errorCode' => null,
+			);
+		} catch ( \Throwable $e ) {
+			// 例外が発生した場合はエラーコードを設定
+			if ( $e instanceof InvoiceNonceMismatchException ) {
+				// invoice に紐づく nonce が期待する値と一致しなかった場合
+				$error_code = self::ERROR_CODE_INVALID_NONCE;
+			} elseif ( $e instanceof ChainConnectionException ) {
+				// チェーンへの接続に失敗した場合
+				$error_code = self::ERROR_CODE_INVALID_CHAIN_ID;
+			} elseif ( $e instanceof PurchaseValidationException ) {
+				// 購入が確認できなかった場合
+				$error_code = self::ERROR_CODE_TRANSACTION_UNCONFIRMED;
+			} else {
+				throw $e; // その他の例外はそのまま投げる
+			}
+			return array(
+				'content'   => null,
+				'errorCode' => $error_code,
+			);
 		}
 	}
 }

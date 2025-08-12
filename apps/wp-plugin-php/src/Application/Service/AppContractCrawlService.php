@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Application\Exception\ChainConnectionException;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
@@ -36,6 +37,11 @@ class AppContractCrawlService {
 	public function crawl( ChainId $chain_id ): void {
 
 		$app_contract = $this->app_contract_repository->get( $chain_id );
+
+		// 接続不可の場合は例外を投げる
+		if ( ! $app_contract->chain()->connectable() ) {
+			throw new ChainConnectionException( "[94375A4C] Cannot connect to chain with ID: {$chain_id}" );
+		}
 
 		// 現時点での最新ブロック番号を取得
 		$latest_block_number = $this->block_number_provider->getByChainId( $chain_id );
