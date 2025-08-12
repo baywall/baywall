@@ -81,9 +81,6 @@ class InvoiceTable extends TableBase {
 			$invoice->nonce() ? $invoice->nonce()->value() : null
 		);
 
-		$result = $this->wpdb()->query( $sql );
-		if ( false === $result || $this->wpdb()->last_error ) {
-			throw new \RuntimeException( '[5F99E86E] Failed to insert invoice. ' . $this->wpdb()->last_error );
-		}
+		$this->safeQuery( $sql );
 	}
 }

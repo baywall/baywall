@@ -68,11 +68,7 @@ class PaidContentTable extends TableBase {
 			)
 		);
 
-		$result = $this->wpdb()->query( $sql );
-
-		if ( false === $result ) {
-			throw new \Exception( '[8DAB2BCF] Failed to set paid content data.' );
-		}
+		$result = $this->safeQuery( $sql );
 		assert( $result <= 2, "[DBB26475] Failed to set paid content data. - post_id: {$post_id}, result: {$result}" );
 	}
 
@@ -82,11 +78,7 @@ class PaidContentTable extends TableBase {
 		SQL;
 
 		$sql    = $this->wpdb()->prepare( $sql, $post_id->value() );
-		$result = $this->wpdb()->query( $sql );
-
-		if ( false === $result ) {
-			throw new \Exception( '[C40F74D9] Failed to delete paid content data.' );
-		}
+		$result = $this->safeQuery( $sql );
 		assert( $result <= 1, "[64CF23D9] Failed to delete paid content data. - post_id: {$post_id}, result: {$result}" );
 	}
 

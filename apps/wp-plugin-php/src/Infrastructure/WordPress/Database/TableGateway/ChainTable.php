@@ -65,9 +65,6 @@ class ChainTable extends TableBase {
 			)
 		);
 
-		$result = $this->wpdb()->query( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[E01C7DE3] Failed to insert or update chain data. ' . $this->wpdb()->last_error );
-		}
+		$this->safeQuery( $sql );
 	}
 }
