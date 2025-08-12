@@ -30,7 +30,7 @@ class PaidContentTable extends TableBase {
 		SQL;
 
 		$sql = $this->wpdb()->prepare( $sql, $post_id->value() );
-		$row = $this->wpdb()->get_row( $sql );
+		$row = $this->safeGetRow( $sql );
 
 		if ( ! is_null( $row ) ) {
 			$row->post_id                     = (int) $row->post_id;
