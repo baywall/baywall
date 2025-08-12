@@ -36,12 +36,12 @@ abstract class TableBase {
 	/**
 	 * $wpdb->get_row() を安全に呼び出すためのヘルパー関数
 	 *
-	 * @param string|null $query
-	 * @param string      $output
-	 * @param int         $y
+	 * @param string $query
+	 * @param string $output
+	 * @param int    $y
 	 * @return array|object|null|void
 	 */
-	protected function safeGetRow( ?string $query = null, string $output = OBJECT, int $y = 0 ) {
+	protected function safeGetRow( string $query, string $output = OBJECT, int $y = 0 ) {
 		$wpdb = $this->wpdb();
 		$row  = $wpdb->get_row( $query, $output, $y );
 		if ( $row === null && ! empty( $wpdb->last_error ) ) {
