@@ -29,7 +29,7 @@ class PaidContentTable extends TableBase {
 			WHERE `post_id` = %d
 		SQL;
 
-		$sql = $this->wpdb()->prepare( $sql, $post_id->value() );
+		$sql = $this->prepare( $sql, $post_id->value() );
 		$row = $this->safeGetRow( $sql );
 
 		if ( ! is_null( $row ) ) {
@@ -77,7 +77,7 @@ class PaidContentTable extends TableBase {
 			DELETE FROM `{$this->tableName()}` WHERE `post_id` = %d
 		SQL;
 
-		$sql    = $this->wpdb()->prepare( $sql, $post_id->value() );
+		$sql    = $this->prepare( $sql, $post_id->value() );
 		$result = $this->safeQuery( $sql );
 		assert( $result <= 1, "[64CF23D9] Failed to delete paid content data. - post_id: {$post_id}, result: {$result}" );
 	}
