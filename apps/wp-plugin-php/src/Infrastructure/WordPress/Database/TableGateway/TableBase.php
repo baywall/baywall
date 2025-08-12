@@ -106,4 +106,20 @@ abstract class TableBase {
 		}
 		return $result;
 	}
+
+	/**
+	 * $wpdb->update() を安全に呼び出すためのヘルパー関数
+	 *
+	 * @param string               $table
+	 * @param array                $where
+	 * @param string[]|string|null $where_format
+	 * @return int
+	 */
+	protected function safeDelete( string $table, array $where, $where_format = null ): int {
+		$result = $this->wpdb()->delete( $table, $where, $where_format );
+		if ( false === $result ) {
+			throw new RuntimeException( '[7E3D8D05] Failed to delete data. ' . $this->wpdb()->last_error );
+		}
+		return $result;
+	}
 }
