@@ -27,7 +27,7 @@ class InvoiceRepositoryImpl implements InvoiceRepository {
 	/** @inheritdoc */
 	public function save( Invoice $invoice ): void {
 		// 請求書情報を保存
-		$this->invoice_table->insert( $invoice );
+		$this->invoice_table->save( $invoice );
 	}
 
 	/** @inheritdoc */
