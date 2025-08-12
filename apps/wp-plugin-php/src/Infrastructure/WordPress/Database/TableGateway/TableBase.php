@@ -49,4 +49,20 @@ abstract class TableBase {
 		}
 		return $row;
 	}
+
+
+	/**
+	 * $wpdb->get_results() を安全に呼び出すためのヘルパー関数
+	 *
+	 * @param string $query
+	 * @return array|object|null
+	 */
+	protected function safeGetResults( string $query, string $output = OBJECT ) {
+		$wpdb    = $this->wpdb();
+		$results = $wpdb->get_results( $query, $output );
+		if ( ! empty( $wpdb->last_error ) ) {
+			throw new RuntimeException( '[89353F21] Failed to get results. ' . $wpdb->last_error );
+		}
+		return $results;
+	}
 }
