@@ -69,9 +69,6 @@ class TokenTable extends TableBase {
 			$token->isPayable(),
 		);
 
-		$result = $this->wpdb()->query( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[7217F4B3] Failed to add token data.' );
-		}
+		$this->safeQuery( $sql );
 	}
 }

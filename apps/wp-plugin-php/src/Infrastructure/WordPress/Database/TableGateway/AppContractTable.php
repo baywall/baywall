@@ -69,9 +69,6 @@ class AppContractTable extends TableBase {
 			)
 		);
 
-		$result = $this->wpdb()->query( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[1AA48899] Failed to insert or update chain data. ' . $this->wpdb()->last_error );
-		}
+		$this->safeQuery( $sql );
 	}
 }
