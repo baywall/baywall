@@ -64,12 +64,9 @@ class SellerTable extends TableBase {
 	}
 
 	public function delete( Address $seller_address ): void {
-		$result = $this->wpdb()->delete(
+		$this->safeDelete(
 			$this->tableName(),
 			array( 'seller_address' => $seller_address->value() )
 		);
-		if ( false === $result ) {
-			throw new \Exception( '[8D9EB76D] Failed to delete seller data.' );
-		}
 	}
 }
