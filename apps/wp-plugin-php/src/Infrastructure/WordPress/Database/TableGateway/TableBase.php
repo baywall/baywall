@@ -23,6 +23,16 @@ abstract class TableBase {
 	}
 
 	/**
+	 * $wpdb->prepare() を呼び出します
+	 *
+	 * @param string $query
+	 * @param array  ...$args
+	 */
+	protected function prepare( string $query, ...$args ): string {
+		return $this->wpdb()->prepare( $query, ...$args );
+	}
+
+	/**
 	 * Named placeholder を使用して SQL クエリを構築します
 	 * ※プレースホルダは、キーがコロンで始まる形式（例: `:key`）で指定してください。
 	 *
