@@ -29,15 +29,11 @@ class PaidContentTable extends TableBase {
 			WHERE `post_id` = %d
 		SQL;
 
-		$sql = $this->wpdb()->prepare( $sql, $post_id->value() );
-		$row = $this->wpdb()->get_row( $sql );
+		$sql = $this->prepare( $sql, $post_id->value() );
 
-		if ( ! is_null( $row ) ) {
-			$row->post_id                     = (int) $row->post_id;
-			$row->selling_network_category_id = is_null( $row->selling_network_category_id ) ? null : (int) $row->selling_network_category_id;
-		}
+		$record = $this->safeGetRow( $sql );
 
-		return is_null( $row ) ? null : new PaidContentTableRecord( $row );
+		return $record === null ? null : new PaidContentTableRecord( $record );
 	}
 
 	public function set( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryId $selling_network_category_id, ?Price $selling_price ): void {
@@ -68,11 +64,7 @@ class PaidContentTable extends TableBase {
 			)
 		);
 
-		$result = $this->wpdb()->query( $sql );
-
-		if ( false === $result ) {
-			throw new \Exception( '[8DAB2BCF] Failed to set paid content data.' );
-		}
+		$result = $this->safeQuery( $sql );
 		assert( $result <= 2, "[DBB26475] Failed to set paid content data. - post_id: {$post_id}, result: {$result}" );
 	}
 
@@ -81,12 +73,8 @@ class PaidContentTable extends TableBase {
 			DELETE FROM `{$this->tableName()}` WHERE `post_id` = %d
 		SQL;
 
-		$sql    = $this->wpdb()->prepare( $sql, $post_id->value() );
-		$result = $this->wpdb()->query( $sql );
-
-		if ( false === $result ) {
-			throw new \Exception( '[C40F74D9] Failed to delete paid content data.' );
-		}
+		$sql    = $this->prepare( $sql, $post_id->value() );
+		$result = $this->safeQuery( $sql );
 		assert( $result <= 1, "[64CF23D9] Failed to delete paid content data. - post_id: {$post_id}, result: {$result}" );
 	}
 
@@ -94,6 +82,6 @@ class PaidContentTable extends TableBase {
 	 * テーブルが存在するかどうかを取得します。
 	 */
 	public function exists(): bool {
-		return (bool) $this->wpdb()->get_var( "SHOW TABLES LIKE '{$this->tableName()}'" );
+		return (bool) $this->safeGetVar( "SHOW TABLES LIKE '{$this->tableName()}'" );
 	}
 }

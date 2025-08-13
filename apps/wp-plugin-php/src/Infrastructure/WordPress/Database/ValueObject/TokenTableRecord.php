@@ -7,6 +7,12 @@ use stdClass;
 
 class TokenTableRecord extends TableRecordBase {
 	public function __construct( stdClass $record ) {
+		$record->chain_id   = (int) $record->chain_id;
+		$record->address    = (string) $record->address;
+		$record->symbol     = (string) $record->symbol;
+		$record->decimals   = (int) $record->decimals;
+		$record->is_payable = (bool) $record->is_payable;
+
 		$this->import( $record );
 	}
 

@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
 use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use stdClass;
 
 /**
  * Appコントラクトの情報を記録するテーブル
@@ -26,22 +27,11 @@ class AppContractTable extends TableBase {
 			SELECT `chain_id`, `address`, `crawled_block_number`, `crawled_block_number_updated_at`
 			FROM `{$this->tableName()}`
 		SQL;
-		$results = $this->wpdb()->get_results( $sql );
-
-		if ( ! is_array( $results ) ) {
-			throw new \Exception( '[0C248CD9] Failed to fetch app contract records. ' . $this->wpdb()->last_error );
-		}
+		$results = $this->safeGetResults( $sql );
 
 		return array_map(
-			function ( $record ) {
-				// 型をテーブル定義に一致させる
-				$record->chain_id             = (int) $record->chain_id;
-				$record->crawled_block_number = null === $record->crawled_block_number ? null : (int) $record->crawled_block_number;
-
-				// AppContractTableRecordのインスタンスを返す
-				return new AppContractTableRecord( $record );
-			},
-			(array) $results
+			fn( stdClass $record ) => new AppContractTableRecord( $record ),
+			$results
 		);
 	}
 
@@ -73,9 +63,6 @@ class AppContractTable extends TableBase {
 			)
 		);
 
-		$result = $this->wpdb()->query( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[1AA48899] Failed to insert or update chain data. ' . $this->wpdb()->last_error );
-		}
+		$this->safeQuery( $sql );
 	}
 }

@@ -38,15 +38,11 @@ class InvoiceTable extends TableBase {
 			WHERE `id` = %s
 		SQL;
 
-		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid() );
+		$sql = $this->prepare( $sql, $invoice_id->ulid() );
 
-		$record = $this->wpdb()->get_row( $sql );
-		if ( null !== $record ) {
-			$record->post_id  = (int) $record->post_id;
-			$record->chain_id = (int) $record->chain_id;
-		}
+		$record = $this->safeGetRow( $sql );
 
-		return is_null( $record ) ? null : new InvoiceTableRecord( $record );
+		return $record === null ? null : new InvoiceTableRecord( $record );
 	}
 
 	public function save( Invoice $invoice ): void {
@@ -67,7 +63,7 @@ class InvoiceTable extends TableBase {
 				`nonce` = VALUES(`nonce`)
 		SQL;
 
-		$sql = $this->wpdb()->prepare(
+		$sql = $this->prepare(
 			$sql,
 			$invoice->id()->ulid(),
 			$invoice->postId()->value(),
@@ -81,9 +77,6 @@ class InvoiceTable extends TableBase {
 			$invoice->nonce() ? $invoice->nonce()->value() : null
 		);
 
-		$result = $this->wpdb()->query( $sql );
-		if ( false === $result || $this->wpdb()->last_error ) {
-			throw new \RuntimeException( '[5F99E86E] Failed to insert invoice. ' . $this->wpdb()->last_error );
-		}
+		$this->safeQuery( $sql );
 	}
 }
