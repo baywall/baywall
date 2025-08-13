@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\SellerTableRecord;
+use stdClass;
 
 /**
  * 販売者情報を記録するテーブル
@@ -30,29 +31,19 @@ class SellerTable extends TableBase {
 			FROM `{$this->tableName()}`
 		SQL;
 
-		$result = $this->wpdb()->get_results( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[5ABA6967] Failed to get seller data.' );
-		}
+		$result = $this->safeGetResults( $sql );
 
-		$records = array();
-		foreach ( $result as $row ) {
-			$row->seller_address       = (string) $row->seller_address;
-			$row->agreed_terms_version = (int) $row->agreed_terms_version;
-			$row->signing_message      = (string) $row->signing_message;
-			$row->signature            = (string) $row->signature;
-
-			$records[] = new SellerTableRecord( $row );
-		}
-
-		return $records;
+		return array_map(
+			fn( stdClass $record ) => new SellerTableRecord( $record ),
+			$result
+		);
 	}
 
 	/**
 	 * 販売者情報を追加します。
 	 */
 	public function add( Address $seller_address, TermsVersion $agreed_terms_version, SigningMessage $signing_message, Signature $signature ): void {
-		$result = $this->wpdb()->insert(
+		$result = $this->safeInsert(
 			$this->tableName(),
 			array(
 				'seller_address'       => $seller_address->value(),
@@ -61,18 +52,13 @@ class SellerTable extends TableBase {
 				'signature'            => $signature->value(),
 			)
 		);
-		if ( false === $result ) {
-			throw new \Exception( '[67CC141B] Failed to add seller data.' );
-		}
+		assert( $result === 1, "[67195917] Failed to insert seller data. {$result}" );
 	}
 
 	public function delete( Address $seller_address ): void {
-		$result = $this->wpdb()->delete(
+		$this->safeDelete(
 			$this->tableName(),
 			array( 'seller_address' => $seller_address->value() )
 		);
-		if ( false === $result ) {
-			throw new \Exception( '[8D9EB76D] Failed to delete seller data.' );
-		}
 	}
 }

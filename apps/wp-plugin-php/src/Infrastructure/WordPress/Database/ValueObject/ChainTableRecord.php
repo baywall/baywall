@@ -7,6 +7,9 @@ use stdClass;
 
 class ChainTableRecord extends TableRecordBase {
 	public function __construct( stdClass $record ) {
+		$record->chain_id            = (int) $record->chain_id;
+		$record->network_category_id = (int) $record->network_category_id;
+
 		$this->import( $record );
 	}
 

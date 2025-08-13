@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\ChainTableRecord;
+use stdClass;
 
 /**
  * チェーンの情報を記録するテーブル
@@ -24,20 +25,11 @@ class ChainTable extends TableBase {
 			SELECT `chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `block_explorer_url`
 			FROM `{$this->tableName()}`
 		SQL;
-		$results = $this->wpdb()->get_results( $sql );
-		assert( is_array( $results ), '[583DBBE7] Invalid result type. Expected array, got ' . gettype( $results ) );
+		$results = $this->safeGetResults( $sql );
 
-		return array_values(
-			array_map(
-				function ( $row ) {
-					// 型をテーブル定義を一致させる
-					$row->chain_id            = (int) $row->chain_id;
-					$row->network_category_id = (int) $row->network_category_id;
-
-					return new ChainTableRecord( $row );
-				},
-				$results
-			)
+		return array_map(
+			fn( stdClass $record ) => new ChainTableRecord( $record ),
+			$results
 		);
 	}
 
@@ -66,9 +58,6 @@ class ChainTable extends TableBase {
 			)
 		);
 
-		$result = $this->wpdb()->query( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[E01C7DE3] Failed to insert or update chain data. ' . $this->wpdb()->last_error );
-		}
+		$this->safeQuery( $sql );
 	}
 }

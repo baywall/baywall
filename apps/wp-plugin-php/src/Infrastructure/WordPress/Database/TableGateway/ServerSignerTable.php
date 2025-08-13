@@ -29,10 +29,8 @@ class ServerSignerTable extends TableBase {
 			FROM `{$this->tableName()}`
 		SQL;
 
-		$results = $this->wpdb()->get_results( $sql );
-		if ( false === $results ) {
-			throw new \RuntimeException( '[667ACE83] Failed to get server signer data.' );
-		} elseif ( count( $results ) > 1 ) {
+		$results = $this->safeGetResults( $sql );
+		if ( count( $results ) > 1 ) {
 			// 2件以上データが存在することはない
 			throw new \RuntimeException( '[81CCE569] More than one server signer data found.' );
 		}
@@ -53,7 +51,7 @@ class ServerSignerTable extends TableBase {
 		?string $encryption_key,
 		?string $encryption_iv
 	): void {
-		$result = $this->wpdb()->insert(
+		$result = $this->safeInsert(
 			$this->tableName(),
 			array(
 				'address'          => $address->value(),
@@ -62,9 +60,6 @@ class ServerSignerTable extends TableBase {
 				'encryption_iv'    => $encryption_iv,
 			),
 		);
-
-		if ( false === $result ) {
-			throw new \RuntimeException( '[9EA75BCD] Failed to save server signer data: ' . $this->wpdb()->last_error );
-		}
+		assert( $result === 1, "[B5113B02] Failed to save server signer data. {$result}" );
 	}
 }
