@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation;
 
+use Cornix\Serendipity\Core\Infrastructure\System\PhpExtChecker;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\PluginVersionOption;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrate;
 use Cornix\Serendipity\Core\Repository\PluginInfo;
@@ -47,6 +48,9 @@ class PluginUpdateHook {
 			$from_version = $plugin_version_option->get();
 			$to_version   = $plugin_info->version();
 			if ( version_compare( $from_version ?? '0.0.0', $to_version, '<' ) ) {
+				// 動作環境のチェック
+				$this->checkSystem();
+
 				// マイグレーション実行
 				( new Migrate( $this->container ) )->run( $from_version, $to_version );
 
@@ -61,6 +65,14 @@ class PluginUpdateHook {
 			// エラー内容を画面に表示して終了
 			wp_die( (string) $e, '', array( 'back_link' => true ) );
 		}
+	}
+
+	/**
+	 * 動作環境のチェックを行います
+	 */
+	private function checkSystem(): void {
+		// PHP拡張のチェック
+		$this->container->get( PhpExtChecker::class )->checkPhpExtensions();
 	}
 
 	private function deactivatePlugin(): void {
