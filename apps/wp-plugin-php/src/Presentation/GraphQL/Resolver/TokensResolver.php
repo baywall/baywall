@@ -31,14 +31,14 @@ class TokensResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$filter_chain_id_value = $args['filter']['chainID'] ?? null;
+		$filter_chain_id_value = $args['filter']['chainId'] ?? null;
 		$filter_address_value  = $args['filter']['address'] ?? null;
 
 		return array_map(
 			fn( TokenDto $token_dto ) => $root_value['token'](
 				$root_value,
 				array(
-					'chainID' => $token_dto->chain_id,
+					'chainId' => $token_dto->chain_id,
 					'address' => $token_dto->address,
 				)
 			),

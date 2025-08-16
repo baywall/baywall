@@ -54,7 +54,7 @@ class AppContractClient {
 				}
 
 				$is_unlocked           = $res['isUnlocked'];
-				$invoice_id            = $res['invoiceID'];
+				$invoice_id            = $res['invoiceId'];
 				$unlocked_block_number = $res['unlockedBlockNumber'];
 
 				assert( is_bool( $is_unlocked ) );

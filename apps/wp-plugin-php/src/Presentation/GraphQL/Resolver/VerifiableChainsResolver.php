@@ -37,7 +37,7 @@ class VerifiableChainsResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$post_id = $args['postID'];
+		$post_id = $args['postId'];
 
 		// 投稿を閲覧できる権限があることをチェック
 		$this->user_access_checker->checkCanViewPost( $post_id );
@@ -58,7 +58,7 @@ class VerifiableChainsResolver extends ResolverBase {
 			$app_contract         = $this->app_contract_repository->get( $chain->id() );
 			$app_contract_address = is_null( $app_contract ) ? null : $app_contract->address();
 			if ( ! is_null( $app_contract_address ) && $chain->connectable() ) {
-				$result[] = $root_value['chain']( $root_value, array( 'chainID' => $chain->id()->value() ) );
+				$result[] = $root_value['chain']( $root_value, array( 'chainId' => $chain->id()->value() ) );
 			}
 		}
 

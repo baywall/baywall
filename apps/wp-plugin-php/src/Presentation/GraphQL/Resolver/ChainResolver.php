@@ -35,7 +35,7 @@ class ChainResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$chain_id_value = $args['chainID'];
+		$chain_id_value = $args['chainId'];
 
 		$chain_dto = $this->get_chain_dto->handle( $chain_id_value );
 		assert( null !== $chain_dto, "[CA31D9B5] chain data is not found. chain id: {$chain_id_value}" );
@@ -55,7 +55,7 @@ class ChainResolver extends ResolverBase {
 				fn( TokenDto $token_dto ) => $root_value['token'](
 					$root_value,
 					array(
-						'chainID' => $token_dto->chain_id,
+						'chainId' => $token_dto->chain_id,
 						'address' => $token_dto->address,
 					)
 				),
@@ -69,7 +69,7 @@ class ChainResolver extends ResolverBase {
 			return $root_value['networkCategory'](
 				$root_value,
 				array(
-					'networkCategoryID' => $chain_dto->network_category_id,
+					'networkCategoryId' => $chain_dto->network_category_id,
 				)
 			);
 		};
@@ -78,7 +78,7 @@ class ChainResolver extends ResolverBase {
 			'id'              => $chain_dto->id,
 			'appContract'     => $app_contract_callback,
 			'confirmations'   => $chain_dto->confirmations,
-			'rpcURL'          => $chain_dto->rpc_url,
+			'rpcUrl'          => $chain_dto->rpc_url,
 			'tokens'          => $tokens_callback,
 			'networkCategory' => $network_category_callback,
 		);

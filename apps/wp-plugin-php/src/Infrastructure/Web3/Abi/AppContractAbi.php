@@ -38,7 +38,7 @@ class AppContractAbi extends AbiBase {
 			BlockNumber::from( $log->blockNumber ), // block_number
 			hexdec( $log->logIndex ), // log_index
 			TransactionHash::from( $log->transactionHash ), // transaction_hash
-			InvoiceId::from( $decoded_event_parameters['invoiceID'] ), // invoice_id
+			InvoiceId::from( $decoded_event_parameters['invoiceId'] ), // invoice_id
 			Address::from( $decoded_event_parameters['signer'] ), // server_signer_address
 			Address::from( $decoded_event_parameters['from'] ), // from_address
 			Address::from( $decoded_event_parameters['to'] ), // to_address
@@ -91,7 +91,7 @@ class AppContractAbiData {
 							{
 								"indexed": false,
 								"internalType": "uint128",
-								"name": "invoiceID",
+								"name": "invoiceId",
 								"type": "uint128"
 							},
 							{
@@ -113,7 +113,7 @@ class AppContractAbiData {
 							},
 							{
 								"internalType": "uint64",
-								"name": "postID",
+								"name": "postId",
 								"type": "uint64"
 							},
 							{
@@ -131,7 +131,7 @@ class AppContractAbiData {
 							},
 							{
 								"internalType": "uint128",
-								"name": "invoiceID",
+								"name": "invoiceId",
 								"type": "uint128"
 							},
 							{

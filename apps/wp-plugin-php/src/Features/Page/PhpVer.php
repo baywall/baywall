@@ -45,7 +45,7 @@ class PhpVarData {
 		// 現在の投稿IDが取得できる場合は追加
 		$post_id = get_the_ID();
 		if ( false !== $post_id ) {
-			$result['postID'] = $post_id;
+			$result['postId'] = $post_id;
 		}
 
 		return $result;

@@ -29,7 +29,7 @@ class SetConfirmationsResolver extends ResolverBase {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		/** @var int */
-		$chain_id_value = $args['chainID'];
+		$chain_id_value = $args['chainId'];
 		/** @var string|null */
 		$confirmations_value = $args['confirmations'] ?? null;
 		$confirmations       = $confirmations_value ?? Config::MIN_CONFIRMATIONS; // nullが指定された場合は既定値を設定 TODO: nullableを廃止
