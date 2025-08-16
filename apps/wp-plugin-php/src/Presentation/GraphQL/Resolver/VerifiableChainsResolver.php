@@ -37,7 +37,7 @@ class VerifiableChainsResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$post_id = $args['postID'];
+		$post_id = $args['postId'];
 
 		// 投稿を閲覧できる権限があることをチェック
 		$this->user_access_checker->checkCanViewPost( $post_id );

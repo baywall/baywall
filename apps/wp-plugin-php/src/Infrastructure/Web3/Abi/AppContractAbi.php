@@ -113,7 +113,7 @@ class AppContractAbiData {
 							},
 							{
 								"internalType": "uint64",
-								"name": "postID",
+								"name": "postId",
 								"type": "uint64"
 							},
 							{

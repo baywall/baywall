@@ -30,7 +30,7 @@ class PostResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$post_dto = $this->get_post_dto->handle( $args['postID'] );
+		$post_dto = $this->get_post_dto->handle( $args['postId'] );
 
 		// 投稿を閲覧できる権限があることをチェック
 		$this->user_access_checker->checkCanViewPost( $post_dto->id );
@@ -53,8 +53,8 @@ class PostResolver extends ResolverBase {
 		return array(
 			'id'             => $post_dto->id,
 			'title'          => $post_dto->title,
-			'sellingPrice'   => fn() => $root_value['sellingPrice']( $root_value, array( 'postID' => $post_dto->id ) ),
-			'sellingContent' => fn() => $root_value['sellingContent']( $root_value, array( 'postID' => $post_dto->id ) ),
+			'sellingPrice'   => fn() => $root_value['sellingPrice']( $root_value, array( 'postId' => $post_dto->id ) ),
+			'sellingContent' => fn() => $root_value['sellingContent']( $root_value, array( 'postId' => $post_dto->id ) ),
 			'payableTokens'  => $payable_tokens_callback,
 		);
 	}
