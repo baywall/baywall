@@ -4,24 +4,24 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Application\UseCase\SaveERC20Token;
+use Cornix\Serendipity\Core\Application\UseCase\SaveErc20Token;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 /**
  * ERC20トークンの情報をサーバーに登録します。
  */
-class RegisterERC20TokenResolver extends ResolverBase {
+class RegisterErc20TokenResolver extends ResolverBase {
 
 	public function __construct(
-		SaveERC20Token $save_erc20_token,
+		SaveErc20Token $save_erc20_token,
 		UserAccessChecker $user_access_checker
 	) {
 		$this->save_erc20_token    = $save_erc20_token;
 		$this->user_access_checker = $user_access_checker;
 	}
 
-	private SaveERC20Token $save_erc20_token;
+	private SaveErc20Token $save_erc20_token;
 	private UserAccessChecker $user_access_checker;
 
 	/**
