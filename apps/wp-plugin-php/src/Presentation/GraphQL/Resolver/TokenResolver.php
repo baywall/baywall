@@ -18,7 +18,7 @@ class TokenResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$chain_id_value = $args['chainID'];
+		$chain_id_value = $args['chainId'];
 		/** @var string */
 		$address_value = $args['address'];
 
@@ -29,7 +29,7 @@ class TokenResolver extends ResolverBase {
 		$token_dto = array_values( $token_dtos )[0];
 
 		return array(
-			'chain'     => fn() => $root_value['chain']( $root_value, array( 'chainID' => $token_dto->chain_id ) ),
+			'chain'     => fn() => $root_value['chain']( $root_value, array( 'chainId' => $token_dto->chain_id ) ),
 			'address'   => $token_dto->address,
 			'symbol'    => $token_dto->symbol,
 			'isPayable' => $token_dto->is_payable,

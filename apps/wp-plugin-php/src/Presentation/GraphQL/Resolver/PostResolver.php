@@ -42,7 +42,7 @@ class PostResolver extends ResolverBase {
 				fn( TokenDto $token_dto ) => $root_value['token'](
 					$root_value,
 					array(
-						'chainID' => $token_dto->chain_id,
+						'chainId' => $token_dto->chain_id,
 						'address' => $token_dto->address,
 					)
 				),

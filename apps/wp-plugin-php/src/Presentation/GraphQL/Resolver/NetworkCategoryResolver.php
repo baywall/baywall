@@ -49,7 +49,7 @@ class NetworkCategoryResolver extends ResolverBase {
 		$chains_callback = function () use ( $root_value, $chains ) {
 			return array_map(
 				function ( $chain ) use ( $root_value ) {
-					return $root_value['chain']( $root_value, array( 'chainID' => $chain->id()->value() ) );
+					return $root_value['chain']( $root_value, array( 'chainId' => $chain->id()->value() ) );
 				},
 				$chains
 			);
