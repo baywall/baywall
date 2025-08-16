@@ -25,7 +25,7 @@ class SalesHistoriesResolver extends ResolverBase {
 		/** @var array */
 		$filter = $args['filter'] ?? null;
 		/** @var string */
-		$invoice_id = $args['invoiceID'] ?? null;
+		$invoice_id = $args['invoiceId'] ?? null;
 
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
