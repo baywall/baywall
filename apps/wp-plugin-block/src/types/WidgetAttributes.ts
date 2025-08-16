@@ -5,7 +5,7 @@
  */
 export type WidgetAttributes = {
 	/** 販売対象のネットワークカテゴリID */
-	sellingNetworkCategoryID: number | null;
+	sellingNetworkCategoryId: number | null;
 
 	/** 販売価格の値(10進数の文字列) */
 	sellingAmount: string | null;
