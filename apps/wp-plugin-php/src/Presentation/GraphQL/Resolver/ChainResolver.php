@@ -78,7 +78,7 @@ class ChainResolver extends ResolverBase {
 			'id'              => $chain_dto->id,
 			'appContract'     => $app_contract_callback,
 			'confirmations'   => $chain_dto->confirmations,
-			'rpcURL'          => $chain_dto->rpc_url,
+			'rpcUrl'          => $chain_dto->rpc_url,
 			'tokens'          => $tokens_callback,
 			'networkCategory' => $network_category_callback,
 		);
