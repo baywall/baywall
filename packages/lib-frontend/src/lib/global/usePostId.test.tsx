@@ -1,19 +1,19 @@
-import { usePostID } from './usePostID';
+import { usePostId } from './usePostId';
 import { PhpVarName } from '../repository/PhpVarName';
 import { renderHook } from '../../jest-lib';
 import { PhpVar } from '../../types/PhpVar';
 
-const setGlobalVar = ( postID: number | undefined ) => {
+const setGlobalVar = ( postId: number | undefined ) => {
 	const varName = new PhpVarName().get();
 	const globalVar: PhpVar = {
 		graphqlUrl: 'https://example.com/graphql',
 		wpRestNonce: 'abcde01234',
-		postID,
+		postId,
 	};
 	( global as any )[ varName ] = globalVar;
 };
 
-describe( '[D78FB2CE] usePostID', () => {
+describe( '[D78FB2CE] usePostId', () => {
 	const cleanup = () => {
 		// document.head.innerHTML = '';
 		( global as any )[ new PhpVarName().get() ] = undefined;
@@ -24,12 +24,12 @@ describe( '[D78FB2CE] usePostID', () => {
 	/**
 	 * 投稿IDが存在する場合のテスト
 	 */
-	it( '[43FA26C6] usePostID - postID exists', () => {
+	it( '[43FA26C6] usePostId - postId exists', () => {
 		// ARRANGE
 		setGlobalVar( 42 );
 
 		// ACT
-		const { result } = renderHook( () => usePostID() );
+		const { result } = renderHook( () => usePostId() );
 
 		// ASSERT
 		expect( result.current ).toEqual( 42 );
@@ -38,12 +38,12 @@ describe( '[D78FB2CE] usePostID', () => {
 	/**
 	 * 投稿IDが存在しない場合のテスト
 	 */
-	it( '[164C4EEB] usePostID - postID does not exist', () => {
+	it( '[164C4EEB] usePostId - postId does not exist', () => {
 		// ARRANGE
 		setGlobalVar( undefined );
 
 		// ACT
-		const { result } = renderHook( () => usePostID() );
+		const { result } = renderHook( () => usePostId() );
 
 		// ASSERT
 		expect( result.current ).toBeNull();
