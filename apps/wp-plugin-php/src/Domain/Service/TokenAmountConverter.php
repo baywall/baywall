@@ -41,7 +41,7 @@ class TokenAmountConverter {
 			->apply( $this->token_repository->all() );
 
 		if ( 1 !== count( $tokens ) ) {
-			throw new \InvalidArgumentException( "[30E8EDA4] Invalid token data. - chainID: {$chain_id}, symbol: {$symbol}, count: " . count( $tokens ) );
+			throw new \InvalidArgumentException( "[30E8EDA4] Invalid token data. - chainId: {$chain_id}, symbol: {$symbol}, count: " . count( $tokens ) );
 		}
 
 		return array_values( $tokens )[0];

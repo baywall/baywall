@@ -32,9 +32,9 @@ class SetRpcUrlResolver extends ResolverBase {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		/** @var int */
-		$chain_id_value = $args['chainID'];
+		$chain_id_value = $args['chainId'];
 		/** @var string|null */
-		$rpc_url_value = $args['rpcURL'];
+		$rpc_url_value = $args['rpcUrl'];
 
 		// 事前にRPC URLが登録しようとしているチェーンIDと一致するかどうかを確認
 		if ( ! is_null( $rpc_url_value ) ) {

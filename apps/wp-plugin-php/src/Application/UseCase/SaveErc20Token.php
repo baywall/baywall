@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;
 
-class SaveERC20Token {
+class SaveErc20Token {
 	public function __construct( TokenRepository $token_repository, ChainRepository $chain_repository ) {
 		$this->token_repository = $token_repository;
 		$this->chain_repository = $chain_repository;

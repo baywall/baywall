@@ -17,7 +17,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 /**
  * ERC20トークンの情報をブロックチェーンから取得して返します。
  */
-class GetERC20InfoResolver extends ResolverBase {
+class GetErc20InfoResolver extends ResolverBase {
 
 	public function __construct(
 		ChainRepository $chain_repository,
@@ -41,7 +41,7 @@ class GetERC20InfoResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$chain_id = ChainId::from( $args['chainID'] );
+		$chain_id = ChainId::from( $args['chainId'] );
 		$address  = Address::from( $args['address'] );
 
 		if ( $address === Ethers::zeroAddress() ) {

@@ -25,7 +25,7 @@ class SalesHistoriesResolver extends ResolverBase {
 		/** @var array */
 		$filter = $args['filter'] ?? null;
 		/** @var string */
-		$invoice_id = $args['invoiceID'] ?? null;
+		$invoice_id = $args['invoiceId'] ?? null;
 
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
@@ -40,7 +40,7 @@ class SalesHistoriesResolver extends ResolverBase {
 						return $root_value['chain'](
 							$root_value,
 							array(
-								'chainID' => $sales_data->chainId(),
+								'chainId' => $sales_data->chainId(),
 							)
 						);
 					},
@@ -48,7 +48,7 @@ class SalesHistoriesResolver extends ResolverBase {
 						return $root_value['post'](
 							$root_value,
 							array(
-								'postID' => $sales_data->postId(),
+								'postId' => $sales_data->postId(),
 							)
 						);
 					},
@@ -66,7 +66,7 @@ class SalesHistoriesResolver extends ResolverBase {
 						return $root_value['chain'](
 							$root_value,
 							array(
-								'chainID' => $sales_data->chainId(),
+								'chainId' => $sales_data->chainId(),
 							)
 						);
 					},
