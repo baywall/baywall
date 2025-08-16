@@ -30,10 +30,10 @@ class NetworkCategoriesResolver extends ResolverBase {
 		/** @var array */
 		$filter = $args['filter'] ?? null;
 		/** @var int|null */
-		$filter_network_category = $filter['networkCategoryID'] ?? null;
+		$filter_network_category = $filter['networkCategoryId'] ?? null;
 
 		return array_map(
-			fn ( int $network_category_id_value ) => $root_value['networkCategory']( $root_value, array( 'networkCategoryID' => $network_category_id_value ) ),
+			fn ( int $network_category_id_value ) => $root_value['networkCategory']( $root_value, array( 'networkCategoryId' => $network_category_id_value ) ),
 			$this->get_network_category_id_values_by_filter->handle( $filter_network_category )
 		);
 	}
