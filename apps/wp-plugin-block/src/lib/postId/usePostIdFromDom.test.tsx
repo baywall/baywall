@@ -1,30 +1,30 @@
 import { expect } from '@jest/globals';
 import React from 'react';
 import { render } from '../../../../jest-lib/render';
-import { usePostIDFromDom } from './usePostIDFromDom';
+import { usePostIdFromDom } from './usePostIdFromDom';
 
 const TEST_ID = '6CEC0231';
 
 const Sut: React.FC = () => {
-	const postID = usePostIDFromDom();
+	const postId = usePostIdFromDom();
 	return (
 		<>
-			<p data-testid={ TEST_ID }>{ String( postID ) }</p>
+			<p data-testid={ TEST_ID }>{ String( postId ) }</p>
 		</>
 	);
 };
 
 /**
- * `usePostIDFromDom`のテスト
+ * `usePostIdFromDom`のテスト
  */
-describe( '[BA9B42CB] usePostIDFromDom()', () => {
+describe( '[BA9B42CB] usePostIdFromDom()', () => {
 	const cleanup = () => {
 		document.body.innerHTML = '';
 	};
 	beforeEach( cleanup );
 	afterEach( cleanup );
 
-	it( '[8F73E331] should return postID from DOM', () => {
+	it( '[8F73E331] should return postId from DOM', () => {
 		// ARRANGE
 		document.body.innerHTML = '<input type="hidden" id="post_ID" name="post_ID" value="42" />';
 
@@ -32,8 +32,8 @@ describe( '[BA9B42CB] usePostIDFromDom()', () => {
 		const { getByTestId } = render( <Sut /> );
 
 		// ASSERT
-		const postID = getByTestId( TEST_ID ).textContent;
-		expect( postID ).toBe( '42' );
+		const postId = getByTestId( TEST_ID ).textContent;
+		expect( postId ).toBe( '42' );
 	} );
 
 	it( '[7AF2B0AE] should return null when post_ID does not exist', () => {
@@ -43,7 +43,7 @@ describe( '[BA9B42CB] usePostIDFromDom()', () => {
 		const { getByTestId } = render( <Sut /> );
 
 		// ASSERT
-		const postID = getByTestId( TEST_ID ).textContent;
-		expect( postID ).toBe( 'null' );
+		const postId = getByTestId( TEST_ID ).textContent;
+		expect( postId ).toBe( 'null' );
 	} );
 } );
