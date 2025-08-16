@@ -33,10 +33,10 @@ const useInitSelectedNetwork = () => {
 
 	useEffect( () => {
 		if ( selectedNetworkCategoryId === undefined ) {
-			if ( widgetAttributes.sellingNetworkCategoryID === null ) {
+			if ( widgetAttributes.sellingNetworkCategoryId === null ) {
 				setSelectedNetworkCategoryId( null );
 			} else {
-				setSelectedNetworkCategoryId( new NetworkCategoryId( widgetAttributes.sellingNetworkCategoryID ) );
+				setSelectedNetworkCategoryId( new NetworkCategoryId( widgetAttributes.sellingNetworkCategoryId ) );
 			}
 		}
 	}, [ widgetAttributes, selectedNetworkCategoryId, setSelectedNetworkCategoryId ] );
