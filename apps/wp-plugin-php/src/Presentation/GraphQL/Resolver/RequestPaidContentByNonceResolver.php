@@ -41,7 +41,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		/** @var string */
 		$invoice_nonce_value = $args['nonce'];
 		/** @var string */
-		$invoice_id_value = $args['invoiceID'];
+		$invoice_id_value = $args['invoiceId'];
 		// 投稿を閲覧できる権限があることをチェック
 		$this->user_access_checker->checkCanViewPost( $this->get_post_dto->handleByInvoiceId( $invoice_id_value )->id );
 
