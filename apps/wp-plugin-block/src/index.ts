@@ -32,7 +32,7 @@ registerBlockType( metadata.name, {
 	attributes: {
 		// 型は`src/block/types/WidgetAttributes.ts`と同期をとること。
 		// ※ デフォルト値を設定する場合は、`includes/classes/Types/WidgetAttributesType.php`の設定も確認すること。
-		sellingNetworkCategoryID: {
+		sellingNetworkCategoryId: {
 			type: 'number',
 			// nullを指定するとシンタックスエラーになるため強制的に型を指定。
 			default: null as unknown as number,

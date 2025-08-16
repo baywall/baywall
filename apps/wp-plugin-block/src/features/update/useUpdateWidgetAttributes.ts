@@ -37,12 +37,12 @@ const useUpdateSellingNetworkAttribute = () => {
 
 		// 値が変更されている場合は属性を更新
 		const orgSelectedNetworkCategory =
-			widgetAttributes.sellingNetworkCategoryID === null
+			widgetAttributes.sellingNetworkCategoryId === null
 				? null
-				: new NetworkCategoryId( widgetAttributes.sellingNetworkCategoryID );
+				: new NetworkCategoryId( widgetAttributes.sellingNetworkCategoryId );
 
 		if ( selectedNetworkCategoryId && orgSelectedNetworkCategory?.value !== selectedNetworkCategoryId.value ) {
-			setWidgetAttributes( ( s ) => ( { ...s, sellingNetworkCategoryID: selectedNetworkCategoryId.value } ) );
+			setWidgetAttributes( ( s ) => ( { ...s, sellingNetworkCategoryId: selectedNetworkCategoryId.value } ) );
 		}
 	}, [ widgetAttributes, setWidgetAttributes, selectedNetworkCategoryId ] );
 };
