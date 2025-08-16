@@ -34,7 +34,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		/** @var int */
 		$post_id = $args['postID'];
 		/** @var int */
-		$chain_id_value = $args['chainID'];
+		$chain_id_value = $args['chainId'];
 		/** @var string */
 		$token_address_value = $args['tokenAddress'];
 		/** @var string */

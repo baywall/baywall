@@ -35,7 +35,7 @@ class ChainResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$chain_id_value = $args['chainID'];
+		$chain_id_value = $args['chainId'];
 
 		$chain_dto = $this->get_chain_dto->handle( $chain_id_value );
 		assert( null !== $chain_dto, "[CA31D9B5] chain data is not found. chain id: {$chain_id_value}" );
@@ -55,7 +55,7 @@ class ChainResolver extends ResolverBase {
 				fn( TokenDto $token_dto ) => $root_value['token'](
 					$root_value,
 					array(
-						'chainID' => $token_dto->chain_id,
+						'chainId' => $token_dto->chain_id,
 						'address' => $token_dto->address,
 					)
 				),
