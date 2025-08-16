@@ -32,7 +32,7 @@ class IssueInvoiceResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$post_id = $args['postID'];
+		$post_id = $args['postId'];
 		/** @var int */
 		$chain_id_value = $args['chainId'];
 		/** @var string */
