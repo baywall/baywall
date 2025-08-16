@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation;
 
+use Cornix\Serendipity\Core\Infrastructure\System\ArchitectureChecker;
 use Cornix\Serendipity\Core\Infrastructure\System\PhpExtChecker;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\PluginVersionOption;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrate;
@@ -71,6 +72,9 @@ class PluginUpdateHook {
 	 * 動作環境のチェックを行います
 	 */
 	private function checkSystem(): void {
+		// 64ビットのPHP環境であることを確認
+		$this->container->get( ArchitectureChecker::class )->checkIs64bit();
+
 		// PHP拡張のチェック
 		$this->container->get( PhpExtChecker::class )->checkPhpExtensions();
 	}
