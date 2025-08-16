@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use WP_Block_Parser_Block;
 
 class WidgetAttributes {
-	private const ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID = 'sellingNetworkCategoryID';
+	private const ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID = 'sellingNetworkCategoryId';
 	private const ATTRS_KEY_SELLING_AMOUNT              = 'sellingAmount';
 	private const ATTRS_KEY_SELLING_SYMBOL              = 'sellingSymbol';
 
