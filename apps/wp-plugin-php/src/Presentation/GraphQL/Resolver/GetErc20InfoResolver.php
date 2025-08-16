@@ -17,7 +17,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 /**
  * ERC20トークンの情報をブロックチェーンから取得して返します。
  */
-class GetERC20InfoResolver extends ResolverBase {
+class GetErc20InfoResolver extends ResolverBase {
 
 	public function __construct(
 		ChainRepository $chain_repository,
