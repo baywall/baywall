@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Registry\ChainIdRegistry;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\LocaleProvider;
 use wpdb;
 
 
@@ -60,14 +61,19 @@ abstract class OracleTableSeedBase extends MigrationBase {
 /** @internal */
 class OracleTableSeed_0_0_1 extends OracleTableSeedBase {
 
-	public function __construct( Environment $environment ) {
-		$this->environment = $environment;
-	}
 	private Environment $environment;
+	private LocaleProvider $locale_provider;
+
+	public function __construct( Environment $environment, LocaleProvider $locale_provider ) {
+		$this->environment     = $environment;
+		$this->locale_provider = $locale_provider;
+	}
 
 	public function up(): void {
+		$lang = $this->locale_provider->getLanguage();
+
 		// ■ Fiat
-		if ( 'ja' === substr( get_locale(), 0, 2 ) || $this->environment->isDevelopment() ) {
+		if ( 'ja' === $lang || $this->environment->isDevelopment() ) {
 			// サイトの言語が日本語の場合、もしくは開発モード時は、`JPY / USD`を登録
 			$this->add( ChainIdRegistry::ethMainnet(), '0xBcE206caE7f0ec07b545EddE332A47C2F75bbeb3', 'JPY', 'USD' );
 		}
