@@ -89,7 +89,7 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 		$privatenet = function ( int $number ): RpcUrl {
 			assert( in_array( $number, array( 1, 2 ), true ) );
 			$prefix = $this->environment->isTesting() ? 'tests-' : '';
-			return RpcUrl::from( "http://{$prefix}privatenet-{$number}.local" );
+			return RpcUrl::from( "http://{$prefix}privatenet-{$number}.test" );
 		};
 
 		if ( $chain_id->equals( ChainIdRegistry::privatenetL1() ) ) {
