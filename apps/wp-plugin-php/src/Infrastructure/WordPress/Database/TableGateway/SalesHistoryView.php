@@ -1,0 +1,110 @@
+<?php
+declare(strict_types=1);
+
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
+
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use stdClass;
+
+/**
+ * 販売情報を取得するためのクラス
+ *
+ * このクラスは、ペイウォール解除イベントテーブル等の複数のテーブルを結合して販売履歴を取得するために使用します
+ */
+class SalesHistoryView extends TableBase {
+
+	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
+		$this->tx_table_name       = $table_name_provider->unlockPaywallTransaction();
+		$this->event_table_name    = $table_name_provider->unlockPaywallTransferEvent();
+		$this->invoice_table_name  = $table_name_provider->invoice();
+		$this->token_table_name    = $table_name_provider->token();
+		$this->wp_posts_table_name = $wpdb->posts; // WordPressの投稿テーブル名を取得
+
+		parent::__construct( $wpdb, '' );
+	}
+	/** トランザクション情報が格納されているテーブル名 */
+	private string $tx_table_name;
+	/** トークン転送イベント情報が格納されているテーブル名 */
+	private string $event_table_name;
+	/** インボイステーブル名 */
+	private string $invoice_table_name;
+	/** トークンテーブル名 */
+	private string $token_table_name;
+	/** WordPressの投稿テーブル名 */
+	private string $wp_posts_table_name;
+
+	/**
+	 *
+	 * @return SalesHistoryViewRecord[]
+	 */
+	public function select() {
+		// ※ 時刻は invoice が作成された時刻を使用
+
+		$sql = <<<SQL
+			SELECT
+				t1.invoice_id,
+				t1.chain_id,
+				t1.block_number,
+				t1.transaction_hash,
+				-- t2_agg.token_address, => t3.payment_token_address
+				-- t2_agg.total_amount, => t3.payment_amount
+				-- t2_agg.consumer_address, => t3.consumer_address
+				t2_agg.contract_address,
+				t2_agg.contract_received_amount,
+				-- t2_agg.seller_address, => t3.seller_address
+				t2_agg.seller_received_amount,
+				t2_agg.affiliate_address,
+				t2_agg.affiliate_received_amount,
+				UNIX_TIMESTAMP(t3.created_at) AS created_at_unix,
+				t3.post_id,
+				t3.selling_amount,
+				t3.selling_symbol,
+				t3.seller_address,
+				t3.payment_token_address,
+				t3.payment_amount,
+				t3.consumer_address,
+				t4.symbol AS payment_token_symbol,
+				t4.decimals AS payment_token_decimals,
+				t5.post_title
+			FROM
+				{$this->tx_table_name} AS t1
+			INNER JOIN (
+				SELECT
+					invoice_id,
+					-- MAX(token_address) AS token_address, => t3.payment_token_address と同じ
+					-- SUM(amount) AS total_amount, => t3.payment_amount と同じ
+					-- MAX(from_address) AS consumer_address, => t3.consumer_address と同じ
+					MAX(CASE WHEN transfer_type = 1 THEN to_address END) AS contract_address,
+					MAX(CASE WHEN transfer_type = 1 THEN amount END) AS contract_received_amount,
+					-- MAX(CASE WHEN transfer_type = 2 THEN to_address END) AS seller_address, => t3.seller_address と同じ
+					MAX(CASE WHEN transfer_type = 2 THEN amount END) AS seller_received_amount,
+					MAX(CASE WHEN transfer_type = 3 THEN to_address END) AS affiliate_address,
+					MAX(CASE WHEN transfer_type = 3 THEN amount END) AS affiliate_received_amount
+				FROM
+					{$this->event_table_name}
+				GROUP BY
+					invoice_id
+			) AS t2_agg
+				ON t1.invoice_id = t2_agg.invoice_id
+			INNER JOIN
+				{$this->invoice_table_name} AS t3
+				ON t1.invoice_id = t3.id
+			LEFT JOIN
+				{$this->token_table_name} AS t4
+				ON t3.chain_id = t4.chain_id AND t3.payment_token_address = t4.address
+			LEFT JOIN
+				{$this->wp_posts_table_name} AS t5
+				ON t3.post_id = t5.ID
+		SQL;
+
+		$results = $this->safeGetResults( $sql );
+
+		return array_map(
+			static function ( stdClass $record ) {
+				return new SalesHistoryViewRecord( $record );
+			},
+			$results
+		);
+	}
+}
