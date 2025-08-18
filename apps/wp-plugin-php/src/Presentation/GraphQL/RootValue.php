@@ -16,12 +16,11 @@ use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SaveTokenResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\RequestPaidContentByNonceResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ResolverBase;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SalesHistoriesResolver;
+use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SaveChainResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SellerResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SellingContentResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SellingPriceResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ServerSignerResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetConfirmationsResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetRpcUrlResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokenResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokensResolver;
@@ -61,10 +60,9 @@ class RootValue {
 			'issueInvoice'              => $container->get( IssueInvoiceResolver::class ),
 			'requestPaidContentByNonce' => $container->get( RequestPaidContentByNonceResolver::class ),
 			'getErc20Info'              => $container->get( GetErc20InfoResolver::class ),
+			'saveChain'                 => $container->get( SaveChainResolver::class ),
 			'saveToken'                 => $container->get( SaveTokenResolver::class ),
 			'setSellerAgreedTerms'      => $container->get( SetSellerAgreedTermsResolver::class ),
-			'setRpcUrl'                 => $container->get( SetRpcUrlResolver::class ),
-			'setConfirmations'          => $container->get( SetConfirmationsResolver::class ),
 		);
 
 		$result = array();
