@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use stdClass;
@@ -38,7 +39,7 @@ class SalesHistoryView extends TableBase {
 	 *
 	 * @return SalesHistoryViewRecord[]
 	 */
-	public function select() {
+	public function select( ?InvoiceId $filter_invoice_id ) {
 		// ※ 時刻は invoice が作成された時刻を使用
 
 		$sql = <<<SQL
@@ -97,6 +98,16 @@ class SalesHistoryView extends TableBase {
 				{$this->wp_posts_table_name} AS t5
 				ON t3.post_id = t5.ID
 		SQL;
+
+		// 条件が指定されている場合はWHERE句を追加
+		$where_conditions = array();
+		if ( $filter_invoice_id !== null ) {
+			$where_conditions[] = 't1.invoice_id = ' . $this->prepare( '%s', (string) $filter_invoice_id );
+		}
+
+		if ( ! empty( $where_conditions ) ) {
+			$sql .= ' WHERE ' . implode( ' AND ', $where_conditions );
+		}
 
 		$results = $this->safeGetResults( $sql );
 
