@@ -30,6 +30,9 @@ class InvoiceId {
 		}
 		throw new \InvalidArgumentException( '[DEE2905B] Invalid invoice ID. ' . var_export( $invoice_id_val, true ) );
 	}
+	public static function fromNullable( ?string $invoice_id_val ): ?self {
+		return $invoice_id_val === null ? null : self::from( $invoice_id_val );
+	}
 
 	/**
 	 * 新しい請求書IDを生成します。
