@@ -29,7 +29,6 @@ class InvoiceTableSchema extends MigratorBase {
 /** @internal */
 class InvoiceTableSchema_0_0_1 extends MigrationBase {
 	public function up(): void {
-		$index_name = "idx_{$this->tableName()}_2D6F4376";
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->tableName()}` (
@@ -46,7 +45,8 @@ class InvoiceTableSchema_0_0_1 extends MigrationBase {
 				`consumer_address`       varchar(191)               NOT NULL,
 				`nonce`                  varchar(191)               DEFAULT NULL,
 				PRIMARY KEY (`id`),
-				KEY `{$index_name}` (`created_at`)
+				KEY `idx_{$this->tableName()}_2D6F4376` (`created_at`),
+				KEY `idx_{$this->tableName()}_6970C683` (`id`, `chain_id`, `payment_token_address`)
 			) {$this->charset()};
 		SQL;
 		$this->query( $sql );

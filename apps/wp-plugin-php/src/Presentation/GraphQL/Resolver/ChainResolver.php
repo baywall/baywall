@@ -75,12 +75,14 @@ class ChainResolver extends ResolverBase {
 		};
 
 		return array(
-			'id'              => $chain_dto->id,
-			'appContract'     => $app_contract_callback,
-			'confirmations'   => $chain_dto->confirmations,
-			'rpcUrl'          => $chain_dto->rpc_url,
-			'tokens'          => $tokens_callback,
-			'networkCategory' => $network_category_callback,
+			'id'               => $chain_dto->id,
+			'name'             => $chain_dto->name,
+			'appContract'      => $app_contract_callback,
+			'confirmations'    => $chain_dto->confirmations,
+			'rpcUrl'           => $chain_dto->rpc_url,
+			'tokens'           => $tokens_callback,
+			'networkCategory'  => $network_category_callback,
+			'blockExplorerUrl' => $chain_dto->block_explorer_url,
 		);
 	}
 }
