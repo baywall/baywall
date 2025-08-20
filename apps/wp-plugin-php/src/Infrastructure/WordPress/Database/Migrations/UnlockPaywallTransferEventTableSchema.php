@@ -41,7 +41,8 @@ class UnlockPaywallTransferEventTableSchema_0_0_1 extends MigrationBase {
 				`amount`         decimal(65, 30)  NOT NULL,
 				`transfer_type`  int              NOT NULL,
 				PRIMARY KEY (`invoice_id`, `log_index`),
-				KEY `idx_{$this->tableName()}_E1160E22` (`created_at`)
+				KEY `idx_{$this->tableName()}_E1160E22` (`created_at`),
+				KEY `idx_{$this->tableName()}_05504FB6` (`invoice_id`, `transfer_type`)
 			) {$this->charset()};
 		SQL;
 		$this->query( $sql );

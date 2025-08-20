@@ -3,18 +3,22 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Service\SalesHistoryService;
+use Cornix\Serendipity\Core\Application\Dto\SalesHistoryDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Entity\SalesHistory;
+use Cornix\Serendipity\Core\Application\UseCase\GetSalesHistoryDtos;
 
 class SalesHistoriesResolver extends ResolverBase {
 
-	public function __construct(
-		UserAccessChecker $user_access_checker
-	) {
-		$this->user_access_checker = $user_access_checker;
-	}
 	private UserAccessChecker $user_access_checker;
+	private GetSalesHistoryDtos $get_sales_history_dtos;
+
+	public function __construct(
+		UserAccessChecker $user_access_checker,
+		GetSalesHistoryDtos $get_sales_history_dtos
+	) {
+		$this->user_access_checker    = $user_access_checker;
+		$this->get_sales_history_dtos = $get_sales_history_dtos;
+	}
 
 	/**
 	 * #[\Override]
@@ -22,78 +26,50 @@ class SalesHistoriesResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		/** @var array */
-		$filter = $args['filter'] ?? null;
-		/** @var string */
-		$invoice_id = $args['invoiceId'] ?? null;
-
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$sales_data_records = ( new SalesHistoryService() )->select( $invoice_id );
+		/** @var string|null */
+		$filter_invoice_id_value = $args['filter']['invoiceId'] ?? null;
 
-		$ret = array_map(
-			fn ( SalesHistory $sales_data ) => array(
-				'invoice'                  => array(
-					'id'        => $sales_data->invoiceId(),
-					'createdAt' => $sales_data->createdAt()->format( 'c' ),
-					'chain'     => function () use ( $root_value, $sales_data ) {
-						return $root_value['chain'](
-							$root_value,
-							array(
-								'chainId' => $sales_data->chainId(),
-							)
-						);
-					},
-					'post'      => function () use ( $root_value, $sales_data ) {
-						return $root_value['post'](
-							$root_value,
-							array(
-								'postId' => $sales_data->postId(),
-							)
-						);
-					},
-					// 販売価格は請求書に記載されている価格を返す
-					// ※ Postの販売価格は現在の販売価格であり、取引時の価格とは異なる場合があるため
-					// 'sellingPrice' => array(
-					// 'amountHex' => $sales_data->sellingPrice()->amountHex(),
-					// 'decimals'  => $sales_data->sellingPrice()->decimals(),
-					// 'symbol'    => $sales_data->sellingPrice()->symbol()->value(),
-					// ),
-				),
+		$sales_history_dtos = $this->get_sales_history_dtos->handle( $filter_invoice_id_value );
 
-				'unlockPaywallTransaction' => array(
-					'chain'             => function () use ( $root_value, $sales_data ) {
-						return $root_value['chain'](
-							$root_value,
-							array(
-								'chainId' => $sales_data->chainId(),
-							)
-						);
-					},
-					'blockNumber'       => $sales_data->blockNumber(),
-					'transactionHash'   => $sales_data->transactionHash(),
-					'sellerAddress'     => $sales_data->sellerAddress(),
-					'consumerAddress'   => $sales_data->consumerAddress(),
-					// 'paymentPrice' => array(
-					// 'amountHex' => $sales_data->paymentPrice()->amountHex(),
-					// 'decimals'  => $sales_data->paymentPrice()->decimals(),
-					// 'symbol'    => $sales_data->paymentPrice()->symbol(),
-					// ),
-					'sellerProfitPrice' => array(
-						'amountHex' => $sales_data->sellerProfitPrice()->amountHex(),
-						'decimals'  => $sales_data->sellerProfitPrice()->decimals(),
-						'symbol'    => $sales_data->sellerProfitPrice()->symbol()->value(),
+		return array_map(
+			fn ( SalesHistoryDto $sales_history_dto ) => array(
+				'invoice'                => array(
+					'id'            => $sales_history_dto->invoice->id,
+					'createdAtUnix' => $sales_history_dto->invoice->created_at_unix,
+					'postId'        => $sales_history_dto->invoice->post_id,
+					'sellingPrice'  => array(
+						'amount' => $sales_history_dto->invoice->selling_price->amount,
+						'symbol' => $sales_history_dto->invoice->selling_price->symbol,
 					),
-					'handlingFeePrice'  => array(
-						'amountHex' => $sales_data->handlingFeePrice()->amountHex(),
-						'decimals'  => $sales_data->handlingFeePrice()->decimals(),
-						'symbol'    => $sales_data->handlingFeePrice()->symbol()->value(),
-					),
+					'chainId'       => $sales_history_dto->invoice->chain_id,
 				),
+				'postTitle'              => $sales_history_dto->post_title,
+				'txHash'                 => $sales_history_dto->tx_hash,
+
+				'consumerAddress'        => $sales_history_dto->consumer_address,
+				'consumerPaymentPrice'   => array(
+					'amount' => $sales_history_dto->consumer_payment_price->amount,
+					'symbol' => $sales_history_dto->consumer_payment_price->symbol,
+				),
+				'contractAddress'        => $sales_history_dto->contract_address,
+				'contractReceivedPrice'  => array(
+					'amount' => $sales_history_dto->contract_received_price->amount,
+					'symbol' => $sales_history_dto->contract_received_price->symbol,
+				),
+				'sellerAddress'          => $sales_history_dto->seller_address,
+				'sellerReceivedPrice'    => array(
+					'amount' => $sales_history_dto->seller_received_price->amount,
+					'symbol' => $sales_history_dto->seller_received_price->symbol,
+				),
+				'affiliateAddress'       => $sales_history_dto->affiliate_address,
+				'affiliateReceivedPrice' => $sales_history_dto->affiliate_received_price ? array(
+					'amount' => $sales_history_dto->affiliate_received_price->amount,
+					'symbol' => $sales_history_dto->affiliate_received_price->symbol,
+				) : null,
 			),
-			$sales_data_records
+			$sales_history_dtos
 		);
-
-		return $ret;
 	}
 }
