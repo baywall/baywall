@@ -9,6 +9,10 @@ export abstract class Url {
 		this.value = urlValue;
 	}
 
+	public equals( other: Url ): boolean {
+		return this.value === other.value;
+	}
+
 	/**
 	 * 指定した文字列がURLの形式かどうかを返します
 	 * @param urlValue
