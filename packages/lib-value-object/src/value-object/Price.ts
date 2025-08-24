@@ -2,12 +2,23 @@ import { Amount } from './Amount';
 import { Symbol } from './Symbol';
 
 export class Price {
+	public readonly amount: Amount;
+	public readonly symbol: Symbol;
+
+	// TODO: public -> private
+	/**
+	 * @param amount
+	 * @param symbol
+	 * @deprecated
+	 */
 	public constructor( amount: Amount, symbol: Symbol ) {
 		this.amount = amount;
 		this.symbol = symbol;
 	}
-	public readonly amount: Amount;
-	public readonly symbol: Symbol;
+
+	public static from( amount: Amount, symbol: Symbol ): Price {
+		return new Price( amount, symbol );
+	}
 
 	/**
 	 * 価格を文字列で取得します

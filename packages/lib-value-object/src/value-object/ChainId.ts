@@ -1,18 +1,13 @@
 export class ChainId {
-	private readonly chainIdValue: number;
+	public readonly value: number;
 
-	private constructor( chainIdValue: number ) {
-		ChainId.checkChainIdValue( chainIdValue );
-
-		this.chainIdValue = chainIdValue;
+	private constructor( value: number ) {
+		ChainId.checkChainIdValue( value );
+		this.value = value;
 	}
 
 	public static from( chainIdValue: number ): ChainId {
 		return new ChainId( chainIdValue );
-	}
-
-	public get value(): number {
-		return this.chainIdValue;
 	}
 
 	private static checkChainIdValue( chainIdValue: number ): void {
