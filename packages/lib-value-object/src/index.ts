@@ -3,6 +3,7 @@ export * from './value-object/Amount';
 export * from './value-object/BlockExplorerAddressUrl';
 export * from './value-object/BlockExplorerBaseUrl';
 export * from './value-object/BlockExplorerTxUrl';
+export * from './value-object/ChainId';
 export * from './value-object/NetworkCategoryId';
 export * from './value-object/Price';
 export * from './value-object/Symbol';
