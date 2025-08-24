@@ -10,6 +10,10 @@ export class Address {
 		return new Address( addressValue );
 	}
 
+	public equals( other: Address ): boolean {
+		return this.value === other.value;
+	}
+
 	private static isAddress( addressValue: string ): boolean {
 		// 簡易チェック。Ethereumのアドレスは40文字の16進数で、0xで始まる。
 		// チェックサムの検証は行っていない。
