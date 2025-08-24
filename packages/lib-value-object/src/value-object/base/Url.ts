@@ -4,7 +4,7 @@
 export abstract class Url {
 	public readonly value: string;
 
-	public constructor( urlValue: string ) {
+	protected constructor( urlValue: string ) {
 		Url.checkUrl( urlValue ); // URLの形式をチェック
 		this.value = urlValue;
 	}
@@ -21,7 +21,7 @@ export abstract class Url {
 		try {
 			new URL( urlValue );
 			return true;
-		} catch ( _ ) {
+		} catch {
 			return false;
 		}
 	}
