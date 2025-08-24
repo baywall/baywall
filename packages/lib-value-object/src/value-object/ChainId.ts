@@ -10,6 +10,10 @@ export class ChainId {
 		return new ChainId( chainIdValue );
 	}
 
+	public equals( other: ChainId ): boolean {
+		return this.value === other.value;
+	}
+
 	private static checkChainIdValue( chainIdValue: number ): void {
 		if ( ! Number.isInteger( chainIdValue ) || chainIdValue <= 0 ) {
 			throw new Error( '[8C8D83D1] ChainId must be a positive integer.' );
