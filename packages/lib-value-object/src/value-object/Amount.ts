@@ -7,12 +7,22 @@ export class Amount {
 	 * @deprecated
 	 */
 	public constructor( value: string ) {
-		Amount.checkAmountValue( value ); // フォーマットチェック
-		this.value = value;
+		Amount.checkAmountValue( value );
+		this.value = Amount.format( value );
 	}
 
 	public static from( amountValue: string ): Amount {
 		return new Amount( amountValue );
+	}
+
+	private static format( amountValue: string ): string {
+		// 小数点がある場合
+		if ( amountValue.includes( '.' ) ) {
+			amountValue = amountValue
+				.replace( /0+$/, '' ) // 末尾の0を削除
+				.replace( /\.$/, '' ); // 末尾が小数点の場合、小数点を削除
+		}
+		return amountValue;
 	}
 
 	private static checkAmountValue( amountValue: string ): void {
