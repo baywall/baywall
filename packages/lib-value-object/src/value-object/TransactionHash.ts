@@ -10,6 +10,10 @@ export class TransactionHash {
 		return new TransactionHash( txHashValue );
 	}
 
+	public equals( other: TransactionHash ): boolean {
+		return this.value === other.value;
+	}
+
 	private static isTransactionHash( txHashValue: string ): boolean {
 		// 簡易チェック。トランザクションハッシュは64文字の16進数で、0xのプレフィックス付き。
 		return /^0x[a-f0-9]{64}$/.test( txHashValue );
