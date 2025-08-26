@@ -1,9 +1,17 @@
 export class NetworkCategoryId {
 	public readonly value: number;
 
+	/**
+	 * @param NetworkCategoryIdValue
+	 * @deprecated
+	 */
 	public constructor( NetworkCategoryIdValue: number ) {
 		NetworkCategoryId.checkNetworkCategoryIdValue( NetworkCategoryIdValue );
 		this.value = NetworkCategoryIdValue;
+	}
+
+	public static from( networkCategoryIdValue: number ): NetworkCategoryId {
+		return new NetworkCategoryId( networkCategoryIdValue );
 	}
 
 	/** @deprecated */
@@ -21,15 +29,15 @@ export class NetworkCategoryId {
 
 	/** @deprecated メインネットのネットワークカテゴリIDを表すインスタンスを取得します */
 	public static get Mainnet(): NetworkCategoryId {
-		return new NetworkCategoryId( NetworkCategoryIdValue.Mainnet );
+		return NetworkCategoryId.from( NetworkCategoryIdValue.Mainnet );
 	}
 	/** @deprecated テストネットのネットワークカテゴリIDを表すインスタンスを取得します */
 	public static get Testnet(): NetworkCategoryId {
-		return new NetworkCategoryId( NetworkCategoryIdValue.Testnet );
+		return NetworkCategoryId.from( NetworkCategoryIdValue.Testnet );
 	}
 	/** @deprecated プライベートネットのネットワークカテゴリIDを表すインスタンスを取得します */
 	public static get Privatenet(): NetworkCategoryId {
-		return new NetworkCategoryId( NetworkCategoryIdValue.Privatenet );
+		return NetworkCategoryId.from( NetworkCategoryIdValue.Privatenet );
 	}
 
 	public equals( other: NetworkCategoryId ): boolean {
