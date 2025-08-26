@@ -10,6 +10,10 @@ export class Address {
 		return new Address( addressValue );
 	}
 
+	public toString(): string {
+		return this.value;
+	}
+
 	public equals( other: Address ): boolean {
 		return this.value === other.value;
 	}
