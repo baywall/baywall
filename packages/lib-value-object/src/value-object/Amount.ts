@@ -1,12 +1,7 @@
 export class Amount {
 	public readonly value: string;
 
-	// TODO: public -> private
-	/**
-	 * @param value
-	 * @deprecated
-	 */
-	public constructor( value: string ) {
+	private constructor( value: string ) {
 		Amount.checkAmountValue( value );
 		this.value = Amount.format( value );
 	}

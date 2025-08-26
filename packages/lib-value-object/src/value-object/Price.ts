@@ -5,13 +5,7 @@ export class Price {
 	public readonly amount: Amount;
 	public readonly symbol: Symbol;
 
-	// TODO: public -> private
-	/**
-	 * @param amount
-	 * @param symbol
-	 * @deprecated
-	 */
-	public constructor( amount: Amount, symbol: Symbol ) {
+	private constructor( amount: Amount, symbol: Symbol ) {
 		this.amount = amount;
 		this.symbol = symbol;
 	}

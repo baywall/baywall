@@ -1,11 +1,7 @@
 export class NetworkCategoryId {
 	public readonly value: number;
 
-	/**
-	 * @param NetworkCategoryIdValue
-	 * @deprecated
-	 */
-	public constructor( NetworkCategoryIdValue: number ) {
+	private constructor( NetworkCategoryIdValue: number ) {
 		NetworkCategoryId.checkNetworkCategoryIdValue( NetworkCategoryIdValue );
 		this.value = NetworkCategoryIdValue;
 	}

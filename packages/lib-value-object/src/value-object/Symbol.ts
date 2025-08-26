@@ -3,12 +3,7 @@ import cc from 'currency-codes';
 export class Symbol {
 	public readonly value: string;
 
-	// TODO: public -> private
-	/**
-	 * @param symbolValue
-	 * @deprecated
-	 */
-	public constructor( symbolValue: string ) {
+	private constructor( symbolValue: string ) {
 		Symbol.checkSymbol( symbolValue );
 		this.value = symbolValue;
 	}
