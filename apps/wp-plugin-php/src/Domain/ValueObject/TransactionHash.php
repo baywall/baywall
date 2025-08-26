@@ -19,7 +19,7 @@ class TransactionHash {
 
 	public static function from( string $hash ): self {
 		// フォーマットチェック
-		if ( ! preg_match( '/^0x[a-fA-F0-9]{64}$/', $hash ) ) {
+		if ( ! preg_match( '/^0x[a-f0-9]{64}$/', $hash ) ) {
 			throw new \InvalidArgumentException( '[7AF48A4D] Invalid transaction hash format: ' . $hash );
 		}
 
