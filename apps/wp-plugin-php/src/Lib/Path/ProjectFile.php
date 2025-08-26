@@ -17,7 +17,7 @@ class ProjectFile {
 	 */
 	public function toUrl(): string {
 		$full_path = $this->toLocalPath();
-		assert( false !== realpath( $full_path ) );
+		assert( false !== realpath( $full_path ), "[53A09083] File does not exist: {$full_path}" );
 
 		return trailingslashit( plugin_dir_url( $full_path ) ) . basename( $full_path );
 	}
