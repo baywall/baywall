@@ -13,6 +13,10 @@ export abstract class Url {
 		return this.value === other.value;
 	}
 
+	public toString(): string {
+		return this.value;
+	}
+
 	/**
 	 * 指定した文字列がURLの形式かどうかを返します
 	 * @param urlValue
