@@ -14,6 +14,10 @@ export class NetworkCategoryId {
 		return new NetworkCategoryId( networkCategoryIdValue );
 	}
 
+	public toString(): string {
+		return `${ this.value }`;
+	}
+
 	/** @deprecated */
 	public get isMainnet(): boolean {
 		return this.equals( NetworkCategoryId.Mainnet );
