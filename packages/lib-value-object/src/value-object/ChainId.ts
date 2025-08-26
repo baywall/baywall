@@ -10,6 +10,10 @@ export class ChainId {
 		return new ChainId( chainIdValue );
 	}
 
+	public toString(): string {
+		return `${ this.value }`;
+	}
+
 	public equals( other: ChainId ): boolean {
 		return this.value === other.value;
 	}
