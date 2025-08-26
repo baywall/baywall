@@ -15,6 +15,10 @@ export class Amount {
 		return new Amount( amountValue );
 	}
 
+	public toString(): string {
+		return this.value;
+	}
+
 	private static format( amountValue: string ): string {
 		// 小数点がある場合
 		if ( amountValue.includes( '.' ) ) {
