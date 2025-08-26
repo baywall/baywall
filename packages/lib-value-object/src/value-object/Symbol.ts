@@ -31,10 +31,10 @@ export class Symbol {
 
 	private static checkSymbol( symbolValue: string ): void {
 		if ( ! Symbol.isSymbol( symbolValue ) ) {
-			throw new Error( `[7D19A592] Invalid symbol value: ${ symbolValue }` );
+			throw new Error( `[7D19A592] Invalid symbol value: '${ symbolValue }'` );
 		}
 	}
 	private static isSymbol( symbolValue: string ): boolean {
-		return symbolValue.length > 0;
+		return symbolValue.length > 0 && symbolValue.trim() === symbolValue;
 	}
 }
