@@ -36,7 +36,7 @@ const useInitSelectedNetwork = () => {
 			if ( widgetAttributes.sellingNetworkCategoryId === null ) {
 				setSelectedNetworkCategoryId( null );
 			} else {
-				setSelectedNetworkCategoryId( new NetworkCategoryId( widgetAttributes.sellingNetworkCategoryId ) );
+				setSelectedNetworkCategoryId( NetworkCategoryId.from( widgetAttributes.sellingNetworkCategoryId ) );
 			}
 		}
 	}, [ widgetAttributes, selectedNetworkCategoryId, setSelectedNetworkCategoryId ] );

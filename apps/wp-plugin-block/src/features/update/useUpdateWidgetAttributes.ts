@@ -39,7 +39,7 @@ const useUpdateSellingNetworkAttribute = () => {
 		const orgSelectedNetworkCategory =
 			widgetAttributes.sellingNetworkCategoryId === null
 				? null
-				: new NetworkCategoryId( widgetAttributes.sellingNetworkCategoryId );
+				: NetworkCategoryId.from( widgetAttributes.sellingNetworkCategoryId );
 
 		if ( selectedNetworkCategoryId && orgSelectedNetworkCategory?.value !== selectedNetworkCategoryId.value ) {
 			setWidgetAttributes( ( s ) => ( { ...s, sellingNetworkCategoryId: selectedNetworkCategoryId.value } ) );
