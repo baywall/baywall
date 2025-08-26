@@ -2,17 +2,19 @@
  * URLを表す抽象クラス
  */
 export abstract class Url {
-	private readonly urlValue: string;
+	public readonly value: string;
 
-	public constructor( urlValue: string ) {
+	protected constructor( urlValue: string ) {
 		Url.checkUrl( urlValue ); // URLの形式をチェック
-
-		this.urlValue = urlValue;
+		this.value = urlValue;
 	}
 
-	/** URLを文字列で取得します */
-	public get value(): string {
-		return this.urlValue;
+	public equals( other: Url ): boolean {
+		return this.value === other.value;
+	}
+
+	public toString(): string {
+		return this.value;
 	}
 
 	/**
@@ -23,7 +25,7 @@ export abstract class Url {
 		try {
 			new URL( urlValue );
 			return true;
-		} catch ( _ ) {
+		} catch {
 			return false;
 		}
 	}

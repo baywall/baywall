@@ -1,17 +1,21 @@
 export class Address {
-	private readonly addressValue: string;
+	public readonly value: string;
 
 	private constructor( addressValue: string ) {
 		Address.checkAddress( addressValue ); // アドレスのフォーマットチェック
-
-		this.addressValue = addressValue;
+		this.value = addressValue;
 	}
+
 	public static from( addressValue: string ): Address {
 		return new Address( addressValue );
 	}
 
-	public get value(): string {
-		return this.addressValue;
+	public toString(): string {
+		return this.value;
+	}
+
+	public equals( other: Address ): boolean {
+		return this.value === other.value;
 	}
 
 	private static isAddress( addressValue: string ): boolean {

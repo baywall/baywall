@@ -1,17 +1,17 @@
 export class TransactionHash {
-	private readonly txHashValue: string;
+	public readonly value: string;
 
 	private constructor( txHashValue: string ) {
 		TransactionHash.checkTransactionHash( txHashValue ); // トランザクションハッシュのフォーマットチェック
 
-		this.txHashValue = txHashValue;
+		this.value = txHashValue;
 	}
 	public static from( txHashValue: string ): TransactionHash {
 		return new TransactionHash( txHashValue );
 	}
 
-	public get value(): string {
-		return this.txHashValue;
+	public equals( other: TransactionHash ): boolean {
+		return this.value === other.value;
 	}
 
 	private static isTransactionHash( txHashValue: string ): boolean {
