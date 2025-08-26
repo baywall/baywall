@@ -41,7 +41,7 @@ const useOnChangeCallback = () => {
 
 	return useCallback(
 		( event: React.ChangeEvent< HTMLSelectElement > ) => {
-			const networkCategoryId = new NetworkCategoryId( parseInt( event.target.value ) );
+			const networkCategoryId = NetworkCategoryId.from( parseInt( event.target.value ) );
 			// 選択されているネットワークを更新
 			setSelectedNetworkCategoryId( networkCategoryId );
 

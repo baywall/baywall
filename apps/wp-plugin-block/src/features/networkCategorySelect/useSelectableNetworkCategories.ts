@@ -14,8 +14,8 @@ export const useSelectableNetworkCategories = () => {
 			return undefined;
 		}
 
-		return serverPostSetting.networkCategories.map(
-			( networkCategory ) => new NetworkCategoryId( networkCategory.id )
+		return serverPostSetting.networkCategories.map( ( networkCategory ) =>
+			NetworkCategoryId.from( networkCategory.id )
 		);
 	}, [ serverPostSetting ] );
 };
