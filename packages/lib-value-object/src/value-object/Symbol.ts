@@ -21,6 +21,10 @@ export class Symbol {
 		return this.value === other.value;
 	}
 
+	public toString(): string {
+		return this.value;
+	}
+
 	/**
 	 * 通貨記号が法定通貨かどうかを取得します
 	 * @param symbolValue
