@@ -22,6 +22,10 @@ abstract class NonceBase {
 		return $this->nonce_value;
 	}
 
+	public function __toString(): string {
+		return $this->nonce_value;
+	}
+
 	/** Nonceのフォーマットが正しいかどうかを返します */
 	abstract protected function isNonceValueFormat( string $nonce_value ): bool;
 
