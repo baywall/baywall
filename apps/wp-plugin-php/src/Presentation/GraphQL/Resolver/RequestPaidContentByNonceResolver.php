@@ -49,6 +49,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			$result = $this->get_paid_content_by_nonce->handle( $invoice_id_value, $invoice_nonce_value );
 			return array(
 				'content'   => $result->paid_content,
+				'newNonce'  => $result->new_nonce,
 				'errorCode' => null,
 			);
 		} catch ( \Throwable $e ) {
@@ -67,6 +68,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			}
 			return array(
 				'content'   => null,
+				'newNonce'  => null,
 				'errorCode' => $error_code,
 			);
 		}
