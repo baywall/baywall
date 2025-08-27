@@ -10,6 +10,10 @@ export class TransactionHash {
 		return new TransactionHash( txHashValue );
 	}
 
+	public toString(): string {
+		return this.value;
+	}
+
 	public equals( other: TransactionHash ): boolean {
 		return this.value === other.value;
 	}
