@@ -19,8 +19,11 @@ class ServerSignerResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		return array(
-			'address' => fn() => $this->server_signer_service->getServerSigner()->address()->value(),
+
+		$server_signer = $this->server_signer_service->getServerSigner();
+
+		return $server_signer === null ? null : array(
+			'address' => $server_signer->address()->value(),
 		);
 	}
 }
