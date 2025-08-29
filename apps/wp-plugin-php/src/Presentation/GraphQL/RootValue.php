@@ -24,7 +24,6 @@ use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ServerSignerResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokenResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokensResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\VerifiableChainsResolver;
 use DI\Container;
 
 class RootValue {
@@ -54,7 +53,6 @@ class RootValue {
 			'seller'                    => $container->get( SellerResolver::class ),
 			'serverSigner'              => $container->get( ServerSignerResolver::class ),
 			'tokens'                    => $container->get( TokensResolver::class ),
-			'verifiableChains'          => $container->get( VerifiableChainsResolver::class ),
 
 			// Mutation
 			'issueInvoice'              => $container->get( IssueInvoiceResolver::class ),
