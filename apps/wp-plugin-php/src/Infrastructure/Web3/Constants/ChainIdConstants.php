@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Registry;
+namespace Cornix\Serendipity\Core\Infrastructure\Web3\Constants;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
-final class ChainIdRegistry {
+final class ChainIdConstants {
 	// ==================== Mainnet ====================
 	private const ETH_MAINNET    = 1;    // イーサリアムメインネット(L1)
 	private const POLYGON_ZK_EVM = 1101; // Polygon zkEVM(L2/mainnet)

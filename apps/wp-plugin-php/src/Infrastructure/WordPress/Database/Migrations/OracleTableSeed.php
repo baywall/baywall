@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Registry\ChainIdRegistry;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\ChainIdConstants;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
@@ -75,17 +75,17 @@ class OracleTableSeed_0_0_1 extends OracleTableSeedBase {
 		// ■ Fiat
 		if ( 'ja' === $lang || $this->environment->isDevelopment() ) {
 			// サイトの言語が日本語の場合、もしくは開発モード時は、`JPY / USD`を登録
-			$this->add( ChainIdRegistry::ethMainnet(), '0xBcE206caE7f0ec07b545EddE332A47C2F75bbeb3', 'JPY', 'USD' );
+			$this->add( ChainIdConstants::ethMainnet(), '0xBcE206caE7f0ec07b545EddE332A47C2F75bbeb3', 'JPY', 'USD' );
 		}
 
 		// ■ Crypto
-		$this->add( ChainIdRegistry::ethMainnet(), '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419', 'ETH', 'USD' );
+		$this->add( ChainIdConstants::ethMainnet(), '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419', 'ETH', 'USD' );
 
 		// テスト中はプライベートネットのOracleを登録
 		if ( $this->environment->isTesting() ) {
 			// プライベートネットのOracleを登録
-			$this->add( ChainIdRegistry::privatenetL1(), '0x3F3B6a555F3a7DeD78241C787e0cDD8E431A64A8', 'ETH', 'USD' );
-			$this->add( ChainIdRegistry::privatenetL1(), '0xc886d2C1BEC5819b4B8F84f35A9885519869A8EE', 'JPY', 'USD' );
+			$this->add( ChainIdConstants::privatenetL1(), '0x3F3B6a555F3a7DeD78241C787e0cDD8E431A64A8', 'ETH', 'USD' );
+			$this->add( ChainIdConstants::privatenetL1(), '0xc886d2C1BEC5819b4B8F84f35A9885519869A8EE', 'JPY', 'USD' );
 		}
 	}
 

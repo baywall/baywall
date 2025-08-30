@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Registry\ChainIdRegistry;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\ChainIdConstants;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
@@ -62,22 +62,22 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 		// Mainnet
 		$mainnet         = NetworkCategoryId::mainnet();
 		$mainnet_rpc_url = null; // Mainnetの場合、RPC URLの初期値はnull
-		$this->insertChainRecord( ChainIdRegistry::ethMainnet(), 'Ethereum Mainnet', $mainnet, $mainnet_rpc_url, 'https://etherscan.io' );
+		$this->insertChainRecord( ChainIdConstants::ethMainnet(), 'Ethereum Mainnet', $mainnet, $mainnet_rpc_url, 'https://etherscan.io' );
 
 		// Testnet
 		$testnet         = NetworkCategoryId::testnet();
 		$testnet_rpc_url = null; // Testnetの場合、RPC URLの初期値はnull
-		$this->insertChainRecord( ChainIdRegistry::sepolia(), 'Sepolia', $testnet, $testnet_rpc_url, 'https://sepolia.etherscan.io' );
-		$this->insertChainRecord( ChainIdRegistry::soneiumMinato(), 'Soneium Testnet Minato', $testnet, $testnet_rpc_url, 'https://soneium-minato.blockscout.com' );
+		$this->insertChainRecord( ChainIdConstants::sepolia(), 'Sepolia', $testnet, $testnet_rpc_url, 'https://sepolia.etherscan.io' );
+		$this->insertChainRecord( ChainIdConstants::soneiumMinato(), 'Soneium Testnet Minato', $testnet, $testnet_rpc_url, 'https://soneium-minato.blockscout.com' );
 
 		// 開発モード時はプライベートネットのチェーン情報も登録
 		if ( $this->environment->isDevelopment() ) {
 			$privatenet           = NetworkCategoryId::privatenet();
-			$privatenet_rpc_url_1 = $this->getPrivatenetRpcUrl( ChainIdRegistry::privatenetL1() );
-			$privatenet_rpc_url_2 = $this->getPrivatenetRpcUrl( ChainIdRegistry::privatenetL2() );
+			$privatenet_rpc_url_1 = $this->getPrivatenetRpcUrl( ChainIdConstants::privatenetL1() );
+			$privatenet_rpc_url_2 = $this->getPrivatenetRpcUrl( ChainIdConstants::privatenetL2() );
 
-			$this->insertChainRecord( ChainIdRegistry::privatenetL1(), 'Privatenet1', $privatenet, $privatenet_rpc_url_1, 'http://localhost:10101' );
-			$this->insertChainRecord( ChainIdRegistry::privatenetL2(), 'Privatenet2', $privatenet, $privatenet_rpc_url_2, 'http://localhost:10102' );
+			$this->insertChainRecord( ChainIdConstants::privatenetL1(), 'Privatenet1', $privatenet, $privatenet_rpc_url_1, 'http://localhost:10101' );
+			$this->insertChainRecord( ChainIdConstants::privatenetL2(), 'Privatenet2', $privatenet, $privatenet_rpc_url_2, 'http://localhost:10102' );
 		}
 	}
 
@@ -92,9 +92,9 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 			return RpcUrl::from( "http://{$prefix}privatenet-{$number}.test" );
 		};
 
-		if ( $chain_id->equals( ChainIdRegistry::privatenetL1() ) ) {
+		if ( $chain_id->equals( ChainIdConstants::privatenetL1() ) ) {
 			return $privatenet( 1 );
-		} elseif ( $chain_id->equals( ChainIdRegistry::privatenetL2() ) ) {
+		} elseif ( $chain_id->equals( ChainIdConstants::privatenetL2() ) ) {
 			return $privatenet( 2 );
 		} else {
 			throw new \InvalidArgumentException( "[11301D24] Invalid chain ID. {$chain_id}" );
