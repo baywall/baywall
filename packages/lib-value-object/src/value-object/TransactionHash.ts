@@ -1,4 +1,10 @@
+const brand: unique symbol = Symbol( 'TransactionHashBrand' );
+
+/** トランザクションハッシュを表すvalue-object */
 export class TransactionHash {
+	/** 型区別用のフィールド */
+	private [ brand ]!: void;
+
 	public readonly value: string;
 
 	private constructor( txHashValue: string ) {

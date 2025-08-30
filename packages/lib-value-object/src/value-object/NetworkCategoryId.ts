@@ -1,4 +1,10 @@
+const brand: unique symbol = Symbol( 'NetworkCategoryIdBrand' );
+
+/** ネットワークカテゴリIDを表すvalue-object */
 export class NetworkCategoryId {
+	/** 型区別用のフィールド */
+	private [ brand ]!: void;
+
 	public readonly value: number;
 
 	private constructor( NetworkCategoryIdValue: number ) {

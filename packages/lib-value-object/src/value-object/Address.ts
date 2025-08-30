@@ -1,4 +1,10 @@
+const brand: unique symbol = Symbol( 'AddressBrand' );
+
+/** アドレスを表すvalue-object */
 export class Address {
+	/** 型区別用のフィールド */
+	private [ brand ]!: void;
+
 	public readonly value: string;
 
 	private constructor( addressValue: string ) {

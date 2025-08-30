@@ -1,4 +1,10 @@
+const brand: unique symbol = Symbol( 'ChainIdBrand' );
+
+/** チェーンIDを表すvalue-object */
 export class ChainId {
+	/** 型区別用のフィールド */
+	private [ brand ]!: void;
+
 	public readonly value: number;
 
 	private constructor( value: number ) {

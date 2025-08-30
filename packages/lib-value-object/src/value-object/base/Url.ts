@@ -1,7 +1,11 @@
+const brand: unique symbol = Symbol( 'UrlBrand' );
 /**
  * URLを表す抽象クラス
  */
 export abstract class Url {
+	/** 型区別用のフィールド */
+	private [ brand ]!: void;
+
 	public readonly value: string;
 
 	protected constructor( urlValue: string ) {

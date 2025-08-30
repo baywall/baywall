@@ -1,7 +1,12 @@
 import { Amount } from './Amount';
 import { Symbol } from './Symbol';
+import { PriceBrand as brand } from './PriceBrand';
 
+/** 価格を表すvalue-object */
 export class Price {
+	/** 型区別用のフィールド */
+	private [ brand ]!: void;
+
 	public readonly amount: Amount;
 	public readonly symbol: Symbol;
 

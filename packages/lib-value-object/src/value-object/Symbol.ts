@@ -1,6 +1,11 @@
 import cc from 'currency-codes';
+import { SymbolBrand as brand } from './SymbolBrand';
 
+/** 通貨記号を表すvalue-object */
 export class Symbol {
+	/** 型区別用のフィールド */
+	private readonly [ brand ]!: void;
+
 	public readonly value: string;
 
 	private constructor( symbolValue: string ) {

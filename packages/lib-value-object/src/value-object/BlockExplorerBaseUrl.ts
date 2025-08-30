@@ -1,9 +1,14 @@
 import { Url } from './base/Url';
 
+const brand: unique symbol = Symbol( 'BlockExplorerBaseUrlBrand' );
+
 /**
  * ブロックエクスプローラーのベースとなるURLを表すValue Object
  */
 export class BlockExplorerBaseUrl extends Url {
+	/** 型区別用のフィールド */
+	private [ brand ]!: void;
+
 	// eslint-disable-next-line no-useless-constructor
 	private constructor( baseUrlValue: string ) {
 		super( baseUrlValue );

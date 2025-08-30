@@ -1,4 +1,10 @@
+const brand: unique symbol = Symbol( 'AmountBrand' );
+
+/** 数量を表すvalue-object */
 export class Amount {
+	/** 型区別用のフィールド */
+	private [ brand ]!: void;
+
 	public readonly value: string;
 
 	private constructor( value: string ) {
