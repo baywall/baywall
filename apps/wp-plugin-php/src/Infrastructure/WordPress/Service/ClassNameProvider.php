@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository\Name;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
-class ClassName {
+class ClassNameProvider {
 
 	/**
 	 * ブロック(ブロックエディタで表示されるウィジェット)に付与されるCSSクラス名を返します。
