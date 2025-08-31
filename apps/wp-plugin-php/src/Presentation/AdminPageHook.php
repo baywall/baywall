@@ -10,6 +10,12 @@ use Cornix\Serendipity\Core\Repository\Name\Slug;
 
 class AdminPageHook {
 
+	private HandleNameProvider $handle_name_provider;
+
+	public function __construct( HandleNameProvider $handle_name_provider ) {
+		$this->handle_name_provider = $handle_name_provider;
+	}
+
 	public function register(): void {
 		// 管理画面のメニュー追加。
 		add_action( 'admin_menu', array( $this, 'addActionAdminMenu' ) );
@@ -48,7 +54,7 @@ class AdminPageHook {
 		assert( is_admin() );
 
 		// 管理画面用のスクリプトを登録する際のハンドル名を取得
-		$handle_name = ( new HandleNameProvider() )->adminScript();
+		$handle_name = $this->handle_name_provider->adminScript();
 
 		// アセットファイルを読み込む
 		$asset_file_path = ( new ProjectFile( 'public/admin/index.asset.php' ) )->toLocalPath();
