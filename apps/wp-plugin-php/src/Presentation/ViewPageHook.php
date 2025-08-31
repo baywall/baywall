@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Repository\Name\HandleName;
 class ViewPageHook {
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueueViewScripts' ) );
+		add_filter( 'script_loader_tag', array( $this, 'addFilterScriptLoaderTag' ), 10, 3 );
 	}
 
 	public function enqueueViewScripts(): void {
@@ -41,5 +42,19 @@ class ViewPageHook {
 			array(),
 			$asset_file['version']
 		);
+	}
+
+	public function addFilterScriptLoaderTag( string $tag, string $handle, string $src ): string {
+		// view用のスクリプトの場合、`defer`属性を追加する
+		// ※ すでにフッターに出力する設定を`wp_enqueue_script`で行っているので効果は薄い
+		if ( ( new HandleName() )->viewScript() === $handle ) {
+			$result = preg_replace(
+				'/<script(.*?)src=[\'"]' . preg_quote( $src, '/' ) . '[\'"](.*?)>/i',
+				'<script$1src="' . esc_url( $src ) . '" defer$2>',
+				$tag
+			);
+			return $result;
+		}
+		return $tag;
 	}
 }
