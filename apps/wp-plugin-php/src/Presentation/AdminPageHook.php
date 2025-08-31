@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation;
 
 use Cornix\Serendipity\Core\Features\Page\PhpVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
-use Cornix\Serendipity\Core\Repository\Name\HandleName;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Repository\I18nText;
 use Cornix\Serendipity\Core\Repository\Name\Slug;
 
@@ -48,7 +48,7 @@ class AdminPageHook {
 		assert( is_admin() );
 
 		// 管理画面用のスクリプトを登録する際のハンドル名を取得
-		$handle_name = ( new HandleName() )->adminScript();
+		$handle_name = ( new HandleNameProvider() )->adminScript();
 
 		// アセットファイルを読み込む
 		$asset_file_path = ( new ProjectFile( 'public/admin/index.asset.php' ) )->toLocalPath();
