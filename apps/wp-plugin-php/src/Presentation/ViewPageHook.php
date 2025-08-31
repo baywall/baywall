@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Repository\Name\HandleName;
 class ViewPageHook {
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueueViewScripts' ) );
+		add_filter( 'script_loader_tag', array( $this, 'addFilterScriptLoaderTag' ), 10, 3 );
 	}
 
 	public function enqueueViewScripts(): void {
@@ -29,7 +30,7 @@ class ViewPageHook {
 			( new ProjectFile( 'public/view/index.js' ) )->toUrl(),
 			$asset_file['dependencies'],
 			$asset_file['version'],
-			true   // フッターに出力
+			true   // フッターに出力 ※ 6.8.2でも`script_loader_tag`による`defer`挿入が可能であることを確認したため、配列にはせず`true`のままとする
 		);
 		// インラインスクリプトを追加
 		( new PhpVer() )->addInlineScript( $handle_name );
@@ -41,5 +42,23 @@ class ViewPageHook {
 			array(),
 			$asset_file['version']
 		);
+	}
+
+	public function addFilterScriptLoaderTag( string $tag, string $handle, string $src ): string {
+		// 以下のサイトでは`script_loader_tag`を使った`defer`挿入ができなくなったとの記載があるが、
+		// WordPress 6.8.2 での動作が確認できたため`wp_enqueue_script`側の対応はそのままとする。
+		// https://note.com/hapiclo_leaves/n/n044526d7e82f
+
+		// view用のスクリプトの場合、`defer`属性を追加する
+		// ※ すでにフッターに出力する設定を`wp_enqueue_script`で行っているので効果は薄い
+		if ( ( new HandleName() )->viewScript() === $handle ) {
+			$result = preg_replace(
+				'/<script(.*?)src=[\'"]' . preg_quote( $src, '/' ) . '[\'"](.*?)>/i',
+				'<script$1src="' . esc_url( $src ) . '" defer$2>',
+				$tag
+			);
+			return $result;
+		}
+		return $tag;
 	}
 }
