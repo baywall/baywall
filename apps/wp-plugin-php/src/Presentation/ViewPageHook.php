@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation;
 
 use Cornix\Serendipity\Core\Features\Page\PhpVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
-use Cornix\Serendipity\Core\Repository\Name\HandleName;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 
 class ViewPageHook {
 	public function register(): void {
@@ -18,7 +18,7 @@ class ViewPageHook {
 		}
 
 		// ゲストユーザー(一般の訪問者)表示用の登録する際のハンドル名を取得
-		$handle_name = ( new HandleName() )->viewScript();
+		$handle_name = ( new HandleNameProvider() )->viewScript();
 
 		// アセットファイルを読み込む
 		$asset_file_path = ( new ProjectFile( 'public/view/index.asset.php' ) )->toLocalPath();
@@ -51,7 +51,7 @@ class ViewPageHook {
 
 		// view用のスクリプトの場合、`defer`属性を追加する
 		// ※ すでにフッターに出力する設定を`wp_enqueue_script`で行っているので効果は薄い
-		if ( ( new HandleName() )->viewScript() === $handle ) {
+		if ( ( new HandleNameProvider() )->viewScript() === $handle ) {
 			$result = preg_replace(
 				'/<script(.*?)src=[\'"]' . preg_quote( $src, '/' ) . '[\'"](.*?)>/i',
 				'<script$1src="' . esc_url( $src ) . '" defer$2>',

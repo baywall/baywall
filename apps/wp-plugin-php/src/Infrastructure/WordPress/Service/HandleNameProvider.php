@@ -1,8 +1,8 @@
 <?php
 
-namespace Cornix\Serendipity\Core\Repository\Name;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
-class HandleName {
+class HandleNameProvider {
 
 	public function blockScript(): string {
 		// 『src/block/index.js』(文字列)のMD5ハッシュ値。
