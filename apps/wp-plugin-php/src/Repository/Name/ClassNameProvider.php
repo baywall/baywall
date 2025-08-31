@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\Name;
 
-class ClassName {
+class ClassNameProvider {
 
 	/**
 	 * ブロック(ブロックエディタで表示されるウィジェット)に付与されるCSSクラス名を返します。
