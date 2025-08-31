@@ -10,6 +10,13 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
  * 投稿編集画面のフック(投稿新規作成画面を含む)
  */
 class PostEditHook {
+
+	private HandleNameProvider $handle_name_provider;
+
+	public function __construct( HandleNameProvider $handle_name_provider ) {
+		$this->handle_name_provider = $handle_name_provider;
+	}
+
 	// ブロックスクリプトの出力先ディレクトリ
 	private const DIST_DIR = 'build/block';
 
@@ -25,7 +32,7 @@ class PostEditHook {
 		}
 
 		// ブロックエディタで使用するスクリプトを登録するときのハンドル名を取得。
-		$handle = ( new HandleNameProvider() )->blockScript();
+		$handle = $this->handle_name_provider->blockScript();
 
 		// アセットファイルを読み込む。
 		$asset_file_path = ( new ProjectFile( self::DIST_DIR . '/index.asset.php' ) )->toLocalPath();
