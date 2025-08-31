@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Infrastructure\Format\HtmlFormat;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
-use Cornix\Serendipity\Core\Repository\Name\ClassNameProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\ClassNameProvider;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
