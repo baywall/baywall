@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Infrastructure\Format\HtmlFormat;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
-use Cornix\Serendipity\Core\Repository\Name\ClassName;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\ClassNameProvider;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
@@ -258,7 +258,7 @@ class WidgetContentBuilder {
 		$block_name = ( new BlockName() )->get();
 		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategoryId(), $post_data->sellingPrice() )->toArray();
 		$attrs_str  = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
-		$class_name = ( new ClassName() )->getBlock();
+		$class_name = ( new ClassNameProvider() )->getBlock();
 		return "<!-- wp:{$block_name} {$attrs_str} -->\n"
 			. "<aside class=\"wp-block-create-block-qik-chain-pay {$class_name}\"></aside>\n"
 			. "<!-- /wp:{$block_name} -->";
