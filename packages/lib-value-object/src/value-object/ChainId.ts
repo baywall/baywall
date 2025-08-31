@@ -26,7 +26,9 @@ export class ChainId {
 
 	private static checkChainIdValue( chainIdValue: number ): void {
 		if ( ! Number.isInteger( chainIdValue ) || chainIdValue <= 0 ) {
-			throw new Error( '[8C8D83D1] ChainId must be a positive integer.' );
+			throw new Error(
+				`[8C8D83D1] ChainId must be a positive integer. ${ chainIdValue } (${ typeof chainIdValue })`
+			);
 		}
 	}
 }
