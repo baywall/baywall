@@ -30,7 +30,7 @@ class ViewPageHook {
 			( new ProjectFile( 'public/view/index.js' ) )->toUrl(),
 			$asset_file['dependencies'],
 			$asset_file['version'],
-			true   // フッターに出力
+			true   // フッターに出力 ※ 6.8.2でも`script_loader_tag`による`defer`挿入が可能であることを確認したため、配列にはせず`true`のままとする
 		);
 		// インラインスクリプトを追加
 		( new PhpVer() )->addInlineScript( $handle_name );
@@ -45,6 +45,10 @@ class ViewPageHook {
 	}
 
 	public function addFilterScriptLoaderTag( string $tag, string $handle, string $src ): string {
+		// 以下のサイトでは`script_loader_tag`を使った`defer`挿入ができなくなったとの記載があるが、
+		// WordPress 6.8.2 での動作が確認できたため`wp_enqueue_script`側の対応はそのままとする。
+		// https://note.com/hapiclo_leaves/n/n044526d7e82f
+
 		// view用のスクリプトの場合、`defer`属性を追加する
 		// ※ すでにフッターに出力する設定を`wp_enqueue_script`で行っているので効果は薄い
 		if ( ( new HandleName() )->viewScript() === $handle ) {
