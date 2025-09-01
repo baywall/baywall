@@ -11,9 +11,11 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\SlugProvider;
 class AdminPageHook {
 
 	private HandleNameProvider $handle_name_provider;
+	private SlugProvider $slug_provider;
 
-	public function __construct( HandleNameProvider $handle_name_provider ) {
+	public function __construct( HandleNameProvider $handle_name_provider, SlugProvider $slug_provider ) {
 		$this->handle_name_provider = $handle_name_provider;
+		$this->slug_provider        = $slug_provider;
 	}
 
 	public function register(): void {
@@ -27,7 +29,6 @@ class AdminPageHook {
 	public function addActionAdminMenu(): void {
 		assert( is_admin() );
 
-		$slug = new SlugProvider();
 		$i18n = new I18nText();
 
 		$capability    = 'manage_options'; // ユーザー権限(`manage_options`は、管理画面の`設定`へアクセス可能な権限)
@@ -41,7 +42,7 @@ class AdminPageHook {
 			$i18n->pluginName(),    // メニューが表示された際のページのタイトルタグに表示されるテキスト（ブラウザのタブに表示されるテキスト）
 			$i18n->pluginName(),    // 管理画面のメニューに表示されるテキスト
 			$capability,            // ユーザー権限
-			$slug->adminMenuRoot(), // メニューのスラッグ
+			$this->slug_provider->adminMenuRoot(), // メニューのスラッグ
 			$page_callback,
 			'dashicons-admin-generic',  // メニューに表示されるアイコン
 		);
