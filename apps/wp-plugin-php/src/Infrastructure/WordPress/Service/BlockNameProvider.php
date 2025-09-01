@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository\Name;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Constant\Config;
 
-class BlockName {
+class BlockNameProvider {
 
 	/** ブロックエディタで使用されるブロック名(キャッシュ) */
 	private static ?string $block_name = null;
