@@ -1,5 +1,5 @@
 import { Logger } from './Logger';
-import { LOG_LEVEL, LogLevel } from './LogLevel';
+import { LOG_LEVEL, LogLevel } from './constants/LogLevel';
 
 /** 指定したログレベルに応じてログを出力するLogger */
 export class LevelFilteredLogger implements Logger {
