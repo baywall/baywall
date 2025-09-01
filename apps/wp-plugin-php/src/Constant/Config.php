@@ -14,6 +14,9 @@ class Config {
 	 */
 	public const ROOT_DIR = __DIR__ . '/../../..';
 
+	/** `block.json`へのパス */
+	public const BLOCK_JSON_PATH = self::ROOT_DIR . '/build/block/block.json';
+
 	/**
 	 * レートの一時データの有効期限(秒)
 	 */
