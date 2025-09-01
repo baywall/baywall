@@ -6,7 +6,7 @@ use Cornix\Serendipity\Core\Features\Page\PhpVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Repository\I18nText;
-use Cornix\Serendipity\Core\Repository\Name\Slug;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\SlugProvider;
 
 class AdminPageHook {
 
@@ -27,7 +27,7 @@ class AdminPageHook {
 	public function addActionAdminMenu(): void {
 		assert( is_admin() );
 
-		$slug = new Slug();
+		$slug = new SlugProvider();
 		$i18n = new I18nText();
 
 		$capability    = 'manage_options'; // ユーザー権限(`manage_options`は、管理画面の`設定`へアクセス可能な権限)
