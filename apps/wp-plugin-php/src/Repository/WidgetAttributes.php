@@ -106,7 +106,7 @@ class WidgetParser {
 	 */
 	private function block( string $post_content ): ?WP_Block_Parser_Block {
 		$blocks     = ( new BlockParser() )->parse( $post_content );
-		$block_name = BlockNameProvider::get(); // ウィジェットに付与されているブロック名
+		$block_name = ( new BlockNameProvider() )->get(); // ウィジェットに付与されているブロック名
 
 		// `blockName`プロパティが$block_nameと一致するブロックを取得
 		$blocks = array_filter(
