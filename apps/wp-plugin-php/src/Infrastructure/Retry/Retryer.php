@@ -21,7 +21,7 @@ class Retryer {
 		for ( $i = 0; $i <= $attempts; $i++ ) {
 			try {
 				return $callable();
-			} catch ( \Exception $e ) {
+			} catch ( \Throwable $e ) {
 				if ( $i < $attempts ) {
 					usleep( $intervals_ms[ $i ] * 1000 ); // ミリ秒をマイクロ秒に変換
 				} else {
