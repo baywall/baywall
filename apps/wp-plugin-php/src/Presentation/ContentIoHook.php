@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\Format\HtmlFormat;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
-use Cornix\Serendipity\Core\Repository\Name\BlockName;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\BlockNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\ClassNameProvider;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
@@ -255,7 +255,7 @@ class WidgetContentBuilder {
 
 	public function build( int $post_id ): string {
 		$post_data  = $this->post_repository->get( PostId::from( $post_id ) );
-		$block_name = ( new BlockName() )->get();
+		$block_name = ( new BlockNameProvider() )->get();
 		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategoryId(), $post_data->sellingPrice() )->toArray();
 		$attrs_str  = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 		$class_name = ( new ClassNameProvider() )->getBlock();
@@ -270,7 +270,7 @@ class WidgetContentBuilder {
  */
 class RawContentDivider {
 	public function __construct() {
-		$block_name      = ( new BlockName() )->get();
+		$block_name      = ( new BlockNameProvider() )->get();
 		$this->start_tag = "<!-- wp:{$block_name}"; // start_tagにはプロパティが含まれるので`-->`は含めない
 		$this->end_tag   = "<!-- /wp:{$block_name} -->";
 	}

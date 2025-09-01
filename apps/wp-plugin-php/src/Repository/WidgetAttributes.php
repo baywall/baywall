@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Repository\Name\BlockName;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\BlockNameProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
@@ -106,7 +106,7 @@ class WidgetParser {
 	 */
 	private function block( string $post_content ): ?WP_Block_Parser_Block {
 		$blocks     = ( new BlockParser() )->parse( $post_content );
-		$block_name = BlockName::get(); // ウィジェットに付与されているブロック名
+		$block_name = BlockNameProvider::get(); // ウィジェットに付与されているブロック名
 
 		// `blockName`プロパティが$block_nameと一致するブロックを取得
 		$blocks = array_filter(
