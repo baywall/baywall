@@ -28,21 +28,16 @@ class ContentIoHook {
 	public function __construct(
 		PostRepository $post_repository,
 		UserAccessProvider $user_access_provider,
-		PaidContentTable $paid_content_table,
-		BlockNameProvider $block_name_provider
+		PaidContentTable $paid_content_table
 	) {
-		$this->post_repository        = $post_repository;
-		$this->user_access_provider   = $user_access_provider;
-		$this->paid_content_table     = $paid_content_table;
-		$this->widget_content_builder = new WidgetContentBuilder( $post_repository, $block_name_provider );
-		$this->raw_content_divider    = new RawContentDivider( $block_name_provider );
+		$this->post_repository      = $post_repository;
+		$this->user_access_provider = $user_access_provider;
+		$this->paid_content_table   = $paid_content_table;
 	}
 
 	private PostRepository $post_repository;
 	private UserAccessProvider $user_access_provider;
 	private PaidContentTable $paid_content_table;
-	private WidgetContentBuilder $widget_content_builder;
-	private RawContentDivider $raw_content_divider;
 
 	/**
 	 * フックを登録します。
@@ -74,7 +69,7 @@ class ContentIoHook {
 	 * ウィジェットの内容(ブロックタグ付きのHTML)を生成します。
 	 */
 	private function createWidgetContent( int $post_id ): string {
-		return $this->widget_content_builder->build( $post_id );
+		return ( new WidgetContentBuilder( $this->post_repository ) )->build( $post_id );
 	}
 
 	/**
@@ -149,10 +144,11 @@ class ContentIoHook {
 		} elseif ( $is_normal_saving || $is_autosaving ) {
 			// 通常の投稿編集画面からのリクエストの場合は、送信されたデータから投稿内容を取得
 			self::$unsaved_original_content = $data['post_content'] ?? '';
-			if ( $this->raw_content_divider->hasWidget( self::$unsaved_original_content ) ) {
+			$divider                        = new RawContentDivider();
+			if ( $divider->hasWidget( self::$unsaved_original_content ) ) {
 				// ウィジェットが含まれている場合は、投稿内容を無料部分だけにして返す。
 				// これにより、無料部分だけがwp_postsテーブルに保存されるようになる。
-				$data['post_content'] = $this->raw_content_divider->getFreeContent( self::$unsaved_original_content );
+				$data['post_content'] = $divider->getFreeContent( self::$unsaved_original_content );
 			}
 		}
 
@@ -168,7 +164,8 @@ class ContentIoHook {
 			return;
 		}
 
-		$post = $this->post_repository->get( PostId::from( $post_id ) );
+		$post_repository = $this->post_repository;
+		$post            = $post_repository->get( PostId::from( $post_id ) );
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
 		$attributes = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
@@ -176,7 +173,7 @@ class ContentIoHook {
 			// ウィジェットが含まれていない場合はウィジェットを削除して保存した可能性があるため、有料記事の情報を削除
 			$post->deletePaidContent();
 		} else {
-			$paid_content_text = $this->raw_content_divider->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
+			$paid_content_text = ( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
 			assert( ! is_null( $paid_content_text ), '[2B9ADC9A] Paid content is null. - post_id: ' . $post_id );
 			// ウィジェットが含まれている場合は有料記事の情報を設定
 			$post->setPaidContent(
@@ -187,7 +184,7 @@ class ContentIoHook {
 		}
 
 		// 変更を保存
-		$this->post_repository->save( $post );
+		$post_repository->save( $post );
 	}
 
 	/**
@@ -251,16 +248,14 @@ class ContentIoHook {
 }
 
 class WidgetContentBuilder {
-	public function __construct( PostRepository $post_repository, BlockNameProvider $block_name_provider ) {
-		$this->post_repository     = $post_repository;
-		$this->block_name_provider = $block_name_provider;
+	public function __construct( PostRepository $post_repository ) {
+		$this->post_repository = $post_repository;
 	}
 	private PostRepository $post_repository;
-	private BlockNameProvider $block_name_provider;
 
 	public function build( int $post_id ): string {
 		$post_data  = $this->post_repository->get( PostId::from( $post_id ) );
-		$block_name = $this->block_name_provider->get();
+		$block_name = ( new BlockNameProvider() )->get();
 		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategoryId(), $post_data->sellingPrice() )->toArray();
 		$attrs_str  = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 		$class_name = ( new ClassNameProvider() )->getBlock();
@@ -274,8 +269,8 @@ class WidgetContentBuilder {
  * `<!-- wp:XXX`が含まれる文字列(投稿内容)を分割します
  */
 class RawContentDivider {
-	public function __construct( BlockNameProvider $block_name_provider ) {
-		$block_name      = $block_name_provider->get();
+	public function __construct() {
+		$block_name      = ( new BlockNameProvider() )->get();
 		$this->start_tag = "<!-- wp:{$block_name}"; // start_tagにはプロパティが含まれるので`-->`は含めない
 		$this->end_tag   = "<!-- /wp:{$block_name} -->";
 	}
