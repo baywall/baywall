@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository\Name;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Repository\PluginInfo;
 
-class Slug {
+class SlugProvider {
 	public function __construct() {
 		$this->text_domain = ( new PluginInfo() )->textDomain();
 	}
