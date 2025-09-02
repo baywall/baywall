@@ -4,6 +4,7 @@ import { type SellingSymbolSelectProps } from './SellingSymbolSelect';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 import { TextProvider } from '../../infrastructure/i18n/service/TextProvider';
 import { useSelectedSellingSymbol } from '../../provider/selected-selling-symbol/useSelectedSellingSymbol';
+import { useSelectedNetworkCategoryId } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategoryId';
 
 export const useSellingSymbolSelectProps = (): SellingSymbolSelectProps => {
 	return {
@@ -31,14 +32,24 @@ const useDisabled = (): boolean => {
 
 const useOptions = (): NonNullable< SellingSymbolSelectProps[ 'options' ] > => {
 	const { data } = useBlockInitDataQuery();
+	const { selectedNetworkCategoryId } = useSelectedNetworkCategoryId();
 	const textProvider = useMemo( () => new TextProvider(), [] );
 
 	const sellableSymbolOptions = useMemo( () => {
-		return data?.sellableCurrencies.map( ( currency ) => ( {
-			label: currency.symbol.value,
-			value: currency.symbol.value,
-		} ) );
-	}, [ data ] );
+		if ( data === undefined || selectedNetworkCategoryId === undefined ) {
+			return undefined;
+		} else if ( selectedNetworkCategoryId === null ) {
+			// ネットワークカテゴリが選択されていない場合、販売可能な通貨一覧は空配列とする
+			return [];
+		}
+
+		return data.sellableCurrencies
+			.filter( ( c ) => c.networkCategoryId.equals( selectedNetworkCategoryId ) )
+			.map( ( currency ) => ( {
+				label: currency.symbol.value,
+				value: currency.symbol.value,
+			} ) );
+	}, [ data, selectedNetworkCategoryId ] );
 
 	// `@wordpress/components`からインポートした`SelectControl`の`options`がundefinedや空配列の場合、
 	// コントロール自体が表示されないため、何かしらの選択肢を入れてから返す
