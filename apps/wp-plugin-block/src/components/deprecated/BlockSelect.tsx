@@ -4,6 +4,7 @@ interface BlockSelectOptionProps extends React.ComponentProps< 'option' > {}
 /**
  * ブロックエディタで描画するセレクトコントロール
  * @param root0
+ * @deprecated
  */
 export const BlockSelect: React.FC< BlockSelectProps > = ( { ...props } ) => {
 	return <select { ...props } />;
@@ -12,6 +13,7 @@ export const BlockSelect: React.FC< BlockSelectProps > = ( { ...props } ) => {
 /**
  * ブロックエディタで描画するセレクトコントロールのオプション
  * @param root0
+ * @deprecated
  */
 export const BlockSelectOption: React.FC< BlockSelectOptionProps > = ( { ...props } ) => {
 	return <option { ...props } />;

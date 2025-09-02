@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { NetworkCategoryId } from '@serendipity/lib-value-object';
-import { BlockSelect, BlockSelectOption } from '../../components/BlockSelect';
+import { BlockSelect, BlockSelectOption } from '../../components/deprecated/BlockSelect';
 
 export interface NetworkCategorySelectProps {
 	value: NetworkCategoryId | null | undefined;
