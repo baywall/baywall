@@ -1,13 +1,27 @@
-import { useMemo } from '@wordpress/element';
+import { useCallback, useMemo } from '@wordpress/element';
+import { Symbol } from '@serendipity/lib-value-object';
 import { type SellingSymbolSelectProps } from './SellingSymbolSelect';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 import { TextProvider } from '../../infrastructure/i18n/service/TextProvider';
+import { useSelectedSellingSymbol } from '../../provider/selected-selling-symbol/useSelectedSellingSymbol';
 
 export const useSellingSymbolSelectProps = (): SellingSymbolSelectProps => {
 	return {
+		onChange: useOnChange(),
 		disabled: useDisabled(),
 		options: useOptions(),
 	};
+};
+
+const useOnChange = (): SellingSymbolSelectProps[ 'onChange' ] => {
+	const { setSelectedSellingSymbol } = useSelectedSellingSymbol();
+
+	return useCallback< NonNullable< SellingSymbolSelectProps[ 'onChange' ] > >(
+		( value ) => {
+			setSelectedSellingSymbol( Symbol.from( value ) );
+		},
+		[ setSelectedSellingSymbol ]
+	);
 };
 
 const useDisabled = (): boolean => {
