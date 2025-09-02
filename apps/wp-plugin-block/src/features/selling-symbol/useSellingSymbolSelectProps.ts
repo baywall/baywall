@@ -54,12 +54,14 @@ const useOptions = (): NonNullable< SellingSymbolSelectProps[ 'options' ] > => {
 	// `@wordpress/components`からインポートした`SelectControl`の`options`がundefinedや空配列の場合、
 	// コントロール自体が表示されないため、何かしらの選択肢を入れてから返す
 	return useMemo( () => {
-		if ( sellableSymbolOptions === undefined ) {
+		if ( sellableSymbolOptions === undefined || selectedNetworkCategoryId === undefined ) {
 			return [ { label: textProvider.loading, value: '' } ];
+		} else if ( selectedNetworkCategoryId === null ) {
+			return [ { label: textProvider.selectSellingNetworkCategory, value: '' } ];
 		} else if ( sellableSymbolOptions.length === 0 ) {
 			return [ { label: textProvider.noOptionsAvailable, value: '' } ];
 		} else {
 			return sellableSymbolOptions;
 		}
-	}, [ sellableSymbolOptions, textProvider ] );
+	}, [ sellableSymbolOptions, selectedNetworkCategoryId, textProvider ] );
 };
