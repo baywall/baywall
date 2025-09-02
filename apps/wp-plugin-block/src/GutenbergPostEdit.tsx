@@ -1,13 +1,13 @@
 import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
-import { SymbolSelect } from './features/symbolSelect/SymbolSelect';
 import { NetworkCategorySelect } from './features/networkCategorySelect/NetworkCategorySelect';
 import { useNetworkCategorySelectProps } from './features/networkCategorySelect/useNetworkCategorySelectProps';
-import { useSymbolSelectProps } from './features/symbolSelect/useSymbolSelectProps';
 import { usePriceValueInputProps } from './features/priceValueInput/usePriceValueInputProps';
 import { PriceValueInput } from './features/priceValueInput/PriceValueInput';
 import { useInitWidgetState } from './features/initialize/useInitWidgetState';
 import { useUpdateWidgetAttributes } from './features/update/useUpdateWidgetAttributes';
+import { SellingSymbolSelect } from './features/selling-symbol/SellingSymbolSelect';
+import { useSellingSymbolSelectProps } from './features/selling-symbol/useSellingSymbolSelectProps';
 
 type GutenbergPostEditProps = {};
 
@@ -28,7 +28,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 					width={ 90 }
 					style={ { display: 'block', maxWidth: '100px' } }
 				/>
-				<SymbolSelect { ...useSymbolSelectProps() } />
+				<SellingSymbolSelect { ...useSellingSymbolSelectProps() } />
 			</div>
 		</Placeholder>
 	);
