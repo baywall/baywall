@@ -1,3 +1,3 @@
-import { BlockAmountInput } from '../../components/BlockAmountInput';
+import { BlockAmountInput } from '../../components/deprecated/BlockAmountInput';
 
 export const PriceValueInput = BlockAmountInput;

@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react';
-import { render } from '../../../jest-lib/render';
+import { render } from '../../../../jest-lib/render';
 import * as stories from './BlockAmountInput.stories';
 
 /**
