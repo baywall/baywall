@@ -1,6 +1,7 @@
+import { useMemo } from '@wordpress/element';
 import { type SellingSymbolSelectProps } from './SellingSymbolSelect';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
-import { useMemo } from '@wordpress/element';
+import { TextProvider } from '../../infrastructure/i18n/service/TextProvider';
 
 export const useSellingSymbolSelectProps = (): SellingSymbolSelectProps => {
 	return {
@@ -16,6 +17,7 @@ const useDisabled = (): boolean => {
 
 const useOptions = (): NonNullable< SellingSymbolSelectProps[ 'options' ] > => {
 	const { data } = useBlockInitDataQuery();
+	const textProvider = useMemo( () => new TextProvider(), [] );
 
 	const sellableSymbolOptions = useMemo( () => {
 		return data?.sellableCurrencies.map( ( currency ) => ( {
@@ -28,11 +30,11 @@ const useOptions = (): NonNullable< SellingSymbolSelectProps[ 'options' ] > => {
 	// コントロール自体が表示されないため、何かしらの選択肢を入れてから返す
 	return useMemo( () => {
 		if ( sellableSymbolOptions === undefined ) {
-			return [ { label: 'Loading...', value: '' } ];
+			return [ { label: textProvider.loading, value: '' } ];
 		} else if ( sellableSymbolOptions.length === 0 ) {
-			return [ { label: 'No options available', value: '' } ];
+			return [ { label: textProvider.noOptionsAvailable, value: '' } ];
 		} else {
 			return sellableSymbolOptions;
 		}
-	}, [ sellableSymbolOptions ] );
+	}, [ sellableSymbolOptions, textProvider ] );
 };
