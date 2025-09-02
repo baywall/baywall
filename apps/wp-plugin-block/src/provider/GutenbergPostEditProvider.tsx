@@ -3,6 +3,7 @@ import { WindowDataProvider } from './windowData/WindowDataProvider';
 import { WidgetStateProvider } from './widgetState/WidgetStateProvider';
 import { ServerDataProvider } from './serverData/ServerDataProvider';
 import { WidgetAttributes } from '../types/WidgetAttributes';
+import { SelectedSellingSymbolProvider } from './selected-selling-symbol/SelectedSellingSymbolProvider';
 
 // アクティブになったときは再読みしない
 const client = new QueryClient( {
@@ -32,7 +33,7 @@ export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps
 				<ServerDataProvider client={ client }>
 					{ /* ウィジェットの状態を保持 */ }
 					<WidgetStateProvider attributes={ attributes } setAttributes={ setAttributes }>
-						{ children }
+						<SelectedSellingSymbolProvider>{ children }</SelectedSellingSymbolProvider>
 					</WidgetStateProvider>
 				</ServerDataProvider>
 			</WindowDataProvider>
