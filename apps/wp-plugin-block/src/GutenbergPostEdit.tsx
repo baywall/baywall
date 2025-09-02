@@ -1,13 +1,13 @@
 import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
-import { NetworkCategorySelect } from './features/networkCategorySelect/NetworkCategorySelect';
-import { useNetworkCategorySelectProps } from './features/networkCategorySelect/useNetworkCategorySelectProps';
 import { usePriceValueInputProps } from './features/priceValueInput/usePriceValueInputProps';
 import { PriceValueInput } from './features/priceValueInput/PriceValueInput';
 import { useInitWidgetState } from './features/initialize/useInitWidgetState';
 import { useUpdateWidgetAttributes } from './features/update/useUpdateWidgetAttributes';
 import { SellingSymbolSelect } from './features/selling-symbol/SellingSymbolSelect';
 import { useSellingSymbolSelectProps } from './features/selling-symbol/useSellingSymbolSelectProps';
+import { SellingNetworkCategorySelect } from './features/selling-network-category/SellingNetworkCategorySelect';
+import { useSellingNetworkCategorySelectProps } from './features/selling-network-category/useSellingNetworkCategorySelectProps';
 
 type GutenbergPostEditProps = {};
 
@@ -20,7 +20,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 	return (
 		<Placeholder icon={ widget } label={ 'Qik Chain Pay' }>
 			<div style={ { width: '100%' } }>
-				<NetworkCategorySelect { ...useNetworkCategorySelectProps() } />
+				<SellingNetworkCategorySelect { ...useSellingNetworkCategorySelectProps() } />
 			</div>
 			<div style={ { display: 'flex', alignItems: 'flex-end' } }>
 				<PriceValueInput
