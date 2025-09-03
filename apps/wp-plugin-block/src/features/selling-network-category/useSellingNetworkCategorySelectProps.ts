@@ -3,7 +3,7 @@ import { NetworkCategoryId } from '@serendipity/lib-value-object';
 import { type SellingNetworkCategorySelectProps } from './SellingNetworkCategorySelect';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 import { TextProvider } from '../../lib/i18n/TextProvider';
-import { useSelectedSellingNetworkCategoryId } from '../../provider/selected-selling-network-id/useSelectedSellingNetworkCategoryId';
+import { useSellingNetworkCategoryId } from '../../provider/selling-network-category-id/useSellingNetworkCategoryId';
 
 export const useSellingNetworkCategorySelectProps = (): SellingNetworkCategorySelectProps => {
 	return {
@@ -15,15 +15,15 @@ export const useSellingNetworkCategorySelectProps = (): SellingNetworkCategorySe
 };
 
 const useValue = (): NonNullable< SellingNetworkCategorySelectProps[ 'value' ] > => {
-	const { selectedSellingNetworkCategoryId } = useSelectedSellingNetworkCategoryId();
-	return selectedSellingNetworkCategoryId?.value.toString() || '';
+	const { sellingNetworkCategoryId } = useSellingNetworkCategoryId();
+	return sellingNetworkCategoryId?.value.toString() || '';
 };
 
 const useOnChange = (): SellingNetworkCategorySelectProps[ 'onChange' ] => {
-	const { setSelectedSellingNetworkCategoryId } = useSelectedSellingNetworkCategoryId();
+	const { setSellingNetworkCategoryId } = useSellingNetworkCategoryId();
 
 	return ( value ) => {
-		setSelectedSellingNetworkCategoryId( NetworkCategoryId.from( Number( value ) ) );
+		setSellingNetworkCategoryId( NetworkCategoryId.from( Number( value ) ) );
 	};
 };
 

@@ -4,7 +4,7 @@ import { type SellingSymbolSelectProps } from './SellingSymbolSelect';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 import { TextProvider } from '../../lib/i18n/TextProvider';
 import { useSelectedSellingSymbol } from '../../provider/selected-selling-symbol/useSelectedSellingSymbol';
-import { useSelectedSellingNetworkCategoryId } from '../../provider/selected-selling-network-id/useSelectedSellingNetworkCategoryId';
+import { useSellingNetworkCategoryId } from '../../provider/selling-network-category-id/useSellingNetworkCategoryId';
 
 export const useSellingSymbolSelectProps = (): SellingSymbolSelectProps => {
 	return {
@@ -38,36 +38,36 @@ const useDisabled = (): boolean => {
 
 const useOptions = (): NonNullable< SellingSymbolSelectProps[ 'options' ] > => {
 	const { data } = useBlockInitDataQuery();
-	const { selectedSellingNetworkCategoryId } = useSelectedSellingNetworkCategoryId();
+	const { sellingNetworkCategoryId } = useSellingNetworkCategoryId();
 	const textProvider = useMemo( () => new TextProvider(), [] );
 
 	const sellableSymbolOptions = useMemo( () => {
-		if ( data === undefined || selectedSellingNetworkCategoryId === undefined ) {
+		if ( data === undefined || sellingNetworkCategoryId === undefined ) {
 			return undefined;
-		} else if ( selectedSellingNetworkCategoryId === null ) {
+		} else if ( sellingNetworkCategoryId === null ) {
 			// ネットワークカテゴリが選択されていない場合、販売可能な通貨一覧は空配列とする
 			return [];
 		}
 
 		return data.sellableCurrencies
-			.filter( ( c ) => c.networkCategoryId.equals( selectedSellingNetworkCategoryId ) )
+			.filter( ( c ) => c.networkCategoryId.equals( sellingNetworkCategoryId ) )
 			.map( ( currency ) => ( {
 				label: currency.symbol.value,
 				value: currency.symbol.value,
 			} ) );
-	}, [ data, selectedSellingNetworkCategoryId ] );
+	}, [ data, sellingNetworkCategoryId ] );
 
 	// `@wordpress/components`からインポートした`SelectControl`の`options`がundefinedや空配列の場合、
 	// コントロール自体が表示されないため、何かしらの選択肢を入れてから返す
 	return useMemo( () => {
-		if ( sellableSymbolOptions === undefined || selectedSellingNetworkCategoryId === undefined ) {
+		if ( sellableSymbolOptions === undefined || sellingNetworkCategoryId === undefined ) {
 			return [ { label: textProvider.loading, value: '' } ];
-		} else if ( selectedSellingNetworkCategoryId === null ) {
+		} else if ( sellingNetworkCategoryId === null ) {
 			return [ { label: textProvider.selectSellingNetworkCategory, value: '' } ];
 		} else if ( sellableSymbolOptions.length === 0 ) {
 			return [ { label: textProvider.noOptionsAvailable, value: '' } ];
 		} else {
 			return sellableSymbolOptions;
 		}
-	}, [ sellableSymbolOptions, selectedSellingNetworkCategoryId, textProvider ] );
+	}, [ sellableSymbolOptions, sellingNetworkCategoryId, textProvider ] );
 };
