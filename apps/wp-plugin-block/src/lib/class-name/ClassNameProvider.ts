@@ -1,4 +1,4 @@
-import { Config } from '../../../constant/Config';
+import { Config } from '../../constant/Config';
 
 export class ClassNameProvider {
 	/** ブロックの要素に指定するCSSのクラス名 */
