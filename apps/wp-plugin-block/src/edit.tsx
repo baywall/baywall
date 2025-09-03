@@ -36,11 +36,10 @@ import { WidgetAttributes } from './types/WidgetAttributes';
 const Edit: React.FC< BlockEditProps< WidgetAttributes > > = ( props ) => {
 	const blockProps = useBlockProps?.() ?? {};
 
-	const { setAttributes, attributes } = props;
 	return (
 		<div { ...blockProps }>
-			<GutenbergPostEditProvider attributes={ attributes } setAttributes={ setAttributes }>
-				<GutenbergPostEdit blockEditProps={ props } />
+			<GutenbergPostEditProvider blockEditProps={ props }>
+				<GutenbergPostEdit />
 			</GutenbergPostEditProvider>
 		</div>
 	);
