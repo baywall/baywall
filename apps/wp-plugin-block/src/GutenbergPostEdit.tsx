@@ -1,13 +1,13 @@
 import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
-import { usePriceValueInputProps } from './features/priceValueInput/usePriceValueInputProps';
-import { PriceValueInput } from './features/priceValueInput/PriceValueInput';
 import { useInitWidgetState } from './features/initialize/useInitWidgetState';
 import { useUpdateWidgetAttributes } from './features/update/useUpdateWidgetAttributes';
 import { SellingSymbolSelect } from './features/selling-symbol/SellingSymbolSelect';
 import { useSellingSymbolSelectProps } from './features/selling-symbol/useSellingSymbolSelectProps';
 import { SellingNetworkCategorySelect } from './features/selling-network-category/SellingNetworkCategorySelect';
 import { useSellingNetworkCategorySelectProps } from './features/selling-network-category/useSellingNetworkCategorySelectProps';
+import { SellingPriceAmount } from './features/selling-price-amount/SellingPriceAmount';
+import { useSellingPriceAmountProps } from './features/selling-price-amount/useSellingPriceAmountProps';
 
 type GutenbergPostEditProps = {};
 
@@ -23,11 +23,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 				<SellingNetworkCategorySelect { ...useSellingNetworkCategorySelectProps() } />
 			</div>
 			<div style={ { display: 'flex', alignItems: 'flex-end' } }>
-				<PriceValueInput
-					{ ...usePriceValueInputProps() }
-					width={ 90 }
-					style={ { display: 'block', maxWidth: '100px' } }
-				/>
+				<SellingPriceAmount { ...useSellingPriceAmountProps() } style={ { width: '150px' } } />
 				<SellingSymbolSelect { ...useSellingSymbolSelectProps() } />
 			</div>
 		</Placeholder>
