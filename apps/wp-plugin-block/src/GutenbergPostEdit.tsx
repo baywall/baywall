@@ -8,10 +8,17 @@ import { SellingNetworkCategorySelect } from './features/selling-network-categor
 import { useSellingNetworkCategorySelectProps } from './features/selling-network-category/useSellingNetworkCategorySelectProps';
 import { SellingPriceAmount } from './features/selling-price-amount/SellingPriceAmount';
 import { useSellingPriceAmountProps } from './features/selling-price-amount/useSellingPriceAmountProps';
+import { BlockEditProps } from '@wordpress/blocks';
+import { WidgetAttributes } from './types/WidgetAttributes';
+import { useSyncWidgetAttributes } from './features/widget-attributes/useSyncWidgetAttributes';
 
-type GutenbergPostEditProps = {};
+type GutenbergPostEditProps = {
+	blockEditProps: BlockEditProps< WidgetAttributes >;
+};
 
-export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
+export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { blockEditProps } ) => {
+	useSyncWidgetAttributes( blockEditProps ); // 画面で設定された値と保存時の属性を同期
+
 	// ウィジェットの状態を初期化
 	useInitWidgetState();
 	// ウィジェットの属性を更新

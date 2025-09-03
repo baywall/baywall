@@ -30,18 +30,17 @@ import { WidgetAttributes } from './types/WidgetAttributes';
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
- * @param root0
- * @param root0.setAttributes
- * @param root0.attributes
+ * @param props
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  */
-const Edit: React.FC< BlockEditProps< WidgetAttributes > > = ( { setAttributes, attributes } ) => {
+const Edit: React.FC< BlockEditProps< WidgetAttributes > > = ( props ) => {
 	const blockProps = useBlockProps?.() ?? {};
 
+	const { setAttributes, attributes } = props;
 	return (
 		<div { ...blockProps }>
 			<GutenbergPostEditProvider attributes={ attributes } setAttributes={ setAttributes }>
-				<GutenbergPostEdit />
+				<GutenbergPostEdit blockEditProps={ props } />
 			</GutenbergPostEditProvider>
 		</div>
 	);
