@@ -3,7 +3,7 @@ import { useEffect } from '@wordpress/element';
 import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { WidgetAttributes } from '../../types/WidgetAttributes';
 import { useSellingNetworkCategoryId } from '../../provider/selling-network-category-id/useSellingNetworkCategoryId';
-import { useSelectedSellingSymbol } from '../../provider/selected-selling-symbol/useSelectedSellingSymbol';
+import { useSellingPriceSymbol } from '../../provider/selling-price-symbol/useSellingPriceSymbol';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 
 export const useSyncWidgetAttributes = () => {
@@ -25,7 +25,7 @@ export const useSyncWidgetAttributes = () => {
 const useLoadAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes > ) => {
 	const { attributes, setAttributes } = blockEditorProps;
 	const { sellingNetworkCategoryId, setSellingNetworkCategoryId } = useSellingNetworkCategoryId();
-	const { selectedSellingSymbol, setSelectedSellingSymbol } = useSelectedSellingSymbol();
+	const { sellingPriceSymbol, setSellingPriceSymbol } = useSellingPriceSymbol();
 
 	// ネットワークカテゴリIDの初期化
 	useEffect( () => {
@@ -36,29 +36,29 @@ const useLoadAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes >
 
 	// 販売価格の通貨シンボル初期化
 	useEffect( () => {
-		if ( selectedSellingSymbol === undefined && attributes.sellingSymbol !== null ) {
-			setSelectedSellingSymbol( Symbol.from( attributes.sellingSymbol ) );
+		if ( sellingPriceSymbol === undefined && attributes.sellingSymbol !== null ) {
+			setSellingPriceSymbol( Symbol.from( attributes.sellingSymbol ) );
 		}
-	}, [ attributes, setAttributes, selectedSellingSymbol, setSelectedSellingSymbol ] );
+	}, [ attributes, setAttributes, sellingPriceSymbol, setSellingPriceSymbol ] );
 };
 
 const useSaveAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes > ) => {
 	const { attributes, setAttributes } = blockEditorProps;
 	const { sellingNetworkCategoryId } = useSellingNetworkCategoryId();
-	const { selectedSellingSymbol } = useSelectedSellingSymbol();
+	const { sellingPriceSymbol } = useSellingPriceSymbol();
 
 	// ネットワークカテゴリIDの保存
 	useEffect( () => {
-		if ( sellingNetworkCategoryId === undefined || selectedSellingSymbol === undefined ) {
+		if ( sellingNetworkCategoryId === undefined || sellingPriceSymbol === undefined ) {
 			// まだ初期化されていない場合は保存しない
 			return;
 		}
 
 		const newAttributes: Partial< WidgetAttributes > = {
 			sellingNetworkCategoryId: sellingNetworkCategoryId?.value || null,
-			sellingSymbol: selectedSellingSymbol?.value || null,
+			sellingSymbol: sellingPriceSymbol?.value || null,
 		};
 
 		setAttributes( newAttributes );
-	}, [ attributes, setAttributes, sellingNetworkCategoryId, selectedSellingSymbol ] );
+	}, [ attributes, setAttributes, sellingNetworkCategoryId, sellingPriceSymbol ] );
 };

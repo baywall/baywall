@@ -1,7 +1,7 @@
 import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
-import { SellingSymbolSelect } from './features/selling-symbol/SellingSymbolSelect';
-import { useSellingSymbolSelectProps } from './features/selling-symbol/useSellingSymbolSelectProps';
+import { SellingSymbolSelect } from './features/selling-price-symbol/SellingSymbolSelect';
+import { useSellingSymbolSelectProps } from './features/selling-price-symbol/useSellingSymbolSelectProps';
 import { SellingNetworkCategorySelect } from './features/selling-network-category/SellingNetworkCategorySelect';
 import { useSellingNetworkCategorySelectProps } from './features/selling-network-category/useSellingNetworkCategorySelectProps';
 import { SellingPriceAmount } from './features/selling-price-amount/SellingPriceAmount';
