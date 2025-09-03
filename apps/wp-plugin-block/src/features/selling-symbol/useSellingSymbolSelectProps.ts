@@ -8,10 +8,16 @@ import { useSelectedNetworkCategoryId } from '../../provider/widgetState/selecte
 
 export const useSellingSymbolSelectProps = (): SellingSymbolSelectProps => {
 	return {
+		value: useValue(),
 		onChange: useOnChange(),
 		disabled: useDisabled(),
 		options: useOptions(),
 	};
+};
+
+const useValue = (): NonNullable< SellingSymbolSelectProps[ 'value' ] > => {
+	const { selectedSellingSymbol } = useSelectedSellingSymbol();
+	return selectedSellingSymbol?.value || '';
 };
 
 const useOnChange = (): SellingSymbolSelectProps[ 'onChange' ] => {
