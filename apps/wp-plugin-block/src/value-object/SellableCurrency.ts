@@ -1,12 +1,11 @@
 import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { SellableCurrencyBrand } from './SellableCurrencyBrand';
 
-const brand = SellableCurrencyBrand;
-
 /** 販売可能な通貨を表すvalue-object */
 export class SellableCurrency {
 	/** 型区別用のフィールド */
-	private [ brand ]!: void;
+	// @ts-ignore: unused-variable
+	private [ SellableCurrencyBrand ]!: void;
 
 	public readonly networkCategoryId: NetworkCategoryId;
 	public readonly symbol: Symbol;
