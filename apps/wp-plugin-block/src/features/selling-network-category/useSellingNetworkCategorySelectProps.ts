@@ -3,7 +3,7 @@ import { NetworkCategoryId } from '@serendipity/lib-value-object';
 import { useSelectedNetworkCategoryId } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategoryId';
 import { type SellingNetworkCategorySelectProps } from './SellingNetworkCategorySelect';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
-import { TextProvider } from '../../infrastructure/i18n/service/TextProvider';
+import { TextProvider } from '../../lib/i18n/TextProvider';
 
 export const useSellingNetworkCategorySelectProps = (): SellingNetworkCategorySelectProps => {
 	return {
