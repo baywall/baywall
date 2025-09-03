@@ -1,11 +1,13 @@
 import { BlockEditProps } from '@wordpress/blocks';
+import { useEffect } from '@wordpress/element';
+import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { WidgetAttributes } from '../../types/WidgetAttributes';
 import { useSelectedSellingNetworkCategoryId } from '../../provider/selected-selling-network-id/useSelectedSellingNetworkCategoryId';
-import { useEffect } from 'react';
-import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { useSelectedSellingSymbol } from '../../provider/selected-selling-symbol/useSelectedSellingSymbol';
+import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 
-export const useSyncWidgetAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes > ) => {
+export const useSyncWidgetAttributes = () => {
+	const blockEditorProps = useBlockEditProps();
 	// 画面の状態をAttributesから初期化
 	useLoadAttributes( blockEditorProps );
 
@@ -48,7 +50,7 @@ const useSaveAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes >
 
 	// ネットワークカテゴリIDの保存
 	useEffect( () => {
-		if(selectedSellingNetworkCategoryId === undefined || selectedSellingSymbol === undefined) {
+		if ( selectedSellingNetworkCategoryId === undefined || selectedSellingSymbol === undefined ) {
 			// まだ初期化されていない場合は保存しない
 			return;
 		}
@@ -58,7 +60,6 @@ const useSaveAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes >
 			sellingSymbol: selectedSellingSymbol?.value || null,
 		};
 
-		setAttributes(newAttributes);
-
+		setAttributes( newAttributes );
 	}, [ attributes, setAttributes, selectedSellingNetworkCategoryId, selectedSellingSymbol ] );
-}
+};
