@@ -2,7 +2,7 @@ import { useCallback, useMemo } from '@wordpress/element';
 import { Symbol } from '@serendipity/lib-value-object';
 import { type SellingSymbolSelectProps } from './SellingSymbolSelect';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
-import { TextProvider } from '../../infrastructure/i18n/service/TextProvider';
+import { TextProvider } from '../../lib/i18n/TextProvider';
 import { useSelectedSellingSymbol } from '../../provider/selected-selling-symbol/useSelectedSellingSymbol';
 import { useSelectedNetworkCategoryId } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategoryId';
 
