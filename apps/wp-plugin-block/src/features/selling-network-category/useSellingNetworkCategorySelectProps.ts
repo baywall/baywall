@@ -1,9 +1,9 @@
 import { useMemo } from '@wordpress/element';
 import { NetworkCategoryId } from '@serendipity/lib-value-object';
-import { useSelectedNetworkCategoryId } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategoryId';
 import { type SellingNetworkCategorySelectProps } from './SellingNetworkCategorySelect';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 import { TextProvider } from '../../lib/i18n/TextProvider';
+import { useSelectedSellingNetworkCategoryId } from '../../provider/selected-selling-network-id/useSelectedSellingNetworkCategoryId';
 
 export const useSellingNetworkCategorySelectProps = (): SellingNetworkCategorySelectProps => {
 	return {
@@ -15,15 +15,15 @@ export const useSellingNetworkCategorySelectProps = (): SellingNetworkCategorySe
 };
 
 const useValue = (): NonNullable< SellingNetworkCategorySelectProps[ 'value' ] > => {
-	const { selectedNetworkCategoryId } = useSelectedNetworkCategoryId();
-	return selectedNetworkCategoryId?.value.toString() || '';
+	const { selectedSellingNetworkCategoryId } = useSelectedSellingNetworkCategoryId();
+	return selectedSellingNetworkCategoryId?.value.toString() || '';
 };
 
 const useOnChange = (): SellingNetworkCategorySelectProps[ 'onChange' ] => {
-	const { setSelectedNetworkCategoryId } = useSelectedNetworkCategoryId();
+	const { setSelectedSellingNetworkCategoryId } = useSelectedSellingNetworkCategoryId();
 
 	return ( value ) => {
-		setSelectedNetworkCategoryId( NetworkCategoryId.from( Number( value ) ) );
+		setSelectedSellingNetworkCategoryId( NetworkCategoryId.from( Number( value ) ) );
 	};
 };
 
