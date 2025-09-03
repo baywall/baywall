@@ -20,17 +20,17 @@ import './style.scss';
 import Edit from './edit';
 import save from './save';
 import metadata from './block.json';
+import { WidgetAttributes } from './types/WidgetAttributes';
 
 /**
  * Every block starts by registering a new block type definition.
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-registerBlockType( metadata.name, {
+registerBlockType< WidgetAttributes >( metadata.name, {
 	title: metadata.title,
 	category: metadata.category,
 	attributes: {
-		// 型は`src/block/types/WidgetAttributes.ts`と同期をとること。
 		// ※ デフォルト値を設定する場合は、`includes/classes/Types/WidgetAttributesType.php`の設定も確認すること。
 		sellingNetworkCategoryId: {
 			type: 'number',
