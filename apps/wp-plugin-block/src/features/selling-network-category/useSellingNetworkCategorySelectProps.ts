@@ -7,10 +7,16 @@ import { TextProvider } from '../../lib/i18n/TextProvider';
 
 export const useSellingNetworkCategorySelectProps = (): SellingNetworkCategorySelectProps => {
 	return {
+		value: useValue(),
 		onChange: useOnChange(),
 		disabled: useDisabled(),
 		options: useOptions(),
 	};
+};
+
+const useValue = (): NonNullable< SellingNetworkCategorySelectProps[ 'value' ] > => {
+	const { selectedNetworkCategoryId } = useSelectedNetworkCategoryId();
+	return selectedNetworkCategoryId?.value.toString() || '';
 };
 
 const useOnChange = (): SellingNetworkCategorySelectProps[ 'onChange' ] => {
