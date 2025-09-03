@@ -1,10 +1,11 @@
 import { BlockEditProps } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
-import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
+import { Amount, NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { WidgetAttributes } from '../../types/WidgetAttributes';
 import { useSellingNetworkCategoryId } from '../../provider/selling-network-category-id/useSellingNetworkCategoryId';
 import { useSellingPriceSymbol } from '../../provider/selling-price-symbol/useSellingPriceSymbol';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
+import { useSellingPriceAmount } from '../../provider/selling-price-amount/useSellingPriceAmount';
 
 export const useSyncWidgetAttributes = () => {
 	const blockEditorProps = useBlockEditProps();
@@ -25,6 +26,7 @@ export const useSyncWidgetAttributes = () => {
 const useLoadAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes > ) => {
 	const { attributes, setAttributes } = blockEditorProps;
 	const { sellingNetworkCategoryId, setSellingNetworkCategoryId } = useSellingNetworkCategoryId();
+	const { sellingPriceAmount, setSellingPriceAmount } = useSellingPriceAmount();
 	const { sellingPriceSymbol, setSellingPriceSymbol } = useSellingPriceSymbol();
 
 	// ネットワークカテゴリIDの初期化
@@ -33,6 +35,17 @@ const useLoadAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes >
 			setSellingNetworkCategoryId( NetworkCategoryId.from( attributes.sellingNetworkCategoryId ) );
 		}
 	}, [ attributes, setAttributes, sellingNetworkCategoryId, setSellingNetworkCategoryId ] );
+
+	// 販売価格の金額初期化
+	useEffect( () => {
+		if ( sellingPriceAmount === undefined ) {
+			if ( attributes.sellingAmount === null ) {
+				setSellingPriceAmount( null );
+			} else {
+				setSellingPriceAmount( Amount.from( attributes.sellingAmount ) );
+			}
+		}
+	}, [ attributes, setAttributes, sellingPriceAmount, setSellingPriceAmount ] );
 
 	// 販売価格の通貨シンボル初期化
 	useEffect( () => {
@@ -45,20 +58,26 @@ const useLoadAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes >
 const useSaveAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes > ) => {
 	const { attributes, setAttributes } = blockEditorProps;
 	const { sellingNetworkCategoryId } = useSellingNetworkCategoryId();
+	const { sellingPriceAmount } = useSellingPriceAmount();
 	const { sellingPriceSymbol } = useSellingPriceSymbol();
 
 	// ネットワークカテゴリIDの保存
 	useEffect( () => {
-		if ( sellingNetworkCategoryId === undefined || sellingPriceSymbol === undefined ) {
+		if (
+			sellingNetworkCategoryId === undefined ||
+			sellingPriceAmount === undefined ||
+			sellingPriceSymbol === undefined
+		) {
 			// まだ初期化されていない場合は保存しない
 			return;
 		}
 
 		const newAttributes: Partial< WidgetAttributes > = {
 			sellingNetworkCategoryId: sellingNetworkCategoryId?.value || null,
+			sellingAmount: sellingPriceAmount?.value || '0',
 			sellingSymbol: sellingPriceSymbol?.value || null,
 		};
 
 		setAttributes( newAttributes );
-	}, [ attributes, setAttributes, sellingNetworkCategoryId, sellingPriceSymbol ] );
+	}, [ attributes, setAttributes, sellingNetworkCategoryId, sellingPriceAmount, sellingPriceSymbol ] );
 };
