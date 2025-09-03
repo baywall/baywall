@@ -4,6 +4,7 @@ import { SellingNetworkCategoryIdProvider } from './selling-network-category-id/
 import { BlockEditPropsProvider } from './block-edit-props/BlockEditPropsProvider';
 import { BlockEditProps } from '@wordpress/blocks';
 import { WidgetAttributes } from '../types/WidgetAttributes';
+import { SellingPriceAmountProvider } from './selling-price-amount/SellingPriceAmountProvider';
 
 // アクティブになったときは再読みしない
 const client = new QueryClient( {
@@ -29,7 +30,9 @@ export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps
 				<BlockEditPropsProvider blockEditProps={ blockEditProps }>
 					{ /* ウィジェットの状態を保持 */ }
 					<SellingNetworkCategoryIdProvider>
-						<SellingPriceSymbolProvider>{ children }</SellingPriceSymbolProvider>
+						<SellingPriceAmountProvider>
+							<SellingPriceSymbolProvider>{ children }</SellingPriceSymbolProvider>
+						</SellingPriceAmountProvider>
 					</SellingNetworkCategoryIdProvider>
 				</BlockEditPropsProvider>
 			</QueryClientProvider>
