@@ -1,5 +1,7 @@
 import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
-import { SellableCurrencyBrand as brand } from './SellableCurrencyBrand';
+import { SellableCurrencyBrand } from './SellableCurrencyBrand';
+
+const brand = SellableCurrencyBrand;
 
 /** 販売可能な通貨を表すvalue-object */
 export class SellableCurrency {
