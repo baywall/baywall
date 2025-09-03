@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from '@wordpress/element';
 import { Symbol } from '@serendipity/lib-value-object';
-import { type SellingSymbolSelectProps } from './SellingSymbolSelect';
+import { type SellingPriceSymbolSelectProps } from './SellingPriceSymbolSelect';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 import { TextProvider } from '../../lib/i18n/TextProvider';
 import { useSellingPriceSymbol } from '../../provider/selling-price-symbol/useSellingPriceSymbol';
 import { useSellingNetworkCategoryId } from '../../provider/selling-network-category-id/useSellingNetworkCategoryId';
 
-export const useSellingSymbolSelectProps = (): SellingSymbolSelectProps => {
+export const useSellingPriceSymbolSelectProps = (): SellingPriceSymbolSelectProps => {
 	return {
 		value: useValue(),
 		onChange: useOnChange(),
@@ -15,15 +15,15 @@ export const useSellingSymbolSelectProps = (): SellingSymbolSelectProps => {
 	};
 };
 
-const useValue = (): NonNullable< SellingSymbolSelectProps[ 'value' ] > => {
+const useValue = (): NonNullable< SellingPriceSymbolSelectProps[ 'value' ] > => {
 	const { sellingPriceSymbol } = useSellingPriceSymbol();
 	return sellingPriceSymbol?.value || '';
 };
 
-const useOnChange = (): SellingSymbolSelectProps[ 'onChange' ] => {
+const useOnChange = (): SellingPriceSymbolSelectProps[ 'onChange' ] => {
 	const { setSellingPriceSymbol } = useSellingPriceSymbol();
 
-	return useCallback< NonNullable< SellingSymbolSelectProps[ 'onChange' ] > >(
+	return useCallback< NonNullable< SellingPriceSymbolSelectProps[ 'onChange' ] > >(
 		( value ) => {
 			setSellingPriceSymbol( Symbol.from( value ) );
 		},
@@ -36,7 +36,7 @@ const useDisabled = (): boolean => {
 	return data === undefined || data.sellableCurrencies.length === 0;
 };
 
-const useOptions = (): NonNullable< SellingSymbolSelectProps[ 'options' ] > => {
+const useOptions = (): NonNullable< SellingPriceSymbolSelectProps[ 'options' ] > => {
 	const { data } = useBlockInitDataQuery();
 	const { sellingNetworkCategoryId } = useSellingNetworkCategoryId();
 	const textProvider = useMemo( () => new TextProvider(), [] );
