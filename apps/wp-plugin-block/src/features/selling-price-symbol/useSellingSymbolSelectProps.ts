@@ -3,7 +3,7 @@ import { Symbol } from '@serendipity/lib-value-object';
 import { type SellingSymbolSelectProps } from './SellingSymbolSelect';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 import { TextProvider } from '../../lib/i18n/TextProvider';
-import { useSelectedSellingSymbol } from '../../provider/selected-selling-symbol/useSelectedSellingSymbol';
+import { useSellingPriceSymbol } from '../../provider/selling-price-symbol/useSellingPriceSymbol';
 import { useSellingNetworkCategoryId } from '../../provider/selling-network-category-id/useSellingNetworkCategoryId';
 
 export const useSellingSymbolSelectProps = (): SellingSymbolSelectProps => {
@@ -16,18 +16,18 @@ export const useSellingSymbolSelectProps = (): SellingSymbolSelectProps => {
 };
 
 const useValue = (): NonNullable< SellingSymbolSelectProps[ 'value' ] > => {
-	const { selectedSellingSymbol } = useSelectedSellingSymbol();
-	return selectedSellingSymbol?.value || '';
+	const { sellingPriceSymbol } = useSellingPriceSymbol();
+	return sellingPriceSymbol?.value || '';
 };
 
 const useOnChange = (): SellingSymbolSelectProps[ 'onChange' ] => {
-	const { setSelectedSellingSymbol } = useSelectedSellingSymbol();
+	const { setSellingPriceSymbol } = useSellingPriceSymbol();
 
 	return useCallback< NonNullable< SellingSymbolSelectProps[ 'onChange' ] > >(
 		( value ) => {
-			setSelectedSellingSymbol( Symbol.from( value ) );
+			setSellingPriceSymbol( Symbol.from( value ) );
 		},
-		[ setSelectedSellingSymbol ]
+		[ setSellingPriceSymbol ]
 	);
 };
 

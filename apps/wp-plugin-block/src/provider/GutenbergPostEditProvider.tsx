@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SelectedSellingSymbolProvider } from './selected-selling-symbol/SelectedSellingSymbolProvider';
+import { SellingPriceSymbolProvider } from './selling-price-symbol/SellingPriceSymbolProvider';
 import { SellingNetworkCategoryIdProvider } from './selling-network-category-id/SellingNetworkCategoryIdProvider';
 import { BlockEditPropsProvider } from './block-edit-props/BlockEditPropsProvider';
 import { BlockEditProps } from '@wordpress/blocks';
@@ -29,7 +29,7 @@ export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps
 				<BlockEditPropsProvider blockEditProps={ blockEditProps }>
 					{ /* ウィジェットの状態を保持 */ }
 					<SellingNetworkCategoryIdProvider>
-						<SelectedSellingSymbolProvider>{ children }</SelectedSellingSymbolProvider>
+						<SellingPriceSymbolProvider>{ children }</SellingPriceSymbolProvider>
 					</SellingNetworkCategoryIdProvider>
 				</BlockEditPropsProvider>
 			</QueryClientProvider>
