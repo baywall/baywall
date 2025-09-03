@@ -1,8 +1,10 @@
-import { QueryClient } from '@tanstack/react-query';
-import { WindowDataProvider } from './windowData/WindowDataProvider';
-import { WidgetStateProvider } from './widgetState/WidgetStateProvider';
-import { ServerDataProvider } from './serverData/ServerDataProvider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SellingPriceSymbolProvider } from './selling-price-symbol/SellingPriceSymbolProvider';
+import { SellingNetworkCategoryIdProvider } from './selling-network-category-id/SellingNetworkCategoryIdProvider';
+import { BlockEditPropsProvider } from './block-edit-props/BlockEditPropsProvider';
+import { BlockEditProps } from '@wordpress/blocks';
 import { WidgetAttributes } from '../types/WidgetAttributes';
+import { SellingPriceAmountProvider } from './selling-price-amount/SellingPriceAmountProvider';
 
 // アクティブになったときは再読みしない
 const client = new QueryClient( {
@@ -14,28 +16,26 @@ const client = new QueryClient( {
 } );
 
 type GutenbergPostEditProviderProps = {
-	attributes: Readonly< WidgetAttributes >;
-	setAttributes: ( attrs: Partial< WidgetAttributes > ) => void;
 	children: React.ReactNode;
+	blockEditProps: BlockEditProps< WidgetAttributes >;
 };
 
 export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps > = ( {
-	attributes,
-	setAttributes,
+	blockEditProps,
 	children,
 } ) => {
 	return (
 		<>
-			{ /* グローバルオブジェクトから取得した情報を保持 */ }
-			<WindowDataProvider>
-				{ /* サーバーに保存されている情報(投稿設定)を取得 */ }
-				<ServerDataProvider client={ client }>
+			<QueryClientProvider client={ client }>
+				<BlockEditPropsProvider blockEditProps={ blockEditProps }>
 					{ /* ウィジェットの状態を保持 */ }
-					<WidgetStateProvider attributes={ attributes } setAttributes={ setAttributes }>
-						{ children }
-					</WidgetStateProvider>
-				</ServerDataProvider>
-			</WindowDataProvider>
+					<SellingNetworkCategoryIdProvider>
+						<SellingPriceAmountProvider>
+							<SellingPriceSymbolProvider>{ children }</SellingPriceSymbolProvider>
+						</SellingPriceAmountProvider>
+					</SellingNetworkCategoryIdProvider>
+				</BlockEditPropsProvider>
+			</QueryClientProvider>
 		</>
 	);
 };
