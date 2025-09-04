@@ -40,7 +40,7 @@ const useLoadAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes >
 	useEffect( () => {
 		if ( sellingPriceAmount === undefined ) {
 			if ( attributes.sellingAmount === null ) {
-				setSellingPriceAmount( null );
+				setSellingPriceAmount( Amount.from( '0' ) );
 			} else {
 				setSellingPriceAmount( Amount.from( attributes.sellingAmount ) );
 			}
