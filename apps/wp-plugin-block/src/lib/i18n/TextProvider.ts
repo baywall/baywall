@@ -28,4 +28,9 @@ export class TextProvider {
 		// `一部の設定がまだ完了していません。`
 		return 'Some settings are not yet configured.';
 	}
+
+	/** ダッシュボード */
+	public get dashboard(): string {
+		return 'Dashboard';
+	}
 }
