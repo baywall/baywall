@@ -10,6 +10,7 @@ import { useSyncWidgetAttributes } from './features/widget-attributes/useSyncWid
 import { AmountErrorNotification } from './features/notification/AmountErrorNotification';
 import { useAmountErrorNotificationProps } from './features/notification/useAmountErrorNotificationProps';
 import { SettingsErrorNotification } from './features/notification/SettingsErrorNotification';
+import { ApiErrorNotification } from './features/notification/ApiErrorNotification';
 
 type GutenbergPostEditProps = {};
 
@@ -20,6 +21,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 		<Placeholder icon={ widget } label={ 'Qik Chain Pay' } id="fd9e15e3-9f4f-4537-8470-3da48e66d6e9">
 			<div style={ { width: '100%', display: 'flex', flexDirection: 'column', gap: '2em' } }>
 				<div style={ { width: '100%' } }>
+					<ApiErrorNotification />
 					<SettingsErrorNotification />
 				</div>
 

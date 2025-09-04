@@ -33,4 +33,9 @@ export class TextProvider {
 	public get dashboard(): string {
 		return 'Dashboard';
 	}
+
+	/** 不明なエラーが発生したときのメッセージ */
+	public get unknownErrorMessage(): string {
+		return 'Unknown Error';
+	}
 }
