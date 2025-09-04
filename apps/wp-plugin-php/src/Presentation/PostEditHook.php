@@ -49,5 +49,13 @@ class PostEditHook {
 
 		// インラインスクリプトを追加
 		( new PhpVer() )->addInlineScript( $handle );
+
+		// スタイルを登録
+		wp_enqueue_style(
+			'b99aafea0cf94d308e4edce4bc087709', // 適当なハンドル名(他で使用しない)
+			( new ProjectFile( self::DIST_DIR . '/index.css' ) )->toUrl(),
+			array(),
+			$asset_file['version']
+		);
 	}
 }
