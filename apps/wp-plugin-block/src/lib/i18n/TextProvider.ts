@@ -17,4 +17,9 @@ export class TextProvider {
 		// `選択可能なオプションが存在しません`
 		return 'No options available';
 	}
+
+	/** 販売価格の数量の入力が不正な場合に表示するメッセージ */
+	public get invalidPriceAmountMessage(): string {
+		return 'Invalid price amount. Please enter a valid value.';
+	}
 }
