@@ -4,8 +4,9 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-/*
-.wp-block-create-block-qik-chain-pay {
-	border: 1px dotted #f00;
+#fd9e15e3-9f4f-4537-8470-3da48e66d6e9 {
+	.components-base-control__field {
+		// SelectControlに`margin-bottom: 8px`が設定されているため、打ち消す
+		margin-bottom: 0 !important;
+	}
 }
-*/
