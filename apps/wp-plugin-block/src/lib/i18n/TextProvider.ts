@@ -22,4 +22,10 @@ export class TextProvider {
 	public get invalidPriceAmountMessage(): string {
 		return 'Invalid price amount. Please enter a valid value.';
 	}
+
+	/** 管理画面の設定で、未登録の項目がある場合に表示するメッセージ */
+	public get settingsIncomplete(): string {
+		// `一部の設定がまだ完了していません。`
+		return 'Some settings are not yet configured.';
+	}
 }
