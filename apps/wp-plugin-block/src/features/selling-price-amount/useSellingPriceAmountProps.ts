@@ -11,8 +11,8 @@ export const useSellingPriceAmountProps = (): SellingPriceAmountProps => {
 	useEffect( () => {
 		if ( value === undefined && sellingPriceAmount !== undefined ) {
 			if ( sellingPriceAmount === null ) {
-				setValue( '0' );
-				setSellingPriceAmount( Amount.from( '0' ) );
+				// ここは通らない
+				throw new Error( '[B9E7EF57] Invalid selling price amount value.' );
 			} else {
 				setValue( sellingPriceAmount.value );
 			}
