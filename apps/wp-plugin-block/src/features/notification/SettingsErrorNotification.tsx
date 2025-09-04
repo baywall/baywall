@@ -1,7 +1,8 @@
 import { useMemo } from '@wordpress/element';
-import { NoticeList, Notice } from '@wordpress/components';
+import { NoticeList } from '@wordpress/components';
 import { TextProvider } from '../../lib/i18n/TextProvider';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
+import { UrlProvider } from '../../lib/wp/UrlProvider';
 
 type Notices = React.ComponentProps< typeof NoticeList >[ 'notices' ];
 
@@ -24,14 +25,20 @@ export const SettingsErrorNotification: React.FC< SettingsErrorNotificationProps
 		}
 
 		const textProvider = new TextProvider();
-		return [
-			{
-				id: '1',
-				status: 'error',
-				isDismissible: false,
-				content: textProvider.settingsIncomplete,
-			},
-		];
+		const urlProvider = new UrlProvider();
+		const notice: Notices[ number ] = {
+			id: 'a7733ff3-ad6a-4d34-bba7-1b1d49b28fb2', // 適当なID
+			status: 'error',
+			isDismissible: false,
+			content: textProvider.settingsIncomplete,
+			actions: [
+				{
+					label: textProvider.dashboard,
+					url: urlProvider.dashboard.toString(),
+				},
+			],
+		};
+		return [ notice ];
 	}, [ data ] );
 
 	return <NoticeList { ...props } notices={ notices } />;
