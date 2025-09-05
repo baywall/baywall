@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * 投稿IDを表す値オブジェクト
  */
-class PostId {
+class PostId implements \Stringable {
 
 	public function __construct( int $post_id ) {
 		if ( $post_id <= 0 ) {

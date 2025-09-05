@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use DateTimeImmutable;
 
-class UnixTimestamp {
+class UnixTimestamp implements \Stringable {
 	private function __construct( int $timestamp ) {
 		$this->timestamp = $timestamp;
 	}

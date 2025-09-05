@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-class TransactionHash {
+class TransactionHash implements \Stringable {
 	private function __construct( string $hash ) {
 		$this->hash = $hash;
 	}

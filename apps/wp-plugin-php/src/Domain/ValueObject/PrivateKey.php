@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-class PrivateKey {
+class PrivateKey implements \Stringable {
 
 	private string $private_key_value;
 
