@@ -11,10 +11,12 @@ import { AmountErrorNotification } from './features/notification/AmountErrorNoti
 import { useAmountErrorNotificationProps } from './features/notification/useAmountErrorNotificationProps';
 import { SettingsErrorNotification } from './features/notification/SettingsErrorNotification';
 import { ApiErrorNotification } from './features/notification/ApiErrorNotification';
+import { useInitialize } from './features/initialize/useInitialize';
 
 type GutenbergPostEditProps = {};
 
 export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
+	useInitialize(); // 初期化処理
 	useSyncWidgetAttributes(); // Attributesと画面の状態を同期
 
 	return (
