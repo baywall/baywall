@@ -1,5 +1,7 @@
 export interface BlockNumberProps extends React.ComponentProps< 'input' > {}
 
+const NUMERIC_INPUT_PATTERN = /^-?[0-9]*\.?[0-9]*$/;
+
 /**
  * ブロックエディタで描画する数値入力コンポーネント
  * @param props
@@ -14,7 +16,7 @@ export const BlockNumber: React.FC< BlockNumberProps > = ( props ) => {
 			// type="number"
 			type="text"
 			inputMode="decimal"
-			pattern="[0-9]*"
+			pattern={ NUMERIC_INPUT_PATTERN.source }
 			onChange={ useOnChange( onChange ) }
 			onCut={ useOnCut( onCut ) }
 			onKeyDownCapture={ useOnKeyDownCapture( onKeyDownCapture ) }
@@ -28,7 +30,7 @@ const useOnChange = ( onChange: BlockNumberProps[ 'onChange' ] ): BlockNumberPro
 	return ( e ) => {
 		const value = e.target.value;
 		// 数値のフォーマットの場合のみ、onChangeを呼び出す
-		if ( /^-?[0-9]*\.?[0-9]*$/.test( value ) ) {
+		if ( NUMERIC_INPUT_PATTERN.test( value ) ) {
 			onChange?.( e );
 		}
 	};
