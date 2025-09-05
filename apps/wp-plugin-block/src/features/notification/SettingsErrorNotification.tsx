@@ -2,7 +2,7 @@ import { useMemo } from '@wordpress/element';
 import { NoticeList } from '@wordpress/components';
 import { TextProvider } from '../../lib/i18n/TextProvider';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
-import { UrlProvider } from '../../lib/wp/UrlProvider';
+import { UrlProvider } from '../../lib/url/UrlProvider';
 
 type Notices = React.ComponentProps< typeof NoticeList >[ 'notices' ];
 
