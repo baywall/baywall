@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * ネットワークカテゴリIDを表すクラス
  */
-final class NetworkCategoryId {
+final class NetworkCategoryId implements \Stringable {
 	/** メインネット(Ethereumメインネット、Polygonメインネット等) */
 	private const MAINNET = 1;
 	/** テストネット(Ethereum Sepolia等) */
@@ -43,6 +43,20 @@ final class NetworkCategoryId {
 
 	public function equals( self $other ): bool {
 		return $this->value === $other->value;
+	}
+
+	public function __toString(): string {
+		switch ( $this->value ) {
+			case self::MAINNET:
+				return 'mainnet';
+			case self::TESTNET:
+				return 'testnet';
+			case self::PRIVATENET:
+				return 'privatenet';
+			default:
+				// ここは通らない
+				throw new \InvalidArgumentException( '[D41C6428] Invalid network category ID: ' . $this->value );
+		}
 	}
 
 
