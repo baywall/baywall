@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
 /**
  * アドレス(ウォレットアドレス/コントラクトアドレス)を表すクラス
  */
-final class Address {
+final class Address implements \Stringable {
 
 	private function __construct( string $address_value ) {
 		self::checkValidAddressFormat( $address_value );

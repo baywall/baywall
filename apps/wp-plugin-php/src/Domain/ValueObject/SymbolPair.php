@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
-class SymbolPair {
+class SymbolPair implements \Stringable {
 	private function __construct( Symbol $base_symbol, Symbol $quote_symbol ) {
 		$this->base_symbol  = $base_symbol;
 		$this->quote_symbol = $quote_symbol;

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-class Rate {
+class Rate implements \Stringable {
 	/**
 	 * Rateインスタンスを生成します。
 	 *
@@ -28,6 +28,10 @@ class Rate {
 
 	public function amount(): Amount {
 		return $this->amount;
+	}
+
+	public function __toString(): string {
+		return "{$this->symbol_pair}: {$this->amount}";
 	}
 
 	/**

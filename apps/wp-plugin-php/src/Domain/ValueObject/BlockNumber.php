@@ -10,7 +10,7 @@ use phpseclib\Math\BigInteger;
 /**
  * ブロック番号を表すクラス
  */
-class BlockNumber {
+class BlockNumber implements \Stringable {
 
 	private function __construct( BigInteger $block_number ) {
 		$this->block_number = $block_number;

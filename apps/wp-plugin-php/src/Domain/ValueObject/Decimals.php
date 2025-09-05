@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * 小数点以下桁数を表す値オブジェクト
  */
-class Decimals {
+class Decimals implements \Stringable {
 
 	private function __construct( int $decimals_value ) {
 		if ( $decimals_value < 0 ) {

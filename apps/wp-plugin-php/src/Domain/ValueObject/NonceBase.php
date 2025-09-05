@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * nonceを表す基底クラス
  */
-abstract class NonceBase {
+abstract class NonceBase implements \Stringable {
 
 	protected function __construct( string $nonce_value ) {
 		if ( ! $this->isNonceValueFormat( $nonce_value ) ) {

@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * `latest`など、evm_getBlockByNumber等で指定できるタグを表すクラス
  */
-final class BlockTag {
+final class BlockTag implements \Stringable {
 	private const LATEST = 'latest';
 
 	// 以下は必要になったタイミングでアンコメント

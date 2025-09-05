@@ -10,7 +10,7 @@ use yamaneyuta\Ulid;
 /**
  * 請求書IDを表すクラス
  */
-class InvoiceId {
+class InvoiceId implements \Stringable {
 
 	private function __construct( Ulid $ulid ) {
 		$this->ulid = $ulid;

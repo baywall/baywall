@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 /** 署名のためのメッセージ */
-class SigningMessage {
+class SigningMessage implements \Stringable {
 
 	private function __construct( string $signing_message_value ) {
 		$this->signing_message_value = $signing_message_value;
