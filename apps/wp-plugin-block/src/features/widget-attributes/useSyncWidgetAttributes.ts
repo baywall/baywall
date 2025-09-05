@@ -21,21 +21,49 @@ const useSaveAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes >
 
 	// ネットワークカテゴリIDの保存
 	useEffect( () => {
-		if (
-			sellingNetworkCategoryId === undefined ||
-			sellingPriceAmount === undefined ||
-			sellingPriceSymbol === undefined
-		) {
-			// まだ初期化されていない場合は保存しない
-			return;
+		if ( sellingNetworkCategoryId === undefined ) {
+			return; // まだ初期化されていない場合は保存しない
 		}
 
-		const newAttributes: Partial< WidgetAttributes > = {
-			sellingNetworkCategoryId: sellingNetworkCategoryId?.value || null,
-			sellingAmount: sellingPriceAmount?.value || '0',
-			sellingSymbol: sellingPriceSymbol?.value || null,
-		};
+		// Attributesの値とContextの値が異なる場合のみ更新する
+		if (
+			attributes.sellingNetworkCategoryId !==
+			( sellingNetworkCategoryId === null ? null : sellingNetworkCategoryId.value )
+		) {
+			setAttributes( {
+				...attributes,
+				sellingNetworkCategoryId: sellingNetworkCategoryId === null ? null : sellingNetworkCategoryId.value,
+			} );
+		}
+	}, [ attributes, setAttributes, sellingNetworkCategoryId ] );
 
-		setAttributes( newAttributes );
-	}, [ attributes, setAttributes, sellingNetworkCategoryId, sellingPriceAmount, sellingPriceSymbol ] );
+	// 販売価格の保存
+	useEffect( () => {
+		if ( sellingPriceAmount === undefined ) {
+			return; // まだ初期化されていない場合は保存しない
+		}
+
+		// Attributesの値とContextの値が異なる場合のみ更新する
+		if ( attributes.sellingAmount !== ( sellingPriceAmount === null ? null : sellingPriceAmount.value ) ) {
+			setAttributes( {
+				...attributes,
+				sellingAmount: sellingPriceAmount === null ? null : sellingPriceAmount.value,
+			} );
+		}
+	}, [ attributes, setAttributes, sellingPriceAmount ] );
+
+	// 販売価格の通貨シンボルの保存
+	useEffect( () => {
+		if ( sellingPriceSymbol === undefined ) {
+			return; // まだ初期化されていない場合は保存しない
+		}
+
+		// Attributesの値とContextの値が異なる場合のみ更新する
+		if ( attributes.sellingSymbol !== ( sellingPriceSymbol === null ? null : sellingPriceSymbol.value ) ) {
+			setAttributes( {
+				...attributes,
+				sellingSymbol: sellingPriceSymbol === null ? null : sellingPriceSymbol.value,
+			} );
+		}
+	}, [ attributes, setAttributes, sellingPriceSymbol ] );
 };
