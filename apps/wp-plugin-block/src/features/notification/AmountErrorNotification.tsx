@@ -1,5 +1,5 @@
 import { useEffect } from '@wordpress/element';
-import { ScreenNotifier } from '../../infrastructure/notification/ScreenNotifier';
+import { ScreenNotifier } from '../../lib/notification/ScreenNotifier';
 import { TextProvider } from '../../lib/i18n/TextProvider';
 
 export interface AmountErrorNotificationProps {
