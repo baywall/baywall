@@ -56,6 +56,11 @@ class WidgetAttributes {
 			return null;
 		}
 
+		// 販売価格の金額がマイナスの場合は例外を投げる
+		if ( $amount->isNegative() ) {
+			throw new \InvalidArgumentException( "[820BAE79] Selling price amount must be non-negative. {$amount}" );
+		}
+
 		return Price::from( $amount, $symbol );
 	}
 
