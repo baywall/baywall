@@ -52,6 +52,10 @@ final class Amount implements \Stringable {
 		return '0' === $this->amount_text;
 	}
 
+	public function isNegative(): bool {
+		return str_starts_with( $this->amount_text, '-' );
+	}
+
 	/** 小数点以下の桁数を取得します */
 	private function decimals(): Decimals {
 		return Decimals::from( strlen( explode( '.', $this->amount_text )[1] ?? '' ) );
@@ -107,7 +111,7 @@ final class Amount implements \Stringable {
 
 	private static function checkAmountText( string $amount_text ): void {
 		// 数値の形式をチェック
-		if ( ! preg_match( '/^\-?\d+(\.\d*[1-9])?$/', $amount_text ) ) {
+		if ( ! preg_match( '/^-?(?:0|[1-9]\d*)(\.\d+)?$/', $amount_text ) ) {
 			throw new \InvalidArgumentException( '[275B6F0E] Invalid amount text: ' . $amount_text );
 		}
 	}
