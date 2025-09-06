@@ -1,5 +1,4 @@
 import { Placeholder } from '@wordpress/components';
-import { widget } from '@wordpress/icons';
 import { SellingPriceSymbolSelect } from './features/selling-price-symbol/SellingPriceSymbolSelect';
 import { useSellingPriceSymbolSelectProps } from './features/selling-price-symbol/useSellingSymbolSelectProps';
 import { SellingNetworkCategorySelect } from './features/selling-network-category/SellingNetworkCategorySelect';
