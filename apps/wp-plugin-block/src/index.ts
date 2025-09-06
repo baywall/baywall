@@ -28,8 +28,7 @@ import { WidgetAttributes } from './types/WidgetAttributes';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType< WidgetAttributes >( metadata.name, {
-	title: metadata.title,
-	category: metadata.category,
+	...( metadata as any ),
 	attributes: {
 		// ※ デフォルト値を設定する場合は、`includes/classes/Types/WidgetAttributesType.php`の設定も確認すること。
 		sellingNetworkCategoryId: {
