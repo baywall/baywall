@@ -107,7 +107,7 @@ final class Amount implements \Stringable {
 
 	private static function checkAmountText( string $amount_text ): void {
 		// 数値の形式をチェック
-		if ( ! preg_match( '/^\-?\d+(\.\d*[1-9])?$/', $amount_text ) ) {
+		if ( ! preg_match( '/^-?(?:0|[1-9]\d*)(\.\d+)?$/', $amount_text ) ) {
 			throw new \InvalidArgumentException( '[275B6F0E] Invalid amount text: ' . $amount_text );
 		}
 	}
