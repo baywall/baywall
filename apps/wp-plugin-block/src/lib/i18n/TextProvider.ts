@@ -44,4 +44,14 @@ export class TextProvider {
 		// 販売ネットワークカテゴリ及び価格を指定してください
 		return 'Please specify the sales network category and price.';
 	}
+
+	/** ネットワークカテゴリ */
+	public get networkCategory(): string {
+		return 'Network Category';
+	}
+
+	/** 価格 */
+	public get price(): string {
+		return 'Price';
+	}
 }
