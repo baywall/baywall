@@ -20,6 +20,10 @@ export class Amount {
 		return this.value;
 	}
 
+	public isNegative(): boolean {
+		return this.value.startsWith( '-' );
+	}
+
 	private static format( amountValue: string ): string {
 		// 小数点がある場合
 		if ( amountValue.includes( '.' ) ) {
