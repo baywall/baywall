@@ -1,5 +1,5 @@
 import { useMemo } from '@wordpress/element';
-import { ScreenNotifier } from '../../lib/notification/ScreenNotifier';
+import { ScreenNotifier } from '../../lib/editor/notification/ScreenNotifier';
 import { TextProvider } from '../../lib/i18n/TextProvider';
 import { useSellingPriceAmount } from '../../provider/selling-price-amount/useSellingPriceAmount';
 import { AmountErrorNotificationProps } from './AmountErrorNotification';
