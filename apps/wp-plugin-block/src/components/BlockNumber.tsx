@@ -7,7 +7,10 @@ const NUMERIC_INPUT_PATTERN = /^-?[0-9]*\.?[0-9]*$/;
  * @param props
  */
 export const BlockNumber: React.FC< BlockNumberProps > = ( props ) => {
-	const { onChange, onCut, onKeyDownCapture, onPaste, ...rest } = props;
+	let { pattern, onChange, onCut, onKeyDownCapture, onPaste, ...rest } = props;
+
+	// patternが指定されていない場合、数値のパターンを設定
+	pattern = pattern ? pattern : NUMERIC_INPUT_PATTERN.source;
 
 	return (
 		// __experimentalNumberControl は ESLintで以下のエラーが発生するため、inputで実装
@@ -16,21 +19,21 @@ export const BlockNumber: React.FC< BlockNumberProps > = ( props ) => {
 			// type="number"
 			type="text"
 			inputMode="decimal"
-			pattern={ NUMERIC_INPUT_PATTERN.source }
-			onChange={ useOnChange( onChange ) }
+			pattern={ pattern }
+			onChange={ useOnChange( onChange, pattern ) }
 			onCut={ useOnCut( onCut ) }
 			onKeyDownCapture={ useOnKeyDownCapture( onKeyDownCapture ) }
-			onPaste={ useOnPaste( onPaste ) }
+			onPaste={ useOnPaste( onPaste, pattern ) }
 			{ ...rest }
 		/>
 	);
 };
 
-const useOnChange = ( onChange: BlockNumberProps[ 'onChange' ] ): BlockNumberProps[ 'onChange' ] => {
+const useOnChange = ( onChange: BlockNumberProps[ 'onChange' ], pattern: string ): BlockNumberProps[ 'onChange' ] => {
 	return ( e ) => {
 		const value = e.target.value;
 		// 数値のフォーマットの場合のみ、onChangeを呼び出す
-		if ( NUMERIC_INPUT_PATTERN.test( value ) ) {
+		if ( new RegExp( pattern ).test( value ) ) {
 			onChange?.( e );
 		}
 	};
@@ -66,11 +69,18 @@ const useOnKeyDownCapture = (
 	};
 };
 
-const useOnPaste = ( onPaste: BlockNumberProps[ 'onPaste' ] ): BlockNumberProps[ 'onPaste' ] => {
+const useOnPaste = ( onPaste: BlockNumberProps[ 'onPaste' ], pattern: string ): BlockNumberProps[ 'onPaste' ] => {
 	return ( e ) => {
-		onPaste?.( e );
-		// 貼り付け処理を行ったとき、ブロックが削除されて文字列が貼り付けられてしまうため
-		// 親要素以降へのイベント伝播をキャンセルする
-		e.stopPropagation();
+		const paste = e.clipboardData.getData( 'text' );
+		// 貼り付けた値が数値のフォーマットの場合のみ、onPasteを呼び出す
+		if ( new RegExp( pattern ).test( paste ) ) {
+			onPaste?.( e );
+
+			// 貼り付け処理を行ったとき、ブロックが削除されて文字列が貼り付けられてしまうため
+			// 親要素以降へのイベント伝播をキャンセルする
+			e.stopPropagation();
+		} else {
+			e.preventDefault(); // 不正な貼り付けをキャンセル
+		}
 	};
 };
