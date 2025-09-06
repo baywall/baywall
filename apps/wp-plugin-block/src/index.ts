@@ -21,6 +21,7 @@ import Edit from './edit';
 import save from './save';
 import metadata from './block.json';
 import { WidgetAttributes } from './types/WidgetAttributes';
+import { BlockIconProvider } from './lib/icon/BlockIconProvider';
 
 /**
  * Every block starts by registering a new block type definition.
@@ -29,6 +30,7 @@ import { WidgetAttributes } from './types/WidgetAttributes';
  */
 registerBlockType< WidgetAttributes >( metadata.name, {
 	...( metadata as any ),
+	icon: new BlockIconProvider().get(),
 	attributes: {
 		// ※ デフォルト値を設定する場合は、`includes/classes/Types/WidgetAttributesType.php`の設定も確認すること。
 		sellingNetworkCategoryId: {

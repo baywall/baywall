@@ -13,6 +13,7 @@ import { SettingsErrorNotification } from './features/notification/SettingsError
 import { ApiErrorNotification } from './features/notification/ApiErrorNotification';
 import { useInitialize } from './features/initialize/useInitialize';
 import { useControlEditorSaving } from './features/control-editor-saving/useControlEditorSaving';
+import { BlockIconProvider } from './lib/icon/BlockIconProvider';
 
 type GutenbergPostEditProps = {};
 
@@ -22,7 +23,11 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 	useControlEditorSaving(); // 投稿の保存制御
 
 	return (
-		<Placeholder icon={ widget } label={ 'Qik Chain Pay' } id="fd9e15e3-9f4f-4537-8470-3da48e66d6e9">
+		<Placeholder
+			icon={ new BlockIconProvider().get() }
+			label={ 'Qik Chain Pay' }
+			id="fd9e15e3-9f4f-4537-8470-3da48e66d6e9"
+		>
 			<div style={ { width: '100%', display: 'flex', flexDirection: 'column', gap: '2em' } }>
 				<div style={ { width: '100%' } }>
 					<ApiErrorNotification />
