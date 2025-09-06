@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Qik Chain Pay",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "This value is invalid. => @see BlockIconProvider",
 	"description": "Allows you to implement a paywall using crypto-assets.",
 	"supports": {
 		"html": false,
