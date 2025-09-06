@@ -23,6 +23,12 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 	useSyncWidgetAttributes(); // Attributesと画面の状態を同期
 	useControlEditorSaving(); // 投稿の保存制御
 	const textProvider = useMemo( () => new TextProvider(), [] );
+	const settingLabelStyle: React.CSSProperties = {
+		fontWeight: 'bold',
+		minWidth: '120px',
+		maxWidth: '120px',
+		display: 'inline-block',
+	};
 
 	return (
 		<Placeholder
@@ -38,18 +44,22 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 				</div>
 
 				<div style={ { display: 'flex', alignItems: 'center', gap: '1.5em' } }>
+					<span style={ settingLabelStyle }>{ textProvider.networkCategory }: </span>
 					<SellingNetworkCategorySelect { ...useSellingNetworkCategorySelectProps() } />
 				</div>
 
-				<div style={ { display: 'flex', alignItems: 'center', gap: '0.75em' } }>
-					<SellingPriceAmount
-						{ ...useSellingPriceAmountProps() }
-						style={ { width: '150px', maxHeight: '32px', minHeight: '32px' } }
-					/>
-					<SellingPriceSymbolSelect { ...useSellingPriceSymbolSelectProps() } />
+				<div style={ { display: 'flex', alignItems: 'center', gap: '1.5em' } }>
+					<span style={ settingLabelStyle }>{ textProvider.price }: </span>
+					<div style={ { display: 'flex', alignItems: 'center', gap: '0.75em' } }>
+						<SellingPriceAmount
+							{ ...useSellingPriceAmountProps() }
+							style={ { width: '150px', maxHeight: '32px', minHeight: '32px' } }
+						/>
+						<SellingPriceSymbolSelect { ...useSellingPriceSymbolSelectProps() } />
 
-					{ /* 販売価格の値が不正な時に通知を行うコンポーネント */ }
-					<AmountErrorNotification { ...useAmountErrorNotificationProps() } />
+						{ /* 販売価格の値が不正な時に通知を行うコンポーネント */ }
+						<AmountErrorNotification { ...useAmountErrorNotificationProps() } />
+					</div>
 				</div>
 			</div>
 		</Placeholder>
