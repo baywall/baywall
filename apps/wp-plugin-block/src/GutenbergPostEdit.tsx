@@ -1,5 +1,4 @@
 import { Placeholder } from '@wordpress/components';
-import { widget } from '@wordpress/icons';
 import { SellingPriceSymbolSelect } from './features/selling-price-symbol/SellingPriceSymbolSelect';
 import { useSellingPriceSymbolSelectProps } from './features/selling-price-symbol/useSellingSymbolSelectProps';
 import { SellingNetworkCategorySelect } from './features/selling-network-category/SellingNetworkCategorySelect';
@@ -14,6 +13,8 @@ import { ApiErrorNotification } from './features/notification/ApiErrorNotificati
 import { useInitialize } from './features/initialize/useInitialize';
 import { useControlEditorSaving } from './features/control-editor-saving/useControlEditorSaving';
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
+import { TextProvider } from './lib/i18n/TextProvider';
+import { useMemo } from '@wordpress/element';
 
 type GutenbergPostEditProps = {};
 
@@ -21,34 +22,52 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 	useInitialize(); // 初期化処理
 	useSyncWidgetAttributes(); // Attributesと画面の状態を同期
 	useControlEditorSaving(); // 投稿の保存制御
+	const textProvider = useMemo( () => new TextProvider(), [] );
 
 	return (
 		<Placeholder
 			icon={ new BlockIconProvider().get() }
 			label={ 'Qik Chain Pay' }
+			instructions={ textProvider.pleaseSpecifySalesNetworkCategoryAndPrice }
 			id="fd9e15e3-9f4f-4537-8470-3da48e66d6e9"
 		>
-			<div style={ { width: '100%', display: 'flex', flexDirection: 'column', gap: '2em' } }>
-				<div style={ { width: '100%' } }>
-					<ApiErrorNotification />
-					<SettingsErrorNotification />
-				</div>
-
-				<div style={ { display: 'flex', alignItems: 'center', gap: '1.5em' } }>
-					<SellingNetworkCategorySelect { ...useSellingNetworkCategorySelectProps() } />
-				</div>
-
-				<div style={ { display: 'flex', alignItems: 'center', gap: '0.75em' } }>
-					<SellingPriceAmount
-						{ ...useSellingPriceAmountProps() }
-						style={ { width: '150px', maxHeight: '32px', minHeight: '32px' } }
-					/>
-					<SellingPriceSymbolSelect { ...useSellingPriceSymbolSelectProps() } />
-
-					{ /* 販売価格の値が不正な時に通知を行うコンポーネント */ }
-					<AmountErrorNotification { ...useAmountErrorNotificationProps() } />
-				</div>
+			{ /* エラー表示 */ }
+			<div style={ { width: '100%' } }>
+				<ApiErrorNotification />
+				<SettingsErrorNotification />
 			</div>
+
+			{ /* 設定項目 ※管理画面のcss(.from-table)を流用 */ }
+			<table className="form-table">
+				<tbody>
+					{ /* ネットワークカテゴリ設定 */ }
+					<tr>
+						<th scope="row">{ textProvider.networkCategory }:</th>
+						<td>
+							<div style={ { display: 'flex', alignItems: 'center', gap: '0.75em' } }>
+								<SellingNetworkCategorySelect { ...useSellingNetworkCategorySelectProps() } />
+							</div>
+						</td>
+					</tr>
+
+					{ /* 販売価格設定 */ }
+					<tr>
+						<th scope="row">{ textProvider.price }:</th>
+						<td>
+							<div style={ { display: 'flex', alignItems: 'center', gap: '0.75em' } }>
+								<SellingPriceAmount
+									{ ...useSellingPriceAmountProps() }
+									style={ { width: '135px', maxHeight: '32px', minHeight: '32px' } }
+								/>
+								<SellingPriceSymbolSelect { ...useSellingPriceSymbolSelectProps() } />
+
+								{ /* 販売価格の値が不正な時に通知を行うコンポーネント */ }
+								<AmountErrorNotification { ...useAmountErrorNotificationProps() } />
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</Placeholder>
 	);
 };
