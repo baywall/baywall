@@ -20,6 +20,10 @@ export class Amount {
 		return this.value;
 	}
 
+	public isNegative(): boolean {
+		return this.value.startsWith( '-' );
+	}
+
 	private static format( amountValue: string ): string {
 		// 小数点がある場合
 		if ( amountValue.includes( '.' ) ) {
@@ -39,6 +43,6 @@ export class Amount {
 	private static isAmountValue( amountValue: string ): boolean {
 		// 整数または小数点を含む数字の文字列であるかどうかをチェック
 		// 例: "123", "-123", "123.45", "-123.45"
-		return /^-?\d+(\.\d+)?$/.test( amountValue );
+		return /^-?(?:0|[1-9]\d*)(\.\d+)?$/.test( amountValue );
 	}
 }
