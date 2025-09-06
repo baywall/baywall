@@ -38,4 +38,10 @@ export class TextProvider {
 	public get unknownErrorMessage(): string {
 		return 'Unknown Error';
 	}
+
+	/** 販売ネットワークカテゴリと価格の指定を促すメッセージ */
+	public get pleaseSpecifySalesNetworkCategoryAndPrice(): string {
+		// 販売ネットワークカテゴリ及び価格を指定してください
+		return 'Please specify the sales network category and price.';
+	}
 }
