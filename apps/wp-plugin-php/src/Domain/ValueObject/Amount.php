@@ -52,6 +52,10 @@ final class Amount implements \Stringable {
 		return '0' === $this->amount_text;
 	}
 
+	public function isNegative(): bool {
+		return str_starts_with( $this->amount_text, '-' );
+	}
+
 	/** 小数点以下の桁数を取得します */
 	private function decimals(): Decimals {
 		return Decimals::from( strlen( explode( '.', $this->amount_text )[1] ?? '' ) );
