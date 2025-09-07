@@ -3,81 +3,86 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Application\UseCase\GetAppContractDto;
-use Cornix\Serendipity\Core\Application\UseCase\GetChainDto;
-use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByFilter;
+use Cornix\Serendipity\Core\Domain\Entity\Token;
+use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 class ResolveChain {
 
+	private UserAccessChecker $user_access_checker;
+	private ChainRepository $chain_repository;
+	private TokenRepository $token_repository;
+	private AppContractRepository $app_contract_repository;
+
 	public function __construct(
-		GetChainDto $get_chain_dto,
-		GetAppContractDto $get_app_contract_dto,
-		GetTokenDtosByFilter $get_token_dtos_by_chain_id_value,
-		UserAccessChecker $user_access_checker
+		UserAccessChecker $user_access_checker,
+		ChainRepository $chain_repository,
+		TokenRepository $token_repository,
+		AppContractRepository $app_contract_repository
 	) {
-		$this->get_chain_dto                    = $get_chain_dto;
-		$this->get_app_contract_dto             = $get_app_contract_dto;
-		$this->get_token_dtos_by_chain_id_value = $get_token_dtos_by_chain_id_value;
-		$this->user_access_checker              = $user_access_checker;
+		$this->user_access_checker     = $user_access_checker;
+		$this->chain_repository        = $chain_repository;
+		$this->token_repository        = $token_repository;
+		$this->app_contract_repository = $app_contract_repository;
 	}
 
-	private GetChainDto $get_chain_dto;
-	private GetAppContractDto $get_app_contract_dto;
-	private GetTokenDtosByFilter $get_token_dtos_by_chain_id_value;
-	private UserAccessChecker $user_access_checker;
-
 	public function handle( array $root_value, array $args ) {
-		/** @var int */
-		$chain_id_value = $args['chainId'];
+		$chain_id = ChainId::from( $args['chainId'] );
 
-		$chain_dto = $this->get_chain_dto->handle( $chain_id_value );
-		assert( null !== $chain_dto, "[CA31D9B5] chain data is not found. chain id: {$chain_id_value}" );
+		$chain = $this->chain_repository->get( $chain_id );
+		assert( null !== $chain, "[CA31D9B5] chain data is not found. chain id: {$chain_id}" );
 
 		// `AppContractResolver`の作成を省略してコールバックを定義
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
-		$app_contract_callback = function () use ( $chain_dto ) {
+		$app_contract_callback = function () use ( $chain ) {
 			// 権限チェック不要
-			$app_contract_dto = $this->get_app_contract_dto->handle( $chain_dto->id );
-			return $app_contract_dto === null ? null : array( 'address' => $app_contract_dto->address );
+			$app_contract = $this->app_contract_repository->get( $chain->id() );
+			return $app_contract === null ? null : array( 'address' => $app_contract->address()->value() );
 		};
 
-		$tokens_callback = function () use ( $root_value, $chain_id_value ) {
+		$tokens_callback = function () use ( $root_value, $chain_id ) {
 			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
+			$filtered_tokens = ( new TokensFilter() )
+			->byChainId( $chain_id )
+			->apply( $this->token_repository->all() );
+
 			return array_map(
-				fn( TokenDto $token_dto ) => $root_value['token'](
+				fn( Token $token ) => $root_value['token'](
 					$root_value,
 					array(
-						'chainId' => $token_dto->chain_id,
-						'address' => $token_dto->address,
+						'chainId' => $token->chainId()->value(),
+						'address' => $token->address()->value(),
 					)
 				),
-				$this->get_token_dtos_by_chain_id_value->handle( $chain_id_value, null )
+				$filtered_tokens
 			);
 		};
 
-		$network_category_callback = function () use ( $root_value, $chain_dto ) {
+		$network_category_callback = function () use ( $root_value, $chain ) {
 			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 			return $root_value['networkCategory'](
 				$root_value,
 				array(
-					'networkCategoryId' => $chain_dto->network_category_id,
+					'networkCategoryId' => $chain->networkCategoryId()->value(),
 				)
 			);
 		};
 
 		return array(
-			'id'               => $chain_dto->id,
-			'name'             => $chain_dto->name,
+			'id'               => $chain->id()->value(),
+			'name'             => $chain->name(),
 			'appContract'      => $app_contract_callback,
-			'confirmations'    => $chain_dto->confirmations,
-			'rpcUrl'           => $chain_dto->rpc_url,
+			'confirmations'    => $chain->confirmations()->value(),
+			'rpcUrl'           => $chain->rpcUrl() ? $chain->rpcUrl()->value() : null,
 			'tokens'           => $tokens_callback,
 			'networkCategory'  => $network_category_callback,
-			'blockExplorerUrl' => $chain_dto->block_explorer_url,
+			'blockExplorerUrl' => $chain->blockExplorerUrl(),
 		);
 	}
 }
