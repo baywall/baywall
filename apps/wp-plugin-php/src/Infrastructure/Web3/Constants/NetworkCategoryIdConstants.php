@@ -11,16 +11,6 @@ final class NetworkCategoryIdConstants {
 	private const TESTNET    = 2;
 	private const PRIVATENET = 3;
 
-	public static function all(): array {
-		$reflection = new \ReflectionClass( __CLASS__ );
-		$constants  = $reflection->getConstants();
-
-		return array_map(
-			fn( $constant_value ) => NetworkCategoryId::from( $constant_value ),
-			$constants
-		);
-	}
-
 	/** メインネット */
 	public static function mainnet(): NetworkCategoryId {
 		return NetworkCategoryId::from( self::MAINNET );
