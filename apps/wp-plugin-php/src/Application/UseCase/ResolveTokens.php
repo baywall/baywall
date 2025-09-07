@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByFilter;
 
-class TokensResolver extends ResolverBase {
+class ResolveTokens {
+
+	private UserAccessChecker $user_access_checker;
+	private GetTokenDtosByFilter $get_token_dtos_by_filter;
 
 	public function __construct(
 		UserAccessChecker $user_access_checker,
@@ -17,18 +20,12 @@ class TokensResolver extends ResolverBase {
 		$this->get_token_dtos_by_filter = $get_token_dtos_by_filter;
 	}
 
-	private UserAccessChecker $user_access_checker;
-	private GetTokenDtosByFilter $get_token_dtos_by_filter;
-
 	/**
 	 * サイトに登録されているトークン一覧を取得します。
 	 *
 	 * ネイティブトークン + 管理者が追加したERC20トークンの一覧
-	 * #[\Override]
-	 *
-	 * @return array
 	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		$filter_chain_id_value = $args['filter']['chainId'] ?? null;
