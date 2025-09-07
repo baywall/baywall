@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Exception\ChainConnectionException;
 use Cornix\Serendipity\Core\Application\Exception\InvoiceNonceMismatchException;
@@ -10,7 +10,17 @@ use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\GetPaidContentByNonce;
 use Cornix\Serendipity\Core\Application\UseCase\GetPostDto;
 
-class RequestPaidContentByNonceResolver extends ResolverBase {
+class ResolveRequestPaidContentByNonce {
+
+	// ここの定数は、GraphQLのエラーコードと一致させること
+	private const ERROR_CODE_INVALID_NONCE           = 'INVALID_NONCE';
+	private const ERROR_CODE_INVALID_CHAIN_ID        = 'INVALID_CHAIN_ID';
+	private const ERROR_CODE_PAYWALL_LOCKED          = 'PAYWALL_LOCKED'; // TODO: 削除
+	private const ERROR_CODE_TRANSACTION_UNCONFIRMED = 'TRANSACTION_UNCONFIRMED';
+
+	private UserAccessChecker $user_access_checker;
+	private GetPostDto $get_post_dto;
+	private GetPaidContentByNonce $get_paid_content_by_nonce;
 
 	public function __construct(
 		UserAccessChecker $user_access_checker,
@@ -22,22 +32,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		$this->get_paid_content_by_nonce = $get_paid_content_by_nonce;
 	}
 
-	private UserAccessChecker $user_access_checker;
-	private GetPostDto $get_post_dto;
-	private GetPaidContentByNonce $get_paid_content_by_nonce;
-
-	// ここの定数は、GraphQLのエラーコードと一致させること
-	private const ERROR_CODE_INVALID_NONCE           = 'INVALID_NONCE';
-	private const ERROR_CODE_INVALID_CHAIN_ID        = 'INVALID_CHAIN_ID';
-	private const ERROR_CODE_PAYWALL_LOCKED          = 'PAYWALL_LOCKED'; // TODO: 削除
-	private const ERROR_CODE_TRANSACTION_UNCONFIRMED = 'TRANSACTION_UNCONFIRMED';
-
-	/**
-	 * #[\Override]
-	 *
-	 * @return string|null
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		/** @var string */
 		$invoice_nonce_value = $args['nonce'];
 		/** @var string */
