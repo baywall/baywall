@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategories;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategory;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ChainsResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ConsumerTermsVersionResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\CurrentSellerTermsResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\GetErc20InfoResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\IssueInvoiceResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\NetworkCategoriesResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\NetworkCategoryResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\PostResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SaveTokenResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\RequestPaidContentByNonceResolver;
@@ -34,11 +34,11 @@ class RootValue {
 	 */
 	public function get( Container $container ) {
 
-		/** @var array<string,ResolverBase> */
+		/** @var array<string,ResolverBase|string> */
 		$resolvers = array(
 			// 非公開
 			'chain'                     => $container->get( ChainResolver::class ),
-			'networkCategory'           => $container->get( NetworkCategoryResolver::class ),
+			'networkCategory'           => ResolveNetworkCategory::class,
 			'sellingContent'            => $container->get( SellingContentResolver::class ),
 			'sellingPrice'              => $container->get( SellingPriceResolver::class ),
 			'token'                     => $container->get( TokenResolver::class ),
@@ -47,7 +47,7 @@ class RootValue {
 			'chains'                    => $container->get( ChainsResolver::class ),
 			'consumerTermsVersion'      => $container->get( ConsumerTermsVersionResolver::class ),
 			'currentSellerTerms'        => $container->get( CurrentSellerTermsResolver::class ),
-			'networkCategories'         => $container->get( NetworkCategoriesResolver::class ),
+			'networkCategories'         => ResolveNetworkCategories::class,
 			'post'                      => $container->get( PostResolver::class ),
 			'salesHistories'            => $container->get( SalesHistoriesResolver::class ),
 			'seller'                    => $container->get( SellerResolver::class ),
@@ -67,7 +67,13 @@ class RootValue {
 		foreach ( $resolvers as $field => $resolver ) {
 			$result[ $field ] = function ( array $root_value, array $args ) use ( $resolver, $container ) {
 				try {
-					return $resolver->resolve( $root_value, $args );
+					if ( is_string( $resolver ) ) {
+						$resolver = $container->get( $resolver );
+						return $resolver->handle( $root_value, $args );
+					} else {
+						// TODO: 削除
+						return $resolver->resolve( $root_value, $args );
+					}
 				} catch ( \Throwable $e ) {
 					$container->get( AppLogger::class )->error( $e );
 					throw $e;
