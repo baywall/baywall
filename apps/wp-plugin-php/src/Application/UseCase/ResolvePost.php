@@ -1,14 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\GetPostDto;
 use Cornix\Serendipity\Core\Application\UseCase\GetPayableTokens;
 
-class PostResolver extends ResolverBase {
+class ResolvePost {
+
+	private GetPostDto $get_post_dto;
+	private GetPayableTokens $get_payable_tokens;
+	private UserAccessChecker $user_access_checker;
 
 	public function __construct(
 		GetPostDto $get_post_dto,
@@ -20,16 +24,8 @@ class PostResolver extends ResolverBase {
 		$this->user_access_checker = $user_access_checker;
 	}
 
-	private GetPostDto $get_post_dto;
-	private GetPayableTokens $get_payable_tokens;
-	private UserAccessChecker $user_access_checker;
 
-	/**
-	 * #[\Override]
-	 *
-	 * @return array
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		$post_dto = $this->get_post_dto->handle( $args['postId'] );
 
 		// 投稿を閲覧できる権限があることをチェック
