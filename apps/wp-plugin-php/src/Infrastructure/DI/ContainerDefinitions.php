@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
+use Cornix\Serendipity\Core\Domain\Repository\NetworkCategoryRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
@@ -33,6 +34,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\NetworkCategoryRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\SellerRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\LogLevelProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PostTitleProviderImpl;
@@ -47,40 +49,41 @@ use function DI\get;
 final class ContainerDefinitions {
 	public static function getDefinitions(): array {
 		return array(
-			wpdb::class                  => fn() => $GLOBALS['wpdb'],
+			wpdb::class                      => fn() => $GLOBALS['wpdb'],
 
 			// TableGateway
 			// ChainTable::class => autowire(),
 
 			// Repository
-			AppContractRepository::class => autowire( AppContractRepositoryImpl::class ),
-			ChainRepository::class       => autowire( ChainRepositoryImpl::class ),
-			InvoiceRepository::class     => autowire( InvoiceRepositoryImpl::class ),
-			OracleRepository::class      => autowire( OracleRepositoryImpl::class ),
-			PostRepository::class        => autowire( PostRepositoryImpl::class ),
-			TokenRepository::class       => autowire( TokenRepositoryImpl::class ),
-			SellerRepository::class      => autowire( SellerRepositoryImpl::class ),
+			AppContractRepository::class     => autowire( AppContractRepositoryImpl::class ),
+			ChainRepository::class           => autowire( ChainRepositoryImpl::class ),
+			InvoiceRepository::class         => autowire( InvoiceRepositoryImpl::class ),
+			NetworkCategoryRepository::class => autowire( NetworkCategoryRepositoryImpl::class ),
+			OracleRepository::class          => autowire( OracleRepositoryImpl::class ),
+			PostRepository::class            => autowire( PostRepositoryImpl::class ),
+			TokenRepository::class           => autowire( TokenRepositoryImpl::class ),
+			SellerRepository::class          => autowire( SellerRepositoryImpl::class ),
 
 			// Service
-			WalletService::class         => autowire( WalletServiceImpl::class ),
-			PostTitleProvider::class     => autowire( PostTitleProviderImpl::class ),
-			RateProvider::class          => get( CachedOracleRateProvider::class ),
+			WalletService::class             => autowire( WalletServiceImpl::class ),
+			PostTitleProvider::class         => autowire( PostTitleProviderImpl::class ),
+			RateProvider::class              => get( CachedOracleRateProvider::class ),
 			// CachedRateProvider::class    => autowire()->constructor(
 			// get( RateTransient::class ),
 			// get( OracleRateProviderImpl::class )
 			// ),
-			UserAccessProvider::class    => autowire( UserAccessProviderImpl::class ),
-			PaidContentService::class    => autowire( PaidContentServiceImpl::class ),
-			BlockNumberProvider::class   => autowire( BlockNumberProviderImpl::class ),
-			TransactionService::class    => autowire( WpTransactionService::class ),
-			SalesHistoryService::class   => autowire( WpSalesHistoryService::class ),
+			UserAccessProvider::class        => autowire( UserAccessProviderImpl::class ),
+			PaidContentService::class        => autowire( PaidContentServiceImpl::class ),
+			BlockNumberProvider::class       => autowire( BlockNumberProviderImpl::class ),
+			TransactionService::class        => autowire( WpTransactionService::class ),
+			SalesHistoryService::class       => autowire( WpSalesHistoryService::class ),
 
 			// Cache
-			OracleRateCache::class       => autowire( WpOracleRateCache::class ),
+			OracleRateCache::class           => autowire( WpOracleRateCache::class ),
 
 			// Logging
-			Logger::class                => autowire( SimpleLogger::class ),
-			LogLevelProvider::class      => autowire( LogLevelProviderImpl::class ),
+			Logger::class                    => autowire( SimpleLogger::class ),
+			LogLevelProvider::class          => autowire( LogLevelProviderImpl::class ),
 		);
 	}
 }
