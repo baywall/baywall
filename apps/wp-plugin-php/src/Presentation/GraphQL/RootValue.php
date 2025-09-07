@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveChain;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategories;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategory;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ChainsResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ConsumerTermsVersionResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\CurrentSellerTermsResolver;
@@ -37,7 +37,7 @@ class RootValue {
 		/** @var array<string,ResolverBase|string> */
 		$resolvers = array(
 			// 非公開
-			'chain'                     => $container->get( ChainResolver::class ),
+			'chain'                     => ResolveChain::class,
 			'networkCategory'           => ResolveNetworkCategory::class,
 			'sellingContent'            => $container->get( SellingContentResolver::class ),
 			'sellingPrice'              => $container->get( SellingPriceResolver::class ),
