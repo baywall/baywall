@@ -3,33 +3,32 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByFilter;
+use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 class ResolveToken {
 
-	private GetTokenDtosByFilter $get_token_dtos_by_chain_id_value;
+	private TokenRepository $token_repository;
 
-	public function __construct( GetTokenDtosByFilter $get_token_dtos_by_chain_id_value ) {
-		$this->get_token_dtos_by_chain_id_value = $get_token_dtos_by_chain_id_value;
+	public function __construct( TokenRepository $token_repository ) {
+		$this->token_repository = $token_repository;
 	}
 
 	public function handle( array $root_value, array $args ) {
-		/** @var int */
-		$chain_id_value = $args['chainId'];
-		/** @var string */
-		$address_value = $args['address'];
+		$chain_id = ChainId::from( $args['chainId'] );
+		$address  = Address::from( $args['address'] );
 
-		$token_dtos = $this->get_token_dtos_by_chain_id_value->handle( $chain_id_value, $address_value );
-		if ( count( $token_dtos ) !== 1 ) {
-			throw new \InvalidArgumentException( "[3716EBA8] Expected exactly one token for chain ID {$chain_id_value} and address {$address_value}, found " . count( $token_dtos ) );
+		$token = $this->token_repository->get( $chain_id, $address );
+		if ( $token === null ) {
+			throw new \InvalidArgumentException( "[436EAC2D] Token not found for chain ID {$chain_id} and address {$address}" );
 		}
-		$token_dto = array_values( $token_dtos )[0];
 
 		return array(
-			'chain'     => fn() => $root_value['chain']( $root_value, array( 'chainId' => $token_dto->chain_id ) ),
-			'address'   => $token_dto->address,
-			'symbol'    => $token_dto->symbol,
-			'isPayable' => $token_dto->is_payable,
+			'chain'     => fn() => $root_value['chain']( $root_value, array( 'chainId' => $token->chainId()->value() ) ),
+			'address'   => $token->address()->value(),
+			'symbol'    => $token->symbol()->value(),
+			'isPayable' => $token->isPayable(),
 		);
 	}
 }
