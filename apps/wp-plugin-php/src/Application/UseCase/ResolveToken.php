@@ -1,22 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByFilter;
 
-class TokenResolver extends ResolverBase {
+class ResolveToken {
+
+	private GetTokenDtosByFilter $get_token_dtos_by_chain_id_value;
 
 	public function __construct( GetTokenDtosByFilter $get_token_dtos_by_chain_id_value ) {
 		$this->get_token_dtos_by_chain_id_value = $get_token_dtos_by_chain_id_value;
 	}
 
-	private GetTokenDtosByFilter $get_token_dtos_by_chain_id_value;
-
-	/**
-	 * #[\Override]
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		/** @var int */
 		$chain_id_value = $args['chainId'];
 		/** @var string */

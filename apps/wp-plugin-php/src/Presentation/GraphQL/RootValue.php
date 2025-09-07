@@ -8,6 +8,8 @@ use Cornix\Serendipity\Core\Application\UseCase\ResolveChains;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategories;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategory;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSaveChain;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveToken;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveTokens;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ConsumerTermsVersionResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\CurrentSellerTermsResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\GetErc20InfoResolver;
@@ -22,8 +24,6 @@ use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SellingContentResolver
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SellingPriceResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ServerSignerResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokenResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokensResolver;
 use DI\Container;
 
 class RootValue {
@@ -41,7 +41,7 @@ class RootValue {
 			'networkCategory'           => ResolveNetworkCategory::class,
 			'sellingContent'            => $container->get( SellingContentResolver::class ),
 			'sellingPrice'              => $container->get( SellingPriceResolver::class ),
-			'token'                     => $container->get( TokenResolver::class ),
+			'token'                     => ResolveToken::class,
 
 			// Query
 			'chains'                    => ResolveChains::class,
@@ -52,7 +52,7 @@ class RootValue {
 			'salesHistories'            => $container->get( SalesHistoriesResolver::class ),
 			'seller'                    => $container->get( SellerResolver::class ),
 			'serverSigner'              => $container->get( ServerSignerResolver::class ),
-			'tokens'                    => $container->get( TokensResolver::class ),
+			'tokens'                    => ResolveTokens::class,
 
 			// Mutation
 			'issueInvoice'              => $container->get( IssueInvoiceResolver::class ),
