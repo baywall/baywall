@@ -3,21 +3,24 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByFilter;
+use Cornix\Serendipity\Core\Domain\Entity\Token;
+use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 class ResolveTokens {
 
 	private UserAccessChecker $user_access_checker;
-	private GetTokenDtosByFilter $get_token_dtos_by_filter;
+	private TokenRepository $token_repository;
 
 	public function __construct(
 		UserAccessChecker $user_access_checker,
-		GetTokenDtosByFilter $get_token_dtos_by_filter
+		TokenRepository $token_repository
 	) {
-		$this->user_access_checker      = $user_access_checker;
-		$this->get_token_dtos_by_filter = $get_token_dtos_by_filter;
+		$this->user_access_checker = $user_access_checker;
+		$this->token_repository    = $token_repository;
 	}
 
 	/**
@@ -28,18 +31,27 @@ class ResolveTokens {
 	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$filter_chain_id_value = $args['filter']['chainId'] ?? null;
-		$filter_address_value  = $args['filter']['address'] ?? null;
+		$filter_chain_id = ChainId::fromNullableValue( $args['filter']['chainId'] ?? null );
+		$filter_address  = Address::fromNullable( $args['filter']['address'] ?? null );
+
+		$filter = new TokensFilter();
+		if ( $filter_chain_id !== null ) {
+			$filter = $filter->byChainId( $filter_chain_id );
+		}
+		if ( $filter_address !== null ) {
+			$filter = $filter->byAddress( $filter_address );
+		}
+		$filtered_tokens = $filter->apply( $this->token_repository->all() );
 
 		return array_map(
-			fn( TokenDto $token_dto ) => $root_value['token'](
+			fn( Token $token ) => $root_value['token'](
 				$root_value,
 				array(
-					'chainId' => $token_dto->chain_id,
-					'address' => $token_dto->address,
+					'chainId' => $token->chainId()->value(),
+					'address' => $token->address()->value(),
 				)
 			),
-			$this->get_token_dtos_by_filter->handle( $filter_chain_id_value, $filter_address_value )
+			$filtered_tokens
 		);
 	}
 }
