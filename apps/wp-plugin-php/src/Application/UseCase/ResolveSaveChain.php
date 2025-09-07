@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\SaveChain;
 
-class SaveChainResolver extends ResolverBase {
+class ResolveSaveChain {
 
 	private UserAccessChecker $user_access_checker;
 	private SaveChain $save_chain;
@@ -19,12 +19,7 @@ class SaveChainResolver extends ResolverBase {
 		$this->save_chain          = $save_chain;
 	}
 
-	/**
-	 * #[\Override]
-	 *
-	 * @return bool
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		/** @var int */
