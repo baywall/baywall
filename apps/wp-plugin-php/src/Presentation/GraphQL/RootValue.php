@@ -4,9 +4,9 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveChain;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveChains;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategories;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategory;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ChainsResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ConsumerTermsVersionResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\CurrentSellerTermsResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\GetErc20InfoResolver;
@@ -44,7 +44,7 @@ class RootValue {
 			'token'                     => $container->get( TokenResolver::class ),
 
 			// Query
-			'chains'                    => $container->get( ChainsResolver::class ),
+			'chains'                    => ResolveChains::class,
 			'consumerTermsVersion'      => $container->get( ConsumerTermsVersionResolver::class ),
 			'currentSellerTerms'        => $container->get( CurrentSellerTermsResolver::class ),
 			'networkCategories'         => ResolveNetworkCategories::class,
