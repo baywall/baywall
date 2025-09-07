@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Application\UseCase\GetAppContractDto;
 use Cornix\Serendipity\Core\Application\UseCase\GetChainDto;
 use Cornix\Serendipity\Core\Application\UseCase\GetTokenDtosByFilter;
 
-class ChainResolver extends ResolverBase {
+class ResolveChain {
 
 	public function __construct(
 		GetChainDto $get_chain_dto,
@@ -28,12 +28,7 @@ class ChainResolver extends ResolverBase {
 	private GetTokenDtosByFilter $get_token_dtos_by_chain_id_value;
 	private UserAccessChecker $user_access_checker;
 
-	/**
-	 * #[\Override]
-	 *
-	 * @return array
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		/** @var int */
 		$chain_id_value = $args['chainId'];
 
