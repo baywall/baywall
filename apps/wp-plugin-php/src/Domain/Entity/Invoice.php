@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 
-class Invoice {
+class Invoice implements \Stringable {
 
 	public function __construct( InvoiceId $id, PostId $post_id, ChainId $chain_id, Price $selling_price, Address $seller_address, Address $payment_token_address, Amount $payment_amount, Address $consumer_address, ?InvoiceNonce $nonce = null ) {
 		$this->id                    = $id;
@@ -66,5 +66,9 @@ class Invoice {
 	/** 新しいnonceを設定します */
 	public function setNonce( InvoiceNonce $nonce ): void {
 		$this->nonce = $nonce;
+	}
+
+	public function __toString() {
+		return (string) $this->id;
 	}
 }
