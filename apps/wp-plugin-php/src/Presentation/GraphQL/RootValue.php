@@ -20,10 +20,10 @@ use Cornix\Serendipity\Core\Application\UseCase\ResolveSeller;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSellingContent;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSellingPrice;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveServerSigner;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveSetSellerAgreedTerms;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveToken;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveTokens;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ResolverBase;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use DI\Container;
 
 class RootValue {
@@ -60,7 +60,7 @@ class RootValue {
 			'getErc20Info'              => ResolveGetErc20Info::class,
 			'saveChain'                 => ResolveSaveChain::class,
 			'saveToken'                 => ResolveSaveToken::class,
-			'setSellerAgreedTerms'      => $container->get( SetSellerAgreedTermsResolver::class ),
+			'setSellerAgreedTerms'      => ResolveSetSellerAgreedTerms::class,
 		);
 
 		$result = array();
