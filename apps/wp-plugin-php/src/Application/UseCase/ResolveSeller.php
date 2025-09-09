@@ -1,23 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 
-class SellerResolver extends ResolverBase {
+class ResolveSeller {
+
+	private SellerRepository $seller_repository;
 
 	public function __construct( SellerRepository $seller_repository ) {
 		$this->seller_repository = $seller_repository;
 	}
-	private SellerRepository $seller_repository;
 
-	/**
-	 * #[\Override]
-	 *
-	 * @return array
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		$seller = $this->seller_repository->get();
 
 		$agreed_terms = null;
