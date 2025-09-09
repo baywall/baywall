@@ -43,7 +43,7 @@ class ResolvePost {
 	public function handle( array $root_value, array $args ) {
 		$post_id = PostId::from( $args['postId'] );
 		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_id->value() );
+		$this->user_access_checker->checkCanViewPost( $post_id );
 
 		// 投稿の情報を取得
 		$post = $this->post_repository->get( $post_id );

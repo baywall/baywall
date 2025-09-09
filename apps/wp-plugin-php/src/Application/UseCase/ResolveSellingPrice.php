@@ -29,7 +29,7 @@ class ResolveSellingPrice {
 		$post_id = PostId::from( $args['postId'] );
 
 		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_id->value() );
+		$this->user_access_checker->checkCanViewPost( $post_id );
 
 		// 販売価格をテーブルから取得して返す
 		$selling_price = $this->post_repository->get( $post_id )->sellingPrice();

@@ -60,7 +60,7 @@ class ResolveRequestPaidContentByNonce {
 		}
 
 		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $invoice->postId()->value() );
+		$this->user_access_checker->checkCanViewPost( $invoice->postId() );
 
 		try {
 			$this->transaction_service->beginTransaction();
