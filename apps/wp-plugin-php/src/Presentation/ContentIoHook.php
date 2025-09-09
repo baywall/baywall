@@ -80,11 +80,12 @@ class ContentIoHook {
 	 *   - wp/v2/posts等のAPIにアクセスした時
 	 */
 	public function restPreparePostFilter( \WP_REST_Response $response, \WP_Post $post, \WP_REST_Request $request ): \WP_REST_Response {
-		if ( ! $this->user_access_provider->canEditPost( $post->ID ) ) {
+		$post_id = PostId::from( $post->ID );
+		if ( ! $this->user_access_provider->canEditPost( $post_id ) ) {
 			return $response;   // 投稿の編集権限がない場合は何もしない
 		}
 
-		$paid_content = $this->post_repository->get( PostId::from( $post->ID ) )->paidContent();
+		$paid_content = $this->post_repository->get( $post_id )->paidContent();
 		if ( ! is_null( $paid_content ) ) {
 			// このメソッドが呼び出されたタイミングでは$response->data['content']['raw']に無料部分のみ格納された状態。
 			$free_content = $response->data['content']['raw'] ?? '';
