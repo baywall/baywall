@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\SaveToken;
@@ -9,7 +9,10 @@ use Cornix\Serendipity\Core\Application\UseCase\SaveToken;
 /**
  * トークンの情報をサーバーに登録します。
  */
-class SaveTokenResolver extends ResolverBase {
+class ResolveSaveToken {
+
+	private SaveToken $save_token;
+	private UserAccessChecker $user_access_checker;
 
 	public function __construct(
 		SaveToken $save_token,
@@ -19,13 +22,7 @@ class SaveTokenResolver extends ResolverBase {
 		$this->user_access_checker = $user_access_checker;
 	}
 
-	private SaveToken $save_token;
-	private UserAccessChecker $user_access_checker;
-
-	/**
-	 * #[\Override]
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		/** @var int */

@@ -15,13 +15,13 @@ use Cornix\Serendipity\Core\Application\UseCase\ResolvePost;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveRequestPaidContentByNonce;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSalesHistories;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSaveChain;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveSaveToken;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSeller;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSellingContent;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSellingPrice;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveServerSigner;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveToken;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveTokens;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SaveTokenResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ResolverBase;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use DI\Container;
@@ -59,7 +59,7 @@ class RootValue {
 			'requestPaidContentByNonce' => ResolveRequestPaidContentByNonce::class,
 			'getErc20Info'              => ResolveGetErc20Info::class,
 			'saveChain'                 => ResolveSaveChain::class,
-			'saveToken'                 => $container->get( SaveTokenResolver::class ),
+			'saveToken'                 => ResolveSaveToken::class,
 			'setSellerAgreedTerms'      => $container->get( SetSellerAgreedTermsResolver::class ),
 		);
 
