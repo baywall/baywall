@@ -1,16 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\Service\SymbolService;
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
-class NetworkCategoryResolver extends ResolverBase {
+class ResolveNetworkCategory {
+
+	private ChainRepository $chain_repository;
+	private UserAccessChecker $user_access_checker;
+	private SymbolService $symbol_service;
 
 	public function __construct(
 		ChainRepository $chain_repository,
@@ -21,16 +25,9 @@ class NetworkCategoryResolver extends ResolverBase {
 		$this->user_access_checker = $user_access_checker;
 		$this->symbol_service      = $symbol_service;
 	}
-	private ChainRepository $chain_repository;
-	private UserAccessChecker $user_access_checker;
-	private SymbolService $symbol_service;
 
-	/**
-	 * #[\Override]
-	 *
-	 * @return array
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ): array {
+
 		$network_category_id = NetworkCategoryId::from( $args['networkCategoryId'] );
 
 		$sellable_symbols_callback = function () {

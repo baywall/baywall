@@ -1,12 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Infrastructure\Terms\SellerTermsProvider;
 
-class CurrentSellerTermsResolver extends ResolverBase {
+class ResolveCurrentSellerTerms {
+
+	private UserAccessChecker $user_access_checker;
+	private SellerTermsProvider $seller_terms_provider;
 
 	public function __construct(
 		UserAccessChecker $user_access_checker,
@@ -16,15 +19,7 @@ class CurrentSellerTermsResolver extends ResolverBase {
 		$this->seller_terms_provider = $seller_terms_provider;
 	}
 
-	private UserAccessChecker $user_access_checker;
-	private SellerTermsProvider $seller_terms_provider;
-
-	/**
-	 * #[\Override]
-	 *
-	 * @return array
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		$seller_terms_current_version = $this->seller_terms_provider->currentVersion();

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+
 class UserAccessChecker {
 	public function __construct( UserAccessProvider $user_access_provider ) {
 		$this->user_access_provider = $user_access_provider;
@@ -11,18 +13,18 @@ class UserAccessChecker {
 	private UserAccessProvider $user_access_provider;
 
 	/** 現在のユーザーで指定した投稿を閲覧できるかをチェックし、閲覧できない場合は例外をスローします */
-	public function checkCanViewPost( int $post_id ): void {
+	public function checkCanViewPost( PostId $post_id ): void {
 		if ( ! $this->user_access_provider->canViewPost( $post_id ) ) {
-			throw new \LogicException( '[E14DA20F] You do not have permission to view this post. post_id: ' . $post_id );
+			throw new \LogicException( "[E14DA20F] You do not have permission to view this post. post_id: {$post_id}" );
 		}
 	}
 
-	/** 現在のユーザーで指定した投稿を編集できるかをチェックし、編集できない場合は例外をスローします */
-	public function checkCanEditPost( int $post_id ): void {
-		if ( ! $this->user_access_provider->canEditPost( $post_id ) ) {
-			throw new \LogicException( '[28E55890] You do not have permission to edit this post. post_id: ' . $post_id );
-		}
-	}
+	// /** 現在のユーザーで指定した投稿を編集できるかをチェックし、編集できない場合は例外をスローします */
+	// public function checkCanEditPost( PostId $post_id ): void {
+	// if ( ! $this->user_access_provider->canEditPost( $post_id ) ) {
+	// throw new \LogicException( "[28E55890] You do not have permission to edit this post. post_id: {$post_id}" );
+	// }
+	// }
 
 	/** 現在のユーザーが管理者権限を持っているかどうかをチェックし、持っていない場合は例外をスローします */
 	public function checkHasAdminRole(): void {
