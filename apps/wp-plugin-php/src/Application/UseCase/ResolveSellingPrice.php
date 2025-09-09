@@ -1,14 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 
-class SellingPriceResolver extends ResolverBase {
+class ResolveSellingPrice {
+
+	private PostRepository $post_repository;
+	private UserAccessChecker $user_access_checker;
 
 	public function __construct(
 		PostRepository $post_repository,
@@ -18,15 +21,7 @@ class SellingPriceResolver extends ResolverBase {
 		$this->user_access_checker = $user_access_checker;
 	}
 
-	private PostRepository $post_repository;
-	private UserAccessChecker $user_access_checker;
-
-	/**
-	 * #[\Override]
-	 *
-	 * @return array|null
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		/** @var int */
 		$post_id = $args['postId'];
 
