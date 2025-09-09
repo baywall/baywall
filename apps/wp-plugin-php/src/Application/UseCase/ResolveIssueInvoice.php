@@ -74,7 +74,7 @@ class ResolveIssueInvoice {
 		$consumer_address = Address::from( $args['consumerAddress'] ); // 購入者のアドレス
 
 		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_id->value() );
+		$this->user_access_checker->checkCanViewPost( $post_id );
 
 		// 請求書番号を発行(+現在の販売価格を記録)
 		try {
