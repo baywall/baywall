@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from '@wordpress/element';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
-import { PostSavingController } from '../../lib/editor/post-saving/PostSavingController';
+import { PostSavingController } from '../../lib/gutenberg/post-saving/PostSavingController';
 
 /**
  * 投稿編集画面の保存処理の有効/無効を制御します
