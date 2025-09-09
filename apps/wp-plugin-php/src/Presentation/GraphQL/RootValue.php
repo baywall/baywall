@@ -16,13 +16,13 @@ use Cornix\Serendipity\Core\Application\UseCase\ResolveSaveChain;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSeller;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSellingContent;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSellingPrice;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveServerSigner;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveToken;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveTokens;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\GetErc20InfoResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\IssueInvoiceResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SaveTokenResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ResolverBase;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ServerSignerResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use DI\Container;
 
@@ -51,7 +51,7 @@ class RootValue {
 			'post'                      => ResolvePost::class,
 			'salesHistories'            => ResolveSalesHistories::class,
 			'seller'                    => ResolveSeller::class,
-			'serverSigner'              => $container->get( ServerSignerResolver::class ),
+			'serverSigner'              => ResolveServerSigner::class,
 			'tokens'                    => ResolveTokens::class,
 
 			// Mutation
