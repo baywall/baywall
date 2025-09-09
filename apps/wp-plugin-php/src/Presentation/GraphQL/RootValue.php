@@ -3,27 +3,26 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ChainResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ChainsResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ConsumerTermsVersionResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\CurrentSellerTermsResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\GetErc20InfoResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\IssueInvoiceResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\NetworkCategoriesResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\NetworkCategoryResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\PostResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SaveTokenResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\RequestPaidContentByNonceResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ResolverBase;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SalesHistoriesResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SaveChainResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SellerResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SellingContentResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SellingPriceResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ServerSignerResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokenResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokensResolver;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveChain;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveChains;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveConsumerTermsVersion;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveCurrentSellerTerms;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveGetErc20Info;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveIssueInvoice;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategories;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategory;
+use Cornix\Serendipity\Core\Application\UseCase\ResolvePost;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveRequestPaidContentByNonce;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveSalesHistories;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveSaveChain;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveSaveToken;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveSeller;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveSellingContent;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveSellingPrice;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveServerSigner;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveSetSellerAgreedTerms;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveToken;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveTokens;
 use DI\Container;
 
 class RootValue {
@@ -34,40 +33,41 @@ class RootValue {
 	 */
 	public function get( Container $container ) {
 
-		/** @var array<string,ResolverBase> */
+		/** @var array<string,string> */
 		$resolvers = array(
 			// 非公開
-			'chain'                     => $container->get( ChainResolver::class ),
-			'networkCategory'           => $container->get( NetworkCategoryResolver::class ),
-			'sellingContent'            => $container->get( SellingContentResolver::class ),
-			'sellingPrice'              => $container->get( SellingPriceResolver::class ),
-			'token'                     => $container->get( TokenResolver::class ),
+			'chain'                     => ResolveChain::class,
+			'networkCategory'           => ResolveNetworkCategory::class,
+			'sellingContent'            => ResolveSellingContent::class,
+			'sellingPrice'              => ResolveSellingPrice::class,
+			'token'                     => ResolveToken::class,
 
 			// Query
-			'chains'                    => $container->get( ChainsResolver::class ),
-			'consumerTermsVersion'      => $container->get( ConsumerTermsVersionResolver::class ),
-			'currentSellerTerms'        => $container->get( CurrentSellerTermsResolver::class ),
-			'networkCategories'         => $container->get( NetworkCategoriesResolver::class ),
-			'post'                      => $container->get( PostResolver::class ),
-			'salesHistories'            => $container->get( SalesHistoriesResolver::class ),
-			'seller'                    => $container->get( SellerResolver::class ),
-			'serverSigner'              => $container->get( ServerSignerResolver::class ),
-			'tokens'                    => $container->get( TokensResolver::class ),
+			'chains'                    => ResolveChains::class,
+			'consumerTermsVersion'      => ResolveConsumerTermsVersion::class,
+			'currentSellerTerms'        => ResolveCurrentSellerTerms::class,
+			'networkCategories'         => ResolveNetworkCategories::class,
+			'post'                      => ResolvePost::class,
+			'salesHistories'            => ResolveSalesHistories::class,
+			'seller'                    => ResolveSeller::class,
+			'serverSigner'              => ResolveServerSigner::class,
+			'tokens'                    => ResolveTokens::class,
 
 			// Mutation
-			'issueInvoice'              => $container->get( IssueInvoiceResolver::class ),
-			'requestPaidContentByNonce' => $container->get( RequestPaidContentByNonceResolver::class ),
-			'getErc20Info'              => $container->get( GetErc20InfoResolver::class ),
-			'saveChain'                 => $container->get( SaveChainResolver::class ),
-			'saveToken'                 => $container->get( SaveTokenResolver::class ),
-			'setSellerAgreedTerms'      => $container->get( SetSellerAgreedTermsResolver::class ),
+			'issueInvoice'              => ResolveIssueInvoice::class,
+			'requestPaidContentByNonce' => ResolveRequestPaidContentByNonce::class,
+			'getErc20Info'              => ResolveGetErc20Info::class,
+			'saveChain'                 => ResolveSaveChain::class,
+			'saveToken'                 => ResolveSaveToken::class,
+			'setSellerAgreedTerms'      => ResolveSetSellerAgreedTerms::class,
 		);
 
 		$result = array();
 		foreach ( $resolvers as $field => $resolver ) {
 			$result[ $field ] = function ( array $root_value, array $args ) use ( $resolver, $container ) {
 				try {
-					return $resolver->resolve( $root_value, $args );
+					$resolver = $container->get( $resolver );
+					return $resolver->handle( $root_value, $args );
 				} catch ( \Throwable $e ) {
 					$container->get( AppLogger::class )->error( $e );
 					throw $e;

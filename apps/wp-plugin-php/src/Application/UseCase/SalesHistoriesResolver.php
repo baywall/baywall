@@ -1,37 +1,32 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Dto\SalesHistoryDto;
+use Cornix\Serendipity\Core\Application\Service\SalesHistoryService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Application\UseCase\GetSalesHistoryDtos;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 
-class SalesHistoriesResolver extends ResolverBase {
+class ResolveSalesHistories {
 
 	private UserAccessChecker $user_access_checker;
-	private GetSalesHistoryDtos $get_sales_history_dtos;
+	private SalesHistoryService $sales_history_service;
 
 	public function __construct(
 		UserAccessChecker $user_access_checker,
-		GetSalesHistoryDtos $get_sales_history_dtos
+		SalesHistoryService $sales_history_service
 	) {
-		$this->user_access_checker    = $user_access_checker;
-		$this->get_sales_history_dtos = $get_sales_history_dtos;
+		$this->user_access_checker   = $user_access_checker;
+		$this->sales_history_service = $sales_history_service;
 	}
 
-	/**
-	 * #[\Override]
-	 *
-	 * @return array
-	 */
 	public function resolve( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		/** @var string|null */
-		$filter_invoice_id_value = $args['filter']['invoiceId'] ?? null;
+		$filter_invoice_id = InvoiceId::fromNullable( $args['filter']['invoiceId'] ?? null );
 
-		$sales_history_dtos = $this->get_sales_history_dtos->handle( $filter_invoice_id_value );
+		$sales_histories = $this->sales_history_service->find( $filter_invoice_id );
 
 		return array_map(
 			fn ( SalesHistoryDto $sales_history_dto ) => array(
@@ -69,7 +64,7 @@ class SalesHistoriesResolver extends ResolverBase {
 					'symbol' => $sales_history_dto->affiliate_received_price->symbol,
 				) : null,
 			),
-			$sales_history_dtos
+			$sales_histories
 		);
 	}
 }

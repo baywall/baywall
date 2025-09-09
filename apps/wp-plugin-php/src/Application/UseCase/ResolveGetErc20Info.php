@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
@@ -17,7 +17,11 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 /**
  * ERC20トークンの情報をブロックチェーンから取得して返します。
  */
-class GetErc20InfoResolver extends ResolverBase {
+class ResolveGetErc20Info {
+
+	private ChainRepository $chain_repository;
+	private OracleRepository $oracle_repository;
+	private UserAccessChecker $user_access_checker;
 
 	public function __construct(
 		ChainRepository $chain_repository,
@@ -29,16 +33,7 @@ class GetErc20InfoResolver extends ResolverBase {
 		$this->user_access_checker = $user_access_checker;
 	}
 
-	private ChainRepository $chain_repository;
-	private OracleRepository $oracle_repository;
-	private UserAccessChecker $user_access_checker;
-
-	/**
-	 * #[\Override]
-	 *
-	 * @return string|null
-	 */
-	public function resolve( array $root_value, array $args ) {
+	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		$chain_id = ChainId::from( $args['chainId'] );

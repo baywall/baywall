@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Dto\IssuedInvoiceDto;
 use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
+use Cornix\Serendipity\Core\Application\Service\TransactionService;
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
+use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
-use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
@@ -21,55 +22,92 @@ use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Format\SolidityStrings;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
 use phpseclib\Math\BigInteger;
 
-class IssueInvoice {
-	public function __construct( TokenRepository $token_repository, InvoiceRepository $invoice_repository, PostRepository $post_repository, SellerRepository $seller_repository, TokenAmountConverter $token_amount_converter, PriceExchangeService $price_exchange_service, ServerSignerService $server_signer_service, WalletService $wallet_service ) {
-		$this->invoice_repository     = $invoice_repository;
-		$this->post_repository        = $post_repository;
-		$this->seller_repository      = $seller_repository;
-		$this->token_amount_converter = $token_amount_converter;
-		$this->price_exchange_service = $price_exchange_service;
-		$this->server_signer_service  = $server_signer_service;
-		$this->wallet_service         = $wallet_service;
-		$this->get_payment_token      = new GetPaymentToken( $token_repository );
-	}
-	private InvoiceRepository $invoice_repository;
+class ResolveIssueInvoice {
+
+	private InitCrawledBlockNumber $init_crawled_block_number;
+	private UserAccessChecker $user_access_checker;
+	private TransactionService $transaction_service;
+	private TokenRepository $token_repository;
 	private PostRepository $post_repository;
 	private SellerRepository $seller_repository;
 	private TokenAmountConverter $token_amount_converter;
 	private PriceExchangeService $price_exchange_service;
-	private GetPaymentToken $get_payment_token;
+	private InvoiceRepository $invoice_repository;
 	private ServerSignerService $server_signer_service;
 	private WalletService $wallet_service;
 
-	public function handle( int $post_id_value, int $chain_id_value, string $payment_token_address_value, string $consumer_address_value ): IssuedInvoiceDto {
-		$post_id               = PostId::from( $post_id_value );
-		$chain_id              = ChainId::from( $chain_id_value );
-		$payment_token_address = Address::from( $payment_token_address_value );
-		$consumer_address      = Address::from( $consumer_address_value );
-
-		// 請求書を作成
-		$invoice = $this->createInvoice( $post_id, $chain_id, $payment_token_address, $consumer_address );
-		// 請求書に対して署名を行う
-		$signed_data = $this->signInvoice( $invoice );
-
-		return new IssuedInvoiceDto(
-			$invoice->id()->hex(),
-			$invoice->nonce()->value(),
-			$signed_data->message()->value(),
-			$signed_data->signature()->value(),
-			$invoice->paymentAmount()->value()
-		);
+	public function __construct(
+		InitCrawledBlockNumber $init_crawled_block_number,
+		UserAccessChecker $user_access_checker,
+		TransactionService $transaction_service,
+		TokenRepository $token_repository,
+		PostRepository $post_repository,
+		SellerRepository $seller_repository,
+		TokenAmountConverter $token_amount_converter,
+		PriceExchangeService $price_exchange_service,
+		InvoiceRepository $invoice_repository,
+		ServerSignerService $server_signer_service,
+		WalletService $wallet_service
+	) {
+		$this->init_crawled_block_number = $init_crawled_block_number;
+		$this->user_access_checker       = $user_access_checker;
+		$this->transaction_service       = $transaction_service;
+		$this->token_repository          = $token_repository;
+		$this->post_repository           = $post_repository;
+		$this->seller_repository         = $seller_repository;
+		$this->token_amount_converter    = $token_amount_converter;
+		$this->price_exchange_service    = $price_exchange_service;
+		$this->invoice_repository        = $invoice_repository;
+		$this->server_signer_service     = $server_signer_service;
+		$this->wallet_service            = $wallet_service;
 	}
+
+	public function handle( array $root_value, array $args ) {
+		$post_id          = PostId::from( $args['postId'] );
+		$chain_id         = ChainId::from( $args['chainId'] );
+		$token_address    = Address::from( $args['tokenAddress'] );
+		$consumer_address = Address::from( $args['consumerAddress'] ); // 購入者のアドレス
+
+		// 投稿を閲覧できる権限があることをチェック
+		$this->user_access_checker->checkCanViewPost( $post_id );
+
+		// 請求書番号を発行(+現在の販売価格を記録)
+		try {
+			$this->transaction_service->beginTransaction();
+
+			// 請求書を作成
+			$invoice = $this->createInvoice( $post_id, $chain_id, $token_address, $consumer_address );
+			// 請求書に対して署名を行う
+			$signed_data = $this->signInvoice( $invoice );
+
+			// クロール済みブロック番号を初期化
+			$this->init_crawled_block_number->handle( $chain_id->value() );
+
+			$this->transaction_service->commit();
+
+			return array(
+				'invoiceIdHex'    => $invoice->id()->hex(),
+				'nonce'           => $invoice->nonce()->value(),
+				'serverMessage'   => $signed_data->message()->value(),
+				'serverSignature' => $signed_data->signature()->value(),
+				'paymentAmount'   => $invoice->paymentAmount()->value(),
+			);
+		} catch ( \Throwable $e ) {
+			$this->transaction_service->rollback();
+			throw $e;
+		}
+	}
+
 
 	/** 請求書を作成します */
 	private function createInvoice( PostId $post_id, ChainId $chain_id, Address $payment_token_address, Address $consumer_address ): Invoice {
 
-		$payment_token  = $this->get_payment_token->handle( $chain_id, $payment_token_address ); // 支払トークン
+		$payment_token  = $this->token_repository->get( $chain_id, $payment_token_address ); // 支払トークン
 		$seller_address = $this->seller_repository->get()->address();
 		$selling_price  = $this->post_repository->get( $post_id )->sellingPrice();
 		if ( $selling_price === null ) {
@@ -102,7 +140,7 @@ class IssueInvoice {
 	}
 
 	/** 請求書に対して署名を行います */
-	private function signInvoice( Invoice $invoice ): SingInvoiceResult {
+	private function signInvoice( Invoice $invoice ): SignInvoiceResult {
 		// 署名用ウォレットで署名を行うためのメッセージを作成
 		$server_message = SigningMessage::from(
 			SolidityStrings::valueToHexString( $invoice->chainId()->value() )
@@ -121,33 +159,11 @@ class IssueInvoice {
 		$server_signer    = $this->server_signer_service->getServerSigner();
 		$server_signature = $this->wallet_service->signMessage( $server_signer, $server_message );
 
-		return new SingInvoiceResult( $server_message, $server_signature );
+		return new SignInvoiceResult( $server_message, $server_signature );
 	}
 }
 
-/**
- * 指定されたチェーンID、アドレスのトークン情報を取得します。
- *
- * @internal
- */
-class GetPaymentToken {
-	public function __construct( TokenRepository $token_repository ) {
-		$this->token_repository = $token_repository;
-	}
-
-	private TokenRepository $token_repository;
-
-	public function handle( ChainId $chain_id, Address $token_address ): Token {
-		$token = $this->token_repository->get( $chain_id, $token_address );
-		if ( is_null( $token ) || ! $token->isPayable() ) {
-			throw new \InvalidArgumentException( '[9213F631] The specified token is not payable.' );
-		}
-		return $token;
-	}
-}
-
-/** @internal */
-class SingInvoiceResult {
+class SignInvoiceResult {
 	public function __construct( SigningMessage $message, Signature $signature ) {
 		$this->message   = $message;
 		$this->signature = $signature;

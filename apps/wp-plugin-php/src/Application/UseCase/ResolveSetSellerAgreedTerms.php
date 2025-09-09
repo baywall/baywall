@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Entity\Seller;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
@@ -10,22 +11,27 @@ use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 use Cornix\Serendipity\Core\Infrastructure\Terms\SellerTermsProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 
-class SaveSeller {
+class ResolveSetSellerAgreedTerms {
 
+	private UserAccessChecker $user_access_checker;
 	private SellerRepository $seller_repository;
 	private SellerTermsProvider $seller_terms_provider;
 
 	public function __construct(
+		UserAccessChecker $user_access_checker,
 		SellerRepository $seller_repository,
 		SellerTermsProvider $seller_terms_provider
 	) {
+		$this->user_access_checker   = $user_access_checker;
 		$this->seller_repository     = $seller_repository;
 		$this->seller_terms_provider = $seller_terms_provider;
 	}
 
-	public function handle( int $agreed_terms_version_value, string $signature_value ): void {
-		$terms_version = TermsVersion::from( $agreed_terms_version_value );
-		$signature     = Signature::from( $signature_value );
+	public function handle( array $root_value, array $args ) {
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
+
+		$terms_version = TermsVersion::from( $args['version'] );
+		$signature     = Signature::from( $args['signature'] );
 
 		// 現在の販売者向け利用規約のバージョンと一致しない場合は例外を投げる
 		$current_version = $this->seller_terms_provider->currentVersion();
@@ -47,5 +53,7 @@ class SaveSeller {
 				$signature,
 			)
 		);
+
+		return true;
 	}
 }
