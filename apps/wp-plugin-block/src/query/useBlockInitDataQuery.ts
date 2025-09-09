@@ -2,6 +2,7 @@ import { useMemo } from '@wordpress/element';
 import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { usePostSettingQuery } from '../../types/gql/generated';
 import { SellableCurrency } from '../value-object/SellableCurrency';
+import { NetworkCategory } from '../value-object/NetworkCategory';
 
 export const useBlockInitDataQuery = () => {
 	const { data, ...rest } = usePostSettingQuery();
@@ -11,9 +12,9 @@ export const useBlockInitDataQuery = () => {
 			return undefined;
 		}
 
-		// 販売可能なネットワークカテゴリID一覧
-		const sellableNetworkCategoryIds = data.networkCategories.map( ( category ) =>
-			NetworkCategoryId.from( category.id )
+		// 販売可能なネットワークカテゴリ一覧
+		const sellableNetworkCategories = data.networkCategories.map( ( category ) =>
+			NetworkCategory.from( NetworkCategoryId.from( category.id ), category.name )
 		);
 
 		// 販売可能な通貨一覧
@@ -23,7 +24,7 @@ export const useBlockInitDataQuery = () => {
 			)
 		);
 
-		return { sellableNetworkCategoryIds, sellableCurrencies };
+		return { sellableNetworkCategories, sellableCurrencies };
 	}, [ data ] );
 
 	return { data: newData, ...rest };
