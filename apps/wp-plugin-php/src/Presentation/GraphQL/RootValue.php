@@ -23,7 +23,6 @@ use Cornix\Serendipity\Core\Application\UseCase\ResolveServerSigner;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSetSellerAgreedTerms;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveToken;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveTokens;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ResolverBase;
 use DI\Container;
 
 class RootValue {
@@ -34,7 +33,7 @@ class RootValue {
 	 */
 	public function get( Container $container ) {
 
-		/** @var array<string,ResolverBase|string> */
+		/** @var array<string,string> */
 		$resolvers = array(
 			// 非公開
 			'chain'                     => ResolveChain::class,
@@ -67,13 +66,8 @@ class RootValue {
 		foreach ( $resolvers as $field => $resolver ) {
 			$result[ $field ] = function ( array $root_value, array $args ) use ( $resolver, $container ) {
 				try {
-					if ( is_string( $resolver ) ) {
-						$resolver = $container->get( $resolver );
-						return $resolver->handle( $root_value, $args );
-					} else {
-						// TODO: 削除
-						return $resolver->resolve( $root_value, $args );
-					}
+					$resolver = $container->get( $resolver );
+					return $resolver->handle( $root_value, $args );
 				} catch ( \Throwable $e ) {
 					$container->get( AppLogger::class )->error( $e );
 					throw $e;
