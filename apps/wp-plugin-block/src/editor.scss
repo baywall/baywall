@@ -9,4 +9,10 @@
 		// SelectControlに`margin-bottom: 8px`が設定されているため、打ち消す
 		margin-bottom: 0 !important;
 	}
+
+	// `Twenty Twenty-One`テーマの時にselectのpaddingが指定されている影響で文字の上下が見切れるため、上下のpaddingを0にする
+	select {
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+	}
 }
