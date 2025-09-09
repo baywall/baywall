@@ -4,25 +4,26 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 
 class UserAccessProviderImpl implements UserAccessProvider {
 
 	/** @inheritdoc */
-	public function canViewPost( int $post_id ): bool {
+	public function canViewPost( PostId $post_id ): bool {
 		// current_user_can( 'read_post', $post_id ); だけで判定しようとしていたが、
 		// get_post_status( $post_id ) === 'publish' && wp_get_current_user()->ID === 0 の場合
 		// (ゲストユーザーのアクセス)の場合にfalseとなったため以下の判定処理で実装
 		if ( is_user_logged_in() ) {
-			return current_user_can( 'read_post', $post_id );
+			return current_user_can( 'read_post', $post_id->value() );
 		} else {
 			// ログインしていない場合は、公開されている投稿のみ閲覧可能
-			return 'publish' === get_post_status( $post_id );
+			return 'publish' === get_post_status( $post_id->value() );
 		}
 	}
 
 	/** @inheritdoc */
-	public function canEditPost( int $post_id ): bool {
-		return current_user_can( 'edit_post', $post_id );
+	public function canEditPost( PostId $post_id ): bool {
+		return current_user_can( 'edit_post', $post_id->value() );
 	}
 
 	/** @inheritdoc */
