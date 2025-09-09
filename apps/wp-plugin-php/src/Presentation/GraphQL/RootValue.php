@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Application\UseCase\ResolvePost;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveRequestPaidContentByNonce;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSaveChain;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveSellingContent;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveSellingPrice;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveToken;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveTokens;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ConsumerTermsVersionResolver;
@@ -21,7 +22,6 @@ use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SaveTokenResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ResolverBase;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SalesHistoriesResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SellerResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SellingPriceResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ServerSignerResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use DI\Container;
@@ -40,7 +40,7 @@ class RootValue {
 			'chain'                     => ResolveChain::class,
 			'networkCategory'           => ResolveNetworkCategory::class,
 			'sellingContent'            => ResolveSellingContent::class,
-			'sellingPrice'              => $container->get( SellingPriceResolver::class ),
+			'sellingPrice'              => ResolveSellingPrice::class,
 			'token'                     => ResolveToken::class,
 
 			// Query
