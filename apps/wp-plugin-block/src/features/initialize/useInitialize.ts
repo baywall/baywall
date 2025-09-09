@@ -31,12 +31,12 @@ const useInitSellingNetworkCategoryId = () => {
 			return;
 		}
 
-		if ( data.sellableNetworkCategoryIds.length === 0 ) {
+		if ( data.sellableNetworkCategories.length === 0 ) {
 			// 販売可能なネットワークが存在しない場合はnullを設定
 			setSellingNetworkCategoryId( null );
 		} else {
 			// 販売可能なネットワークが存在する場合は先頭のIDを設定
-			setSellingNetworkCategoryId( data.sellableNetworkCategoryIds[ 0 ] );
+			setSellingNetworkCategoryId( data.sellableNetworkCategories[ 0 ].id );
 		}
 	}, [ attributes.sellingNetworkCategoryId, data, sellingNetworkCategoryId, setSellingNetworkCategoryId ] );
 };

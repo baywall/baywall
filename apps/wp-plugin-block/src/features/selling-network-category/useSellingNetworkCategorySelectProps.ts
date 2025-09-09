@@ -41,12 +41,12 @@ const useOptions = (): NonNullable< SellingNetworkCategorySelectProps[ 'options'
 			return undefined;
 		}
 
-		const sellableNetworkCategoryIds = [ ...data.sellableNetworkCategoryIds ];
-		sellableNetworkCategoryIds.sort( ( a, b ) => a.value - b.value );
+		const sellableNetworkCategories = [ ...data.sellableNetworkCategories ];
+		sellableNetworkCategories.sort( ( a, b ) => a.id.value - b.id.value );
 
-		return sellableNetworkCategoryIds.map( ( networkCategoryId ) => ( {
-			label: networkCategoryId.value.toString(), // TODO: ネットワークカテゴリ名に変更
-			value: networkCategoryId.value.toString(),
+		return sellableNetworkCategories.map( ( networkCategory ) => ( {
+			label: networkCategory.name,
+			value: networkCategory.id.value.toString(),
 		} ) );
 	}, [ data ] );
 
