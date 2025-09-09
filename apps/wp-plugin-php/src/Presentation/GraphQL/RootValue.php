@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Application\UseCase\ResolveChain;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveChains;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveConsumerTermsVersion;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveCurrentSellerTerms;
+use Cornix\Serendipity\Core\Application\UseCase\ResolveIssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategories;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveNetworkCategory;
 use Cornix\Serendipity\Core\Application\UseCase\ResolvePost;
@@ -20,7 +21,6 @@ use Cornix\Serendipity\Core\Application\UseCase\ResolveServerSigner;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveToken;
 use Cornix\Serendipity\Core\Application\UseCase\ResolveTokens;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\GetErc20InfoResolver;
-use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\IssueInvoiceResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SaveTokenResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ResolverBase;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
@@ -55,7 +55,7 @@ class RootValue {
 			'tokens'                    => ResolveTokens::class,
 
 			// Mutation
-			'issueInvoice'              => $container->get( IssueInvoiceResolver::class ),
+			'issueInvoice'              => ResolveIssueInvoice::class,
 			'requestPaidContentByNonce' => ResolveRequestPaidContentByNonce::class,
 			'getErc20Info'              => $container->get( GetErc20InfoResolver::class ),
 			'saveChain'                 => ResolveSaveChain::class,

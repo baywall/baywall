@@ -1,14 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
 use Cornix\Serendipity\Core\Application\UseCase\IssueInvoice;
 
-class IssueInvoiceResolver extends ResolverBase {
+class ResolveIssueInvoice {
+
+	private IssueInvoice $issue_invoice;
+	private InitCrawledBlockNumber $init_crawled_block_number;
+	private UserAccessChecker $user_access_checker;
+	private TransactionService $transaction_service;
 
 	public function __construct(
 		IssueInvoice $issue_invoice,
@@ -22,14 +27,6 @@ class IssueInvoiceResolver extends ResolverBase {
 		$this->transaction_service       = $transaction_service;
 	}
 
-	private IssueInvoice $issue_invoice;
-	private InitCrawledBlockNumber $init_crawled_block_number;
-	private UserAccessChecker $user_access_checker;
-	private TransactionService $transaction_service;
-
-	/**
-	 * #[\Override]
-	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
 		$post_id = $args['postId'];
