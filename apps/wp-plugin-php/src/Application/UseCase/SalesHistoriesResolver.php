@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Application\Dto\SalesHistoryDto;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\GetSalesHistoryDtos;
 
-class SalesHistoriesResolver extends ResolverBase {
+class ResolveSalesHistories {
 
 	private UserAccessChecker $user_access_checker;
 	private GetSalesHistoryDtos $get_sales_history_dtos;
@@ -20,11 +20,6 @@ class SalesHistoriesResolver extends ResolverBase {
 		$this->get_sales_history_dtos = $get_sales_history_dtos;
 	}
 
-	/**
-	 * #[\Override]
-	 *
-	 * @return array
-	 */
 	public function resolve( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
