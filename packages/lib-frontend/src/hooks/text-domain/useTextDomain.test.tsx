@@ -1,6 +1,6 @@
 import { renderHook } from '../../jest-lib';
 import { useTextDomain } from './useTextDomain';
-import { useGraphQLUrl } from '../../hooks/useGraphQLUrl';
+import { useGraphQLUrl } from '../useGraphQLUrl';
 
 jest.mock( '../../hooks/useGraphQLUrl' );
 
