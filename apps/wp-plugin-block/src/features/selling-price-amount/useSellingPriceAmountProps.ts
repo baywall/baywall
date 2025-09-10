@@ -1,4 +1,5 @@
 import { useEffect, useState } from '@wordpress/element';
+import { useLogger } from '@serendipity/lib-frontend';
 import { Amount } from '@serendipity/lib-value-object';
 import { type SellingPriceAmountProps } from './SellingPriceAmount';
 import { useSellingPriceAmount } from '../../provider/selling-price-amount/useSellingPriceAmount';
@@ -29,6 +30,7 @@ const useOnChange = (
 	setValue: React.Dispatch< React.SetStateAction< string | undefined > >
 ): NonNullable< SellingPriceAmountProps[ 'onChange' ] > => {
 	const { setSellingPriceAmount } = useSellingPriceAmount();
+	const logger = useLogger();
 
 	return ( e ) => {
 		const value = e.target.value;
@@ -37,7 +39,7 @@ const useOnChange = (
 			setSellingPriceAmount( Amount.from( value ) ); // コンテキストに保存する値（Amount）を更新
 		} catch ( err ) {
 			setSellingPriceAmount( null ); // 変換できない場合はnullをセット
-			throw err; // TODO: ログ出力に置き換え
+			logger.error( err );
 		}
 	};
 };
