@@ -1,5 +1,5 @@
 import { useGraphQLUrl } from './useGraphQLUrl';
-import { PhpVarName } from '../repository/PhpVarName';
+import { PhpVarNameProvider } from '../repository/PhpVarNameProvider';
 import { render } from '../../jest-lib';
 import { PhpVar } from '../../types/PhpVar';
 
@@ -15,7 +15,7 @@ const Sut: React.FC = () => {
 };
 
 const setGlobalVar = ( graphqlUrl: string, wpRestNonce: string ) => {
-	const varName = new PhpVarName().get();
+	const varName = new PhpVarNameProvider().get();
 	const globalVar: PhpVar = {
 		graphqlUrl,
 		wpRestNonce,
@@ -25,7 +25,7 @@ const setGlobalVar = ( graphqlUrl: string, wpRestNonce: string ) => {
 
 describe( '[975F9282] useGraphQLUrl', () => {
 	const cleanup = () => {
-		( global as any )[ new PhpVarName().get() ] = undefined;
+		( global as any )[ new PhpVarNameProvider().get() ] = undefined;
 	};
 	beforeEach( cleanup );
 	afterEach( cleanup );
