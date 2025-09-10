@@ -2,7 +2,7 @@ import { renderHook } from '../../jest-lib';
 import { useTextDomain } from './useTextDomain';
 import { useGraphQLUrl } from '../graphql-url/useGraphQLUrl';
 
-jest.mock( '../../hooks/useGraphQLUrl' );
+jest.mock( '../graphql-url/useGraphQLUrl' );
 
 describe( '[55E68644] useTextDomain', () => {
 	/**
