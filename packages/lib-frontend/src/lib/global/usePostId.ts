@@ -10,7 +10,7 @@ export const usePostId = (): number | null | undefined => {
 	const phpVar = usePhpVar();
 
 	useEffect( () => {
-		if ( phpVar === null || phpVar.postId === undefined ) {
+		if ( phpVar === null || phpVar.postId === null ) {
 			setPostId( null );
 		} else if ( typeof phpVar.postId === 'number' ) {
 			setPostId( phpVar.postId );
