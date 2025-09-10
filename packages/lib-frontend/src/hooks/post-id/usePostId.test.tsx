@@ -1,10 +1,10 @@
 import { usePostId } from './usePostId';
-import { PhpVarName } from '../repository/PhpVarName';
+import { PhpVarNameProvider } from '../../lib/php-var/PhpVarNameProvider';
 import { renderHook } from '../../jest-lib';
 import { PhpVar } from '../../types/PhpVar';
 
-const setGlobalVar = ( postId: number | undefined ) => {
-	const varName = new PhpVarName().get();
+const setGlobalVar = ( postId: number | null ) => {
+	const varName = new PhpVarNameProvider().get();
 	const globalVar: PhpVar = {
 		graphqlUrl: 'https://example.com/graphql',
 		wpRestNonce: 'abcde01234',
@@ -16,7 +16,7 @@ const setGlobalVar = ( postId: number | undefined ) => {
 describe( '[D78FB2CE] usePostId', () => {
 	const cleanup = () => {
 		// document.head.innerHTML = '';
-		( global as any )[ new PhpVarName().get() ] = undefined;
+		( global as any )[ new PhpVarNameProvider().get() ] = undefined;
 	};
 	beforeEach( cleanup );
 	afterEach( cleanup );
@@ -40,7 +40,7 @@ describe( '[D78FB2CE] usePostId', () => {
 	 */
 	it( '[164C4EEB] usePostId - postId does not exist', () => {
 		// ARRANGE
-		setGlobalVar( undefined );
+		setGlobalVar( null );
 
 		// ACT
 		const { result } = renderHook( () => usePostId() );
