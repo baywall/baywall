@@ -124,7 +124,9 @@ class WidgetParser {
 		$blocks = array_values( $blocks );
 
 		// ウィジェットは1投稿につき1つまでしか存在しない
-		assert( count( $blocks ) <= 1, '[FD104DDE] Widget block must be only one in a post' );
+		if ( 1 < count( $blocks ) ) {
+			throw new \RuntimeException( '[FD104DDE] Widget block must be only one in a post. ' . count( $blocks ) . ' found.' );
+		}
 
 		// ウィジェットが存在しない場合はnullを返す
 		return 0 === count( $blocks ) ? null : $blocks[0];
