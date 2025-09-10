@@ -1,5 +1,6 @@
 import { useMemo } from '@wordpress/element';
 import { NoticeList } from '@wordpress/components';
+import { useLogger } from '@serendipity/lib-frontend';
 import { TextProvider } from '../../lib/i18n/TextProvider';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 
@@ -13,6 +14,7 @@ type ApiErrorNotificationProps = Omit< React.ComponentProps< typeof NoticeList >
  */
 export const ApiErrorNotification: React.FC< ApiErrorNotificationProps > = ( props ) => {
 	const { isError, error } = useBlockInitDataQuery();
+	const logger = useLogger();
 
 	const notices: Notices = useMemo( () => {
 		if ( isError === false ) {
@@ -20,12 +22,11 @@ export const ApiErrorNotification: React.FC< ApiErrorNotificationProps > = ( pro
 			return [];
 		}
 
-		// TODO: loggerでログを出す
-		console.error( '[0E9ECDBB]', error );
+		logger.error( '[0E9ECDBB]', error );
 		if ( error instanceof Error ) {
-			console.error( '[CDDFE276]', error.name );
-			console.error( '[F9C3ABC9]', error.message );
-			console.error( '[2C896DFD]', error.stack );
+			logger.error( '[CDDFE276]', error.name );
+			logger.error( '[F9C3ABC9]', error.message );
+			logger.error( '[2C896DFD]', error.stack );
 		}
 
 		let message = new TextProvider().unknownErrorMessage;
