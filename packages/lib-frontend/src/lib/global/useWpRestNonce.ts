@@ -1,4 +1,4 @@
-import { usePhpVar } from './_usePhpVar';
+import { usePhpVar } from '../../hooks/php-var/usePhpVar';
 
 /**
  * REST APIにアクセスする際のNonceを取得します。

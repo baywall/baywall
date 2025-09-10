@@ -1,7 +1,6 @@
-import { useGraphQLUrl } from '../../hooks/useGraphQLUrl';
-import { useWpRestNonce } from '../../lib/global/useWpRestNonce';
 import { fetcher } from './codegen/_fetcher';
 import { createRequestInit } from './_createRequestInit';
+import { usePhpVar } from '../../hooks/php-var/usePhpVar';
 
 /**
  * @param      query
@@ -17,8 +16,10 @@ export const useFetcher = < TData, TVariables >( query: string, variables?: TVar
 };
 
 const useFetchParams = () => {
-	const endpoint = useGraphQLUrl();
-	const nonce = useWpRestNonce();
+	const phpVar = usePhpVar();
+
+	const endpoint = phpVar?.graphqlUrl;
+	const nonce = phpVar?.wpRestNonce;
 
 	if ( ! endpoint || ! nonce ) {
 		throw new Error( `[11D62E9A] endpoint: ${ endpoint }, nonce: ${ nonce }` );
