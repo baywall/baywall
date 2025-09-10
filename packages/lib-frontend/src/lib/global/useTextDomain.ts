@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useGraphQLUrl } from './useGraphQLUrl';
+import { useGraphQLUrl } from '../../hooks/useGraphQLUrl';
 
 export const useTextDomain = () => {
 	const [ textDomain, setTextDomain ] = useState< string | null | undefined >( undefined );

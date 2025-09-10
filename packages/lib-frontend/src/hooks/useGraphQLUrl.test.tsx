@@ -1,7 +1,7 @@
 import { useGraphQLUrl } from './useGraphQLUrl';
-import { PhpVarNameProvider } from '../php-var/PhpVarNameProvider';
-import { render } from '../../jest-lib';
-import { PhpVar } from '../../types/PhpVar';
+import { PhpVarNameProvider } from '../lib/php-var/PhpVarNameProvider';
+import { render } from '../jest-lib';
+import { PhpVar } from '../types/PhpVar';
 
 const TEST_ID = '61D2F697';
 
