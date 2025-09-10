@@ -1,7 +1,7 @@
 import { usePostId } from './usePostId';
-import { PhpVarNameProvider } from '../php-var/PhpVarNameProvider';
-import { renderHook } from '../../jest-lib';
-import { PhpVar } from '../../types/PhpVar';
+import { PhpVarNameProvider } from '../lib/php-var/PhpVarNameProvider';
+import { renderHook } from '../jest-lib';
+import { PhpVar } from '../types/PhpVar';
 
 const setGlobalVar = ( postId: number | null ) => {
 	const varName = new PhpVarNameProvider().get();
