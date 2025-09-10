@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { getPhpVar } from '../lib/php-var/getPhpVar';
+import { getPhpVar } from '../../lib/php-var/getPhpVar';
 
 /** 投稿IDを取得します。 */
 export const usePostId = (): number | null | undefined => {
