@@ -1,6 +1,6 @@
-import { fetcher } from './codegen/_fetcher';
-import { createRequestInit } from './_createRequestInit';
+import { createRequestInit } from '../../lib/graphql/_createRequestInit';
 import { usePhpVar } from '../../hooks/php-var/usePhpVar';
+import { fetcher } from '../../lib/graphql/codegen/_fetcher';
 
 /**
  * @param      query

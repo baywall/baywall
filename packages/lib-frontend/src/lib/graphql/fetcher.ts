@@ -1,4 +1,4 @@
-import { getPhpVar } from '../../lib/php-var/getPhpVar';
+import { getPhpVar } from '../php-var/getPhpVar';
 import { fetcher as _fetcher } from './codegen/_fetcher';
 import { createRequestInit } from './_createRequestInit';
 
