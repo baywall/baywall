@@ -3,7 +3,7 @@ import { PhpVarNameProvider } from '../php-var/PhpVarNameProvider';
 import { renderHook } from '../../jest-lib';
 import { PhpVar } from '../../types/PhpVar';
 
-const setGlobalVar = ( postId: number | undefined ) => {
+const setGlobalVar = ( postId: number | null ) => {
 	const varName = new PhpVarNameProvider().get();
 	const globalVar: PhpVar = {
 		graphqlUrl: 'https://example.com/graphql',
@@ -40,7 +40,7 @@ describe( '[D78FB2CE] usePostId', () => {
 	 */
 	it( '[164C4EEB] usePostId - postId does not exist', () => {
 		// ARRANGE
-		setGlobalVar( undefined );
+		setGlobalVar( null );
 
 		// ACT
 		const { result } = renderHook( () => usePostId() );
