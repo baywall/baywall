@@ -42,11 +42,9 @@ class PhpVarData {
 			'graphqlUrl'  => $graphql_url,
 		);
 
-		// 現在の投稿IDが取得できる場合は追加
-		$post_id = get_the_ID();
-		if ( false !== $post_id ) {
-			$result['postId'] = $post_id;
-		}
+		// 現在の投稿IDが取得できる場合は追加(取得できなかった場合はnull)
+		$post_id          = get_the_ID();
+		$result['postId'] = false === $post_id ? null : $post_id;
 
 		return $result;
 	}
