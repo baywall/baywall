@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { getPhpVar } from '../lib/php-var/getPhpVar';
+import { getPhpVar } from '../../lib/php-var/getPhpVar';
 
 /** GraphQLのURLを取得します */
 export const useGraphQLUrl = (): string | null | undefined => {
