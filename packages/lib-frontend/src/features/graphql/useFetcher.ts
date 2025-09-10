@@ -1,4 +1,4 @@
-import { useGraphQLUrl } from '../../lib/global/useGraphQLUrl';
+import { useGraphQLUrl } from '../../hooks/useGraphQLUrl';
 import { useWpRestNonce } from '../../lib/global/useWpRestNonce';
 import { fetcher } from './codegen/_fetcher';
 import { createRequestInit } from './_createRequestInit';
