@@ -1,5 +1,5 @@
 import { useGraphQLUrl } from './useGraphQLUrl';
-import { PhpVarNameProvider } from '../repository/PhpVarNameProvider';
+import { PhpVarNameProvider } from '../php-var/PhpVarNameProvider';
 import { render } from '../../jest-lib';
 import { PhpVar } from '../../types/PhpVar';
 

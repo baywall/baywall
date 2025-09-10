@@ -1,5 +1,5 @@
 import { useWpRestNonce } from './useWpRestNonce';
-import { PhpVarNameProvider } from '../repository/PhpVarNameProvider';
+import { PhpVarNameProvider } from '../php-var/PhpVarNameProvider';
 import { render, renderHook } from '../../jest-lib';
 import { PhpVar } from '../../types/PhpVar';
 

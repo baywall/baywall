@@ -1,5 +1,5 @@
 import { usePostId } from './usePostId';
-import { PhpVarNameProvider } from '../repository/PhpVarNameProvider';
+import { PhpVarNameProvider } from '../php-var/PhpVarNameProvider';
 import { renderHook } from '../../jest-lib';
 import { PhpVar } from '../../types/PhpVar';
 
