@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useGraphQLUrl } from '../useGraphQLUrl';
+import { useGraphQLUrl } from '../graphql-url/useGraphQLUrl';
 
 export const useTextDomain = (): string | null | undefined => {
 	const graphqlUrl = useGraphQLUrl();
