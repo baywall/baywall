@@ -43,7 +43,7 @@ export const ApiErrorNotification: React.FC< ApiErrorNotificationProps > = ( pro
 			content: message,
 		};
 		return [ notice ];
-	}, [ isError, error ] );
+	}, [ logger, isError, error ] );
 
 	return <NoticeList { ...props } notices={ notices } />;
 };
