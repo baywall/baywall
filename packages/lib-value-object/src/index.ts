@@ -5,6 +5,7 @@ export * from './value-object/BlockExplorerBaseUrl';
 export * from './value-object/BlockExplorerTxUrl';
 export * from './value-object/ChainId';
 export * from './value-object/NetworkCategoryId';
+export * from './value-object/PostId';
 export * from './value-object/Price';
 export * from './value-object/Symbol';
 export * from './value-object/TransactionHash';
