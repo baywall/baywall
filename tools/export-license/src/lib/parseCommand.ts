@@ -2,8 +2,11 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 
 export type CommandArgsType = {
+	/** 分析対象のディレクトリまたはファイル */
 	start: string;
+	/** ライセンスファイル一式を出力するディレクトリ */
 	output: string;
+	/** ライセンス情報が記載されたjsonファイルの出力先 */
 	metaFile: string;
 };
 

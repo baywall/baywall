@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ModuleInfos } from 'license-checker';
-import { getVendorDirName } from './getVendorDirName';
 
 /**
  * ライセンスファイルをコピーします。
@@ -21,7 +20,8 @@ export const copyLicenseFiles = ( packages: ModuleInfos, start: string, output: 
 		}
 
 		// コピー先ライセンスファイルのパスを取得
-		const dst = src.replace( path.join( start, getVendorDirName( start ) ), output );
+		const dst = path.join( output, name, path.basename( src ) );
+
 		// ディレクトリが存在しない場合は作成
 		const dir = path.dirname( dst );
 		if ( ! fs.existsSync( dir ) ) {
