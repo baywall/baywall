@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository\Name;
 
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 
-class OptionName {
+class OptionNameProvider {
 
 	/**
 	 * 指定されたオプション名に接頭辞をつけて返します
