@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase;
+namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
 use Cornix\Serendipity\Core\Application\Service\ChainIdChecker;
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
