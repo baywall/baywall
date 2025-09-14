@@ -6,16 +6,17 @@ use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
+use DI\Container;
 
 /**
  * 投稿編集画面のフック(投稿新規作成画面を含む)
  */
 class PostEditHook extends HookBase {
 
-	private HandleNameProvider $handle_name_provider;
+	private Container $container;
 
-	public function __construct( HandleNameProvider $handle_name_provider ) {
-		$this->handle_name_provider = $handle_name_provider;
+	public function __construct( Container $container ) {
+		$this->container = $container;
 	}
 
 	// ブロックスクリプトの出力先ディレクトリ
@@ -32,8 +33,10 @@ class PostEditHook extends HookBase {
 			return;
 		}
 
+		$handle_name_provider = $this->container->get( HandleNameProvider::class );
+
 		// ブロックエディタで使用するスクリプトを登録するときのハンドル名を取得。
-		$handle = $this->handle_name_provider->blockScript();
+		$handle = $handle_name_provider->blockScript();
 
 		// アセットファイルを読み込む。
 		$asset_file_path = ( new ProjectFile( self::DIST_DIR . '/index.asset.php' ) )->toLocalPath();

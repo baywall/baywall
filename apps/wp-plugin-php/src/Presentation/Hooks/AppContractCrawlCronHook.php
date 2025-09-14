@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Repository\Name\CronActionName;
 use Cornix\Serendipity\Core\Repository\PluginInfo;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
+use DI\Container;
 
 /**
  * AppContractのイベントクロール処理をwp_cronを使って登録するクラス。
@@ -18,10 +19,10 @@ use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
  */
 class AppContractCrawlCronHook extends HookBase {
 
-	private CrawlAllAppContract $crawl_all_app_contract;
+	private Container $container;
 
-	public function __construct( CrawlAllAppContract $crawl_all_app_contract ) {
-		$this->crawl_all_app_contract = $crawl_all_app_contract;
+	public function __construct( Container $container ) {
+		$this->container = $container;
 	}
 
 	public function register(): void {
@@ -66,6 +67,6 @@ class AppContractCrawlCronHook extends HookBase {
 	}
 
 	public function execute(): void {
-		$this->crawl_all_app_contract->handle();
+		$this->container->get( CrawlAllAppContract::class )->handle();
 	}
 }

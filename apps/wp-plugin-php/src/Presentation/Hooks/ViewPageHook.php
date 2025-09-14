@@ -6,13 +6,14 @@ use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
+use DI\Container;
 
 class ViewPageHook extends HookBase {
 
-	private HandleNameProvider $handle_name_provider;
+	private Container $container;
 
-	public function __construct( HandleNameProvider $handle_name_provider ) {
-		$this->handle_name_provider = $handle_name_provider;
+	public function __construct( Container $container ) {
+		$this->container = $container;
 	}
 
 	public function register(): void {
@@ -25,8 +26,10 @@ class ViewPageHook extends HookBase {
 			return;
 		}
 
+		$handle_name_provider = $this->container->get( HandleNameProvider::class );
+
 		// ゲストユーザー(一般の訪問者)表示用の登録する際のハンドル名を取得
-		$handle_name = $this->handle_name_provider->viewScript();
+		$handle_name = $handle_name_provider->viewScript();
 
 		// アセットファイルを読み込む
 		$asset_file_path = ( new ProjectFile( 'public/view/index.asset.php' ) )->toLocalPath();
@@ -57,9 +60,11 @@ class ViewPageHook extends HookBase {
 		// WordPress 6.8.2 での動作が確認できたため`wp_enqueue_script`側の対応はそのままとする。
 		// https://note.com/hapiclo_leaves/n/n044526d7e82f
 
+		$handle_name_provider = $this->container->get( HandleNameProvider::class );
+
 		// view用のスクリプトの場合、`defer`属性を追加する
 		// ※ すでにフッターに出力する設定を`wp_enqueue_script`で行っているので効果は薄い
-		if ( $this->handle_name_provider->viewScript() === $handle ) {
+		if ( $handle_name_provider->viewScript() === $handle ) {
 			$result = preg_replace(
 				'/<script(.*?)src=[\'"]' . preg_quote( $src, '/' ) . '[\'"](.*?)>/i',
 				'<script$1src="' . esc_url( $src ) . '" defer$2>',
