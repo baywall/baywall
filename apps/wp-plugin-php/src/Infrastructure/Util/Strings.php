@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Lib\Strings;
+
+namespace Cornix\Serendipity\Core\Infrastructure\Util;
 
 class Strings {
 	private static $IS_MBSTRING_ENABLED = null;

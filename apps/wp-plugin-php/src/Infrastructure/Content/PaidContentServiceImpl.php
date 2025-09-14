@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Content;
 use Cornix\Serendipity\Core\Application\Service\PaidContentService;
 use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
 use Cornix\Serendipity\Core\Infrastructure\Format\HtmlFormat;
-use Cornix\Serendipity\Core\Lib\Strings\Strings;
+use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
 
 class PaidContentServiceImpl implements PaidContentService {
 
