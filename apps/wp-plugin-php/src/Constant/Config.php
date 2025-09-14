@@ -17,6 +17,13 @@ class Config {
 	/** `block.json`へのパス */
 	public const BLOCK_JSON_PATH = self::ROOT_DIR . '/build/block/block.json';
 
+	/** Gutenbergブロックで設定された販売ネットワークカテゴリIDの属性名 */
+	public const BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID = 'sellingNetworkCategoryId';
+	/** Gutenbergブロックで設定された販売価格の金額の属性名 */
+	public const BLOCK_ATTR_NAME_SELLING_AMOUNT = 'sellingAmount';
+	/** Gutenbergブロックで設定された販売価格の通貨の属性名 */
+	public const BLOCK_ATTR_NAME_SELLING_SYMBOL = 'sellingSymbol';
+
 	/**
 	 * PHPから渡される変数名
 	 * ※ TypeScript側と整合性を取ること
