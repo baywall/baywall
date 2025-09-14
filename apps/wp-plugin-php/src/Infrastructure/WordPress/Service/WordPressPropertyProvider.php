@@ -8,7 +8,8 @@ use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 /**
  * WordPressの設定情報を取得するクラス。
  */
-class WpPropertyProvider {
+// ※ このクラスはWordPressから情報を取得するためのクラスなので、WpPropertyProviderという名前を避けています。
+class WordPressPropertyProvider {
 	/**
 	 * 指定したIDの投稿が公開されているかどうかを返します。
 	 *
