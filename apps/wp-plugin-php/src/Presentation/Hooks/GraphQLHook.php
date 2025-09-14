@@ -6,13 +6,14 @@ use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
+use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
 use GraphQL\GraphQL;
 
 /**
  * GraphQLのAPI登録
  */
-class GraphQLHook {
+class GraphQLHook extends HookBase {
 
 	public function __construct( RestProperty $rest_property, Container $container ) {
 		$this->rest_property = $rest_property;

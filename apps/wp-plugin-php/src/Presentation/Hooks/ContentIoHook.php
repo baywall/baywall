@@ -14,6 +14,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\BlockNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\ClassNameProvider;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
+use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 
 /**
  * 投稿内容を保存、または取得時のhooksを登録するクラス
@@ -23,7 +24,7 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
  *
  * @package Cornix\Serendipity\Core\Hook\Post
  */
-class ContentIoHook {
+class ContentIoHook extends HookBase {
 
 	public function __construct(
 		PostRepository $post_repository,

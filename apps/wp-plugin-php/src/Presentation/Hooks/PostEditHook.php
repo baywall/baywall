@@ -4,12 +4,13 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
+use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
 
 /**
  * 投稿編集画面のフック(投稿新規作成画面を含む)
  */
-class PostEditHook {
+class PostEditHook extends HookBase {
 
 	private HandleNameProvider $handle_name_provider;
 

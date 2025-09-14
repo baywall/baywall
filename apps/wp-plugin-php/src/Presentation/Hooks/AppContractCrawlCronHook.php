@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Application\UseCase\CrawlAllAppContract;
 use Cornix\Serendipity\Core\Repository\Name\CronActionName;
 use Cornix\Serendipity\Core\Repository\PluginInfo;
 use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 
 /**
  * AppContractのイベントクロール処理をwp_cronを使って登録するクラス。
@@ -15,7 +16,7 @@ use Cornix\Serendipity\Core\Constant\Config;
  * `wp_schedule_event`では、デフォルトで1時間に1回が一番短いサイクル。
  * `cron_schedules`フィルタで追加は可能だが、他プラグインとの競合等を考慮し`wp_schedule_single_event`を毎回登録する方法を採用。
  */
-class AppContractCrawlCronHook {
+class AppContractCrawlCronHook extends HookBase {
 
 	private CrawlAllAppContract $crawl_all_app_contract;
 
