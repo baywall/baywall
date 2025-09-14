@@ -8,14 +8,14 @@ use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nText;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nTextProvider;
 
 class NetworkCategoryRepositoryImpl implements NetworkCategoryRepository {
 
 	private ChainTable $chain_table;
-	private I18nText $i18n;
+	private I18nTextProvider $i18n;
 
-	public function __construct( ChainTable $chain_table, I18nText $i18n ) {
+	public function __construct( ChainTable $chain_table, I18nTextProvider $i18n ) {
 		$this->chain_table = $chain_table;
 		$this->i18n        = $i18n;
 	}
