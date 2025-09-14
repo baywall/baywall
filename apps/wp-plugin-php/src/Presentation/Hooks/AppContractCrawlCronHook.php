@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\UseCase\CrawlAllAppContract;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\CronActionName;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\CronActionNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
@@ -27,7 +27,7 @@ class AppContractCrawlCronHook extends HookBase {
 
 	public function register(): void {
 		// Cronアクション名を取得
-		$action_name = $this->container->get( CronActionName::class )->appContractCrawl();
+		$action_name = $this->container->get( CronActionNameProvider::class )->appContractCrawl();
 
 		// Appコントラクトのログをクロールするアクションを追加
 		add_action( $action_name, array( $this, 'execute' ) );
