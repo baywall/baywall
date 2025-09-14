@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\SellerTable;
 
-class SellerRepositoryImpl implements SellerRepository {
+class WpSellerRepository implements SellerRepository {
 
 	private SellerTable $seller_table;
 

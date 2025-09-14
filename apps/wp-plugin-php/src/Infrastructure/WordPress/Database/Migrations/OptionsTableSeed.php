@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\LogLevelProviderImpl;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use wpdb;
 
@@ -32,10 +32,10 @@ class OptionsTableSeed extends MigratorBase {
 /** @internal */
 class OptionsTableSeed_0_0_1 extends MigrationBase {
 
-	public function __construct( LogLevelProviderImpl $log_level_provider ) {
+	public function __construct( WpLogLevelProvider $log_level_provider ) {
 		$this->log_level_provider = $log_level_provider;
 	}
-	private LogLevelProviderImpl $log_level_provider;
+	private WpLogLevelProvider $log_level_provider;
 
 	public function up(): void {
 		$is_debug = defined( 'WP_DEBUG' ) && WP_DEBUG;

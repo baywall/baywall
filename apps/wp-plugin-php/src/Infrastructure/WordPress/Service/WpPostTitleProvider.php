@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 
-class PostTitleProviderImpl implements PostTitleProvider {
+class WpPostTitleProvider implements PostTitleProvider {
 
 	/** @inheritdoc */
 	public function getPostTitle( PostId $post_id ): ?string {

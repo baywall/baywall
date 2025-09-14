@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
-class TokenRepositoryImpl implements TokenRepository {
+class WpTokenRepository implements TokenRepository {
 
 	public function __construct( TokenTable $token_table ) {
 		$this->token_table = $token_table;
