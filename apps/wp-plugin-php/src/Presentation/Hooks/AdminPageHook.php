@@ -8,15 +8,14 @@ use Cornix\Serendipity\Core\Repository\I18nText;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\SlugProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
+use DI\Container;
 
 class AdminPageHook extends HookBase {
 
-	private HandleNameProvider $handle_name_provider;
-	private SlugProvider $slug_provider;
+	private Container $container;
 
-	public function __construct( HandleNameProvider $handle_name_provider, SlugProvider $slug_provider ) {
-		$this->handle_name_provider = $handle_name_provider;
-		$this->slug_provider        = $slug_provider;
+	public function __construct( Container $container ) {
+		$this->container = $container;
 	}
 
 	public function register(): void {
@@ -30,7 +29,8 @@ class AdminPageHook extends HookBase {
 	public function addActionAdminMenu(): void {
 		assert( is_admin() );
 
-		$i18n = new I18nText();
+		$i18n          = $this->container->get( I18nText::class );
+		$slug_provider = $this->container->get( SlugProvider::class );
 
 		$capability    = 'manage_options'; // ユーザー権限(`manage_options`は、管理画面の`設定`へアクセス可能な権限)
 		$page_callback = function () {
@@ -43,7 +43,7 @@ class AdminPageHook extends HookBase {
 			$i18n->pluginName(),    // メニューが表示された際のページのタイトルタグに表示されるテキスト（ブラウザのタブに表示されるテキスト）
 			$i18n->pluginName(),    // 管理画面のメニューに表示されるテキスト
 			$capability,            // ユーザー権限
-			$this->slug_provider->adminMenuRoot(), // メニューのスラッグ
+			$slug_provider->adminMenuRoot(), // メニューのスラッグ
 			$page_callback,
 			'dashicons-admin-generic',  // メニューに表示されるアイコン
 		);
@@ -55,8 +55,11 @@ class AdminPageHook extends HookBase {
 	public function addActionAdminEnqueueScripts(): void {
 		assert( is_admin() );
 
+		$handle_name_provider = $this->container->get( HandleNameProvider::class );
+		$php_var_exporter     = $this->container->get( PhpVarExporter::class );
+
 		// 管理画面用のスクリプトを登録する際のハンドル名を取得
-		$handle_name = $this->handle_name_provider->adminScript();
+		$handle_name = $handle_name_provider->adminScript();
 
 		// アセットファイルを読み込む
 		$asset_file_path = ( new ProjectFile( 'public/admin/index.asset.php' ) )->toLocalPath();
@@ -72,6 +75,6 @@ class AdminPageHook extends HookBase {
 		);
 
 		// インラインスクリプトを追加
-		( new PhpVarExporter() )->addInlineScript( $handle_name );
+		$php_var_exporter->addInlineScript( $handle_name );
 	}
 }
