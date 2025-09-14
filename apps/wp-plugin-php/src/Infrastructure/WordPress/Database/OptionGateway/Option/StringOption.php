@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Option;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
 
 class StringOption {
 	public function __construct( string $option_key_name ) {
