@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\Name;
 
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
+
 class CronActionName {
 
 	private static function getPrefix(): string {
-		return ( new Prefix() )->cronActionNamePrefix();
+		return ( new PrefixProvider() )->cronActionName();
 	}
 
 	/**
