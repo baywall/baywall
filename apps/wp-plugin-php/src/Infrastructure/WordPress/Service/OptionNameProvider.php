@@ -7,18 +7,16 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 
 class OptionNameProvider {
 
-	/**
-	 * 指定されたオプション名に接頭辞をつけて返します
-	 * 作成するオプション名はこのメソッドを使用してください
-	 */
-	private function addPrefix( string $option_name ): string {
-		return ( new PrefixProvider() )->optionKey() . $option_name;
+	private string $prefix;
+
+	public function __construct( PrefixProvider $prefixProvider ) {
+		$this->prefix = $prefixProvider->optionKey();
 	}
 
 	/**
 	 * インストールされたプラグインのバージョン
 	 */
 	public function pluginVersion(): string {
-		return $this->addPrefix( 'plugin_version' );
+		return $this->prefix . 'plugin_version';
 	}
 }
