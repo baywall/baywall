@@ -1,31 +1,27 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Presentation;
+namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
+use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
 use GraphQL\GraphQL;
 
 /**
  * GraphQLのAPI登録
  */
-class GraphQLHook {
+class GraphQLHook extends HookBase {
 
-	public function __construct( RestProperty $rest_property, Container $container ) {
-		$this->rest_property = $rest_property;
+	private Container $container;
+	private ?RestProperty $rest_property;
+
+	public function __construct( Container $container, ?RestProperty $rest_property = null ) {
 		$this->container     = $container;
-		$this->app_logger    = $container->get( AppLogger::class );
+		$this->rest_property = $rest_property;
 	}
-
-	/** @var RestProperty */
-	private $rest_property;
-	/** @var Container */
-	private $container;
-	/** @var AppLogger */
-	private $app_logger;
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'addActionRestApiInit' ) );
@@ -33,10 +29,12 @@ class GraphQLHook {
 
 	public function addActionRestApiInit(): void {
 
+		$rest_property = $this->rest_property ?? $this->container->get( RestProperty::class );
+
 		// GraphQLのエンドポイントを登録
 		$success = register_rest_route(
-			$this->rest_property->namespace(),
-			$this->rest_property->graphQlRoute(),
+			$rest_property->namespace(),
+			$rest_property->graphQlRoute(),
 			array(
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->callback( $request ),
@@ -49,6 +47,8 @@ class GraphQLHook {
 
 	public function callback( \WP_REST_Request $request ) {
 
+		$app_logger = $this->container->get( AppLogger::class );
+
 		// リクエストボディをデコード
 		$input           = json_decode( $request->get_body(), true );
 		$query           = $input['query'];
@@ -60,9 +60,9 @@ class GraphQLHook {
 		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values )
 			// https://webonyx.github.io/graphql-php/error-handling/#custom-error-handling-and-formatting
 			->setErrorsHandler(
-				function ( array $errors, callable $formatter ): array {
+				function ( array $errors, callable $formatter ) use ( $app_logger ): array {
 					foreach ( $errors as $error ) {
-						$this->app_logger->error( $error ); // エラーログを出力
+						$app_logger->error( $error ); // エラーログを出力
 					}
 					return array_map( $formatter, $errors );
 				}
