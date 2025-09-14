@@ -102,7 +102,7 @@ final class Amount implements \Stringable {
 	 * @throws DivisionByZeroError
 	 */
 	public function div( self $other, Decimals $accuracy_decimals ): self {
-		if ( '0' === $other->amount_text ) {
+		if ( $other->isZero() ) {
 			throw new DivisionByZeroError( "[B3F404A6] The expression is invalid: {$this->amount_text} / {$other->amount_text}" );
 		}
 
