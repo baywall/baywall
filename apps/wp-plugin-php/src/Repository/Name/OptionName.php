@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\Name;
 
-use Cornix\Serendipity\Core\Repository\Name\Prefix;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 
 class OptionName {
 
@@ -12,7 +12,7 @@ class OptionName {
 	 * 作成するオプション名はこのメソッドを使用してください
 	 */
 	private function addPrefix( string $option_name ): string {
-		return ( new Prefix() )->optionKeyPrefix() . $option_name;
+		return ( new PrefixProvider() )->optionKey() . $option_name;
 	}
 
 	/**
