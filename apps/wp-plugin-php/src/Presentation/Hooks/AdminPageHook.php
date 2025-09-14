@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
-use Cornix\Serendipity\Core\Repository\I18nText;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nText;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\SlugProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
