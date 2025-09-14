@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation;
 
-use Cornix\Serendipity\Core\Features\Page\PhpVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
+use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
 
 class ViewPageHook {
 
@@ -40,7 +40,7 @@ class ViewPageHook {
 			true   // フッターに出力 ※ 6.8.2でも`script_loader_tag`による`defer`挿入が可能であることを確認したため、配列にはせず`true`のままとする
 		);
 		// インラインスクリプトを追加
-		( new PhpVer() )->addInlineScript( $handle_name );
+		( new PhpVarExporter() )->addInlineScript( $handle_name );
 
 		// スタイルを登録
 		wp_enqueue_style(
