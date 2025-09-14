@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Presentation;
+namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;

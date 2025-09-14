@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation;
+namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\UseCase\CrawlAllAppContract;
 use Cornix\Serendipity\Core\Repository\Name\CronActionName;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation;
+namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
