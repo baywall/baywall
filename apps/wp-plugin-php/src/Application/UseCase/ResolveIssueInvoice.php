@@ -24,7 +24,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Infrastructure\Format\SolidityStrings;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
-use Cornix\Serendipity\Core\Repository\ConsumerTerms;
+use Cornix\Serendipity\Core\Repository\ConsumerTermsProvider;
 use phpseclib\Math\BigInteger;
 
 class ResolveIssueInvoice {
@@ -150,7 +150,7 @@ class ResolveIssueInvoice {
 			. SolidityStrings::valueToHexString( $invoice->postId()->value() )
 			. SolidityStrings::addressToHexString( $invoice->paymentTokenAddress() )
 			. SolidityStrings::valueToHexString( new BigInteger( $invoice->paymentAmount()->value() ) )
-			. SolidityStrings::valueToHexString( ( new ConsumerTerms() )->currentVersion() )
+			. SolidityStrings::valueToHexString( ( new ConsumerTermsProvider() )->currentVersion() )
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 )    // TODO: アフィリエイト報酬率
 		);
