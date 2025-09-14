@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 
-class CronActionName {
+class CronActionNameProvider {
 
 	private string $prefix;
 
