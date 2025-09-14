@@ -15,6 +15,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\ClassNameProvider;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
+use DI\Container;
 
 /**
  * 投稿内容を保存、または取得時のhooksを登録するクラス
@@ -26,19 +27,13 @@ use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
  */
 class ContentIoHook extends HookBase {
 
-	public function __construct(
-		PostRepository $post_repository,
-		UserAccessProvider $user_access_provider,
-		PaidContentTable $paid_content_table
-	) {
-		$this->post_repository      = $post_repository;
-		$this->user_access_provider = $user_access_provider;
-		$this->paid_content_table   = $paid_content_table;
-	}
+	private Container $container;
+	private PostRepository $post_repository; // TODO: 将来的にUseCaseに置き換える
 
-	private PostRepository $post_repository;
-	private UserAccessProvider $user_access_provider;
-	private PaidContentTable $paid_content_table;
+	public function __construct( Container $container ) {
+		$this->container       = $container;
+		$this->post_repository = $container->get( PostRepository::class );
+	}
 
 	/**
 	 * フックを登録します。
@@ -81,8 +76,9 @@ class ContentIoHook extends HookBase {
 	 *   - wp/v2/posts等のAPIにアクセスした時
 	 */
 	public function restPreparePostFilter( \WP_REST_Response $response, \WP_Post $post, \WP_REST_Request $request ): \WP_REST_Response {
-		$post_id = PostId::from( $post->ID );
-		if ( ! $this->user_access_provider->canEditPost( $post_id ) ) {
+		$post_id              = PostId::from( $post->ID );
+		$user_access_provider = $this->container->get( UserAccessProvider::class );
+		if ( ! $user_access_provider->canEditPost( $post_id ) ) {
 			return $response;   // 投稿の編集権限がない場合は何もしない
 		}
 
@@ -193,10 +189,12 @@ class ContentIoHook extends HookBase {
 	 * 投稿が削除された時のアクション。有料記事の情報も削除します。
 	 */
 	public function deletePostAction( int $post_id ): void {
+		$paid_content_table = $this->container->get( PaidContentTable::class );
+
 		// テスト実行中、テストツールによって投稿が削除される。
 		// その際、このフックが呼び出されるが、テーブル作成前に呼び出されるとエラーになるため
 		// テスト中かつテーブルが存在しない場合は何もしない
-		if ( ( new Environment() )->isTesting() && ! $this->paid_content_table->exists() ) {
+		if ( ( new Environment() )->isTesting() && ! $paid_content_table->exists() ) {
 			return; // テスト中に限り、テーブルが存在しない場合は何もしない
 		}
 
