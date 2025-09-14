@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Uninstall;
 
-use Cornix\Serendipity\Core\Repository\Name\Prefix;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 
 class OptionUninstaller {
 
@@ -11,7 +11,7 @@ class OptionUninstaller {
 	 * 本プラグインで扱うオプションをすべて削除します。
 	 */
 	public function execute() {
-		$prefix = ( new Prefix() )->optionKeyPrefix();
+		$prefix = ( new PrefixProvider() )->optionKey();
 
 		// `wp_load_alloptions`は`autoload`が`yes`のオプションのみ取得する。
 		// `autoload`が`no`のオプションも取得したいので、直接SQLを実行する。
