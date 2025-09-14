@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 /**
  * WordPressの設定情報を取得するクラス。
  */
-class WPSettings {
+class WpPropertyProvider {
 	/**
 	 * 指定したIDの投稿が公開されているかどうかを返します。
 	 *
