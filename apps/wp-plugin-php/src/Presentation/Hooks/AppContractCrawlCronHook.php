@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\UseCase\CrawlAllAppContract;
 use Cornix\Serendipity\Core\Repository\Name\CronActionName;
-use Cornix\Serendipity\Core\Repository\PluginInfo;
+use Cornix\Serendipity\Core\Repository\PluginInfoProvider;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
@@ -34,7 +34,7 @@ class AppContractCrawlCronHook extends HookBase {
 
 		// プラグインが無効化された時に登録したアクションを削除
 		register_deactivation_hook(
-			( new PluginInfo() )->mainFilePath(),
+			( new PluginInfoProvider() )->mainFilePath(),
 			function () use ( $action_name ) {
 				wp_clear_scheduled_hook( $action_name );
 			}

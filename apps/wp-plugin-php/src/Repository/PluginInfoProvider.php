@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Constant\Config;
 
-class PluginInfo {
+class PluginInfoProvider {
 
 	public function __construct() {
 		$this->plugin_main_file = PluginMainFile::getInstance();
