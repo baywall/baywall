@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation;
 
-use Cornix\Serendipity\Core\Features\Page\PhpVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Repository\I18nText;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\SlugProvider;
+use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
 
 class AdminPageHook {
 
@@ -71,6 +71,6 @@ class AdminPageHook {
 		);
 
 		// インラインスクリプトを追加
-		( new PhpVer() )->addInlineScript( $handle_name );
+		( new PhpVarExporter() )->addInlineScript( $handle_name );
 	}
 }
