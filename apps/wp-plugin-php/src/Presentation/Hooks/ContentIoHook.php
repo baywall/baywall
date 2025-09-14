@@ -4,15 +4,17 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
+use Cornix\Serendipity\Core\Domain\Entity\WidgetAttributes;
 use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\ValueObject\Content;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\Format\HtmlFormat;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\BlockNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\ClassNameProvider;
-use Cornix\Serendipity\Core\Repository\WidgetAttributes;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\GutenbergService;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
@@ -162,11 +164,13 @@ class ContentIoHook extends HookBase {
 			return;
 		}
 
-		$post_repository = $this->post_repository;
-		$post            = $post_repository->get( PostId::from( $post_id ) );
+		$post_repository   = $this->post_repository;
+		$post              = $post_repository->get( PostId::from( $post_id ) );
+		$gutenberg_service = $this->container->get( GutenbergService::class );
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
-		$attributes = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
+		$content    = Content::from( wp_unslash( self::$unsaved_original_content ) );
+		$attributes = $gutenberg_service->getWidgetAttributes( $content );
 		if ( is_null( $attributes ) ) {
 			// ウィジェットが含まれていない場合はウィジェットを削除して保存した可能性があるため、有料記事の情報を削除
 			$post->deletePaidContent();
@@ -254,11 +258,15 @@ class WidgetContentBuilder {
 	private PostRepository $post_repository;
 
 	public function build( int $post_id ): string {
-		$post_data  = $this->post_repository->get( PostId::from( $post_id ) );
-		$block_name = ( new BlockNameProvider() )->get();
-		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategoryId(), $post_data->sellingPrice() )->toArray();
-		$attrs_str  = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
-		$class_name = ( new ClassNameProvider() )->getBlock();
+		$post_data         = $this->post_repository->get( PostId::from( $post_id ) );
+		$block_name        = ( new BlockNameProvider() )->get();
+		$widget_attributes = WidgetAttributes::from(
+			$post_data->sellingNetworkCategoryId(),
+			$post_data->sellingPrice()->amount(),
+			$post_data->sellingPrice()->symbol()
+		);
+		$attrs_str         = wp_json_encode( $widget_attributes->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+		$class_name        = ( new ClassNameProvider() )->getBlock();
 		return "<!-- wp:{$block_name} {$attrs_str} -->\n"
 			. "<aside class=\"wp-block-create-block-qik-chain-pay {$class_name}\"></aside>\n"
 			. "<!-- /wp:{$block_name} -->";
