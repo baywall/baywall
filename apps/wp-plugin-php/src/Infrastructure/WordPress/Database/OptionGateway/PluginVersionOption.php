@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\OptionNameProvider;
  * プラグインがインストールされた時にこの値が書き込まれます。
  */
 class PluginVersionOption extends StringOption {
-	public function __construct() {
-		parent::__construct( ( new OptionNameProvider() )->pluginVersion() );
+	public function __construct( OptionNameProvider $optionNameProvider ) {
+		parent::__construct( $optionNameProvider->pluginVersion() );
 	}
 }
