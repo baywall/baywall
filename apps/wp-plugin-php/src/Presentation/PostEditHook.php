@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation;
 
-use Cornix\Serendipity\Core\Features\Page\PhpVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
+use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
 
 /**
  * 投稿編集画面のフック(投稿新規作成画面を含む)
@@ -48,7 +48,7 @@ class PostEditHook {
 		);
 
 		// インラインスクリプトを追加
-		( new PhpVer() )->addInlineScript( $handle );
+		( new PhpVarExporter() )->addInlineScript( $handle );
 
 		// スタイルを登録
 		wp_enqueue_style(
