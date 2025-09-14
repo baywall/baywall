@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\ChainTableRecord;
 
-class ChainRepositoryImpl implements ChainRepository {
+class WpChainRepository implements ChainRepository {
 
 	public function __construct( ChainTable $chain_table ) {
 		$this->chain_table = $chain_table;

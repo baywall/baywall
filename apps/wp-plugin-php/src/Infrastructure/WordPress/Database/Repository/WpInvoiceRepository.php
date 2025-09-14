@@ -16,7 +16,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
 
-class InvoiceRepositoryImpl implements InvoiceRepository {
+class WpInvoiceRepository implements InvoiceRepository {
 
 	public function __construct( InvoiceTable $invoice_table ) {
 		$this->invoice_table = $invoice_table;

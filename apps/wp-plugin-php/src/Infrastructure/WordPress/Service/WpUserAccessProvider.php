@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 
-class UserAccessProviderImpl implements UserAccessProvider {
+class WpUserAccessProvider implements UserAccessProvider {
 
 	/** @inheritdoc */
 	public function canViewPost( PostId $post_id ): bool {

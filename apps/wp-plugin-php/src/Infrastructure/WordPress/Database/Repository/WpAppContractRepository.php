@@ -14,7 +14,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
 use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
 
-class AppContractRepositoryImpl implements AppContractRepository {
+class WpAppContractRepository implements AppContractRepository {
 	public function __construct( AppContractTable $app_contract_table, ChainRepository $chain_repository ) {
 		$this->app_contract_table = $app_contract_table;
 		$this->chain_repository   = $chain_repository;

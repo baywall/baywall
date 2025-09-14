@@ -21,12 +21,12 @@ use Cornix\Serendipity\Core\Domain\Service\RateProvider;
 use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Infrastructure\Cache\OracleRateCache;
 use Cornix\Serendipity\Core\Infrastructure\Content\PaidContentServiceImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\AppContractRepositoryImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\ChainRepositoryImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\InvoiceRepositoryImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\OracleRepositoryImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\PostRepositoryImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\TokenRepositoryImpl;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpAppContractRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpChainRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpInvoiceRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpOracleRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpPostRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpTokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\Logging\Handler\SimpleLogger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
@@ -34,11 +34,11 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\NetworkCategoryRepositoryImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\SellerRepositoryImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\LogLevelProviderImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PostTitleProviderImpl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\UserAccessProviderImpl;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpNetworkCategoryRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpSellerRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpUserAccessProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpSalesHistoryService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpTransactionService;
 use wpdb;
@@ -55,24 +55,24 @@ final class ContainerDefinitions {
 			// ChainTable::class => autowire(),
 
 			// Repository
-			AppContractRepository::class     => autowire( AppContractRepositoryImpl::class ),
-			ChainRepository::class           => autowire( ChainRepositoryImpl::class ),
-			InvoiceRepository::class         => autowire( InvoiceRepositoryImpl::class ),
-			NetworkCategoryRepository::class => autowire( NetworkCategoryRepositoryImpl::class ),
-			OracleRepository::class          => autowire( OracleRepositoryImpl::class ),
-			PostRepository::class            => autowire( PostRepositoryImpl::class ),
-			TokenRepository::class           => autowire( TokenRepositoryImpl::class ),
-			SellerRepository::class          => autowire( SellerRepositoryImpl::class ),
+			AppContractRepository::class     => autowire( WpAppContractRepository::class ),
+			ChainRepository::class           => autowire( WpChainRepository::class ),
+			InvoiceRepository::class         => autowire( WpInvoiceRepository::class ),
+			NetworkCategoryRepository::class => autowire( WpNetworkCategoryRepository::class ),
+			OracleRepository::class          => autowire( WpOracleRepository::class ),
+			PostRepository::class            => autowire( WpPostRepository::class ),
+			TokenRepository::class           => autowire( WpTokenRepository::class ),
+			SellerRepository::class          => autowire( WpSellerRepository::class ),
 
 			// Service
 			WalletService::class             => autowire( WalletServiceImpl::class ),
-			PostTitleProvider::class         => autowire( PostTitleProviderImpl::class ),
+			PostTitleProvider::class         => autowire( WpPostTitleProvider::class ),
 			RateProvider::class              => get( CachedOracleRateProvider::class ),
 			// CachedRateProvider::class    => autowire()->constructor(
 			// get( RateTransient::class ),
 			// get( OracleRateProviderImpl::class )
 			// ),
-			UserAccessProvider::class        => autowire( UserAccessProviderImpl::class ),
+			UserAccessProvider::class        => autowire( WpUserAccessProvider::class ),
 			PaidContentService::class        => autowire( PaidContentServiceImpl::class ),
 			BlockNumberProvider::class       => autowire( BlockNumberProviderImpl::class ),
 			TransactionService::class        => autowire( WpTransactionService::class ),
@@ -83,7 +83,7 @@ final class ContainerDefinitions {
 
 			// Logging
 			Logger::class                    => autowire( SimpleLogger::class ),
-			LogLevelProvider::class          => autowire( LogLevelProviderImpl::class ),
+			LogLevelProvider::class          => autowire( WpLogLevelProvider::class ),
 		);
 	}
 }

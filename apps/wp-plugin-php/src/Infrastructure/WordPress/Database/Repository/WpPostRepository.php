@@ -14,7 +14,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\PaidContentTableRecord;
 
-class PostRepositoryImpl implements PostRepository {
+class WpPostRepository implements PostRepository {
 
 	public function __construct( PaidContentTable $paid_content_table ) {
 		$this->paid_content_table = $paid_content_table;

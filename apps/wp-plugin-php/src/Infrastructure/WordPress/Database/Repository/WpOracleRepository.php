@@ -14,7 +14,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\OracleTable;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\OracleTableRecord;
 
-class OracleRepositoryImpl implements OracleRepository {
+class WpOracleRepository implements OracleRepository {
 
 	public function __construct( OracleTable $oracle_table, ChainRepository $chain_repository ) {
 		$this->oracle_table     = $oracle_table;

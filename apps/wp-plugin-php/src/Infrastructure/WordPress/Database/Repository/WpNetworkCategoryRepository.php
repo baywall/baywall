@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConst
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nTextProvider;
 
-class NetworkCategoryRepositoryImpl implements NetworkCategoryRepository {
+class WpNetworkCategoryRepository implements NetworkCategoryRepository {
 
 	private ChainTable $chain_table;
 	private I18nTextProvider $i18n;

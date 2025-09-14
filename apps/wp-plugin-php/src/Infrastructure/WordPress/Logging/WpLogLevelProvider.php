@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 
-class LogLevelProviderImpl implements LogLevelProvider {
+class WpLogLevelProvider implements LogLevelProvider {
 	public function __construct( PrefixProvider $prefix_provider ) {
 		$this->prefix_provider = $prefix_provider;
 	}
