@@ -7,14 +7,16 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 
 class CronActionName {
 
-	private static function getPrefix(): string {
-		return ( new PrefixProvider() )->cronActionName();
+	private string $prefix;
+
+	public function __construct( PrefixProvider $prefixProvider ) {
+		$this->prefix = $prefixProvider->cronActionName();
 	}
 
 	/**
 	 * Appコントラクトのクロール処理を行うCronアクション名を取得します。
 	 */
-	public static function appContractCrawl(): string {
-		return self::getPrefix() . 'app_contract_crawl';
+	public function appContractCrawl(): string {
+		return $this->prefix . 'app_contract_crawl';
 	}
 }
