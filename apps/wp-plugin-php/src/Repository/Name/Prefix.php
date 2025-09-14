@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\Name;
 
-use Cornix\Serendipity\Core\Repository\PluginInfo;
+use Cornix\Serendipity\Core\Repository\PluginInfoProvider;
 /** @deprecated use Infrastructure/WordPress/Service/PrefixProvider */
 class Prefix {
 
@@ -13,7 +13,7 @@ class Prefix {
 	 * @return string
 	 */
 	private function convertedTextDomain(): string {
-		$text_domain = ( new PluginInfo() )->textDomain();
+		$text_domain = ( new PluginInfoProvider() )->textDomain();
 
 		// プラグインのテキストドメインのハイフンをアンダーバーに変換
 		$result = str_replace( '-', '_', $text_domain );

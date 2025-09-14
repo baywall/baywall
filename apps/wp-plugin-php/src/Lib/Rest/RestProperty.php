@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Rest;
 
-use Cornix\Serendipity\Core\Repository\PluginInfo;
+use Cornix\Serendipity\Core\Repository\PluginInfoProvider;
 use Cornix\Serendipity\Core\Repository\WPSettings;
 
 class RestProperty {
@@ -10,7 +10,7 @@ class RestProperty {
 	public function namespace(): string {
 		// 名前空間はプラグインのテキストドメインを使用
 		// 外部サイトなど、第三者からのアクセスは想定していないためバージョニングは行わない
-		return ( new PluginInfo() )->textDomain();
+		return ( new PluginInfoProvider() )->textDomain();
 	}
 
 	public function graphQlRoute(): string {
