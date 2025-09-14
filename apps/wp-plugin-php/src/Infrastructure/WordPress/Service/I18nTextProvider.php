@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
-class I18nText {
+class I18nTextProvider {
 	/**
 	 * プラグイン名を取得します。
 	 */

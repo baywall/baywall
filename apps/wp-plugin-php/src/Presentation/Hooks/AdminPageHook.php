@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
-use Cornix\Serendipity\Core\Repository\I18nText;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nTextProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\SlugProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
@@ -29,7 +29,7 @@ class AdminPageHook extends HookBase {
 	public function addActionAdminMenu(): void {
 		assert( is_admin() );
 
-		$i18n          = $this->container->get( I18nText::class );
+		$i18n          = $this->container->get( I18nTextProvider::class );
 		$slug_provider = $this->container->get( SlugProvider::class );
 
 		$capability    = 'manage_options'; // ユーザー権限(`manage_options`は、管理画面の`設定`へアクセス可能な権限)
