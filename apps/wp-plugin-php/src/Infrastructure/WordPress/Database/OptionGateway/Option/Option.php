@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
 
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
-use Cornix\Serendipity\Core\Lib\Strings\Strings;
+use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
 
 class Option {
 	public function __construct( string $option_key_name ) {
