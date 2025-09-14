@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
-use Cornix\Serendipity\Core\Repository\I18nText;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nText;
 
 class NetworkCategoryRepositoryImpl implements NetworkCategoryRepository {
 
