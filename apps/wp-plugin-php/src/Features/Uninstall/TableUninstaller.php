@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\Uninstall;
 
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MySQLiFactory;
-use Cornix\Serendipity\Core\Repository\Name\Prefix;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 class TableUninstaller {
 	public function execute( \wpdb $wpdb ): void {
-		$table_name_prefix = ( new Prefix() )->tableNamePrefix();
+		$table_name_prefix = ( new PrefixProvider() )->tableName();
 
 		// $table_name_prefixで始まるテーブルをすべて削除する
 		$sql = <<<SQL

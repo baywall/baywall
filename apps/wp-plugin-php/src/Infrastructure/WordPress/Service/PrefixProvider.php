@@ -3,22 +3,49 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Repository\Name\Prefix;
-
 class PrefixProvider {
 
-	// TODO: Prefixクラスから処理をこのクラスへ移動
-
+	/** optionsテーブルに格納する際のキー名に付与するプレフィックスを取得します。 */
 	public function optionKey(): string {
-		return ( new Prefix() )->optionKeyPrefix();
+		$text_domain = $this->convertedTextDomain();
+		return "{$text_domain}_";
 	}
 
-
+	/** 本プラグインで使用するテーブル名のプレフィックスを取得します。 */
 	public function tableName(): string {
-		return ( new Prefix() )->tableNamePrefix();
+		global $wpdb;
+		$table_prefix = $wpdb->prefix;
+		$text_domain  = $this->convertedTextDomain();
+		return "{$table_prefix}{$text_domain}_";
 	}
 
+	/** transient(optionsテーブルの一時データ)として格納する際のキー名に付与するプレフィックスを取得します。 */
 	public function transientKey(): string {
-		return ( new Prefix() )->transientKeyPrefix();
+		$text_domain = $this->convertedTextDomain();
+		return "{$text_domain}_";
+	}
+
+	/** Cronに登録するアクション名に付与するプレフィックスを取得します。 */
+	public function cronActionName(): string {
+		$text_domain = $this->convertedTextDomain();
+		return "{$text_domain}_";
+	}
+
+
+	/**
+	 * プレフィックスとして使用しやすいように変換したテキストドメインを取得します。
+	 *
+	 * @return string
+	 */
+	private function convertedTextDomain(): string {
+		$text_domain = ( new PluginInfoProvider() )->textDomain();
+
+		// プラグインのテキストドメインのハイフンをアンダーバーに変換
+		$result = str_replace( '-', '_', $text_domain );
+
+		// 結果はアンダーバーと小文字の英字のみ(数字、ハイフンは除外)
+		assert( preg_match( '/^[a-z_]+$/', $result ) === 1, "[CBE2850E] Invalid format - '{$text_domain}'" );
+
+		return $result;
 	}
 }

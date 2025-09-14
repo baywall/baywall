@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Infrastructure\System\PhpExtChecker;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\PluginVersionOption;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrate;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
-use Cornix\Serendipity\Core\Repository\PluginInfo;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use DI\Container;
 use Throwable;
 
@@ -45,7 +45,7 @@ class PluginUpdateHook extends HookBase {
 		assert( is_admin() );
 		try {
 			$plugin_version_option = $this->container->get( PluginVersionOption::class );
-			$plugin_info           = $this->container->get( PluginInfo::class );
+			$plugin_info           = $this->container->get( PluginInfoProvider::class );
 			// バージョンチェック
 			$from_version = $plugin_version_option->get();
 			$to_version   = $plugin_info->version();
@@ -85,6 +85,6 @@ class PluginUpdateHook extends HookBase {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 		// プラグインを無効化
-		deactivate_plugins( plugin_basename( ( new PluginInfo() )->mainFilePath() ) );
+		deactivate_plugins( plugin_basename( ( new PluginInfoProvider() )->mainFilePath() ) );
 	}
 }

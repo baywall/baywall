@@ -1,14 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 
 /**
  * WordPressの設定情報を取得するクラス。
  */
-class WPSettings {
+// ※ このクラスはWordPressから情報を取得するためのクラスなので、WpPropertyProviderという名前を避けています。
+class WordPressPropertyProvider {
 	/**
 	 * 指定したIDの投稿が公開されているかどうかを返します。
 	 *
