@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Repository\ConsumerTermsProvider;
+use Cornix\Serendipity\Core\Infrastructure\Terms\ConsumerTermsProvider;
 
 class ResolveConsumerTermsVersion {
 	public function handle( array $root_value, array $args ) {

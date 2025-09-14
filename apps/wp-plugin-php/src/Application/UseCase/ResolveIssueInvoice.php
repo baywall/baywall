@@ -24,7 +24,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Infrastructure\Format\SolidityStrings;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
-use Cornix\Serendipity\Core\Repository\ConsumerTermsProvider;
+use Cornix\Serendipity\Core\Infrastructure\Terms\ConsumerTermsProvider;
 use phpseclib\Math\BigInteger;
 
 class ResolveIssueInvoice {
