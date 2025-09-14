@@ -27,7 +27,7 @@ class AppContractCrawlCronHook extends HookBase {
 
 	public function register(): void {
 		// Cronアクション名を取得
-		$action_name = CronActionName::appContractCrawl();
+		$action_name = $this->container->get( CronActionName::class )->appContractCrawl();
 
 		// Appコントラクトのログをクロールするアクションを追加
 		add_action( $action_name, array( $this, 'execute' ) );
