@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation;
+namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Infrastructure\System\ArchitectureChecker;
 use Cornix\Serendipity\Core\Infrastructure\System\PhpExtChecker;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\PluginVersionOption;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrate;
+use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Repository\PluginInfo;
 use DI\Container;
 use Throwable;
@@ -29,7 +30,7 @@ use Throwable;
 // ■その他注意事項
 // - マルチサイトの場合、他のサイトに対しても処理が実行されるかどうか確認する必要あり(もしくはサイトIDに依存しない設計にする)
 
-class PluginUpdateHook {
+class PluginUpdateHook extends HookBase {
 
 	public function __construct( Container $container ) {
 		$this->container = $container;
