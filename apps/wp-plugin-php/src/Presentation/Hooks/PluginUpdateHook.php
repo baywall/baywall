@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Infrastructure\System\PhpExtChecker;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\PluginVersionOption;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrate;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
-use Cornix\Serendipity\Core\Repository\PluginInfoProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use DI\Container;
 use Throwable;
 
