@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Rest;
 
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
-use Cornix\Serendipity\Core\Repository\WpPropertyProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPropertyProvider;
 
 class RestProperty {
 
