@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway;
 
 use Cornix\Serendipity\Core\Lib\Option\StringOption;
-use Cornix\Serendipity\Core\Repository\Name\OptionName;
+use Cornix\Serendipity\Core\Repository\Name\OptionNameProvider;
 
 /**
  * プラグインバージョンを取得または保存するクラス
@@ -12,6 +12,6 @@ use Cornix\Serendipity\Core\Repository\Name\OptionName;
  */
 class PluginVersionOption extends StringOption {
 	public function __construct() {
-		parent::__construct( ( new OptionName() )->pluginVersion() );
+		parent::__construct( ( new OptionNameProvider() )->pluginVersion() );
 	}
 }
