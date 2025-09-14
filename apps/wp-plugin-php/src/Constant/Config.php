@@ -18,6 +18,12 @@ class Config {
 	public const BLOCK_JSON_PATH = self::ROOT_DIR . '/build/block/block.json';
 
 	/**
+	 * PHPから渡される変数名
+	 * ※ TypeScript側と整合性を取ること
+	 */
+	public const PHP_VAR_NAME = 'php_var_20792bdd';
+
+	/**
 	 * レートの一時データの有効期限(秒)
 	 */
 	public const RATE_TRANSIENT_EXPIRATION = 60 * 10; // 10分

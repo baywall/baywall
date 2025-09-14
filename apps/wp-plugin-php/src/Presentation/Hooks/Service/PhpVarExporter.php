@@ -1,35 +1,30 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Features\Page;
+namespace Cornix\Serendipity\Core\Presentation\Hooks\Service;
 
-use Cornix\Serendipity\Core\Repository\Name\PhpVarName;
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 
-class PhpVer {
+class PhpVarExporter {
+
 	/**
 	 * @param string $handle インラインスクリプトを追加するスクリプトハンドル名
 	 */
 	public function addInlineScript( string $handle ): void {
 		// javascriptとして出力する際の変数名を取得
-		$js_var_name = ( new PhpVarName() )->get();
-
-		// 出力する変数の値
-		$var = ( new PhpVarData() )->get();
+		$js_var_name = Config::PHP_VAR_NAME;
 
 		$success = wp_add_inline_script(
 			$handle,
-			"var $js_var_name = " . wp_json_encode( $var ) . ';',
+			"var {$js_var_name} = " . wp_json_encode( $this->getPhpVar() ) . ';',
 			'before',   // スクリプトの前に追加
 		);
 
 		assert( $success );
 	}
-}
 
-
-class PhpVarData {
-
-	public function get() {
+	/** `wp_add_inline_script`で出力する値を返します */
+	private function getPhpVar(): array {
 		// REST APIアクセス用のnonce
 		$wp_rest_nonce = wp_create_nonce( 'wp_rest' );
 
