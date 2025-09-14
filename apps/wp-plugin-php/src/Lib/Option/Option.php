@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Option;
 
-use Cornix\Serendipity\Core\Repository\Name\Prefix;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 class Option {
 	public function __construct( string $option_key_name ) {
-		assert( 0 === Strings::strpos( $option_key_name, ( new Prefix() )->optionKeyPrefix() ) );
+		assert( 0 === Strings::strpos( $option_key_name, ( new PrefixProvider() )->optionKey() ) );
 		$this->option_key_name = $option_key_name;
 	}
 	private string $option_key_name;

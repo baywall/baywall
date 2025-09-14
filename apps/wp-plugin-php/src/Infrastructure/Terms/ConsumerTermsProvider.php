@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Infrastructure\Terms;
 
 /**
  * 本プラグインにおける購入者向け利用規約の情報を取得するためのクラス
  */
-class ConsumerTerms {
+class ConsumerTermsProvider {
 
 	/**
 	 * このプラグインに同梱されている購入者向け利用規約のバージョンを取得します。

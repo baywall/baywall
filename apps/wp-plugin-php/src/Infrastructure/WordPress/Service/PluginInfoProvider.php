@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Constant\Config;
 
-class PluginInfo {
+class PluginInfoProvider {
 
 	public function __construct() {
 		$this->plugin_main_file = PluginMainFile::getInstance();
