@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Plug
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrate;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 use DI\Container;
 use Throwable;
 
@@ -78,6 +79,11 @@ class PluginUpdateHook extends HookBase {
 
 		// PHP拡張のチェック
 		$this->container->get( PhpExtChecker::class )->checkPhpExtensions();
+
+		// マルチサイト構成でないことを確認
+		if ( $this->container->get( WordPressPropertyProvider::class )->isMultisite() ) {
+			throw new \RuntimeException( '[CFE0F8E3] This plugin does not support WordPress Multisite.' );
+		}
 	}
 
 	private function deactivatePlugin(): void {

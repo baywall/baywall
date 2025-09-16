@@ -38,4 +38,9 @@ class WordPressPropertyProvider {
 		// https://wordpress.stackexchange.com/questions/16161/what-is-difference-between-get-bloginfourl-and-get-site-url
 		return get_home_url();
 	}
+
+	/** マルチサイト構成になっているかどうかを返します。 */
+	public function isMultisite(): bool {
+		return is_multisite();
+	}
 }
