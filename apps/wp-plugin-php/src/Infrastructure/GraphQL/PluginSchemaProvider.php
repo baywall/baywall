@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Lib\GraphQL;
+namespace Cornix\Serendipity\Core\Infrastructure\GraphQL;
 
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
