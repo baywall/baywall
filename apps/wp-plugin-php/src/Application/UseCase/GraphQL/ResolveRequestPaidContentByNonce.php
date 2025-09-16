@@ -62,9 +62,8 @@ class ResolveRequestPaidContentByNonce {
 		// 投稿を閲覧できる権限があることをチェック
 		$this->user_access_checker->checkCanViewPost( $invoice->postId() );
 
+		$this->transaction_service->beginTransaction();
 		try {
-			$this->transaction_service->beginTransaction();
-
 			// 事前チェック
 			$this->checkNonce( $invoice, $invoice_nonce );  // nonceの確認（期待するnonceでない場合は例外が発生）
 			$this->checkIsPurchased( $invoice );    // 購入済みかどうかを確認（購入が確認できない場合は例外が発生）
@@ -83,6 +82,7 @@ class ResolveRequestPaidContentByNonce {
 				'errorCode' => null,
 			);
 		} catch ( \Throwable $e ) {
+			$this->transaction_service->rollback();
 			$this->logger->error( $e );
 
 			// 例外が発生した場合はエラーコードを設定

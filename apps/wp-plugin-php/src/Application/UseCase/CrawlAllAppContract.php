@@ -35,16 +35,11 @@ class CrawlAllAppContract {
 		foreach ( $crawlable_chains as $chain ) {
 			// トランザクションはチェーン単位で行う
 			try {
-				$this->transaction_service->beginTransaction();
-
 				// Appコントラクトのイベントを収集
-				$this->app_contract_crawl_service->crawl( $chain->id() );
-
-				$this->transaction_service->commit();
+				$this->transaction_service->transactional( fn() => $this->app_contract_crawl_service->crawl( $chain->id() ) );
 			} catch ( Throwable $e ) {
-				// エラーが発生した場合はトランザクションをロールバック
-				$this->transaction_service->rollback();
-				$error = $e; // エラーを保持
+				// エラーが発生した場合、ここでは再スローせずにエラーを保持
+				$error = $e;
 				// ここでは再スローしない
 			}
 		}
