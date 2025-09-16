@@ -14,8 +14,16 @@ class Config {
 	 */
 	public const ROOT_DIR = __DIR__ . '/../../..';
 
+	private const BLOCK_BUILD_RELATIVE_DIR = 'build/block';
 	/** `block.json`へのパス */
-	public const BLOCK_JSON_PATH = self::ROOT_DIR . '/build/block/block.json';
+	public const BLOCK_JSON_PATH = self::ROOT_DIR . '/' . self::BLOCK_BUILD_RELATIVE_DIR . '/block.json';
+	/** ブロックエディタ用の『index.asset.php』ファイルへのパス */
+	public const BLOCK_ASSET_PATH = self::ROOT_DIR . '/' . self::BLOCK_BUILD_RELATIVE_DIR . '/index.asset.php';
+	/** ブロックエディタ用の『index.js』ファイルへの相対パス(URL生成に使用) */
+	public const BLOCK_JS_RELATIVE_PATH = self::BLOCK_BUILD_RELATIVE_DIR . '/index.js';
+	/** ブロックエディタ用の『index.css』ファイルへの相対パス(URL生成に使用) */
+	public const BLOCK_CSS_RELATIVE_PATH = self::BLOCK_BUILD_RELATIVE_DIR . '/index.css';
+
 
 	/** Gutenbergブロックで設定された販売ネットワークカテゴリIDの属性名 */
 	public const BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID = 'sellingNetworkCategoryId';
@@ -28,6 +36,20 @@ class Config {
 	public const GRAPHQL_SCHEMA_PATH = self::ROOT_DIR . '/includes/assets/graphql/schema/schema.graphql';
 	/** GraphQLスキーマのキャッシュファイル(PHPファイル)へのパス */
 	public const GRAPHQL_CACHE_PATH = self::ROOT_DIR . '/includes/cache/graphql-schema.php';
+
+	private const ADMIN_BUILD_RELATIVE_DIR = 'public/admin';
+	// 管理画面用『index.asset.php』ファイルへのパス
+	public const ADMIN_ASSET_PATH = self::ROOT_DIR . '/' . self::ADMIN_BUILD_RELATIVE_DIR . '/index.asset.php';
+	// 管理画面用『index.js』ファイルへの相対パス(URL生成に使用)
+	public const ADMIN_JS_RELATIVE_PATH = self::ADMIN_BUILD_RELATIVE_DIR . '/index.js';
+
+	private const VIEW_BUILD_RELATIVE_DIR = 'public/view';
+	// ゲストユーザー(一般の訪問者)表示用『index.asset.php』ファイルへのパス
+	public const VIEW_ASSET_PATH = self::ROOT_DIR . '/' . self::VIEW_BUILD_RELATIVE_DIR . '/index.asset.php';
+	// ゲストユーザー(一般の訪問者)表示用『index.js』ファイルへの相対パス(URL生成に使用)
+	public const VIEW_JS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.js';
+	// ゲストユーザー(一般の訪問者)表示用『index.css』ファイルへの相対パス(URL生成に使用)
+	public const VIEW_CSS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.css';
 
 	/**
 	 * PHPから渡される変数名
