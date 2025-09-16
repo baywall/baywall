@@ -14,7 +14,7 @@ class RestProperty {
 	}
 
 	public function graphQlRoute(): string {
-		return '/graphql';
+		return 'graphql';
 	}
 
 	/**
