@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
-use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchemaProvider;
+use Cornix\Serendipity\Core\Infrastructure\GraphQL\PluginSchemaProvider;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
