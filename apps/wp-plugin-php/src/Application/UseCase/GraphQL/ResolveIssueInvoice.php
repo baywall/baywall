@@ -77,30 +77,27 @@ class ResolveIssueInvoice {
 		$this->user_access_checker->checkCanViewPost( $post_id );
 
 		// 請求書番号を発行(+現在の販売価格を記録)
-		try {
-			$this->transaction_service->beginTransaction();
+		return $this->transaction_service->transactional(
+			function () use ( $post_id, $chain_id, $token_address, $consumer_address ) {
+				// 請求書を作成
+				$invoice = $this->createInvoice( $post_id, $chain_id, $token_address, $consumer_address );
+				// 請求書に対して署名を行う
+				$signed_data = $this->signInvoice( $invoice );
 
-			// 請求書を作成
-			$invoice = $this->createInvoice( $post_id, $chain_id, $token_address, $consumer_address );
-			// 請求書に対して署名を行う
-			$signed_data = $this->signInvoice( $invoice );
+				// クロール済みブロック番号を初期化
+				$this->init_crawled_block_number->handle( $chain_id->value() );
 
-			// クロール済みブロック番号を初期化
-			$this->init_crawled_block_number->handle( $chain_id->value() );
+				$this->transaction_service->commit();
 
-			$this->transaction_service->commit();
-
-			return array(
-				'invoiceIdHex'    => $invoice->id()->hex(),
-				'nonce'           => $invoice->nonce()->value(),
-				'serverMessage'   => $signed_data->message()->value(),
-				'serverSignature' => $signed_data->signature()->value(),
-				'paymentAmount'   => $invoice->paymentAmount()->value(),
-			);
-		} catch ( \Throwable $e ) {
-			$this->transaction_service->rollback();
-			throw $e;
-		}
+				return array(
+					'invoiceIdHex'    => $invoice->id()->hex(),
+					'nonce'           => $invoice->nonce()->value(),
+					'serverMessage'   => $signed_data->message()->value(),
+					'serverSignature' => $signed_data->signature()->value(),
+					'paymentAmount'   => $invoice->paymentAmount()->value(),
+				);
+			}
+		);
 	}
 
 

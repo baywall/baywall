@@ -39,17 +39,7 @@ class Migrate {
 
 	/** @return MigratorBase[] */
 	public function seed( ?string $from_version, string $to_version ): array {
-		try {
-			$this->transaction_service->beginTransaction();
-
-			$migrators = $this->migrate( $this->seedClasses(), $from_version, $to_version );
-
-			$this->transaction_service->commit();
-			return $migrators;
-		} catch ( Throwable $e ) {
-			$this->transaction_service->rollback();
-			throw $e;
-		}
+		return $this->transaction_service->transactional( fn() => $this->migrate( $this->seedClasses(), $from_version, $to_version ) );
 	}
 
 	/**

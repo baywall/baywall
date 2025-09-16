@@ -39,29 +39,26 @@ class ResolveSaveChain {
 		$confirmations_value = $args['confirmations'];
 		$confirmations       = Confirmations::from( $confirmations_value );
 
-		try {
-			$this->transaction_service->beginTransaction();
+		return $this->transaction_service->transactional(
+			function () use ( $chain_id, $rpc_url, $confirmations ) {
 
-			// 更新前のチェーン情報を取得
-			$chain = $this->chain_repository->get( $chain_id );
+				// 更新前のチェーン情報を取得
+				$chain = $this->chain_repository->get( $chain_id );
 
-			// RPC URLが別の値になった場合はそのURLが登録しようとしているチェーンIDと一致するかどうかを確認
-			if ( $rpc_url !== null && ( $chain->rpcUrl() === null || ! $rpc_url->equals( $chain->rpcUrl() ) ) ) {
-				$this->chain_id_checker->checkChainId( $rpc_url, $chain_id );
+				// RPC URLが別の値になった場合はそのURLが登録しようとしているチェーンIDと一致するかどうかを確認
+				if ( $rpc_url !== null && ( $chain->rpcUrl() === null || ! $rpc_url->equals( $chain->rpcUrl() ) ) ) {
+					$this->chain_id_checker->checkChainId( $rpc_url, $chain_id );
+				}
+
+				// チェーン情報を更新
+				$chain->setRpcUrl( $rpc_url );
+				$chain->setConfirmations( $confirmations );
+
+				// 値を更新したチェーン情報を保存
+				$this->chain_repository->save( $chain );
+
+				return true;
 			}
-
-			// チェーン情報を更新
-			$chain->setRpcUrl( $rpc_url );
-			$chain->setConfirmations( $confirmations );
-
-			// 値を更新したチェーン情報を保存
-			$this->chain_repository->save( $chain );
-
-			$this->transaction_service->commit();
-			return true;
-		} catch ( \Throwable $e ) {
-			$this->transaction_service->rollback();
-			throw $e;
-		}
+		);
 	}
 }
