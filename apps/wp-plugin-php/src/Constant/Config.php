@@ -26,6 +26,8 @@ class Config {
 
 	/** GraphQLスキーマファイルへのパス */
 	public const GRAPHQL_SCHEMA_PATH = self::ROOT_DIR . '/includes/assets/graphql/schema/schema.graphql';
+	/** GraphQLスキーマのキャッシュファイル(PHPファイル)へのパス */
+	public const GRAPHQL_CACHE_PATH = self::ROOT_DIR . '/includes/cache/graphql-schema.php';
 
 	/**
 	 * PHPから渡される変数名

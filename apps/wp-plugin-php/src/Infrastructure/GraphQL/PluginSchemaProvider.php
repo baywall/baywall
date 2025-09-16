@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\GraphQL;
 
 use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use GraphQL\Language\Parser;
 use GraphQL\Utils\AST;
@@ -13,7 +12,7 @@ class PluginSchemaProvider {
 	public function get() {
 		// キャッシュファイルをこのプラグインディレクトリ内に作成することで
 		// プラグインアップデート時は存在しなくなり、再作成される仕組み。
-		$cache_file_path = ( new ProjectFile( 'includes/cache/graphql-schema.php' ) )->toLocalPath();
+		$cache_file_path = Config::GRAPHQL_CACHE_PATH;
 
 		// 開発中は、スキーマ等が更新される可能性があるので、キャッシュファイルが古い場合はキャッシュファイルを削除
 		if ( ( new Environment() )->isDevelopment() ) {
