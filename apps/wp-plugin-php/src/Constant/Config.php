@@ -43,6 +43,14 @@ class Config {
 	// 管理画面用『index.js』ファイルへの相対パス(URL生成に使用)
 	public const ADMIN_JS_RELATIVE_PATH = self::ADMIN_BUILD_RELATIVE_DIR . '/index.js';
 
+	private const VIEW_BUILD_RELATIVE_DIR = 'public/view';
+	// ゲストユーザー(一般の訪問者)表示用『index.asset.php』ファイルへのパス
+	public const VIEW_ASSET_PATH = self::ROOT_DIR . '/' . self::VIEW_BUILD_RELATIVE_DIR . '/index.asset.php';
+	// ゲストユーザー(一般の訪問者)表示用『index.js』ファイルへの相対パス(URL生成に使用)
+	public const VIEW_JS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.js';
+	// ゲストユーザー(一般の訪問者)表示用『index.css』ファイルへの相対パス(URL生成に使用)
+	public const VIEW_CSS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.css';
+
 	/**
 	 * PHPから渡される変数名
 	 * ※ TypeScript側と整合性を取ること
