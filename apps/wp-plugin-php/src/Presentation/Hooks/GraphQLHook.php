@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
-use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
+use Cornix\Serendipity\Core\Infrastructure\GraphQL\PluginSchemaProvider;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
@@ -54,7 +54,7 @@ class GraphQLHook extends HookBase {
 		$query           = $input['query'];
 		$variable_values = isset( $input['variables'] ) ? $input['variables'] : null;
 
-		$schema     = ( new PluginSchema() )->get();
+		$schema     = ( new PluginSchemaProvider() )->get();
 		$root_value = ( new RootValue() )->get( $this->container );
 
 		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values )
