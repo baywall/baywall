@@ -8,7 +8,7 @@ use GraphQL\Language\Parser;
 use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;
 
-class PluginSchema {
+class PluginSchemaProvider {
 	public function get() {
 		// キャッシュファイルをこのプラグインディレクトリ内に作成することで
 		// プラグインアップデート時は存在しなくなり、再作成される仕組み。
