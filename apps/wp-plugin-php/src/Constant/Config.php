@@ -29,6 +29,12 @@ class Config {
 	/** GraphQLスキーマのキャッシュファイル(PHPファイル)へのパス */
 	public const GRAPHQL_CACHE_PATH = self::ROOT_DIR . '/includes/cache/graphql-schema.php';
 
+	private const ADMIN_BUILD_RELATIVE_DIR = 'public/admin';
+	// 管理画面用『index.asset.php』ファイルへのパス
+	public const ADMIN_ASSET_PATH = self::ROOT_DIR . '/' . self::ADMIN_BUILD_RELATIVE_DIR . '/index.asset.php';
+	// 管理画面用『index.js』ファイルへの相対パス(URL生成に使用)
+	public const ADMIN_JS_RELATIVE_PATH = self::ADMIN_BUILD_RELATIVE_DIR . '/index.js';
+
 	/**
 	 * PHPから渡される変数名
 	 * ※ TypeScript側と整合性を取ること
