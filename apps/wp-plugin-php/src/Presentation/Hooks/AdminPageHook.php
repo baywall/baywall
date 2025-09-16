@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nTextProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\SlugProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
@@ -57,18 +58,18 @@ class AdminPageHook extends HookBase {
 
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
 		$php_var_exporter     = $this->container->get( PhpVarExporter::class );
+		$plugin               = $this->container->get( PluginInfoProvider::class );
 
 		// 管理画面用のスクリプトを登録する際のハンドル名を取得
 		$handle_name = $handle_name_provider->adminScript();
 
 		// アセットファイルを読み込む
-		$asset_file_path = ( new ProjectFile( 'public/admin/index.asset.php' ) )->toLocalPath();
-		$asset_file      = include $asset_file_path;
+		$asset_file = include Config::ADMIN_ASSET_PATH;
 
 		// 管理画面のスクリプト読み込み
 		wp_enqueue_script(
 			$handle_name,
-			( new ProjectFile( 'public/admin/index.js' ) )->toUrl(),
+			$plugin->toUrl( Config::ADMIN_JS_RELATIVE_PATH ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true,   // フッターに出力。
