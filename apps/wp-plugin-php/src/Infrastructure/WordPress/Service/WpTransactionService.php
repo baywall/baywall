@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use wpdb;
 
-class WpTransactionService implements TransactionService {
+class WpTransactionService extends TransactionService {
 	public function __construct( wpdb $wpdb ) {
 		$this->wpdb = $wpdb;
 	}
