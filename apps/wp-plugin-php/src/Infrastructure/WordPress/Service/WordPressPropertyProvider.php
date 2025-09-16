@@ -10,15 +10,6 @@ use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
  */
 // ※ このクラスはWordPressから情報を取得するためのクラスなので、WpPropertyProviderという名前を避けています。
 class WordPressPropertyProvider {
-	/**
-	 * 指定したIDの投稿が公開されているかどうかを返します。
-	 *
-	 * @param PostId $post_id
-	 */
-	public function isPublished( PostId $post_id ): bool {
-		return get_post_status( $post_id->value() ) === 'publish';
-	}
-
 
 	/**
 	 * 「設定 > パーマリンク設定」で「基本」(英語の場合は「Plain」)のパーマリンクが選択されているかどうかを取得します。
