@@ -24,6 +24,9 @@ class Config {
 	/** Gutenbergブロックで設定された販売価格の通貨の属性名 */
 	public const BLOCK_ATTR_NAME_SELLING_SYMBOL = 'sellingSymbol';
 
+	/** GraphQLスキーマファイルへのパス */
+	public const GRAPHQL_SCHEMA_PATH = self::ROOT_DIR . '/includes/assets/graphql/schema/schema.graphql';
+
 	/**
 	 * PHPから渡される変数名
 	 * ※ TypeScript側と整合性を取ること

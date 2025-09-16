@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\GraphQL;
 
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use GraphQL\Language\Parser;
@@ -22,7 +23,7 @@ class PluginSchemaProvider {
 		// ここでは、キャッシュファイル生成に失敗しても例外を投げないことで
 		// キャッシュファイルの生成に失敗しても、スキーマの取得ができるようにしている。
 		if ( ! file_exists( $cache_file_path ) ) {
-			$graphql_schema_path = $this->graphqlSchemaPath();
+			$graphql_schema_path = Config::GRAPHQL_SCHEMA_PATH;
 			$document            = Parser::parse( file_get_contents( $graphql_schema_path ) );
 			// キャッシュファイルを作成
 			file_put_contents( $cache_file_path, "<?php\nreturn " . var_export( AST::toArray( $document ), true ) . ";\n" );
@@ -39,7 +40,7 @@ class PluginSchemaProvider {
 	 * GraphQLスキーマファイルのパスを取得します。
 	 */
 	private function graphqlSchemaPath() {
-		return ( new ProjectFile( 'includes/assets/graphql/schema/schema.graphql' ) )->toLocalPath();
+		return Config::GRAPHQL_SCHEMA_PATH;
 	}
 
 	/**
