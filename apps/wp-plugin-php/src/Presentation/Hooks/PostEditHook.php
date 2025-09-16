@@ -2,8 +2,9 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
 use DI\Container;
@@ -19,9 +20,6 @@ class PostEditHook extends HookBase {
 		$this->container = $container;
 	}
 
-	// ブロックスクリプトの出力先ディレクトリ
-	private const DIST_DIR = 'build/block';
-
 	public function register(): void {
 		add_action( 'enqueue_block_assets', array( $this, 'addActionEnqueueBlockAssets' ) );
 	}
@@ -34,18 +32,18 @@ class PostEditHook extends HookBase {
 		}
 
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
+		$plugin               = $this->container->get( PluginInfoProvider::class );
 
 		// ブロックエディタで使用するスクリプトを登録するときのハンドル名を取得。
 		$handle = $handle_name_provider->blockScript();
 
 		// アセットファイルを読み込む。
-		$asset_file_path = ( new ProjectFile( self::DIST_DIR . '/index.asset.php' ) )->toLocalPath();
-		$asset_file      = include $asset_file_path;
+		$asset_file = include Config::BLOCK_ASSET_PATH;
 
 		// ブロックスクリプトを登録
 		wp_enqueue_script(
 			$handle,
-			( new ProjectFile( self::DIST_DIR . '/index.js' ) )->toUrl(),
+			$plugin->toUrl( Config::BLOCK_JS_RELATIVE_PATH ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true,   // フッターに出力。
@@ -57,7 +55,7 @@ class PostEditHook extends HookBase {
 		// スタイルを登録
 		wp_enqueue_style(
 			'b99aafea0cf94d308e4edce4bc087709', // 適当なハンドル名(他で使用しない)
-			( new ProjectFile( self::DIST_DIR . '/index.css' ) )->toUrl(),
+			$plugin->toUrl( Config::BLOCK_CSS_RELATIVE_PATH ),
 			array(),
 			$asset_file['version']
 		);

@@ -14,8 +14,16 @@ class Config {
 	 */
 	public const ROOT_DIR = __DIR__ . '/../../..';
 
+	private const BLOCK_BUILD_RELATIVE_DIR = 'build/block';
 	/** `block.json`へのパス */
-	public const BLOCK_JSON_PATH = self::ROOT_DIR . '/build/block/block.json';
+	public const BLOCK_JSON_PATH = self::ROOT_DIR . '/' . self::BLOCK_BUILD_RELATIVE_DIR . '/block.json';
+	/** ブロックエディタ用の『index.asset.php』ファイルへのパス */
+	public const BLOCK_ASSET_PATH = self::ROOT_DIR . '/' . self::BLOCK_BUILD_RELATIVE_DIR . '/index.asset.php';
+	/** ブロックエディタ用の『index.js』ファイルへの相対パス(URL生成に使用) */
+	public const BLOCK_JS_RELATIVE_PATH = self::BLOCK_BUILD_RELATIVE_DIR . '/index.js';
+	/** ブロックエディタ用の『index.css』ファイルへの相対パス(URL生成に使用) */
+	public const BLOCK_CSS_RELATIVE_PATH = self::BLOCK_BUILD_RELATIVE_DIR . '/index.css';
+
 
 	/** Gutenbergブロックで設定された販売ネットワークカテゴリIDの属性名 */
 	public const BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID = 'sellingNetworkCategoryId';
