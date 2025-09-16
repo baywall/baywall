@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
-interface TransactionService {
-	public function beginTransaction(): void;
-	public function commit(): void;
-	public function rollback(): void;
+abstract class TransactionService {
+	abstract public function beginTransaction(): void;
+	abstract public function commit(): void;
+	abstract public function rollback(): void;
 }
