@@ -3,17 +3,19 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
-use Cornix\Serendipity\Core\Domain\Entity\Oracle;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
+use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\ContractFactory;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
 class OracleClient {
-	public function __construct( Oracle $oracle ) {
-		$this->oracle_contract = ( new ContractFactory() )->create( $oracle->chain()->rpcUrl(), ( new OracleAbi() )->get(), $oracle->address() );
-	}
 	private Contract $oracle_contract;
+
+	public function __construct( RpcUrl $rpc_url, Address $address ) {
+		$this->oracle_contract = ( new ContractFactory() )->create( $rpc_url, ( new OracleAbi() )->get(), $address );
+	}
 
 	/**
 	 * レートの小数点以下桁数を取得します。
