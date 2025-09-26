@@ -11,10 +11,13 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveGetErc20Info;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategory;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveOracle;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveOracles;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolvePost;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveRequestPaidContentByNonce;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSalesHistories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveChain;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveOracle;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveToken;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSeller;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSellingContent;
@@ -37,6 +40,7 @@ class RootValue {
 		$resolvers = array(
 			// 非公開
 			'chain'                     => ResolveChain::class,
+			'oracle'                    => ResolveOracle::class,
 			'networkCategory'           => ResolveNetworkCategory::class,
 			'sellingContent'            => ResolveSellingContent::class,
 			'sellingPrice'              => ResolveSellingPrice::class,
@@ -47,6 +51,7 @@ class RootValue {
 			'consumerTermsVersion'      => ResolveConsumerTermsVersion::class,
 			'currentSellerTerms'        => ResolveCurrentSellerTerms::class,
 			'networkCategories'         => ResolveNetworkCategories::class,
+			'oracles'                   => ResolveOracles::class,
 			'post'                      => ResolvePost::class,
 			'salesHistories'            => ResolveSalesHistories::class,
 			'seller'                    => ResolveSeller::class,
@@ -58,6 +63,7 @@ class RootValue {
 			'requestPaidContentByNonce' => ResolveRequestPaidContentByNonce::class,
 			'getErc20Info'              => ResolveGetErc20Info::class,
 			'saveChain'                 => ResolveSaveChain::class,
+			'saveOracle'                => ResolveSaveOracle::class,
 			'saveToken'                 => ResolveSaveToken::class,
 			'setSellerAgreedTerms'      => ResolveSetSellerAgreedTerms::class,
 		);
