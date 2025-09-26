@@ -8,6 +8,6 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\OracleClient;
 
 class OracleClientFactory {
 	public function create( Oracle $oracle ): OracleClient {
-		return new OracleClient( $oracle );
+		return new OracleClient( $oracle->chain()->rpcUrl(), $oracle->address() );
 	}
 }
