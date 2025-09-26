@@ -39,6 +39,11 @@ class WpOracleRepository implements OracleRepository {
 			$this->oracle_table->all()
 		);
 	}
+
+	/** @inheritdoc */
+	public function save( Oracle $oracle ): void {
+		$this->oracle_table->save( $oracle );
+	}
 }
 
 /** @internal */
