@@ -17,6 +17,7 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolvePost;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveRequestPaidContentByNonce;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSalesHistories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveChain;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveOracle;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveToken;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSeller;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSellingContent;
@@ -62,6 +63,7 @@ class RootValue {
 			'requestPaidContentByNonce' => ResolveRequestPaidContentByNonce::class,
 			'getErc20Info'              => ResolveGetErc20Info::class,
 			'saveChain'                 => ResolveSaveChain::class,
+			'saveOracle'                => ResolveSaveOracle::class,
 			'saveToken'                 => ResolveSaveToken::class,
 			'setSellerAgreedTerms'      => ResolveSetSellerAgreedTerms::class,
 		);
