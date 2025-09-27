@@ -4,19 +4,23 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 
 class OracleResolver {
-	public function __construct( OracleRepository $oracle_repository ) {
+	private ChainRepository $chain_repository;
+	private OracleRepository $oracle_repository;
+
+	public function __construct( ChainRepository $chain_repository, OracleRepository $oracle_repository ) {
+		$this->chain_repository  = $chain_repository;
 		$this->oracle_repository = $oracle_repository;
 	}
-	private OracleRepository $oracle_repository;
 
 	/** `レート取得用のオラクル`を取得します。 */
 	public function resolveRateOracle( SymbolPair $symbol_pair ): ?Oracle {
-		$connectable_oracles = ( new OraclesFilter() )
+		$connectable_oracles = ( new OraclesFilter( $this->chain_repository ) )
 			->bySymbolPair( $symbol_pair )
 			->byConnectable()
 			->apply( $this->oracle_repository->all() );

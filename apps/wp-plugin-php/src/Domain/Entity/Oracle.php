@@ -3,24 +3,24 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 
 class Oracle {
 
-	public function __construct( Chain $chain, Address $address, SymbolPair $symbol_pair ) {
-		$this->chain       = $chain;
+	public function __construct( ChainId $chain_id, Address $address, SymbolPair $symbol_pair ) {
+		$this->chain_id    = $chain_id;
 		$this->address     = $address;
 		$this->symbol_pair = $symbol_pair;
 	}
 
-	private Chain $chain;
+	private ChainId $chain_id;
 	private Address $address;
 	private SymbolPair $symbol_pair;
 
-	public function chain(): Chain {
-		return $this->chain;
+	public function chainId(): ChainId {
+		return $this->chain_id;
 	}
 
 	public function address(): Address {
@@ -34,7 +34,7 @@ class Oracle {
 	public function __toString() {
 		return json_encode(
 			array(
-				'chain'        => $this->chain,
+				'chain_id'     => $this->chain_id,
 				'address'      => $this->address,
 				'base_symbol'  => $this->symbol_pair->base()->value(),
 				'quote_symbol' => $this->symbol_pair->quote()->value(),

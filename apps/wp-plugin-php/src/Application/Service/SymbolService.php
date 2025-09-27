@@ -3,16 +3,20 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class SymbolService {
 
-	public function __construct( OracleRepository $oracle_repository ) {
-		$this->oracle_repository = $oracle_repository;
-	}
 	private OracleRepository $oracle_repository;
+	private ChainRepository $chain_repository;
+
+	public function __construct( OracleRepository $oracle_repository, ChainRepository $chain_repository ) {
+		$this->oracle_repository = $oracle_repository;
+		$this->chain_repository  = $chain_repository;
+	}
 
 	/**
 	 * 販売価格として設定可能な通貨シンボル一覧を取得します。
@@ -24,7 +28,7 @@ class SymbolService {
 		// 　　　その上で、現時点で販売価格として設定できるものはRPC URLが設定されているものとする。
 
 		// 接続可能なoracle一覧を取得
-		$oracles = ( new OraclesFilter() )
+		$oracles = ( new OraclesFilter( $this->chain_repository ) )
 			->byConnectable()
 			->apply( $this->oracle_repository->all() );
 
