@@ -47,7 +47,7 @@ class OracleTable extends TableBase {
 
 		$sql = $this->prepare(
 			$sql,
-			$oracle->chain()->id()->value(),
+			$oracle->chainId()->value(),
 			$oracle->address()->value(),
 			$oracle->symbolPair()->base()->value(),
 			$oracle->symbolPair()->quote()->value()

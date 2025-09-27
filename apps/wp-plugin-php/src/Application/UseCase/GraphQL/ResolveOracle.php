@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
@@ -10,11 +11,14 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 class ResolveOracle {
 
+	private ChainRepository $chain_repository;
 	private OracleRepository $oracle_repository;
 
 	public function __construct(
+		ChainRepository $chain_repository,
 		OracleRepository $oracle_repository
 	) {
+		$this->chain_repository  = $chain_repository;
 		$this->oracle_repository = $oracle_repository;
 	}
 
@@ -24,7 +28,7 @@ class ResolveOracle {
 
 		$oracles = $this->oracle_repository->all();
 
-		$filtered_oracles = ( new OraclesFilter() )
+		$filtered_oracles = ( new OraclesFilter( $this->chain_repository ) )
 			->byChainId( $chain_id )
 			->byAddress( $address )
 			->apply( $oracles );
@@ -38,7 +42,7 @@ class ResolveOracle {
 		$chain_callback = fn() => $root_value['chain'](
 			$root_value,
 			array(
-				'chainId' => $oracle->chain()->id()->value(),
+				'chainId' => $oracle->chainId()->value(),
 			)
 		);
 

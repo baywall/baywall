@@ -39,7 +39,7 @@ class WpOracleRateCache implements OracleRateCache {
 	private function transientKey( Oracle $oracle ): string {
 		// OracleのチェーンID＋アドレスでキーとしては一意になるが、
 		// データを見たときに認識しやすくするため、symbolを含める
-		$chain_id_value       = $oracle->chain()->id()->value();
+		$chain_id_value       = $oracle->chainId()->value();
 		$oracle_address_value = $oracle->address()->value();
 		$base_value           = $oracle->symbolPair()->base()->value();
 		$quote_value          = $oracle->symbolPair()->quote()->value();

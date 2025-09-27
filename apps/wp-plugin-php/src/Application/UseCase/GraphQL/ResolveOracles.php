@@ -29,7 +29,7 @@ class ResolveOracles {
 			fn( Oracle $oracle ) => $root_value['oracle'](
 				$root_value,
 				array(
-					'chainId' => $oracle->chain()->id()->value(),
+					'chainId' => $oracle->chainId()->value(),
 					'address' => $oracle->address()->value(),
 				)
 			),

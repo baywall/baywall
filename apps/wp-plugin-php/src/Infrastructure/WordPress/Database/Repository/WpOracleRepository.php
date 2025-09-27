@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
@@ -16,13 +14,11 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\Oracle
 
 class WpOracleRepository implements OracleRepository {
 
-	public function __construct( OracleTable $oracle_table, ChainRepository $chain_repository ) {
-		$this->oracle_table     = $oracle_table;
-		$this->chain_repository = $chain_repository;
+	public function __construct( OracleTable $oracle_table ) {
+		$this->oracle_table = $oracle_table;
 	}
 
 	private OracleTable $oracle_table;
-	private ChainRepository $chain_repository;
 
 	/**
 	 * Repositoryに存在するOracle一覧を取得します。
@@ -31,11 +27,7 @@ class WpOracleRepository implements OracleRepository {
 	 */
 	public function all(): array {
 		return array_map(
-			function ( OracleTableRecord $record ) {
-				$chain = $this->chain_repository->get( ChainId::from( $record->chainIdValue() ) );
-				assert( $chain !== null, '[890CB3D8] Chain record not found for Oracle: ' . $record->chainIdValue() );
-				return new OracleImpl( $record, $chain );
-			},
+			fn( OracleTableRecord $record ) => new OracleImpl( $record ),
 			$this->oracle_table->all()
 		);
 	}
@@ -48,9 +40,9 @@ class WpOracleRepository implements OracleRepository {
 
 /** @internal */
 class OracleImpl extends Oracle {
-	public function __construct( OracleTableRecord $oracle_record, Chain $chain ) {
+	public function __construct( OracleTableRecord $oracle_record ) {
 		parent::__construct(
-			$chain,
+			ChainId::from( $oracle_record->chainIdValue() ),
 			Address::from( $oracle_record->addressValue() ),
 			SymbolPair::from(
 				Symbol::from( $oracle_record->baseSymbolValue() ),

@@ -69,7 +69,7 @@ class ResolveGetErc20Info {
 			// XXX/USD や XXX/ETH の接続可能なOracleが存在する場合はレート変換可能と判定
 			$quote_symbols = array( 'USD', 'ETH' );
 			foreach ( $quote_symbols as $quote_symbol ) {
-				$filtered_oracles = ( new OraclesFilter() )
+				$filtered_oracles = ( new OraclesFilter( $this->chain_repository ) )
 					->bySymbolPair( SymbolPair::from( $symbol, Symbol::from( $quote_symbol ) ) )
 					->byConnectable()
 					->apply( $oracles );
