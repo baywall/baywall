@@ -36,7 +36,8 @@ class WpSalesHistoryService implements SalesHistoryService {
 			$record->created_at_unix,
 			$record->post_id,
 			new PriceDto( $record->selling_amount, $record->selling_symbol ),
-			$record->chain_id
+			$record->chain_id,
+			$record->chain_name
 		);
 
 		// トークン転送イベントは数量から価格への変換が必要
