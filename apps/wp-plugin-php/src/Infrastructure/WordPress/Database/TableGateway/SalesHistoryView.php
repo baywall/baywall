@@ -20,6 +20,7 @@ class SalesHistoryView extends TableBase {
 		$this->event_table_name    = $table_name_provider->unlockPaywallTransferEvent();
 		$this->invoice_table_name  = $table_name_provider->invoice();
 		$this->token_table_name    = $table_name_provider->token();
+		$this->chain_table_name    = $table_name_provider->chain();
 		$this->wp_posts_table_name = $wpdb->posts; // WordPressの投稿テーブル名を取得
 
 		parent::__construct( $wpdb, '' );
@@ -34,6 +35,8 @@ class SalesHistoryView extends TableBase {
 	private string $token_table_name;
 	/** WordPressの投稿テーブル名 */
 	private string $wp_posts_table_name;
+	/** チェーンテーブル名 */
+	private string $chain_table_name;
 
 	/**
 	 *
@@ -46,6 +49,7 @@ class SalesHistoryView extends TableBase {
 			SELECT
 				t1.invoice_id,
 				t1.chain_id,
+				t6.name AS chain_name,
 				t1.block_number,
 				t1.transaction_hash,
 				-- t2_agg.token_address, => t3.payment_token_address
@@ -97,6 +101,9 @@ class SalesHistoryView extends TableBase {
 			LEFT JOIN
 				{$this->wp_posts_table_name} AS t5
 				ON t3.post_id = t5.ID
+			LEFT JOIN
+				{$this->chain_table_name} AS t6
+				ON t3.chain_id = t6.chain_id
 		SQL;
 
 		// 条件が指定されている場合はWHERE句を追加

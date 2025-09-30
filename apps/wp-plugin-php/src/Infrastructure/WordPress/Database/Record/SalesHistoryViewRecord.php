@@ -20,6 +20,7 @@ class SalesHistoryViewRecord extends RecordBase {
 
 	public string $invoice_id;
 	public int $chain_id;
+	public string $chain_name;
 	public int $block_number;
 	public string $transaction_hash;
 	public string $contract_address;
