@@ -39,6 +39,7 @@ class ResolveSalesHistories {
 						'symbol' => $sales_history_dto->invoice->selling_price->symbol,
 					),
 					'chainId'       => $sales_history_dto->invoice->chain_id,
+					'chainName'     => $sales_history_dto->invoice->chain_name,
 				),
 				'postTitle'              => $sales_history_dto->post_title,
 				'txHash'                 => $sales_history_dto->tx_hash,
