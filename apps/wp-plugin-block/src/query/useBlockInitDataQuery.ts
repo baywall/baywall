@@ -1,31 +1,24 @@
-import { useMemo } from '@wordpress/element';
 import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { usePostSettingQuery } from '../../types/gql/generated';
 import { SellableCurrency } from '../value-object/SellableCurrency';
 import { NetworkCategory } from '../value-object/NetworkCategory';
 
 export const useBlockInitDataQuery = () => {
-	const { data, ...rest } = usePostSettingQuery();
+	return usePostSettingQuery( undefined, {
+		select: ( data ) => {
+			// 販売可能なネットワークカテゴリ一覧
+			const sellableNetworkCategories = data.networkCategories.map( ( category ) =>
+				NetworkCategory.from( NetworkCategoryId.from( category.id ), category.name )
+			);
 
-	const newData = useMemo( () => {
-		if ( data === undefined ) {
-			return undefined;
-		}
+			// 販売可能な通貨一覧
+			const sellableCurrencies = data.networkCategories.flatMap( ( category ) =>
+				category.sellableSymbols.map( ( symbol ) =>
+					SellableCurrency.from( NetworkCategoryId.from( category.id ), Symbol.from( symbol ) )
+				)
+			);
 
-		// 販売可能なネットワークカテゴリ一覧
-		const sellableNetworkCategories = data.networkCategories.map( ( category ) =>
-			NetworkCategory.from( NetworkCategoryId.from( category.id ), category.name )
-		);
-
-		// 販売可能な通貨一覧
-		const sellableCurrencies = data.networkCategories.flatMap( ( category ) =>
-			category.sellableSymbols.map( ( symbol ) =>
-				SellableCurrency.from( NetworkCategoryId.from( category.id ), Symbol.from( symbol ) )
-			)
-		);
-
-		return { sellableNetworkCategories, sellableCurrencies };
-	}, [ data ] );
-
-	return { data: newData, ...rest };
+			return { sellableNetworkCategories, sellableCurrencies };
+		},
+	} );
 };
