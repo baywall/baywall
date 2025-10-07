@@ -1,4 +1,4 @@
-import { useEffect, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { useLogger } from '@serendipity/lib-frontend';
 import { Amount } from '@serendipity/lib-value-object';
 import { type SellingPriceAmountProps } from './SellingPriceAmount';
@@ -6,22 +6,10 @@ import { useSellingPriceAmount } from '../../provider/selling-price-amount/useSe
 
 export const useSellingPriceAmountProps = (): SellingPriceAmountProps => {
 	const [ value, setValue ] = useState< string | undefined >( undefined ); // 画面で表示されている値
-
-	const { sellingPriceAmount, setSellingPriceAmount } = useSellingPriceAmount();
-	// 画面の値が未初期化の時、コンテキストの値で初期化する
-	useEffect( () => {
-		if ( value === undefined && sellingPriceAmount !== undefined ) {
-			if ( sellingPriceAmount === null ) {
-				// ここは通らない
-				throw new Error( '[B9E7EF57] Invalid selling price amount value.' );
-			} else {
-				setValue( sellingPriceAmount.value );
-			}
-		}
-	}, [ value, setValue, sellingPriceAmount, setSellingPriceAmount ] );
+	const { sellingPriceAmount } = useSellingPriceAmount(); // 内部で保持している価格
 
 	return {
-		value,
+		value: value ?? sellingPriceAmount?.value,
 		onChange: useOnChange( setValue ),
 	};
 };
