@@ -9,7 +9,6 @@ use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;
 
 /**
@@ -41,11 +40,6 @@ class ResolveSaveToken {
 
 		$token = $this->token_repository->get( $chain_id, $address );
 		if ( null === $token ) {
-			// ネイティブトークンはプラグインインストール時に登録済みのため、ここを通る場合は例外を投げる
-			if ( $address->equals( Ethers::zeroAddress() ) ) {
-				throw new \RuntimeException( "[7B2CA023] Native token is already registered. chain ID: {$chain_id}" );
-			}
-
 			// トークンデータが存在しない場合は新規登録を行うために少数点以下桁数とシンボルを取得する
 
 			// チェーンに接続してERC20コントラクトから少数点以下桁数とシンボルを取得する
