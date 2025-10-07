@@ -8,7 +8,6 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\ChainIdConstants;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
@@ -62,20 +61,20 @@ class TokenTableSeed_0_0_1 extends TokenTableSeedBase {
 	private Environment $environment;
 
 	public function up(): void {
-		// ネイティブトークンのアドレスは0x00とする
-		$zero_address = Ethers::zeroAddress()->value();
+		// ネイティブトークンのアドレスを文字列で取得
+		$native_token_address = Address::nativeToken()->value();
 
 		// メインネットのネイティブトークンを登録(Ethereum Mainnetのみ支払可能として指定)
-		$this->add( ChainIdConstants::ethMainnet(), $zero_address, 'ETH', 18, true );
+		$this->add( ChainIdConstants::ethMainnet(), $native_token_address, 'ETH', 18, true );
 
 		// テストネットのネイティブトークンを登録(Sepoliaのみ支払可能として指定)
-		$this->add( ChainIdConstants::sepolia(), $zero_address, 'ETH', 18, true );
-		$this->add( ChainIdConstants::soneiumMinato(), $zero_address, 'ETH', 18, false );
+		$this->add( ChainIdConstants::sepolia(), $native_token_address, 'ETH', 18, true );
+		$this->add( ChainIdConstants::soneiumMinato(), $native_token_address, 'ETH', 18, false );
 
 		// 開発モード時はプライベートネットのネイティブトークンを登録
 		if ( $this->environment->isDevelopment() ) {
-			$this->add( ChainIdConstants::privatenetL1(), $zero_address, 'ETH', 18, true );
-			$this->add( ChainIdConstants::privatenetL2(), $zero_address, 'MATIC', 18, false );
+			$this->add( ChainIdConstants::privatenetL1(), $native_token_address, 'ETH', 18, true );
+			$this->add( ChainIdConstants::privatenetL2(), $native_token_address, 'MATIC', 18, false );
 		}
 	}
 
