@@ -96,4 +96,11 @@ class Config {
 	// ブロック生成速度が2s/blockの場合、1時間分程度のログ取得が可能。(Cronのインターバルが1時間であっても1回の取得で完了できる)
 	/** `eth_getLogs`呼び出しで取得するブロック数の最大値 */
 	public const GET_LOGS_MAX_RANGE = 1999;
+
+	/**
+	 * ネイティブトークンのアドレス(便宜的に使用するアドレス)
+	 *
+	 * @see https://github.com/ethereum/ercs/blob/master/ERCS/erc-7528.md
+	 */
+	public const NATIVE_TOKEN_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 }
