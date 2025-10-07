@@ -39,9 +39,9 @@ class ResolveGetErc20Info {
 		$chain_id = ChainId::from( $args['chainId'] );
 		$address  = Address::from( $args['address'] );
 
-		if ( $address === Ethers::zeroAddress() ) {
-			// ERC20トークンの情報を取得するResolverのため、アドレスゼロも不許可
-			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
+		if ( $address->equals( Ethers::zeroAddress() ) || $address->equals( Address::nativeToken() ) ) {
+			// ERC20トークンの情報を取得するResolverのため、アドレスゼロやネイティブトークンのアドレスは不許可
+			throw new \InvalidArgumentException( "[6D00DB41] Invalid address. {$address}" );
 		}
 
 		$chain = $this->chain_repository->get( $chain_id );
