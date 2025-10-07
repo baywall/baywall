@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Infrastructure\Format\Padding;
 use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
 
@@ -48,5 +49,10 @@ final class Address implements \Stringable {
 		if ( ! $is_valid ) {
 			throw new \InvalidArgumentException( '[B4AE59FC] Invalid address format. ' . $address_value );
 		}
+	}
+
+	/** ネイティブトークンのアドレスを取得します */
+	public static function nativeToken(): self {
+		return new self( Config::NATIVE_TOKEN_ADDRESS );
 	}
 }
