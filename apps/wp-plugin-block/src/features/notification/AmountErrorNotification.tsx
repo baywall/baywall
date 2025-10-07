@@ -28,6 +28,9 @@ export const AmountErrorNotification: React.FC< AmountErrorNotificationProps > =
 		} else {
 			screenNotifier.hide( id );
 		}
+
+		// クリーンアップ時に通知を消す
+		return () => screenNotifier.hide( id );
 	}, [ isError, screenNotifier, textProvider ] );
 
 	return null; // 通知はsnackbarを使って行うため、このコンポーネント自体は描画しない

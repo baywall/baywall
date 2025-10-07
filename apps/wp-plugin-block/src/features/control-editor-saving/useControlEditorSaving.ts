@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from '@wordpress/element';
+import { useEffect, useMemo } from '@wordpress/element';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 import { PostSavingController } from '../../lib/gutenberg/post-saving/PostSavingController';
 
@@ -10,17 +10,13 @@ import { PostSavingController } from '../../lib/gutenberg/post-saving/PostSaving
  */
 export const useControlEditorSaving = () => {
 	const { attributes } = useBlockEditProps();
-	const [ lock, setLock ] = useState( false ); // 保存ロック状態を管理
-	const postSavingController = useMemo( () => new PostSavingController(), [] );
 
-	useEffect( () => {
-		// ブロックの属性にnullが含まれている場合、保存をロックする
-		const includesNull = Object.values( attributes ).some( ( value ) => value === null );
-		setLock( includesNull );
-	}, [ attributes, setLock ] );
+	// ブロックの属性にnullが含まれている場合、ロック(保存できないように)する
+	const lock = useMemo( () => Object.values( attributes ).some( ( value ) => value === null ), [ attributes ] );
 
 	useEffect( () => {
 		const lockName = '38f6569d-91bb-424d-8e94-4f7e35c64edd'; // 適当なロック名
+		const postSavingController = new PostSavingController();
 		if ( lock ) {
 			postSavingController.lock( lockName );
 		} else {
@@ -30,5 +26,5 @@ export const useControlEditorSaving = () => {
 			// クリーンアップ時にロックを解除
 			postSavingController.unlock( lockName );
 		};
-	}, [ lock, postSavingController ] );
+	}, [ lock ] );
 };
