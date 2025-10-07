@@ -6,6 +6,15 @@ import { Amount, NetworkCategoryId, Symbol } from '@serendipity/lib-value-object
 import { useSellingPriceAmount } from '../../provider/selling-price-amount/useSellingPriceAmount';
 import { useSellingPriceSymbol } from '../../provider/selling-price-symbol/useSellingPriceSymbol';
 
+/**
+ * 初期化処理
+ *
+ * ※ useQueryのsuccessイベントで初期化を行った場合に
+ *    以下の操作で初期化処理が実行されないため
+ *    useEffectを用いて初期化処理を実施。
+ *
+ * - 画面でウィジェットを削除、再度追加した場合
+ */
 export const useInitialize = (): void => {
 	useInitSellingNetworkCategoryId(); // ネットワークカテゴリIDの初期化
 	useInitSellingPriceAmount(); // 販売価格（数量）の初期化
