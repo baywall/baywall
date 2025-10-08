@@ -1,4 +1,4 @@
-import { Logger } from './Logger';
+import { Logger } from '../domain/service/Logger';
 import { LOG_LEVEL, LogLevel } from './constants/LogLevel';
 
 /** 指定したログレベルに応じてログを出力するLogger */

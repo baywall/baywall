@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Logger } from './Logger';
+import { Logger } from '../domain/service/Logger';
 
 export class ConsoleLogger implements Logger {
 	debug( message: string, ...optionalParams: unknown[] ): void {
