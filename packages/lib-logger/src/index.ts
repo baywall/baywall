@@ -1,6 +1,6 @@
 export { LOG_LEVEL } from './constant/LogLevel';
 export { UnitLogger } from './domain/service/UnitLogger';
-export { ApplicationLogger } from './domain/service/Logger';
+export { ApplicationLogger } from './domain/service/ApplicationLogger';
 export { LogLevel } from './domain/types/LogLevel';
 
 export { ConsoleUnitLogger } from './infrastructure/console/ConsoleUnitLogger';
