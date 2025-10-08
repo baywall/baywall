@@ -1,16 +1,16 @@
 import { LOG_LEVEL } from '../../constant/LogLevel';
 import { LogLevel } from '../types/LogLevel';
-import { UnitLogger } from './UnitLogger';
+import { Logger } from './Logger';
 
-/** 指定されたログレベルでログ出力を制御するUnitLoggerの実装 */
-export class LevelFilteredUnitLogger implements UnitLogger {
+/** 指定されたログレベルでログ出力を制御するLoggerの実装 */
+export class LevelFilteredLogger implements Logger {
 	private readonly logLevels = [ LOG_LEVEL.DEBUG, LOG_LEVEL.INFO, LOG_LEVEL.WARN, LOG_LEVEL.ERROR ];
 
 	/** コンストラクタで指定されたログレベルのインデックス */
 	private readonly logLevelIndex: number;
 
 	public constructor(
-		private unitLogger: UnitLogger,
+		private unitLogger: Logger,
 		logLevel: LogLevel
 	) {
 		this.logLevelIndex = this.logLevels.indexOf( logLevel );

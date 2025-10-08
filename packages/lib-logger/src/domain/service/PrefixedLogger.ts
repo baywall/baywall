@@ -1,13 +1,13 @@
 import { LogLevel } from '../types/LogLevel';
 import { LogPrefixProvider } from './LogPrefixProvider';
-import { UnitLogger } from './UnitLogger';
+import { Logger } from './Logger';
 
-/** ログの先頭に指定された文字列を付与してログ出力するUnitLoggerの実装 */
-export class PrefixedUnitLogger implements UnitLogger {
+/** ログの先頭に指定された文字列を付与してログ出力するLoggerの実装 */
+export class PrefixedLogger implements Logger {
 	// eslint-disable-next-line no-useless-constructor
 	public constructor(
 		private logPrefixProvider: LogPrefixProvider,
-		private unitLogger: UnitLogger
+		private unitLogger: Logger
 	) {}
 
 	public log( logLevel: LogLevel, ...args: any[] ): void {

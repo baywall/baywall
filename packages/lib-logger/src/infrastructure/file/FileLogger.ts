@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import util from 'node:util';
-import { UnitLogger } from '../../domain/service/UnitLogger';
+import { Logger } from '../../domain/service/Logger';
 import { LogLevel } from '../../domain/types/LogLevel';
 
 /** 指定したファイルにログを出力するLogger */
-export class FileUnitLogger implements UnitLogger {
+export class FileLogger implements Logger {
 	private readonly argsFormatter: ArgsFormatter = new ArgsFormatter();
 
 	// eslint-disable-next-line no-useless-constructor

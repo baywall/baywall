@@ -1,11 +1,11 @@
 import { LOG_LEVEL } from '../../constant/LogLevel';
-import { UnitLogger } from '../../domain/service/UnitLogger';
+import { Logger } from '../../domain/service/Logger';
 import { LogLevel } from '../../domain/types/LogLevel';
 
 /* eslint-disable no-console */
 
-/** コンソールにログを出力するUnitLoggerの実装 */
-export class ConsoleUnitLogger implements UnitLogger {
+/** コンソールにログを出力するLoggerの実装 */
+export class ConsoleLogger implements Logger {
 	private readonly levels = {
 		[ LOG_LEVEL.DEBUG ]: 'debug',
 		[ LOG_LEVEL.INFO ]: 'info',
