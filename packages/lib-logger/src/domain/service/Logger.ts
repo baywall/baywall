@@ -1,6 +1,6 @@
 export interface ApplicationLogger {
-	debug( message?: any, ...optionalParams: any[] ): void;
-	info( message?: any, ...optionalParams: any[] ): void;
-	warn( message?: any, ...optionalParams: any[] ): void;
-	error( message?: any, ...optionalParams: any[] ): void;
+	debug( ...args: any[] ): void;
+	info( ...args: any[] ): void;
+	warn( ...args: any[] ): void;
+	error( ...args: any[] ): void;
 }
