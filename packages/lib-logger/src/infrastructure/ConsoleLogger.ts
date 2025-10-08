@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import { Logger } from '../domain/service/Logger';
+import { ApplicationLogger } from '../domain/service/Logger';
 
-export class ConsoleLogger implements Logger {
+export class ConsoleLogger implements ApplicationLogger {
 	debug( message: string, ...optionalParams: unknown[] ): void {
 		console.debug( `[DEBUG] ${ message }`, ...optionalParams );
 	}

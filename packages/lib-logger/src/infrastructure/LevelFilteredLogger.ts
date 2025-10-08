@@ -1,14 +1,14 @@
-import { Logger } from '../domain/service/Logger';
+import { ApplicationLogger } from '../domain/service/Logger';
 import { LOG_LEVEL } from '../constant/LogLevel';
 import { LogLevel } from '../domain/types/LogLevel';
 
 /** 指定したログレベルに応じてログを出力するLogger */
-export class LevelFilteredLogger implements Logger {
-	public constructor( logger: Logger, logLevel: LogLevel ) {
+export class LevelFilteredLogger implements ApplicationLogger {
+	public constructor( logger: ApplicationLogger, logLevel: LogLevel ) {
 		this.logger = logger;
 		this.logLevel = logLevel;
 	}
-	private logger: Logger;
+	private logger: ApplicationLogger;
 	private logLevel: LogLevel;
 
 	public debug( message?: any, ...optionalParams: any[] ): void {
