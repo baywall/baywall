@@ -1,7 +1,7 @@
 import { ConsoleLogger } from '../ConsoleLogger';
 import { LevelFilteredLogger } from '../LevelFilteredLogger';
 import { Logger } from '../../domain/service/Logger';
-import { LogLevel } from '../constants/LogLevel';
+import { LogLevel } from '../../domain/types/LogLevel';
 
 export class LoggerFactory {
 	/**
