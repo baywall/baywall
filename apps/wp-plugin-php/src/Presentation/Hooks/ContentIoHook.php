@@ -262,8 +262,8 @@ class WidgetContentBuilder {
 		$block_name        = ( new BlockNameProvider() )->get();
 		$widget_attributes = WidgetAttributes::from(
 			$post_data->sellingNetworkCategoryId(),
-			$post_data->sellingPrice()->amount(),
-			$post_data->sellingPrice()->symbol()
+			$post_data->sellingPrice() ? $post_data->sellingPrice()->amount() : null,
+			$post_data->sellingPrice() ? $post_data->sellingPrice()->symbol() : null
 		);
 		$attrs_str         = wp_json_encode( $widget_attributes->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 		$class_name        = ( new ClassNameProvider() )->getBlock();
