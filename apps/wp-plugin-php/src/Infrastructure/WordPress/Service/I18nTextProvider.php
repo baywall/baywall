@@ -8,21 +8,21 @@ class I18nTextProvider {
 	 * プラグイン名を取得します。
 	 */
 	public function pluginName(): string {
-		return __( 'Qik Chain Pay', 'qik-chain-pay' );
+		return __( 'baywall', 'baywall' );
 	}
 
 	/** メインネット */
 	public function mainnet(): string {
-		return __( 'Mainnet', 'qik-chain-pay' );
+		return __( 'Mainnet', 'baywall' );
 	}
 
 	/** テストネット */
 	public function testnet(): string {
-		return __( 'Testnet', 'qik-chain-pay' );
+		return __( 'Testnet', 'baywall' );
 	}
 
 	/** プライベートネット */
 	public function privatenet(): string {
-		return __( 'Privatenet', 'qik-chain-pay' );
+		return __( 'Privatenet', 'baywall' );
 	}
 }
