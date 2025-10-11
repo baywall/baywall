@@ -27,7 +27,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 	return (
 		<Placeholder
 			icon={ new BlockIconProvider().get() }
-			label={ 'Qik Chain Pay' }
+			label={ 'baywall' }
 			instructions={ textProvider.pleaseSpecifySalesNetworkCategoryAndPrice }
 			id="fd9e15e3-9f4f-4537-8470-3da48e66d6e9"
 		>
