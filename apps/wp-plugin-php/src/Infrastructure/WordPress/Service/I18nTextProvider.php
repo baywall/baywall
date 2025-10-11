@@ -8,7 +8,7 @@ class I18nTextProvider {
 	 * プラグイン名を取得します。
 	 */
 	public function pluginName(): string {
-		return __( 'Qik Chain Pay', 'baywall' );
+		return __( 'baywall', 'baywall' );
 	}
 
 	/** メインネット */
