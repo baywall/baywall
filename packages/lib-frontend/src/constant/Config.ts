@@ -8,4 +8,9 @@ export class Config {
 	 * ※ PHP側と整合性を取ること
 	 */
 	public static readonly PHP_VAR_NAME = 'php_var_20792bdd';
+
+	/**
+	 * 本プロジェクトのフロントエンド側で出力するログの日付フォーマット
+	 */
+	public static readonly LOG_DATE_FORMAT = 'yyyy-MM-dd HH:mm:ss.SSS';
 }
