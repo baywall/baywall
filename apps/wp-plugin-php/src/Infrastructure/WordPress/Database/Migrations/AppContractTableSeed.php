@@ -62,7 +62,7 @@ class AppContractTableSeed_0_0_1 extends AppContractTableSeedBase {
 			$this->add( ChainIdConstants::privatenetL2(), '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512' );
 
 			// テストネットで開発用のコントラクトアドレスを使用
-			$this->add( ChainIdConstants::sepolia(), '0x6e98081f56608E3a9414823239f65c0e6399561d' );
+			$this->add( ChainIdConstants::sepolia(), '0xf66018B75804AF732794DD3FFB231BDa0e4DC6b5' );
 			$this->add( ChainIdConstants::soneiumMinato(), '0x6a9214D8264C00d884225542d3af47cf5De2049f' );
 		} else {
 			// TODO: テストネットのコントラクトアドレスを登録
