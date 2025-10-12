@@ -7,11 +7,11 @@ export class PrefixedLogger implements Logger {
 	// eslint-disable-next-line no-useless-constructor
 	public constructor(
 		private logPrefixProvider: LogPrefixProvider,
-		private unitLogger: Logger
+		private logger: Logger
 	) {}
 
 	public log( logLevel: LogLevel, ...args: any[] ): void {
 		const prefix = this.logPrefixProvider.get( logLevel );
-		this.unitLogger.log( logLevel, prefix, ...args );
+		this.logger.log( logLevel, prefix, ...args );
 	}
 }

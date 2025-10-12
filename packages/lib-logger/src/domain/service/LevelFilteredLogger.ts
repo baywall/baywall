@@ -10,7 +10,7 @@ export class LevelFilteredLogger implements Logger {
 	private readonly logLevelIndex: number;
 
 	public constructor(
-		private unitLogger: Logger,
+		private logger: Logger,
 		logLevel: LogLevel
 	) {
 		this.logLevelIndex = this.logLevels.indexOf( logLevel );
@@ -26,7 +26,7 @@ export class LevelFilteredLogger implements Logger {
 		}
 
 		if ( index >= this.logLevelIndex ) {
-			this.unitLogger.log( logLevel, ...args );
+			this.logger.log( logLevel, ...args );
 		}
 	}
 }
