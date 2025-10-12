@@ -61,7 +61,7 @@ class ResolveSaveOracle {
 		}
 
 		// 登録するOracle情報を作成
-		$oracle = new Oracle( $chain, $address, SymbolPair::from( $base_symbol, $quote_symbol ) );
+		$oracle = new Oracle( $chain->id(), $address, SymbolPair::from( $base_symbol, $quote_symbol ) );
 
 		// Oracle情報を保存
 		$this->oracle_repository->save( $oracle );
