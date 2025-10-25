@@ -30,6 +30,11 @@ class ServerSignerTableSchema extends MigratorBase {
 class ServerSignerTableSchema_0_0_1 extends MigrationBase {
 	public function up(): void {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
+
+		// `address`はウォレットの秘密鍵から生成可能だが、以下の目的で保持
+		// - 秘密鍵からウォレットを作成したときの検証
+		// - アドレスだけ参照する際の計算量削減
+		// `base64_key`はウォレットの秘密鍵をBase64エンコードしたものを保存(そのままコピペでウォレットに登録されないようにしているだけ)
 		$sql = <<<SQL
 			CREATE TABLE `{$this->tableName()}` (
 				`created_at`        timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP,
