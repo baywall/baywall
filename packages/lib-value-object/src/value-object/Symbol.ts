@@ -1,8 +1,9 @@
 import cc from 'currency-codes';
 import { SymbolBrand as brand } from './SymbolBrand';
+import { ValueObject } from './base/ValueObject';
 
 /** 通貨記号を表すvalue-object */
-export class Symbol {
+export class Symbol implements ValueObject< Symbol > {
 	/** 型区別用のフィールド */
 	private readonly [ brand ]!: void;
 

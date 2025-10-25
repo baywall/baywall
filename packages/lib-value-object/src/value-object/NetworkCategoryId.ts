@@ -1,7 +1,9 @@
+import { ValueObject } from './base/ValueObject';
+
 const brand: unique symbol = Symbol( 'NetworkCategoryIdBrand' );
 
 /** ネットワークカテゴリIDを表すvalue-object */
-export class NetworkCategoryId {
+export class NetworkCategoryId implements ValueObject< NetworkCategoryId > {
 	/** 型区別用のフィールド */
 	private [ brand ]!: void;
 

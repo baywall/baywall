@@ -1,7 +1,9 @@
+import { ValueObject } from './base/ValueObject';
+
 const brand: unique symbol = Symbol( 'AmountBrand' );
 
 /** 数量を表すvalue-object */
-export class Amount {
+export class Amount implements ValueObject< Amount > {
 	/** 型区別用のフィールド */
 	private [ brand ]!: void;
 
@@ -14,6 +16,10 @@ export class Amount {
 
 	public static from( amountValue: string ): Amount {
 		return new Amount( amountValue );
+	}
+
+	public equals( other: Amount ): boolean {
+		return this.value === other.value;
 	}
 
 	public toString(): string {
