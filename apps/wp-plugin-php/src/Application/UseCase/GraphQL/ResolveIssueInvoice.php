@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
@@ -11,6 +10,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
+use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\PriceExchangeService;
 use Cornix\Serendipity\Core\Domain\Service\TokenAmountConverter;
@@ -38,7 +38,7 @@ class ResolveIssueInvoice {
 	private TokenAmountConverter $token_amount_converter;
 	private PriceExchangeService $price_exchange_service;
 	private InvoiceRepository $invoice_repository;
-	private ServerSignerService $server_signer_service;
+	private ServerSignerRepository $server_signer_repository;
 	private WalletService $wallet_service;
 
 	public function __construct(
@@ -51,7 +51,7 @@ class ResolveIssueInvoice {
 		TokenAmountConverter $token_amount_converter,
 		PriceExchangeService $price_exchange_service,
 		InvoiceRepository $invoice_repository,
-		ServerSignerService $server_signer_service,
+		ServerSignerRepository $server_signer_service,
 		WalletService $wallet_service
 	) {
 		$this->init_crawled_block_number = $init_crawled_block_number;
@@ -63,7 +63,7 @@ class ResolveIssueInvoice {
 		$this->token_amount_converter    = $token_amount_converter;
 		$this->price_exchange_service    = $price_exchange_service;
 		$this->invoice_repository        = $invoice_repository;
-		$this->server_signer_service     = $server_signer_service;
+		$this->server_signer_repository  = $server_signer_service;
 		$this->wallet_service            = $wallet_service;
 	}
 
@@ -153,7 +153,7 @@ class ResolveIssueInvoice {
 		);
 
 		// サーバーの署名用ウォレットで署名
-		$server_signer    = $this->server_signer_service->getServerSigner();
+		$server_signer    = $this->server_signer_repository->get();
 		$server_signature = $this->wallet_service->signMessage( $server_signer, $server_message );
 
 		return new SignInvoiceResult( $server_message, $server_signature );
