@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Application\Factory\SignerFactory;
-use Cornix\Serendipity\Core\Domain\Entity\Signer;
+use Cornix\Serendipity\Core\Domain\Entity\Base\Signer;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\PrivateKey;
 use Cornix\Serendipity\Core\Infrastructure\System\OpenSslChecker;
