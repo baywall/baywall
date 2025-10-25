@@ -15,20 +15,12 @@ class ServerSignerTableRecord extends TableRecordBase {
 	}
 
 	protected string $address;
-	protected string $private_key_data;
-	protected ?string $encryption_key;
-	protected ?string $encryption_iv;
+	protected string $base64_key;
 
 	public function addressValue(): string {
 		return $this->address;
 	}
-	public function privateKeyDataValue(): string {
-		return $this->private_key_data;
-	}
-	public function encryptionKeyValue(): ?string {
-		return $this->encryption_key;
-	}
-	public function encryptionIvValue(): ?string {
-		return $this->encryption_iv;
+	public function base64KeyValue(): string {
+		return $this->base64_key;
 	}
 }

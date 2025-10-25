@@ -3,19 +3,19 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
+use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 
 class ResolveServerSigner {
 
-	private ServerSignerService $server_signer_service;
+	private ServerSignerRepository $server_signer_repository;
 
-	public function __construct( ServerSignerService $server_signer_service ) {
-		$this->server_signer_service = $server_signer_service;
+	public function __construct( ServerSignerRepository $server_signer_repository ) {
+		$this->server_signer_repository = $server_signer_repository;
 	}
 
 	public function handle( array $root_value, array $args ) {
 
-		$server_signer = $this->server_signer_service->getServerSigner();
+		$server_signer = $this->server_signer_repository->get();
 
 		return $server_signer === null ? null : array(
 			'address' => $server_signer->address()->value(),
