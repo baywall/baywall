@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Application\Exception\ChainConnectionException;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\UnlockPaywallTransferEventRepository;
@@ -15,7 +16,7 @@ class AppContractCrawlService {
 	private AppContractRepository $app_contract_repository;
 	private AppContractClientFactory $app_contract_client_factory;
 	private EthGetLogsToBlockProvider $eth_get_logs_to_block_provider;
-	private ServerSignerService $server_signer_service;
+	private ServerSignerRepository $server_signer_repository;
 	private UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository;
 
 	public function __construct(
@@ -23,14 +24,14 @@ class AppContractCrawlService {
 		AppContractRepository $app_contract_repository,
 		AppContractClientFactory $app_contract_client_factory,
 		EthGetLogsToBlockProvider $eth_get_logs_to_block_provider,
-		ServerSignerService $server_signer_service,
+		ServerSignerRepository $server_signer_repository,
 		UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository
 	) {
 		$this->block_number_provider                    = $block_number_provider;
 		$this->app_contract_repository                  = $app_contract_repository;
 		$this->app_contract_client_factory              = $app_contract_client_factory;
 		$this->eth_get_logs_to_block_provider           = $eth_get_logs_to_block_provider;
-		$this->server_signer_service                    = $server_signer_service;
+		$this->server_signer_repository                 = $server_signer_repository;
 		$this->unlock_paywall_transfer_event_repository = $unlock_paywall_transfer_event_repository;
 	}
 
@@ -59,7 +60,7 @@ class AppContractCrawlService {
 		$to_block_number   = $this->eth_get_logs_to_block_provider->get( $chain_id, $from_block_number, $latest_block_number );
 
 		// フィルタ条件となる署名用ウォレットアドレスを取得
-		$server_signer_address = $this->server_signer_service->getServerSigner()->address();
+		$server_signer_address = $this->server_signer_repository->get()->address();
 		// Appコントラクトからイベントを取得
 		$client = $this->app_contract_client_factory->create( $chain_id );
 		$events = $client->getUnlockPaywallTransferEvents( $from_block_number, $to_block_number, $server_signer_address );
