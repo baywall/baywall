@@ -35,9 +35,7 @@ class ServerSignerTableSchema_0_0_1 extends MigrationBase {
 				`created_at`        timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`updated_at`        timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`address`           varchar(191)   NOT NULL,
-				`private_key_data`  varchar(191)   NOT NULL,
-				`encryption_key`    varchar(191),
-				`encryption_iv`     varchar(191),
+				`base64_key`        varchar(191)   NOT NULL,
 				PRIMARY KEY (`address`)
 			) {$this->charset()};
 		SQL;
