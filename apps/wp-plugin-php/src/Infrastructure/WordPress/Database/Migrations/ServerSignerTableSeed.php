@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations;
 
-use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\ServerSignerPrivateKeyRepository;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use RuntimeException;
 use wpdb;
 
 
@@ -32,24 +30,19 @@ class ServerSignerTableSeed extends MigratorBase {
 /** @internal */
 class ServerSignerTableSeed_0_0_1 extends MigrationBase {
 
-	public function __construct( ServerSignerService $server_signer_service, ServerSignerPrivateKeyRepository $repository ) {
-		$this->server_signer_service = $server_signer_service;
-		$this->repository            = $repository;
-	}
-	private ServerSignerService $server_signer_service;
-	private ServerSignerPrivateKeyRepository $repository;
-
 	public function up(): void {
-		if ( $this->repository->address() !== null ) {
-			throw new RuntimeException( '[A8F10C57] Server signer table already has data. Cannot initialize.' );
-		}
+		// TODO: すでにデータが存在する場合はエラーとする
 
-		$server_signer_data = $this->server_signer_service->generateServerSignerData();
-		$this->repository->save(
-			$server_signer_data->address(),
-			$server_signer_data->privateKeyData(),
-			$server_signer_data->encryptionKey(),
-			$server_signer_data->encryptionIv()
+		$private_key      = Ethers::generatePrivateKey();
+		$address          = Ethers::privateKeyToAddress( $private_key );
+		$base64_key_value = base64_encode( $private_key->value() );
+
+		$this->insert(
+			$this->tableName(),
+			array(
+				'address'    => $address->value(),
+				'base64_key' => $base64_key_value,
+			)
 		);
 	}
 
