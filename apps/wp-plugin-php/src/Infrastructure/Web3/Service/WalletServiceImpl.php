@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
 
-use Cornix\Serendipity\Core\Domain\Entity\Signer;
+use Cornix\Serendipity\Core\Domain\Entity\Base\Signer;
 use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
