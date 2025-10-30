@@ -103,4 +103,29 @@ class Config {
 	 * @see https://github.com/ethereum/ercs/blob/master/ERCS/erc-7528.md
 	 */
 	public const NATIVE_TOKEN_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+
+	/**
+	 * GraphQLの最大クエリ複雑度
+	 *
+	 * 動作する最小の値を設定
+	 *
+	 * @see https://webonyx.github.io/graphql-php/security/#query-complexity-analysis
+	 */
+	public const GRAPHQL_MAX_COMPLEXITY = 28;
+
+	/**
+	 * GraphQLの最大クエリ深度
+	 *
+	 * 動作する最小の値を設定
+	 *
+	 * @see https://webonyx.github.io/graphql-php/security/#limiting-query-depth
+	 */
+	public const GRAPHQL_MAX_QUERY_DEPTH = 3;
+
+	/**
+	 * GraphQLのインテロスペクションを無効化するかどうか
+	 *
+	 * @see https://webonyx.github.io/graphql-php/security/#disabling-introspection
+	 */
+	public const GRAPHQL_DISABLE_INTROSPECTION = true;
 }
