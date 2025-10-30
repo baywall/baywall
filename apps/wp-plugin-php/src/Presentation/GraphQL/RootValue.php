@@ -7,7 +7,6 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveChain;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveChains;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveConsumerTermsVersion;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveCurrentSellerTerms;
-use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveGetErc20Info;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategory;
@@ -61,7 +60,6 @@ class RootValue {
 			// Mutation
 			'issueInvoice'              => ResolveIssueInvoice::class,
 			'requestPaidContentByNonce' => ResolveRequestPaidContentByNonce::class,
-			'getErc20Info'              => ResolveGetErc20Info::class,
 			'saveChain'                 => ResolveSaveChain::class,
 			'saveOracle'                => ResolveSaveOracle::class,
 			'saveToken'                 => ResolveSaveToken::class,
