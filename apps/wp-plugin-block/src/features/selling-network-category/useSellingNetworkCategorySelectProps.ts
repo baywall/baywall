@@ -29,7 +29,7 @@ const useOnChange = (): SellingNetworkCategorySelectProps[ 'onChange' ] => {
 
 const useDisabled = (): boolean => {
 	const { data } = useBlockInitDataQuery();
-	return data === undefined || data.sellableCurrencies.length === 0;
+	return data === undefined || data.sellableSymbols.length === 0;
 };
 
 const useOptions = (): NonNullable< SellingNetworkCategorySelectProps[ 'options' ] > => {
