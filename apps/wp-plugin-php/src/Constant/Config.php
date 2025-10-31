@@ -128,4 +128,11 @@ class Config {
 	 * @see https://webonyx.github.io/graphql-php/security/#disabling-introspection
 	 */
 	public const GRAPHQL_DISABLE_INTROSPECTION = true;
+
+	/**
+	 * GraphQLのmutationで許可される最大フィールド数
+	 *
+	 * mutation呼び出し時に許容するフィールド数の上限（独自ルール）
+	 */
+	public const GRAPHQL_MUTATION_FIELD_MAX_COUNT = 1;
 }
