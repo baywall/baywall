@@ -1,10 +1,10 @@
 import { BlockEditProps } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
 import { WidgetAttributes } from '../../types/WidgetAttributes';
-import { useSellingNetworkCategoryId } from '../../provider/selling-network-category-id/useSellingNetworkCategoryId';
 import { useSellingPriceSymbol } from '../../provider/selling-price-symbol/useSellingPriceSymbol';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 import { useSellingPriceAmount } from '../../provider/selling-price-amount/useSellingPriceAmount';
+import { useSelectedNetworkCategoryIdState } from '../selling-network-category/hooks/useSelectedNetworkCategoryIdState';
 
 export const useSyncWidgetAttributes = () => {
 	const blockEditorProps = useBlockEditProps();
@@ -15,27 +15,27 @@ export const useSyncWidgetAttributes = () => {
 
 const useSaveAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes > ) => {
 	const { attributes, setAttributes } = blockEditorProps;
-	const { sellingNetworkCategoryId } = useSellingNetworkCategoryId();
+	const [ selectedNetworkCategoryId ] = useSelectedNetworkCategoryIdState();
 	const { sellingPriceAmount } = useSellingPriceAmount();
 	const { sellingPriceSymbol } = useSellingPriceSymbol();
 
 	// ネットワークカテゴリIDの保存
 	useEffect( () => {
-		if ( sellingNetworkCategoryId === undefined ) {
+		if ( selectedNetworkCategoryId === undefined ) {
 			return; // まだ初期化されていない場合は保存しない
 		}
 
 		// Attributesの値とContextの値が異なる場合のみ更新する
 		if (
 			attributes.sellingNetworkCategoryId !==
-			( sellingNetworkCategoryId === null ? null : sellingNetworkCategoryId.value )
+			( selectedNetworkCategoryId === null ? null : selectedNetworkCategoryId.value )
 		) {
 			setAttributes( {
 				...attributes,
-				sellingNetworkCategoryId: sellingNetworkCategoryId === null ? null : sellingNetworkCategoryId.value,
+				sellingNetworkCategoryId: selectedNetworkCategoryId === null ? null : selectedNetworkCategoryId.value,
 			} );
 		}
-	}, [ attributes, setAttributes, sellingNetworkCategoryId ] );
+	}, [ attributes, setAttributes, selectedNetworkCategoryId ] );
 
 	// 販売価格の保存
 	useEffect( () => {

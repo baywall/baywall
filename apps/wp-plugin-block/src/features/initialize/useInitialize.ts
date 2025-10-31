@@ -1,10 +1,10 @@
 import { useEffect } from '@wordpress/element';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
-import { useSellingNetworkCategoryId } from '../../provider/selling-network-category-id/useSellingNetworkCategoryId';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 import { Amount, NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { useSellingPriceAmount } from '../../provider/selling-price-amount/useSellingPriceAmount';
 import { useSellingPriceSymbol } from '../../provider/selling-price-symbol/useSellingPriceSymbol';
+import { useSelectedNetworkCategoryIdState } from '../selling-network-category/hooks/useSelectedNetworkCategoryIdState';
 
 /**
  * 初期化処理
@@ -25,14 +25,14 @@ export const useInitialize = (): void => {
 const useInitSellingNetworkCategoryId = () => {
 	const { attributes } = useBlockEditProps();
 	const { data } = useBlockInitDataQuery();
-	const { setSellingNetworkCategoryId } = useSellingNetworkCategoryId();
+	const [ , setSelectedNetworkCategoryId ] = useSelectedNetworkCategoryIdState();
 
 	useEffect( () => {
 		if ( data === undefined ) {
 			return; // データ取得前は何もしない
 		}
 
-		setSellingNetworkCategoryId( ( prev ) => {
+		setSelectedNetworkCategoryId( ( prev ) => {
 			if ( prev !== undefined ) {
 				return prev; // 初期化済みの場合は何もしない
 			}
@@ -44,7 +44,7 @@ const useInitSellingNetworkCategoryId = () => {
 			// 販売可能なネットワークが存在する場合は先頭のIDを、存在しない場合はnullを設定
 			return data.sellableNetworkCategories[ 0 ]?.id ?? null;
 		} );
-	}, [ attributes.sellingNetworkCategoryId, data, setSellingNetworkCategoryId ] );
+	}, [ attributes.sellingNetworkCategoryId, data, setSelectedNetworkCategoryId ] );
 };
 
 /** 画面で入力されている販売価格（数量）を初期化します。 */
@@ -70,12 +70,11 @@ const useInitSellingPriceAmount = () => {
 const useInitSellingPriceSymbol = () => {
 	const { attributes } = useBlockEditProps();
 	const { data } = useBlockInitDataQuery();
-	const { sellingNetworkCategoryId } = useSellingNetworkCategoryId();
 	const { setSellingPriceSymbol } = useSellingPriceSymbol();
 
 	useEffect( () => {
-		if ( data === undefined || sellingNetworkCategoryId === undefined ) {
-			return; // データ取得前やネットワークカテゴリ初期化前は何もしない
+		if ( data === undefined ) {
+			return; // データ取得前は何もしない
 		}
 
 		setSellingPriceSymbol( ( prev ) => {
@@ -90,5 +89,5 @@ const useInitSellingPriceSymbol = () => {
 			// 先頭のシンボルを設定
 			return data.sellableSymbols[ 0 ] ?? null;
 		} );
-	}, [ attributes.sellingSymbol, data, sellingNetworkCategoryId, setSellingPriceSymbol ] );
+	}, [ attributes.sellingSymbol, data, setSellingPriceSymbol ] );
 };
