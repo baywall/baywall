@@ -1,9 +1,9 @@
 import { useMemo } from '@wordpress/element';
 import { NetworkCategoryId } from '@serendipity/lib-value-object';
 import { type SellingNetworkCategorySelectProps } from './SellingNetworkCategorySelect';
-import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
-import { TextProvider } from '../../lib/i18n/TextProvider';
-import { useSellingNetworkCategoryId } from '../../provider/selling-network-category-id/useSellingNetworkCategoryId';
+import { useBlockInitDataQuery } from '../../../query/useBlockInitDataQuery';
+import { TextProvider } from '../../../lib/i18n/TextProvider';
+import { useSellingNetworkCategoryId } from '../../../provider/selling-network-category-id/useSellingNetworkCategoryId';
 
 export const useSellingNetworkCategorySelectProps = (): SellingNetworkCategorySelectProps => {
 	return {

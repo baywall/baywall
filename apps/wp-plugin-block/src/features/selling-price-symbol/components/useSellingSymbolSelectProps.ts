@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from '@wordpress/element';
 import { Symbol } from '@serendipity/lib-value-object';
 import { type SellingPriceSymbolSelectProps } from './SellingPriceSymbolSelect';
-import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
-import { TextProvider } from '../../lib/i18n/TextProvider';
-import { useSellingPriceSymbol } from '../../provider/selling-price-symbol/useSellingPriceSymbol';
+import { useBlockInitDataQuery } from '../../../query/useBlockInitDataQuery';
+import { TextProvider } from '../../../lib/i18n/TextProvider';
+import { useSellingPriceSymbol } from '../../../provider/selling-price-symbol/useSellingPriceSymbol';
 
 export const useSellingPriceSymbolSelectProps = (): SellingPriceSymbolSelectProps => {
 	return {
