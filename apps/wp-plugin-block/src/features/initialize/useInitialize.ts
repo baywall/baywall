@@ -74,6 +74,7 @@ const useInitSellingPriceSymbol = () => {
 		attributes: { sellingSymbol },
 	} = useBlockEditProps();
 	const { data } = useBlockInitDataQuery();
+	const [ selectedNetworkCategoryId ] = useSelectedNetworkCategoryIdState();
 	const [ , setSellingPriceSymbol ] = useSelectedSellingPriceSymbolState();
 
 	useEffect( () => {
@@ -84,6 +85,10 @@ const useInitSellingPriceSymbol = () => {
 		setSellingPriceSymbol( ( prev ) => {
 			if ( prev !== undefined ) {
 				return prev; // 初期化済みの場合は何もしない
+			} else if ( selectedNetworkCategoryId === undefined ) {
+				return prev; // ネットワークカテゴリIDが未初期化の場合は何もしない
+			} else if ( selectedNetworkCategoryId === null ) {
+				return null; // ネットワークカテゴリIDがnullの場合はnullを設定
 			}
 
 			if ( sellingSymbol !== null ) {
@@ -91,7 +96,10 @@ const useInitSellingPriceSymbol = () => {
 			}
 
 			// 先頭のシンボルを設定
-			return data.sellableSymbols[ 0 ] ?? null;
+			return (
+				data.sellableNetworkCategories.find( ( c ) => c.id.equals( selectedNetworkCategoryId ) )
+					?.sellableSymbols[ 0 ] ?? null
+			);
 		} );
-	}, [ sellingSymbol, data, setSellingPriceSymbol ] );
+	}, [ sellingSymbol, data, selectedNetworkCategoryId, setSellingPriceSymbol ] );
 };
