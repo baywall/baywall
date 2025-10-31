@@ -2,7 +2,7 @@ import { useState } from '@wordpress/element';
 import { useLogger } from '@serendipity/lib-frontend';
 import { Amount } from '@serendipity/lib-value-object';
 import { type SellingPriceAmountProps } from './SellingPriceAmount';
-import { useSellingPriceAmount } from '../../provider/selling-price-amount/useSellingPriceAmount';
+import { useSellingPriceAmount } from '../../../provider/selling-price-amount/useSellingPriceAmount';
 
 export const useSellingPriceAmountProps = (): SellingPriceAmountProps => {
 	const [ value, setValue ] = useState< string | undefined >( undefined ); // 画面で表示されている値

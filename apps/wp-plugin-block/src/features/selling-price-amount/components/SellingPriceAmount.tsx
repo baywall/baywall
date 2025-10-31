@@ -1,4 +1,4 @@
-import { NonNegativeNumber, NonNegativeNumberProps } from '../../components/NonNegativeNumber';
+import { NonNegativeNumber, NonNegativeNumberProps } from '../../../components/NonNegativeNumber';
 
 export type SellingPriceAmountProps = NonNegativeNumberProps;
 
