@@ -3,45 +3,27 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Service\SymbolService;
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\NetworkCategoryRepository;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class ResolveNetworkCategory {
 
 	private ChainRepository $chain_repository;
-	private UserAccessChecker $user_access_checker;
-	private SymbolService $symbol_service;
 	private NetworkCategoryRepository $network_category_repository;
 
 	public function __construct(
 		ChainRepository $chain_repository,
-		UserAccessChecker $user_access_checker,
-		SymbolService $symbol_service,
 		NetworkCategoryRepository $network_category_repository
 	) {
 		$this->chain_repository            = $chain_repository;
-		$this->user_access_checker         = $user_access_checker;
-		$this->symbol_service              = $symbol_service;
 		$this->network_category_repository = $network_category_repository;
 	}
 
 	public function handle( array $root_value, array $args ): array {
 
 		$network_category = $this->network_category_repository->get( NetworkCategoryId::from( $args['networkCategoryId'] ) );
-
-		$sellable_symbols_callback = function () {
-			$this->user_access_checker->checkCanCreatePost();   // 投稿を新規作成できる権限が必要
-
-			return array_map(
-				fn( Symbol $symbol ) => $symbol->value(),
-				$this->symbol_service->getSellableSymbols()
-			);
-		};
 
 		$chains_callback = function () use ( $root_value, $network_category ) {
 			// ネットワークカテゴリで絞り込んだチェーン一覧を取得
@@ -57,10 +39,9 @@ class ResolveNetworkCategory {
 		};
 
 		return array(
-			'id'              => $network_category->id()->value(),
-			'name'            => $network_category->name(),
-			'chains'          => $chains_callback,
-			'sellableSymbols' => $sellable_symbols_callback,
+			'id'     => $network_category->id()->value(),
+			'name'   => $network_category->name(),
+			'chains' => $chains_callback,
 		);
 	}
 }
