@@ -2,9 +2,9 @@ import { useEffect } from '@wordpress/element';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 import { Amount, NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
-import { useSellingPriceSymbol } from '../../provider/selling-price-symbol/useSellingPriceSymbol';
 import { useSelectedNetworkCategoryIdState } from '../selling-network-category/hooks/useSelectedNetworkCategoryIdState';
 import { useInputSellingPriceAmountState } from '../selling-price-amount/hooks/useInputSellingPriceAmountState';
+import { useSelectedSellingPriceSymbolState } from '../selling-price-symbol/hooks/useSelectedSellingPriceSymbolState';
 
 /**
  * 初期化処理
@@ -74,7 +74,7 @@ const useInitSellingPriceSymbol = () => {
 		attributes: { sellingSymbol },
 	} = useBlockEditProps();
 	const { data } = useBlockInitDataQuery();
-	const { setSellingPriceSymbol } = useSellingPriceSymbol();
+	const [ , setSellingPriceSymbol ] = useSelectedSellingPriceSymbolState();
 
 	useEffect( () => {
 		if ( data === undefined ) {

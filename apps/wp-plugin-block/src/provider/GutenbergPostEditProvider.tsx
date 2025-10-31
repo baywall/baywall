@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SellingPriceSymbolProvider } from './selling-price-symbol/SellingPriceSymbolProvider';
 import { BlockEditPropsProvider } from './block-edit-props/BlockEditPropsProvider';
 import { BlockEditProps } from '@wordpress/blocks';
 import { WidgetAttributes } from '../types/WidgetAttributes';
@@ -27,10 +26,7 @@ export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps
 		<>
 			<QueryClientProvider client={ client }>
 				<Provider>
-					<BlockEditPropsProvider blockEditProps={ blockEditProps }>
-						{ /* ウィジェットの状態を保持 */ }
-						<SellingPriceSymbolProvider>{ children }</SellingPriceSymbolProvider>
-					</BlockEditPropsProvider>
+					<BlockEditPropsProvider blockEditProps={ blockEditProps }>{ children }</BlockEditPropsProvider>
 				</Provider>
 			</QueryClientProvider>
 		</>
