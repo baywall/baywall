@@ -1,10 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SellingPriceSymbolProvider } from './selling-price-symbol/SellingPriceSymbolProvider';
-import { SellingNetworkCategoryIdProvider } from './selling-network-category-id/SellingNetworkCategoryIdProvider';
 import { BlockEditPropsProvider } from './block-edit-props/BlockEditPropsProvider';
 import { BlockEditProps } from '@wordpress/blocks';
 import { WidgetAttributes } from '../types/WidgetAttributes';
-import { SellingPriceAmountProvider } from './selling-price-amount/SellingPriceAmountProvider';
+import { Provider } from 'jotai';
 
 // アクティブになったときは再読みしない
 const client = new QueryClient( {
@@ -27,14 +25,9 @@ export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps
 	return (
 		<>
 			<QueryClientProvider client={ client }>
-				<BlockEditPropsProvider blockEditProps={ blockEditProps }>
-					{ /* ウィジェットの状態を保持 */ }
-					<SellingNetworkCategoryIdProvider>
-						<SellingPriceAmountProvider>
-							<SellingPriceSymbolProvider>{ children }</SellingPriceSymbolProvider>
-						</SellingPriceAmountProvider>
-					</SellingNetworkCategoryIdProvider>
-				</BlockEditPropsProvider>
+				<Provider>
+					<BlockEditPropsProvider blockEditProps={ blockEditProps }>{ children }</BlockEditPropsProvider>
+				</Provider>
 			</QueryClientProvider>
 		</>
 	);
