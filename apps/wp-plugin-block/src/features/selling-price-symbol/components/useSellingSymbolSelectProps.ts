@@ -3,7 +3,7 @@ import { Symbol } from '@serendipity/lib-value-object';
 import { type SellingPriceSymbolSelectProps } from './SellingPriceSymbolSelect';
 import { useBlockInitDataQuery } from '../../../query/useBlockInitDataQuery';
 import { TextProvider } from '../../../lib/i18n/TextProvider';
-import { useSellingPriceSymbol } from '../../../provider/selling-price-symbol/useSellingPriceSymbol';
+import { useSelectedSellingPriceSymbolState } from '../hooks/useSelectedSellingPriceSymbolState';
 
 export const useSellingPriceSymbolSelectProps = (): SellingPriceSymbolSelectProps => {
 	return {
@@ -15,12 +15,12 @@ export const useSellingPriceSymbolSelectProps = (): SellingPriceSymbolSelectProp
 };
 
 const useValue = (): NonNullable< SellingPriceSymbolSelectProps[ 'value' ] > => {
-	const { sellingPriceSymbol } = useSellingPriceSymbol();
+	const [ sellingPriceSymbol ] = useSelectedSellingPriceSymbolState();
 	return sellingPriceSymbol?.value || '';
 };
 
 const useOnChange = (): SellingPriceSymbolSelectProps[ 'onChange' ] => {
-	const { setSellingPriceSymbol } = useSellingPriceSymbol();
+	const [ , setSellingPriceSymbol ] = useSelectedSellingPriceSymbolState();
 
 	return useCallback< NonNullable< SellingPriceSymbolSelectProps[ 'onChange' ] > >(
 		( value ) => {
