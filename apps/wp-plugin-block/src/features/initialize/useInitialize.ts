@@ -83,18 +83,12 @@ const useInitSellingPriceSymbol = () => {
 				return prev; // 初期化済みの場合は何もしない
 			}
 
-			if ( sellingNetworkCategoryId === null ) {
-				return null; // ネットワークカテゴリIDがnullの場合は通貨シンボルもnullを設定
-			} else if ( attributes.sellingSymbol !== null ) {
+			if ( attributes.sellingSymbol !== null ) {
 				return Symbol.from( attributes.sellingSymbol ); // Attributesに値がある場合はそれを優先して設定
 			}
 
-			// 現在選択されているネットワークで販売可能な通貨シンボル一覧を取得
-			const filteredCurrencies = data.sellableCurrencies.filter( ( currency ) =>
-				currency.networkCategoryId.equals( sellingNetworkCategoryId )
-			);
-
-			return filteredCurrencies[ 0 ]?.symbol ?? null; // 取得した通貨シンボル一覧の先頭のシンボルを設定
+			// 先頭のシンボルを設定
+			return data.sellableSymbols[ 0 ] ?? null;
 		} );
 	}, [ attributes.sellingSymbol, data, sellingNetworkCategoryId, setSellingPriceSymbol ] );
 };
