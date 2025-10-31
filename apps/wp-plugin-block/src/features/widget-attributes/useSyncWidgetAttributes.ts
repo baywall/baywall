@@ -3,8 +3,8 @@ import { useEffect } from '@wordpress/element';
 import { WidgetAttributes } from '../../types/WidgetAttributes';
 import { useSellingPriceSymbol } from '../../provider/selling-price-symbol/useSellingPriceSymbol';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
-import { useSellingPriceAmount } from '../../provider/selling-price-amount/useSellingPriceAmount';
 import { useSelectedNetworkCategoryIdState } from '../selling-network-category/hooks/useSelectedNetworkCategoryIdState';
+import { useInputSellingPriceAmountState } from '../selling-price-amount/hooks/useInputSellingPriceAmountState';
 
 export const useSyncWidgetAttributes = () => {
 	const blockEditorProps = useBlockEditProps();
@@ -16,7 +16,7 @@ export const useSyncWidgetAttributes = () => {
 const useSaveAttributes = ( blockEditorProps: BlockEditProps< WidgetAttributes > ) => {
 	const { attributes, setAttributes } = blockEditorProps;
 	const [ selectedNetworkCategoryId ] = useSelectedNetworkCategoryIdState();
-	const { sellingPriceAmount } = useSellingPriceAmount();
+	const [ sellingPriceAmount ] = useInputSellingPriceAmountState();
 	const { sellingPriceSymbol } = useSellingPriceSymbol();
 
 	// ネットワークカテゴリIDの保存
