@@ -3,7 +3,6 @@ import { SellingPriceSymbolProvider } from './selling-price-symbol/SellingPriceS
 import { BlockEditPropsProvider } from './block-edit-props/BlockEditPropsProvider';
 import { BlockEditProps } from '@wordpress/blocks';
 import { WidgetAttributes } from '../types/WidgetAttributes';
-import { SellingPriceAmountProvider } from './selling-price-amount/SellingPriceAmountProvider';
 import { Provider } from 'jotai';
 
 // アクティブになったときは再読みしない
@@ -30,9 +29,7 @@ export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps
 				<Provider>
 					<BlockEditPropsProvider blockEditProps={ blockEditProps }>
 						{ /* ウィジェットの状態を保持 */ }
-						<SellingPriceAmountProvider>
-							<SellingPriceSymbolProvider>{ children }</SellingPriceSymbolProvider>
-						</SellingPriceAmountProvider>
+						<SellingPriceSymbolProvider>{ children }</SellingPriceSymbolProvider>
 					</BlockEditPropsProvider>
 				</Provider>
 			</QueryClientProvider>
