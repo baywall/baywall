@@ -26,12 +26,16 @@ const useSelectCallback = () => {
 	return useCallback( ( data: PostSettingQuery ) => {
 		// 販売可能なネットワークカテゴリ一覧
 		const sellableNetworkCategories: NetworkCategory[] = data.networkCategories
+			.filter( ( category ) => category.sellableSymbols.length > 0 ) // 販売可能なシンボルが存在するカテゴリのみ対象
 			.sort( ( a, b ) => a.id - b.id )
-			.map( ( category ) => NetworkCategory.from( NetworkCategoryId.from( category.id ), category.name ) );
+			.map( ( category ) =>
+				NetworkCategory.from(
+					NetworkCategoryId.from( category.id ),
+					category.name,
+					category.sellableSymbols.sort().map( ( symbol ) => Symbol.from( symbol ) )
+				)
+			);
 
-		// 販売可能なシンボル一覧
-		const sellableSymbols: Symbol[] = data.sellableSymbols.sort().map( ( symbol ) => Symbol.from( symbol ) );
-
-		return { sellableNetworkCategories, sellableSymbols };
+		return { sellableNetworkCategories };
 	}, [] );
 };
