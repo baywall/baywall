@@ -3,12 +3,18 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Infrastructure\GraphQL\PluginSchemaProvider;
+use Cornix\Serendipity\Core\Infrastructure\GraphQL\Rule\MutationFieldLimitRule;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
 use GraphQL\GraphQL;
+use GraphQL\Validator\DocumentValidator;
+use GraphQL\Validator\Rules\DisableIntrospection;
+use GraphQL\Validator\Rules\QueryComplexity;
+use GraphQL\Validator\Rules\QueryDepth;
 
 /**
  * GraphQLのAPI登録
@@ -56,6 +62,18 @@ class GraphQLHook extends HookBase {
 
 		$schema     = ( new PluginSchemaProvider() )->get();
 		$root_value = ( new RootValue() )->get( $this->container );
+
+		// クエリの複雑度制限を追加
+		DocumentValidator::addRule( new QueryComplexity( Config::GRAPHQL_MAX_COMPLEXITY ) );
+		// クエリの深度制限を追加
+		DocumentValidator::addRule( new QueryDepth( Config::GRAPHQL_MAX_QUERY_DEPTH ) );
+		// イントロスペクションの無効化
+		if ( Config::GRAPHQL_DISABLE_INTROSPECTION ) {
+			DocumentValidator::addRule( new DisableIntrospection( DisableIntrospection::ENABLED ) );
+		}
+		// 独自ルール追加
+		// mutation呼び出し時のフィールド数制限ルールを追加
+		DocumentValidator::addRule( new MutationFieldLimitRule( Config::GRAPHQL_MUTATION_FIELD_MAX_COUNT ) );
 
 		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values )
 			// https://webonyx.github.io/graphql-php/error-handling/#custom-error-handling-and-formatting
