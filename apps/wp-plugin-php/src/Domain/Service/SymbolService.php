@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class SymbolService {
@@ -23,14 +24,50 @@ class SymbolService {
 	}
 
 	/**
-	 * 指定したシンボルが販売可能かどうかを判定します。
+	 * 本システムで扱うシンボル一覧(法定通貨/暗号資産)を取得します
+	 *
+	 * @return Symbol[]
 	 */
-	public function isSellable( Symbol $symbol ): bool {
-		$all_tokens            = $this->token_repository->all();
-		$payable_symbol_tokens = ( new TokensFilter() )
+	public function all() {
+		/**
+		 * 通貨シンボルの文字列をキーとする連想配列。後でキーだけを取り出して重複排除するために使用。
+		 *
+		 * @var array<string,true>
+		 */
+		$symbol_value_set = array();
+
+		// トークン一覧のシンボルを追加
+		foreach ( $this->token_repository->all() as $token ) {
+			$symbol_value_set[ $token->symbol()->value() ] = true;
+		}
+		// Oracleのbaseとquoteのシンボルを追加
+		foreach ( $this->oracle_repository->all() as $oracle ) {
+			$symbol_value_set[ $oracle->symbolPair()->base()->value() ]  = true;
+			$symbol_value_set[ $oracle->symbolPair()->quote()->value() ] = true;
+		}
+
+		return array_map(
+			fn( $symbol_value ) => Symbol::from( $symbol_value ),
+			array_keys( $symbol_value_set )
+		);
+	}
+
+	/**
+	 * 指定したシンボルが指定したネットワークカテゴリで販売可能かどうかを判定します。
+	 */
+	public function isSellable( Symbol $symbol, NetworkCategoryId $network_category_id ): bool {
+		// 指定したネットワークに存在するトークン一覧を取得
+		$target_network_all_tokens = array_filter(
+			$this->token_repository->all(),
+			function ( $token ) use ( $network_category_id ) {
+				$chain = $this->chain_repository->get( $token->chainId() );
+				return $chain->networkCategoryId()->equals( $network_category_id );
+			}
+		);
+		$payable_symbol_tokens     = ( new TokensFilter() )
 			->bySymbol( $symbol )
 			->byIsPayable( true )
-			->apply( $all_tokens );
+			->apply( $target_network_all_tokens );
 
 		// レート変換無しで支払い可能なトークンが存在する場合は販売可能
 		// - ETHが支払い可能 => ETHで販売可能
@@ -75,7 +112,7 @@ class SymbolService {
 			$base_symbol_tokens = ( new TokensFilter() )
 				->bySymbol( $base_symbol )
 				->byIsPayable( true )
-				->apply( $all_tokens );
+				->apply( $target_network_all_tokens );
 
 			if ( ! empty( $base_symbol_tokens ) ) {
 				return true;
