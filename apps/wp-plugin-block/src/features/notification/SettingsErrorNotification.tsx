@@ -19,7 +19,7 @@ export const SettingsErrorNotification: React.FC< SettingsErrorNotificationProps
 		if ( data === undefined ) {
 			// データ取得中は何も表示しない
 			return [];
-		} else if ( data.sellableNetworkCategories.length > 0 && data.sellableSymbols.length > 0 ) {
+		} else if ( data.sellableNetworkCategories.length > 0 ) {
 			// 設定が正しい場合は何も表示しない
 			return [];
 		}

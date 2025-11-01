@@ -7,5 +7,6 @@ export interface SellingPriceSymbolSelectProps extends BlockSingleSelectProps {}
  * @param props
  */
 export const SellingPriceSymbolSelect: React.FC< SellingPriceSymbolSelectProps > = ( props ) => {
-	return <BlockSingleSelect { ...props } />;
+	const { ...rest } = props;
+	return <BlockSingleSelect { ...rest } />;
 };
