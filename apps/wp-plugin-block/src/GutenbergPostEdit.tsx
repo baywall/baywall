@@ -14,6 +14,8 @@ import { useControlEditorSaving } from './features/control-editor-saving/useCont
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
 import { TextProvider } from './lib/i18n/TextProvider';
 import { useMemo } from '@wordpress/element';
+import { InvalidDecimalsNotification } from './features/notification/invalid-decimals/components/InvalidDecimalsNotification';
+import { useInvalidDecimalsNotificationProps } from './features/notification/invalid-decimals/components/useInvalidDecimalsNotificationProps';
 
 type GutenbergPostEditProps = {};
 
@@ -61,6 +63,8 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 
 								{ /* 販売価格の値が不正な時に通知を行うコンポーネント */ }
 								<AmountErrorNotification { ...useAmountErrorNotificationProps() } />
+								{ /* 販売価格の小数点以下桁数が不正な時に通知を行うコンポーネント */ }
+								<InvalidDecimalsNotification { ...useInvalidDecimalsNotificationProps() } />
 							</div>
 						</td>
 					</tr>
