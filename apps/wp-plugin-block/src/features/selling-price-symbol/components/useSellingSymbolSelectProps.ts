@@ -42,6 +42,9 @@ const useAutoSelectValue = (): void => {
 		} else if ( selectedSymbol && ! options.find( ( o ) => o.value === selectedSymbol.value ) ) {
 			// 選択可能な選択肢以外を選択している場合は先頭の選択肢を設定する
 			setSelectedSymbol( Symbol.from( options[ 0 ].value ) );
+		} else if ( ! selectedSymbol ) {
+			// 選択されていない場合は先頭の選択肢を設定する
+			setSelectedSymbol( Symbol.from( options[ 0 ].value ) );
 		}
 	}, [ savedSellingSymbol, options, selectedSymbol, setSelectedSymbol ] );
 };
