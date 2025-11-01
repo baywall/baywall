@@ -15,36 +15,7 @@ import { useInputSellingPriceAmountState } from '../selling-price-amount/hooks/u
  * - 画面でウィジェットを削除、再度追加した場合
  */
 export const useInitialize = (): void => {
-	useInitSellingNetworkCategoryId(); // ネットワークカテゴリIDの初期化
 	useInitSellingPriceAmount(); // 販売価格（数量）の初期化
-};
-
-/** 画面で選択されているネットワークカテゴリIDを初期化します。 */
-const useInitSellingNetworkCategoryId = () => {
-	const {
-		attributes: { sellingNetworkCategoryId },
-	} = useBlockEditProps();
-	const { data } = useBlockInitDataQuery();
-	const [ , setSelectedNetworkCategoryId ] = useSelectedNetworkCategoryIdState();
-
-	useEffect( () => {
-		if ( data === undefined ) {
-			return; // データ取得前は何もしない
-		}
-
-		setSelectedNetworkCategoryId( ( prev ) => {
-			if ( prev !== undefined ) {
-				return prev; // 初期化済みの場合は何もしない
-			}
-
-			// Attributesに値がある場合はそれを優先して設定
-			if ( sellingNetworkCategoryId !== null ) {
-				return NetworkCategoryId.from( sellingNetworkCategoryId );
-			}
-			// 販売可能なネットワークが存在する場合は先頭のIDを、存在しない場合はnullを設定
-			return data.sellableNetworkCategories[ 0 ]?.id ?? null;
-		} );
-	}, [ sellingNetworkCategoryId, data, setSelectedNetworkCategoryId ] );
 };
 
 /** 画面で入力されている販売価格（数量）を初期化します。 */
