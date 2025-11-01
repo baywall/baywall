@@ -10,7 +10,6 @@ import { AmountErrorNotification } from './features/notification/AmountErrorNoti
 import { useAmountErrorNotificationProps } from './features/notification/useAmountErrorNotificationProps';
 import { SettingsErrorNotification } from './features/notification/SettingsErrorNotification';
 import { ApiErrorNotification } from './features/notification/ApiErrorNotification';
-import { useInitialize } from './features/initialize/useInitialize';
 import { useControlEditorSaving } from './features/control-editor-saving/useControlEditorSaving';
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
 import { TextProvider } from './lib/i18n/TextProvider';
@@ -19,7 +18,6 @@ import { useMemo } from '@wordpress/element';
 type GutenbergPostEditProps = {};
 
 export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
-	useInitialize(); // 初期化処理
 	useSyncWidgetAttributes(); // Attributesと画面の状態を同期
 	useControlEditorSaving(); // 投稿の保存制御
 	const textProvider = useMemo( () => new TextProvider(), [] );
