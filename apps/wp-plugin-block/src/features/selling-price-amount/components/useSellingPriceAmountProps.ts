@@ -3,22 +3,39 @@ import { useLogger } from '@serendipity/lib-frontend';
 import { Amount } from '@serendipity/lib-value-object';
 import { type SellingPriceAmountProps } from './SellingPriceAmount';
 import { useInputSellingPriceAmountState } from '../hooks/useInputSellingPriceAmountState';
+import { useSavedSellingAmount } from '../../widget-attributes/useSavedSellingAmount';
+import { useEffect } from 'react';
 
 // 画面で表示されている金額の文字列
 const valueAtom = atom< string | undefined >( undefined );
 
 export const useSellingPriceAmountProps = (): SellingPriceAmountProps => {
+	useInitValue();
+
 	return {
 		value: useValue(),
 		onChange: useOnChange(),
 	};
 };
 
+const useInitValue = () => {
+	const savedSellingAmount = useSavedSellingAmount();
+	const [ value, setValue ] = useAtom( valueAtom );
+	const [ , setInputSellingPriceAmount ] = useInputSellingPriceAmountState();
+
+	useEffect( () => {
+		if ( value !== undefined ) {
+			return; // 既に値が設定されている場合は何もしない
+		}
+		const initAmount = savedSellingAmount ?? Amount.from( '0' );
+		setValue( initAmount.value ); // 画面に表示されている値を設定
+		setInputSellingPriceAmount( initAmount ); // コンテキストに保存する値を設定
+	}, [ savedSellingAmount, value, setValue, setInputSellingPriceAmount ] );
+};
+
 const useValue = () => {
 	const [ value ] = useAtom( valueAtom );
-	const [ inputSellingPriceAmount ] = useInputSellingPriceAmountState();
-
-	return value !== undefined ? value : inputSellingPriceAmount?.value ?? '';
+	return value ?? '';
 };
 
 const useOnChange = (): NonNullable< SellingPriceAmountProps[ 'onChange' ] > => {
