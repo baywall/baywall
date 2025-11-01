@@ -1,4 +1,5 @@
 import { NonNegativeNumber, NonNegativeNumberProps } from '../../../components/NonNegativeNumber';
+import { Config } from '../../../constant/Config';
 
 export type SellingPriceAmountProps = NonNegativeNumberProps;
 
@@ -7,6 +8,5 @@ export type SellingPriceAmountProps = NonNegativeNumberProps;
  * @param props
  */
 export const SellingPriceAmount: React.FC< SellingPriceAmountProps > = ( props ) => {
-	const MAX_LENGTH = 78 + 1; // 256bit符号なし整数の最大値（78桁） + 小数点（1桁）
-	return <NonNegativeNumber { ...props } maxLength={ MAX_LENGTH } />;
+	return <NonNegativeNumber { ...props } maxLength={ Config.SELLING_PRICE_AMOUNT_MAX_TEXT_LENGTH } />;
 };
