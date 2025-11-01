@@ -91,15 +91,12 @@ const useOptions = (): SellingPriceSymbolSelectProps[ 'options' ] => {
 			savedSellingNetworkCategoryId &&
 			selectedNetworkCategoryId &&
 			savedSellingNetworkCategoryId.equals( selectedNetworkCategoryId );
-		// 選択されている通貨シンボルが一覧に存在しないかどうかを取得
+		// 選択されている通貨シンボルが一覧に存在するかどうかを取得
 		const isSelectedSymbolExists =
 			selectedSellingPriceSymbol && sellableSymbols.find( ( s ) => s.equals( selectedSellingPriceSymbol ) );
 
 		// 保存時と同じネットワークカテゴリが選択されており、選択済みの通貨シンボルが一覧に存在しない場合は選択肢に追加
-		if ( isLoadedNetworkCategorySelected && ! isSelectedSymbolExists ) {
-			if ( ! selectedSellingPriceSymbol ) {
-				throw new Error( '[5A02B58D]' ); // ここは通らない
-			}
+		if ( selectedSellingPriceSymbol && isLoadedNetworkCategorySelected && ! isSelectedSymbolExists ) {
 			result.unshift( {
 				label: selectedSellingPriceSymbol.value,
 				value: selectedSellingPriceSymbol.value,
