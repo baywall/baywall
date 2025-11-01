@@ -15,24 +15,4 @@ import { useInputSellingPriceAmountState } from '../selling-price-amount/hooks/u
  * - 画面でウィジェットを削除、再度追加した場合
  */
 export const useInitialize = (): void => {
-	useInitSellingPriceAmount(); // 販売価格（数量）の初期化
-};
-
-/** 画面で入力されている販売価格（数量）を初期化します。 */
-const useInitSellingPriceAmount = () => {
-	const {
-		attributes: { sellingAmount },
-	} = useBlockEditProps();
-	const { data } = useBlockInitDataQuery();
-	const [ , setSellingPriceAmount ] = useInputSellingPriceAmountState();
-
-	useEffect( () => {
-		if ( data === undefined ) {
-			return; // データ取得前は何もしない
-		}
-
-		// 初期化済みの場合は何もしない
-		// Attributesに値がある場合はその値を、存在しない場合は初期値として0を設定
-		setSellingPriceAmount( ( prev ) => ( prev !== undefined ? prev : Amount.from( sellingAmount ?? '0' ) ) );
-	}, [ sellingAmount, data, setSellingPriceAmount ] );
 };
