@@ -5,6 +5,7 @@ import { type SellingPriceAmountProps } from './SellingPriceAmount';
 import { useInputSellingPriceAmountState } from './hooks/useInputSellingPriceAmountState';
 import { useSavedSellingAmount } from '../widget-attributes/useSavedSellingAmount';
 import { useEffect } from 'react';
+import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
 
 // 画面で表示されている金額の文字列
 const valueAtom = atom< string | undefined >( undefined );
@@ -34,7 +35,13 @@ const useInitValue = () => {
 };
 
 const useValue = () => {
+	const { data } = useBlockInitDataQuery();
 	const [ value ] = useAtom( valueAtom );
+
+	if ( data === undefined ) {
+		return ''; // 他のコントロールがデータ取得まで何も表示されないので、それに合わせた制御
+	}
+
 	return value ?? '';
 };
 
