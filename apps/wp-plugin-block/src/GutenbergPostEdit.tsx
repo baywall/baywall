@@ -16,6 +16,7 @@ import { InvalidDecimalsNotification } from './features/notification/invalid-dec
 import { useInvalidDecimalsNotificationProps } from './features/notification/invalid-decimals/components/useInvalidDecimalsNotificationProps';
 import { useTranslation } from 'react-i18next';
 import { useSettingsErrorNotificationProps } from './features/notification/settings-error/useSettingsErrorNotificationProps';
+import { useApiErrorNotificationProps } from './features/notification/api-error/useApiErrorNotificationProps';
 
 type GutenbergPostEditProps = {};
 
@@ -33,7 +34,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 		>
 			{ /* エラー表示 */ }
 			<div style={ { width: '100%' } }>
-				<ApiErrorNotification />
+				<ApiErrorNotification { ...useApiErrorNotificationProps() } />
 				<SettingsErrorNotification { ...useSettingsErrorNotificationProps() } />
 			</div>
 
