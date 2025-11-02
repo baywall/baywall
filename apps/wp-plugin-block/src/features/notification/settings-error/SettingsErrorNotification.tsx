@@ -1,7 +1,7 @@
 import { useMemo } from '@wordpress/element';
 import { NoticeList } from '@wordpress/components';
-import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
-import { UrlProvider } from '../../lib/url/UrlProvider';
+import { useBlockInitDataQuery } from '../../../query/useBlockInitDataQuery';
+import { UrlProvider } from '../../../lib/url/UrlProvider';
 import { useTranslation } from 'react-i18next';
 
 type Notices = React.ComponentProps< typeof NoticeList >[ 'notices' ];
