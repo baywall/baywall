@@ -6,11 +6,7 @@ import { UrlProvider } from '../../../lib/url/UrlProvider';
 
 export const useSettingsErrorNotificationProps = (): SettingsErrorNotificationProps => {
 	return {
-		isSettingsComplete: useIsSettingsComplete(),
+		isSettingsComplete: isSettingsComplete( useBlockInitDataQuery().data ),
 		urlProvider: useMemo( () => new UrlProvider(), [] ),
 	};
-};
-
-const useIsSettingsComplete = (): boolean | undefined => {
-	return isSettingsComplete( useBlockInitDataQuery().data );
 };
