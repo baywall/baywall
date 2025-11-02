@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Amount } from '@serendipity/lib-value-object';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 
@@ -9,17 +9,9 @@ import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditP
  *    投稿を保存後にこの値が変更されることは無いことに注意してください。
  */
 export const useSavedSellingAmount = (): Amount | null => {
-	const [ amount, setAmount ] = useState< Amount | null | undefined >( undefined );
 	const {
-		attributes: { sellingAmount: sellingAmountValue },
+		attributes: { sellingAmount: amountValue },
 	} = useBlockEditProps();
 
-	return useMemo( () => {
-		if ( amount !== undefined ) {
-			return amount;
-		}
-		const loadedAmount = sellingAmountValue ? Amount.from( sellingAmountValue ) : null;
-		setAmount( loadedAmount );
-		return loadedAmount;
-	}, [ amount, setAmount, sellingAmountValue ] );
+	return useState< Amount | null >( amountValue ? Amount.from( amountValue ) : null )[ 0 ];
 };
