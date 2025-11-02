@@ -15,6 +15,7 @@ import { BlockIconProvider } from './lib/icon/BlockIconProvider';
 import { InvalidDecimalsNotification } from './features/notification/invalid-decimals/components/InvalidDecimalsNotification';
 import { useInvalidDecimalsNotificationProps } from './features/notification/invalid-decimals/components/useInvalidDecimalsNotificationProps';
 import { useTranslation } from 'react-i18next';
+import { useSettingsErrorNotificationProps } from './features/notification/settings-error/useSettingsErrorNotificationProps';
 
 type GutenbergPostEditProps = {};
 
@@ -33,7 +34,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 			{ /* エラー表示 */ }
 			<div style={ { width: '100%' } }>
 				<ApiErrorNotification />
-				<SettingsErrorNotification />
+				<SettingsErrorNotification { ...useSettingsErrorNotificationProps() } />
 			</div>
 
 			{ /* 設定項目 ※管理画面のcss(.from-table)を流用 */ }
