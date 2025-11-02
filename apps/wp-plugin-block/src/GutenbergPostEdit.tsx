@@ -1,10 +1,10 @@
 import { Placeholder } from '@wordpress/components';
-import { SellingPriceSymbolSelect } from './features/selling-price-symbol/components/SellingPriceSymbolSelect';
-import { useSellingPriceSymbolSelectProps } from './features/selling-price-symbol/components/useSellingSymbolSelectProps';
-import { SellingNetworkCategorySelect } from './features/selling-network-category/components/SellingNetworkCategorySelect';
-import { useSellingNetworkCategorySelectProps } from './features/selling-network-category/components/useSellingNetworkCategorySelectProps';
-import { SellingPriceAmount } from './features/selling-price-amount/components/SellingPriceAmount';
-import { useSellingPriceAmountProps } from './features/selling-price-amount/components/useSellingPriceAmountProps';
+import { SellingPriceSymbolSelect } from './features/selling-price-symbol/SellingPriceSymbolSelect';
+import { useSellingPriceSymbolSelectProps } from './features/selling-price-symbol/useSellingSymbolSelectProps';
+import { SellingNetworkCategorySelect } from './features/selling-network-category/SellingNetworkCategorySelect';
+import { useSellingNetworkCategorySelectProps } from './features/selling-network-category/useSellingNetworkCategorySelectProps';
+import { SellingPriceAmount } from './features/selling-price-amount/SellingPriceAmount';
+import { useSellingPriceAmountProps } from './features/selling-price-amount/useSellingPriceAmountProps';
 import { useSyncWidgetAttributes } from './features/widget-attributes/useSyncWidgetAttributes';
 import { AmountErrorNotification } from './features/notification/amount-error/AmountErrorNotification';
 import { useAmountErrorNotificationProps } from './features/notification/amount-error/useAmountErrorNotificationProps';
