@@ -23,6 +23,8 @@ import metadata from './block.json';
 import { WidgetAttributes } from './types/WidgetAttributes';
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
 
+import './i18n/18n'; // i18n初期化処理を実行
+
 /**
  * Every block starts by registering a new block type definition.
  *
