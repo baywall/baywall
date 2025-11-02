@@ -4,6 +4,9 @@ import { PostSettingQuery, usePostSettingQuery } from '../../types/gql/generated
 import { NetworkCategory } from '../value-object/NetworkCategory';
 import { useLogger } from '@serendipity/lib-frontend';
 
+/** ブロック初期データの型 */
+export type BlockInitDataType = NonNullable< ReturnType< typeof useBlockInitDataQuery >[ 'data' ] >;
+
 /** ブロック初期データ取得クエリ */
 export const useBlockInitDataQuery = () => {
 	const logger = useLogger();
