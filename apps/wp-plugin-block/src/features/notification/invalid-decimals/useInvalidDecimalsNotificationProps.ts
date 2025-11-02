@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { ScreenNotifier } from '../../../../lib/gutenberg/notification/ScreenNotifier';
+import { ScreenNotifier } from '../../../lib/gutenberg/notification/ScreenNotifier';
 import { InvalidDecimalsNotificationProps } from './InvalidDecimalsNotification';
-import { useInputSellingPriceAmountState } from '../../../selling-price-amount/hooks/useInputSellingPriceAmountState';
-import { useSelectedSymbolsMaxDecimals } from '../hooks/useSelectedSymbolsMaxDecimals';
-import { useIsDecimalPlacesError } from '../hooks/useIsDecimalPlacesError';
+import { useInputSellingPriceAmountState } from '../../selling-price-amount/hooks/useInputSellingPriceAmountState';
+import { useSelectedSymbolsMaxDecimals } from './hooks/useSelectedSymbolsMaxDecimals';
+import { useIsDecimalPlacesError } from './hooks/useIsDecimalPlacesError';
 
 export const useInvalidDecimalsNotificationProps = (): InvalidDecimalsNotificationProps => {
 	return {

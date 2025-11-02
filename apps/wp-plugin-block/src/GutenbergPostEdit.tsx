@@ -12,8 +12,8 @@ import { SettingsErrorNotification } from './features/notification/settings-erro
 import { ApiErrorNotification } from './features/notification/api-error/ApiErrorNotification';
 import { useControlEditorSaving } from './features/control-editor-saving/useControlEditorSaving';
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
-import { InvalidDecimalsNotification } from './features/notification/invalid-decimals/components/InvalidDecimalsNotification';
-import { useInvalidDecimalsNotificationProps } from './features/notification/invalid-decimals/components/useInvalidDecimalsNotificationProps';
+import { InvalidDecimalsNotification } from './features/notification/invalid-decimals/InvalidDecimalsNotification';
+import { useInvalidDecimalsNotificationProps } from './features/notification/invalid-decimals/useInvalidDecimalsNotificationProps';
 import { useTranslation } from 'react-i18next';
 import { useSettingsErrorNotificationProps } from './features/notification/settings-error/useSettingsErrorNotificationProps';
 import { useApiErrorNotificationProps } from './features/notification/api-error/useApiErrorNotificationProps';
