@@ -12,23 +12,22 @@ import { SettingsErrorNotification } from './features/notification/SettingsError
 import { ApiErrorNotification } from './features/notification/ApiErrorNotification';
 import { useControlEditorSaving } from './features/control-editor-saving/useControlEditorSaving';
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
-import { TextProvider } from './lib/i18n/TextProvider';
-import { useMemo } from '@wordpress/element';
 import { InvalidDecimalsNotification } from './features/notification/invalid-decimals/components/InvalidDecimalsNotification';
 import { useInvalidDecimalsNotificationProps } from './features/notification/invalid-decimals/components/useInvalidDecimalsNotificationProps';
+import { useTranslation } from 'react-i18next';
 
 type GutenbergPostEditProps = {};
 
 export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
+	const { t } = useTranslation();
 	useSyncWidgetAttributes(); // Attributesと画面の状態を同期
 	useControlEditorSaving(); // 投稿の保存制御
-	const textProvider = useMemo( () => new TextProvider(), [] );
 
 	return (
 		<Placeholder
 			icon={ new BlockIconProvider().get() }
 			label={ 'baywall' }
-			instructions={ textProvider.pleaseSpecifySalesNetworkCategoryAndPrice }
+			instructions={ t( 'select_network_category_and_price_message' ) }
 			id="fd9e15e3-9f4f-4537-8470-3da48e66d6e9"
 		>
 			{ /* エラー表示 */ }
@@ -42,7 +41,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 				<tbody>
 					{ /* ネットワークカテゴリ設定 */ }
 					<tr>
-						<th scope="row">{ textProvider.networkCategory }:</th>
+						<th scope="row">{ t( 'network_category_label' ) }:</th>
 						<td>
 							<div style={ { display: 'flex', alignItems: 'center', gap: '0.75em' } }>
 								<SellingNetworkCategorySelect { ...useSellingNetworkCategorySelectProps() } />
@@ -52,7 +51,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 
 					{ /* 販売価格設定 */ }
 					<tr>
-						<th scope="row">{ textProvider.price }:</th>
+						<th scope="row">{ t( 'price_label' ) }:</th>
 						<td>
 							<div style={ { display: 'flex', alignItems: 'center', gap: '0.75em' } }>
 								<SellingPriceAmount

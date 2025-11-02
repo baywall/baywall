@@ -1,8 +1,8 @@
 import { useMemo } from '@wordpress/element';
 import { NoticeList } from '@wordpress/components';
 import { useLogger } from '@serendipity/lib-frontend';
-import { TextProvider } from '../../lib/i18n/TextProvider';
 import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
+import { useTranslation } from 'react-i18next';
 
 type Notices = React.ComponentProps< typeof NoticeList >[ 'notices' ];
 
@@ -13,6 +13,7 @@ type ApiErrorNotificationProps = Omit< React.ComponentProps< typeof NoticeList >
  * @param props
  */
 export const ApiErrorNotification: React.FC< ApiErrorNotificationProps > = ( props ) => {
+	const { t } = useTranslation();
 	const { isError, error } = useBlockInitDataQuery();
 	const logger = useLogger();
 
@@ -29,7 +30,7 @@ export const ApiErrorNotification: React.FC< ApiErrorNotificationProps > = ( pro
 			logger.error( '[2C896DFD]', error.stack );
 		}
 
-		let message = new TextProvider().unknownErrorMessage;
+		let message = t( 'unknown_error_label' );
 		if ( error instanceof Error ) {
 			message = error.message;
 		} else if ( ( error as any ).toString === 'function' ) {
@@ -43,7 +44,7 @@ export const ApiErrorNotification: React.FC< ApiErrorNotificationProps > = ( pro
 			content: message,
 		};
 		return [ notice ];
-	}, [ logger, isError, error ] );
+	}, [ t, logger, isError, error ] );
 
 	return <NoticeList { ...props } notices={ notices } />;
 };
