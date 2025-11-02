@@ -9,7 +9,7 @@ import { useSyncWidgetAttributes } from './features/widget-attributes/useSyncWid
 import { AmountErrorNotification } from './features/notification/amount-error/AmountErrorNotification';
 import { useAmountErrorNotificationProps } from './features/notification/amount-error/useAmountErrorNotificationProps';
 import { SettingsErrorNotification } from './features/notification/SettingsErrorNotification';
-import { ApiErrorNotification } from './features/notification/ApiErrorNotification';
+import { ApiErrorNotification } from './features/notification/api-error/ApiErrorNotification';
 import { useControlEditorSaving } from './features/control-editor-saving/useControlEditorSaving';
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
 import { InvalidDecimalsNotification } from './features/notification/invalid-decimals/components/InvalidDecimalsNotification';
