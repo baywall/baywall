@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from '@wordpress/element';
 import { NetworkCategoryId } from '@serendipity/lib-value-object';
 import { type SellingNetworkCategorySelectProps } from './SellingNetworkCategorySelect';
-import { useBlockInitDataQuery } from '../../../query/useBlockInitDataQuery';
-import { useSelectedNetworkCategoryIdState } from '../hooks/useSelectedNetworkCategoryIdState';
-import { useSavedSellingNetworkCategoryId } from '../../widget-attributes/useSavedSellingNetworkCategoryId';
+import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
+import { useSelectedNetworkCategoryIdState } from './hooks/useSelectedNetworkCategoryIdState';
+import { useSavedSellingNetworkCategoryId } from '../widget-attributes/useSavedSellingNetworkCategoryId';
 
 export const useSellingNetworkCategorySelectProps = (): SellingNetworkCategorySelectProps => {
 	useAutoSelectValue();

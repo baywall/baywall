@@ -2,8 +2,8 @@ import { atom, useAtom } from 'jotai';
 import { useLogger } from '@serendipity/lib-frontend';
 import { Amount } from '@serendipity/lib-value-object';
 import { type SellingPriceAmountProps } from './SellingPriceAmount';
-import { useInputSellingPriceAmountState } from '../hooks/useInputSellingPriceAmountState';
-import { useSavedSellingAmount } from '../../widget-attributes/useSavedSellingAmount';
+import { useInputSellingPriceAmountState } from './hooks/useInputSellingPriceAmountState';
+import { useSavedSellingAmount } from '../widget-attributes/useSavedSellingAmount';
 import { useEffect } from 'react';
 
 // 画面で表示されている金額の文字列
