@@ -1,5 +1,5 @@
 import { useEffect } from '@wordpress/element';
-import { ScreenNotifier } from '../../lib/gutenberg/notification/ScreenNotifier';
+import { ScreenNotifier } from '../../../lib/gutenberg/notification/ScreenNotifier';
 import { useTranslation } from 'react-i18next';
 
 export interface AmountErrorNotificationProps {
