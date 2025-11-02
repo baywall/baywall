@@ -14,9 +14,17 @@ export const useSellingPriceAmountProps = (): SellingPriceAmountProps => {
 	useInitValue();
 
 	return {
+		disabled: useDisabled(),
 		value: useValue(),
 		onChange: useOnChange(),
 	};
+};
+
+const useDisabled = (): boolean => {
+	const { data } = useBlockInitDataQuery();
+
+	// データ取得中は無効化
+	return data === undefined;
 };
 
 const useInitValue = () => {
