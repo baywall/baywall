@@ -8,7 +8,7 @@ import { useSellingPriceAmountProps } from './features/selling-price-amount/comp
 import { useSyncWidgetAttributes } from './features/widget-attributes/useSyncWidgetAttributes';
 import { AmountErrorNotification } from './features/notification/amount-error/AmountErrorNotification';
 import { useAmountErrorNotificationProps } from './features/notification/amount-error/useAmountErrorNotificationProps';
-import { SettingsErrorNotification } from './features/notification/SettingsErrorNotification';
+import { SettingsErrorNotification } from './features/notification/settings-error/SettingsErrorNotification';
 import { ApiErrorNotification } from './features/notification/api-error/ApiErrorNotification';
 import { useControlEditorSaving } from './features/control-editor-saving/useControlEditorSaving';
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
