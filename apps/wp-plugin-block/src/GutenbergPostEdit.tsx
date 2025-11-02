@@ -6,8 +6,8 @@ import { useSellingNetworkCategorySelectProps } from './features/selling-network
 import { SellingPriceAmount } from './features/selling-price-amount/components/SellingPriceAmount';
 import { useSellingPriceAmountProps } from './features/selling-price-amount/components/useSellingPriceAmountProps';
 import { useSyncWidgetAttributes } from './features/widget-attributes/useSyncWidgetAttributes';
-import { AmountErrorNotification } from './features/notification/AmountErrorNotification';
-import { useAmountErrorNotificationProps } from './features/notification/useAmountErrorNotificationProps';
+import { AmountErrorNotification } from './features/notification/amount-error/AmountErrorNotification';
+import { useAmountErrorNotificationProps } from './features/notification/amount-error/useAmountErrorNotificationProps';
 import { SettingsErrorNotification } from './features/notification/SettingsErrorNotification';
 import { ApiErrorNotification } from './features/notification/ApiErrorNotification';
 import { useControlEditorSaving } from './features/control-editor-saving/useControlEditorSaving';
