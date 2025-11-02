@@ -1,28 +1,28 @@
 import { useMemo } from '@wordpress/element';
 import { NoticeList } from '@wordpress/components';
-import { useBlockInitDataQuery } from '../../../query/useBlockInitDataQuery';
 import { UrlProvider } from '../../../lib/url/UrlProvider';
 import { useTranslation } from 'react-i18next';
 
 type Notices = React.ComponentProps< typeof NoticeList >[ 'notices' ];
 
-type SettingsErrorNotificationProps = Omit< React.ComponentProps< typeof NoticeList >, 'notices' >;
+export type SettingsErrorNotificationProps = Omit< React.ComponentProps< typeof NoticeList >, 'notices' > & {
+	/** 設定が正しい場合はtrue */
+	isSettingsComplete: boolean | undefined;
+};
 
 /**
  * 設定が不正な場合に表示するエラー
  * @param props
  */
 export const SettingsErrorNotification: React.FC< SettingsErrorNotificationProps > = ( props ) => {
+	const { isSettingsComplete } = props;
 	const { t } = useTranslation();
-	const { data } = useBlockInitDataQuery();
 
-	const notices: Notices = useMemo( () => {
-		if ( data === undefined ) {
-			// データ取得中は何も表示しない
-			return [];
-		} else if ( data.sellableNetworkCategories.length > 0 ) {
-			// 設定が正しい場合は何も表示しない
-			return [];
+	const notices: Notices | undefined = useMemo( () => {
+		if ( isSettingsComplete === undefined ) {
+			return undefined;
+		} else if ( isSettingsComplete === true ) {
+			return []; // 設定が正しい場合は通知項目なし
 		}
 
 		const urlProvider = new UrlProvider();
@@ -39,7 +39,7 @@ export const SettingsErrorNotification: React.FC< SettingsErrorNotificationProps
 			],
 		};
 		return [ notice ];
-	}, [ t, data ] );
+	}, [ t, isSettingsComplete ] );
 
-	return <NoticeList { ...props } notices={ notices } />;
+	return notices && notices.length > 0 ? <NoticeList { ...props } notices={ notices } /> : null;
 };
