@@ -9,7 +9,7 @@ type Notices = React.ComponentProps< typeof NoticeList >[ 'notices' ];
 export type SettingsErrorNotificationProps = Omit< React.ComponentProps< typeof NoticeList >, 'notices' > & {
 	/** 設定が正しい場合はtrue */
 	isSettingsComplete: boolean | undefined;
-	urlProvider?: UrlProvider;
+	urlProvider: UrlProvider;
 };
 
 /**
@@ -17,7 +17,7 @@ export type SettingsErrorNotificationProps = Omit< React.ComponentProps< typeof 
  * @param props
  */
 export const SettingsErrorNotification: React.FC< SettingsErrorNotificationProps > = ( props ) => {
-	const { isSettingsComplete, urlProvider = new UrlProvider() } = props;
+	const { isSettingsComplete, urlProvider } = props;
 	const { t } = useTranslation();
 
 	const notices: Notices | undefined = useMemo( () => {
