@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo } from '@wordpress/element';
 import { Symbol } from '@serendipity/lib-value-object';
 import { type SellingPriceSymbolSelectProps } from './SellingPriceSymbolSelect';
-import { useBlockInitDataQuery } from '../../../query/useBlockInitDataQuery';
-import { useSelectedSellingPriceSymbolState } from '../hooks/useSelectedSellingPriceSymbolState';
-import { useSellableSymbols } from '../hooks/useSellableSymbols';
-import { useSavedSellingSymbol } from '../../widget-attributes/useSavedSellingSymbol';
-import { useSavedSellingNetworkCategoryId } from '../../widget-attributes/useSavedSellingNetworkCategoryId';
-import { useSelectedNetworkCategoryIdState } from '../../selling-network-category/hooks/useSelectedNetworkCategoryIdState';
+import { useBlockInitDataQuery } from '../../query/useBlockInitDataQuery';
+import { useSelectedSellingPriceSymbolState } from './hooks/useSelectedSellingPriceSymbolState';
+import { useSellableSymbols } from './hooks/useSellableSymbols';
+import { useSavedSellingSymbol } from '../widget-attributes/useSavedSellingSymbol';
+import { useSavedSellingNetworkCategoryId } from '../widget-attributes/useSavedSellingNetworkCategoryId';
+import { useSelectedNetworkCategoryIdState } from '../selling-network-category/hooks/useSelectedNetworkCategoryIdState';
 
 export const useSellingPriceSymbolSelectProps = (): SellingPriceSymbolSelectProps => {
 	useAutoSelectValue();

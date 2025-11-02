@@ -1,5 +1,5 @@
-import { NonNegativeNumber, NonNegativeNumberProps } from '../../../components/NonNegativeNumber';
-import { Config } from '../../../constant/Config';
+import { NonNegativeNumber, NonNegativeNumberProps } from '../../components/NonNegativeNumber';
+import { Config } from '../../constant/Config';
 
 export type SellingPriceAmountProps = NonNegativeNumberProps;
 
