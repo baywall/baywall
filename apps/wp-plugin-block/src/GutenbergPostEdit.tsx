@@ -1,20 +1,22 @@
 import { Placeholder } from '@wordpress/components';
-import { SellingPriceSymbolSelect } from './features/selling-price-symbol/components/SellingPriceSymbolSelect';
-import { useSellingPriceSymbolSelectProps } from './features/selling-price-symbol/components/useSellingSymbolSelectProps';
-import { SellingNetworkCategorySelect } from './features/selling-network-category/components/SellingNetworkCategorySelect';
-import { useSellingNetworkCategorySelectProps } from './features/selling-network-category/components/useSellingNetworkCategorySelectProps';
-import { SellingPriceAmount } from './features/selling-price-amount/components/SellingPriceAmount';
-import { useSellingPriceAmountProps } from './features/selling-price-amount/components/useSellingPriceAmountProps';
+import { SellingPriceSymbolSelect } from './features/selling-price-symbol/SellingPriceSymbolSelect';
+import { useSellingPriceSymbolSelectProps } from './features/selling-price-symbol/useSellingSymbolSelectProps';
+import { SellingNetworkCategorySelect } from './features/selling-network-category/SellingNetworkCategorySelect';
+import { useSellingNetworkCategorySelectProps } from './features/selling-network-category/useSellingNetworkCategorySelectProps';
+import { SellingPriceAmount } from './features/selling-price-amount/SellingPriceAmount';
+import { useSellingPriceAmountProps } from './features/selling-price-amount/useSellingPriceAmountProps';
 import { useSyncWidgetAttributes } from './features/widget-attributes/useSyncWidgetAttributes';
-import { AmountErrorNotification } from './features/notification/AmountErrorNotification';
-import { useAmountErrorNotificationProps } from './features/notification/useAmountErrorNotificationProps';
-import { SettingsErrorNotification } from './features/notification/SettingsErrorNotification';
-import { ApiErrorNotification } from './features/notification/ApiErrorNotification';
+import { AmountErrorNotification } from './features/notification/amount-error/AmountErrorNotification';
+import { useAmountErrorNotificationProps } from './features/notification/amount-error/useAmountErrorNotificationProps';
+import { SettingsErrorNotification } from './features/notification/settings-error/SettingsErrorNotification';
+import { ApiErrorNotification } from './features/notification/api-error/ApiErrorNotification';
 import { useControlEditorSaving } from './features/control-editor-saving/useControlEditorSaving';
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
-import { InvalidDecimalsNotification } from './features/notification/invalid-decimals/components/InvalidDecimalsNotification';
-import { useInvalidDecimalsNotificationProps } from './features/notification/invalid-decimals/components/useInvalidDecimalsNotificationProps';
+import { InvalidDecimalsNotification } from './features/notification/invalid-decimals/InvalidDecimalsNotification';
+import { useInvalidDecimalsNotificationProps } from './features/notification/invalid-decimals/useInvalidDecimalsNotificationProps';
 import { useTranslation } from 'react-i18next';
+import { useSettingsErrorNotificationProps } from './features/notification/settings-error/useSettingsErrorNotificationProps';
+import { useApiErrorNotificationProps } from './features/notification/api-error/useApiErrorNotificationProps';
 
 type GutenbergPostEditProps = {};
 
@@ -32,8 +34,8 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 		>
 			{ /* エラー表示 */ }
 			<div style={ { width: '100%' } }>
-				<ApiErrorNotification />
-				<SettingsErrorNotification />
+				<ApiErrorNotification { ...useApiErrorNotificationProps() } />
+				<SettingsErrorNotification { ...useSettingsErrorNotificationProps() } />
 			</div>
 
 			{ /* 設定項目 ※管理画面のcss(.from-table)を流用 */ }

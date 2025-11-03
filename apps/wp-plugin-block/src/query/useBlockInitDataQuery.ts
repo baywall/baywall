@@ -1,8 +1,12 @@
 import { useCallback, useEffect } from 'react';
-import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
+import { Decimals, NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { PostSettingQuery, usePostSettingQuery } from '../../types/gql/generated';
 import { NetworkCategory } from '../value-object/NetworkCategory';
 import { useLogger } from '@serendipity/lib-frontend';
+import { Token } from '../value-object/Token';
+
+/** ブロック初期データの型 */
+export type BlockInitDataType = NonNullable< ReturnType< typeof useBlockInitDataQuery >[ 'data' ] >;
 
 /** ブロック初期データ取得クエリ */
 export const useBlockInitDataQuery = () => {
@@ -36,6 +40,19 @@ const useSelectCallback = () => {
 				)
 			);
 
-		return { sellableNetworkCategories };
+		const tokens: Token[] = data.tokens.map( ( t ) => {
+			return Token.from(
+				NetworkCategoryId.from( t.chain.networkCategory.id ),
+				Symbol.from( t.symbol ),
+				Decimals.from( t.decimals )
+			);
+		} );
+
+		return {
+			/** 販売可能なネットワークカテゴリ一覧 */
+			sellableNetworkCategories,
+			/** サーバーに登録済みのトークン一覧 */
+			tokens,
+		};
 	}, [] );
 };
