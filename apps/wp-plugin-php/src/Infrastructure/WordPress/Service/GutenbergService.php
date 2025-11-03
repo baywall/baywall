@@ -74,7 +74,7 @@ class GutenbergService {
 		$blocks = array_filter(
 			$blocks,
 			function ( $block ) use ( $block_name ) {
-				return $block_name === $block->blockName;
+				return $block_name->value() === $block->blockName;
 			}
 		);
 
