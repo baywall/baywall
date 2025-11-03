@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Symbol } from '@serendipity/lib-value-object';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 
@@ -9,17 +9,9 @@ import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditP
  *    投稿を保存後にこの値が変更されることは無いことに注意してください。
  */
 export const useSavedSellingSymbol = (): Symbol | null => {
-	const [ symbol, setSymbol ] = useState< Symbol | null | undefined >( undefined );
 	const {
-		attributes: { sellingSymbol: sellingSymbolValue },
+		attributes: { sellingSymbol: symbolValue },
 	} = useBlockEditProps();
 
-	return useMemo( () => {
-		if ( symbol !== undefined ) {
-			return symbol;
-		}
-		const loadedSymbol = sellingSymbolValue ? Symbol.from( sellingSymbolValue ) : null;
-		setSymbol( loadedSymbol );
-		return loadedSymbol;
-	}, [ symbol, setSymbol, sellingSymbolValue ] );
+	return useState< Symbol | null >( symbolValue ? Symbol.from( symbolValue ) : null )[ 0 ];
 };
