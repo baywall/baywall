@@ -268,7 +268,7 @@ class WidgetContentBuilder {
 		$attrs_str         = wp_json_encode( $widget_attributes->toArray(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 		$class_name        = ( new ClassNameProvider() )->getBlock();
 		return "<!-- wp:{$block_name} {$attrs_str} -->\n"
-			. "<aside class=\"wp-block-create-block-baywall {$class_name}\"></aside>\n"
+			. "<aside class=\"wp-block-baywall-paywall {$class_name}\"></aside>\n"
 			. "<!-- /wp:{$block_name} -->";
 	}
 }
