@@ -5,9 +5,11 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Entity\WidgetAttributes;
+use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\Content;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\BlockName;
 use WP_Block;
@@ -15,10 +17,12 @@ use WP_Block;
 /** WordPressのGutenberg関連のサービスを提供します。 */
 class GutenbergService {
 
+	private PostRepository $post_repository;
 	private BlockNameProvider $block_name_provider;
 	private ClassNameProvider $class_name_provider;
 
-	public function __construct( BlockNameProvider $block_name_provider, ClassNameProvider $class_name_provider ) {
+	public function __construct( PostRepository $post_repository, BlockNameProvider $block_name_provider, ClassNameProvider $class_name_provider ) {
+		$this->post_repository     = $post_repository;
 		$this->block_name_provider = $block_name_provider;
 		$this->class_name_provider = $class_name_provider;
 	}
@@ -34,7 +38,14 @@ class GutenbergService {
 		return WidgetAttributes::from( $selling_network_category_id, $selling_amount, $selling_symbol );
 	}
 
-	public function createWidgetBlock( WidgetAttributes $widget_attributes ): WP_Block {
+	public function createWidgetBlock( PostId $post_id ): WP_Block {
+		$post              = $this->post_repository->get( $post_id );
+		$widget_attributes = WidgetAttributes::from(
+			$post->sellingNetworkCategoryId(),
+			$post->sellingAmount(),
+			$post->sellingSymbol(),
+		);
+
 		$attrs            = $widget_attributes->toArray();
 		$block_name_value = $this->block_name_provider->get()->value();
 
