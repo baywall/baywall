@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
+use Cornix\Serendipity\Core\Constant\WpConfig;
+
 class ClassNameProvider {
 
 	/**
@@ -11,7 +13,6 @@ class ClassNameProvider {
 	 * @return string
 	 */
 	public function getBlock(): string {
-		// ※ TypeScript側と整合性を取ること
-		return 'ae6cefc4-82d4-4220-840b-d74538ea7284';
+		return WpConfig::PAYWALL_BLOCK_CLASS_NAME;
 	}
 }
