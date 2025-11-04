@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks\Service;
 
-use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 
 class PhpVarExporter {
@@ -12,7 +12,7 @@ class PhpVarExporter {
 	 */
 	public function addInlineScript( string $handle ): void {
 		// javascriptとして出力する際の変数名を取得
-		$js_var_name = Config::PHP_VAR_NAME;
+		$js_var_name = WpConfig::PHP_VAR_NAME;
 
 		$success = wp_add_inline_script(
 			$handle,
