@@ -106,8 +106,8 @@ class ContentSaveHook {
 				$pending_blocks[]             = $this->gutenberg_service->createWidgetBlock(
 					WidgetAttributes::from(
 						$revision_post->sellingNetworkCategoryId(),
-						$revision_post->sellingPrice() ? $revision_post->sellingPrice()->amount() : null,
-						$revision_post->sellingPrice() ? $revision_post->sellingPrice()->symbol() : null
+						$revision_post->sellingAmount(),
+						$revision_post->sellingSymbol(),
 					)
 				);
 				$revision_paid_content_blocks = $this->gutenberg_service->parseBlocks( Content::from( $revision_post->paidContent()->value() ) );
@@ -165,7 +165,7 @@ class ContentSaveHook {
 
 			$widget_attributes = $this->gutenberg_service->getWidgetAttributes( $this->pending_blocks[ $paywall_block_index ] );
 			$paid_content      = PaidContent::from( $this->gutenberg_service->serializeBlocks( array_slice( $this->pending_blocks, $paywall_block_index + 1 ) )->value() );
-			$post->setPaidContent( $paid_content, $widget_attributes->sellingNetworkCategoryId(), $widget_attributes->sellingPrice() );
+			$post->setPaidContent( $paid_content, $widget_attributes->sellingNetworkCategoryId(), $widget_attributes->sellingAmount(), $widget_attributes->sellingSymbol() );
 			$this->post_repository->save( $post );
 		} elseif ( $this->pending_delete_paid_content ) {
 			// 有料部分のデータを削除する場合
@@ -235,8 +235,8 @@ class ContentLoadHook {
 			$paywall_block = $this->gutenberg_service->createWidgetBlock(
 				WidgetAttributes::from(
 					$post->sellingNetworkCategoryId(),
-					$post->sellingPrice() ? $post->sellingPrice()->amount() : null,
-					$post->sellingPrice() ? $post->sellingPrice()->symbol() : null
+					$post->sellingAmount(),
+					$post->sellingSymbol(),
 				)
 			);
 			// HTMLコメントを除去したウィジェットを追加
@@ -268,8 +268,8 @@ class ContentLoadHook {
 		$result_blocks[] = $this->gutenberg_service->createWidgetBlock(
 			WidgetAttributes::from(
 				$post->sellingNetworkCategoryId(),
-				$post->sellingPrice() ? $post->sellingPrice()->amount() : null,
-				$post->sellingPrice() ? $post->sellingPrice()->symbol() : null
+				$post->sellingAmount(),
+				$post->sellingSymbol()
 			)
 		);
 		// 有料部分のブロックを追加
@@ -306,8 +306,8 @@ class ContentLoadHook {
 			$paywall_block = $this->gutenberg_service->createWidgetBlock(
 				WidgetAttributes::from(
 					$post->sellingNetworkCategoryId(),
-					$post->sellingPrice() ? $post->sellingPrice()->amount() : null,
-					$post->sellingPrice() ? $post->sellingPrice()->symbol() : null
+					$post->sellingAmount(),
+					$post->sellingSymbol()
 				)
 			);
 

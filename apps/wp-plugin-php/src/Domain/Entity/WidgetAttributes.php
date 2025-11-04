@@ -6,7 +6,6 @@ namespace Cornix\Serendipity\Core\Domain\Entity;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 /** Gutenbergで配置したブロックの属性(画面で設定された値) */
@@ -29,20 +28,11 @@ class WidgetAttributes {
 	public function sellingNetworkCategoryId(): ?NetworkCategoryId {
 		return $this->selling_network_category_id;
 	}
-	/*
 	public function sellingAmount(): ?Amount {
 		return $this->selling_amount;
 	}
 	public function sellingSymbol(): ?Symbol {
 		return $this->selling_symbol;
-	}
-	*/
-	public function sellingPrice(): ?Price {
-		if ( $this->selling_amount !== null && $this->selling_symbol !== null ) {
-			return Price::from( $this->selling_amount, $this->selling_symbol );
-		} else {
-			return null;
-		}
 	}
 
 	public function toArray(): array {
