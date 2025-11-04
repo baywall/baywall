@@ -102,7 +102,7 @@ class ContentSaveHook {
 
 				$pending_blocks               = array();
 				$pending_blocks[]             = $this->gutenberg_service->createWidgetBlock( $revision_post->id() );
-				$revision_paid_content_blocks = $this->gutenberg_service->parseBlocks( Content::from( $revision_post->paidContent()->value() ) );
+				$revision_paid_content_blocks = $this->gutenberg_service->parseBlocks( $revision_post->paidContent() );
 
 				$pending_blocks       = array_merge( $pending_blocks, $revision_paid_content_blocks );
 				$this->pending_blocks = $pending_blocks;
@@ -224,9 +224,8 @@ class ContentLoadHook {
 		// -> ダミーブロックはコメントだけなので削除済み
 		$post = $this->post_repository->get( $post_id );
 		if ( $post->paidContent() !== null ) {
-			$paywall_block = $this->gutenberg_service->createWidgetBlock( $post_id );
 			// HTMLコメントを除去したウィジェットを追加
-			return $content . $paywall_block->render();
+			return $content . $this->gutenberg_service->createWidgetBlock( $post_id )->render();
 		} else {
 			return $content;
 		}
@@ -245,7 +244,7 @@ class ContentLoadHook {
 
 		$post                = $this->post_repository->get( PostId::from( $revision_post->ID ) );
 		$paid_content        = $post->paidContent();
-		$paid_content_blocks = $paid_content ? $this->gutenberg_service->parseBlocks( Content::from( $paid_content->value() ) ) : array();
+		$paid_content_blocks = $paid_content ? $this->gutenberg_service->parseBlocks( $paid_content ) : array();
 
 		// クライアントに返すブロック一覧を作成(この時点ではダミーブロックを除いた無料部分のブロック一覧)
 		$result_blocks = array_slice( $revision_blocks, 0, $dummy_paywall_block_index );
@@ -287,7 +286,8 @@ class ContentLoadHook {
 			// ペイウォールブロックを追加
 			$result_blocks[] = $paywall_block;
 			// 有料部分のブロックを追加
-			$paid_content_blocks = $this->gutenberg_service->parseBlocks( Content::from( $post->paidContent() ? $post->paidContent()->value() : '' ) );
+			$paid_content        = $post->paidContent();
+			$paid_content_blocks = $paid_content ? $this->gutenberg_service->parseBlocks( $paid_content ) : array();
 			$result_blocks       = array_merge( $result_blocks, $paid_content_blocks );
 		}
 
