@@ -42,4 +42,12 @@ class WidgetAttributes {
 			Config::BLOCK_ATTR_NAME_SELLING_SYMBOL => $this->selling_symbol ? $this->selling_symbol->value() : null,
 		);
 	}
+
+	public static function fromArray( array $attrs ): self {
+		return self::from(
+			NetworkCategoryId::fromNullable( $attrs[ Config::BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID ] ?? null ),
+			Amount::fromNullable( $attrs[ Config::BLOCK_ATTR_NAME_SELLING_AMOUNT ] ?? null ),
+			Symbol::fromNullable( $attrs[ Config::BLOCK_ATTR_NAME_SELLING_SYMBOL ] ?? null )
+		);
+	}
 }

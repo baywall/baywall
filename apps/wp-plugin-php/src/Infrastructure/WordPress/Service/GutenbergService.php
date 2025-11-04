@@ -3,14 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Entity\WidgetAttributes;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\Content;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\BlockName;
 use WP_Block;
 
@@ -29,13 +25,7 @@ class GutenbergService {
 
 	public function getWidgetAttributes( WP_Block $block ): WidgetAttributes {
 		assert( $block->name === $this->block_name_provider->get()->value(), '[8F0F589D]' );
-		$attrs = $block->attributes;
-
-		$selling_network_category_id = NetworkCategoryId::fromNullable( $attrs[ Config::BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID ] ?? null );
-		$selling_amount              = Amount::fromNullable( $attrs[ Config::BLOCK_ATTR_NAME_SELLING_AMOUNT ] ?? null );
-		$selling_symbol              = Symbol::fromNullable( $attrs[ Config::BLOCK_ATTR_NAME_SELLING_SYMBOL ] ?? null );
-
-		return WidgetAttributes::from( $selling_network_category_id, $selling_amount, $selling_symbol );
+		return WidgetAttributes::fromArray( $block->attributes );
 	}
 
 	public function createWidgetBlock( PostId $post_id ): WP_Block {
