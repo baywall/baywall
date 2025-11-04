@@ -8,11 +8,11 @@ use Cornix\Serendipity\Core\Constant\WpConfig;
 class ClassNameProvider {
 
 	/**
-	 * ブロック(ブロックエディタで表示されるウィジェット)に付与されるCSSクラス名を返します。
+	 * ペイウォールブロック(ブロックエディタで表示されるウィジェット)に付与されるCSSクラス名を返します。
 	 *
 	 * @return string
 	 */
-	public function getBlock(): string {
+	public function paywallBlock(): string {
 		return WpConfig::PAYWALL_BLOCK_CLASS_NAME;
 	}
 }

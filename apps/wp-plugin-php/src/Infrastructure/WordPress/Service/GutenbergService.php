@@ -38,7 +38,7 @@ class GutenbergService {
 		$attrs            = $widget_attributes->toArray();
 		$block_name_value = $this->block_name_provider->get()->value();
 
-		$class_name         = $this->class_name_provider->getBlock();
+		$class_name         = $this->class_name_provider->paywallBlock();
 		$default_class_name = 'wp-block-' . str_replace( '/', '-', $block_name_value );
 		$html               = '<aside class="' . esc_attr( $default_class_name ) . ' ' . esc_attr( $class_name ) . '"></aside>';
 
