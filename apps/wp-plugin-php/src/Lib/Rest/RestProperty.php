@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Rest;
 
+use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
@@ -14,7 +15,7 @@ class RestProperty {
 	}
 
 	public function graphQlRoute(): string {
-		return 'graphql';
+		return WpConfig::GRAPHQL_ROUTE;
 	}
 
 	/**
