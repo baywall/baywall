@@ -26,8 +26,24 @@ final class Amount implements \Stringable {
 	/** 値を10進数の文字列で保持 */
 	private string $amount_text;
 
+	/** 10進数の文字列からインスタンスを作成します。 */
 	public static function from( string $amount_text ): self {
 		return new self( $amount_text );
+	}
+
+	/** 16進数の文字列からインスタンスを作成します。 */
+	public static function fromHex( Hex $hex ): self {
+		$raw_hex_value = ltrim( $hex->value(), '0x' );
+		$amount_value  = '0';
+		$len           = strlen( $raw_hex_value );
+
+		for ( $i = 0; $i < $len; $i++ ) {
+			$digit        = strpos( '0123456789abcdef', $raw_hex_value[ $i ] );
+			$power        = bcpow( '16', (string) ( $len - $i - 1 ) );
+			$amount_value = bcadd( $amount_value, bcmul( (string) $digit, $power ) );
+		}
+
+		return new self( $amount_value );
 	}
 
 	public static function fromNullable( ?string $amount_text ): ?self {
