@@ -4,7 +4,6 @@ namespace Cornix\Serendipity\Core\Lib\Rest;
 
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
 class RestProperty {
 
@@ -16,16 +15,5 @@ class RestProperty {
 
 	public function graphQlRoute(): string {
 		return WpConfig::GRAPHQL_ROUTE;
-	}
-
-	/**
-	 * GraphQLのURLを取得します。
-	 * ※末尾にスラッシュは含まれません。
-	 *
-	 * @return string
-	 */
-	public function graphQlUrl(): string {
-		$wp_property = new WordPressPropertyProvider();
-		return untrailingslashit( $wp_property->apiRootUrl() ) . '/' . $this->namespace() . '/' . $this->graphQlRoute();
 	}
 }
