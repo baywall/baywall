@@ -18,26 +18,15 @@ class BlockNumber implements \Stringable {
 
 	private BigInteger $block_number;
 
-	/**
-	 * @param int|string|BigInteger $block_number
-	 */
-	public static function from( $block_number ): self {
-		if ( is_int( $block_number ) ) {
-			return new self( new BigInteger( $block_number, 10 ) );
-		} elseif ( is_string( $block_number ) && Validate::isHex( $block_number ) ) {
-			return new self( new BigInteger( $block_number, 16 ) );
-		} elseif ( $block_number instanceof BigInteger ) {
-			return new self( $block_number );
-		} else {
-			throw new \InvalidArgumentException( '[DEE2905B] Invalid block number. - block_number: ' . var_export( $block_number, true ) );
-		}
+	public static function fromInt( int $block_number ): self {
+		return new self( new BigInteger( $block_number, 10 ) );
+	}
+	public static function fromHex( Hex $hex ): self {
+		return new self( new BigInteger( $hex->value(), 16 ) );
 	}
 
-	/**
-	 * @param null|int|string|BigInteger $block_number
-	 */
-	public static function fromNullable( $block_number ): ?self {
-		return null === $block_number ? null : self::from( $block_number );
+	public static function fromIntNullable( ?int $block_number ): ?self {
+		return null === $block_number ? null : self::fromInt( $block_number );
 	}
 
 	/**

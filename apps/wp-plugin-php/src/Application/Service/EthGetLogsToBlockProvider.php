@@ -37,6 +37,7 @@ class EthGetLogsToBlockProvider {
 		}
 
 		// 一旦confirmationsを考慮せずに終了ブロック番号を計算
+		/** @var int */
 		$to_number_value = min(
 			$from_block->int() + ( Config::GET_LOGS_MAX_RANGE - 1 ),
 			$latest_block->int()
@@ -44,9 +45,10 @@ class EthGetLogsToBlockProvider {
 		// confirmationsを考慮して終了ブロック番号を調整
 		$to_number_value -= ( $confirmations_value - 1 );
 		// 終了ブロック番号が開始ブロック番号を超えないようにする
+		/** @var int */
 		$to_number_value = max( $to_number_value, $from_block->int() );
 
 		// BlockNumberオブジェクトに変換して返す
-		return BlockNumber::from( $to_number_value );
+		return BlockNumber::fromInt( $to_number_value );
 	}
 }

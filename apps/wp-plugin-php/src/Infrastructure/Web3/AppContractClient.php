@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\ContractFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use phpseclib\Math\BigInteger;
@@ -61,7 +62,7 @@ class AppContractClient {
 				assert( $invoice_id instanceof BigInteger );
 				assert( $unlocked_block_number instanceof BigInteger );
 
-				$result = new GetPaywallStatusResult( $is_unlocked, InvoiceId::from( $invoice_id ), BlockNumber::from( $unlocked_block_number ) );
+				$result = new GetPaywallStatusResult( $is_unlocked, InvoiceId::from( $invoice_id ), BlockNumber::fromHex( Hex::from( '0x' . $unlocked_block_number->toHex() ) ) );
 			}
 		);
 
