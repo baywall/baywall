@@ -21,6 +21,11 @@ class WpConfig {
 	public const PHP_VAR_NAME = 'php_var_20792bdd';
 
 	/**
+	 * GraphQLのルート名
+	 */
+	public const GRAPHQL_ROUTE = 'graphql';
+
+	/**
 	 * ペイウォールブロックスクリプトのハンドル名
 	 *
 	 * 『src/block/index.js』(文字列)のMD5ハッシュ値
