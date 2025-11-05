@@ -74,7 +74,7 @@ class TokenTableSeed_0_0_1 extends TokenTableSeedBase {
 		// 開発モード時はプライベートネットのネイティブトークンを登録
 		if ( $this->environment->isDevelopment() ) {
 			$this->add( ChainIdConstants::privatenetL1(), $native_token_address, 'ETH', 18, true );
-			$this->add( ChainIdConstants::privatenetL2(), $native_token_address, 'MATIC', 18, false );
+			$this->add( ChainIdConstants::privatenetL2(), $native_token_address, 'POL', 18, false );
 		}
 	}
 
