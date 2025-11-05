@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 
-class RestProperty {
+class RestPropertyProvider {
 
 	public function namespace(): string {
 		// 名前空間はプラグインのテキストドメインを使用

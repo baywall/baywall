@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Infrastructure\GraphQL\PluginSchemaProvider;
 use Cornix\Serendipity\Core\Infrastructure\GraphQL\Rule\MutationFieldLimitRule;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\RestProperty;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\RestPropertyProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
 use GraphQL\GraphQL;
@@ -22,11 +22,11 @@ use GraphQL\Validator\Rules\QueryDepth;
 class GraphQLHook extends HookBase {
 
 	private Container $container;
-	private RestProperty $rest_property;
+	private RestPropertyProvider $rest_property;
 
-	public function __construct( Container $container, ?RestProperty $rest_property = null ) {
+	public function __construct( Container $container, ?RestPropertyProvider $rest_property = null ) {
 		$this->container     = $container;
-		$this->rest_property = $rest_property ?? $container->get( RestProperty::class );
+		$this->rest_property = $rest_property ?? $container->get( RestPropertyProvider::class );
 	}
 
 	public function register(): void {

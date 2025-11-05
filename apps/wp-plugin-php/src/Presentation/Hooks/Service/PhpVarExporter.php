@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks\Service;
 
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\RestProperty;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\RestPropertyProvider;
 
 class PhpVarExporter {
 
@@ -31,7 +31,7 @@ class PhpVarExporter {
 
 		// GraphQL APIのURL
 		$wp_property   = new WordPressPropertyProvider();
-		$rest_property = new RestProperty();
+		$rest_property = new RestPropertyProvider();
 		$graphql_url   = untrailingslashit( $wp_property->apiRootUrl() ) . '/' . $rest_property->namespace() . '/' . $rest_property->graphQlRoute();
 
 		// 出力する変数
