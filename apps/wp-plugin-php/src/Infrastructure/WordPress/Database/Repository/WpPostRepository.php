@@ -9,7 +9,6 @@ use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\PaidContentTableRecord;
@@ -32,7 +31,7 @@ class WpPostRepository implements PostRepository {
 		// テーブルから有料記事情報を取得
 		$record = $this->paid_content_table->select( $post_id );
 
-		return $record ? new PostImpl( $record ) : new Post( $post_id, null, null, null );
+		return $record ? new PostImpl( $record ) : new Post( $post_id, null, null, null, null );
 	}
 
 	/** @inheritdoc */
@@ -47,7 +46,8 @@ class WpPostRepository implements PostRepository {
 				$post->id(),
 				$post->paidContent(),
 				$post->sellingNetworkCategoryId(),
-				$post->sellingPrice()
+				$post->sellingAmount(),
+				$post->sellingSymbol(),
 			);
 		}
 	}
@@ -61,17 +61,8 @@ class PostImpl extends Post {
 			PostId::from( $record->postIdValue() ),
 			PaidContent::from( $record->paidContentValue() ),
 			NetworkCategoryId::fromNullable( $record->sellingNetworkCategoryIdValue() ),
-			$this->getPriceFromRecord( $record ),
+			Amount::fromNullable( $record->sellingAmountValue() ),
+			Symbol::fromNullable( $record->sellingSymbolValue() ),
 		);
-	}
-
-	private function getPriceFromRecord( PaidContentTableRecord $record ): ?Price {
-		$selling_amount_value = $record->sellingAmountValue();
-		$selling_symbol       = $record->sellingSymbolValue();
-		if ( null === $selling_amount_value || null === $selling_symbol ) {
-			return null;
-		} else {
-			return Price::from( Amount::from( $selling_amount_value ), Symbol::from( $selling_symbol ) );
-		}
 	}
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
-use Cornix\Serendipity\Core\Domain\Entity\WidgetAttributes;
 use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Content;
@@ -98,19 +97,12 @@ class ContentSaveHook {
 				// リビジョンからの復元の場合はペイウォールブロック＋有料部分をフィールドに保持
 				// ※ リビジョンから復元した際にさらにリビジョンが追加されるが、その投稿IDは`save_post`フィルタ内でしか取得できないため
 				// ここで直接上書きすることはできない。
-				$revision_post_id = PostId::from( (int) $_GET['revision'] );
-				$revision_post    = $this->post_repository->get( $revision_post_id );
+				$revision_post = $this->post_repository->get( PostId::from( (int) $_GET['revision'] ) );
 				assert( $revision_post->paidContent() !== null, '[B581B4FD]' );
 
 				$pending_blocks               = array();
-				$pending_blocks[]             = $this->gutenberg_service->createWidgetBlock(
-					WidgetAttributes::from(
-						$revision_post->sellingNetworkCategoryId(),
-						$revision_post->sellingPrice() ? $revision_post->sellingPrice()->amount() : null,
-						$revision_post->sellingPrice() ? $revision_post->sellingPrice()->symbol() : null
-					)
-				);
-				$revision_paid_content_blocks = $this->gutenberg_service->parseBlocks( Content::from( $revision_post->paidContent()->value() ) );
+				$pending_blocks[]             = $this->gutenberg_service->createWidgetBlock( $revision_post->id() );
+				$revision_paid_content_blocks = $this->gutenberg_service->parseBlocks( $revision_post->paidContent() );
 
 				$pending_blocks       = array_merge( $pending_blocks, $revision_paid_content_blocks );
 				$this->pending_blocks = $pending_blocks;
@@ -165,7 +157,7 @@ class ContentSaveHook {
 
 			$widget_attributes = $this->gutenberg_service->getWidgetAttributes( $this->pending_blocks[ $paywall_block_index ] );
 			$paid_content      = PaidContent::from( $this->gutenberg_service->serializeBlocks( array_slice( $this->pending_blocks, $paywall_block_index + 1 ) )->value() );
-			$post->setPaidContent( $paid_content, $widget_attributes->sellingNetworkCategoryId(), $widget_attributes->sellingPrice() );
+			$post->setPaidContent( $paid_content, $widget_attributes->sellingNetworkCategoryId(), $widget_attributes->sellingAmount(), $widget_attributes->sellingSymbol() );
 			$this->post_repository->save( $post );
 		} elseif ( $this->pending_delete_paid_content ) {
 			// 有料部分のデータを削除する場合
@@ -232,15 +224,8 @@ class ContentLoadHook {
 		// -> ダミーブロックはコメントだけなので削除済み
 		$post = $this->post_repository->get( $post_id );
 		if ( $post->paidContent() !== null ) {
-			$paywall_block = $this->gutenberg_service->createWidgetBlock(
-				WidgetAttributes::from(
-					$post->sellingNetworkCategoryId(),
-					$post->sellingPrice() ? $post->sellingPrice()->amount() : null,
-					$post->sellingPrice() ? $post->sellingPrice()->symbol() : null
-				)
-			);
 			// HTMLコメントを除去したウィジェットを追加
-			return $content . $paywall_block->render();
+			return $content . $this->gutenberg_service->createWidgetBlock( $post_id )->render();
 		} else {
 			return $content;
 		}
@@ -257,21 +242,14 @@ class ContentLoadHook {
 			return $revision_field_content; // ダミーブロックが存在しない場合は何もしない
 		}
 
-		$post_id             = PostId::from( $revision_post->ID );
-		$post                = $this->post_repository->get( $post_id );
+		$post                = $this->post_repository->get( PostId::from( $revision_post->ID ) );
 		$paid_content        = $post->paidContent();
-		$paid_content_blocks = $paid_content ? $this->gutenberg_service->parseBlocks( Content::from( $paid_content->value() ) ) : array();
+		$paid_content_blocks = $paid_content ? $this->gutenberg_service->parseBlocks( $paid_content ) : array();
 
 		// クライアントに返すブロック一覧を作成(この時点ではダミーブロックを除いた無料部分のブロック一覧)
 		$result_blocks = array_slice( $revision_blocks, 0, $dummy_paywall_block_index );
 		// ペイウォールブロックを追加
-		$result_blocks[] = $this->gutenberg_service->createWidgetBlock(
-			WidgetAttributes::from(
-				$post->sellingNetworkCategoryId(),
-				$post->sellingPrice() ? $post->sellingPrice()->amount() : null,
-				$post->sellingPrice() ? $post->sellingPrice()->symbol() : null
-			)
-		);
+		$result_blocks[] = $this->gutenberg_service->createWidgetBlock( $post->id() );
 		// 有料部分のブロックを追加
 		$result_blocks = array_merge( $result_blocks, $paid_content_blocks );
 
@@ -303,18 +281,13 @@ class ContentLoadHook {
 			// 投稿の編集権限がある場合はペイウォールブロックと有料部分のブロックを追加
 
 			$post          = $this->post_repository->get( $post_id );
-			$paywall_block = $this->gutenberg_service->createWidgetBlock(
-				WidgetAttributes::from(
-					$post->sellingNetworkCategoryId(),
-					$post->sellingPrice() ? $post->sellingPrice()->amount() : null,
-					$post->sellingPrice() ? $post->sellingPrice()->symbol() : null
-				)
-			);
+			$paywall_block = $this->gutenberg_service->createWidgetBlock( $post_id );
 
 			// ペイウォールブロックを追加
 			$result_blocks[] = $paywall_block;
 			// 有料部分のブロックを追加
-			$paid_content_blocks = $this->gutenberg_service->parseBlocks( Content::from( $post->paidContent() ? $post->paidContent()->value() : '' ) );
+			$paid_content        = $post->paidContent();
+			$paid_content_blocks = $paid_content ? $this->gutenberg_service->parseBlocks( $paid_content ) : array();
 			$result_blocks       = array_merge( $result_blocks, $paid_content_blocks );
 		}
 

@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\PaidContentTableRecord;
 
 /**
@@ -36,7 +37,7 @@ class PaidContentTable extends TableBase {
 		return $record === null ? null : new PaidContentTableRecord( $record );
 	}
 
-	public function set( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryId $selling_network_category_id, ?Price $selling_price ): void {
+	public function set( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryId $selling_network_category_id, ?Amount $selling_amount, ?Symbol $selling_symbol ): void {
 		$sql = <<<SQL
 			INSERT INTO `{$this->tableName()}` (
 				`post_id`,
@@ -57,10 +58,10 @@ class PaidContentTable extends TableBase {
 			$sql,
 			array(
 				':post_id'                     => $post_id->value(),
-				':paid_content'                => is_null( $paid_content ) ? null : $paid_content->value(),
-				':selling_network_category_id' => is_null( $selling_network_category_id ) ? null : $selling_network_category_id->value(),
-				':selling_amount'              => is_null( $selling_price ) ? null : $selling_price->amount()->value(),
-				':selling_symbol'              => is_null( $selling_price ) ? null : $selling_price->symbol()->value(),
+				':paid_content'                => $paid_content ? $paid_content->value() : null,
+				':selling_network_category_id' => $selling_network_category_id ? $selling_network_category_id->value() : null,
+				':selling_amount'              => $selling_amount ? $selling_amount->value() : null,
+				':selling_symbol'              => $selling_symbol ? $selling_symbol->value() : null,
 			)
 		);
 

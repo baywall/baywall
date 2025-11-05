@@ -51,11 +51,6 @@ class Config {
 	// ゲストユーザー(一般の訪問者)表示用『index.css』ファイルへの相対パス(URL生成に使用)
 	public const VIEW_CSS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.css';
 
-	/**
-	 * PHPから渡される変数名
-	 * ※ TypeScript側と整合性を取ること
-	 */
-	public const PHP_VAR_NAME = 'php_var_20792bdd';
 
 	/**
 	 * レートの一時データの有効期限(秒)

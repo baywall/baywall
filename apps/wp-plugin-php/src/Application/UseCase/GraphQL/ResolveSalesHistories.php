@@ -24,7 +24,7 @@ class ResolveSalesHistories {
 	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$filter_invoice_id = InvoiceId::fromNullable( $args['filter']['invoiceId'] ?? null );
+		$filter_invoice_id = InvoiceId::fromUlidValueNullable( $args['filter']['invoiceId'] ?? null );
 
 		$sales_histories = $this->sales_history_service->find( $filter_invoice_id );
 

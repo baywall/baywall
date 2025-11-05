@@ -2,8 +2,9 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks\Service;
 
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
+use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\RestPropertyProvider;
 
 class PhpVarExporter {
 
@@ -12,7 +13,7 @@ class PhpVarExporter {
 	 */
 	public function addInlineScript( string $handle ): void {
 		// javascriptとして出力する際の変数名を取得
-		$js_var_name = Config::PHP_VAR_NAME;
+		$js_var_name = WpConfig::PHP_VAR_NAME;
 
 		$success = wp_add_inline_script(
 			$handle,
@@ -29,7 +30,9 @@ class PhpVarExporter {
 		$wp_rest_nonce = wp_create_nonce( 'wp_rest' );
 
 		// GraphQL APIのURL
-		$graphql_url = ( new RestProperty() )->graphQlUrl();
+		$wp_property   = new WordPressPropertyProvider();
+		$rest_property = new RestPropertyProvider();
+		$graphql_url   = untrailingslashit( $wp_property->apiRootUrl() ) . '/' . $rest_property->namespace() . '/' . $rest_property->graphQlRoute();
 
 		// 出力する変数
 		$result = array(

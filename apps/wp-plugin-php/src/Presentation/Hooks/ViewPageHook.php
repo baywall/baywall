@@ -29,6 +29,7 @@ class ViewPageHook extends HookBase {
 
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
 		$plugin               = $this->container->get( PluginInfoProvider::class );
+		$php_var_exporter     = $this->container->get( PhpVarExporter::class );
 
 		// ゲストユーザー(一般の訪問者)表示用の登録する際のハンドル名を取得
 		$handle_name = $handle_name_provider->viewScript();
@@ -45,7 +46,7 @@ class ViewPageHook extends HookBase {
 			true   // フッターに出力 ※ 6.8.2でも`script_loader_tag`による`defer`挿入が可能であることを確認したため、配列にはせず`true`のままとする
 		);
 		// インラインスクリプトを追加
-		( new PhpVarExporter() )->addInlineScript( $handle_name );
+		$php_var_exporter->addInlineScript( $handle_name );
 
 		// スタイルを登録
 		wp_enqueue_style(
