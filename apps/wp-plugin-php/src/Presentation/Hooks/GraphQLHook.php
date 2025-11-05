@@ -22,11 +22,11 @@ use GraphQL\Validator\Rules\QueryDepth;
 class GraphQLHook extends HookBase {
 
 	private Container $container;
-	private ?RestProperty $rest_property;
+	private RestProperty $rest_property;
 
 	public function __construct( Container $container, ?RestProperty $rest_property = null ) {
 		$this->container     = $container;
-		$this->rest_property = $rest_property;
+		$this->rest_property = $rest_property ?? $container->get( RestProperty::class );
 	}
 
 	public function register(): void {
@@ -34,13 +34,10 @@ class GraphQLHook extends HookBase {
 	}
 
 	public function addActionRestApiInit(): void {
-
-		$rest_property = $this->rest_property ?? $this->container->get( RestProperty::class );
-
 		// GraphQLのエンドポイントを登録
 		$success = register_rest_route(
-			$rest_property->namespace(),
-			$rest_property->graphQlRoute(),
+			$this->rest_property->namespace(),
+			$this->rest_property->graphQlRoute(),
 			array(
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->callback( $request ),
