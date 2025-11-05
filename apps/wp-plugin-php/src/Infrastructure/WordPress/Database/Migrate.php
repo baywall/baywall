@@ -11,7 +11,6 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\ChainTa
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\InvoiceTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\OptionsTableSeed;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\OracleTableSchema;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\OracleTableSeed;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\PaidContentTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\SellerTableSchema;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\ServerSignerTableSchema;
@@ -67,7 +66,6 @@ class Migrate {
 			AppContractTableSeed::class,
 			ChainTableSeed::class,
 			TokenTableSeed::class,
-			OracleTableSeed::class,
 			ServerSignerTableSeed::class,
 			OptionsTableSeed::class,
 			// 他のシードクラスを追加する場合はここに記述
