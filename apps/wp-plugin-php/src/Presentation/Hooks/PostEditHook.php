@@ -33,6 +33,7 @@ class PostEditHook extends HookBase {
 
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
 		$plugin               = $this->container->get( PluginInfoProvider::class );
+		$php_var_exporter     = $this->container->get( PhpVarExporter::class );
 
 		// ブロックエディタで使用するスクリプトを登録するときのハンドル名を取得。
 		$handle = $handle_name_provider->blockScript();
@@ -50,7 +51,7 @@ class PostEditHook extends HookBase {
 		);
 
 		// インラインスクリプトを追加
-		( new PhpVarExporter() )->addInlineScript( $handle );
+		$php_var_exporter->addInlineScript( $handle );
 
 		// スタイルを登録
 		wp_enqueue_style(
