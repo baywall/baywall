@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3\Abi;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
@@ -35,7 +36,7 @@ class AppContractAbi extends AbiBase {
 		$decoded_event_parameters = $this->decodeEventParameters( $log );
 
 		return new UnlockPaywallTransferEvent(
-			BlockNumber::from( $log->blockNumber ), // block_number
+			BlockNumber::fromHex( Hex::from( $log->blockNumber ) ), // block_number
 			hexdec( $log->logIndex ), // log_index
 			TransactionHash::from( $log->transactionHash ), // transaction_hash
 			InvoiceId::from( $decoded_event_parameters['invoiceId'] ), // invoice_id
