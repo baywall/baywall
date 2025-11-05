@@ -68,7 +68,6 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 		$testnet         = NetworkCategoryId::testnet();
 		$testnet_rpc_url = null; // Testnetの場合、RPC URLの初期値はnull
 		$this->insertChainRecord( ChainIdConstants::sepolia(), 'Sepolia', $testnet, $testnet_rpc_url, 'https://sepolia.etherscan.io' );
-		$this->insertChainRecord( ChainIdConstants::soneiumMinato(), 'Soneium Testnet Minato', $testnet, $testnet_rpc_url, 'https://soneium-minato.blockscout.com' );
 
 		// 開発モード時はプライベートネットのチェーン情報も登録
 		if ( $this->environment->isDevelopment() ) {
