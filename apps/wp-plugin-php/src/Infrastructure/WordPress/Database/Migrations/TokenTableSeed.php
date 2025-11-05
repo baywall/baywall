@@ -69,7 +69,6 @@ class TokenTableSeed_0_0_1 extends TokenTableSeedBase {
 
 		// テストネットのネイティブトークンを登録
 		$this->add( ChainIdConstants::sepolia(), $native_token_address, 'ETH', 18, false );
-		$this->add( ChainIdConstants::soneiumMinato(), $native_token_address, 'ETH', 18, false );
 
 		// 開発モード時はプライベートネットのネイティブトークンを登録
 		if ( $this->environment->isDevelopment() ) {

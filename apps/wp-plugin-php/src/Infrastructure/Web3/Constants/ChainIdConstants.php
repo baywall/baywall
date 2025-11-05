@@ -13,7 +13,6 @@ final class ChainIdConstants {
 	// ==================== Testnet ====================
 	private const SEPOLIA                = 11155111; // イーサリアムSepoliaテストネット(L1)
 	private const POLYGON_ZK_EVM_CARDONA = 2442;     // Polygon zkEVMテストネット(L2/Sepolia)
-	private const SONEIUM_MINATO         = 1946;     // Soneiumテストネット(L2/Sepolia)
 
 	// ==================== Privatenet ====================
 	private const PRIVATENET_L1 = 31337; // PrivatenetL1に位置付けられたチェーンID
@@ -41,10 +40,6 @@ final class ChainIdConstants {
 	/** Polygon zkEVM テストネット */
 	public static function polygonZkEvmCardona(): ChainId {
 		return ChainId::from( self::POLYGON_ZK_EVM_CARDONA );
-	}
-	/** Soneium テストネット */
-	public static function soneiumMinato(): ChainId {
-		return ChainId::from( self::SONEIUM_MINATO );
 	}
 
 	// ==================== Privatenet ====================
