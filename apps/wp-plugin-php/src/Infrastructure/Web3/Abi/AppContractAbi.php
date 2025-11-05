@@ -12,6 +12,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Abi\Base\AbiBase;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
+use phpseclib\Math\BigInteger;
 use stdClass;
 
 class AppContractAbi extends AbiBase {
@@ -33,19 +34,27 @@ class AppContractAbi extends AbiBase {
 	}
 
 	public function decodeUnlockPaywallTransferEvent( stdClass $log ): UnlockPaywallTransferEvent {
-		$decoded_event_parameters = $this->decodeEventParameters( $log );
+		$decoded_event_params = $this->decodeEventParameters( $log );
+
+		assert( is_string( $decoded_event_params['signer'] ), '[A18B1291] ' . var_export( $decoded_event_params['signer'], true ) );
+		assert( is_string( $decoded_event_params['from'] ), '[FD9BA69A] ' . var_export( $decoded_event_params['from'], true ) );
+		assert( is_string( $decoded_event_params['to'] ), '[8E6055C5] ' . var_export( $decoded_event_params['to'], true ) );
+		assert( is_string( $decoded_event_params['token'] ), '[E3FD1079] ' . var_export( $decoded_event_params['token'], true ) );
+		assert( $decoded_event_params['amount'] instanceof BigInteger, '[AF7DF1B0] ' . var_export( $decoded_event_params['amount'], true ) );
+		assert( $decoded_event_params['invoiceId'] instanceof BigInteger, '[D454A801] ' . var_export( $decoded_event_params['invoiceId'], true ) );
+		assert( $decoded_event_params['transferType'] instanceof BigInteger, '[2CC10192] ' . var_export( $decoded_event_params['transferType'], true ) );
 
 		return new UnlockPaywallTransferEvent(
 			BlockNumber::fromHex( Hex::from( $log->blockNumber ) ), // block_number
 			hexdec( $log->logIndex ), // log_index
 			TransactionHash::from( $log->transactionHash ), // transaction_hash
-			InvoiceId::from( $decoded_event_parameters['invoiceId'] ), // invoice_id
-			Address::from( $decoded_event_parameters['signer'] ), // server_signer_address
-			Address::from( $decoded_event_parameters['from'] ), // from_address
-			Address::from( $decoded_event_parameters['to'] ), // to_address
-			Address::from( $decoded_event_parameters['token'] ), // token_address
-			Amount::from( $decoded_event_parameters['amount']->toString() ), // amount
-			UnlockPaywallTransferType::from( (int) ( $decoded_event_parameters['transferType'] )->toString() ) // transfer_type
+			InvoiceId::fromHex( Hex::from( '0x' . $decoded_event_params['invoiceId']->toHex() ) ), // invoice_id
+			Address::from( $decoded_event_params['signer'] ), // server_signer_address
+			Address::from( $decoded_event_params['from'] ), // from_address
+			Address::from( $decoded_event_params['to'] ), // to_address
+			Address::from( $decoded_event_params['token'] ), // token_address
+			Amount::from( $decoded_event_params['amount']->toString() ), // amount
+			UnlockPaywallTransferType::from( (int) ( $decoded_event_params['transferType'] )->toString() ) // transfer_type
 		);
 	}
 }
