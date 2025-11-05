@@ -3,15 +3,16 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
+use Cornix\Serendipity\Core\Constant\WpConfig;
+
 class ClassNameProvider {
 
 	/**
-	 * ブロック(ブロックエディタで表示されるウィジェット)に付与されるCSSクラス名を返します。
+	 * ペイウォールブロック(ブロックエディタで表示されるウィジェット)に付与されるCSSクラス名を返します。
 	 *
 	 * @return string
 	 */
-	public function getBlock(): string {
-		// ※ TypeScript側と整合性を取ること
-		return 'ae6cefc4-82d4-4220-840b-d74538ea7284';
+	public function paywallBlock(): string {
+		return WpConfig::PAYWALL_BLOCK_CLASS_NAME;
 	}
 }

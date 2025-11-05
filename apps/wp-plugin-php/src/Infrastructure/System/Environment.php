@@ -11,8 +11,8 @@ use Cornix\Serendipity\Core\Constant\Config;
  */
 class Environment {
 
-	/** developmentモードを判定するためのファイルパス */
-	private const DEVELOPMENT_MODE_CHECK_FILE = Config::ROOT_DIR . '/package.json';
+	/** developmentモードを判定するためのディレクトリパス */
+	private const DEVELOPMENT_MODE_CHECK_DIR = Config::ROOT_DIR . '/node_modules';
 
 	/**
 	 * 開発モードかどうかを取得します。
@@ -25,7 +25,7 @@ class Environment {
 	 * - 本番環境での運用時(zipファイルからインストールした場合)
 	 */
 	public function isDevelopment(): bool {
-		return file_exists( self::DEVELOPMENT_MODE_CHECK_FILE );
+		return is_dir( self::DEVELOPMENT_MODE_CHECK_DIR );
 	}
 
 	/**
