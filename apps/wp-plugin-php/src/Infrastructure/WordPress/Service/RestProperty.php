@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Lib\Rest;
+
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;

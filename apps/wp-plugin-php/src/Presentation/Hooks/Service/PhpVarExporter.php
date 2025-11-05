@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks\Service;
 
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
-use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\RestProperty;
 
 class PhpVarExporter {
 
