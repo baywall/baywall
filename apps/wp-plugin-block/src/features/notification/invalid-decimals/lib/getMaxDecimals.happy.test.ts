@@ -135,7 +135,7 @@ describe( '[Happy] getMaxDecimals', () => {
 			const symbol = Symbol.from( 'BTC' );
 			const dic: Token[] = [
 				Token.from( NetworkCategoryId.from( 1 ), Symbol.from( 'ETH' ), Decimals.from( 18 ) ),
-				Token.from( NetworkCategoryId.from( 1 ), Symbol.from( 'MATIC' ), Decimals.from( 18 ) ),
+				Token.from( NetworkCategoryId.from( 1 ), Symbol.from( 'POL' ), Decimals.from( 18 ) ),
 			];
 
 			// ACT
