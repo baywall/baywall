@@ -64,16 +64,16 @@ class TokenTableSeed_0_0_1 extends TokenTableSeedBase {
 		// ネイティブトークンのアドレスを文字列で取得
 		$native_token_address = Address::nativeToken()->value();
 
-		// メインネットのネイティブトークンを登録(Ethereum Mainnetのみ支払可能として指定)
-		$this->add( ChainIdConstants::ethMainnet(), $native_token_address, 'ETH', 18, true );
+		// メインネットのネイティブトークンを登録
+		$this->add( ChainIdConstants::ethMainnet(), $native_token_address, 'ETH', 18, false );
 
-		// テストネットのネイティブトークンを登録(Sepoliaのみ支払可能として指定)
-		$this->add( ChainIdConstants::sepolia(), $native_token_address, 'ETH', 18, true );
+		// テストネットのネイティブトークンを登録
+		$this->add( ChainIdConstants::sepolia(), $native_token_address, 'ETH', 18, false );
 		$this->add( ChainIdConstants::soneiumMinato(), $native_token_address, 'ETH', 18, false );
 
 		// 開発モード時はプライベートネットのネイティブトークンを登録
 		if ( $this->environment->isDevelopment() ) {
-			$this->add( ChainIdConstants::privatenetL1(), $native_token_address, 'ETH', 18, true );
+			$this->add( ChainIdConstants::privatenetL1(), $native_token_address, 'ETH', 18, false );
 			$this->add( ChainIdConstants::privatenetL2(), $native_token_address, 'POL', 18, false );
 		}
 	}
