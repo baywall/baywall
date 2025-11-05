@@ -62,7 +62,11 @@ class AppContractClient {
 				assert( $invoice_id instanceof BigInteger );
 				assert( $unlocked_block_number instanceof BigInteger );
 
-				$result = new GetPaywallStatusResult( $is_unlocked, InvoiceId::from( $invoice_id ), BlockNumber::fromHex( Hex::from( '0x' . $unlocked_block_number->toHex() ) ) );
+				$result = new GetPaywallStatusResult(
+					$is_unlocked,
+					InvoiceId::fromHex( Hex::from( '0x' . $invoice_id->toHex() ) ),
+					BlockNumber::fromHex( Hex::from( '0x' . $unlocked_block_number->toHex() ) )
+				);
 			}
 		);
 
