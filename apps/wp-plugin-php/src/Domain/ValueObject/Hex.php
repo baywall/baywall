@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use InvalidArgumentException;
+
 /**
  * 16進数の文字列を表す値オブジェクト
  */
@@ -31,6 +33,28 @@ class Hex implements \Stringable {
 
 	public function __toString(): string {
 		return $this->hex_value;
+	}
+
+	/**
+	 * 指定した基数で文字列として値を取得します。
+	 */
+	public function toString( int $base = 16 ): string {
+		if ( $base === 16 ) {
+			return $this->hex_value;
+		} elseif ( $base === 10 ) {
+			$raw_hex_value = ltrim( $this->value(), '0x' );
+			$result        = '0';
+			$len           = strlen( $raw_hex_value );
+
+			for ( $i = 0; $i < $len; $i++ ) {
+				$digit  = strpos( '0123456789abcdef', $raw_hex_value[ $i ] );
+				$power  = bcpow( '16', (string) ( $len - $i - 1 ) );
+				$result = bcadd( $result, bcmul( (string) $digit, $power ) );
+			}
+			return $result;
+		} else {
+			throw new \InvalidArgumentException( '[BB835D38] Unsupported base for toString: ' . $base );
+		}
 	}
 
 	/** int型の値で取得します */
