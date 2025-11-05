@@ -32,4 +32,13 @@ class Hex implements \Stringable {
 	public function __toString(): string {
 		return $this->hex_value;
 	}
+
+	/** int型の値で取得します */
+	public function intValue(): int {
+		$result = hexdec( $this->hex_value );
+		if ( is_int( $result ) ) {
+			return $result;
+		}
+		throw new \RuntimeException( '[F361A92C] Hex value is too large to convert to int: ' . $this->hex_value );
+	}
 }
