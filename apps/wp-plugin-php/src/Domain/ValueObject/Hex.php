@@ -26,6 +26,21 @@ class Hex implements \Stringable {
 	public static function from( string $hex_value ): self {
 		return new self( $hex_value );
 	}
+	/** 10進数の文字列からインスタンスを生成します */
+	public static function fromDecValue( string $dec_value ): self {
+		if ( ! preg_match( '/^\d+$/', $dec_value ) ) {
+			throw new InvalidArgumentException( '[54F21E6B] Invalid decimal format for: ' . $dec_value );
+		}
+
+		$raw_hex = '';
+		while ( bccomp( $dec_value, '0' ) > 0 ) {
+			$remainder = bcmod( $dec_value, '16' ); // 16 で割った余りを求める
+			$hexDigit  = dechex( (int) $remainder ); // 16進数の文字に変換
+			$raw_hex   = $hexDigit . $raw_hex;    // 結果に追加（逆順）
+			$dec_value = bcdiv( $dec_value, '16', 0 );  // 商を計算
+		}
+		return strlen( $raw_hex ) > 0 ? new self( '0x' . $raw_hex ) : new self( '0x0' );
+	}
 
 	public function equals( self $other ): bool {
 		return $this->value() === $other->value();
