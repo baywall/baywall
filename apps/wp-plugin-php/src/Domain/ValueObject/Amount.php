@@ -26,8 +26,14 @@ final class Amount implements \Stringable {
 	/** 値を10進数の文字列で保持 */
 	private string $amount_text;
 
+	/** 10進数の文字列からインスタンスを作成します。 */
 	public static function from( string $amount_text ): self {
 		return new self( $amount_text );
+	}
+
+	/** 16進数の文字列からインスタンスを作成します。 */
+	public static function fromHex( Hex $hex ): self {
+		return new self( $hex->toString( 10 ) );
 	}
 
 	public static function fromNullable( ?string $amount_text ): ?self {

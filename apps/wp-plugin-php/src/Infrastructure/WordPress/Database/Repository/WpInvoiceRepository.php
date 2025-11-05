@@ -41,7 +41,7 @@ class WpInvoiceRepository implements InvoiceRepository {
 class InvoiceImpl extends Invoice {
 	public function __construct( InvoiceTableRecord $invoice_record ) {
 		parent::__construct(
-			InvoiceId::from( $invoice_record->idValue() ),
+			InvoiceId::fromUlidValue( $invoice_record->idValue() ),
 			PostId::from( $invoice_record->postIdValue() ),
 			ChainId::from( $invoice_record->chainIdValue() ),
 			Price::from(

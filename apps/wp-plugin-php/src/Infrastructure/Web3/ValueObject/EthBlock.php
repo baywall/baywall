@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use stdClass;
 
@@ -20,11 +21,13 @@ class EthBlock {
 	}
 
 	public function number(): BlockNumber {
-		return BlockNumber::from( $this->response->number );
+		$block_number_hex = Hex::from( $this->response->number );
+		return BlockNumber::fromHex( $block_number_hex );
 	}
 
 	public function timestamp(): UnixTimestamp {
-		// タイムスタンプはUNIX時間
-		return UnixTimestamp::from( hexdec( $this->response->timestamp ) );
+		$timestamp_hex = Hex::from( $this->response->timestamp );
+		// タイムスタンプはUNIX時間なのでhexdecで変換して問題ない
+		return UnixTimestamp::from( hexdec( $timestamp_hex->value() ) );
 	}
 }

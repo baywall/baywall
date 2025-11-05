@@ -14,6 +14,7 @@ use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 
@@ -53,7 +54,7 @@ class ResolveRequestPaidContentByNonce {
 
 	public function handle( array $root_value, array $args ) {
 		$invoice_nonce = InvoiceNonce::from( $args['nonce'] );
-		$invoice_id    = InvoiceId::from( $args['invoiceId'] );
+		$invoice_id    = InvoiceId::fromHex( Hex::from( $args['invoiceId'] ) );
 		$invoice       = $this->invoice_repository->get( $invoice_id );
 		if ( $invoice === null ) {
 			throw new \InvalidArgumentException( "[B8057163] Invoice not found: {$invoice_id}" );

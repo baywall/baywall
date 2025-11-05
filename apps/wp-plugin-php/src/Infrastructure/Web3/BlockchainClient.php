@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\EthBlock;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use phpseclib\Math\BigInteger;
@@ -128,7 +129,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$block_number = BlockNumber::from( $res );
+						$block_number = BlockNumber::fromHex( Hex::from( '0x' . $res->toHex() ) );
 					}
 				);
 			}
