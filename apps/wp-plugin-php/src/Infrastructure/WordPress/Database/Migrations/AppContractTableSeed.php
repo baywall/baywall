@@ -31,8 +31,9 @@ class AppContractTableSeed extends MigratorBase {
 // --------------------------------------------------------------------------------
 
 abstract class AppContractTableSeedBase extends MigrationBase {
-	protected function add( ChainId $chain_id, string $address_value ): void {
-		$address = Address::from( $address_value );
+	protected function add( int $chain_id_value, string $address_value ): void {
+		$chain_id = ChainId::from( $chain_id_value );
+		$address  = Address::from( $address_value );
 		$this->insert(
 			$this->tableName(),
 			array(
@@ -57,15 +58,21 @@ class AppContractTableSeed_0_0_1 extends AppContractTableSeedBase {
 
 		// TODO: メインネットのコントラクトアドレスを登録
 
-		if ( $this->environment->isDevelopment() ) {
-			$this->add( ChainIdConstants::privatenetL1(), '0x5FbDB2315678afecb367f032d93F642f64180aa3' );
-			$this->add( ChainIdConstants::privatenetL2(), '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512' );
+		if ( $this->environment->isProduction() ) {
+			// TODO: 販売者が動作確認用で使うテストネットのコントラクトアドレスを登録
+			// 開発者以外も使うため、影響範囲が大きい
+		} elseif ( $this->environment->isDevelopment() || $this->environment->isTesting() ) {
+			// 開発用のコントラクトアドレスを登録
 
-			// テストネットで開発用のコントラクトアドレスを使用
-			$this->add( ChainIdConstants::sepolia(), '0x65fA00d60343da7AB6Ff1f805eCAE452da758Fa0' );
-			$this->add( ChainIdConstants::soneiumMinato(), '0x6a9214D8264C00d884225542d3af47cf5De2049f' );
+			// プライベートネット
+			$this->add( ChainIdConstants::PRIVATENET1, '0x5FbDB2315678afecb367f032d93F642f64180aa3' );
+			$this->add( ChainIdConstants::PRIVATENET2, '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512' );
+
+			// テストネット
+			// このコントラクトを使うのは開発者だけなので影響は限定的
+			$this->add( ChainIdConstants::SEPOLIA, '0x65fA00d60343da7AB6Ff1f805eCAE452da758Fa0' );
 		} else {
-			// TODO: テストネットのコントラクトアドレスを登録
+			throw new \RuntimeException( '[63F60D82] Unsupported environment' );
 		}
 	}
 
