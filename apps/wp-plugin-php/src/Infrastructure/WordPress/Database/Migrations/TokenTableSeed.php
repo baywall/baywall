@@ -34,8 +34,11 @@ class TokenTableSeed extends MigratorBase {
 
 /** @internal */
 abstract class TokenTableSeedBase extends MigrationBase {
-	protected function add( ChainId $chain_id, string $address_value, string $symbol_value, int $decimals_value, bool $is_payable ): void {
+	protected function add( int $chain_id_value, string $address_value, string $symbol_value, int $decimals_value, bool $is_payable ): void {
+		$chain_id = ChainId::from( $chain_id_value );
 		$address  = Address::from( $address_value );
+		// ネイティブトークンのみ許可
+		assert( $address->equals( Address::nativeToken() ), '[83181C3F] Native token address expected.' );
 		$symbol   = Symbol::from( $symbol_value );
 		$decimals = Decimals::from( $decimals_value );
 
@@ -64,17 +67,16 @@ class TokenTableSeed_0_0_1 extends TokenTableSeedBase {
 		// ネイティブトークンのアドレスを文字列で取得
 		$native_token_address = Address::nativeToken()->value();
 
-		// メインネットのネイティブトークンを登録(Ethereum Mainnetのみ支払可能として指定)
-		$this->add( ChainIdConstants::ethMainnet(), $native_token_address, 'ETH', 18, true );
+		// メインネットのネイティブトークンを登録
+		$this->add( ChainIdConstants::ETHEREUM, $native_token_address, 'ETH', 18, false );
 
-		// テストネットのネイティブトークンを登録(Sepoliaのみ支払可能として指定)
-		$this->add( ChainIdConstants::sepolia(), $native_token_address, 'ETH', 18, true );
-		$this->add( ChainIdConstants::soneiumMinato(), $native_token_address, 'ETH', 18, false );
+		// テストネットのネイティブトークンを登録
+		$this->add( ChainIdConstants::SEPOLIA, $native_token_address, 'ETH', 18, false );
 
 		// 開発モード時はプライベートネットのネイティブトークンを登録
-		if ( $this->environment->isDevelopment() ) {
-			$this->add( ChainIdConstants::privatenetL1(), $native_token_address, 'ETH', 18, true );
-			$this->add( ChainIdConstants::privatenetL2(), $native_token_address, 'MATIC', 18, false );
+		if ( $this->environment->isDevelopment() || $this->environment->isTesting() ) {
+			$this->add( ChainIdConstants::PRIVATENET1, $native_token_address, 'ETH', 18, false );
+			$this->add( ChainIdConstants::PRIVATENET2, $native_token_address, 'POL', 18, false );
 		}
 	}
 

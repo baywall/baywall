@@ -33,8 +33,10 @@ class ChainTableSeed extends MigratorBase {
 // --------------------------------------------------------------------------------
 
 abstract class ChainTableSeedBase extends MigrationBase {
-	protected function insertChainRecord( ChainId $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, string $block_explorer_url ): void {
+	protected function insertChainRecord( int $chain_id_value, string $name, NetworkCategoryId $network_category_id, ?string $rpc_url_value, string $block_explorer_url ): void {
+		$chain_id      = ChainId::from( $chain_id_value );
 		$confirmations = Confirmations::from( 1 ); // 初期値として設定する確認数は1
+		$rpc_url       = RpcUrl::fromNullable( $rpc_url_value );
 		$this->insert(
 			$this->tableName(),
 			array(
@@ -59,45 +61,47 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 	private Environment $environment;
 
 	public function up(): void {
-		// Mainnet
-		$mainnet         = NetworkCategoryId::mainnet();
-		$mainnet_rpc_url = null; // Mainnetの場合、RPC URLの初期値はnull
-		$this->insertChainRecord( ChainIdConstants::ethMainnet(), 'Ethereum Mainnet', $mainnet, $mainnet_rpc_url, 'https://etherscan.io' );
+		// Mainnet --------------------
+		// Ethereum
+		$this->insertChainRecord(
+			ChainIdConstants::ETHEREUM,
+			'Ethereum',
+			NetworkCategoryId::mainnet(),
+			null, // RPC URLはnull
+			'https://etherscan.io'
+		);
 
-		// Testnet
-		$testnet         = NetworkCategoryId::testnet();
-		$testnet_rpc_url = null; // Testnetの場合、RPC URLの初期値はnull
-		$this->insertChainRecord( ChainIdConstants::sepolia(), 'Sepolia', $testnet, $testnet_rpc_url, 'https://sepolia.etherscan.io' );
-		$this->insertChainRecord( ChainIdConstants::soneiumMinato(), 'Soneium Testnet Minato', $testnet, $testnet_rpc_url, 'https://soneium-minato.blockscout.com' );
+		// Testnet --------------------
+		// Sepolia
+		$this->insertChainRecord(
+			ChainIdConstants::SEPOLIA,
+			'Sepolia',
+			NetworkCategoryId::testnet(),
+			null, // RPC URLはnull
+			'https://sepolia.etherscan.io'
+		);
 
-		// 開発モード時はプライベートネットのチェーン情報も登録
-		if ( $this->environment->isDevelopment() ) {
-			$privatenet           = NetworkCategoryId::privatenet();
-			$privatenet_rpc_url_1 = $this->getPrivatenetRpcUrl( ChainIdConstants::privatenetL1() );
-			$privatenet_rpc_url_2 = $this->getPrivatenetRpcUrl( ChainIdConstants::privatenetL2() );
+		// 開発、テスト時はプライベートネットのチェーン情報も登録
+		if ( $this->environment->isDevelopment() || $this->environment->isTesting() ) {
+			$is_development = $this->environment->isDevelopment();
 
-			$this->insertChainRecord( ChainIdConstants::privatenetL1(), 'Privatenet1', $privatenet, $privatenet_rpc_url_1, 'http://localhost:10101' );
-			$this->insertChainRecord( ChainIdConstants::privatenetL2(), 'Privatenet2', $privatenet, $privatenet_rpc_url_2, 'http://localhost:10102' );
-		}
-	}
+			// Privatenet 1
+			$this->insertChainRecord(
+				ChainIdConstants::PRIVATENET1,
+				'Privatenet1',
+				NetworkCategoryId::privatenet(),
+				$is_development ? 'http://privatenet-1.test' : 'http://tests-privatenet-1.test',
+				'http://localhost:10101'    // ブロックエクスプローラーURL
+			);
 
-	/**
-	 * 指定されたプライベートネットのチェーンIDに対応するRPC URLを取得します。
-	 */
-	private function getPrivatenetRpcUrl( ChainId $chain_id ): RpcUrl {
-		// プライベートネットのURLを取得する関数
-		$privatenet = function ( int $number ): RpcUrl {
-			assert( in_array( $number, array( 1, 2 ), true ) );
-			$prefix = $this->environment->isTesting() ? 'tests-' : '';
-			return RpcUrl::from( "http://{$prefix}privatenet-{$number}.test" );
-		};
-
-		if ( $chain_id->equals( ChainIdConstants::privatenetL1() ) ) {
-			return $privatenet( 1 );
-		} elseif ( $chain_id->equals( ChainIdConstants::privatenetL2() ) ) {
-			return $privatenet( 2 );
-		} else {
-			throw new \InvalidArgumentException( "[11301D24] Invalid chain ID. {$chain_id}" );
+			// Privatenet 2
+			$this->insertChainRecord(
+				ChainIdConstants::PRIVATENET2,
+				'Privatenet2',
+				NetworkCategoryId::privatenet(),
+				$is_development ? 'http://privatenet-2.test' : 'http://tests-privatenet-2.test',
+				'http://localhost:10102'    // ブロックエクスプローラーURL
+			);
 		}
 	}
 
