@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 final class ChainIdConstants {
 	// ==================== Mainnet ====================
-	private const ETH_MAINNET    = 1;    // イーサリアムメインネット(L1)
+	private const ETHEREUM       = 1;    // イーサリアムメインネット(L1)
 	private const POLYGON_ZK_EVM = 1101; // Polygon zkEVM(L2/mainnet)
 
 	// ==================== Testnet ====================
@@ -23,8 +23,8 @@ final class ChainIdConstants {
 	// ==================== Mainnet ====================
 
 	/** イーサリアムメインネット */
-	public static function ethMainnet(): ChainId {
-		return ChainId::from( self::ETH_MAINNET );
+	public static function ethereum(): ChainId {
+		return ChainId::from( self::ETHEREUM );
 	}
 	/** Polygon zkEVM メインネット */
 	public static function polygonZkEvm(): ChainId {

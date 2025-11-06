@@ -62,7 +62,7 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 		// Mainnet
 		$mainnet         = NetworkCategoryId::mainnet();
 		$mainnet_rpc_url = null; // Mainnetの場合、RPC URLの初期値はnull
-		$this->insertChainRecord( ChainIdConstants::ethMainnet(), 'Ethereum Mainnet', $mainnet, $mainnet_rpc_url, 'https://etherscan.io' );
+		$this->insertChainRecord( ChainIdConstants::ethereum(), 'Ethereum', $mainnet, $mainnet_rpc_url, 'https://etherscan.io' );
 
 		// Testnet
 		$testnet         = NetworkCategoryId::testnet();
