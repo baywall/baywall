@@ -31,8 +31,9 @@ class AppContractTableSeed extends MigratorBase {
 // --------------------------------------------------------------------------------
 
 abstract class AppContractTableSeedBase extends MigrationBase {
-	protected function add( ChainId $chain_id, string $address_value ): void {
-		$address = Address::from( $address_value );
+	protected function add( int $chain_id_value, string $address_value ): void {
+		$chain_id = ChainId::from( $chain_id_value );
+		$address  = Address::from( $address_value );
 		$this->insert(
 			$this->tableName(),
 			array(
@@ -64,12 +65,12 @@ class AppContractTableSeed_0_0_1 extends AppContractTableSeedBase {
 			// 開発用のコントラクトアドレスを登録
 
 			// プライベートネット
-			$this->add( ChainIdConstants::privatenetL1(), '0x5FbDB2315678afecb367f032d93F642f64180aa3' );
-			$this->add( ChainIdConstants::privatenetL2(), '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512' );
+			$this->add( ChainIdConstants::PRIVATENET1, '0x5FbDB2315678afecb367f032d93F642f64180aa3' );
+			$this->add( ChainIdConstants::PRIVATENET2, '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512' );
 
 			// テストネット
 			// このコントラクトを使うのは開発者だけなので影響は限定的
-			$this->add( ChainIdConstants::sepolia(), '0x65fA00d60343da7AB6Ff1f805eCAE452da758Fa0' );
+			$this->add( ChainIdConstants::SEPOLIA, '0x65fA00d60343da7AB6Ff1f805eCAE452da758Fa0' );
 		} else {
 			throw new \RuntimeException( '[63F60D82] Unsupported environment' );
 		}
