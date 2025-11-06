@@ -65,7 +65,7 @@ class TokenTableSeed_0_0_1 extends TokenTableSeedBase {
 		$native_token_address = Address::nativeToken()->value();
 
 		// メインネットのネイティブトークンを登録
-		$this->add( ChainIdConstants::ethMainnet(), $native_token_address, 'ETH', 18, false );
+		$this->add( ChainIdConstants::ethereum(), $native_token_address, 'ETH', 18, false );
 
 		// テストネットのネイティブトークンを登録
 		$this->add( ChainIdConstants::sepolia(), $native_token_address, 'ETH', 18, false );
