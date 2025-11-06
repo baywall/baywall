@@ -7,16 +7,18 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 
 final class ChainIdConstants {
 	// ==================== Mainnet ====================
-	private const ETHEREUM       = 1;    // イーサリアムメインネット(L1)
-	private const POLYGON_ZK_EVM = 1101; // Polygon zkEVM(L2/mainnet)
+	public const ETHEREUM       = 1;    // イーサリアムメインネット(L1)
+	public const POLYGON_ZK_EVM = 1101; // Polygon zkEVM(L2/mainnet)
 
 	// ==================== Testnet ====================
-	private const SEPOLIA                = 11155111; // イーサリアムSepoliaテストネット(L1)
-	private const POLYGON_ZK_EVM_CARDONA = 2442;     // Polygon zkEVMテストネット(L2/Sepolia)
+	public const SEPOLIA                = 11155111; // イーサリアムSepoliaテストネット(L1)
+	public const POLYGON_ZK_EVM_CARDONA = 2442;     // Polygon zkEVMテストネット(L2/Sepolia)
 
 	// ==================== Privatenet ====================
-	private const PRIVATENET_L1 = 31337; // PrivatenetL1に位置付けられたチェーンID
-	private const PRIVATENET_L2 = 1337;  // PrivatenetL2に位置付けられたチェーンID(L2) ※実際はロールアップを行っていない、単に独立したネットワーク
+	/** Ethereumの代わりに使用するプライベートネットのチェーンID */
+	public const PRIVATENET1 = 31337;
+	/** Polygonの代わりに使用するプライベートネットのチェーンID */
+	public const PRIVATENET2 = 1337;
 
 
 
@@ -46,11 +48,11 @@ final class ChainIdConstants {
 
 	/** Privatenet L1 */
 	public static function privatenetL1(): ChainId {
-		return ChainId::from( self::PRIVATENET_L1 );
+		return ChainId::from( self::PRIVATENET1 );
 	}
 	/** Privatenet L2 */
 	public static function privatenetL2(): ChainId {
-		return ChainId::from( self::PRIVATENET_L2 );
+		return ChainId::from( self::PRIVATENET2 );
 	}
 
 	private function __construct() {} // インスタンス生成禁止
