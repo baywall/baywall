@@ -69,8 +69,8 @@ class ChainTableSeed_0_0_1 extends ChainTableSeedBase {
 		$testnet_rpc_url = null; // Testnetの場合、RPC URLの初期値はnull
 		$this->insertChainRecord( ChainIdConstants::sepolia(), 'Sepolia', $testnet, $testnet_rpc_url, 'https://sepolia.etherscan.io' );
 
-		// 開発モード時はプライベートネットのチェーン情報も登録
-		if ( $this->environment->isDevelopment() ) {
+		// 開発、テスト時はプライベートネットのチェーン情報も登録
+		if ( $this->environment->isDevelopment() || $this->environment->isTesting() ) {
 			$privatenet           = NetworkCategoryId::privatenet();
 			$privatenet_rpc_url_1 = $this->getPrivatenetRpcUrl( ChainIdConstants::privatenetL1() );
 			$privatenet_rpc_url_2 = $this->getPrivatenetRpcUrl( ChainIdConstants::privatenetL2() );
