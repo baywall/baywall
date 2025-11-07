@@ -55,7 +55,7 @@ class PluginUpdateHook extends HookBase {
 				$this->checkSystem();
 
 				// マイグレーション実行
-				( new Migrate( $this->container ) )->handle( $prev_installed_version, $to_version );
+				$this->container->get( Migrate::class )->handle( $prev_installed_version, $to_version );
 
 				// プラグインのバージョンを更新
 				$plugin_version_option->update( $to_version, false );
