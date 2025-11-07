@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\CronActionNameProvi
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
-use DI\Container;
+use Psr\Container\ContainerInterface;
 
 /**
  * AppContractのイベントクロール処理をwp_cronを使って登録するクラス。
@@ -19,9 +19,9 @@ use DI\Container;
  */
 class AppContractCrawlCronHook extends HookBase {
 
-	private Container $container;
+	private ContainerInterface $container;
 
-	public function __construct( Container $container ) {
+	public function __construct( ContainerInterface $container ) {
 		$this->container = $container;
 	}
 
@@ -34,7 +34,7 @@ class AppContractCrawlCronHook extends HookBase {
 
 		// プラグインが無効化された時に登録したアクションを削除
 		register_deactivation_hook(
-			( new PluginInfoProvider() )->mainFilePath(),
+			$this->container->get( PluginInfoProvider::class )->mainFilePath(),
 			function () use ( $action_name ) {
 				wp_clear_scheduled_hook( $action_name );
 			}
