@@ -9,24 +9,22 @@ use Cornix\Serendipity\Core\Infrastructure\GraphQL\PluginSchemaProvider;
 use Cornix\Serendipity\Core\Infrastructure\GraphQL\Rule\MutationFieldLimitRule;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\RestPropertyProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
-use DI\Container;
 use GraphQL\GraphQL;
 use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\DisableIntrospection;
 use GraphQL\Validator\Rules\QueryComplexity;
 use GraphQL\Validator\Rules\QueryDepth;
+use Psr\Container\ContainerInterface;
 
 /**
  * GraphQLのAPI登録
  */
 class GraphQLHook extends HookBase {
 
-	private Container $container;
-	private RestPropertyProvider $rest_property;
+	private ContainerInterface $container;
 
-	public function __construct( Container $container, ?RestPropertyProvider $rest_property = null ) {
-		$this->container     = $container;
-		$this->rest_property = $rest_property ?? $container->get( RestPropertyProvider::class );
+	public function __construct( ContainerInterface $container ) {
+		$this->container = $container;
 	}
 
 	public function register(): void {
@@ -34,10 +32,11 @@ class GraphQLHook extends HookBase {
 	}
 
 	public function addActionRestApiInit(): void {
+		$rest_property = $this->container->get( RestPropertyProvider::class );
 		// GraphQLのエンドポイントを登録
 		$success = register_rest_route(
-			$this->rest_property->namespace(),
-			$this->rest_property->graphQlRoute(),
+			$rest_property->namespace(),
+			$rest_property->graphQlRoute(),
 			array(
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->callback( $request ),
@@ -57,7 +56,7 @@ class GraphQLHook extends HookBase {
 		$query           = $input['query'];
 		$variable_values = isset( $input['variables'] ) ? $input['variables'] : null;
 
-		$schema     = ( new PluginSchemaProvider() )->get();
+		$schema     = $this->container->get( PluginSchemaProvider::class )->get();
 		$root_value = $this->container->get( RootValue::class )->get();
 
 		// クエリの複雑度制限を追加
