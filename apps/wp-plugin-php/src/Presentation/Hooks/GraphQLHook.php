@@ -58,7 +58,7 @@ class GraphQLHook extends HookBase {
 		$variable_values = isset( $input['variables'] ) ? $input['variables'] : null;
 
 		$schema     = ( new PluginSchemaProvider() )->get();
-		$root_value = ( new RootValue() )->get( $this->container );
+		$root_value = $this->container->get( RootValue::class )->get();
 
 		// クエリの複雑度制限を追加
 		DocumentValidator::addRule( new QueryComplexity( Config::GRAPHQL_MAX_COMPLEXITY ) );
