@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\PaidC
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\BlockNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\GutenbergService;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
-use DI\Container;
+use Psr\Container\ContainerInterface;
 use WP_Block;
 use WP_Post;
 
@@ -28,7 +28,7 @@ class ContentHook extends HookBase {
 	private ContentLoadHook $content_load_hook;
 	private ContentDeleteHook $content_delete_hook;
 
-	public function __construct( Container $container ) {
+	public function __construct( ContainerInterface $container ) {
 		$this->content_save_hook   = $container->get( ContentSaveHook::class );
 		$this->content_load_hook   = $container->get( ContentLoadHook::class );
 		$this->content_delete_hook = $container->get( ContentDeleteHook::class );
