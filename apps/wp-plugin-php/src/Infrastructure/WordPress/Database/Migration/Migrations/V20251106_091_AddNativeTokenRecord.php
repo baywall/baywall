@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
+use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
@@ -15,14 +16,16 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
 class V20251106_091_AddNativeTokenRecord extends MigrationBase {
 
+	private TransactionService $transaction_service;
 	private MyWpdb $wpdb;
 	private string $table_name;
 	private Environment $environment;
 
-	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider, Environment $environment ) {
-		$this->wpdb        = $wpdb;
-		$this->table_name  = $table_name_provider->token();
-		$this->environment = $environment;
+	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider, Environment $environment ) {
+		$this->transaction_service = $transaction_service;
+		$this->wpdb                = $wpdb;
+		$this->table_name          = $table_name_provider->token();
+		$this->environment         = $environment;
 	}
 
 	public function version(): string {
@@ -30,18 +33,21 @@ class V20251106_091_AddNativeTokenRecord extends MigrationBase {
 	}
 
 	public function up(): void {
+		$this->transaction_service->transactional(
+			function () {
+				// メインネットのネイティブトークンを登録
+				$this->insert( ChainIdConstants::ETHEREUM, 'ETH' );
 
-		// メインネットのネイティブトークンを登録
-		$this->insert( ChainIdConstants::ETHEREUM, 'ETH' );
+				// テストネットのネイティブトークンを登録
+				$this->insert( ChainIdConstants::SEPOLIA, 'ETH' );
 
-		// テストネットのネイティブトークンを登録
-		$this->insert( ChainIdConstants::SEPOLIA, 'ETH' );
-
-		// 開発モード及びテストモード時はプライベートネットのネイティブトークンを登録
-		if ( $this->environment->isDevelopment() || $this->environment->isTesting() ) {
-			$this->insert( ChainIdConstants::PRIVATENET1, 'ETH' );
-			$this->insert( ChainIdConstants::PRIVATENET2, 'POL' );
-		}
+				// 開発モード及びテストモード時はプライベートネットのネイティブトークンを登録
+				if ( $this->environment->isDevelopment() || $this->environment->isTesting() ) {
+					$this->insert( ChainIdConstants::PRIVATENET1, 'ETH' );
+					$this->insert( ChainIdConstants::PRIVATENET2, 'POL' );
+				}
+			}
+		);
 	}
 
 	public function down(): void {
