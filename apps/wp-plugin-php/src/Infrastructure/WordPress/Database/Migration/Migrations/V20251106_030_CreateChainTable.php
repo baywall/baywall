@@ -1,38 +1,31 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigrationBase;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrations\Base\MigratorBase;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use wpdb;
 
+class V20251106_030_CreateChainTable extends MigrationBase {
 
-class ChainTableSchema extends MigratorBase {
+	private MyWpdb $wpdb;
+	private string $table_name;
 
-	public function __construct( wpdb $wpdb, TableNameProvider $table_name_provider ) {
-		parent::__construct( $wpdb, $table_name_provider->chain() );
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+		$this->wpdb       = $wpdb;
+		$this->table_name = $table_name_provider->chain();
 	}
 
-	/** @inheritdoc */
-	protected function versions(): array {
-		return array(
-			array( '0.0.1', ChainTableSchema_0_0_1::class ),
-			// 他のバージョンのクラスを追加する場合はここに記述
-		);
+	public function version(): string {
+		return '0.0.1';
 	}
-}
 
-// --------------------------------------------------------------------------------
-
-/** @internal */
-class ChainTableSchema_0_0_1 extends MigrationBase {
 	public function up(): void {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		// - `confirmations`は将来的に`latest`のような文字列が入る可能性があるため、`varchar(191)`とする
 		$sql = <<<SQL
-			CREATE TABLE `{$this->tableName()}` (
+			CREATE TABLE `{$this->table_name}` (
 				`created_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`updated_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`chain_id`                     bigint        unsigned  NOT NULL,
@@ -42,12 +35,12 @@ class ChainTableSchema_0_0_1 extends MigrationBase {
 				`confirmations`                varchar(191)            NOT NULL,
 				`block_explorer_url`           varchar(191),
 				PRIMARY KEY (`chain_id`)
-			) {$this->charset()};
+			) {$this->wpdb->get_charset_collate()};
 		SQL;
-		$this->query( $sql );
+		$this->wpdb->dbh->query( $sql );
 	}
 
 	public function down(): void {
-		$this->query( "DROP TABLE IF EXISTS `{$this->tableName()}`;" );
+		$this->wpdb->dbh->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
 	}
 }

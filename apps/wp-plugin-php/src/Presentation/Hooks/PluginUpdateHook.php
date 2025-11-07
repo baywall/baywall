@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
+use Cornix\Serendipity\Core\Application\UseCase\Migrate;
 use Cornix\Serendipity\Core\Infrastructure\System\ArchitectureChecker;
 use Cornix\Serendipity\Core\Infrastructure\System\PhpExtChecker;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\PluginVersionOption;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migrate;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
@@ -48,14 +48,14 @@ class PluginUpdateHook extends HookBase {
 			$plugin_version_option = $this->container->get( PluginVersionOption::class );
 			$plugin_info           = $this->container->get( PluginInfoProvider::class );
 			// バージョンチェック
-			$from_version = $plugin_version_option->get();
-			$to_version   = $plugin_info->version();
-			if ( version_compare( $from_version ?? '0.0.0', $to_version, '<' ) ) {
+			$prev_installed_version = $plugin_version_option->get() ?? '0.0.0';
+			$to_version             = $plugin_info->version();
+			if ( version_compare( $prev_installed_version, $to_version, '<' ) ) {
 				// 動作環境のチェック
 				$this->checkSystem();
 
 				// マイグレーション実行
-				( new Migrate( $this->container ) )->run( $from_version, $to_version );
+				( new Migrate( $this->container ) )->handle( $prev_installed_version, $to_version );
 
 				// プラグインのバージョンを更新
 				$plugin_version_option->update( $to_version, false );
