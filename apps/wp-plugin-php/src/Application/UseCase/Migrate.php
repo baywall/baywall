@@ -6,7 +6,6 @@ namespace Cornix\Serendipity\Core\Application\UseCase;
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\MigrationLocator;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\PluginVersion;
-use DI\Container;
 
 /** データベースのマイグレーションを実行するクラス */
 class Migrate {
@@ -14,9 +13,9 @@ class Migrate {
 	private MigrationLocator $locator;
 	private AppLogger $logger;
 
-	public function __construct( Container $container ) {
-		$this->locator = new MigrationLocator( $container );
-		$this->logger  = $container->get( AppLogger::class );
+	public function __construct( MigrationLocator $locator, AppLogger $logger ) {
+		$this->locator = $locator;
+		$this->logger  = $logger;
 	}
 
 	public function handle( string $prev_version, string $target_version ): void {
