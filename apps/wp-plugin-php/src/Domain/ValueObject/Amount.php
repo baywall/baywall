@@ -63,7 +63,7 @@ final class Amount implements \Stringable {
 	}
 
 	/** 小数点以下の桁数を取得します */
-	private function decimals(): Decimals {
+	public function decimals(): Decimals {
 		return Decimals::from( strlen( explode( '.', $this->amount_text )[1] ?? '' ) );
 	}
 

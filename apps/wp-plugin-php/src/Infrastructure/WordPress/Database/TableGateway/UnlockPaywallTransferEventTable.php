@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
+use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
 
@@ -18,6 +19,9 @@ class UnlockPaywallTransferEventTable extends TableBase {
 	}
 
 	public function save( InvoiceId $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, UnlockPaywallTransferType $transfer_type ): void {
+		// 数量に小数点が含まれることはない
+		assert( $amount->decimals()->equals( Decimals::from( 0 ) ), '[F48CCCE8] Amount must be an integer.' );
+
 		$result = $this->safeInsert(
 			$this->tableName(),
 			array(
