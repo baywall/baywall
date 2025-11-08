@@ -70,4 +70,9 @@ class TableNameProvider {
 	public function seller(): string {
 		return $this->addPrefix( 'seller' );
 	}
+
+	/** クロール済みのブロックを記録するテーブル名 */
+	public function crawledBlock(): string {
+		return $this->addPrefix( 'crawled_block' );
+	}
 }
