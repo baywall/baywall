@@ -13,13 +13,17 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\AppCo
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
 use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\CrawledBlockTable;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\CrawledBlockTableRecord;
 
 class WpAppContractRepository implements AppContractRepository {
-	public function __construct( AppContractTable $app_contract_table, ChainRepository $chain_repository ) {
-		$this->app_contract_table = $app_contract_table;
-		$this->chain_repository   = $chain_repository;
+	public function __construct( AppContractTable $app_contract_table, CrawledBlockTable $crawled_block_table, ChainRepository $chain_repository ) {
+		$this->app_contract_table  = $app_contract_table;
+		$this->crawled_block_table = $crawled_block_table;
+		$this->chain_repository    = $chain_repository;
 	}
 	private AppContractTable $app_contract_table;
+	private CrawledBlockTable $crawled_block_table;
 	private ChainRepository $chain_repository;
 
 	/** @inheritdoc */
@@ -29,28 +33,45 @@ class WpAppContractRepository implements AppContractRepository {
 			$records,
 			fn( $record ) => $record->chainIdValue() === $chain_id->value()
 		);
-		assert( count( $records ) <= 1, '[68E05B97] should return at most one record.' );
+		assert( count( $records ) <= 1, '[68E05B97] should return at most one record. - ' . count( $records ) );
+
+		$crawled_block_number_records = $this->crawled_block_table->all();
+		$crawled_block_number_records = array_filter(
+			$crawled_block_number_records,
+			fn( $record ) => $record->chainIdValue() === $chain_id->value()
+		);
+		assert( count( $crawled_block_number_records ) <= 1, '[C5AB3471] should return at most one record. - ' . count( $crawled_block_number_records ) );
 
 		return empty( $records ) ? null : new AppContractImpl(
 			$this->chain_repository->get( $chain_id ),
-			array_values( $records )[0]
+			array_values( $records )[0],
+			empty( $crawled_block_number_records ) ? null : array_values( $crawled_block_number_records )[0]
 		);
 	}
 
 	/** @inheritdoc */
 	public function save( AppContract $app_contract ): void {
-		$this->app_contract_table->save( $app_contract );
+		// コントラクト情報はプラグインインストール時に設定され、以降変更されないため保存処理は不要
+		// $this->app_contract_table->save( $app_contract );
+
+		// クロール済みブロック番号の更新
+		if ( $app_contract->crawledBlockNumber() !== null ) {
+			$this->crawled_block_table->save(
+				$app_contract->chain()->id(),
+				$app_contract->crawledBlockNumber()
+			);
+		}
 	}
 }
 
 /** @internal */
 class AppContractImpl extends AppContract {
-	public function __construct( Chain $chain, AppContractTableRecord $record ) {
+	public function __construct( Chain $chain, AppContractTableRecord $record, ?CrawledBlockTableRecord $crawled_block_record ) {
 		parent::__construct(
 			$chain,
 			Address::from( $record->addressValue() ),
-			BlockNumber::fromIntNullable( $record->crawledBlockNumberValue() ),
-			UnixTimestampFormat::fromMySQL( $record->crawledBlockNumberUpdatedAtValue() )
+			$crawled_block_record ? BlockNumber::fromInt( $crawled_block_record->blockNumberValue() ) : null,
+			$crawled_block_record ? UnixTimestampFormat::fromMySQL( $crawled_block_record->updatedAtValue() ) : null
 		);
 	}
 }

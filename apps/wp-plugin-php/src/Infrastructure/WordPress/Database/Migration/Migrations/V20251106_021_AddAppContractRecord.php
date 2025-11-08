@@ -62,10 +62,8 @@ class V20251106_021_AddAppContractRecord extends MigrationBase {
 		$this->wpdb->insert(
 			$this->table_name,
 			array(
-				'chain_id'                        => ChainId::from( $chain_id_value )->value(),
-				'address'                         => Address::from( $address_value )->value(),
-				'crawled_block_number'            => null,
-				'crawled_block_number_updated_at' => null,
+				'chain_id' => ChainId::from( $chain_id_value )->value(),
+				'address'  => Address::from( $address_value )->value(),
 			)
 		);
 	}
