@@ -6,17 +6,17 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration;
 use Cornix\Serendipity\Core\Infrastructure\Util\NamespaceParser;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\PluginVersion;
-use DI\Container;
+use Psr\Container\ContainerInterface;
 
 /** マイグレーション対象となるクラスインスタンス一覧を取得します */
 class MigrationLocator {
 
 	const MIGRATIONS_DIR = __DIR__ . '/Migrations/';
 
-	private Container $container;
+	private ContainerInterface $container;
 	private NamespaceParser $namespace_parser;
 
-	public function __construct( Container $container ) {
+	public function __construct( ContainerInterface $container ) {
 		$this->container        = $container;
 		$this->namespace_parser = $container->get( NamespaceParser::class );
 	}

@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Plug
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
-use DI\Container;
+use Psr\Container\ContainerInterface;
 use Throwable;
 
 // ■プラグインがインストールされた時や更新時のhookに関して
@@ -33,10 +33,10 @@ use Throwable;
 
 class PluginUpdateHook extends HookBase {
 
-	public function __construct( Container $container ) {
+	public function __construct( ContainerInterface $container ) {
 		$this->container = $container;
 	}
-	private Container $container;
+	private ContainerInterface $container;
 
 	public function register(): void {
 		add_action( 'admin_init', array( $this, 'addActionAdminInit' ) );
@@ -91,6 +91,6 @@ class PluginUpdateHook extends HookBase {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 		// プラグインを無効化
-		deactivate_plugins( plugin_basename( ( new PluginInfoProvider() )->mainFilePath() ) );
+		deactivate_plugins( plugin_basename( $this->container->get( PluginInfoProvider::class )->mainFilePath() ) );
 	}
 }
