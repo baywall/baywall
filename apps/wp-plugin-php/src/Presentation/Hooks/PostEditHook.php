@@ -7,16 +7,16 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
-use DI\Container;
+use Psr\Container\ContainerInterface;
 
 /**
  * 投稿編集画面のフック(投稿新規作成画面を含む)
  */
 class PostEditHook extends HookBase {
 
-	private Container $container;
+	private ContainerInterface $container;
 
-	public function __construct( Container $container ) {
+	public function __construct( ContainerInterface $container ) {
 		$this->container = $container;
 	}
 

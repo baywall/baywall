@@ -25,15 +25,22 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveServerSigner;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSetSellerAgreedTerms;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveToken;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveTokens;
-use DI\Container;
+use Psr\Container\ContainerInterface;
 
 class RootValue {
 
+	private ContainerInterface $container;
+	private AppLogger $logger;
+
+	public function __construct( ContainerInterface $container, AppLogger $logger ) {
+		$this->container = $container;
+		$this->logger    = $logger;
+	}
+
 	/**
-	 * @param \DI\Container $container
 	 * @return array<string, mixed>
 	 */
-	public function get( Container $container ) {
+	public function get(): array {
 
 		/** @var array<string,string> */
 		$resolvers = array(
@@ -68,12 +75,12 @@ class RootValue {
 
 		$result = array();
 		foreach ( $resolvers as $field => $resolver ) {
-			$result[ $field ] = function ( array $root_value, array $args ) use ( $resolver, $container ) {
+			$result[ $field ] = function ( array $root_value, array $args ) use ( $resolver ) {
 				try {
-					$resolver = $container->get( $resolver );
+					$resolver = $this->container->get( $resolver );
 					return $resolver->handle( $root_value, $args );
 				} catch ( \Throwable $e ) {
-					$container->get( AppLogger::class )->error( $e );
+					$this->logger->error( $e );
 					throw $e;
 				}
 			};
