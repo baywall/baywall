@@ -34,7 +34,7 @@ class V20251106_040_CreateInvoiceTable extends MigrationBase {
 				`selling_symbol`         varchar(191)               NOT NULL,
 				`seller_address`         varchar(191)               NOT NULL,
 				`payment_token_address`  varchar(191)               NOT NULL,
-				`payment_amount`         decimal(65, 30)            NOT NULL,
+				`payment_amount`         decimal(35, 0)             NOT NULL,
 				`consumer_address`       varchar(191)               NOT NULL,
 				`nonce`                  varchar(191)               DEFAULT NULL,
 				PRIMARY KEY (`id`),
