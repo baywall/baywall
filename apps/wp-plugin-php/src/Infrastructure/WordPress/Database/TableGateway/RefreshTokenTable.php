@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\RefreshTokenTableRecord;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Entity\RefreshTokenInfo;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\HashedRefreshToken;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\RefreshTokenHash;
 
 /**
  * 認証用のリフレッシュトークンの情報を記録するテーブル
@@ -17,14 +17,14 @@ class RefreshTokenTable extends TableBase {
 		parent::__construct( $wpdb, $table_name_provider->refreshToken() );
 	}
 
-	public function get( HashedRefreshToken $hashed_refresh_token ): ?RefreshTokenTableRecord {
+	public function get( RefreshTokenHash $refresh_token_hash ): ?RefreshTokenTableRecord {
 		$sql = <<<SQL
 			SELECT `refresh_token_hash`, `wallet_address`, `expires_at`, `revoked_at`
 			FROM `{$this->tableName()}`
 			WHERE `refresh_token_hash` = %s
 			LIMIT 1
 		SQL;
-		$sql = $this->prepare( $sql, $hashed_refresh_token->value() );
+		$sql = $this->prepare( $sql, $refresh_token_hash->value() );
 
 		$record = $this->safeGetRow( $sql );
 
@@ -44,7 +44,7 @@ class RefreshTokenTable extends TableBase {
 		SQL;
 		$sql = $this->prepare(
 			$sql,
-			$refresh_token_info->hashedRefreshToken()->value(),
+			$refresh_token_info->refreshTokenHash()->value(),
 			$refresh_token_info->walletAddress()->value(),
 			$refresh_token_info->expiresAt()->toMySqlValue(),
 			null // 追加時はrevoked_atはNULLで登録

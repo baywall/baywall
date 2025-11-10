@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\RefreshTokenTable;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Entity\RefreshTokenInfo;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\HashedRefreshToken;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\RefreshTokenHash;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\RefreshToken;
 
 class WpRefreshTokenRepository {
@@ -36,7 +36,7 @@ class WpRefreshTokenRepository {
 
 		assert( $record->refreshTokenHashValue() === $refresh_token->hash()->value(), '[459CDA79]' );
 		return RefreshTokenInfo::create(
-			HashedRefreshToken::from( $record->refreshTokenHashValue() ),
+			RefreshTokenHash::from( $record->refreshTokenHashValue() ),
 			Address::from( $record->walletAddressValue() ),
 			UnixTimestamp::fromMySql( $record->expiresAtValue() ),
 			UnixTimestamp::fromMySqlNullable( $record->revokedAtValue() )
