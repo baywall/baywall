@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Bytes;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\HashedRefreshToken;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\RefreshTokenHash;
 use DateTimeImmutable;
 
 /**
@@ -54,14 +54,14 @@ class RefreshToken implements \Stringable {
 	/**
 	 * データベースに保存する際のハッシュ化された文字列を取得します
 	 */
-	public function hash(): HashedRefreshToken {
+	public function hash(): RefreshTokenHash {
 		$parts           = explode( '.', $this->token_value );
 		$timestamp_text  = $parts[0];
 		$random_hex_text = $parts[1];
 
 		$hashed_random_part = hash( self::HASH_ALGORITHM, $random_hex_text );
 
-		return HashedRefreshToken::from( $timestamp_text . '.' . $hashed_random_part );
+		return RefreshTokenHash::from( $timestamp_text . '.' . $hashed_random_part );
 	}
 
 	public function equals( self $other ): bool {
