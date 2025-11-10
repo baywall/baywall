@@ -75,4 +75,8 @@ class TableNameProvider {
 	public function crawledBlock(): string {
 		return $this->addPrefix( 'crawled_block' );
 	}
+
+	public function refreshToken(): string {
+		return $this->addPrefix( 'refresh_token' );
+	}
 }
