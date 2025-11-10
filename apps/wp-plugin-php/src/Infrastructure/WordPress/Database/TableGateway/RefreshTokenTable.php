@@ -46,7 +46,7 @@ class RefreshTokenTable extends TableBase {
 			$sql,
 			$refresh_token_info->hashedRefreshToken()->value(),
 			$refresh_token_info->walletAddress()->value(),
-			$refresh_token_info->expiresAt()->value(),
+			$refresh_token_info->expiresAt()->toMySqlValue(),
 			null // 追加時はrevoked_atはNULLで登録
 		);
 

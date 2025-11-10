@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\RefreshTokenTable;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Entity\RefreshTokenInfo;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\HashedRefreshToken;
@@ -12,13 +12,11 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\RefreshToken;
 
 class WpRefreshTokenRepository {
 
-	public function __construct( RefreshTokenTable $refresh_token_table, UnixTimestampFormat $unix_timestamp_format ) {
-		$this->refresh_token_table   = $refresh_token_table;
-		$this->unix_timestamp_format = $unix_timestamp_format;
+	public function __construct( RefreshTokenTable $refresh_token_table ) {
+		$this->refresh_token_table = $refresh_token_table;
 	}
 
 	private RefreshTokenTable $refresh_token_table;
-	private UnixTimestampFormat $unix_timestamp_format;
 
 	/**
 	 * リフレッシュトークン情報を保存（追加）します。
@@ -40,8 +38,8 @@ class WpRefreshTokenRepository {
 		return RefreshTokenInfo::create(
 			HashedRefreshToken::from( $record->refreshTokenHashValue() ),
 			Address::from( $record->walletAddressValue() ),
-			$this->unix_timestamp_format->fromMySQL( $record->expiresAtValue() ),
-			$this->unix_timestamp_format->fromMySQL( $record->revokedAtValue() )
+			UnixTimestamp::fromMySql( $record->expiresAtValue() ),
+			UnixTimestamp::fromMySqlNullable( $record->revokedAtValue() )
 		);
 	}
 }

@@ -11,8 +11,8 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\AppContractTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
-use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\CrawledBlockTable;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\CrawledBlockTableRecord;
 
@@ -71,7 +71,7 @@ class AppContractImpl extends AppContract {
 			$chain,
 			Address::from( $record->addressValue() ),
 			$crawled_block_record ? BlockNumber::fromInt( $crawled_block_record->blockNumberValue() ) : null,
-			$crawled_block_record ? UnixTimestampFormat::fromMySQL( $crawled_block_record->updatedAtValue() ) : null
+			$crawled_block_record ? UnixTimestamp::fromMySQL( $crawled_block_record->updatedAtValue() ) : null
 		);
 	}
 }
