@@ -33,14 +33,6 @@ abstract class NonceBase implements \Stringable {
 	 * 指定したバイト長のnonce値を生成します。
 	 */
 	protected static function generateNonceValue( int $byte ): string {
-		// `wp_generate_uuid4`は`mt_rand`を用いているため、別の方法で乱数を生成する。
-		// 参考:
-		// - wp_generate_uuid4: https://developer.wordpress.org/reference/functions/wp_generate_uuid4/
-		// - mt_rand: https://www.php.net/manual/ja/function.mt-rand.php
-		// 　> この関数が生成する値は、暗号学的にセキュアではありません。そのため、これを暗号や、戻り値を推測できないことが必須の値として使っては いけません。
-		// 　> 簡単なユースケースの場合、random_int() と random_bytes() 関数が、オペレーティングシステムの CSPRNG を使った、 便利で安全な API を提供します。
-
-		$nonce = random_bytes( $byte );
-		return bin2hex( $nonce );
+		return bin2hex( Bytes::generateRandom( $byte )->bin() );
 	}
 }
