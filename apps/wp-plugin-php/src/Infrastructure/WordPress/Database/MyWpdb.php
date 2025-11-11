@@ -47,6 +47,18 @@ class MyWpdb {
 		return $result;
 	}
 
+
+	/**
+	 * wpdb->get_row
+	 */
+	public function getRow( string $query, string $output = OBJECT, int $y = 0 ) {
+		$row = $this->wpdb->get_row( $query, $output, $y );
+		if ( $row === null && ! empty( $this->wpdb->last_error ) ) {
+			throw new RuntimeException( '[108B8388] Failed to get row. ' . $this->wpdb->last_error );
+		}
+		return $row;
+	}
+
 	/**
 	 *
 	 * @return string `DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci`のような文字列
