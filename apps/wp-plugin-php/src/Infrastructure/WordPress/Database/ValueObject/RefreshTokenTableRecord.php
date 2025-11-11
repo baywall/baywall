@@ -17,7 +17,7 @@ class RefreshTokenTableRecord extends TableRecordBase {
 		$record->refresh_token_hash = (string) $record->refresh_token_hash;
 		$record->wallet_address     = (string) $record->wallet_address;
 		$record->expires_at         = (string) $record->expires_at;
-		$record->revoked_at         = isset( $record->revoked_at ) ? (string) $record->revoked_at : null;
+		$record->revoked_at         = $record->revoked_at !== null ? (string) $record->revoked_at : null;
 
 		$this->import( $record );
 	}
