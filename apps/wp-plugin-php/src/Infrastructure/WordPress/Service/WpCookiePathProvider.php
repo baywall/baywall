@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
+use Cornix\Serendipity\Core\Application\Service\CookiePathProvider;
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
 
 // ブラウザに書き込むCookieのパス(setcookieでpathに指定する値)を取得するクラス
-class WpCookiePathProvider {
+class WpCookiePathProvider implements CookiePathProvider {
 
 	private WordPressPropertyProvider $wp_property;
 

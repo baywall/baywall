@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\DI;
 
 use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
+use Cornix\Serendipity\Core\Application\Service\CookiePathProvider;
 use Cornix\Serendipity\Core\Application\Service\PaidContentService;
 use Cornix\Serendipity\Core\Application\Service\SalesHistoryService;
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
@@ -39,6 +40,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpNetwo
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpSellerRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpServerSignerRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpCookiePathProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpUserAccessProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpSalesHistoryService;
@@ -68,6 +70,7 @@ final class ContainerDefinitions {
 			SellerRepository::class          => autowire( WpSellerRepository::class ),
 
 			// Service
+			CookiePathProvider::class        => autowire( WpCookiePathProvider::class ),
 			WalletService::class             => autowire( WalletServiceImpl::class ),
 			PostTitleProvider::class         => autowire( WpPostTitleProvider::class ),
 			RateProvider::class              => get( CachedOracleRateProvider::class ),
