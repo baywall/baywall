@@ -25,6 +25,13 @@ class WordPressPropertyProvider {
 		*/
 	}
 
+	/** SSLでアクセスされているかどうかを取得します */
+	public function isSsl(): bool {
+		// ※ リバースプロキシを使って設定が漏れている場合はHTTPSアクセスでもfalseを返す可能性あり
+		// @see https://www.en-pc.jp/wordpress_isssl_notworking/
+		return is_ssl();
+	}
+
 	/** マルチサイト構成になっているかどうかを返します。 */
 	public function isMultisite(): bool {
 		return is_multisite();
