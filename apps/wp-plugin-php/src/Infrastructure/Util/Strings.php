@@ -49,6 +49,17 @@ class Strings {
 	}
 
 	/**
+	 * 文字列が指定した部分文字列を含んでいるかどうかを返します。
+	 */
+	public static function contains( string $haystack, string $needle ): bool {
+		// `str_contains`はPHP8以降で使用可能。
+		// ここではself::strposを使用して互換性を保つ。
+		// 空文字が検索文字列に指定された場合はtrueを返す
+		// => https://www.php.net/manual/ja/function.str-contains.php
+		return $needle === '' ? true : self::strpos( $haystack, $needle ) !== false;
+	}
+
+	/**
 	 * 文字列内の指定した文字列の出現位置をすべて検索します。(独自実装)
 	 *
 	 * @return int[]
