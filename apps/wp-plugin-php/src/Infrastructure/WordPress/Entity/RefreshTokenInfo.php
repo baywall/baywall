@@ -47,4 +47,15 @@ class RefreshTokenInfo {
 	public function revokedAt(): ?UnixTimestamp {
 		return $this->revoked_at;
 	}
+
+	/** リフレッシュトークンが期限切れかどうかを取得します */
+	public function isExpired(): bool {
+		$now = UnixTimestamp::now();
+		return $this->expires_at->value() < $now->value();
+	}
+
+	/** リフレッシュトークンが取り消されているかどうかを取得します */
+	public function isRevoked(): bool {
+		return $this->revoked_at !== null;
+	}
 }
