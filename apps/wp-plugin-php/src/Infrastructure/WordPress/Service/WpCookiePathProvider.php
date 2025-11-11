@@ -6,7 +6,7 @@ use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
 
 // ブラウザに書き込むCookieのパス(setcookieでpathに指定する値)を取得するクラス
-class CookiePathProvider {
+class WpCookiePathProvider {
 
 	private WordPressPropertyProvider $wp_property;
 
