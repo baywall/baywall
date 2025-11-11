@@ -41,9 +41,11 @@ class MyWpdb {
 	 */
 	public function insert( string $table, array $data, $format = null ): int {
 		$result = $this->wpdb->insert( $table, $data, $format );
-		if ( ! is_int( $result ) ) {
+		if ( $result === false ) {
 			throw new RuntimeException( "[356E918B] wpdb insert failed: {$this->wpdb->last_error}" );
 		}
+		assert( is_int( $result ), "[221420F1] {$result}" );
+
 		return $result;
 	}
 
