@@ -16,8 +16,8 @@ class NamedPlaceholder {
 	 * Named placeholder を使用して SQL クエリを構築します
 	 * ※プレースホルダは、キーがコロンで始まる形式（例: `:key`）で指定してください。
 	 *
-	 * @param string               $query
-	 * @param array<string,string> $args プレースホルダに対応する値の連想配列
+	 * @param string              $query
+	 * @param array<string,mixed> $args プレースホルダに対応する値の連想配列
 	 */
 	public function prepare( string $query, array $args ): string {
 
