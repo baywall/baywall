@@ -51,6 +51,10 @@ class Config {
 	// ゲストユーザー(一般の訪問者)表示用『index.css』ファイルへの相対パス(URL生成に使用)
 	public const VIEW_CSS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.css';
 
+	/** アクセストークンの有効期限(秒) */
+	public const ACCESS_TOKEN_EXPIRATION = 60 * 15; // 15分
+	/** リフレッシュトークンの有効期限(秒) */
+	public const REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 14; // 2週間
 
 	/**
 	 * レートの一時データの有効期限(秒)
