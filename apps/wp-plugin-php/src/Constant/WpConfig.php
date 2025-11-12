@@ -35,6 +35,11 @@ class WpConfig {
 	 */
 	public const GRAPHQL_ROUTE = 'graphql';
 
+	/** アクセストークンの有効期限(秒) */
+	public const ACCESS_TOKEN_EXPIRATION = 60 * 15; // 15分
+	/** リフレッシュトークンの有効期限(秒) */
+	public const REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 14; // 2週間
+
 	/** JWTの秘密鍵の長さ(文字数) */
 	public const JWT_SECRET_KEY_LENGTH = 64;
 
