@@ -35,6 +35,9 @@ class WpConfig {
 	 */
 	public const GRAPHQL_ROUTE = 'graphql';
 
+	/** JWTの秘密鍵の長さ(文字数) */
+	public const JWT_SECRET_KEY_LENGTH = 64;
+
 	/** アクセストークン(+リフレッシュトークン)更新のルート名 */
 	public const REST_ROUTE_AUTH_REFRESH = 'auth/refresh';
 

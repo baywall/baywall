@@ -19,4 +19,9 @@ class OptionNameProvider {
 	public function pluginVersion(): string {
 		return $this->prefix . 'plugin_version';
 	}
+
+	/** JWTの秘密鍵 */
+	public function jwtSecretKey(): string {
+		return $this->prefix . 'jwt_secret_key';
+	}
 }
