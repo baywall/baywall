@@ -11,7 +11,12 @@ class JWT {
 		// 'HS512' => 'sha512',
 	);
 
-	public function encode( string $alg, array $payload, string $secret ): string {
+	public function encode(
+		string $alg,
+		array $payload,
+		#[\SensitiveParameter]
+		string $secret
+	): string {
 		if ( $secret === '' ) {
 			// $secretが空文字の場合は例外をスロー
 			throw new \InvalidArgumentException( '[9A2D9CD6] Secret key must not be empty.' );
@@ -39,7 +44,11 @@ class JWT {
 		return $data . '.' . $signature_encoded;
 	}
 
-	public function decode( string $jwt, string $secret ): array {
+	public function decode(
+		string $jwt,
+		#[\SensitiveParameter]
+		string $secret
+	): array {
 		$parts = explode( '.', $jwt );
 		if ( count( $parts ) !== 3 ) {
 			throw new \InvalidArgumentException( '[EC8F3FD8] Invalid JWT format.' );
