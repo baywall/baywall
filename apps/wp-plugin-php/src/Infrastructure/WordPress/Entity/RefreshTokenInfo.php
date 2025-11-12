@@ -58,4 +58,9 @@ class RefreshTokenInfo {
 	public function isRevoked(): bool {
 		return $this->revoked_at !== null;
 	}
+
+	/** リフレッシュトークンを取り消します */
+	public function revoke(): void {
+		$this->revoked_at = UnixTimestamp::now();
+	}
 }
