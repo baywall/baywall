@@ -42,4 +42,11 @@ class WpRefreshTokenRepository {
 			UnixTimestamp::fromMySqlNullable( $record->revokedAtValue() )
 		);
 	}
+
+	/**
+	 * リフレッシュトークン情報を更新します。
+	 */
+	public function update( RefreshTokenInfo $refresh_token_info ): void {
+		$this->refresh_token_table->update( $refresh_token_info );
+	}
 }
