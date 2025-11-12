@@ -58,4 +58,25 @@ class RefreshTokenTable {
 			throw new \RuntimeException( '[2005DFF8] Failed to insert refresh token record.' );
 		}
 	}
+
+	public function update( RefreshTokenInfo $refresh_token_info ): void {
+		$revoked_at_value         = $refresh_token_info->revokedAt() !== null
+			? $refresh_token_info->revokedAt()->toMySqlValue()
+			: null;
+		$refresh_token_hash_value = $refresh_token_info->refreshTokenHash()->value();
+
+		$result = $this->wpdb->update(
+			$this->table_name,
+			array(
+				'revoked_at' => $revoked_at_value,
+			),
+			array(
+				'refresh_token_hash' => $refresh_token_hash_value,
+			)
+		);
+
+		if ( $result !== 1 ) {
+			throw new \RuntimeException( '[2AFE05DC] Failed to update refresh token record.' );
+		}
+	}
 }
