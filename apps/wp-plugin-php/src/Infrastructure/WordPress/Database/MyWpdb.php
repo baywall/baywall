@@ -49,6 +49,25 @@ class MyWpdb {
 		return $result;
 	}
 
+	/**
+	 * wpdb->update
+	 *
+	 * @param string          $table
+	 * @param array           $data
+	 * @param array           $where
+	 * @param string[]|string $format
+	 * @param string[]|string $where_format
+	 * @return int
+	 */
+	public function update( string $table, array $data, array $where, $format = null, $where_format = null ): int {
+		$result = $this->wpdb->update( $table, $data, $where, $format, $where_format );
+		if ( $result === false ) {
+			throw new RuntimeException( "[3AC6E13E] wpdb update failed: {$this->wpdb->last_error}" );
+		}
+		assert( is_int( $result ), "[6131415E] {$result}" );
+
+		return $result;
+	}
 
 	/**
 	 * wpdb->get_row
