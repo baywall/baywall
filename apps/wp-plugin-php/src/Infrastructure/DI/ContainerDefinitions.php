@@ -57,45 +57,45 @@ use function DI\get;
 final class ContainerDefinitions {
 	public static function getDefinitions(): array {
 		return array(
-			wpdb::class                      => fn() => $GLOBALS['wpdb'],
+			wpdb::class                          => fn() => $GLOBALS['wpdb'],
 
 			// TableGateway
 			// ChainTable::class => autowire(),
 
 			// Repository
-			AppContractRepository::class     => autowire( WpAppContractRepository::class ),
-			ChainRepository::class           => autowire( WpChainRepository::class ),
-			InvoiceRepository::class         => autowire( WpInvoiceRepository::class ),
-			NetworkCategoryRepository::class => autowire( WpNetworkCategoryRepository::class ),
-			OracleRepository::class          => autowire( WpOracleRepository::class ),
-			PostRepository::class            => autowire( WpPostRepository::class ),
-			ServerSignerRepository::class    => autowire( WpServerSignerRepository::class ),
-			TokenRepository::class           => autowire( WpTokenRepository::class ),
-			SellerRepository::class          => autowire( WpSellerRepository::class ),
+			AppContractRepository::class         => autowire( WpAppContractRepository::class ),
+			ChainRepository::class               => autowire( WpChainRepository::class ),
+			InvoiceRepository::class             => autowire( WpInvoiceRepository::class ),
+			NetworkCategoryRepository::class     => autowire( WpNetworkCategoryRepository::class ),
+			OracleRepository::class              => autowire( WpOracleRepository::class ),
+			PostRepository::class                => autowire( WpPostRepository::class ),
+			ServerSignerRepository::class        => autowire( WpServerSignerRepository::class ),
+			TokenRepository::class               => autowire( WpTokenRepository::class ),
+			SellerRepository::class              => autowire( WpSellerRepository::class ),
 
 			// Service
-			CookiePathProvider::class        => autowire( WpCookiePathProvider::class ),
-			WalletService::class             => autowire( WalletServiceImpl::class ),
-			PostTitleProvider::class         => autowire( WpPostTitleProvider::class ),
-			RateProvider::class              => get( CachedOracleRateProvider::class ),
+			CookiePathProvider::class            => autowire( WpCookiePathProvider::class ),
+			WalletService::class                 => autowire( WalletServiceImpl::class ),
+			PostTitleProvider::class             => autowire( WpPostTitleProvider::class ),
+			RateProvider::class                  => get( CachedOracleRateProvider::class ),
 			// CachedRateProvider::class    => autowire()->constructor(
 			// get( RateTransient::class ),
 			// get( OracleRateProviderImpl::class )
 			// ),
-			UserAccessProvider::class        => autowire( WpUserAccessProvider::class ),
-			PaidContentService::class        => autowire( PaidContentServiceImpl::class ),
-			BlockNumberProvider::class       => autowire( BlockNumberProviderImpl::class ),
-			TransactionService::class        => autowire( WpTransactionService::class ),
-			SalesHistoryService::class       => autowire( WpSalesHistoryService::class ),
-			JwtSecretKeyProvider::class      => autowire( WpJwtSecretKeyProvider::class ),
+			UserAccessProvider::class            => autowire( WpUserAccessProvider::class ),
+			PaidContentService::class            => autowire( PaidContentServiceImpl::class ),
+			BlockNumberProvider::class           => autowire( BlockNumberProviderImpl::class ),
+			TransactionService::class            => autowire( WpTransactionService::class ),
+			SalesHistoryService::class           => autowire( WpSalesHistoryService::class ),
+			JwtSecretKeyProvider::class          => autowire( WpJwtSecretKeyProvider::class ),
 			AccessTokenExpirationProvider::class => autowire( WpAccessTokenExpirationProvider::class ),
 
 			// Cache
-			OracleRateCache::class           => autowire( WpOracleRateCache::class ),
+			OracleRateCache::class               => autowire( WpOracleRateCache::class ),
 
 			// Logging
-			Logger::class                    => autowire( SimpleLogger::class ),
-			LogLevelProvider::class          => autowire( WpLogLevelProvider::class ),
+			Logger::class                        => autowire( SimpleLogger::class ),
+			LogLevelProvider::class              => autowire( WpLogLevelProvider::class ),
 		);
 	}
 }
