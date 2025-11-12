@@ -40,6 +40,8 @@ class WpConfig {
 	/** リフレッシュトークンの有効期限(秒) */
 	public const REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 14; // 2週間
 
+	/** JWTの署名アルゴリズム */
+	public const JWT_ALGORITHM = 'HS256'; // HMAC-SHA256
 	/** JWTの秘密鍵の長さ(文字数) */
 	public const JWT_SECRET_KEY_LENGTH = 64;
 
