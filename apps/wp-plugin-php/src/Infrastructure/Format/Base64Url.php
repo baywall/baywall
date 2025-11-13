@@ -7,6 +7,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Format;
  * Base64URLエンコード/デコードクラス
  *
  * - JWTで使用
+ *
  * @see https://ja.wikipedia.org/wiki/Base64#%E5%A4%89%E5%BD%A2%E7%89%88
  */
 class Base64Url {

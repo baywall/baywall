@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\JWT;
 
 use Cornix\Serendipity\Core\Infrastructure\Format\Base64Url;
 
-class JWT {
+class JwtCodec {
 
 	private $supported_algorithm_map = array(
 		'HS256' => 'sha256',
