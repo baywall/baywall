@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Infrastructure\DI;
 
 use Cornix\Serendipity\Core\Application\Service\AccessTokenExpirationProvider;
 use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
-use Cornix\Serendipity\Core\Application\Service\CookiePathProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtSecretKeyProvider;
 use Cornix\Serendipity\Core\Application\Service\PaidContentService;
@@ -78,7 +77,6 @@ final class ContainerDefinitions {
 			SellerRepository::class              => autowire( WpSellerRepository::class ),
 
 			// Service
-			CookiePathProvider::class            => autowire( WpCookiePathProvider::class ),
 			WalletService::class                 => autowire( WalletServiceImpl::class ),
 			PostTitleProvider::class             => autowire( WpPostTitleProvider::class ),
 			RateProvider::class                  => get( CachedOracleRateProvider::class ),
