@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Application\Service\JwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Constant\WpConfig;
-use Cornix\Serendipity\Core\Domain\ValueObject\JwtAlgorithm;
+use Cornix\Serendipity\Core\Infrastructure\JWT\JwtAlgorithm;
 
 class WpJwtAlgorithmProvider implements JwtAlgorithmProvider {
 	/** @inheritDoc */

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\JwtAlgorithm;
+use Cornix\Serendipity\Core\Infrastructure\JWT\JwtAlgorithm;
 
 // /** JWTの署名アルゴリズムを提供するインタフェース */
 interface JwtAlgorithmProvider {

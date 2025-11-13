@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject;
+namespace Cornix\Serendipity\Core\Infrastructure\JWT;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Base\AccessToken;
 
