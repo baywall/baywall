@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Application\Service\JwtSecretKeyProvider;
 use Cornix\Serendipity\Core\Constant\WpConfig;
-use Cornix\Serendipity\Core\Domain\ValueObject\JwtSecretKey;
+use Cornix\Serendipity\Core\Infrastructure\JWT\JwtSecretKey;
 
 class WpJwtSecretKeyProvider implements JwtSecretKeyProvider {
 
