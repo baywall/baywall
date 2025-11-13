@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Base\AccessToken;
 use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\Jwt;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Infrastructure\JWT\JwtCodec;
-use Cornix\Serendipity\Core\Infrastructure\JWT\JwtAccessTokenPayload;
+use Cornix\Serendipity\Core\Infrastructure\JWT\JwtPayload;
 
 class AccessTokenService {
 
@@ -30,7 +30,7 @@ class AccessTokenService {
 		$algorithm = $this->jwt_algorithm_provider->get();
 
 		// ペイロードを作成
-		$payload = JwtAccessTokenPayload::create(
+		$payload = JwtPayload::create(
 			$wallet_address,
 			UnixTimestamp::now(), // 発行日時
 			$this->expiration_provider->get(), // 有効期限
