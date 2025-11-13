@@ -38,7 +38,7 @@ class WpConfig {
 	/** アクセストークンの有効期限(秒) */
 	public const ACCESS_TOKEN_EXPIRATION = 60 * 15; // 15分
 	/** リフレッシュトークンの有効期限(秒) */
-	public const REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 14; // 2週間
+	public const REFRESH_TOKEN_EXPIRATION_DURATION = 60 * 60 * 24 * 14; // 2週間
 
 	/** JWTの署名アルゴリズム */
 	public const JWT_ALGORITHM = 'HS256'; // HMAC-SHA256

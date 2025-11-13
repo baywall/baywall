@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Application\Service\CookiePathProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtSecretKeyProvider;
 use Cornix\Serendipity\Core\Application\Service\PaidContentService;
+use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\SalesHistoryService;
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
@@ -48,6 +49,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpCookiePathProvide
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpUserAccessProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpSalesHistoryService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpTransactionService;
@@ -92,6 +94,7 @@ final class ContainerDefinitions {
 			JwtAlgorithmProvider::class          => autowire( WpJwtAlgorithmProvider::class ),
 			JwtSecretKeyProvider::class          => autowire( WpJwtSecretKeyProvider::class ),
 			AccessTokenExpirationProvider::class => autowire( WpAccessTokenExpirationProvider::class ),
+			RefreshTokenCookieProvider::class    => autowire( WpRefreshTokenCookieProvider::class ),
 
 			// Cache
 			OracleRateCache::class               => autowire( WpOracleRateCache::class ),

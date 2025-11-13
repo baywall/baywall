@@ -36,4 +36,18 @@ class WordPressPropertyProvider {
 	public function isMultisite(): bool {
 		return is_multisite();
 	}
+
+	/**
+	 *
+	 * @return 'local'|'development'|'staging'|'production'
+	 */
+	public function getEnvironmentType(): string {
+		// `WP_ENVIRONMENT_TYPE`に設定された値(default: 'production')を返す。
+		// 以下のいずれかの値を返す
+		// - local
+		// - development
+		// - staging
+		// - production
+		return wp_get_environment_type();
+	}
 }
