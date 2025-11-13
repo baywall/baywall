@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\ValueObject;
+namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
 
