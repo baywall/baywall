@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\JWT;
 
+use Cornix\Serendipity\Core\Infrastructure\Format\Base64Url;
+
 class JWT {
 
 	private $supported_algorithm_map = array(
@@ -11,10 +13,10 @@ class JWT {
 		// 'HS512' => 'sha512',
 	);
 
-	private JwtBase64Url $base64;
+	private Base64Url $base64url;
 
 	public function __construct() {
-		$this->base64 = new JwtBase64Url();
+		$this->base64url = new Base64Url();
 	}
 
 	public function encode(
@@ -38,14 +40,14 @@ class JWT {
 			throw new \InvalidArgumentException( "[8812C526] Unsupported JWT algorithm: {$alg}" );
 		}
 
-		$header_encoded  = $this->base64->encode( json_encode( $header, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
-		$payload_encoded = $this->base64->encode( json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
+		$header_encoded  = $this->base64url->encode( json_encode( $header, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
+		$payload_encoded = $this->base64url->encode( json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
 
 		$data = $header_encoded . '.' . $payload_encoded;   // 署名対象文字列
 
 		// 署名をバイナリ形式で生成し、base64URLエンコード(JWT仕様)
 		$signature         = hash_hmac( $hash_algorithm, $data, $secret, true );
-		$signature_encoded = $this->base64->encode( $signature );
+		$signature_encoded = $this->base64url->encode( $signature );
 
 		return $data . '.' . $signature_encoded;
 	}
@@ -67,8 +69,8 @@ class JWT {
 		[$header_encoded, $payload_encoded, $signature_encoded] = $parts;
 
 		// ヘッダーとペイロードのJSON文字列をデコード
-		$header_json  = $this->base64->decode( $header_encoded );
-		$payload_json = $this->base64->decode( $payload_encoded );
+		$header_json  = $this->base64url->decode( $header_encoded );
+		$payload_json = $this->base64url->decode( $payload_encoded );
 
 		// 連想配列に変換
 		$header  = json_decode( $header_json, true );
@@ -91,7 +93,7 @@ class JWT {
 		// 署名検証
 		$data                       = $header_encoded . '.' . $payload_encoded;   // 署名対象文字列
 		$expected_signature         = hash_hmac( $hash_algorithm, $data, $secret, true );
-		$expected_signature_encoded = $this->base64->encode( $expected_signature );
+		$expected_signature_encoded = $this->base64url->encode( $expected_signature );
 
 		if ( ! hash_equals( $expected_signature_encoded, $signature_encoded ) ) {
 			throw new \InvalidArgumentException( '[857C37AC] JWT signature verification failed.' );
