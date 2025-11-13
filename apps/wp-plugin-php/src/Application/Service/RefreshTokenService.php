@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Application\Service;
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Domain\Exception\UnauthorizedAccessException;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\RefreshToken;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpRefreshTokenRepository;
 
@@ -13,13 +14,19 @@ class RefreshTokenService {
 
 	private AppLogger $app_logger;
 	private WpRefreshTokenRepository $refresh_token_repository;
+	private RefreshTokenCookieProvider $refresh_token_cookie_provider;
+	private CookieWriter $cookie_writer;
 
 	public function __construct(
 		AppLogger $app_logger,
-		WpRefreshTokenRepository $refresh_token_repository
+		WpRefreshTokenRepository $refresh_token_repository,
+		RefreshTokenCookieProvider $refresh_token_cookie_provider,
+		CookieWriter $cookie_writer
 	) {
-		$this->app_logger               = $app_logger;
-		$this->refresh_token_repository = $refresh_token_repository;
+		$this->app_logger                    = $app_logger;
+		$this->refresh_token_repository      = $refresh_token_repository;
+		$this->refresh_token_cookie_provider = $refresh_token_cookie_provider;
+		$this->cookie_writer                 = $cookie_writer;
 	}
 
 	/**
@@ -51,6 +58,22 @@ class RefreshTokenService {
 		$wallet_address = $refresh_token_info->walletAddress();
 
 		return new RotateRefreshTokenResult( $new_refresh_token, $wallet_address );
+	}
+
+	/**
+	 * リフレッシュトークンをクッキーに保存します
+	 *
+	 * @param RefreshToken $new_refresh_token 新しいリフレッシュトークン
+	 */
+	public function setCookie( RefreshToken $new_refresh_token ): void {
+		$cookie  = $this->refresh_token_cookie_provider->get( $new_refresh_token );
+		$success = $this->cookie_writer->set( $cookie );
+
+		if ( $success === false ) {
+			$error = new \RuntimeException( '[68ACEBC4] Failed to set refresh token cookie.' );
+			$this->app_logger->error( $error );
+			throw $error;
+		}
 	}
 }
 
