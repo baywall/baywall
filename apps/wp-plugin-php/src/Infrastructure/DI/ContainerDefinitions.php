@@ -23,6 +23,7 @@ use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
+use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
 use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Infrastructure\Cache\OracleRateCache;
 use Cornix\Serendipity\Core\Infrastructure\Content\PaidContentServiceImpl;
@@ -44,11 +45,11 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpSelle
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpServerSignerRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenExpirationProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpCookiePathProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenCookieProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpUserAccessProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpSalesHistoryService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpTransactionService;
@@ -93,6 +94,7 @@ final class ContainerDefinitions {
 			JwtSecretKeyProvider::class          => autowire( WpJwtSecretKeyProvider::class ),
 			AccessTokenExpirationProvider::class => autowire( WpAccessTokenExpirationProvider::class ),
 			RefreshTokenCookieProvider::class    => autowire( WpRefreshTokenCookieProvider::class ),
+			RefreshTokenService::class           => autowire( WpRefreshTokenService::class ),
 
 			// Cache
 			OracleRateCache::class               => autowire( WpOracleRateCache::class ),
