@@ -43,13 +43,13 @@ final class JwtPayload extends ArrayValueObject {
 		$this->expires_at     = $expires_at;
 	}
 
-	// public static function from( array $jwt_payload_value ): self {
-	// $wallet_address = Address::from( $jwt_payload_value[ self::PAYLOAD_KEY_WALLET_ADDRESS ] );
-	// $expires_at     = UnixTimestamp::from( $jwt_payload_value[ self::PAYLOAD_KEY_EXPIRES_AT ] );
-	// $issued_at      = UnixTimestamp::from( $jwt_payload_value[ self::PAYLOAD_KEY_ISSUED_AT ] );
-	//
-	// return new self( $wallet_address, $expires_at, $issued_at );
-	// }
+	public static function from( array $jwt_payload_value ): self {
+		$wallet_address = Address::from( $jwt_payload_value[ self::PAYLOAD_KEY_WALLET_ADDRESS ] );
+		$issued_at      = UnixTimestamp::from( $jwt_payload_value[ self::PAYLOAD_KEY_ISSUED_AT ] );
+		$expires_at     = UnixTimestamp::from( $jwt_payload_value[ self::PAYLOAD_KEY_EXPIRES_AT ] );
+
+		return new self( $wallet_address, $issued_at, $expires_at );
+	}
 
 	/** JWTペイロードを作成します */
 	public static function create( Address $wallet_address, UnixTimestamp $issued_at, UnixTimestamp $expires_at ): self {

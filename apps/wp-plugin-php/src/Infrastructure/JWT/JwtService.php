@@ -26,4 +26,13 @@ class JwtService {
 			)
 		);
 	}
+
+	public function decode( Jwt $jwt, JwtSecretKey $secret_key ): JwtPayload {
+		$payload_array = $this->jwt_codec->decode(
+			$jwt->value(),
+			$secret_key->value(),
+		);
+
+		return JwtPayload::from( $payload_array );
+	}
 }
