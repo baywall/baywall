@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\Service;
 use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
 use Cornix\Serendipity\Core\Domain\Exception\UnauthorizedAccessException;
 use Cornix\Serendipity\Core\Domain\Repository\RefreshTokenRepository;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 
@@ -21,6 +22,22 @@ abstract class RefreshTokenService {
 
 	protected function __construct( RefreshTokenRepository $refresh_token_repository ) {
 		$this->refresh_token_repository = $refresh_token_repository;
+	}
+
+	/**
+	 * リフレッシュトークンを発行します
+	 */
+	public function issue( Address $wallet_address ): RefreshToken {
+		$new_refresh_token = RefreshToken::create(
+			$this->generateRefreshTokenString(),
+			$wallet_address,
+			$this->getExpiresAt(),
+			null // リフレッシュトークン生成時、`revoked_at`はnullに設定
+		);
+
+		$this->refresh_token_repository->add( $new_refresh_token );
+
+		return $new_refresh_token;
 	}
 
 	/**
