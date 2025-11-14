@@ -6,18 +6,18 @@ namespace Cornix\Serendipity\Core\Application\Service;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Infrastructure\Reimpl\JWT\JwtCodec;
+use Cornix\Serendipity\Core\Infrastructure\JWT\JwtService;
 use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\JwtPayload;
 
 class AccessTokenService {
 
-	private JwtCodec $jwt_codec;
+	private JwtService $jwt_service;
 	private JwtAlgorithmProvider $jwt_algorithm_provider;
 	private JwtSecretKeyProvider $jwt_secret_key_provider;
 	private AccessTokenExpirationProvider $expiration_provider;
 
-	public function __construct( JwtCodec $jwt_codec, JwtAlgorithmProvider $jwt_algorithm_provider, JwtSecretKeyProvider $jwt_secret_key_provider, AccessTokenExpirationProvider $access_token_expiration_provider ) {
-		$this->jwt_codec               = $jwt_codec;
+	public function __construct( JwtService $jwt_service, JwtAlgorithmProvider $jwt_algorithm_provider, JwtSecretKeyProvider $jwt_secret_key_provider, AccessTokenExpirationProvider $access_token_expiration_provider ) {
+		$this->jwt_service             = $jwt_service;
 		$this->jwt_algorithm_provider  = $jwt_algorithm_provider;
 		$this->jwt_secret_key_provider = $jwt_secret_key_provider;
 		$this->expiration_provider     = $access_token_expiration_provider;
@@ -39,13 +39,9 @@ class AccessTokenService {
 		$secret_key = $this->jwt_secret_key_provider->get();
 
 		// JWTトークンを生成
-		$token_value = $this->jwt_codec->encode(
-			$algorithm->value(),
-			$payload->value(),
-			$secret_key->value(),
-		);
+		$jwt = $this->jwt_service->encode( $algorithm, $payload, $secret_key );
 
-		// value objectに変換して返す
-		return AccessToken::from( $token_value );
+		// AccessTokenの型に変換して返す
+		return AccessToken::from( $jwt->value() );
 	}
 }
