@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
  */
 class AccessToken extends StringValueObject {
 
-	private function __construct(string $access_token_value ) {
+	private function __construct( string $access_token_value ) {
 		parent::__construct( $access_token_value );
 	}
 
