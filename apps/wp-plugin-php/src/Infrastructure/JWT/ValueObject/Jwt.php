@@ -3,16 +3,15 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\AccessToken;
+use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
 
 /**
- * JWT形式のアクセストークンを表すクラス
+ * JWT形式のトークンを表すクラス
  */
-final class Jwt extends AccessToken {
+final class Jwt extends StringValueObject {
 
 	private function __construct( string $jwt_value ) {
 		parent::__construct( $jwt_value );
-
 		$this->checkJwtFormat( $jwt_value );
 	}
 
