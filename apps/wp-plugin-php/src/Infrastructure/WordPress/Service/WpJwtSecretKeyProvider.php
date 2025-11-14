@@ -22,7 +22,7 @@ class WpJwtSecretKeyProvider implements JwtSecretKeyProvider {
 
 		if ( $secret === null ) {
 			$secret = wp_generate_password( WpConfig::JWT_SECRET_KEY_LENGTH, false, false );
-			$this->option_service->update( $this->option_name, $secret, true ); // autoload = true
+			$this->option_service->update( $this->option_name, $secret, false ); // autoload = false
 		}
 
 		return JwtSecretKey::from( $secret );
