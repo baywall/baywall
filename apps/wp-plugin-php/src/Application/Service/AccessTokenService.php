@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\AccessToken;
-use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\Jwt;
+use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Infrastructure\JWT\JwtCodec;
 use Cornix\Serendipity\Core\Infrastructure\JWT\JwtPayload;
@@ -47,6 +46,6 @@ class AccessTokenService {
 		);
 
 		// value objectに変換して返す
-		return Jwt::from( $token_value );
+		return AccessToken::from( $token_value );
 	}
 }
