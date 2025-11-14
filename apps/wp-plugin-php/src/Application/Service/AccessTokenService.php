@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Infrastructure\Reimpl\JWT\JwtCodec;
-use Cornix\Serendipity\Core\Infrastructure\JWT\JwtPayload;
+use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\JwtPayload;
 
 class AccessTokenService {
 

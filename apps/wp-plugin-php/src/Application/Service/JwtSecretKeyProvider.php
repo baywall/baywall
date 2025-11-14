@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Infrastructure\JWT\JwtSecretKey;
+use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
 
 /** JWTの共通鍵を提供するインタフェース */
 interface JwtSecretKeyProvider {

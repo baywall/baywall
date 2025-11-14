@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\JWT;
+namespace Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
 
