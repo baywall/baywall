@@ -30,10 +30,6 @@ class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 		);
 	}
 
-	private function expires(): int {
-		return time() + WpConfig::REFRESH_TOKEN_EXPIRATION_DURATION;
-	}
-
 	/** Cookieに書き込むリフレッシュトークンのパスを取得します */
 	private function path(): string {
 		$api_root_url = $this->wp_property->apiRootUrl();
