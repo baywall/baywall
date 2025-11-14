@@ -21,7 +21,7 @@ class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 		return Cookie::create(
 			WpConfig::COOKIE_NAME_REFRESH_TOKEN, // name
 			$refresh_token->token()->value(), // value
-			$this->expires(),
+			$refresh_token->expiresAt()->value(), // expires
 			$this->path(),
 			null, // domain: nullで発行元ホスト名が自動設定される
 			$this->secure(),

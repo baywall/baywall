@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\RefreshToken;
 
 /**
  * リフレッシュトークンをCookieに書き込む際のプロパティを提供します
