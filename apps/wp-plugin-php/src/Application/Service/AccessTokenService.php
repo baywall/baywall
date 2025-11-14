@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Infrastructure\JWT\JwtService;
+use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\Jwt;
 use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\JwtPayload;
 
 class AccessTokenService {
@@ -43,5 +44,26 @@ class AccessTokenService {
 
 		// AccessTokenの型に変換して返す
 		return AccessToken::from( $jwt->value() );
+	}
+
+	/** 指定したアクセストークンが有効かどうかを判定します */
+	public function isValid( AccessToken $access_token ): bool {
+		// 有効期限が現在時刻より後であれば有効
+		return $this->decode( $access_token )->expiresAt()->value() > time();
+	}
+
+	/** 指定したアクセストークンからウォレットアドレスを取得します */
+	public function getWalletAddress( AccessToken $access_token ): Address {
+		return $this->decode( $access_token )->walletAddress();
+	}
+
+	private function decode( AccessToken $access_token ): JwtPayload {
+		// Jwt型に変換
+		$jwt = Jwt::from( $access_token->value() );
+
+		// 署名用の秘密鍵を取得
+		$secret_key = $this->jwt_secret_key_provider->get();
+
+		return $this->jwt_service->decode( $jwt, $secret_key );
 	}
 }
