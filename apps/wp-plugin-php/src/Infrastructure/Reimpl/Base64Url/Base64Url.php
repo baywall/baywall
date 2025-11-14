@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Format;
+namespace Cornix\Serendipity\Core\Infrastructure\Reimpl\Base64Url;
 
 /**
  * Base64URLエンコード/デコードクラス
