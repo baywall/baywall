@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\RefreshTokenTableRecord;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Entity\RefreshTokenInfo;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\RefreshTokenHash;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\WpRefreshTokenHashString;
 
 /**
  * 認証用のリフレッシュトークンの情報を記録するテーブル
@@ -22,7 +22,7 @@ class RefreshTokenTable {
 		$this->table_name = $table_name_provider->refreshToken();
 	}
 
-	public function get( RefreshTokenHash $refresh_token_hash ): ?RefreshTokenTableRecord {
+	public function get( WpRefreshTokenHashString $wp_refresh_token_hash ): ?RefreshTokenTableRecord {
 		$sql = $this->wpdb->prepare(
 			<<<SQL
 				SELECT `refresh_token_hash`, `wallet_address`, `expires_at`, `revoked_at`
@@ -30,7 +30,7 @@ class RefreshTokenTable {
 				WHERE `refresh_token_hash` = :refresh_token_hash
 				LIMIT 1
 			SQL,
-			array( ':refresh_token_hash' => $refresh_token_hash->value() )
+			array( ':refresh_token_hash' => $wp_refresh_token_hash->value() )
 		);
 
 		$record = $this->wpdb->getRow( $sql );
@@ -38,8 +38,8 @@ class RefreshTokenTable {
 		return $record === null ? null : new RefreshTokenTableRecord( $record );
 	}
 
-	public function add( RefreshTokenInfo $refresh_token_info ): void {
-		if ( $refresh_token_info->revokedAt() !== null ) {
+	public function add( RefreshToken $refresh_token ): void {
+		if ( $refresh_token->revokedAt() !== null ) {
 			// 新規追加時、無効化日時はnull
 			throw new \InvalidArgumentException( '[991AECA4] When adding a new refresh token, revoked_at must be null.' );
 		}
@@ -47,9 +47,9 @@ class RefreshTokenTable {
 		$result = $this->wpdb->insert(
 			$this->table_name,
 			array(
-				'refresh_token_hash' => $refresh_token_info->refreshTokenHash()->value(),
-				'wallet_address'     => $refresh_token_info->walletAddress()->value(),
-				'expires_at'         => $refresh_token_info->expiresAt()->toMySqlValue(),
+				'refresh_token_hash' => WpRefreshTokenHashString::from( $refresh_token->token() )->value(),
+				'wallet_address'     => $refresh_token->walletAddress()->value(),
+				'expires_at'         => $refresh_token->expiresAt()->toMySqlValue(),
 				'revoked_at'         => null, // 追加時はrevoked_atはNULLで登録
 			)
 		);
@@ -59,15 +59,16 @@ class RefreshTokenTable {
 		}
 	}
 
-	public function update( RefreshTokenInfo $refresh_token_info ): void {
-		$revoked_at_value         = $refresh_token_info->revokedAt() !== null
-			? $refresh_token_info->revokedAt()->toMySqlValue()
+	public function update( RefreshToken $refresh_token ): void {
+		$revoked_at_value         = $refresh_token->revokedAt() !== null
+			? $refresh_token->revokedAt()->toMySqlValue()
 			: null;
-		$refresh_token_hash_value = $refresh_token_info->refreshTokenHash()->value();
+		$refresh_token_hash_value = WpRefreshTokenHashString::from( $refresh_token->token() )->value();
 
 		$result = $this->wpdb->update(
 			$this->table_name,
 			array(
+				// ※ `expires_at`は更新しないこと
 				'revoked_at' => $revoked_at_value,
 			),
 			array(
