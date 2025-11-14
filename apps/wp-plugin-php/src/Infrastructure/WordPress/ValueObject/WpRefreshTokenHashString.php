@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
+use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
 
 class WpRefreshTokenHashString extends StringValueObject {
 	private const HASH_ALGORITHM = 'sha256';
@@ -13,11 +14,12 @@ class WpRefreshTokenHashString extends StringValueObject {
 		self::checkWpRefreshTokenHashFormat( $wp_refresh_token_hash_value );
 	}
 
-	public static function from( WpRefreshTokenString $wp_refresh_token_string ): self {
+	public static function from( RefreshTokenString $refresh_token_string ): self {
+		assert( WpRefreshTokenString::from( $refresh_token_string->value() ) instanceof WpRefreshTokenString, '[672553FB]' );
 		// WpRefreshTokenStringのフォーマット変更があった場合に気づけるようにassert文を追加
-		assert( preg_match( '/^\d{17}\.[0-9a-f]{64}$/', $wp_refresh_token_string->value() ) === 1, '[D4C2C6E1]' );
+		assert( preg_match( '/^\d{17}\.[0-9a-f]{64}$/', $refresh_token_string->value() ) === 1, '[D4C2C6E1]' );
 
-		$parts           = explode( '.', $wp_refresh_token_string->value() );
+		$parts           = explode( '.', $refresh_token_string->value() );
 		$timestamp_text  = $parts[0];
 		$random_hex_text = $parts[1];
 
