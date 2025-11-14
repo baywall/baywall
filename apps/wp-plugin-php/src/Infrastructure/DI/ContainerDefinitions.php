@@ -18,6 +18,7 @@ use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\NetworkCategoryRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\Repository\RefreshTokenRepository;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
@@ -41,6 +42,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpNetworkCategoryRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpRefreshTokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpSellerRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpServerSignerRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
@@ -76,6 +78,7 @@ final class ContainerDefinitions {
 			ServerSignerRepository::class        => autowire( WpServerSignerRepository::class ),
 			TokenRepository::class               => autowire( WpTokenRepository::class ),
 			SellerRepository::class              => autowire( WpSellerRepository::class ),
+			RefreshTokenRepository::class        => autowire( WpRefreshTokenRepository::class ),
 
 			// Service
 			WalletService::class                 => autowire( WalletServiceImpl::class ),
