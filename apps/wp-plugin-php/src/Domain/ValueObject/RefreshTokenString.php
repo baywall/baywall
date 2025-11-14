@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
  * - リフレッシュトークン文字列のフォーマットは実装次第のため、ここではチェックしない
  */
 class RefreshTokenString extends StringValueObject {
-	private function __construct( string $refresh_token_value ) {
+	protected function __construct( string $refresh_token_value ) {
 		parent::__construct( $refresh_token_value );
 	}
 
