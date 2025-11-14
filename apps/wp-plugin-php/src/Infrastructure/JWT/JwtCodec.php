@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\JWT;
 
-use Cornix\Serendipity\Core\Infrastructure\Format\Base64Url;
+use Cornix\Serendipity\Core\Infrastructure\Reimpl\Base64Url\Base64Url;
 
 class JwtCodec {
 
