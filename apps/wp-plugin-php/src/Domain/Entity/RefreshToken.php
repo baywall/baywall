@@ -14,17 +14,17 @@ class RefreshToken {
 
 	private RefreshTokenString $refresh_token_string;
 	private Address $wallet_address;
-	private ?UnixTimestamp $expires_at;
+	private UnixTimestamp $expires_at;
 	private ?UnixTimestamp $revoked_at;
 
-	private function __construct( RefreshTokenString $refresh_token_string, Address $wallet_address, ?UnixTimestamp $expires_at, ?UnixTimestamp $revoked_at ) {
+	private function __construct( RefreshTokenString $refresh_token_string, Address $wallet_address, UnixTimestamp $expires_at, ?UnixTimestamp $revoked_at ) {
 		$this->refresh_token_string = $refresh_token_string;
 		$this->wallet_address       = $wallet_address;
 		$this->expires_at           = $expires_at;
 		$this->revoked_at           = $revoked_at;
 	}
 
-	public static function create( RefreshTokenString $refresh_token_string, Address $wallet_address, ?UnixTimestamp $expires_at, ?UnixTimestamp $revoked_at ): self {
+	public static function create( RefreshTokenString $refresh_token_string, Address $wallet_address, UnixTimestamp $expires_at, ?UnixTimestamp $revoked_at ): self {
 		return new self( $refresh_token_string, $wallet_address, $expires_at, $revoked_at );
 	}
 
@@ -39,7 +39,7 @@ class RefreshToken {
 	}
 
 	/** リフレッシュトークンの有効期限 */
-	public function expiresAt(): ?UnixTimestamp {
+	public function expiresAt(): UnixTimestamp {
 		return $this->expires_at;
 	}
 
