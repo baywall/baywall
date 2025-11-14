@@ -5,9 +5,9 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
 use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\RefreshToken;
 
 class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 
@@ -20,7 +20,7 @@ class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 	public function get( RefreshToken $refresh_token ): Cookie {
 		return Cookie::create(
 			WpConfig::COOKIE_NAME_REFRESH_TOKEN, // name
-			$refresh_token->value(), // value
+			$refresh_token->token()->value(), // value
 			$this->expires(),
 			$this->path(),
 			null, // domain: nullで発行元ホスト名が自動設定される
