@@ -51,7 +51,6 @@ class Config {
 	// ゲストユーザー(一般の訪問者)表示用『index.css』ファイルへの相対パス(URL生成に使用)
 	public const VIEW_CSS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.css';
 
-
 	/**
 	 * レートの一時データの有効期限(秒)
 	 */

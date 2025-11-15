@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database;
 
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Util\NamedPlaceholder;
 use mysqli;
 use mysqli_result;
 use RuntimeException;
@@ -14,10 +15,23 @@ use wpdb;
 class MyWpdb {
 	private wpdb $wpdb;
 	public MyMySQLi $dbh;
+	private NamedPlaceholder $named_placeholder;
 
 	public function __construct( wpdb $wpdb ) {
-		$this->wpdb = $wpdb;
-		$this->dbh  = new MyMySQLi( $wpdb->dbh );
+		$this->wpdb              = $wpdb;
+		$this->dbh               = new MyMySQLi( $wpdb->dbh );
+		$this->named_placeholder = new NamedPlaceholder( $wpdb );
+	}
+
+	/**
+	 * Named placeholder を使用して SQL クエリを構築します
+	 * ※プレースホルダは、キーがコロンで始まる形式（例: `:key`）で指定してください。
+	 *
+	 * @param string              $query
+	 * @param array<string,mixed> $args プレースホルダに対応する値の連想配列
+	 */
+	public function prepare( string $query, array $args ): string {
+		return $this->named_placeholder->prepare( $query, $args );
 	}
 
 	/**
@@ -27,10 +41,43 @@ class MyWpdb {
 	 */
 	public function insert( string $table, array $data, $format = null ): int {
 		$result = $this->wpdb->insert( $table, $data, $format );
-		if ( ! is_int( $result ) ) {
+		if ( $result === false ) {
 			throw new RuntimeException( "[356E918B] wpdb insert failed: {$this->wpdb->last_error}" );
 		}
+		assert( is_int( $result ), "[221420F1] {$result}" );
+
 		return $result;
+	}
+
+	/**
+	 * wpdb->update
+	 *
+	 * @param string          $table
+	 * @param array           $data
+	 * @param array           $where
+	 * @param string[]|string $format
+	 * @param string[]|string $where_format
+	 * @return int
+	 */
+	public function update( string $table, array $data, array $where, $format = null, $where_format = null ): int {
+		$result = $this->wpdb->update( $table, $data, $where, $format, $where_format );
+		if ( $result === false ) {
+			throw new RuntimeException( "[3AC6E13E] wpdb update failed: {$this->wpdb->last_error}" );
+		}
+		assert( is_int( $result ), "[6131415E] {$result}" );
+
+		return $result;
+	}
+
+	/**
+	 * wpdb->get_row
+	 */
+	public function getRow( string $query, string $output = OBJECT, int $y = 0 ) {
+		$row = $this->wpdb->get_row( $query, $output, $y );
+		if ( $row === null && ! empty( $this->wpdb->last_error ) ) {
+			throw new RuntimeException( '[108B8388] Failed to get row. ' . $this->wpdb->last_error );
+		}
+		return $row;
 	}
 
 	/**
