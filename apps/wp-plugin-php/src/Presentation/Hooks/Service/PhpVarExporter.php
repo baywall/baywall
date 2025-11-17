@@ -38,6 +38,7 @@ class PhpVarExporter {
 		$result = array(
 			'wpRestNonce' => $wp_rest_nonce,
 			'graphqlUrl'  => $graphql_url,
+			'apiRoot'     => trailingslashit( $wp_property->apiRootUrl() ),
 		);
 
 		// 現在の投稿IDが取得できる場合は追加(取得できなかった場合はnull)
