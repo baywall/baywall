@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\DI;
 
 use Cornix\Serendipity\Core\Application\Service\AccessTokenExpirationProvider;
 use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
+use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtSecretKeyProvider;
 use Cornix\Serendipity\Core\Application\Service\PaidContentService;
@@ -15,6 +16,7 @@ use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
+use Cornix\Serendipity\Core\Domain\Repository\InvoiceTokenRepository;
 use Cornix\Serendipity\Core\Domain\Repository\NetworkCategoryRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
@@ -22,6 +24,7 @@ use Cornix\Serendipity\Core\Domain\Repository\RefreshTokenRepository;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenService;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
 use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
@@ -41,12 +44,15 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpInvoiceTokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpNetworkCategoryRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpRefreshTokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpSellerRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpServerSignerRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenExpirationProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenCookieProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
@@ -79,6 +85,7 @@ final class ContainerDefinitions {
 			TokenRepository::class               => autowire( WpTokenRepository::class ),
 			SellerRepository::class              => autowire( WpSellerRepository::class ),
 			RefreshTokenRepository::class        => autowire( WpRefreshTokenRepository::class ),
+			InvoiceTokenRepository::class        => autowire( WpInvoiceTokenRepository::class ),
 
 			// Service
 			WalletService::class                 => autowire( WalletServiceImpl::class ),
@@ -97,7 +104,9 @@ final class ContainerDefinitions {
 			JwtSecretKeyProvider::class          => autowire( WpJwtSecretKeyProvider::class ),
 			AccessTokenExpirationProvider::class => autowire( WpAccessTokenExpirationProvider::class ),
 			RefreshTokenCookieProvider::class    => autowire( WpRefreshTokenCookieProvider::class ),
+			InvoiceTokenCookieProvider::class    => autowire( WpInvoiceTokenCookieProvider::class ),
 			RefreshTokenService::class           => autowire( WpRefreshTokenService::class ),
+			InvoiceTokenService::class           => autowire( WpInvoiceTokenService::class ),
 
 			// Cache
 			OracleRateCache::class               => autowire( WpOracleRateCache::class ),
