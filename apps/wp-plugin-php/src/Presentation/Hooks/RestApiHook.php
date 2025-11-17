@@ -3,11 +3,13 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
+use Cornix\Serendipity\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
 use Cornix\Serendipity\Core\Application\UseCase\RefreshAccessToken;
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Domain\Exception\UnauthorizedAccessException;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
+use InvalidArgumentException;
 
 /**
  * REST APIのフック登録(GraphQLを除く)
@@ -25,7 +27,7 @@ class RestApiHook extends HookBase {
 	}
 
 	public function addActionRestApiInit(): void {
-		// アクセストークン発行用のエンドポイントを登録
+		// リフレッシュトークンを用いてアクセストークンを発行するAPIを登録
 		$success = register_rest_route(
 			WpConfig::REST_NAMESPACE,
 			WpConfig::REST_ROUTE_AUTH_REFRESH,
@@ -40,7 +42,18 @@ class RestApiHook extends HookBase {
 				'permission_callback' => '__return_true',
 			)
 		);
+		assert( $success );
 
+		// 請求書トークンを用いてアクセストークンを発行するAPIを登録
+		$success = register_rest_route(
+			WpConfig::REST_NAMESPACE,
+			WpConfig::REST_ROUTE_AUTH_TOKEN_INVOICE,
+			array(
+				'methods'             => 'POST',
+				'callback'            => fn ( \WP_REST_Request $request ) => $this->authTokenInvoiceHandler( $request ),
+				'permission_callback' => '__return_true',
+			)
+		);
 		assert( $success );
 	}
 
@@ -63,6 +76,38 @@ class RestApiHook extends HookBase {
 		} catch ( UnauthorizedAccessException $e ) {
 			$app_logger->debug( $e ); // 大量にアクセスされる可能性があるため、debugレベルでログ出力
 			// リフレッシュトークンが無効な場合、401エラーを返す
+			return new \WP_REST_Response(
+				array( 'message' => 'Unauthorized' ),
+				self::HTTP_STATUS_401_UNAUTHORIZED
+			);
+		}
+	}
+
+	public function authTokenInvoiceHandler( \WP_REST_Request $request ) {
+		$app_logger = $this->container->get( AppLogger::class );
+
+		// 請求書トークンをCookieから取得
+		/** @var string|null */
+		$invoice_token_string_value = $_COOKIE[ WpConfig::COOKIE_NAME_INVOICE_TOKEN ] ?? null;
+		// 請求書IDはリクエストボディから取得
+		$json_body = $request->get_json_params();
+		/** @var string|null */
+		$invoice_id_value = $json_body['invoice_id'] ?? null;
+
+		try {
+			if ( $invoice_token_string_value === null ) {
+				throw new UnauthorizedAccessException( '[A693201D] Invoice token is missing.' );
+			} elseif ( $invoice_id_value === null ) {
+				throw new InvalidArgumentException( '[E388D526] Invoice ID is missing.' );
+			}
+
+			return $this->container->get( IssueAccessTokenByInvoiceToken::class )->handle(
+				$invoice_id_value,
+				$invoice_token_string_value
+			);
+		} catch ( UnauthorizedAccessException $e ) {
+			$app_logger->debug( $e ); // 大量にアクセスされる可能性があるため、debugレベルでログ出力
+			// 請求書トークンが無効な場合、401エラーを返す
 			return new \WP_REST_Response(
 				array( 'message' => 'Unauthorized' ),
 				self::HTTP_STATUS_401_UNAUTHORIZED
