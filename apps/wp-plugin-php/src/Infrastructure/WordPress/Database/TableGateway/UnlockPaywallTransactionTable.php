@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\UnlockPaywallTransactionTableRecord;
 
 /**
  * ペイウォール解除時のトランザクションに関するデータを記録するテーブル
@@ -35,6 +36,20 @@ class UnlockPaywallTransactionTable extends TableBase {
 		assert( $result <= 1, "[C5EB0772] Failed to save unlock paywall transaction. {$result}" );
 	}
 
+	/** 指定した請求書IDに対応するトランザクション情報を取得します */
+	public function get( InvoiceId $invoice_id ): ?UnlockPaywallTransactionTableRecord {
+		$sql = <<<SQL
+			SELECT `invoice_id`, `chain_id`, `block_number`, `transaction_hash` FROM `{$this->tableName()}`
+			WHERE `invoice_id` = %s
+		SQL;
+
+		$sql = $this->prepare( $sql, $invoice_id->ulid() );
+		$row = $this->safeGetRow( $sql );
+
+		return $row !== null ? new UnlockPaywallTransactionTableRecord( $row ) : null;
+	}
+
+	/** @deprecated */
 	public function exists( InvoiceId $invoice_id ): bool {
 		$sql = <<<SQL
 			SELECT `invoice_id` FROM `{$this->tableName()}`
