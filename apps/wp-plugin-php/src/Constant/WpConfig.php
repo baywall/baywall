@@ -47,9 +47,13 @@ class WpConfig {
 
 	/** アクセストークン(+リフレッシュトークン)更新のルート名 */
 	public const REST_ROUTE_AUTH_REFRESH = 'auth/refresh';
+	/** 請求書トークンをアクセストークン(+リフレッシュトークン)と引き換えるルート名 */
+	public const REST_ROUTE_AUTH_TOKEN_INVOICE = 'auth/token/invoice';
 
 	/** リフレッシュトークンを保存するクッキー名 */
 	public const COOKIE_NAME_REFRESH_TOKEN = self::REST_NAMESPACE . '_refresh_token';
+	/** 請求書トークンを保存するクッキー名 */
+	public const COOKIE_NAME_INVOICE_TOKEN = self::REST_NAMESPACE . '_invoice_token';
 
 
 	/**
