@@ -3,7 +3,7 @@ import { getPhpVar } from '../../../lib/php-var/getPhpVar';
 import { useMemo } from 'react';
 
 /** 投稿IDを取得します */
-export const usePostId = (): PostId | null => {
+export const usePostId = (): PostId | null | undefined => {
 	return useMemo( () => getPostIdValue(), [] );
 };
 
