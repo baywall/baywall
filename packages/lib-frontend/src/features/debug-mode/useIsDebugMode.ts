@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { isDebugMode } from '../../lib/debug-mode/isDebugMode';
+import { isDebugMode } from './isDebugMode';
 
 /** デバッグモードで動作しているかどうかを取得します */
 export const useIsDebugMode = (): boolean => {
