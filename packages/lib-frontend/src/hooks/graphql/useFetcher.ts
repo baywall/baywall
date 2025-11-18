@@ -1,6 +1,7 @@
 import { createRequestInit } from '../../lib/graphql/_createRequestInit';
 import { usePhpVar } from '../../hooks/php-var/usePhpVar';
 import { fetcher } from '../../lib/graphql/codegen/_fetcher';
+import { getWpRestNonce } from '../../lib/php-var/wp-rest-nonce/getWpRestNonce';
 
 /**
  * @param      query
@@ -19,7 +20,7 @@ const useFetchParams = () => {
 	const phpVar = usePhpVar();
 
 	const endpoint = phpVar?.graphqlUrl;
-	const nonce = phpVar?.wpRestNonce;
+	const nonce = getWpRestNonce();
 
 	if ( ! endpoint || ! nonce ) {
 		throw new Error( `[11D62E9A] endpoint: ${ endpoint }, nonce: ${ nonce }` );
@@ -27,6 +28,6 @@ const useFetchParams = () => {
 
 	return {
 		endpoint,
-		requestInit: createRequestInit( nonce ),
+		requestInit: createRequestInit( nonce.value ),
 	} as const;
 };
