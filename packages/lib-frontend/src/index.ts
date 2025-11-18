@@ -1,8 +1,8 @@
-export * from './features/graphql-codegen/fetcher';
-export * from './features/debug-mode/useIsDebugMode';
-export * from './features/graphql-codegen/useFetcher';
-export * from './features/logger/useLogger';
-export * from './features/php-var/usePhpVar';
+export { fetcher } from './features/graphql-codegen/fetcher';
+export { useIsDebugMode } from './features/debug-mode/useIsDebugMode';
+export { useFetcher } from './features/graphql-codegen/useFetcher';
+export { useLogger } from './features/logger/useLogger';
+export { usePhpVar } from './features/php-var/usePhpVar';
 export { useApiRoot } from './features/php-var/api-root/useApiRoot';
 export { usePostId } from './features/php-var/post-id/usePostId';
-export * from './features/text-domain/useTextDomain';
+export { useTextDomain } from './features/text-domain/useTextDomain';
