@@ -13,7 +13,7 @@ const getApiRootValue = (): HttpUrl | null => {
 	if ( phpVar === null ) {
 		return null; // HTMLにphpVarが出力されていない場合
 	} else if ( phpVar.apiRoot === undefined || phpVar.apiRoot === null ) {
-		return null; // 投稿ページ以外など、apiRootが設定されていない場合
+		return null;
 	} else if ( typeof phpVar.apiRoot === 'string' ) {
 		return HttpUrl.from( phpVar.apiRoot );
 	} else {
