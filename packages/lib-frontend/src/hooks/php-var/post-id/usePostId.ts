@@ -1,5 +1,5 @@
 import { PostId } from '@serendipity/lib-value-object';
-import { getPhpVar } from '../../lib/php-var/getPhpVar';
+import { getPhpVar } from '../../../lib/php-var/getPhpVar';
 import { useMemo } from 'react';
 
 /** 投稿IDを取得します */
