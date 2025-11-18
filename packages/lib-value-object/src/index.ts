@@ -5,3 +5,4 @@ export * from './value-object/PostId';
 export * from './value-object/HttpUrl';
 export * from './value-object/NetworkCategoryId';
 export * from './value-object/Symbol';
+export * from './value-object/WpRestNonce';
