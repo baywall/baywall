@@ -1,5 +1,5 @@
 import { HttpUrl } from '@serendipity/lib-value-object';
-import { getPhpVar } from './getPhpVar';
+import { getPhpVar } from '../getPhpVar';
 
 export const getApiRoot = (): HttpUrl | null => {
 	const phpVar = getPhpVar();
