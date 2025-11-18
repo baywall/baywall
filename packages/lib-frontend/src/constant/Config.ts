@@ -11,6 +11,9 @@ export class Config {
 	/** WordPressで使用しているテキストドメイン */
 	public static readonly TEXT_DOMAIN = 'baywall';
 
+	/** GraphQLのエンドポイントパス */
+	public static readonly GRAPHQL_ENDPOINT_PATH = 'baywall/graphql';
+
 	/**
 	 * サーバーから出力されるグローバル変数の名前
 	 *
