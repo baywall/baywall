@@ -1,6 +1,7 @@
 export { fetcher } from './features/graphql-codegen/fetcher';
 export { useIsDebugMode } from './features/debug-mode/useIsDebugMode';
 export { useFetcher } from './features/graphql-codegen/useFetcher';
+export { useGraphQlUrl } from './features/graphql-url/useGraphQlUrl';
 export { useLogger } from './features/logger/useLogger';
 export { usePhpVar } from './features/php-var/usePhpVar';
 export { useApiRoot } from './features/php-var/api-root/useApiRoot';
