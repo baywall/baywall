@@ -1,7 +1,7 @@
-import { createRequestInit } from '../../lib/graphql/_createRequestInit';
-import { usePhpVar } from '../../hooks/php-var/usePhpVar';
-import { fetcher } from '../../lib/graphql/codegen/_fetcher';
-import { getWpRestNonce } from '../../lib/php-var/wp-rest-nonce/getWpRestNonce';
+import { createRequestInit } from './_createRequestInit';
+import { usePhpVar } from '../php-var/usePhpVar';
+import { fetcher } from './original/_fetcher';
+import { getWpRestNonce } from '../php-var/wp-rest-nonce/getWpRestNonce';
 
 /**
  * @param      query

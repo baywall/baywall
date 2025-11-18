@@ -1,5 +1,5 @@
 import { getPhpVar } from '../php-var/getPhpVar';
-import { fetcher as _fetcher } from './codegen/_fetcher';
+import { fetcher as _fetcher } from './original/_fetcher';
 import { createRequestInit } from './_createRequestInit';
 import { getWpRestNonce } from '../php-var/wp-rest-nonce/getWpRestNonce';
 
