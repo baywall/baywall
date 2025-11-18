@@ -1,5 +1,5 @@
 import { PostId } from '@serendipity/lib-value-object';
-import { getPhpVar } from './getPhpVar';
+import { getPhpVar } from '../getPhpVar';
 
 export const getPostId = (): PostId | null => {
 	const phpVar = getPhpVar();

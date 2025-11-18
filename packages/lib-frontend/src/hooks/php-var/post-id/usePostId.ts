@@ -1,6 +1,6 @@
 import { PostId } from '@serendipity/lib-value-object';
 import { useMemo } from 'react';
-import { getPostId } from '../../../lib/php-var/getPostId';
+import { getPostId } from '../../../lib/php-var/post-id/getPostId';
 
 /** 投稿IDを取得します */
 export const usePostId = (): PostId | null | undefined => {
