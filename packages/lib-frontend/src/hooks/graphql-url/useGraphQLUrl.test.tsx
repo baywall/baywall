@@ -19,6 +19,7 @@ const setGlobalVar = ( graphqlUrl: string, wpRestNonce: string ) => {
 	const globalVar: PhpVar = {
 		graphqlUrl,
 		wpRestNonce,
+		apiRoot: 'https://example.com/wp-json/',
 	};
 	( global as any )[ varName ] = globalVar;
 };
