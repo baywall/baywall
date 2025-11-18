@@ -48,7 +48,7 @@ class WpConfig {
 	public const JWT_SECRET_KEY_LENGTH = 64;
 
 	/** アクセストークン(+リフレッシュトークン)更新のルート名 */
-	public const REST_ROUTE_AUTH_REFRESH = 'auth/refresh';
+	public const REST_ROUTE_AUTH_REFRESH = 'auth/token/refresh';
 	/** 請求書トークンをアクセストークン(+リフレッシュトークン)と引き換えるルート名 */
 	public const REST_ROUTE_AUTH_TOKEN_INVOICE = 'auth/token/invoice';
 
