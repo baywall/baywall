@@ -1,7 +1,7 @@
 import { createRequestInit } from './_createRequestInit';
-import { usePhpVar } from '../php-var/usePhpVar';
 import { fetcher } from './original/_fetcher';
 import { getWpRestNonce } from '../php-var/wp-rest-nonce/getWpRestNonce';
+import { getGraphQlUrl } from '../graphql-url/getGraphQlUrl';
 
 /**
  * @param      query
@@ -17,9 +17,7 @@ export const useFetcher = < TData, TVariables >( query: string, variables?: TVar
 };
 
 const useFetchParams = () => {
-	const phpVar = usePhpVar();
-
-	const endpoint = phpVar?.graphqlUrl;
+	const endpoint = getGraphQlUrl();
 	const nonce = getWpRestNonce();
 
 	if ( ! endpoint || ! nonce ) {
@@ -27,7 +25,7 @@ const useFetchParams = () => {
 	}
 
 	return {
-		endpoint,
+		endpoint: endpoint.value,
 		requestInit: createRequestInit( nonce.value ),
 	} as const;
 };
