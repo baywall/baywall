@@ -1,4 +1,4 @@
-import { renderHook } from '../../jest-lib';
+import { silentRenderHook } from '../../jest-lib';
 import { useTextDomain } from './useTextDomain';
 import { useGraphQLUrl } from '../graphql-url/useGraphQLUrl';
 
@@ -13,7 +13,7 @@ describe( '[55E68644] useTextDomain', () => {
 		( useGraphQLUrl as jest.Mock ).mockReturnValue( 'http://example.com/wp-json/my-text-domain/graphql' );
 
 		// ACT
-		const { result } = renderHook( () => useTextDomain() );
+		const { result } = silentRenderHook( () => useTextDomain() );
 
 		// ASSERT
 		expect( result.current ).toBe( 'my-text-domain' );
@@ -29,7 +29,7 @@ describe( '[55E68644] useTextDomain', () => {
 		);
 
 		// ACT
-		const { result } = renderHook( () => useTextDomain() );
+		const { result } = silentRenderHook( () => useTextDomain() );
 
 		// ASSERT
 		expect( result.current ).toBe( 'my-text-domain' );
@@ -43,7 +43,7 @@ describe( '[55E68644] useTextDomain', () => {
 		( useGraphQLUrl as jest.Mock ).mockReturnValue( null );
 
 		// ACT
-		const { result } = renderHook( () => useTextDomain() );
+		const { result } = silentRenderHook( () => useTextDomain() );
 
 		// ASSERT
 		expect( result.current ).toBeNull();
@@ -57,7 +57,7 @@ describe( '[55E68644] useTextDomain', () => {
 		( useGraphQLUrl as jest.Mock ).mockReturnValue( 'http://example.com/foo/bar' );
 
 		// ACT, ASSERT
-		expect( () => renderHook( () => useTextDomain() ) ).toThrow( '[97289E73]' );
+		expect( () => silentRenderHook( () => useTextDomain() ) ).toThrow( '[97289E73]' );
 	} );
 
 	/**
@@ -68,6 +68,6 @@ describe( '[55E68644] useTextDomain', () => {
 		( useGraphQLUrl as jest.Mock ).mockReturnValue( 'http://example.com/graphql' );
 
 		// ACT, ASSERT
-		expect( () => renderHook( () => useTextDomain() ) ).toThrow( '[97289E73]' );
+		expect( () => silentRenderHook( () => useTextDomain() ) ).toThrow( '[97289E73]' );
 	} );
 } );
