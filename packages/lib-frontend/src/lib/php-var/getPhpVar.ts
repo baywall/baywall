@@ -1,4 +1,4 @@
-import { PhpVar } from '../../types/PhpVar';
+import { PhpVar } from './types/PhpVar';
 import { PhpVarNameProvider } from './PhpVarNameProvider';
 
 export const getPhpVar = (): PhpVar | null => {
