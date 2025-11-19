@@ -6,7 +6,7 @@ use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
 use Cornix\Serendipity\Core\Application\UseCase\RefreshAccessToken;
 use Cornix\Serendipity\Core\Constant\WpConfig;
-use Cornix\Serendipity\Core\Domain\Exception\UnauthorizedAccessException;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
 use InvalidArgumentException;
@@ -65,7 +65,7 @@ class RestApiHook extends HookBase {
 		try {
 			// リフレッシュトークンが送信されていない場合は例外をスロー
 			if ( $refresh_token_value === null ) {
-				throw new UnauthorizedAccessException( '[A018971D] Refresh token is missing.' );
+				throw new UnauthorizedException( '[A018971D] Refresh token is missing.' );
 			}
 
 			$access_token_value = $this->container->get( RefreshAccessToken::class )->handle( $refresh_token_value );
@@ -73,7 +73,7 @@ class RestApiHook extends HookBase {
 			return array(
 				'access_token' => $access_token_value,
 			);
-		} catch ( UnauthorizedAccessException $e ) {
+		} catch ( UnauthorizedException $e ) {
 			$app_logger->debug( $e ); // 大量にアクセスされる可能性があるため、debugレベルでログ出力
 			// リフレッシュトークンが無効な場合、401エラーを返す
 			return new \WP_REST_Response(
@@ -96,7 +96,7 @@ class RestApiHook extends HookBase {
 
 		try {
 			if ( $invoice_token_string_value === null ) {
-				throw new UnauthorizedAccessException( '[A693201D] Invoice token is missing.' );
+				throw new UnauthorizedException( '[A693201D] Invoice token is missing.' );
 			} elseif ( $invoice_id_value === null ) {
 				throw new InvalidArgumentException( '[E388D526] Invoice ID is missing.' );
 			}
@@ -105,7 +105,7 @@ class RestApiHook extends HookBase {
 				$invoice_id_value,
 				$invoice_token_string_value
 			);
-		} catch ( UnauthorizedAccessException $e ) {
+		} catch ( UnauthorizedException $e ) {
 			$app_logger->debug( $e ); // 大量にアクセスされる可能性があるため、debugレベルでログ出力
 			// 請求書トークンが無効な場合、401エラーを返す
 			return new \WP_REST_Response(

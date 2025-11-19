@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
-use Cornix\Serendipity\Core\Domain\Exception\UnauthorizedAccessException;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Domain\Repository\RefreshTokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
@@ -54,7 +54,7 @@ abstract class RefreshTokenService {
 		// - 無効化されたリフレッシュトークン
 		// - 期限切れのリフレッシュトークン
 		if ( $refresh_token === null || $refresh_token->isRevoked() || $refresh_token->isExpired() ) {
-			throw new UnauthorizedAccessException( '[6E4E2DAB] Invalid refresh token.' );
+			throw new UnauthorizedException( '[6E4E2DAB] Invalid refresh token.' );
 		}
 
 		// 古いリフレッシュトークンを無効化
