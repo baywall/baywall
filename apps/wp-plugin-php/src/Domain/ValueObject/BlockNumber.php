@@ -27,6 +27,7 @@ class BlockNumber implements \Stringable {
 
 	/**
 	 * 現在のブロック番号に引数の値を加算した新しいインスタンスを取得します。
+	 * TODO: 引数の型をBlockHeightに変更
 	 */
 	public function add( int $addend ): self {
 		return new self( $this->block_number_value + $addend );
@@ -34,6 +35,8 @@ class BlockNumber implements \Stringable {
 
 	/**
 	 * 現在のブロック番号から引数の値を減算した新しいインスタンスを取得します。
+	 *
+	 * TODO: 引数の型をBlockHeightに変更
 	 */
 	public function sub( int $subtrahend ): self {
 		return new self( $this->block_number_value - $subtrahend );
