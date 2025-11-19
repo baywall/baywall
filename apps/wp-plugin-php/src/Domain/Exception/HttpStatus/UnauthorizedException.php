@@ -1,12 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Exception;
+namespace Cornix\Serendipity\Core\Domain\Exception\HttpStatus;
 
 /**
- * 認証されていないユーザーがアクセスした場合にスローされる例外
+ * 401 Unauthorized
+ *
+ * アクセス権がない、または認証に失敗した場合にスローされる例外クラス
  */
-class UnauthorizedAccessException extends \RuntimeException {
+class UnauthorizedException extends \RuntimeException {
 	/**
 	 * @param string          $message
 	 * @param int             $code
