@@ -25,7 +25,6 @@ use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenService;
-use Cornix\Serendipity\Core\Domain\Service\PaymentStatusService;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
 use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
@@ -56,7 +55,6 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenCooki
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPaymentStatusService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenService;
@@ -109,7 +107,6 @@ final class ContainerDefinitions {
 			InvoiceTokenCookieProvider::class    => autowire( WpInvoiceTokenCookieProvider::class ),
 			RefreshTokenService::class           => autowire( WpRefreshTokenService::class ),
 			InvoiceTokenService::class           => autowire( WpInvoiceTokenService::class ),
-			PaymentStatusService::class          => autowire( WpPaymentStatusService::class ),
 
 			// Cache
 			OracleRateCache::class               => autowire( WpOracleRateCache::class ),
