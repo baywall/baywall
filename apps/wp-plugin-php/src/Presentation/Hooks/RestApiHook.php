@@ -84,8 +84,6 @@ class RestApiHook extends HookBase {
 	}
 
 	public function authTokenInvoiceHandler( \WP_REST_Request $request ) {
-		$app_logger = $this->container->get( AppLogger::class );
-
 		// 請求書トークンをCookieから取得
 		/** @var string|null */
 		$invoice_token_string_value = $_COOKIE[ WpConfig::COOKIE_NAME_INVOICE_TOKEN ] ?? null;
@@ -101,13 +99,18 @@ class RestApiHook extends HookBase {
 				throw new InvalidArgumentException( '[E388D526] Invoice ID is missing.' );
 			}
 
-			return $this->container->get( IssueAccessTokenByInvoiceToken::class )->handle(
+			$result = $this->container->get( IssueAccessTokenByInvoiceToken::class )->handle(
 				$invoice_id_value,
 				$invoice_token_string_value
 			);
+			assert( array_key_exists( 'access_token', $result ), '[F02C7C55]' );
+			return new \WP_REST_Response(
+				$result,
+				$result['access_token'] !== null
+					? self::HTTP_STATUS_200_OK
+					: self::HTTP_STATUS_402_PAYMENT_REQUIRED
+			);
 		} catch ( UnauthorizedException $e ) {
-			$app_logger->debug( $e ); // 大量にアクセスされる可能性があるため、debugレベルでログ出力
-			// 請求書トークンが無効な場合、401エラーを返す
 			return new \WP_REST_Response(
 				array( 'message' => 'Unauthorized' ),
 				self::HTTP_STATUS_401_UNAUTHORIZED
