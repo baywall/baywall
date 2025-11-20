@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\InvoiceToken;
-use Cornix\Serendipity\Core\Domain\Exception\InvalidInvoiceTokenException;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceTokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
@@ -55,7 +55,7 @@ abstract class InvoiceTokenService {
 		// - 無効化された請求書トークン
 		// - 期限切れの請求書トークン
 		if ( $invoice_token === null || $invoice_token->isRevoked() || $invoice_token->isExpired() ) {
-			throw new InvalidInvoiceTokenException( '[1109F03D] Invalid invoice token.' );
+			throw new UnauthorizedException( '[1109F03D] Invalid invoice token.' );
 		}
 
 		// 古い請求書トークンを無効化
