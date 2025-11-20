@@ -11,6 +11,8 @@ use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
 use InvalidArgumentException;
+use Throwable;
+use WP_REST_Response;
 
 /**
  * REST APIのフック登録(GraphQLを除く)
@@ -61,7 +63,6 @@ class RestApiHook extends HookBase {
 	public function authRefreshHandler( \WP_REST_Request $request ) {
 		// リフレッシュトークンを取得
 		$refresh_token_value = $_COOKIE[ WpConfig::COOKIE_NAME_REFRESH_TOKEN ] ?? null;
-		$app_logger          = $this->container->get( AppLogger::class );
 
 		try {
 			// リフレッシュトークンが送信されていない場合は例外をスロー
@@ -75,11 +76,17 @@ class RestApiHook extends HookBase {
 				'access_token' => $access_token_value,
 			);
 		} catch ( UnauthorizedException $e ) {
-			$app_logger->debug( $e ); // 大量にアクセスされる可能性があるため、debugレベルでログ出力
+			$this->container->get( AppLogger::class )->debug( $e );
 			// リフレッシュトークンが無効な場合、401エラーを返す
-			return new \WP_REST_Response(
+			return new WP_REST_Response(
 				array( 'message' => 'Unauthorized' ),
 				self::HTTP_STATUS_401_UNAUTHORIZED
+			);
+		} catch ( Throwable $e ) {
+			$this->container->get( AppLogger::class )->error( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Internal Server Error' ),
+				self::HTTP_STATUS_500_INTERNAL_SERVER_ERROR
 			);
 		}
 	}
@@ -105,19 +112,27 @@ class RestApiHook extends HookBase {
 				$invoice_token_string_value
 			);
 			assert( array_key_exists( 'access_token', $result ) && is_string( $result['access_token'] ), '[F02C7C55] ' . json_encode( $result ) );
-			return new \WP_REST_Response(
+			return new WP_REST_Response(
 				$result,
 				self::HTTP_STATUS_200_OK
 			);
 		} catch ( UnauthorizedException $e ) {
-			return new \WP_REST_Response(
+			$this->container->get( AppLogger::class )->debug( $e );
+			return new WP_REST_Response(
 				array( 'message' => 'Unauthorized' ),
 				self::HTTP_STATUS_401_UNAUTHORIZED
 			);
 		} catch ( PaymentRequiredException $e ) {
-			return new \WP_REST_Response(
+			$this->container->get( AppLogger::class )->debug( $e );
+			return new WP_REST_Response(
 				array( 'message' => 'Payment Required' ),
 				self::HTTP_STATUS_402_PAYMENT_REQUIRED
+			);
+		} catch ( Throwable $e ) {
+			$this->container->get( AppLogger::class )->error( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Internal Server Error' ),
+				self::HTTP_STATUS_500_INTERNAL_SERVER_ERROR
 			);
 		}
 	}
