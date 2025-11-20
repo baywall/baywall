@@ -6,6 +6,7 @@ use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
 use Cornix\Serendipity\Core\Application\UseCase\RefreshAccessToken;
 use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
@@ -103,17 +104,20 @@ class RestApiHook extends HookBase {
 				$invoice_id_value,
 				$invoice_token_string_value
 			);
-			assert( array_key_exists( 'access_token', $result ), '[F02C7C55]' );
+			assert( array_key_exists( 'access_token', $result ) && is_string( $result['access_token'] ), '[F02C7C55] ' . json_encode( $result ) );
 			return new \WP_REST_Response(
 				$result,
-				$result['access_token'] !== null
-					? self::HTTP_STATUS_200_OK
-					: self::HTTP_STATUS_402_PAYMENT_REQUIRED
+				self::HTTP_STATUS_200_OK
 			);
 		} catch ( UnauthorizedException $e ) {
 			return new \WP_REST_Response(
 				array( 'message' => 'Unauthorized' ),
 				self::HTTP_STATUS_401_UNAUTHORIZED
+			);
+		} catch ( PaymentRequiredException $e ) {
+			return new \WP_REST_Response(
+				array( 'message' => 'Payment Required' ),
+				self::HTTP_STATUS_402_PAYMENT_REQUIRED
 			);
 		}
 	}
