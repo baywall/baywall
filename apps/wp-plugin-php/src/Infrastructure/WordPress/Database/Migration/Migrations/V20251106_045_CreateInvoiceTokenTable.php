@@ -23,10 +23,6 @@ class V20251106_045_CreateInvoiceTokenTable extends MigrationBase {
 
 	public function up(): void {
 		// 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
-		//
-		// 一つの`invoice_id`に対して複数の`invoice_token_hash`が存在することができるが、
-		// クライアント側で待機後にアクセスするので、作成されたとしても数レコードの想定。
-		// よって、`invoice_token_hash`のインデックスは張らない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
 				`created_at`          timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -34,7 +30,7 @@ class V20251106_045_CreateInvoiceTokenTable extends MigrationBase {
 				`invoice_token_hash`  varchar(191)  NOT NULL,
 				`expires_at`          timestamp     NOT NULL,
 				`revoked_at`          timestamp         NULL DEFAULT NULL,
-				PRIMARY KEY (`invoice_id`)
+				PRIMARY KEY (`invoice_token_hash`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
 		$this->wpdb->dbh->query( $sql );

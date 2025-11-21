@@ -95,22 +95,13 @@ class RestApiHook extends HookBase {
 		// 請求書トークンをCookieから取得
 		/** @var string|null */
 		$invoice_token_string_value = $_COOKIE[ WpConfig::COOKIE_NAME_INVOICE_TOKEN ] ?? null;
-		// 請求書IDはリクエストボディから取得
-		$json_body = $request->get_json_params();
-		/** @var string|null */
-		$invoice_id_value = $json_body['invoice_id'] ?? null;
 
 		try {
 			if ( $invoice_token_string_value === null ) {
 				throw new UnauthorizedException( '[A693201D] Invoice token is missing.' );
-			} elseif ( $invoice_id_value === null ) {
-				throw new InvalidArgumentException( '[E388D526] Invoice ID is missing.' );
 			}
 
-			$result = $this->container->get( IssueAccessTokenByInvoiceToken::class )->handle(
-				$invoice_id_value,
-				$invoice_token_string_value
-			);
+			$result = $this->container->get( IssueAccessTokenByInvoiceToken::class )->handle( $invoice_token_string_value );
 			assert( array_key_exists( 'access_token', $result ) && is_string( $result['access_token'] ), '[F02C7C55] ' . json_encode( $result ) );
 			return new WP_REST_Response(
 				$result,

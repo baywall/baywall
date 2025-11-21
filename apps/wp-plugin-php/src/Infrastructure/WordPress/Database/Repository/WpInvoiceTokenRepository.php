@@ -19,12 +19,12 @@ class WpInvoiceTokenRepository implements InvoiceTokenRepository {
 		$this->invoice_token_table = $invoice_token_table;
 	}
 
-	/** 指定した請求書ID及び請求書トークン文字列に合致する請求書情報を取得します。 */
-	public function get( InvoiceId $invoice_id, InvoiceTokenString $invoice_token_string ): ?InvoiceToken {
-		$record = $this->invoice_token_table->get( $invoice_id, WpInvoiceTokenHashString::from( $invoice_token_string ) );
+	/** 指定した請求書トークン文字列に合致する請求書情報を取得します。 */
+	public function get( InvoiceTokenString $invoice_token_string ): ?InvoiceToken {
+		$record = $this->invoice_token_table->get( WpInvoiceTokenHashString::from( $invoice_token_string ) );
 
 		return $record !== null ? InvoiceToken::create(
-			$invoice_id,
+			InvoiceId::fromUlidValue( $record->invoiceIdValue() ),
 			$invoice_token_string,
 			UnixTimestamp::fromMySql( $record->expiresAtValue() ),
 			UnixTimestamp::fromMySqlNullable( $record->revokedAtValue() )
