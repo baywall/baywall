@@ -15,7 +15,7 @@ class WpInvoiceTokenHashString extends StringValueObject {
 	}
 
 	public static function from( InvoiceTokenString $invoice_token_string ): self {
-		assert( WpInvoiceTokenString::from( $invoice_token_string->value() ) instanceof WpInvoiceTokenString, '[]' );
+		assert( WpInvoiceTokenString::from( $invoice_token_string->value() ) instanceof WpInvoiceTokenString, '[81339409]' );
 
 		return new self( hash( self::HASH_ALGORITHM, $invoice_token_string->value() ) );
 	}
