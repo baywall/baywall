@@ -30,16 +30,17 @@ class RestApiHook extends HookBase {
 	}
 
 	public function addActionRestApiInit(): void {
+		// OAuth 2.0 ではアクセストークンリクエスト時にPOSTメソッドを使う。ここで登録するアクセストークン発行APIもそれに倣い、POSTメソッドを使用する。
+		//
+		// @see [RFC 6749 - The OAuth 2.0 Authorization Framework 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc6749.html)
+		// > The client MUST use the HTTP "POST" method when making access token requests.
+		// > クライアントは、アクセストークンリクエストを行うときにHTTPの「POST」メソッドを使用する必要があります。
+
 		// リフレッシュトークンを用いてアクセストークンを発行するAPIを登録
 		$success = register_rest_route(
 			WpConfig::REST_NAMESPACE,
 			WpConfig::REST_ROUTE_AUTH_REFRESH,
 			array(
-				// OAuth 2.0 ではアクセストークンリクエスト時にPOSTメソッドを使う。ここでもそれに従う。
-				//
-				// @see [RFC 6749 - The OAuth 2.0 Authorization Framework 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc6749.html)
-				// > The client MUST use the HTTP "POST" method when making access token requests.
-				// > クライアントは、アクセストークンリクエストを行うときにHTTPの「POST」メソッドを使用する必要があります。
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->authRefreshHandler( $request ),
 				'permission_callback' => '__return_true',
