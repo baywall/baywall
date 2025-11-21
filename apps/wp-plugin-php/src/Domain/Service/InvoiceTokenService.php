@@ -43,12 +43,11 @@ abstract class InvoiceTokenService {
 	/**
 	 * トークンローテーションを実行します
 	 *
-	 * @param InvoiceId          $invoice_id           請求書ID
 	 * @param InvoiceTokenString $invoice_token_string クライアントから送信された請求書トークン文字列
 	 */
-	public function rotation( InvoiceId $invoice_id, InvoiceTokenString $invoice_token_string ): InvoiceToken {
+	public function rotation( InvoiceTokenString $invoice_token_string ): InvoiceToken {
 
-		$invoice_token = $this->invoice_token_repository->get( $invoice_id, $invoice_token_string );
+		$invoice_token = $this->invoice_token_repository->get( $invoice_token_string );
 
 		// 以下の場合は例外をスロー
 		// - データベースに存在しない請求書トークン
@@ -64,7 +63,7 @@ abstract class InvoiceTokenService {
 
 		// 新しい請求書トークンを生成して保存
 		$new_invoice_token = InvoiceToken::create(
-			$invoice_id,
+			$invoice_token->invoiceId(),
 			$this->generateInvoiceTokenString(),
 			$this->getExpiresAt(),
 			null // 請求書トークン生成時、`revoked_at`はnullに設定

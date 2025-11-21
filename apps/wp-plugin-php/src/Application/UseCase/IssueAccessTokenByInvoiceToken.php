@@ -13,8 +13,6 @@ use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceTokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenService;
 use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
-use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\UnlockPaywallTransferEventRepository;
@@ -55,33 +53,31 @@ class IssueAccessTokenByInvoiceToken {
 		$this->invoice_token_cookie_provider            = $invoice_token_cookie_provider;
 	}
 
-	public function handle( string $invoice_id_hex_value, string $invoice_token_string_value ): array {
+	public function handle( string $invoice_token_string_value ): array {
 		return $this->transaction_service->transactional(
-			function () use ( $invoice_id_hex_value, $invoice_token_string_value ) {
-				$invoice_id           = InvoiceId::fromHex( Hex::from( $invoice_id_hex_value ) );
+			function () use ( $invoice_token_string_value ) {
 				$invoice_token_string = InvoiceTokenString::from( $invoice_token_string_value );
 
-				$invoice_token = $this->invoice_token_repository->get( $invoice_id, $invoice_token_string );
+				$invoice_token = $this->invoice_token_repository->get( $invoice_token_string );
 				if ( $invoice_token === null ) {
-					throw new InvalidArgumentException( "[BCD15F61] Invalid invoice id: {$invoice_id_hex_value}, token: {$invoice_token_string_value}" );
+					throw new InvalidArgumentException( "[BCD15F61] Invalid invoice token: {$invoice_token_string_value}" );
 				}
 
 				// 請求書トークンのローテーション(DB更新+Cookie書き込み)
-				$new_invoice_token        = $this->invoice_token_service->rotation( $invoice_id, $invoice_token_string );
+				$new_invoice_token        = $this->invoice_token_service->rotation( $invoice_token_string );
 				$new_invoice_token_cookie = $this->invoice_token_cookie_provider->get( $new_invoice_token );
 				$this->cookie_writer->set( $new_invoice_token_cookie );
 
 				// 請求書のチェーンに対してAppコントラクトイベントをクロール
-				$invoice = $this->invoice_repository->get( $invoice_id );
+				$invoice = $this->invoice_repository->get( $invoice_token->invoiceId() );
 				$this->app_contract_crawl_service->crawl( $invoice->chainId() );
 
 				// 購入時のトランザクションが含まれるブロック番号を取得
-				$payment_block_number = $this->unlock_paywall_transfer_event_repository->getBlockNumber( $invoice_id );
-
+				$payment_block_number = $this->unlock_paywall_transfer_event_repository->getBlockNumber( $invoice_token->invoiceId() );
 				if ( $payment_block_number === null ) {
 					// （まだ）支払いが確認できない場合は例外をスロー
 					// この後ブロックに取り込まれる可能性もあるのでCookieの無効化は行わない
-					throw new PaymentRequiredException( "[694039A0] Payment not found for invoice: {$invoice_id_hex_value}" );
+					throw new PaymentRequiredException( "[694039A0] Payment not found for invoice: {$invoice}" );
 				} else {
 					// 支払いが確認できた場合はリフレッシュトークンとアクセストークンを発行
 					// リフレッシュトークンはCookieに保存
