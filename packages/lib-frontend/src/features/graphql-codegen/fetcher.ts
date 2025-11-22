@@ -13,5 +13,5 @@ export const fetcher = < TData, TVariables >( query: string, variables?: TVariab
 
 	const requestInit = createRequestInit( nonce.value );
 
-	return _fetcher< TData, TVariables >( endpoint.value, requestInit, query, variables );
+	return _fetcher< TData, TVariables >( endpoint.value, requestInit, query.trim(), variables );
 };
