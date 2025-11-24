@@ -1,4 +1,3 @@
-import { createRequestInit } from './_createRequestInit';
 import { getWpRestNonce } from '../php-var/wp-rest-nonce/getWpRestNonce';
 import { getGraphQlUrl } from '../graphql-url/getGraphQlUrl';
 import { GraphqlError } from './error/GraphqlError';
@@ -11,12 +10,13 @@ export const fetcher = < TData, TVariables >( query: string, variables?: TVariab
 		throw new Error( `[EC048815] endpoint: ${ endpoint }, nonce: ${ nonce }` );
 	}
 
-	const requestInit = createRequestInit( nonce.value );
-
 	return async (): Promise< TData > => {
 		const res = await fetch( endpoint.value, {
 			method: 'POST',
-			...requestInit,
+			headers: {
+				'Content-Type': 'application/json',
+				'X-WP-Nonce': nonce.value,
+			},
 			body: JSON.stringify( { query, variables } ),
 		} );
 
