@@ -2,7 +2,7 @@ import { getWpRestNonce } from '../php-var/wp-rest-nonce/getWpRestNonce';
 import { getGraphQlUrl } from '../graphql-url/getGraphQlUrl';
 import { GraphqlError } from './error/GraphqlError';
 
-export const fetcher = < TData, TVariables >( query: string, variables?: TVariables ) => {
+export const fetcher = < TData, TVariables >( query: string, variables?: TVariables, requestInit?: RequestInit ) => {
 	const endpoint = getGraphQlUrl();
 	const nonce = getWpRestNonce();
 
@@ -16,6 +16,7 @@ export const fetcher = < TData, TVariables >( query: string, variables?: TVariab
 			headers: {
 				'Content-Type': 'application/json',
 				'X-WP-Nonce': nonce.value,
+				...requestInit?.headers,
 			},
 			body: JSON.stringify( { query, variables } ),
 		} );
