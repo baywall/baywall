@@ -1,7 +1,7 @@
-import { fetcher as _fetcher } from './original/_fetcher';
 import { createRequestInit } from './_createRequestInit';
 import { getWpRestNonce } from '../php-var/wp-rest-nonce/getWpRestNonce';
 import { getGraphQlUrl } from '../graphql-url/getGraphQlUrl';
+import { GraphqlError } from './error/GraphqlError';
 
 export const fetcher = < TData, TVariables >( query: string, variables?: TVariables ) => {
 	const endpoint = getGraphQlUrl();
@@ -13,5 +13,19 @@ export const fetcher = < TData, TVariables >( query: string, variables?: TVariab
 
 	const requestInit = createRequestInit( nonce.value );
 
-	return _fetcher< TData, TVariables >( endpoint.value, requestInit, query.trim(), variables );
+	return async (): Promise< TData > => {
+		const res = await fetch( endpoint.value, {
+			method: 'POST',
+			...requestInit,
+			body: JSON.stringify( { query, variables } ),
+		} );
+
+		const json = await res.json();
+
+		if ( json.errors ) {
+			throw new GraphqlError( json.errors );
+		}
+
+		return json.data;
+	};
 };
