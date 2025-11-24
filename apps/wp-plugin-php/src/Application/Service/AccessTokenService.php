@@ -49,6 +49,7 @@ class AccessTokenService {
 	/** 指定したアクセストークンが有効かどうかを判定します */
 	public function isValid( AccessToken $access_token ): bool {
 		// 有効期限が現在時刻より後であれば有効
+		// 署名の検証はdecode時に行われるためここでは不要
 		return $this->decode( $access_token )->expiresAt()->value() > time();
 	}
 
