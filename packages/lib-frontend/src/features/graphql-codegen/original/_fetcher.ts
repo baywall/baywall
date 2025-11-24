@@ -1,10 +1,11 @@
 /**
  * graphql-codegen(@graphql-codegen/typescript-react-query v6.1.0)が生成したオリジナルのfetcher
  * ※ codegen.tsのconfigをコメントアウトして実行すると、この関数が生成される
- * @param endpoint
- * @param requestInit
- * @param query
- * @param variables
+ * @deprecated この関数はerrorsの詳細が取得できないのでfetcher.tsのfetcher関数を使ってください
+ * @param      endpoint
+ * @param      requestInit
+ * @param      query
+ * @param      variables
  */
 // istanbul ignore next
 export function fetcher< TData, TVariables >(
