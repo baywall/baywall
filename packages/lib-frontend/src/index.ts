@@ -1,4 +1,5 @@
 export { fetcher } from './features/graphql-codegen/fetcher';
+export { GraphqlError } from './features/graphql-codegen/error/GraphqlError';
 export { useIsDebugMode } from './features/debug-mode/useIsDebugMode';
 export { useFetcher } from './features/graphql-codegen/useFetcher';
 export { useGraphQlUrl } from './features/graphql-url/useGraphQlUrl';
