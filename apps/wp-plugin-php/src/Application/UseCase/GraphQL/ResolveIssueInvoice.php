@@ -20,7 +20,6 @@ use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
@@ -106,7 +105,6 @@ class ResolveIssueInvoice {
 
 				return array(
 					'invoiceIdHex'    => $invoice->id()->hex(),
-					'nonce'           => $invoice->nonce()->value(),
 					'serverMessage'   => $signed_data->message()->value(),
 					'serverSignature' => $signed_data->signature()->value(),
 					'paymentAmount'   => $invoice->paymentAmount()->value(),
@@ -141,7 +139,6 @@ class ResolveIssueInvoice {
 			$payment_token_address,
 			$payment_amount,
 			$consumer_address,
-			InvoiceNonce::generate() // 新規nonce
 		);
 		assert( $this->invoice_repository->get( $invoice->id() ) === null, '[A9E90E49] Duplicate invoice ID detected.' );   // 請求書IDの重複チェック(存在しないIDが発行されていることを確認)
 

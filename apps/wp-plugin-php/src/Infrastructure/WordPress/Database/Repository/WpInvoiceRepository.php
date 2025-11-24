@@ -10,7 +10,6 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\InvoiceTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
@@ -52,7 +51,6 @@ class InvoiceImpl extends Invoice {
 			Address::from( $invoice_record->paymentTokenAddressValue() ),
 			Amount::from( $invoice_record->paymentAmountValue() ),
 			Address::from( $invoice_record->consumerAddressValue() ),
-			InvoiceNonce::from( $invoice_record->nonceValue() ),
 		);
 	}
 }

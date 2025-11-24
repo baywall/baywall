@@ -7,13 +7,12 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 
 class Invoice implements \Stringable {
 
-	public function __construct( InvoiceId $id, PostId $post_id, ChainId $chain_id, Price $selling_price, Address $seller_address, Address $payment_token_address, Amount $payment_amount, Address $consumer_address, ?InvoiceNonce $nonce = null ) {
+	public function __construct( InvoiceId $id, PostId $post_id, ChainId $chain_id, Price $selling_price, Address $seller_address, Address $payment_token_address, Amount $payment_amount, Address $consumer_address ) {
 		$this->id                    = $id;
 		$this->post_id               = $post_id;
 		$this->chain_id              = $chain_id;
@@ -22,7 +21,6 @@ class Invoice implements \Stringable {
 		$this->payment_token_address = $payment_token_address;
 		$this->payment_amount        = $payment_amount;
 		$this->consumer_address      = $consumer_address;
-		$this->nonce                 = $nonce;
 	}
 
 	private InvoiceId $id;
@@ -33,7 +31,6 @@ class Invoice implements \Stringable {
 	private Address $payment_token_address;
 	private Amount $payment_amount;
 	private Address $consumer_address;
-	private ?InvoiceNonce $nonce;
 
 	public function id(): InvoiceId {
 		return $this->id;
@@ -58,14 +55,6 @@ class Invoice implements \Stringable {
 	}
 	public function consumerAddress(): Address {
 		return $this->consumer_address;
-	}
-	public function nonce(): ?InvoiceNonce {
-		return $this->nonce;
-	}
-
-	/** 新しいnonceを設定します */
-	public function setNonce( InvoiceNonce $nonce ): void {
-		$this->nonce = $nonce;
 	}
 
 	public function __toString() {
