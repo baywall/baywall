@@ -24,7 +24,7 @@ export const fetcher = < TData, TVariables >( query: string, variables?: TVariab
 		const json = await res.json();
 
 		if ( json.errors ) {
-			throw new GraphqlError( json.errors );
+			throw new GraphqlError( json.errors[ 0 ] );
 		}
 
 		return json.data;
