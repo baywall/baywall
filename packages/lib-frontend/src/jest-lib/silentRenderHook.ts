@@ -13,7 +13,7 @@ type HydrateableContainer = Parameters< ( typeof ReactDOMClient )[ 'hydrateRoot'
  * @param render
  * @param options
  */
-export const renderHook = <
+export const silentRenderHook = <
 	Result,
 	Props,
 	Q extends Queries = typeof queries,
