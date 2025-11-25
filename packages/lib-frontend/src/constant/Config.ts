@@ -2,6 +2,19 @@ export class Config {
 	private constructor() {} // eslint-disable-line no-useless-constructor
 
 	/**
+	 * アプリケーションの識別子
+	 *
+	 * ※ ローカルストレージのキーなどで使用
+	 */
+	public static APP_ID = 'baywall';
+
+	/** WordPressで使用しているテキストドメイン */
+	public static readonly TEXT_DOMAIN = 'baywall';
+
+	/** GraphQLのエンドポイントパス */
+	public static readonly GRAPHQL_ENDPOINT_PATH = 'baywall/graphql';
+
+	/**
 	 * サーバーから出力されるグローバル変数の名前
 	 *
 	 * ※ REST API等の情報が格納される変数名
