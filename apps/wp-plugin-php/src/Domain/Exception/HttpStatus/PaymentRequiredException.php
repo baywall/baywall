@@ -1,10 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Exception;
+namespace Cornix\Serendipity\Core\Domain\Exception\HttpStatus;
 
-/** Invoice に紐づく nonce が期待する値と一致しなかった時に発生する例外 */
-class InvoiceNonceMismatchException extends \RuntimeException {
+/**
+ * 402 Payment Required
+ *
+ * 料金の支払いをするまでリクエストを処理できない状態の時にスローされる例外クラス
+ */
+class PaymentRequiredException extends \RuntimeException {
 	/**
 	 * @param string          $message
 	 * @param int             $code

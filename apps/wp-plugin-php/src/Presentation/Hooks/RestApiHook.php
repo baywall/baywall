@@ -3,11 +3,16 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
+use Cornix\Serendipity\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
 use Cornix\Serendipity\Core\Application\UseCase\RefreshAccessToken;
 use Cornix\Serendipity\Core\Constant\WpConfig;
-use Cornix\Serendipity\Core\Domain\Exception\UnauthorizedAccessException;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
+use InvalidArgumentException;
+use Throwable;
+use WP_REST_Response;
 
 /**
  * REST APIのフック登録(GraphQLを除く)
@@ -25,34 +30,45 @@ class RestApiHook extends HookBase {
 	}
 
 	public function addActionRestApiInit(): void {
-		// アクセストークン発行用のエンドポイントを登録
+		// OAuth 2.0 ではアクセストークンリクエスト時にPOSTメソッドを使う。ここで登録するアクセストークン発行APIもそれに倣い、POSTメソッドを使用する。
+		//
+		// @see [RFC 6749 - The OAuth 2.0 Authorization Framework 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc6749.html)
+		// > The client MUST use the HTTP "POST" method when making access token requests.
+		// > クライアントは、アクセストークンリクエストを行うときにHTTPの「POST」メソッドを使用する必要があります。
+
+		// リフレッシュトークンを用いてアクセストークンを発行するAPIを登録
 		$success = register_rest_route(
 			WpConfig::REST_NAMESPACE,
 			WpConfig::REST_ROUTE_AUTH_REFRESH,
 			array(
-				// OAuth 2.0 ではアクセストークンリクエスト時にPOSTメソッドを使う。ここでもそれに従う。
-				//
-				// @see [RFC 6749 - The OAuth 2.0 Authorization Framework 日本語訳](https://tex2e.github.io/rfc-translater/html/rfc6749.html)
-				// > The client MUST use the HTTP "POST" method when making access token requests.
-				// > クライアントは、アクセストークンリクエストを行うときにHTTPの「POST」メソッドを使用する必要があります。
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->authRefreshHandler( $request ),
 				'permission_callback' => '__return_true',
 			)
 		);
+		assert( $success );
 
+		// 請求書トークンを用いてアクセストークンを発行するAPIを登録
+		$success = register_rest_route(
+			WpConfig::REST_NAMESPACE,
+			WpConfig::REST_ROUTE_AUTH_TOKEN_INVOICE,
+			array(
+				'methods'             => 'POST',
+				'callback'            => fn ( \WP_REST_Request $request ) => $this->authTokenInvoiceHandler( $request ),
+				'permission_callback' => '__return_true',
+			)
+		);
 		assert( $success );
 	}
 
 	public function authRefreshHandler( \WP_REST_Request $request ) {
 		// リフレッシュトークンを取得
 		$refresh_token_value = $_COOKIE[ WpConfig::COOKIE_NAME_REFRESH_TOKEN ] ?? null;
-		$app_logger          = $this->container->get( AppLogger::class );
 
 		try {
 			// リフレッシュトークンが送信されていない場合は例外をスロー
 			if ( $refresh_token_value === null ) {
-				throw new UnauthorizedAccessException( '[A018971D] Refresh token is missing.' );
+				throw new UnauthorizedException( '[A018971D] Refresh token is missing.' );
 			}
 
 			$access_token_value = $this->container->get( RefreshAccessToken::class )->handle( $refresh_token_value );
@@ -60,12 +76,55 @@ class RestApiHook extends HookBase {
 			return array(
 				'access_token' => $access_token_value,
 			);
-		} catch ( UnauthorizedAccessException $e ) {
-			$app_logger->debug( $e ); // 大量にアクセスされる可能性があるため、debugレベルでログ出力
+		} catch ( UnauthorizedException $e ) {
+			$this->container->get( AppLogger::class )->debug( $e );
 			// リフレッシュトークンが無効な場合、401エラーを返す
-			return new \WP_REST_Response(
+			return new WP_REST_Response(
 				array( 'message' => 'Unauthorized' ),
 				self::HTTP_STATUS_401_UNAUTHORIZED
+			);
+		} catch ( Throwable $e ) {
+			$this->container->get( AppLogger::class )->error( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Internal Server Error' ),
+				self::HTTP_STATUS_500_INTERNAL_SERVER_ERROR
+			);
+		}
+	}
+
+	public function authTokenInvoiceHandler( \WP_REST_Request $request ) {
+		// 請求書トークンをCookieから取得
+		/** @var string|null */
+		$invoice_token_string_value = $_COOKIE[ WpConfig::COOKIE_NAME_INVOICE_TOKEN ] ?? null;
+
+		try {
+			if ( $invoice_token_string_value === null ) {
+				throw new UnauthorizedException( '[A693201D] Invoice token is missing.' );
+			}
+
+			$result = $this->container->get( IssueAccessTokenByInvoiceToken::class )->handle( $invoice_token_string_value );
+			assert( array_key_exists( 'access_token', $result ) && is_string( $result['access_token'] ), '[F02C7C55] ' . json_encode( $result ) );
+			return new WP_REST_Response(
+				$result,
+				self::HTTP_STATUS_200_OK
+			);
+		} catch ( UnauthorizedException $e ) {
+			$this->container->get( AppLogger::class )->debug( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Unauthorized' ),
+				self::HTTP_STATUS_401_UNAUTHORIZED
+			);
+		} catch ( PaymentRequiredException $e ) {
+			$this->container->get( AppLogger::class )->debug( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Payment Required' ),
+				self::HTTP_STATUS_402_PAYMENT_REQUIRED
+			);
+		} catch ( Throwable $e ) {
+			$this->container->get( AppLogger::class )->error( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Internal Server Error' ),
+				self::HTTP_STATUS_500_INTERNAL_SERVER_ERROR
 			);
 		}
 	}

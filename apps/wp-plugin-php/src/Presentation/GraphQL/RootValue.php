@@ -7,13 +7,13 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveChain;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveChains;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveConsumerTermsVersion;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveCurrentSellerTerms;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveGetPaidContent;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategory;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveOracle;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveOracles;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolvePost;
-use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveRequestPaidContentByNonce;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSalesHistories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveChain;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveOracle;
@@ -45,32 +45,32 @@ class RootValue {
 		/** @var array<string,string> */
 		$resolvers = array(
 			// 非公開
-			'chain'                     => ResolveChain::class,
-			'oracle'                    => ResolveOracle::class,
-			'networkCategory'           => ResolveNetworkCategory::class,
-			'sellingContent'            => ResolveSellingContent::class,
-			'sellingPrice'              => ResolveSellingPrice::class,
-			'token'                     => ResolveToken::class,
+			'chain'                => ResolveChain::class,
+			'oracle'               => ResolveOracle::class,
+			'networkCategory'      => ResolveNetworkCategory::class,
+			'sellingContent'       => ResolveSellingContent::class,
+			'sellingPrice'         => ResolveSellingPrice::class,
+			'token'                => ResolveToken::class,
 
 			// Query
-			'chains'                    => ResolveChains::class,
-			'consumerTermsVersion'      => ResolveConsumerTermsVersion::class,
-			'currentSellerTerms'        => ResolveCurrentSellerTerms::class,
-			'networkCategories'         => ResolveNetworkCategories::class,
-			'oracles'                   => ResolveOracles::class,
-			'post'                      => ResolvePost::class,
-			'salesHistories'            => ResolveSalesHistories::class,
-			'seller'                    => ResolveSeller::class,
-			'serverSigner'              => ResolveServerSigner::class,
-			'tokens'                    => ResolveTokens::class,
+			'chains'               => ResolveChains::class,
+			'consumerTermsVersion' => ResolveConsumerTermsVersion::class,
+			'currentSellerTerms'   => ResolveCurrentSellerTerms::class,
+			'networkCategories'    => ResolveNetworkCategories::class,
+			'oracles'              => ResolveOracles::class,
+			'post'                 => ResolvePost::class,
+			'salesHistories'       => ResolveSalesHistories::class,
+			'seller'               => ResolveSeller::class,
+			'serverSigner'         => ResolveServerSigner::class,
+			'tokens'               => ResolveTokens::class,
 
 			// Mutation
-			'issueInvoice'              => ResolveIssueInvoice::class,
-			'requestPaidContentByNonce' => ResolveRequestPaidContentByNonce::class,
-			'saveChain'                 => ResolveSaveChain::class,
-			'saveOracle'                => ResolveSaveOracle::class,
-			'saveToken'                 => ResolveSaveToken::class,
-			'setSellerAgreedTerms'      => ResolveSetSellerAgreedTerms::class,
+			'issueInvoice'         => ResolveIssueInvoice::class,
+			'getPaidContent'       => ResolveGetPaidContent::class,
+			'saveChain'            => ResolveSaveChain::class,
+			'saveOracle'           => ResolveSaveOracle::class,
+			'saveToken'            => ResolveSaveToken::class,
+			'setSellerAgreedTerms' => ResolveSetSellerAgreedTerms::class,
 		);
 
 		$result = array();

@@ -22,7 +22,6 @@ class InvoiceTableRecord extends TableRecordBase {
 	protected string $payment_token_address;
 	protected string $payment_amount;
 	protected string $consumer_address;
-	protected string $nonce;
 
 	public function idValue(): string {
 		return $this->id;
@@ -50,8 +49,5 @@ class InvoiceTableRecord extends TableRecordBase {
 	}
 	public function consumerAddressValue(): string {
 		return $this->consumer_address;
-	}
-	public function nonceValue(): string {
-		return $this->nonce;
 	}
 }

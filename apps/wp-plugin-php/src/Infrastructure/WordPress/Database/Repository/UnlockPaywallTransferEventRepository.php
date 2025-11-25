@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
@@ -37,6 +38,12 @@ class UnlockPaywallTransferEventRepository {
 			$event->amount(),
 			$event->transferType()
 		);
+	}
+
+	/** 指定した請求書IDのトランザクションが書き込まれているブロック番号を取得します */
+	public function getBlockNumber( InvoiceId $invoice_id ): ?BlockNumber {
+		$record = $this->unlock_paywall_transaction_table->get( $invoice_id );
+		return BlockNumber::fromIntNullable( $record ? $record->blockNumberValue() : null );
 	}
 
 	/**

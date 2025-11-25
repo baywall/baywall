@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
+use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
@@ -12,16 +13,17 @@ use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenService;
 use Cornix\Serendipity\Core\Domain\Service\PriceExchangeService;
 use Cornix\Serendipity\Core\Domain\Service\TokenAmountConverter;
 use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
+use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
 use Cornix\Serendipity\Core\Infrastructure\Format\SolidityStrings;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Terms\ConsumerTermsProvider;
@@ -40,6 +42,9 @@ class ResolveIssueInvoice {
 	private InvoiceRepository $invoice_repository;
 	private ServerSignerRepository $server_signer_repository;
 	private WalletService $wallet_service;
+	private InvoiceTokenService $invoice_token_service;
+	private InvoiceTokenCookieProvider $invoice_token_cookie_provider;
+	private CookieWriter $cookie_writer;
 
 	public function __construct(
 		InitCrawledBlockNumber $init_crawled_block_number,
@@ -52,19 +57,25 @@ class ResolveIssueInvoice {
 		PriceExchangeService $price_exchange_service,
 		InvoiceRepository $invoice_repository,
 		ServerSignerRepository $server_signer_service,
-		WalletService $wallet_service
+		WalletService $wallet_service,
+		InvoiceTokenService $invoice_token_service,
+		InvoiceTokenCookieProvider $invoice_token_cookie_provider,
+		CookieWriter $cookie_writer
 	) {
-		$this->init_crawled_block_number = $init_crawled_block_number;
-		$this->user_access_checker       = $user_access_checker;
-		$this->transaction_service       = $transaction_service;
-		$this->token_repository          = $token_repository;
-		$this->post_repository           = $post_repository;
-		$this->seller_repository         = $seller_repository;
-		$this->token_amount_converter    = $token_amount_converter;
-		$this->price_exchange_service    = $price_exchange_service;
-		$this->invoice_repository        = $invoice_repository;
-		$this->server_signer_repository  = $server_signer_service;
-		$this->wallet_service            = $wallet_service;
+		$this->init_crawled_block_number     = $init_crawled_block_number;
+		$this->user_access_checker           = $user_access_checker;
+		$this->transaction_service           = $transaction_service;
+		$this->token_repository              = $token_repository;
+		$this->post_repository               = $post_repository;
+		$this->seller_repository             = $seller_repository;
+		$this->token_amount_converter        = $token_amount_converter;
+		$this->price_exchange_service        = $price_exchange_service;
+		$this->invoice_repository            = $invoice_repository;
+		$this->server_signer_repository      = $server_signer_service;
+		$this->wallet_service                = $wallet_service;
+		$this->invoice_token_service         = $invoice_token_service;
+		$this->invoice_token_cookie_provider = $invoice_token_cookie_provider;
+		$this->cookie_writer                 = $cookie_writer;
 	}
 
 	public function handle( array $root_value, array $args ) {
@@ -87,11 +98,13 @@ class ResolveIssueInvoice {
 				// クロール済みブロック番号を初期化
 				$this->init_crawled_block_number->handle( $chain_id->value() );
 
-				$this->transaction_service->commit();
+				// 請求書トークンを発行し、Cookieに保存
+				$invoice_token = $this->invoice_token_service->issue( $invoice->id() );
+				$cookie        = $this->invoice_token_cookie_provider->get( $invoice_token );
+				$this->cookie_writer->set( $cookie );
 
 				return array(
 					'invoiceIdHex'    => $invoice->id()->hex(),
-					'nonce'           => $invoice->nonce()->value(),
 					'serverMessage'   => $signed_data->message()->value(),
 					'serverSignature' => $signed_data->signature()->value(),
 					'paymentAmount'   => $invoice->paymentAmount()->value(),
@@ -126,7 +139,6 @@ class ResolveIssueInvoice {
 			$payment_token_address,
 			$payment_amount,
 			$consumer_address,
-			InvoiceNonce::generate() // 新規nonce
 		);
 		assert( $this->invoice_repository->get( $invoice->id() ) === null, '[A9E90E49] Duplicate invoice ID detected.' );   // 請求書IDの重複チェック(存在しないIDが発行されていることを確認)
 
