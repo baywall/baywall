@@ -29,6 +29,11 @@ class TableNameProvider {
 		return $this->addPrefix( 'invoice' );
 	}
 
+	/** 発行した請求書トークンを記録するテーブル名 */
+	public function invoiceToken(): string {
+		return $this->addPrefix( 'invoice_token' );
+	}
+
 	/** ペイウォール解除時のトランザクションに関するデータを記録するテーブル名 */
 	public function unlockPaywallTransaction(): string {
 		return $this->addPrefix( 'unlock_paywall_transaction' );

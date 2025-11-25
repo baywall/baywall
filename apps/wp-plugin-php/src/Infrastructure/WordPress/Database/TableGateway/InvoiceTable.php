@@ -33,8 +33,7 @@ class InvoiceTable extends TableBase {
 				`seller_address`,
 				`payment_token_address`,
 				`payment_amount`,
-				`consumer_address`,
-				`nonce`
+				`consumer_address`
 			FROM `{$this->tableName()}`
 			WHERE `id` = %s
 		SQL;
@@ -52,9 +51,9 @@ class InvoiceTable extends TableBase {
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->tableName()}`
-				( `id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_amount`, `consumer_address`, `nonce` )
+				( `id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_amount`, `consumer_address` )
 			VALUES
-				( %s, %d, %d, %s, %s, %s, %s, %s, %s, %s )
+				( %s, %d, %d, %s, %s, %s, %s, %s, %s )
 			ON DUPLICATE KEY UPDATE
 				`post_id` = VALUES(`post_id`),
 				`chain_id` = VALUES(`chain_id`),
@@ -63,8 +62,7 @@ class InvoiceTable extends TableBase {
 				`seller_address` = VALUES(`seller_address`),
 				`payment_token_address` = VALUES(`payment_token_address`),
 				`payment_amount` = VALUES(`payment_amount`),
-				`consumer_address` = VALUES(`consumer_address`),
-				`nonce` = VALUES(`nonce`)
+				`consumer_address` = VALUES(`consumer_address`)
 		SQL;
 
 		$sql = $this->prepare(
@@ -78,7 +76,6 @@ class InvoiceTable extends TableBase {
 			$invoice->paymentTokenAddress()->value(),
 			$invoice->paymentAmount()->value(),
 			$invoice->consumerAddress()->value(),
-			$invoice->nonce() ? $invoice->nonce()->value() : null
 		);
 
 		$this->safeQuery( $sql );

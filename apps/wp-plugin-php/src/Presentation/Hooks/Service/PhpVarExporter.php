@@ -4,7 +4,6 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks\Service;
 
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\RestPropertyProvider;
 
 class PhpVarExporter {
 
@@ -30,14 +29,12 @@ class PhpVarExporter {
 		$wp_rest_nonce = wp_create_nonce( 'wp_rest' );
 
 		// GraphQL APIのURL
-		$wp_property   = new WordPressPropertyProvider();
-		$rest_property = new RestPropertyProvider();
-		$graphql_url   = untrailingslashit( $wp_property->apiRootUrl() ) . '/' . $rest_property->namespace() . '/' . $rest_property->graphQlRoute();
+		$wp_property = new WordPressPropertyProvider();
 
 		// 出力する変数
 		$result = array(
 			'wpRestNonce' => $wp_rest_nonce,
-			'graphqlUrl'  => $graphql_url,
+			'apiRoot'     => trailingslashit( $wp_property->apiRootUrl() ),
 		);
 
 		// 現在の投稿IDが取得できる場合は追加(取得できなかった場合はnull)

@@ -4,6 +4,8 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Infrastructure\GraphQL\PluginSchemaProvider;
 use Cornix\Serendipity\Core\Infrastructure\GraphQL\Rule\MutationFieldLimitRule;
@@ -48,9 +50,6 @@ class GraphQLHook extends HookBase {
 	}
 
 	public function callback( \WP_REST_Request $request ) {
-
-		$app_logger = $this->container->get( AppLogger::class );
-
 		// リクエストボディをデコード
 		$input           = json_decode( $request->get_body(), true );
 		$query           = $input['query'];
@@ -74,11 +73,46 @@ class GraphQLHook extends HookBase {
 		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values )
 			// https://webonyx.github.io/graphql-php/error-handling/#custom-error-handling-and-formatting
 			->setErrorsHandler(
-				function ( array $errors, callable $formatter ) use ( $app_logger ): array {
-					foreach ( $errors as $error ) {
-						$app_logger->error( $error ); // エラーログを出力
-					}
-					return array_map( $formatter, $errors );
+				function ( array $errors, callable $formatter ): array {
+					return array_map(
+						function ( \GraphQL\Error\Error $error ) use ( $formatter ) {
+							$prev_error = $error->getPrevious();
+
+							$app_logger = $this->container->get( AppLogger::class );
+							$app_logger->error( $error );
+							if ( $prev_error ) {
+								$app_logger->error( $prev_error );
+							}
+
+							$extensions = $error->getExtensions() ?? array();
+							$message    = null;
+
+							// エラーのメッセージを抽象的なものに置き換える
+							if ( $prev_error instanceof PaymentRequiredException ) {
+								$extensions['code'] = 'PAYMENT_REQUIRED';
+								$message            = 'Payment Required';
+							} elseif ( $prev_error instanceof UnauthorizedException ) {
+								$extensions['code'] = 'UNAUTHORIZED';
+								$message            = 'Unauthorized';
+							} else {
+								$extensions['code'] = 'INTERNAL_SERVER_ERROR';
+								$message            = 'Internal Server Error';
+							}
+
+							$new_error = new \GraphQL\Error\Error(
+								$message, // $error->getPrevious()->getMessage(), // message
+								null, // $error->getNodes(), // nodes
+								null, // $error->getSource(), // source
+								null, // $error->getPositions(), // positions
+								null, // $error->getPath(), // path
+								null, // $error, // previous
+								$extensions // $error->getExtensions() // extensions
+							);
+
+							return $formatter( $new_error );
+						},
+						$errors
+					);
 				}
 			)
 			->toArray();
