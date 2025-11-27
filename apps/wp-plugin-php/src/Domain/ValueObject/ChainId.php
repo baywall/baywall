@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /**
  * チェーンIDを表す値オブジェクト
  */
-class ChainId {
+class ChainId implements ValueObject {
 
 	private function __construct( int $chain_id_value ) {
 		if ( $chain_id_value <= 0 ) {

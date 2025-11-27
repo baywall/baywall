@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /**
  * 通貨シンボルを表すValueObject
  */
-final class Symbol {
+final class Symbol implements ValueObject {
 
 	private function __construct( string $symbol_value ) {
 		self::checkValidSymbolFormat( $symbol_value );

@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /** 記事の内容を表現するクラス */
-class Content {
+class Content implements ValueObject {
 	protected function __construct( string $content_text ) {
 		$this->content_text = $content_text;
 	}

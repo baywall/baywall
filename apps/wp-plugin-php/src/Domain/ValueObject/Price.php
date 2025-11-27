@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-class Price {
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
+class Price implements ValueObject {
 	private function __construct( Amount $amount, Symbol $symbol ) {
 		$this->amount = $amount;
 		$this->symbol = $symbol;

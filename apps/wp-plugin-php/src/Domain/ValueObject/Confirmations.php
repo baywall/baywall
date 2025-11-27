@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /**
  * ブロックチェーンのトランザクションの確認数を表すクラス
  */
-final class Confirmations {
+final class Confirmations implements ValueObject {
 
 	private function __construct( $confirmations_value ) {
 		self::checkConfirmationsValue( $confirmations_value );

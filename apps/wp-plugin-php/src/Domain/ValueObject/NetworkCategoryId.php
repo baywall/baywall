@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /**
  * ネットワークカテゴリIDを表すクラス
  */
-final class NetworkCategoryId {
+final class NetworkCategoryId implements ValueObject {
 	/** メインネット(Ethereumメインネット、Polygonメインネット等) */
 	private const MAINNET = 1;
 	/** テストネット(Ethereum Sepolia等) */

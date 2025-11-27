@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
 use Cornix\Serendipity\Core\Infrastructure\Format\Padding;
 use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
 
 /**
  * アドレス(ウォレットアドレス/コントラクトアドレス)を表すクラス
  */
-final class Address {
+final class Address implements ValueObject {
 
 	private function __construct( string $address_value ) {
 		self::checkValidAddressFormat( $address_value );
@@ -35,7 +36,7 @@ final class Address {
 		return ( new Padding() )->toBytes32Hex( $this->value() );
 	}
 
-	public function __toString() {
+	public function __toString(): string {
 		return $this->address_value;
 	}
 

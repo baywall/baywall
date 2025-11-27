@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
 use DivisionByZeroError;
 use InvalidArgumentException;
 
 /**
  * 数量等を表すクラス
  */
-final class Amount {
+final class Amount implements ValueObject {
 
 	private function __construct( string $amount_text ) {
 		if ( false !== strpos( $amount_text, '.' ) ) {
@@ -75,7 +76,7 @@ final class Amount {
 		return $this->amount_text;
 	}
 
-	public function __toString() {
+	public function __toString(): string {
 		return $this->value();
 	}
 

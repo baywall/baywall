@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /**
  * ブロック番号を表すクラス
  */
-class BlockNumber {
+class BlockNumber implements ValueObject {
 
 	private function __construct( int $block_number_value ) {
 		$this->block_number_value = $block_number_value;

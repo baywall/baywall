@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /** 署名のためのメッセージ */
-class SigningMessage {
+class SigningMessage implements ValueObject {
 
 	private function __construct( string $signing_message_value ) {
 		$this->signing_message_value = $signing_message_value;

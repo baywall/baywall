@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /**
  * 投稿IDを表す値オブジェクト
  */
-class PostId {
+class PostId implements ValueObject {
 
 	public function __construct( int $post_id ) {
 		if ( $post_id <= 0 ) {

@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /** 署名データ */
-class Signature {
+class Signature implements ValueObject {
 
 	private function __construct( string $signature ) {
 		$this->checkFormat( $signature );

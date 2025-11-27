@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /**
  * 小数点以下桁数を表す値オブジェクト
  */
-class Decimals {
+class Decimals implements ValueObject {
 
 	private function __construct( int $decimals_value ) {
 		if ( $decimals_value < 0 ) {

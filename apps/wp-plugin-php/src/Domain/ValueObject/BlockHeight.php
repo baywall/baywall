@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /**
  * ブロック高を表すクラス
  */
-class BlockHeight {
+class BlockHeight implements ValueObject {
 
 	private function __construct( int $block_height_value ) {
 		if ( $block_height_value < 0 ) {
