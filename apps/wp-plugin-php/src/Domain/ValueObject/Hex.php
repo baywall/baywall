@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
 use InvalidArgumentException;
 
 /**
  * 16進数の文字列を表す値オブジェクト
  */
-class Hex {
+class Hex implements ValueObject {
 
 	private function __construct( string $hex_value ) {
 		// 16進数の形式をチェック(大文字のA-Fは許容しない)

@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /**
  * ネットワークカテゴリを表すクラス
  */
-final class NetworkCategory {
+final class NetworkCategory implements ValueObject {
 
 	private function __construct( NetworkCategoryId $network_category_id, string $name ) {
 		$this->id   = $network_category_id;

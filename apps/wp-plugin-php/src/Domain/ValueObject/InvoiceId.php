@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
 use yamaneyuta\Ulid;
 
 /**
  * 請求書IDを表すクラス
  */
-class InvoiceId {
+class InvoiceId implements ValueObject {
 
 	private function __construct( Ulid $ulid ) {
 		$this->ulid = $ulid;

@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
 /**
  * bytes32型の値を表すクラス
  */
-final class Bytes32 {
+final class Bytes32 implements ValueObject {
 
 	private function __construct( string $bytes32_value ) {
 		self::checkValidBytes32Format( $bytes32_value );
@@ -28,7 +30,7 @@ final class Bytes32 {
 		return $this->bytes32_value;
 	}
 
-	public function __toString() {
+	public function __toString(): string {
 		return $this->bytes32_value;
 	}
 

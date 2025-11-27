@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-class TransactionHash {
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
+class TransactionHash implements ValueObject {
 	private function __construct( string $hash ) {
 		$this->hash = $hash;
 	}

@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-class UnlockPaywallTransferType {
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+
+class UnlockPaywallTransferType implements ValueObject {
 
 	// 以下の定義はコントラクトで定義されている内容と一致させるようにしてください。
 	/** 販売手数料 */
@@ -22,6 +24,10 @@ class UnlockPaywallTransferType {
 
 	public function value(): int {
 		return $this->value;
+	}
+
+	public function __toString(): string {
+		return (string) $this->value;
 	}
 
 	public static function from( int $unlock_paywall_transfer_type_value ): self {

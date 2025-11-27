@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
 use DateTimeImmutable;
 
-class UnixTimestamp {
+class UnixTimestamp implements ValueObject {
 
 	private int $timestamp;
 
