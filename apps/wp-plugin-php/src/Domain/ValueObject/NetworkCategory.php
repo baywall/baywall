@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * ネットワークカテゴリを表すクラス
  */
-final class NetworkCategory implements \Stringable {
+final class NetworkCategory {
 
 	private function __construct( NetworkCategoryId $network_category_id, string $name ) {
 		$this->id   = $network_category_id;

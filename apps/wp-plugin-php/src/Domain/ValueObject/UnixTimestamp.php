@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use DateTimeImmutable;
 
-class UnixTimestamp implements \Stringable {
+class UnixTimestamp {
 
 	private int $timestamp;
 

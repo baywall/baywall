@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-class Rate implements \Stringable {
+class Rate {
 	/**
 	 * Rateインスタンスを生成します。
 	 *

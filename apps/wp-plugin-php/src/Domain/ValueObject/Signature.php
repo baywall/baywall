@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 /** 署名データ */
-class Signature implements \Stringable {
+class Signature {
 
 	private function __construct( string $signature ) {
 		$this->checkFormat( $signature );

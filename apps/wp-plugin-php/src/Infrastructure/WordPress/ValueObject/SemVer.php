@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
 /**
  * セマンティックバージョンを表す値オブジェクト
  */
-class SemVer implements \Stringable {
+class SemVer {
 
 	protected function __construct( string $sem_ver_value ) {
 		$this->checkSemVerValue( $sem_ver_value );

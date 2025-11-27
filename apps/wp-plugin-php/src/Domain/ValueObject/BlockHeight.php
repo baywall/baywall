@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * ブロック高を表すクラス
  */
-class BlockHeight implements \Stringable {
+class BlockHeight {
 
 	private function __construct( int $block_height_value ) {
 		if ( $block_height_value < 0 ) {

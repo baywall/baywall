@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 /**
  * バイトデータを表すクラス
  */
-class Bytes implements \Stringable {
+class Bytes {
 
 	private function __construct( string $bin_value ) {
 		$this->bin_value = $bin_value;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 /** 記事の内容を表現するクラス */
-class Content implements \Stringable {
+class Content {
 	protected function __construct( string $content_text ) {
 		$this->content_text = $content_text;
 	}

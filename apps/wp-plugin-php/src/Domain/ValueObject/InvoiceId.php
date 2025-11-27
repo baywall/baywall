@@ -8,7 +8,7 @@ use yamaneyuta\Ulid;
 /**
  * 請求書IDを表すクラス
  */
-class InvoiceId implements \Stringable {
+class InvoiceId {
 
 	private function __construct( Ulid $ulid ) {
 		$this->ulid = $ulid;

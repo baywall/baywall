@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * チェーンIDを表す値オブジェクト
  */
-class ChainId implements \Stringable {
+class ChainId {
 
 	private function __construct( int $chain_id_value ) {
 		if ( $chain_id_value <= 0 ) {

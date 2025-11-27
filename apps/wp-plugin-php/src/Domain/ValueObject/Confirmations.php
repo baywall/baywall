@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * ブロックチェーンのトランザクションの確認数を表すクラス
  */
-final class Confirmations implements \Stringable {
+final class Confirmations {
 
 	private function __construct( $confirmations_value ) {
 		self::checkConfirmationsValue( $confirmations_value );
