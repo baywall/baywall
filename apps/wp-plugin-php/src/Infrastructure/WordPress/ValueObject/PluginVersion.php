@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
 /**
  * プラグインバージョンを表す値オブジェクト
  */
-class PluginVersion extends SemVer implements \Stringable {
+class PluginVersion extends SemVer {
 
 	public function __construct( string $plugin_version ) {
 		parent::__construct( $plugin_version );

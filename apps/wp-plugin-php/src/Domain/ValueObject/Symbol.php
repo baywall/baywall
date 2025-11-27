@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * 通貨シンボルを表すValueObject
  */
-final class Symbol implements \Stringable {
+final class Symbol {
 
 	private function __construct( string $symbol_value ) {
 		self::checkValidSymbolFormat( $symbol_value );

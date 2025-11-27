@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 /** 利用規約バージョン */
-class TermsVersion implements \Stringable {
+class TermsVersion {
 	private function __construct( int $version_value ) {
 		assert( $version_value > 0, '[1AA762E9] TermsVersion must be greater than 0' );
 		$this->version_value = $version_value;

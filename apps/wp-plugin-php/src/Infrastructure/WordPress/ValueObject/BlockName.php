@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
 /**
  * Gutenbergのブロック名を表す値オブジェクト
  */
-class BlockName implements \Stringable {
+class BlockName {
 
 	private function __construct( string $block_name_value ) {
 		$this->checkBlockNameValue( $block_name_value );

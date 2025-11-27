@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
 /**
  * RPC URLを表すValueObjectクラス
  */
-final class RpcUrl implements \Stringable {
+final class RpcUrl {
 
 	private function __construct( string $rpc_url_value ) {
 		self::checkValidRpcUrlFormat( $rpc_url_value );

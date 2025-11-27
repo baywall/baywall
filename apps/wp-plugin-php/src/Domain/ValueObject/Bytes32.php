@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * bytes32型の値を表すクラス
  */
-final class Bytes32 implements \Stringable {
+final class Bytes32 {
 
 	private function __construct( string $bytes32_value ) {
 		self::checkValidBytes32Format( $bytes32_value );

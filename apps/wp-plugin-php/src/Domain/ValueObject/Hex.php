@@ -8,7 +8,7 @@ use InvalidArgumentException;
 /**
  * 16進数の文字列を表す値オブジェクト
  */
-class Hex implements \Stringable {
+class Hex {
 
 	private function __construct( string $hex_value ) {
 		// 16進数の形式をチェック(大文字のA-Fは許容しない)

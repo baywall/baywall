@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 /**
  * ブロック番号を表すクラス
  */
-class BlockNumber implements \Stringable {
+class BlockNumber {
 
 	private function __construct( int $block_number_value ) {
 		$this->block_number_value = $block_number_value;
