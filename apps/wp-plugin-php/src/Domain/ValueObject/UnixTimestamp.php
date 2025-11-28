@@ -42,6 +42,10 @@ class UnixTimestamp implements ValueObject {
 		return new self( time() );
 	}
 
+	public function equals( self $other ): bool {
+		return $this->timestamp === $other->timestamp;
+	}
+
 	public function __toString(): string {
 		return $this->toMySqlValue();
 	}
