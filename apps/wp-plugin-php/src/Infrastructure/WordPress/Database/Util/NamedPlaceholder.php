@@ -72,7 +72,7 @@ class NamedPlaceholder {
 
 	/** プレースホルダのフォーマットに一致しているかどうかを返します */
 	private function isPlaceholderFormat( string $key ): bool {
-		return 1 === preg_match( '/^:[a-z_]+$/', $key ); // 例: :key, :another_key など
+		return 1 === preg_match( '/^:[a-z0-9_]+$/', $key ); // 例: :key, :another_key など
 	}
 	/** プレースホルダのフォーマットが不正な場合に例外をスローします */
 	private function checkPlaceholderFormat( string $key ): void {
