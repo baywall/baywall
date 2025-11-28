@@ -35,6 +35,23 @@ class MyWpdb {
 	}
 
 	/**
+	 * wpdb->query
+	 *
+	 * @param string $query
+	 * @return int
+	 */
+	public function query( string $query ): int {
+		$result = $this->wpdb->query( $query );
+		if ( $result === false ) {
+			throw new RuntimeException( "[D76677B0] SQL query failed: {$query}. " . $this->wpdb->last_error );
+		}
+		// CREATE,ALTER等の時はtrueが返ってくるが、DDLは$this->dbh->queryで実行するため、
+		// ここは必ずintになる
+		assert( is_int( $result ), "[4E471767] {$result}" );
+		return $result;
+	}
+
+	/**
 	 * wpdbインスタンスを使用してテーブルへデータを挿入します。
 	 *
 	 * @param string[]|string $format
