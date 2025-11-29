@@ -57,6 +57,16 @@ class WpConfig {
 	/** 請求書トークンを保存するクッキー名 */
 	public const COOKIE_NAME_INVOICE_TOKEN = self::REST_NAMESPACE . '_invoice_token';
 
+	/**
+	 * ERC-4361の署名用メッセージに含めるユーザー向けの説明文。
+	 * トークンの有効期限や別ブラウザなど、認証情報が存在しない状況でリフレッシュトークンを発行する時に使用する。
+	 *
+	 * https://eips.ethereum.org/EIPS/eip-4361 には、
+	 * > A human-readable ASCII assertion that the user will sign which MUST NOT include '\n' (the byte 0x0a).
+	 * とあるので多言語対応は不要。
+	 */
+	public const ERC4361_STATEMENT = 'Sign this message to unlock the paywall.';
+
 
 	/**
 	 * ペイウォールブロックスクリプトのハンドル名
