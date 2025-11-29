@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
 /** 署名のためのメッセージ */
 class SigningMessage implements ValueObject {
 
-	private function __construct( string $signing_message_value ) {
+	protected function __construct( string $signing_message_value ) {
 		$this->signing_message_value = $signing_message_value;
 	}
 	public static function from( string $signing_message_value ): self {
