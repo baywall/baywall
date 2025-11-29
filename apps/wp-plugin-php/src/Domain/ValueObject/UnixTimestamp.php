@@ -33,6 +33,14 @@ class UnixTimestamp implements ValueObject {
 	public function toMySqlValue(): string {
 		return ( new DateTimeImmutable() )->setTimestamp( $this->timestamp )->format( 'Y-m-d H:i:s' );
 	}
+	/**
+	 * RFC3339形式の文字列を取得します
+	 *
+	 * 例: `2025-11-29T01:45:50+00:00`
+	 */
+	public function toRfc3339Value(): string {
+		return ( new DateTimeImmutable() )->setTimestamp( $this->timestamp )->format( DateTimeImmutable::RFC3339 );
+	}
 
 	public function value(): int {
 		return $this->timestamp;
