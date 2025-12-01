@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
 
 use Cornix\Serendipity\Core\Application\ValueObject\Erc4361NonceString;
+use Tuupola\Base62;
 
 class WpErc4361NonceString extends Erc4361NonceString {
 
@@ -15,11 +16,9 @@ class WpErc4361NonceString extends Erc4361NonceString {
 		// https://eips.ethereum.org/EIPS/eip-4361 には、以下のように説明がある。
 		// > A random string typically chosen by the relying party and used to prevent replay attacks, at least 8 alphanumeric characters.
 		//
-		// base64を使う場合、8文字分は6バイト必要。
-		// => ここでは8バイトの乱数をbase64エンコードした値をnonceとして使う。
+		// 記号が含まれる時、MetaMaskでうまく解釈されない状況になったため、base64ではなくbase62を使用する。
+		// ※ 記号が含まれる場合、MetaMask上でEIP4361用の表示画面でなく通常の署名画面になるだけなので、署名自体は可能。
 
-		$random_bytes = random_bytes( 8 );
-		$nonce_string = rtrim( base64_encode( $random_bytes ), '=' );
-		return new self( $nonce_string );
+		return new self( ( new Base62() )->encode( random_bytes( 8 ) ) );
 	}
 }
