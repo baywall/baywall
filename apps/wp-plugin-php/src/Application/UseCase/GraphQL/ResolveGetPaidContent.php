@@ -33,13 +33,16 @@ class ResolveGetPaidContent {
 
 		$invoice_id = InvoiceId::fromHex( Hex::from( $args['invoiceId'] ) );
 
-		return $this->transaction_service->transactional(
+		$this->transaction_service->transactional(
 			function () use ( $invoice_id ) {
-
 				// 請求書のチェーンに対してAppコントラクトイベントをクロール
 				$invoice = $this->invoice_repository->get( $invoice_id );
 				$this->app_contract_crawl_service->crawl( $invoice->chainId() );
+			}
+		);
 
+		return $this->transaction_service->transactional(
+			function () use ( $invoice_id ) {
 				// 有料コンテンツを取得
 				$paid_content_value = $this->get_paid_content->handle( $invoice_id->hex() );
 
