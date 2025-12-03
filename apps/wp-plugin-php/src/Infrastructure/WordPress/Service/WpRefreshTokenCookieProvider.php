@@ -7,7 +7,6 @@ use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
-use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
 
 class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 
@@ -33,17 +32,7 @@ class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 	/** Cookieに書き込むリフレッシュトークンのパスを取得します */
 	private function path(): string {
 		$api_root_url = $this->wp_property->apiRootUrl();
-		if ( Strings::contains( $api_root_url, '?' ) ) {
-			assert( Strings::contains( $api_root_url, '/index.php?rest_route=' ), "[E58E182F] {$api_root_url}" );
-			// パーマリンクがデフォルトのままの場合、pathはルートを指定
-			// ※ セキュリティが低くなるのでダッシュボード等で警告を表示
-			$path = '/';
-		} else {
-			assert( Strings::contains( $api_root_url, '/wp-json/' ), "[25ECA6F7] api_root_url: {$api_root_url}" );
-			$path = parse_url( $api_root_url, PHP_URL_PATH ) . WpConfig::REST_NAMESPACE . '/' . WpConfig::REST_ROUTE_AUTH_REFRESH;
-			assert( ! Strings::contains( $path, '//' ), "[FAB98DDF] {$api_root_url}" );
-		}
-		return $path;
+		return parse_url( trailingslashit( $api_root_url ) . WpConfig::REST_NAMESPACE . '/' . WpConfig::REST_ROUTE_AUTH_REFRESH, PHP_URL_PATH );
 	}
 
 	private function secure(): bool {
