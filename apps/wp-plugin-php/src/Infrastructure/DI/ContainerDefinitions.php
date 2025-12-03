@@ -27,7 +27,7 @@ use Cornix\Serendipity\Core\Domain\Repository\RefreshTokenRepository;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
-use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenService;
+use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenProvider;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
 use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
@@ -58,7 +58,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenExpira
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361NonceProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361PropertyProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenCookieProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenService;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
@@ -113,7 +113,7 @@ final class ContainerDefinitions {
 			RefreshTokenCookieProvider::class    => autowire( WpRefreshTokenCookieProvider::class ),
 			InvoiceTokenCookieProvider::class    => autowire( WpInvoiceTokenCookieProvider::class ),
 			RefreshTokenService::class           => autowire( WpRefreshTokenService::class ),
-			InvoiceTokenService::class           => autowire( WpInvoiceTokenService::class ),
+			InvoiceTokenProvider::class          => autowire( WpInvoiceTokenProvider::class ),
 			Erc4361PropertyProvider::class       => autowire( WpErc4361PropertyProvider::class ),
 			Erc4361NonceProvider::class          => autowire( WpErc4361NonceProvider::class ),
 
