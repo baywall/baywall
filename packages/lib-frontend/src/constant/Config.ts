@@ -1,4 +1,5 @@
 export class Config {
+	// istanbul ignore next
 	private constructor() {} // eslint-disable-line no-useless-constructor
 
 	/**
