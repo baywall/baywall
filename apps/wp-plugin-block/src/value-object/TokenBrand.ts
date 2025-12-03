@@ -1,1 +1,1 @@
-export const brand: unique symbol = Symbol( 'TokenBrand' );
+export const brand: unique symbol = Symbol( 'Token' );
