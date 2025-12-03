@@ -8,19 +8,14 @@ use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceTokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 
-abstract class InvoiceTokenService {
+class InvoiceTokenService {
 
-	/** 請求書トークン文字列を生成します */
-	abstract protected function generateInvoiceTokenString(): InvoiceTokenString;
-
-	/** 請求書トークンの有効期限を取得します */
-	abstract protected function getExpiresAt(): UnixTimestamp;
-
+	private InvoiceTokenProvider $invoice_token_provider;
 	private InvoiceTokenRepository $invoice_token_repository;
 
-	protected function __construct( InvoiceTokenRepository $invoice_token_repository ) {
+	public function __construct( InvoiceTokenProvider $invoice_token_provider, InvoiceTokenRepository $invoice_token_repository ) {
+		$this->invoice_token_provider   = $invoice_token_provider;
 		$this->invoice_token_repository = $invoice_token_repository;
 	}
 
@@ -30,8 +25,8 @@ abstract class InvoiceTokenService {
 	public function issue( InvoiceId $invoice_id ): InvoiceToken {
 		$new_invoice_token = InvoiceToken::create(
 			$invoice_id,
-			$this->generateInvoiceTokenString(),
-			$this->getExpiresAt(),
+			$this->invoice_token_provider->generateInvoiceTokenString(),
+			$this->invoice_token_provider->getExpiresAt(),
 			null // 請求書トークン生成時、`revoked_at`はnullに設定
 		);
 
@@ -64,8 +59,8 @@ abstract class InvoiceTokenService {
 		// 新しい請求書トークンを生成して保存
 		$new_invoice_token = InvoiceToken::create(
 			$invoice_token->invoiceId(),
-			$this->generateInvoiceTokenString(),
-			$this->getExpiresAt(),
+			$this->invoice_token_provider->generateInvoiceTokenString(),
+			$this->invoice_token_provider->getExpiresAt(),
 			null // 請求書トークン生成時、`revoked_at`はnullに設定
 		);
 		$this->invoice_token_repository->add( $new_invoice_token );
