@@ -1,5 +1,6 @@
-import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
-import { brand } from './NetworkCategoryBrand';
+import { NetworkCategoryId, Symbol as TokenSymbol } from '@serendipity/lib-value-object';
+
+const brand: unique symbol = Symbol( 'NetworkCategory' );
 
 export class NetworkCategory {
 	/** 型区別用のフィールド */
@@ -8,15 +9,15 @@ export class NetworkCategory {
 
 	public readonly id: NetworkCategoryId;
 	public readonly name: string;
-	public readonly sellableSymbols: Symbol[];
+	public readonly sellableSymbols: TokenSymbol[];
 
-	private constructor( id: NetworkCategoryId, name: string, sellableSymbols: Symbol[] ) {
+	private constructor( id: NetworkCategoryId, name: string, sellableSymbols: TokenSymbol[] ) {
 		this.id = id;
 		this.name = name;
 		this.sellableSymbols = sellableSymbols;
 	}
 
-	public static from( id: NetworkCategoryId, name: string, sellableSymbols: Symbol[] ): NetworkCategory {
+	public static from( id: NetworkCategoryId, name: string, sellableSymbols: TokenSymbol[] ): NetworkCategory {
 		return new NetworkCategory( id, name, sellableSymbols );
 	}
 }
