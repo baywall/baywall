@@ -5,7 +5,7 @@ const brand: unique symbol = Symbol( 'HttpUrl' );
 /** HTTPのURLを表すvalue-object */
 export class HttpUrl implements ValueObject< HttpUrl > {
 	/** 型区別用のフィールド */
-	private readonly [ brand ]!: void;
+	private [ brand ]!: void;
 
 	public readonly value: string;
 

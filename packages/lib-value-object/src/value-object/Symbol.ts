@@ -5,7 +5,7 @@ import { ValueObject } from './base/ValueObject';
 /** 通貨記号を表すvalue-object */
 export class Symbol implements ValueObject< Symbol > {
 	/** 型区別用のフィールド */
-	private readonly [ brand ]!: void;
+	private [ brand ]!: void;
 
 	public readonly value: string;
 
