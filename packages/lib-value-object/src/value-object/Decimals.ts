@@ -1,6 +1,6 @@
 import { ValueObject } from './base/ValueObject';
 
-const brand: unique symbol = Symbol( 'DecimalsBrand' );
+const brand: unique symbol = Symbol( 'Decimals' );
 
 /** 小数点以下桁数を表すvalue-object */
 export class Decimals implements ValueObject< Decimals > {

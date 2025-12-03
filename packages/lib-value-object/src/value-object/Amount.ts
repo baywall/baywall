@@ -1,6 +1,6 @@
 import { ValueObject } from './base/ValueObject';
 
-const brand: unique symbol = Symbol( 'AmountBrand' );
+const brand: unique symbol = Symbol( 'Amount' );
 
 /** 数量を表すvalue-object */
 export class Amount implements ValueObject< Amount > {

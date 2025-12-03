@@ -1,4 +1,4 @@
-const brand: unique symbol = Symbol( 'PostIdBrand' );
+const brand: unique symbol = Symbol( 'PostId' );
 
 /** 投稿IDを表すvalue-object */
 export class PostId {
