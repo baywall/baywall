@@ -1,1 +1,1 @@
-export const brand: unique symbol = Symbol( 'NetworkCategoryBrand' );
+export const brand: unique symbol = Symbol( 'NetworkCategory' );
