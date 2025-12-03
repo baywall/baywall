@@ -22,32 +22,6 @@ export class NetworkCategoryId implements ValueObject< NetworkCategoryId > {
 		return `${ this.value }`;
 	}
 
-	/** @deprecated */
-	public get isMainnet(): boolean {
-		return this.equals( NetworkCategoryId.Mainnet );
-	}
-	/** @deprecated */
-	public get isTestnet(): boolean {
-		return this.equals( NetworkCategoryId.Testnet );
-	}
-	/** @deprecated */
-	public get isPrivatenet(): boolean {
-		return this.equals( NetworkCategoryId.Privatenet );
-	}
-
-	/** @deprecated メインネットのネットワークカテゴリIDを表すインスタンスを取得します */
-	public static get Mainnet(): NetworkCategoryId {
-		return NetworkCategoryId.from( NetworkCategoryIdValue.Mainnet );
-	}
-	/** @deprecated テストネットのネットワークカテゴリIDを表すインスタンスを取得します */
-	public static get Testnet(): NetworkCategoryId {
-		return NetworkCategoryId.from( NetworkCategoryIdValue.Testnet );
-	}
-	/** @deprecated プライベートネットのネットワークカテゴリIDを表すインスタンスを取得します */
-	public static get Privatenet(): NetworkCategoryId {
-		return NetworkCategoryId.from( NetworkCategoryIdValue.Privatenet );
-	}
-
 	public equals( other: NetworkCategoryId ): boolean {
 		return this.value === other.value;
 	}
