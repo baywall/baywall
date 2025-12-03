@@ -84,4 +84,8 @@ class TableNameProvider {
 	public function refreshToken(): string {
 		return $this->addPrefix( 'refresh_token' );
 	}
+
+	public function erc4361Nonce(): string {
+		return $this->addPrefix( 'erc4361_nonce' );
+	}
 }

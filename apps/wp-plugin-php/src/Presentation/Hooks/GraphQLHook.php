@@ -4,6 +4,8 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\ForbiddenException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
@@ -88,12 +90,18 @@ class GraphQLHook extends HookBase {
 							$message    = null;
 
 							// エラーのメッセージを抽象的なものに置き換える
-							if ( $prev_error instanceof PaymentRequiredException ) {
-								$extensions['code'] = 'PAYMENT_REQUIRED';
-								$message            = 'Payment Required';
-							} elseif ( $prev_error instanceof UnauthorizedException ) {
+							if ( $prev_error instanceof BadRequestException ) { // 400
+								$extensions['code'] = 'BAD_REQUEST';
+								$message            = 'Bad Request';
+							} elseif ( $prev_error instanceof UnauthorizedException ) { // 401
 								$extensions['code'] = 'UNAUTHORIZED';
 								$message            = 'Unauthorized';
+							} elseif ( $prev_error instanceof PaymentRequiredException ) { // 402
+								$extensions['code'] = 'PAYMENT_REQUIRED';
+								$message            = 'Payment Required';
+							} elseif ( $prev_error instanceof ForbiddenException ) { // 403
+								$extensions['code'] = 'FORBIDDEN';
+								$message            = 'Forbidden';
 							} else {
 								$extensions['code'] = 'INTERNAL_SERVER_ERROR';
 								$message            = 'Internal Server Error';
