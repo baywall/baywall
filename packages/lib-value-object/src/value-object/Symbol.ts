@@ -1,4 +1,3 @@
-import cc from 'currency-codes';
 import { ValueObject } from './base/ValueObject';
 
 const brand: unique symbol = Symbol( 'Symbol' );
@@ -25,14 +24,6 @@ class TokenSymbol implements ValueObject< TokenSymbol > {
 
 	public toString(): string {
 		return this.value;
-	}
-
-	/**
-	 * 通貨記号が法定通貨かどうかを取得します
-	 * @param symbolValue
-	 */
-	public isLegalCurrencySymbol( symbolValue: string ): boolean {
-		return cc.code( symbolValue ) !== undefined;
 	}
 
 	private static checkSymbol( symbolValue: string ): void {
