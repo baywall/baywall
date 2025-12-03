@@ -39,6 +39,7 @@ class InvoiceId implements ValueObject {
 
 	/**
 	 * `0x`プレフィックスを含むhex形式で値を取得します。
+	 * TODO: hexValue() に名称変更検討
 	 */
 	public function hex(): string {
 		return '0x' . $this->ulid->toHex();

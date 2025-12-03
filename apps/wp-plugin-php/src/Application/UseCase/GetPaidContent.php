@@ -97,6 +97,10 @@ class GetPaidContent {
 
 		// 購入時のトランザクションが含まれるブロック番号を取得
 		$payment_block_number = $this->unlock_paywall_transfer_event_repository->getBlockNumber( $invoice->id() );
+		if ( $payment_block_number === null ) {
+			// 購入時のトランザクション情報が存在しない場合は未確認扱い
+			return false;
+		}
 
 		// 現在のブロック番号を取得
 		$current_block_number = $this->block_number_provider->getByChainId( $invoice->chainId(), BlockTag::latest() );

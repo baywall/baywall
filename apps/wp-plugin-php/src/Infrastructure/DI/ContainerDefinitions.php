@@ -5,6 +5,9 @@ namespace Cornix\Serendipity\Core\Infrastructure\DI;
 
 use Cornix\Serendipity\Core\Application\Service\AccessTokenExpirationProvider;
 use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
+use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
+use Cornix\Serendipity\Core\Application\Service\Erc4361NonceProvider;
+use Cornix\Serendipity\Core\Application\Service\Erc4361PropertyProvider;
 use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtSecretKeyProvider;
@@ -44,6 +47,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpErc4361NonceRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpInvoiceTokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpNetworkCategoryRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpRefreshTokenRepository;
@@ -51,6 +55,8 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpSelle
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpServerSignerRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenExpirationProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361NonceProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361PropertyProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenCookieProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvider;
@@ -86,6 +92,7 @@ final class ContainerDefinitions {
 			SellerRepository::class              => autowire( WpSellerRepository::class ),
 			RefreshTokenRepository::class        => autowire( WpRefreshTokenRepository::class ),
 			InvoiceTokenRepository::class        => autowire( WpInvoiceTokenRepository::class ),
+			Erc4361NonceRepository::class        => autowire( WpErc4361NonceRepository::class ),
 
 			// Service
 			WalletService::class                 => autowire( WalletServiceImpl::class ),
@@ -107,6 +114,8 @@ final class ContainerDefinitions {
 			InvoiceTokenCookieProvider::class    => autowire( WpInvoiceTokenCookieProvider::class ),
 			RefreshTokenService::class           => autowire( WpRefreshTokenService::class ),
 			InvoiceTokenService::class           => autowire( WpInvoiceTokenService::class ),
+			Erc4361PropertyProvider::class       => autowire( WpErc4361PropertyProvider::class ),
+			Erc4361NonceProvider::class          => autowire( WpErc4361NonceProvider::class ),
 
 			// Cache
 			OracleRateCache::class               => autowire( WpOracleRateCache::class ),

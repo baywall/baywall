@@ -9,6 +9,15 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 // ※ このクラスはWordPressから情報を取得するためのクラスなので、WpPropertyProviderという名前を避けています。
 class WordPressPropertyProvider {
 
+	/**
+	 * サイトのホームURLを取得します。
+	 *
+	 * 「設定 > 一般」の「サイトアドレス (URL)」(サイト訪問者がアクセスするURL)
+	 */
+	public function homeUrl(): string {
+		return get_home_url();
+	}
+
 	/** REST APIのルートURLを取得します。 */
 	public function apiRootUrl(): string {
 		return get_rest_url();
