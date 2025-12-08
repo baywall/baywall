@@ -37,20 +37,20 @@ class PriceExchangeService {
 			return $this->calculatePrice( $price, $direct_rate );
 		}
 
-		$fromUsd = $this->resolveRate( $price->symbol(), Symbol::from( 'USD' ) );
-		$usdTo   = $this->resolveRate( Symbol::from( 'USD' ), $to_symbol );
-		if ( ! is_null( $fromUsd ) && ! is_null( $usdTo ) ) {
+		$from_usd = $this->resolveRate( $price->symbol(), Symbol::from( 'USD' ) );
+		$usd_to   = $this->resolveRate( Symbol::from( 'USD' ), $to_symbol );
+		if ( ! is_null( $from_usd ) && ! is_null( $usd_to ) ) {
 			// USDを経由して変換可能な場合
-			$usd_price = $this->calculatePrice( $price, $fromUsd );
-			return $this->calculatePrice( $usd_price, $usdTo );
+			$usd_price = $this->calculatePrice( $price, $from_usd );
+			return $this->calculatePrice( $usd_price, $usd_to );
 		}
 
-		$fromEth = $this->resolveRate( $price->symbol(), Symbol::from( 'ETH' ) );
-		$ethTo   = $this->resolveRate( Symbol::from( 'ETH' ), $to_symbol );
-		if ( ! is_null( $fromEth ) && ! is_null( $ethTo ) ) {
+		$from_eth = $this->resolveRate( $price->symbol(), Symbol::from( 'ETH' ) );
+		$eth_to   = $this->resolveRate( Symbol::from( 'ETH' ), $to_symbol );
+		if ( ! is_null( $from_eth ) && ! is_null( $eth_to ) ) {
 			// ETHを経由して変換可能な場合
-			$eth_price = $this->calculatePrice( $price, $fromEth );
-			return $this->calculatePrice( $eth_price, $ethTo );
+			$eth_price = $this->calculatePrice( $price, $from_eth );
+			return $this->calculatePrice( $eth_price, $eth_to );
 		}
 
 		// ETH,USDを経由して変換可能な場合, USD,ETHを経由して変換可能な場合は現時点で実装しない

@@ -36,8 +36,8 @@ class Hex implements ValueObject {
 		$raw_hex = '';
 		while ( bccomp( $dec_value, '0' ) > 0 ) {
 			$remainder = bcmod( $dec_value, '16' ); // 16 で割った余りを求める
-			$hexDigit  = dechex( (int) $remainder ); // 16進数の文字に変換
-			$raw_hex   = $hexDigit . $raw_hex;    // 結果に追加（逆順）
+			$hex_digit = dechex( (int) $remainder ); // 16進数の文字に変換
+			$raw_hex   = $hex_digit . $raw_hex;    // 結果に追加（逆順）
 			$dec_value = bcdiv( $dec_value, '16', 0 );  // 商を計算
 		}
 		return strlen( $raw_hex ) > 0 ? new self( '0x' . $raw_hex ) : new self( '0x0' );

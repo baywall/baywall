@@ -12,10 +12,10 @@ use GraphQL\Validator\ValidationContext;
  */
 class MutationFieldLimitRule extends ValidationRule {
 
-	private int $maxFields;
+	private int $max_fields;
 
-	public function __construct( int $maxFields ) {
-		$this->maxFields = $maxFields;
+	public function __construct( int $max_fields ) {
+		$this->max_fields = $max_fields;
 	}
 
 	public function getVisitor( ValidationContext $context ): array {
@@ -25,11 +25,11 @@ class MutationFieldLimitRule extends ValidationRule {
 					return;
 				}
 
-				$topLevelFields = $node->selectionSet
+				$top_level_fields = $node->selectionSet
 					? count( $node->selectionSet->selections )
 					: 0;
 
-				if ( $topLevelFields > $this->maxFields ) {
+				if ( $top_level_fields > $this->max_fields ) {
 					$context->reportError(
 						new Error( '[BBF09EBD] Only one top-level mutation field is allowed per request.' )
 					);
