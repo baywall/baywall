@@ -9,8 +9,8 @@ class CronActionNameProvider {
 
 	private string $prefix;
 
-	public function __construct( PrefixProvider $prefixProvider ) {
-		$this->prefix = $prefixProvider->cronActionName();
+	public function __construct( PrefixProvider $prefix_provider ) {
+		$this->prefix = $prefix_provider->cronActionName();
 	}
 
 	/**

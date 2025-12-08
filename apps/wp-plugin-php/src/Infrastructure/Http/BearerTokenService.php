@@ -14,15 +14,15 @@ class BearerTokenService {
 	public function get(): ?string {
 
 		// $_SERVER から取得
-		$authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? null;
+		$auth_header = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? null;
 		// $_SERVERから取得できなかった場合は`getallheaders()`を使用
-		if ( $authHeader === null && function_exists( 'getallheaders' ) ) {
-			$headers    = getallheaders();
-			$authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? null;
+		if ( $auth_header === null && function_exists( 'getallheaders' ) ) {
+			$headers     = getallheaders();
+			$auth_header = $headers['Authorization'] ?? $headers['authorization'] ?? null;
 		}
 
-		if ( $authHeader !== null ) {
-			if ( preg_match( '/Bearer\s(\S+)/', $authHeader, $matches ) ) {
+		if ( $auth_header !== null ) {
+			if ( preg_match( '/Bearer\s(\S+)/', $auth_header, $matches ) ) {
 				return $matches[1];
 			}
 		}

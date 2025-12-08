@@ -9,8 +9,8 @@ class OptionNameProvider {
 
 	private string $prefix;
 
-	public function __construct( PrefixProvider $prefixProvider ) {
-		$this->prefix = $prefixProvider->optionKey();
+	public function __construct( PrefixProvider $prefix_provider ) {
+		$this->prefix = $prefix_provider->optionKey();
 	}
 
 	/**

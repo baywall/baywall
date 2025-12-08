@@ -13,18 +13,18 @@ class Cookie {
 	private ?string $path;
 	private ?string $domain;
 	private ?bool $secure;
-	private ?bool $httpOnly;
-	private ?string $sameSite;
+	private ?bool $http_only;
+	private ?string $same_site;
 
 	private function __construct( string $name, string $value, ?int $expires = null, ?string $path = null, ?string $domain = null, ?bool $secure = null, ?bool $httpOnly = null, ?string $sameSite = null ) {
-		$this->name     = $name;
-		$this->value    = $value;
-		$this->expires  = $expires;
-		$this->path     = $path;
-		$this->domain   = $domain;
-		$this->secure   = $secure;
-		$this->httpOnly = $httpOnly;
-		$this->sameSite = $sameSite;
+		$this->name      = $name;
+		$this->value     = $value;
+		$this->expires   = $expires;
+		$this->path      = $path;
+		$this->domain    = $domain;
+		$this->secure    = $secure;
+		$this->http_only = $httpOnly;
+		$this->same_site = $sameSite;
 	}
 
 	public static function create( string $name, string $value, ?int $expires = null, ?string $path = null, ?string $domain = null, ?bool $secure = null, ?bool $httpOnly = null, ?string $sameSite = null ): self {
@@ -53,11 +53,11 @@ class Cookie {
 		if ( $this->secure !== null ) {
 			$options['secure'] = $this->secure;
 		}
-		if ( $this->httpOnly !== null ) {
-			$options['httponly'] = $this->httpOnly;
+		if ( $this->http_only !== null ) {
+			$options['httponly'] = $this->http_only;
 		}
-		if ( $this->sameSite !== null ) {
-			$options['samesite'] = $this->sameSite;
+		if ( $this->same_site !== null ) {
+			$options['samesite'] = $this->same_site;
 		}
 		return $options;
 	}

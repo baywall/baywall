@@ -7,10 +7,10 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 
 class TableNameProvider {
 
-	private PrefixProvider $prefixProvider;
+	private PrefixProvider $prefix_provider;
 
-	public function __construct( PrefixProvider $prefixProvider ) {
-		$this->prefixProvider = $prefixProvider;
+	public function __construct( PrefixProvider $prefix_provider ) {
+		$this->prefix_provider = $prefix_provider;
 	}
 
 	// 定数の値(テーブル名)は変更しないでください
@@ -21,7 +21,7 @@ class TableNameProvider {
 	 * 作成するテーブル名はこのメソッドを使用してください
 	 */
 	private function addPrefix( string $table_name ): string {
-		return $this->prefixProvider->tableName() . $table_name;
+		return $this->prefix_provider->tableName() . $table_name;
 	}
 
 	/** 発行した請求書情報を記録するテーブル名 */
