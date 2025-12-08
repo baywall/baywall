@@ -10,12 +10,10 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import en from '../../../i18n/block/translation.en.json';
 import ja from '../../../i18n/block/translation.ja.json';
-import zh from '../../../i18n/block/translation.zh.json';
 
 const resources = {
 	en: { translation: en },
 	ja: { translation: ja },
-	zh: { translation: zh },
 };
 
 const languageDetector = new LanguageDetector( null, {
