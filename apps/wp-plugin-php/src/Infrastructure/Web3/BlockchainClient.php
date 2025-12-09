@@ -86,7 +86,7 @@ class BlockchainClient {
 	 */
 	public function ethGetBlockByNumber( $block_number_or_tag ): EthBlock {
 		if ( $block_number_or_tag instanceof BlockNumber ) {
-			$block_number = $block_number_or_tag->hex();
+			$block_number = $block_number_or_tag->hex()->value();
 		} elseif ( $block_number_or_tag instanceof BlockTag ) {
 			$block_number = $block_number_or_tag->value();
 		} else {
