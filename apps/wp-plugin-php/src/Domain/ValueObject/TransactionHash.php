@@ -28,6 +28,10 @@ class TransactionHash implements ValueObject {
 		return new self( $hash );
 	}
 
+	public function equals( self $other ): bool {
+		return $this->hash === $other->hash;
+	}
+
 	/**
 	 * トランザクションハッシュを文字列として返します。
 	 */

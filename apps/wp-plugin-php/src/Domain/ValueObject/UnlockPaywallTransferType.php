@@ -30,6 +30,10 @@ class UnlockPaywallTransferType implements ValueObject {
 		return (string) $this->value;
 	}
 
+	public function equals( self $other ): bool {
+		return $this->value === $other->value;
+	}
+
 	public static function from( int $unlock_paywall_transfer_type_value ): self {
 		return new self( $unlock_paywall_transfer_type_value );
 	}

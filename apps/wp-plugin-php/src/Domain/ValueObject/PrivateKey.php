@@ -43,6 +43,11 @@ class PrivateKey implements ValueObject {
 		return $this->private_key_value;
 	}
 
+	public function equals( self $other ): bool {
+		// タイミング攻撃を避けるためハッシュベース比較を使用
+		return hash_equals( $this->private_key_value, $other->private_key_value );
+	}
+
 	public function __debugInfo() {
 		return array(
 			// プライベートキーはデバッグ出力から除外
