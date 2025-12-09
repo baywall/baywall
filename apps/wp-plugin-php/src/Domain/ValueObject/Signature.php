@@ -28,6 +28,10 @@ class Signature implements ValueObject {
 		return $this->signature_value;
 	}
 
+	public function equals( self $other ): bool {
+		return $this->signature_value === $other->signature_value;
+	}
+
 	private function checkFormat( string $signature ): void {
 		if ( ! preg_match( '/^0x[0-9a-f]{130}$/', $signature ) ) {
 			throw new \InvalidArgumentException( "[DF154E53] Invalid signature format. '{$signature}" );

@@ -90,8 +90,8 @@ class AppContractClient {
 		assert( $from_block->compare( $to_block ) <= 0, '[438F5DEE] from_block must be less than or equal to to_block.' );
 
 		$filter = array(
-			'fromBlock' => $from_block->hex(),
-			'toBlock'   => $to_block->hex(),
+			'fromBlock' => $from_block->hex()->value(),
+			'toBlock'   => $to_block->hex()->value(),
 			'address'   => $this->app_contract->address()->value(),
 			'topics'    => array(
 				$this->abi->unlockPaywallTransferTopicHash(),

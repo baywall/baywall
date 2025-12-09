@@ -56,10 +56,10 @@ class BlockNumber implements ValueObject {
 	}
 
 	/**
-	 * ブロック番号を16進数表記で取得します。
+	 * ブロック番号をHexオブジェクトで取得します。
 	 */
-	public function hex(): string {
-		return Hex::from( '0x' . dechex( $this->block_number_value ) )->value();
+	public function hex(): Hex {
+		return Hex::from( '0x' . dechex( $this->block_number_value ) );
 	}
 
 	/**
@@ -71,5 +71,9 @@ class BlockNumber implements ValueObject {
 
 	public function __toString(): string {
 		return (string) $this->int();
+	}
+
+	public function equals( self $other ): bool {
+		return $this->block_number_value === $other->block_number_value;
 	}
 }

@@ -56,4 +56,8 @@ class InvoiceId implements ValueObject {
 	public function __toString(): string {
 		return $this->ulid->toString();
 	}
+
+	public function equals( self $other ): bool {
+		return $this->ulid->toString() === $other->ulid->toString();
+	}
 }
