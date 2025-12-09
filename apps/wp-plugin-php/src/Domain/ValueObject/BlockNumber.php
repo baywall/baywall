@@ -72,4 +72,8 @@ class BlockNumber implements ValueObject {
 	public function __toString(): string {
 		return (string) $this->int();
 	}
+
+	public function equals( self $other ): bool {
+		return $this->block_number_value === $other->block_number_value;
+	}
 }

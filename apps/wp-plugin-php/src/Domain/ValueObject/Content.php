@@ -23,4 +23,8 @@ class Content implements ValueObject {
 	public function __toString(): string {
 		return $this->content_text;
 	}
+
+	public function equals( self $other ): bool {
+		return $this->content_text === $other->content_text;
+	}
 }

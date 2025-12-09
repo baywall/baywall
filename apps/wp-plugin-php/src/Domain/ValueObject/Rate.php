@@ -36,6 +36,10 @@ class Rate implements ValueObject {
 		return "{$this->symbol_pair}: {$this->amount}";
 	}
 
+	public function equals( self $other ): bool {
+		return $this->symbol_pair->equals( $other->symbol_pair ) && $this->amount->equals( $other->amount );
+	}
+
 	/**
 	 * レートを反転します。
 	 * 例: ETH/USD (rate: 2000) → USD/ETH (rate: 0.0005)

@@ -28,6 +28,10 @@ class BlockHeight implements ValueObject {
 		return $this->block_height_value;
 	}
 
+	public function equals( self $other ): bool {
+		return $this->block_height_value === $other->block_height_value;
+	}
+
 	public function __toString(): string {
 		return (string) $this->value();
 	}

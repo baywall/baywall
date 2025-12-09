@@ -24,4 +24,8 @@ class SigningMessage implements ValueObject {
 	public function __toString(): string {
 		return $this->signing_message_value;
 	}
+
+	public function equals( self $other ): bool {
+		return $this->signing_message_value === $other->signing_message_value;
+	}
 }
