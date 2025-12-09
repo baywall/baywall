@@ -27,7 +27,7 @@ class Decimals implements ValueObject {
 	}
 
 	public function equals( self $other ): bool {
-		return $this->decimals_value === $other->value();
+		return $this->decimals_value === $other->decimals_value;
 	}
 
 	public function __toString(): string {

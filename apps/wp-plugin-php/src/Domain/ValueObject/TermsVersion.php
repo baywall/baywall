@@ -22,7 +22,7 @@ class TermsVersion implements ValueObject {
 	}
 
 	public function equals( self $other ): bool {
-		return $this->version_value === $other->value();
+		return $this->version_value === $other->version_value;
 	}
 
 	public function __toString(): string {

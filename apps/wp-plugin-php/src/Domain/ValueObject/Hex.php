@@ -44,7 +44,7 @@ class Hex implements ValueObject {
 	}
 
 	public function equals( self $other ): bool {
-		return $this->value() === $other->value();
+		return $this->hex_value === $other->hex_value;
 	}
 
 	public function __toString(): string {
