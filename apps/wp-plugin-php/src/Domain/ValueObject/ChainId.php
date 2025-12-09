@@ -23,7 +23,7 @@ class ChainId implements ValueObject {
 	}
 
 	public function equals( self $other ): bool {
-		return $this->chain_id_value === $other->value();
+		return $this->chain_id_value === $other->chain_id_value;
 	}
 
 	public function __toString(): string {

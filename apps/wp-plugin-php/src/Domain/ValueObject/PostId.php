@@ -28,7 +28,7 @@ class PostId implements ValueObject {
 	}
 
 	public function equals( self $other ): bool {
-		return $this->post_id === $other->value();
+		return $this->post_id === $other->post_id;
 	}
 
 	public function __toString(): string {

@@ -23,7 +23,7 @@ class BlockName {
 	}
 
 	public function equals( self $other ): bool {
-		return $this->value() === $other->value();
+		return $this->block_name_value === $other->block_name_value;
 	}
 
 	public function __toString(): string {

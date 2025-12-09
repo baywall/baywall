@@ -23,7 +23,7 @@ class SemVer {
 	}
 
 	public function equals( self $other ): bool {
-		return $this->value() === $other->value();
+		return $this->sem_ver_value === $other->sem_ver_value;
 	}
 
 	public function __toString(): string {
