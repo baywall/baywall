@@ -13,7 +13,7 @@ class TokensFilter {
 	private array $filters = array();
 
 	public function byChainId( ChainId $chain_id ): self {
-		$this->filters[] = fn ( Token $token ) => $token->chainId()->value() === $chain_id->value();
+		$this->filters[] = fn ( Token $token ) => $token->chainId()->equals( $chain_id );
 		return $this;
 	}
 
