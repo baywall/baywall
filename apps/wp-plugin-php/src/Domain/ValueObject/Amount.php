@@ -51,7 +51,7 @@ final class Amount implements ValueObject {
 	 */
 	public static function fromBaseUnitAndDecimals( string $base_unit, Decimals $decimals ): self {
 		// 基本単位から小数点以下の桁数を考慮してAmountを生成
-		$multiplier = (string) ( 10 ** $decimals->value() );
+		$multiplier = bcpow( '10', (string) $decimals->value() );
 		return new self( bcdiv( $base_unit, $multiplier, $decimals->value() ) );
 	}
 
