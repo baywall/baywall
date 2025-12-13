@@ -24,7 +24,7 @@ abstract class AbiBase {
 	/**
 	 * 指定したメソッドまたはイベントのtopic(フィルタ用のハッシュ値)を取得します。
 	 *
-	 * keccak256("UnlockPaywall(address,address,uint64,uint128,address)") のようなハッシュ値
+	 * keccak256("UnlockPaywall(address,address,uint256,uint256,address)") のようなハッシュ値
 	 */
 	protected function topicHash( string $func_or_event_name ): string {
 		if ( ! array_key_exists( $func_or_event_name, $this->topic_hash_cache ) ) {
