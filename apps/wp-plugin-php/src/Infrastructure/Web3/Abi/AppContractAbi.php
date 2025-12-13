@@ -122,9 +122,9 @@ class AppContractAbiData {
 								"type": "address"
 							},
 							{
-								"internalType": "uint64",
+								"internalType": "uint256",
 								"name": "postId",
-								"type": "uint64"
+								"type": "uint256"
 							},
 							{
 								"internalType": "address",
