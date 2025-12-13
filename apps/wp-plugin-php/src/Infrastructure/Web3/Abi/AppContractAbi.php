@@ -100,9 +100,9 @@ class AppContractAbiData {
 							},
 							{
 								"indexed": false,
-								"internalType": "uint128",
+								"internalType": "uint256",
 								"name": "invoiceId",
-								"type": "uint128"
+								"type": "uint256"
 							},
 							{
 								"indexed": false,
@@ -122,9 +122,9 @@ class AppContractAbiData {
 								"type": "address"
 							},
 							{
-								"internalType": "uint64",
+								"internalType": "uint256",
 								"name": "postId",
-								"type": "uint64"
+								"type": "uint256"
 							},
 							{
 								"internalType": "address",
@@ -140,9 +140,9 @@ class AppContractAbiData {
 								"type": "bool"
 							},
 							{
-								"internalType": "uint128",
+								"internalType": "uint256",
 								"name": "invoiceId",
-								"type": "uint128"
+								"type": "uint256"
 							},
 							{
 								"internalType": "uint256",
