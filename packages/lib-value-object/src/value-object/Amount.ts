@@ -1,4 +1,7 @@
+import Decimal from 'decimal.js';
+import { DivideByZeroError } from '../error/DivideByZeroError';
 import { ValueObject } from './base/ValueObject';
+import { Decimals } from './Decimals';
 
 const brand: unique symbol = Symbol( 'Amount' );
 
@@ -7,6 +10,7 @@ export class Amount implements ValueObject< Amount > {
 	/** 型区別用のフィールド */
 	private [ brand ]!: void;
 
+	// 値を10進数の文字列で保持
 	public readonly value: string;
 
 	private constructor( value: string ) {
@@ -18,12 +22,36 @@ export class Amount implements ValueObject< Amount > {
 		return new Amount( amountValue );
 	}
 
+	public add( other: Amount ): Amount {
+		return Amount.from( Decimal.add( this.value, other.value ).toString() );
+	}
+
+	public sub( other: Amount ): Amount {
+		return Amount.from( Decimal.sub( this.value, other.value ).toString() );
+	}
+
+	public mul( other: Amount ): Amount {
+		return Amount.from( Decimal.mul( this.value, other.value ).toString() );
+	}
+
+	public div( other: Amount, decimals: Decimals ): Amount {
+		if ( other.isZero() ) {
+			throw new DivideByZeroError();
+		}
+		const D = Decimal.clone( { precision: decimals.value } );
+		return Amount.from( D.div( this.value, other.value ).toString() );
+	}
+
 	public equals( other: Amount ): boolean {
 		return this.value === other.value;
 	}
 
 	public toString(): string {
 		return this.value;
+	}
+
+	public isZero(): boolean {
+		return this.value === '0';
 	}
 
 	public isNegative(): boolean {

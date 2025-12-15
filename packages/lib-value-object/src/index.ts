@@ -1,3 +1,4 @@
+export * from './error/DivideByZeroError';
 export * from './value-object/base/ValueObject';
 export * from './value-object/Amount';
 export * from './value-object/Decimals';
