@@ -82,6 +82,11 @@ export class Amount implements ValueObject< Amount > {
 		return this.value.startsWith( '-' );
 	}
 
+	/** 整数かどうかを取得します */
+	public isInteger(): boolean {
+		return ! this.value.includes( '.' );
+	}
+
 	private static format( amountValue: string ): string {
 		// 小数点がある場合
 		if ( amountValue.includes( '.' ) ) {
