@@ -52,6 +52,11 @@ final class Address implements ValueObject {
 		}
 	}
 
+	/** ゼロアドレスを取得します */
+	public static function zero(): self {
+		return self::from( '0x0000000000000000000000000000000000000000' );
+	}
+
 	/** ネイティブトークンのアドレスを取得します */
 	public static function nativeToken(): self {
 		return new self( Config::NATIVE_TOKEN_ADDRESS );
