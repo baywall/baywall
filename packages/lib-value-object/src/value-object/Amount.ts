@@ -1,4 +1,7 @@
+import Decimal from 'decimal.js';
+import { DivideByZeroError } from '../error/DivideByZeroError';
 import { ValueObject } from './base/ValueObject';
+import { Decimals } from './Decimals';
 
 const brand: unique symbol = Symbol( 'Amount' );
 
@@ -7,6 +10,15 @@ export class Amount implements ValueObject< Amount > {
 	/** 型区別用のフィールド */
 	private [ brand ]!: void;
 
+	// 指数表記に変更する桁数
+	//
+	// uint256 の最大値が78桁なので80桁を指定:
+	// https://rareskills.io/post/uint-max-value-solidity
+	// type(uint256).max: 115792089237316195423570985008687907853269984665640564039457584007913129639935
+	private static readonly TO_EXP_NEG = -81; // 80桁まで指数表記にしない
+	private static readonly TO_EXP_POS = 81; // 80桁まで指数表記にしない
+
+	// 値を10進数の文字列で保持
 	public readonly value: string;
 
 	private constructor( value: string ) {
@@ -18,6 +30,42 @@ export class Amount implements ValueObject< Amount > {
 		return new Amount( amountValue );
 	}
 
+	public add( other: Amount ): Amount {
+		const D = Decimal.clone( {
+			toExpNeg: Amount.TO_EXP_NEG,
+			toExpPos: Amount.TO_EXP_POS,
+		} );
+		return Amount.from( D.add( this.value, other.value ).toString() );
+	}
+
+	public sub( other: Amount ): Amount {
+		const D = Decimal.clone( {
+			toExpNeg: Amount.TO_EXP_NEG,
+			toExpPos: Amount.TO_EXP_POS,
+		} );
+		return Amount.from( D.sub( this.value, other.value ).toString() );
+	}
+
+	public mul( other: Amount ): Amount {
+		const D = Decimal.clone( {
+			toExpNeg: Amount.TO_EXP_NEG,
+			toExpPos: Amount.TO_EXP_POS,
+		} );
+		return Amount.from( D.mul( this.value, other.value ).toString() );
+	}
+
+	public div( other: Amount, decimals: Decimals ): Amount {
+		if ( other.isZero() ) {
+			throw new DivideByZeroError();
+		}
+		const D = Decimal.clone( {
+			precision: decimals.value,
+			toExpNeg: Amount.TO_EXP_NEG,
+			toExpPos: Amount.TO_EXP_POS,
+		} );
+		return Amount.from( D.div( this.value, other.value ).toString() );
+	}
+
 	public equals( other: Amount ): boolean {
 		return this.value === other.value;
 	}
@@ -26,8 +74,17 @@ export class Amount implements ValueObject< Amount > {
 		return this.value;
 	}
 
+	public isZero(): boolean {
+		return this.value === '0';
+	}
+
 	public isNegative(): boolean {
 		return this.value.startsWith( '-' );
+	}
+
+	/** 整数かどうかを取得します */
+	public isInteger(): boolean {
+		return ! this.value.includes( '.' );
 	}
 
 	private static format( amountValue: string ): string {
