@@ -81,4 +81,9 @@ class Hex implements ValueObject {
 		}
 		throw new \RuntimeException( '[F361A92C] Hex value is too large to convert to int: ' . $this->hex_value );
 	}
+
+	/** バイナリデータとしての値を取得します */
+	public function bin(): string {
+		return hex2bin( str_replace( '0x', '', $this->hex_value ) );
+	}
 }
