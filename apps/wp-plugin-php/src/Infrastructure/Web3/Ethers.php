@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Bytes32;
+use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 use Cornix\Serendipity\Core\Domain\ValueObject\PrivateKey;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
@@ -18,7 +19,14 @@ class Ethers {
 	}
 
 	public static function keccak256( string $data ): Bytes32 {
-		return Bytes32::from( '0x' . Keccak::hash( $data, 256 ) );
+		$keccak256_hex_value = '0x' . self::rawKeccak256( $data );
+		return Bytes32::fromHex( Hex::from( $keccak256_hex_value ) );
+	}
+
+	private static function rawKeccak256( string $data ): string {
+		$result = Keccak::hash( $data, 256 );
+		assert( preg_match( '/^[0-9a-f]{64}$/', $result ) );
+		return $result;
 	}
 
 	/**
@@ -41,12 +49,13 @@ class Ethers {
 	 */
 	public static function verifyMessage( SigningMessage $message, Signature $signature ): ?Address {
 
-		$message_hash = bin2hex( self::keccak256( self::eip191( $message->value() ) )->bin() );
-		$sign         = array(
-			'r' => substr( $signature->value(), 2, 64 ),
-			's' => substr( $signature->value(), 66, 64 ),
+		$message_hash    = self::rawKeccak256( self::eip191( $message->value() ) );
+		$signature_value = $signature->value();
+		$sign            = array(
+			'r' => substr( $signature_value, 2, 64 ),
+			's' => substr( $signature_value, 66, 64 ),
 		);
-		$recid        = ord( hex2bin( substr( $signature->value(), 130, 2 ) ) ) - 27;
+		$recid           = ord( hex2bin( substr( $signature_value, 130, 2 ) ) ) - 27;
 		if ( $recid != ( $recid & 1 ) ) {
 			return null;
 		}
