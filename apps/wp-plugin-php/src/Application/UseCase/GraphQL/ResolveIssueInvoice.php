@@ -106,7 +106,7 @@ class ResolveIssueInvoice {
 				return array(
 					'invoiceIdHex'    => $invoice->id()->hex(),
 					'serverMessage'   => $signed_data->message()->value(),
-					'serverSignature' => $signed_data->signature()->value(),
+					'serverSignature' => $signed_data->signature()->hex()->value(),
 					'paymentAmount'   => $invoice->paymentAmount()->value(),
 				);
 			}
