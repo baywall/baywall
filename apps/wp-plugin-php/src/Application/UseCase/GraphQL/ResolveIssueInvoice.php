@@ -159,7 +159,7 @@ class ResolveIssueInvoice {
 			. SolidityStrings::valueToHexString( $invoice->id()->hex() )
 			. SolidityStrings::addressToHexString( $invoice->paymentTokenAddress() )
 			. SolidityStrings::valueToHexString( new BigInteger( $invoice->paymentAmount()->value() ) )
-			. SolidityStrings::valueToHexString( ( new ConsumerTermsProvider() )->currentVersion() )
+			. SolidityStrings::valueToHexString( ( new ConsumerTermsProvider() )->getTextHash()->hex()->value() )
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 )    // TODO: アフィリエイト報酬率
 		);
