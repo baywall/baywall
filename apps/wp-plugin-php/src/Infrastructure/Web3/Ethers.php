@@ -14,10 +14,6 @@ use kornrunner\Keccak;
 
 class Ethers {
 
-	public static function zeroAddress(): Address {
-		return Address::from( '0x0000000000000000000000000000000000000000' );
-	}
-
 	public static function keccak256( string $data ): Bytes32 {
 		$keccak256_hex_value = '0x' . self::rawKeccak256( $data );
 		return Bytes32::fromHex( Hex::from( $keccak256_hex_value ) );
