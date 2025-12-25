@@ -31,7 +31,6 @@ use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenProvider;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
 use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
-use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Infrastructure\Cache\OracleRateCache;
 use Cornix\Serendipity\Core\Infrastructure\Content\PaidContentServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpAppContractRepository;
@@ -45,7 +44,6 @@ use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpErc4361NonceRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpInvoiceTokenRepository;
@@ -95,7 +93,6 @@ final class ContainerDefinitions {
 			Erc4361NonceRepository::class        => autowire( WpErc4361NonceRepository::class ),
 
 			// Service
-			WalletService::class                 => autowire( WalletServiceImpl::class ),
 			PostTitleProvider::class             => autowire( WpPostTitleProvider::class ),
 			RateProvider::class                  => get( CachedOracleRateProvider::class ),
 			// CachedRateProvider::class    => autowire()->constructor(

@@ -106,9 +106,9 @@ class AppContractAbiData {
 							},
 							{
 								"indexed": false,
-								"internalType": "uint32",
+								"internalType": "uint256",
 								"name": "transferType",
-								"type": "uint32"
+								"type": "uint256"
 							}
 						],
 						"name": "UnlockPaywallTransfer",

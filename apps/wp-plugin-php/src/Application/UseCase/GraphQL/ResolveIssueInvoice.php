@@ -16,7 +16,6 @@ use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenService;
 use Cornix\Serendipity\Core\Domain\Service\PriceExchangeService;
 use Cornix\Serendipity\Core\Domain\Service\TokenAmountConverter;
-use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
@@ -27,6 +26,7 @@ use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
 use Cornix\Serendipity\Core\Infrastructure\Format\SolidityStrings;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Terms\ConsumerTermsProvider;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Service\SignatureService;
 use phpseclib\Math\BigInteger;
 
 class ResolveIssueInvoice {
@@ -41,7 +41,7 @@ class ResolveIssueInvoice {
 	private PriceExchangeService $price_exchange_service;
 	private InvoiceRepository $invoice_repository;
 	private ServerSignerRepository $server_signer_repository;
-	private WalletService $wallet_service;
+	private SignatureService $signature_service;
 	private InvoiceTokenService $invoice_token_service;
 	private InvoiceTokenCookieProvider $invoice_token_cookie_provider;
 	private CookieWriter $cookie_writer;
@@ -57,7 +57,7 @@ class ResolveIssueInvoice {
 		PriceExchangeService $price_exchange_service,
 		InvoiceRepository $invoice_repository,
 		ServerSignerRepository $server_signer_service,
-		WalletService $wallet_service,
+		SignatureService $signature_service,
 		InvoiceTokenService $invoice_token_service,
 		InvoiceTokenCookieProvider $invoice_token_cookie_provider,
 		CookieWriter $cookie_writer
@@ -72,7 +72,7 @@ class ResolveIssueInvoice {
 		$this->price_exchange_service        = $price_exchange_service;
 		$this->invoice_repository            = $invoice_repository;
 		$this->server_signer_repository      = $server_signer_service;
-		$this->wallet_service                = $wallet_service;
+		$this->signature_service             = $signature_service;
 		$this->invoice_token_service         = $invoice_token_service;
 		$this->invoice_token_cookie_provider = $invoice_token_cookie_provider;
 		$this->cookie_writer                 = $cookie_writer;
@@ -155,18 +155,18 @@ class ResolveIssueInvoice {
 			SolidityStrings::valueToHexString( $invoice->chainId()->value() )
 			. SolidityStrings::addressToHexString( $invoice->sellerAddress() )
 			. SolidityStrings::addressToHexString( $invoice->consumerAddress() )
-			. SolidityStrings::valueToHexString( $invoice->id()->hex() )
 			. SolidityStrings::valueToHexString( $invoice->postId()->value() )
+			. SolidityStrings::valueToHexString( $invoice->id()->hex() )
 			. SolidityStrings::addressToHexString( $invoice->paymentTokenAddress() )
 			. SolidityStrings::valueToHexString( new BigInteger( $invoice->paymentAmount()->value() ) )
-			. SolidityStrings::valueToHexString( ( new ConsumerTermsProvider() )->currentVersion() )
+			. SolidityStrings::valueToHexString( ( new ConsumerTermsProvider() )->getTextHash()->hex()->value() )
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 )    // TODO: アフィリエイト報酬率
 		);
 
 		// サーバーの署名用ウォレットで署名
 		$server_signer    = $this->server_signer_repository->get();
-		$server_signature = $this->wallet_service->signMessage( $server_signer, $server_message );
+		$server_signature = $this->signature_service->signMessage( $server_signer, $server_message );
 
 		return new SignInvoiceResult( $server_message, $server_signature );
 	}
