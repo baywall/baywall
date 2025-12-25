@@ -21,15 +21,6 @@ final class Bytes32 implements ValueObject {
 		return new self( $bytes32_value );
 	}
 
-	/**
-	 * 32バイトの値を16進数表記で返します。
-	 *
-	 * ※ 先頭の`0x`は含まれないことに注意
-	 */
-	public function value(): string {
-		return $this->bytes32_value;
-	}
-
 	public function __toString(): string {
 		return $this->bytes32_value;
 	}
@@ -38,19 +29,22 @@ final class Bytes32 implements ValueObject {
 		return $this->bytes32_value === $other->bytes32_value;
 	}
 
+	public function bin(): string {
+		return $this->hex()->bin();
+	}
+
 	public function hex(): Hex {
-		return Hex::from( '0x' . $this->bytes32_value );
+		return Hex::from( $this->bytes32_value );
 	}
 
 	private static function checkValidBytes32Format( string $bytes32_value ): void {
-		// TODO: 先頭の`0x`を付与する
-		if ( ! preg_match( '/^[0-9a-f]{64}$/', $bytes32_value, $matches ) ) {
+		if ( ! preg_match( '/^0x[0-9a-f]{64}$/', $bytes32_value, $matches ) ) {
 			throw new \InvalidArgumentException( '[589860EA] Invalid bytes32 format. ' . $bytes32_value );
 		}
 	}
 
 	/** ゼロのbytes32値を取得します */
 	public static function zero(): self {
-		return self::from( '0000000000000000000000000000000000000000000000000000000000000000' );
+		return self::from( '0x0000000000000000000000000000000000000000000000000000000000000000' );
 	}
 }
