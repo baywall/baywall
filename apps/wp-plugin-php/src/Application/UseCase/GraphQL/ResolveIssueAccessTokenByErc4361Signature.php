@@ -13,11 +13,11 @@ use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
-use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Service\SignatureService;
 
 /** ERC-4361の署名を検証してアクセストークン(+リフレッシュトークン)を発行するクラス */
 class ResolveIssueAccessTokenByErc4361Signature {
@@ -27,19 +27,19 @@ class ResolveIssueAccessTokenByErc4361Signature {
 	private Erc4361NonceRepository $erc4361_nonce_repository;
 	private InvoiceRepository $invoice_repository;
 	private UnlockPaywallChecker $unlock_paywall_checker;
-	private WalletService $wallet_service;
+	private SignatureService $signature_service;
 	private RefreshTokenService $refresh_token_service;
 	private RefreshTokenCookieProvider $refresh_token_cookie_provider;
 	private AccessTokenService $access_token_service;
 	private CookieWriter $cookie_writer;
 
-	public function __construct( TransactionService $transaction_service, Erc4361Service $erc4361_service, Erc4361NonceRepository $erc4361_nonce_repository, InvoiceRepository $invoice_repository, UnlockPaywallChecker $unlock_paywall_checker, WalletService $wallet_service, RefreshTokenService $refresh_token_service, RefreshTokenCookieProvider $refresh_token_cookie_provider, AccessTokenService $access_token_service, CookieWriter $cookie_writer ) {
+	public function __construct( TransactionService $transaction_service, Erc4361Service $erc4361_service, Erc4361NonceRepository $erc4361_nonce_repository, InvoiceRepository $invoice_repository, UnlockPaywallChecker $unlock_paywall_checker, SignatureService $signature_service, RefreshTokenService $refresh_token_service, RefreshTokenCookieProvider $refresh_token_cookie_provider, AccessTokenService $access_token_service, CookieWriter $cookie_writer ) {
 		$this->transaction_service           = $transaction_service;
 		$this->erc4361_service               = $erc4361_service;
 		$this->erc4361_nonce_repository      = $erc4361_nonce_repository;
 		$this->invoice_repository            = $invoice_repository;
 		$this->unlock_paywall_checker        = $unlock_paywall_checker;
-		$this->wallet_service                = $wallet_service;
+		$this->signature_service             = $signature_service;
 		$this->refresh_token_service         = $refresh_token_service;
 		$this->refresh_token_cookie_provider = $refresh_token_cookie_provider;
 		$this->access_token_service          = $access_token_service;
@@ -64,7 +64,7 @@ class ResolveIssueAccessTokenByErc4361Signature {
 				// 保存済みのnonceを使って署名用メッセージを再構築
 				$message = $this->erc4361_service->createMessage( $invoice_id, $stored_nonce );
 				// 再構築したメッセージと、受け取った署名からアドレスを計算
-				$recovered_address = $this->wallet_service->recoverAddress( $message, $signature );
+				$recovered_address = $this->signature_service->recoverAddress( $message, $signature );
 
 				if ( ! $consumer_address->equals( $recovered_address ) ) {
 					// 署名の検証に失敗した場合はエラー

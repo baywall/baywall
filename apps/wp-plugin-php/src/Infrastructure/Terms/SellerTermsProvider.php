@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Terms;
 
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 
@@ -19,9 +20,9 @@ class SellerTermsProvider {
 
 	/**
 	 * 販売者向け利用規約に署名する時のメッセージを取得します。
-	 * ※※※ 過去のバージョンが引数として渡される可能性があるため、過去バージョンでのメッセージが壊れないように注意してください。
 	 */
-	public function getSigningMessage( TermsVersion $version ): SigningMessage {
-		return SigningMessage::from( 'I agree to the seller\'s terms of service v' . $version->value() );
+	// TODO: 引数を削除
+	public function getSigningMessage( ?TermsVersion $version = null ): SigningMessage {
+		return SigningMessage::from( Config::SELLER_TERMS_SIGNING_MESSAGE );
 	}
 }

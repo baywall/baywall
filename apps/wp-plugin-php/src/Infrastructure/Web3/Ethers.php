@@ -102,7 +102,7 @@ class Ethers {
 	}
 
 	/**
-	 * メッセージに署名を行います。
+	 * メッセージに署名を行います。(EIP191準拠)
 	 *
 	 * @see https://ethereum.stackexchange.com/a/86503
 	 * @disregard P1009 Undefined type
