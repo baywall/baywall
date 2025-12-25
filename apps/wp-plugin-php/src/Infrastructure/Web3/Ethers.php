@@ -46,7 +46,7 @@ class Ethers {
 	public static function verifyMessage( SigningMessage $message, Signature $signature ): ?Address {
 
 		$message_hash    = self::rawKeccak256( self::eip191( $message )->value() );
-		$signature_value = $signature->value();
+		$signature_value = $signature->hex()->value();
 		$sign            = array(
 			'r' => substr( $signature_value, 2, 64 ),
 			's' => substr( $signature_value, 66, 64 ),

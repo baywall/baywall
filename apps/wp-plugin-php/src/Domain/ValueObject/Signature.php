@@ -20,8 +20,8 @@ class Signature implements ValueObject {
 		return new self( Bytes::fromHex( Hex::from( $signature_value ) ) );
 	}
 
-	public function value(): string {
-		return $this->value->hex()->__toString();
+	public function hex(): Hex {
+		return $this->value->hex();
 	}
 
 	public function __toString(): string {

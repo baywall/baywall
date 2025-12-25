@@ -21,7 +21,7 @@ class ResolveSeller {
 			$agreed_terms = array(
 				'version'   => $seller->agreedTermsVersion()->value(),
 				'message'   => $seller->signingMessage()->value(),  // TODO: プロパティ名を'signingMessage'に変更
-				'signature' => $seller->signature()->value(),
+				'signature' => $seller->signature()->hex()->value(),
 			);
 		}
 

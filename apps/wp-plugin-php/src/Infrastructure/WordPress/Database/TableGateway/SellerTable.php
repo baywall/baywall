@@ -49,7 +49,7 @@ class SellerTable extends TableBase {
 				'seller_address'       => $seller_address->value(),
 				'agreed_terms_version' => $agreed_terms_version->value(),
 				'signing_message'      => $signing_message->value(),
-				'signature'            => $signature->value(),
+				'signature'            => $signature->hex()->value(),
 			)
 		);
 		assert( $result === 1, "[67195917] Failed to insert seller data. {$result}" );
