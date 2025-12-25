@@ -14,8 +14,8 @@ use kornrunner\Keccak;
 
 class Ethers {
 
-	public static function keccak256( string $data ): Bytes32 {
-		$keccak256_hex_value = '0x' . self::rawKeccak256( $data );
+	public static function keccak256( SigningMessage $message ): Bytes32 {
+		$keccak256_hex_value = '0x' . self::rawKeccak256( $message->value() );
 		return Bytes32::fromHex( Hex::from( $keccak256_hex_value ) );
 	}
 
@@ -45,7 +45,7 @@ class Ethers {
 	 */
 	public static function verifyMessage( SigningMessage $message, Signature $signature ): ?Address {
 
-		$message_hash    = self::rawKeccak256( self::eip191( $message->value() ) );
+		$message_hash    = self::rawKeccak256( self::eip191( $message )->value() );
 		$signature_value = $signature->value();
 		$sign            = array(
 			'r' => substr( $signature_value, 2, 64 ),
@@ -69,9 +69,10 @@ class Ethers {
 	 *
 	 * @see https://eips.ethereum.org/EIPS/eip-191
 	 */
-	public static function eip191( string $message ): string {
-		$message_length = strlen( $message );
-		return "\x19Ethereum Signed Message:\n{$message_length}{$message}";
+	public static function eip191( SigningMessage $message ): SigningMessage {
+		$message_value  = $message->value();
+		$message_length = strlen( $message_value );
+		return SigningMessage::from( "\x19Ethereum Signed Message:\n{$message_length}{$message_value}" );
 	}
 
 	/**
@@ -101,8 +102,8 @@ class Ethers {
 	 *
 	 * @see https://github.com/simplito/elliptic-php#verifying-ethereum-signature
 	 */
-	public static function computeAddress( \Elliptic\Curve\ShortCurve\Point $public_key ): Address {
-		$hash_value    = bin2hex( self::keccak256( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ) )->bin() );
+	private static function computeAddress( \Elliptic\Curve\ShortCurve\Point $public_key ): Address {
+		$hash_value    = self::rawKeccak256( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ) );
 		$address_value = \Web3\Utils::toChecksumAddress( substr( $hash_value, 24 ) );
 		return Address::from( $address_value );
 	}
@@ -118,10 +119,10 @@ class Ethers {
 		PrivateKey $private_key,
 		SigningMessage $message
 	): Signature {
-		$message_hash = bin2hex( self::keccak256( self::eip191( $message->value() ) )->bin() );
+		$message_hash = self::keccak256( self::eip191( $message ) );
 
 		$key_pair  = self::signerPrivateKeyToEcKeyPair( $private_key );
-		$signature = $key_pair->sign( $message_hash, array( 'canonical' => true ) );
+		$signature = $key_pair->sign( bin2hex( $message_hash->bin() ), array( 'canonical' => true ) );
 
 		$r = str_pad( $signature->r->toString( 16 ), 64, '0', STR_PAD_LEFT );
 		$s = str_pad( $signature->s->toString( 16 ), 64, '0', STR_PAD_LEFT );
