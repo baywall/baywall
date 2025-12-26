@@ -20,6 +20,10 @@ class Signature implements ValueObject {
 		return new self( Bytes::fromHex( Hex::from( $signature_value ) ) );
 	}
 
+	public function bin(): string {
+		return $this->value->bin();
+	}
+
 	public function hex(): Hex {
 		return $this->value->hex();
 	}
