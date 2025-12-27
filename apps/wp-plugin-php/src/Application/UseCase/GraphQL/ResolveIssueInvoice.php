@@ -24,7 +24,6 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
 use Cornix\Serendipity\Core\Infrastructure\Format\SolidityStrings;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Terms\ConsumerTermsProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\SignatureService;
 use phpseclib\Math\BigInteger;
