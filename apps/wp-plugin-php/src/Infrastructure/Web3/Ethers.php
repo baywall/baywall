@@ -12,6 +12,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Elliptic\EC;
 use kornrunner\Keccak;
 
+// TODO: 引数及び戻り値をプリミティブ型に変更し、Infrastructure/Reimpl/ ディレクトリ以下に移動
 class Ethers {
 
 	public static function keccak256( SigningMessage $message ): Bytes32 {
