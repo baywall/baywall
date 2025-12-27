@@ -133,4 +133,57 @@ class Ethers {
 
 		return $signature;
 	}
+
+	/**
+	 * @param string[]       $types
+	 * @param (int|string)[] $values 数値または`0x`始まりのHEX文字列
+	 * @return string 連結されたHEX文字列 (`0x`始まり)
+	 */
+	public static function solidityPacked( array $types, array $values ): string {
+		// 引数の長さが一致することを確認
+		assert( count( $types ) === count( $values ), '[5C6F2D1E] types len: ' . count( $types ) . ', values len: ' . count( $values ) );
+
+		// TODO: pack等で最適化
+		$packed = '0x';
+		foreach ( $types as $index => $type ) {
+			$value = $values[ $index ];
+			// valueを一旦`0x`無しのHEXに変換
+			if ( is_int( $value ) ) {
+				$raw_hex = dechex( $value );
+			} elseif ( is_string( $value ) ) {
+				assert( preg_match( '/^0x[0-9a-fA-F]+$/', $value ) );
+				$raw_hex = strtolower( substr( $value, 2 ) );
+			} else {
+				throw new \InvalidArgumentException( '[5963C820] Unsupported value type: ' . gettype( $value ) );
+			}
+			assert( is_string( $raw_hex ), '[4851DA47]' );
+			assert( preg_match( '/^[0-9a-f]*$/', $raw_hex ), "[D3C2E2B1] {$raw_hex}" );
+
+			switch ( $type ) {
+				case 'address':
+					assert( preg_match( '/^[0-9a-f]{40}$/', $raw_hex ), "[EB3A3707] {$raw_hex}" );
+					$packed .= $raw_hex;
+					break;
+				case 'uint256':
+				case 'uint128':
+				case 'uint64':
+					$bit          = (int) str_replace( 'uint', '', $type );
+					$hex_len      = $bit / 4;
+					$value_packed = str_pad( $raw_hex, $hex_len, '0', STR_PAD_LEFT );
+					assert( preg_match( "/^[0-9a-f]{{$hex_len}}$/", $value_packed ), "[7C2D1F6E] {$value_packed}" );
+					$packed .= $value_packed;
+					break;
+				case 'bytes32':
+					assert( preg_match( '/^[0-9a-f]{64}$/', $raw_hex ), "[70601E35] {$raw_hex}" );
+					$packed .= $raw_hex;
+					break;
+				case 'bytes':
+					$packed .= $raw_hex;
+					break;
+				default:
+					throw new \InvalidArgumentException( "[78263401] Unsupported type: {$type}" );
+			}
+		}
+		return $packed;
+	}
 }
