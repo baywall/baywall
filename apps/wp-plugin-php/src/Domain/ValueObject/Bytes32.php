@@ -10,47 +10,42 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
  */
 final class Bytes32 implements ValueObject {
 
-	private function __construct( string $bytes32_value ) {
-		self::checkValidBytes32Format( $bytes32_value );
+	private Bytes $value;
 
-		$this->bytes32_value = $bytes32_value;
-	}
-	private string $bytes32_value;
+	private function __construct( Bytes $value ) {
+		self::checkValue( $value );
 
-	public static function from( string $bytes32_value ): self {
-		return new self( $bytes32_value );
+		$this->value = $value;
 	}
 
-	/**
-	 * 32バイトの値を16進数表記で返します。
-	 *
-	 * ※ 先頭の`0x`は含まれないことに注意
-	 */
-	public function value(): string {
-		return $this->bytes32_value;
+	public static function fromHex( Hex $bytes32_hex ): self {
+		return new self( Bytes::fromHex( $bytes32_hex ) );
 	}
 
 	public function __toString(): string {
-		return $this->bytes32_value;
+		return $this->value->__toString();
 	}
 
 	public function equals( self $other ): bool {
-		return $this->bytes32_value === $other->bytes32_value;
+		return $this->value->equals( $other->value );
+	}
+
+	public function bin(): string {
+		return $this->value->bin();
 	}
 
 	public function hex(): Hex {
-		return Hex::from( '0x' . $this->bytes32_value );
+		return $this->value->hex();
 	}
 
-	private static function checkValidBytes32Format( string $bytes32_value ): void {
-		// TODO: 先頭の`0x`を付与する
-		if ( ! preg_match( '/^[0-9a-f]{64}$/', $bytes32_value, $matches ) ) {
-			throw new \InvalidArgumentException( '[589860EA] Invalid bytes32 format. ' . $bytes32_value );
+	private static function checkValue( Bytes $value ): void {
+		if ( strlen( $value->bin() ) !== 32 ) {
+			throw new \InvalidArgumentException( '[589860EA] Invalid bytes32 value. ' . $value );
 		}
 	}
 
 	/** ゼロのbytes32値を取得します */
 	public static function zero(): self {
-		return self::from( '0000000000000000000000000000000000000000000000000000000000000000' );
+		return self::fromHex( Hex::from( '0x0000000000000000000000000000000000000000000000000000000000000000' ) );
 	}
 }

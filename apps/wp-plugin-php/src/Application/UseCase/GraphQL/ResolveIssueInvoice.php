@@ -24,7 +24,6 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
 use Cornix\Serendipity\Core\Infrastructure\Format\SolidityStrings;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Terms\ConsumerTermsProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\SignatureService;
 use phpseclib\Math\BigInteger;
@@ -106,7 +105,7 @@ class ResolveIssueInvoice {
 				return array(
 					'invoiceIdHex'    => $invoice->id()->hex(),
 					'serverMessage'   => $signed_data->message()->value(),
-					'serverSignature' => $signed_data->signature()->value(),
+					'serverSignature' => $signed_data->signature()->hex()->value(),
 					'paymentAmount'   => $invoice->paymentAmount()->value(),
 				);
 			}
@@ -160,7 +159,7 @@ class ResolveIssueInvoice {
 			. SolidityStrings::addressToHexString( $invoice->paymentTokenAddress() )
 			. SolidityStrings::valueToHexString( new BigInteger( $invoice->paymentAmount()->value() ) )
 			. SolidityStrings::valueToHexString( ( new ConsumerTermsProvider() )->getTextHash()->hex()->value() )
-			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
+			. SolidityStrings::addressToHexString( Address::zero() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 )    // TODO: アフィリエイト報酬率
 		);
 
