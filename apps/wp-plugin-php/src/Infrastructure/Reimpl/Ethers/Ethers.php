@@ -69,7 +69,7 @@ class Ethers {
 		/** @var \Elliptic\Curve\ShortCurve\Point */
 		$public_key = $ec->recoverPubKey( $hash, $sign, $recid );
 
-		$result = self::computeAddress( $public_key );
+		$result = self::computeAddress( '0x' . $public_key->encode( 'hex' ) );
 		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) );
 		return $result;
 	}
@@ -79,8 +79,8 @@ class Ethers {
 	 *
 	 * @see https://github.com/simplito/elliptic-php#verifying-ethereum-signature
 	 */
-	public static function computeAddress( \Elliptic\Curve\ShortCurve\Point $public_key ): string {
-		$result = '0x' . substr( Keccak::hash( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ), 256 ), 24 );
+	public static function computeAddress( string $public_key ): string {
+		$result = '0x' . substr( Keccak::hash( substr( hex2bin( str_replace( '0x', '', $public_key ) ), 1 ), 256 ), 24 );
 		$result = \Web3\Utils::toChecksumAddress( $result ); // チェックサム付きアドレスに変換
 		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) );
 		return $result;
