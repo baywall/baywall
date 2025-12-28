@@ -11,12 +11,16 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
  */
 class Bytes implements ValueObject {
 
+	/** バイナリデータとしての値 */
+	private string $bin_value;
+
 	private function __construct( string $bin_value ) {
 		$this->bin_value = $bin_value;
 	}
 
-	/** バイナリデータとしての値 */
-	private string $bin_value;
+	public static function fromHex( Hex $hex ): self {
+		return new self( $hex->bin() );
+	}
 
 	/** バイナリデータを取得します */
 	public function bin(): string {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Terms;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Bytes32;
+use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 
 /**
  * 本プラグインにおける購入者向け利用規約の情報を取得するためのクラス
@@ -26,6 +27,6 @@ class ConsumerTermsProvider {
 	public function getTextHash(): Bytes32 {
 		// TODO: 必要な場合は購入者向け利用規約本文のハッシュ値を取得して返す
 		// （将来的に削除されるため、現時点では仮の値を返している）
-		return Bytes32::from( '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' ); // 仮の値を返す
+		return Bytes32::fromHex( Hex::from( '0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' ) ); // 仮の値を返す
 	}
 }

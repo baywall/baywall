@@ -8,33 +8,37 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
 /** 署名データ */
 class Signature implements ValueObject {
 
-	private function __construct( string $signature ) {
-		$this->checkFormat( $signature );
+	private Bytes $value;
 
-		$this->signature_value = $signature;
+	private function __construct( Bytes $value ) {
+		$this->checkValue( $value );
+
+		$this->value = $value;
 	}
 
-	private string $signature_value;
-
-	public static function from( string $signature ): self {
-		return new self( $signature );
+	public static function from( string $signature_value ): self {
+		return new self( Bytes::fromHex( Hex::from( $signature_value ) ) );
 	}
 
-	public function value(): string {
-		return $this->signature_value;
+	public function bin(): string {
+		return $this->value->bin();
+	}
+
+	public function hex(): Hex {
+		return $this->value->hex();
 	}
 
 	public function __toString(): string {
-		return $this->signature_value;
+		return $this->value->__toString();
 	}
 
 	public function equals( self $other ): bool {
-		return $this->signature_value === $other->signature_value;
+		return $this->value->equals( $other->value );
 	}
 
-	private function checkFormat( string $signature ): void {
-		if ( ! preg_match( '/^0x[0-9a-f]{130}$/', $signature ) ) {
-			throw new \InvalidArgumentException( "[DF154E53] Invalid signature format. '{$signature}" );
+	private function checkValue( Bytes $value ): void {
+		if ( strlen( $value->bin() ) !== 65 ) {
+			throw new \InvalidArgumentException( '[DF154E53] Invalid signature value. ' . $value );
 		}
 	}
 }

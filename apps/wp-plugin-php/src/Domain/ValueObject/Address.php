@@ -32,6 +32,13 @@ final class Address implements ValueObject {
 		return $this->address_value;
 	}
 
+	/** アドレスの値をバイナリ形式で取得します */
+	public function bin(): string {
+		$bin = hex2bin( str_replace( '0x', '', $this->address_value ) );
+		assert( strlen( $bin ) === 20 );
+		return $bin;
+	}
+
 	public function toBytes32Hex(): string {
 		return ( new Padding() )->toBytes32Hex( $this->value() );
 	}

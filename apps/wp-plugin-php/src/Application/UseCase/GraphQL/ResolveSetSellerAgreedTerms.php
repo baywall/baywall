@@ -9,22 +9,25 @@ use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 use Cornix\Serendipity\Core\Infrastructure\Terms\SellerTermsProvider;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Service\SignatureService;
 
 class ResolveSetSellerAgreedTerms {
 
 	private UserAccessChecker $user_access_checker;
 	private SellerRepository $seller_repository;
 	private SellerTermsProvider $seller_terms_provider;
+	private SignatureService $signature_service;
 
 	public function __construct(
 		UserAccessChecker $user_access_checker,
 		SellerRepository $seller_repository,
-		SellerTermsProvider $seller_terms_provider
+		SellerTermsProvider $seller_terms_provider,
+		SignatureService $signature_service
 	) {
 		$this->user_access_checker   = $user_access_checker;
 		$this->seller_repository     = $seller_repository;
 		$this->seller_terms_provider = $seller_terms_provider;
+		$this->signature_service     = $signature_service;
 	}
 
 	public function handle( array $root_value, array $args ) {
@@ -41,7 +44,7 @@ class ResolveSetSellerAgreedTerms {
 
 		// 署名用メッセージを取得
 		$signing_message = $this->seller_terms_provider->getSigningMessage( $terms_version );
-		$seller_address  = Ethers::verifyMessage( $signing_message, $signature );
+		$seller_address  = $this->signature_service->recoverAddress( $signing_message, $signature );
 		// TODO: 引数に string $expected_address を追加し、署名を検証するロジックを追加
 
 		// 販売者情報を保存
