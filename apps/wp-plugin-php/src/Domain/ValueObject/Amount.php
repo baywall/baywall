@@ -72,6 +72,13 @@ final class Amount implements ValueObject {
 		return $this->amount_text === $other->amount_text;
 	}
 
+	public function hex(): Hex {
+		if ( $this->isNegative() || ! $this->decimals()->equals( Decimals::from( 0 ) ) ) {
+			throw new InvalidArgumentException( "[340F2CAC] Cannot convert to Hex: {$this}" );
+		}
+		return Hex::fromDecValue( $this->amount_text );
+	}
+
 	public function value(): string {
 		return $this->amount_text;
 	}
