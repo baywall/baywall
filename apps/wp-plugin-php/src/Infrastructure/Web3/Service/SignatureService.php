@@ -14,7 +14,7 @@ use Cornix\Serendipity\Core\Infrastructure\Reimpl\Ethers\EthersWallet;
 
 /** 署名関連のサービスクラス */
 class SignatureService {
-	/** 署名を行います */
+	/** EIP191に準拠した署名を行います */
 	public function signMessage( Signer $signer, SigningMessage $message ): Signature {
 		$wallet = new EthersWallet( $signer->privateKey()->value() );
 		return Signature::from( $wallet->signMessage( $message->value() ) );

@@ -8,14 +8,14 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 
 /**
  * 本プラグインにおける購入者向け利用規約の情報を取得するためのクラス
- *
- * @deprecated 購入者向け利用規約本文のハッシュ値はクライアント側で計算するため、このクラスは不要
- * TODO: 削除
+ * TODO: CustomerTermsProviderに名前を変更し、testsディレクトリへ移動
  */
 class ConsumerTermsProvider {
 
 	/**
 	 * このプラグインに同梱されている購入者向け利用規約のバージョンを取得します。
+	 *
+	 * @deprecated to be removed
 	 */
 	public function currentVersion(): int {
 		// TODO: 購入者向け利用規約バージョン取得処理の実装
