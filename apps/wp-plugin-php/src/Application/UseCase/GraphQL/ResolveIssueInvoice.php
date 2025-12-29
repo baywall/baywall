@@ -23,6 +23,7 @@ use Cornix\Serendipity\Core\Infrastructure\Terms\ConsumerTermsProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\SignatureService;
 use phpseclib\Math\BigInteger;
 
+/** @deprecated use ResolveIssueInvoiceV2 */
 class ResolveIssueInvoice {
 
 	private InitCrawledBlockNumber $init_crawled_block_number;
