@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveGetPaidContent;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueAccessTokenByErc4361Signature;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueErc4361Message;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoice;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoiceV2;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategory;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveOracle;
@@ -68,6 +69,7 @@ class RootValue {
 
 			// Mutation
 			'issueInvoice'                       => ResolveIssueInvoice::class,
+			'issueInvoiceV2'                     => ResolveIssueInvoiceV2::class,
 			'issueErc4361Message'                => ResolveIssueErc4361Message::class,
 			'issueAccessTokenByErc4361Signature' => ResolveIssueAccessTokenByErc4361Signature::class,
 			'getPaidContent'                     => ResolveGetPaidContent::class,
