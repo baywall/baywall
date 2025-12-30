@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
  */
 class PostId implements ValueObject {
 
-	public function __construct( int $post_id ) {
+	private function __construct( int $post_id ) {
 		if ( $post_id <= 0 ) {
 			throw new \InvalidArgumentException( '[8B2A1F3C] Post ID must be a positive integer.' );
 		}
