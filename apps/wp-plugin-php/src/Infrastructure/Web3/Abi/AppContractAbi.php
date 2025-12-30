@@ -128,7 +128,7 @@ class AppContractAbiData {
 							},
 							{
 								"internalType": "address",
-								"name": "consumer",
+								"name": "customer",
 								"type": "address"
 							}
 						],

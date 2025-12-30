@@ -33,7 +33,7 @@ class InvoiceTable extends TableBase {
 				`seller_address`,
 				`payment_token_address`,
 				`payment_amount`,
-				`consumer_address`
+				`customer_address`
 			FROM `{$this->tableName()}`
 			WHERE `id` = %s
 		SQL;
@@ -51,7 +51,7 @@ class InvoiceTable extends TableBase {
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->tableName()}`
-				( `id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_amount`, `consumer_address` )
+				( `id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_amount`, `customer_address` )
 			VALUES
 				( %s, %d, %d, %s, %s, %s, %s, %s, %s )
 			ON DUPLICATE KEY UPDATE
@@ -62,7 +62,7 @@ class InvoiceTable extends TableBase {
 				`seller_address` = VALUES(`seller_address`),
 				`payment_token_address` = VALUES(`payment_token_address`),
 				`payment_amount` = VALUES(`payment_amount`),
-				`consumer_address` = VALUES(`consumer_address`)
+				`customer_address` = VALUES(`customer_address`)
 		SQL;
 
 		$sql = $this->prepare(
@@ -75,7 +75,7 @@ class InvoiceTable extends TableBase {
 			$invoice->sellerAddress()->value(),
 			$invoice->paymentTokenAddress()->value(),
 			$invoice->paymentAmount()->value(),
-			$invoice->consumerAddress()->value(),
+			$invoice->customerAddress()->value(),
 		);
 
 		$this->safeQuery( $sql );

@@ -35,7 +35,7 @@ class V20251106_040_CreateInvoiceTable extends MigrationBase {
 				`seller_address`         varchar(191)               NOT NULL,
 				`payment_token_address`  varchar(191)               NOT NULL,
 				`payment_amount`         decimal(35, 0)             NOT NULL,
-				`consumer_address`       varchar(191)               NOT NULL,
+				`customer_address`       varchar(191)               NOT NULL,
 				PRIMARY KEY (`id`),
 				KEY `idx_{$this->table_name}_2D6F4376` (`created_at`),
 				KEY `idx_{$this->table_name}_6970C683` (`id`, `chain_id`, `payment_token_address`)

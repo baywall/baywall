@@ -83,15 +83,15 @@ class IssueAccessTokenByInvoiceToken {
 					// リフレッシュトークンはCookieに保存
 
 					// 購入者ウォレットアドレスを取得
-					$consumer_address = $invoice->consumerAddress();
+					$customer_address = $invoice->customerAddress();
 
 					// リフレッシュトークンを発行し、クッキーに保存
-					$refresh_token        = $this->refresh_token_service->issue( $consumer_address );
+					$refresh_token        = $this->refresh_token_service->issue( $customer_address );
 					$refresh_token_cookie = $this->refresh_token_cookie_provider->get( $refresh_token );
 					$this->cookie_writer->set( $refresh_token_cookie );
 
 					// アクセストークンを発行
-					$access_token = $this->access_token_service->issue( $consumer_address );
+					$access_token = $this->access_token_service->issue( $customer_address );
 
 					return array(
 						'access_token' => $access_token->value(),

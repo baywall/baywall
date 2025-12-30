@@ -73,9 +73,9 @@ class GetPaidContent {
 		// 請求書IDのチェック
 		if ( $invoice === null ) {
 			throw new \InvalidArgumentException( "[5B98E562] Invoice not found: {$invoice_id}" );
-		} elseif ( ! $invoice->consumerAddress()->equals( $address ) ) {
+		} elseif ( ! $invoice->customerAddress()->equals( $address ) ) {
 			// 購入者チェック。別のユーザーの請求書IDを指定した場合は例外をスロー
-			throw new ForbiddenException( "[200D84DE] Address mismatch. client: {$address}, invoice: {$invoice->consumerAddress()}" );
+			throw new ForbiddenException( "[200D84DE] Address mismatch. client: {$address}, invoice: {$invoice->customerAddress()}" );
 		}
 
 		// 支払い確認チェック。指定した待機ブロック数経過していない場合は例外をスロー

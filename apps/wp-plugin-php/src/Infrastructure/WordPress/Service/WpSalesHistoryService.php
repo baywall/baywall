@@ -50,7 +50,7 @@ class WpSalesHistoryService implements SalesHistoryService {
 			$invoice_dto,
 			$record->post_title,
 			$record->transaction_hash,
-			$record->consumer_address,
+			$record->customer_address,
 			$to_price_dto_callback( $record->payment_amount ),
 			$record->contract_address,
 			$to_price_dto_callback( $record->contract_received_amount ),

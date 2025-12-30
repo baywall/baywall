@@ -133,7 +133,7 @@ class ResolveIssueInvoiceV2 {
 			$invoice->chainId()->value(),
 			$server_signer->address()->value(),
 			$invoice->sellerAddress()->value(),
-			$invoice->consumerAddress()->value(),
+			$invoice->customerAddress()->value(),
 			$invoice->postId()->value(),
 			$invoice->id()->hex(),
 			$invoice->paymentTokenAddress()->value(),
