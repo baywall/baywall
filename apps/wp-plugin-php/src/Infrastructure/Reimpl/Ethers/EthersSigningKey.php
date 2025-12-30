@@ -19,7 +19,7 @@ class EthersSigningKey {
 		#[\SensitiveParameter]
 		string $private_key
 	) {
-		assert( preg_match( '/^0x[0-9a-f]{1,64}$/', $private_key ) );
+		assert( preg_match( '/^0x[0-9a-f]{64}$/', $private_key ) );
 		$this->key_pair = ( new EC( 'secp256k1' ) )->keyFromPrivate( str_replace( '0x', '', $private_key ) );
 	}
 
@@ -37,14 +37,28 @@ class EthersSigningKey {
 		return $result;
 	}
 
-	/** 秘密鍵を取得します。 */
+	/**
+	 * 秘密鍵を取得します。
+	 *
+	 * @return string 32バイトの16進数文字列('0x'+64文字)
+	 *
+	 * - ethers.jsの秘密鍵生成時、先頭バイトが0であっても`0x`+64文字で出力
+	 * - MetaMaskの秘密鍵エクスポートは先頭バイトが0であっても64文字で出力
+	 */
 	public function privateKey(): string {
-		return '0x' . $this->key_pair->getPrivate( 'hex' );
+		return '0x' . str_pad( $this->key_pair->getPrivate( 'hex' ), 64, '0', STR_PAD_LEFT );
 	}
 
-	/** 公開鍵を取得します。 */
+	/**
+	 * 公開鍵を取得します。
+	 *
+	 * - ethers.jsでは非圧縮形式の公開鍵を用いているため、それに合わせて`$compact`に`false`を指定
+	 *   (`Wallet.createRandom().signingKey.publicKey` が `0x04` で開始する値を返す)
+	 */
 	public function publicKey(): string {
-		return '0x' . $this->key_pair->getPublic( 'hex' );
+		$public_key = '0x' . $this->key_pair->getPublic( false, 'hex' );
+		assert( preg_match( '/^0x04[0-9a-f]{128}/', $public_key ) );
+		return $public_key;
 	}
 
 	public function __debugInfo() {
