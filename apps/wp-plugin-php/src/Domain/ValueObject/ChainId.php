@@ -34,7 +34,7 @@ class ChainId implements ValueObject {
 		return new self( $chain_id_value );
 	}
 
-	public static function fromNullableValue( ?int $chain_id_value ): ?self {
+	public static function fromNullable( ?int $chain_id_value ): ?self {
 		return $chain_id_value === null ? null : self::from( $chain_id_value );
 	}
 }
