@@ -19,7 +19,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
 use Cornix\Serendipity\Core\Infrastructure\Format\SolidityStrings;
-use Cornix\Serendipity\Core\Infrastructure\Terms\ConsumerTermsProvider;
+use Cornix\Serendipity\Core\Infrastructure\Terms\CustomerTermsProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\SignatureService;
 use phpseclib\Math\BigInteger;
 
@@ -65,7 +65,7 @@ class ResolveIssueInvoice {
 		$post_id          = PostId::from( $args['postId'] );
 		$chain_id         = ChainId::from( $args['chainId'] );
 		$token_address    = Address::from( $args['tokenAddress'] );
-		$consumer_address = Address::from( $args['consumerAddress'] ); // 購入者のアドレス
+		$customer_address = Address::from( $args['customerAddress'] ); // 購入者のアドレス
 
 		// 投稿を閲覧できる権限があることをチェック
 		$this->user_access_checker->checkCanViewPost( $post_id );
@@ -77,9 +77,9 @@ class ResolveIssueInvoice {
 
 		// 請求書番号を発行(+現在の販売価格を記録)
 		return $this->transaction_service->transactional(
-			function () use ( $post_id, $payment_token, $consumer_address ) {
+			function () use ( $post_id, $payment_token, $customer_address ) {
 				// 請求書を作成
-				$invoice = $this->invoice_service->issueInvoice( $consumer_address, $post_id, $payment_token );
+				$invoice = $this->invoice_service->issueInvoice( $customer_address, $post_id, $payment_token );
 				// 請求書に対して署名を行う
 				$signed_data = $this->signInvoice( $invoice );
 
@@ -107,12 +107,12 @@ class ResolveIssueInvoice {
 		$server_message = SigningMessage::from(
 			SolidityStrings::valueToHexString( $invoice->chainId()->value() )
 			. SolidityStrings::addressToHexString( $invoice->sellerAddress() )
-			. SolidityStrings::addressToHexString( $invoice->consumerAddress() )
+			. SolidityStrings::addressToHexString( $invoice->customerAddress() )
 			. SolidityStrings::valueToHexString( $invoice->postId()->value() )
 			. SolidityStrings::valueToHexString( $invoice->id()->hex() )
 			. SolidityStrings::addressToHexString( $invoice->paymentTokenAddress() )
 			. SolidityStrings::valueToHexString( new BigInteger( $invoice->paymentAmount()->value() ) )
-			. SolidityStrings::valueToHexString( ( new ConsumerTermsProvider() )->getTextHash()->hex()->value() )
+			. SolidityStrings::valueToHexString( ( new CustomerTermsProvider() )->getTextHash()->hex()->value() )
 			. SolidityStrings::addressToHexString( Address::zero() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 )    // TODO: アフィリエイト報酬率
 		);

@@ -44,7 +44,7 @@ class Erc4361Service {
 		return Erc4361Message::from(
 			$this->message_builder->buildMessage(
 				$domain->value(),
-				$invoice->consumerAddress()->value(),   // 購入者のアドレスで署名を要求する
+				$invoice->customerAddress()->value(),   // 購入者のアドレスで署名を要求する
 				$statement !== null ? $statement->value() : null,
 				$uri->value(),
 				(string) self::ERC4361_MESSAGE_VERSION,

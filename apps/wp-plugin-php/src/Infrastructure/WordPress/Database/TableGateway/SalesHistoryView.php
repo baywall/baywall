@@ -54,7 +54,7 @@ class SalesHistoryView extends TableBase {
 				t1.transaction_hash,
 				-- t2_agg.token_address, => t3.payment_token_address
 				-- t2_agg.total_amount, => t3.payment_amount
-				-- t2_agg.consumer_address, => t3.consumer_address
+				-- t2_agg.customer_address, => t3.customer_address
 				t2_agg.contract_address,
 				t2_agg.contract_received_amount,
 				-- t2_agg.seller_address, => t3.seller_address
@@ -68,7 +68,7 @@ class SalesHistoryView extends TableBase {
 				t3.seller_address,
 				t3.payment_token_address,
 				t3.payment_amount,
-				t3.consumer_address,
+				t3.customer_address,
 				t4.symbol AS payment_token_symbol,
 				t4.decimals AS payment_token_decimals,
 				t5.post_title
@@ -79,7 +79,7 @@ class SalesHistoryView extends TableBase {
 					invoice_id,
 					-- MAX(token_address) AS token_address, => t3.payment_token_address と同じ
 					-- SUM(amount) AS total_amount, => t3.payment_amount と同じ
-					-- MAX(from_address) AS consumer_address, => t3.consumer_address と同じ
+					-- MAX(from_address) AS customer_address, => t3.customer_address と同じ
 					MAX(CASE WHEN transfer_type = 1 THEN to_address END) AS contract_address,
 					MAX(CASE WHEN transfer_type = 1 THEN amount END) AS contract_received_amount,
 					-- MAX(CASE WHEN transfer_type = 2 THEN to_address END) AS seller_address, => t3.seller_address と同じ

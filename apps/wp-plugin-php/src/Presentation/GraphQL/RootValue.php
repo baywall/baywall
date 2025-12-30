@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL;
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveChain;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveChains;
-use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveConsumerTermsVersion;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveCustomerTermsVersion;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveCurrentSellerTerms;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveGetPaidContent;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueAccessTokenByErc4361Signature;
@@ -57,7 +57,7 @@ class RootValue {
 
 			// Query
 			'chains'                             => ResolveChains::class,
-			'consumerTermsVersion'               => ResolveConsumerTermsVersion::class,
+			'customerTermsVersion'               => ResolveCustomerTermsVersion::class,
 			'currentSellerTerms'                 => ResolveCurrentSellerTerms::class,
 			'networkCategories'                  => ResolveNetworkCategories::class,
 			'oracles'                            => ResolveOracles::class,

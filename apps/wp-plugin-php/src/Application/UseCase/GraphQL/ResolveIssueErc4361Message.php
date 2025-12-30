@@ -47,11 +47,11 @@ class ResolveIssueErc4361Message {
 					throw new BadRequestException( "[4244B369] Invoice not found: {$invoice_id}" );
 				}
 				// 購入者アドレスを取得
-				$consumer_address = $invoice->consumerAddress();
+				$customer_address = $invoice->customerAddress();
 
 				// nonceを生成し、購入者アドレスと紐づけて保存
 				$nonce = $this->erc4361_nonce_provider->generate();
-				$this->erc4361_nonce_repository->save( $consumer_address, $nonce );
+				$this->erc4361_nonce_repository->save( $customer_address, $nonce );
 
 				// 署名用メッセージを生成
 				$erc4361_message = $this->erc4361_service->createMessage( $invoice_id, $nonce );

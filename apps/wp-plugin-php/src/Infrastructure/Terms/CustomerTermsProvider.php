@@ -8,9 +8,9 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 
 /**
  * 本プラグインにおける購入者向け利用規約の情報を取得するためのクラス
- * TODO: CustomerTermsProviderに名前を変更し、testsディレクトリへ移動
+ * TODO: testsディレクトリへ移動
  */
-class ConsumerTermsProvider {
+class CustomerTermsProvider {
 
 	/**
 	 * このプラグインに同梱されている購入者向け利用規約のバージョンを取得します。
@@ -19,7 +19,7 @@ class ConsumerTermsProvider {
 	 */
 	public function currentVersion(): int {
 		// TODO: 購入者向け利用規約バージョン取得処理の実装
-		error_log( '[230E2F1C] ConsumerTerms::version() - Not implemented yet' );
+		error_log( '[230E2F1C] CustomerTerms::version() - Not implemented yet' );
 		return 1;
 	}
 

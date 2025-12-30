@@ -35,7 +35,7 @@ class SalesHistoryViewRecord extends RecordBase {
 	public string $seller_address;
 	public string $payment_token_address;
 	public string $payment_amount;
-	public string $consumer_address;
+	public string $customer_address;
 	public string $payment_token_symbol;
 	public int $payment_token_decimals;
 	public ?string $post_title;
