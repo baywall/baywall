@@ -35,7 +35,7 @@ class PostId implements ValueObject {
 		return (string) $this->post_id;
 	}
 
-	public static function fromNullableValue( ?int $post_id ): ?self {
+	public static function fromNullable( ?int $post_id ): ?self {
 		return $post_id === null ? null : self::from( $post_id );
 	}
 }

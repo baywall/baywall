@@ -31,7 +31,7 @@ class ResolveTokens {
 	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$filter_chain_id = ChainId::fromNullableValue( $args['filter']['chainId'] ?? null );
+		$filter_chain_id = ChainId::fromNullable( $args['filter']['chainId'] ?? null );
 		$filter_address  = Address::fromNullable( $args['filter']['address'] ?? null );
 
 		$filter = new TokensFilter();
