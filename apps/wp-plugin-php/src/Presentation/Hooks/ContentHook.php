@@ -214,7 +214,7 @@ class ContentLoadHook {
 			return $content;    // 投稿、固定ページ以外は処理抜け
 		}
 
-		$post_id = PostId::fromNullableValue( isset( $GLOBALS['post'] ) ? $GLOBALS['post']->ID : null );
+		$post_id = PostId::fromNullable( isset( $GLOBALS['post'] ) ? $GLOBALS['post']->ID : null );
 		if ( $post_id === null ) {
 			return $content;    // 投稿IDが取得できない場合は処理抜け
 		}

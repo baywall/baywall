@@ -5,7 +5,12 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
 
-/** 利用規約バージョン */
+/**
+ * 利用規約バージョン
+ *
+ * @deprecated
+ * TODO: 削除
+ */
 class TermsVersion implements ValueObject {
 	private function __construct( int $version_value ) {
 		assert( $version_value > 0, '[1AA762E9] TermsVersion must be greater than 0' );

@@ -25,7 +25,7 @@ class ResolveChains {
 	public function handle( array $root_value, array $args ): array {
 		$this->user_access_checker->checkHasAdminRole();  // 管理者権限が必要
 
-		$filter_chain_id = ChainId::fromNullableValue( $args['filter']['chainId'] ?? null );
+		$filter_chain_id = ChainId::fromNullable( $args['filter']['chainId'] ?? null );
 		/** @var bool|null */
 		$filter_is_connectable = $args['filter']['isConnectable'] ?? null;
 
