@@ -14,8 +14,8 @@ class PrivateKey implements ValueObject {
 		#[\SensitiveParameter]
 		string $private_key_value
 	) {
-		// フォーマットチェック(最大64文字の16進数)
-		if ( ! preg_match( '/^0x[a-f0-9]{1,64}$/', $private_key_value ) ) {
+		// フォーマットチェック(32バイトの値)
+		if ( ! preg_match( '/^0x[a-f0-9]{64}$/', $private_key_value ) ) {
 			throw new \InvalidArgumentException( '[5CE68177] Invalid private key format: ' . $private_key_value );
 		}
 		$this->private_key_value = $private_key_value;

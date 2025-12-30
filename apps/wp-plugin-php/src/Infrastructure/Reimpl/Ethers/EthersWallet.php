@@ -14,14 +14,13 @@ class EthersWallet {
 		#[\SensitiveParameter]
 		string $private_key
 	) {
-		assert( preg_match( '/^0x[0-9a-f]{1,64}$/', $private_key ) );
 		$this->signing_key = new EthersSigningKey( $private_key );
 	}
 
 	public static function createRandom(): self {
 		$ec          = new EC( 'secp256k1' );
 		$key_pair    = $ec->genKeyPair();
-		$private_key = $key_pair->getPrivate( 'hex' );
+		$private_key = str_pad( $key_pair->getPrivate( 'hex' ), 64, '0', STR_PAD_LEFT );
 
 		return new self( "0x{$private_key}" );
 	}
