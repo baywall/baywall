@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Reimpl\Ethers;
 
 use Elliptic\EC;
 use Elliptic\EC\KeyPair;
+use InvalidArgumentException;
 
 /**
  * 署名用の鍵を表すクラス
@@ -19,7 +20,9 @@ class EthersSigningKey {
 		#[\SensitiveParameter]
 		string $private_key
 	) {
-		assert( preg_match( '/^0x[0-9a-f]{64}$/', $private_key ) );
+		if ( ! preg_match( '/^0x[0-9a-f]{64}$/', $private_key ) ) {
+			throw new InvalidArgumentException( "[6F4D3BF3] Invalid private key. {$private_key}" );
+		}
 		$this->key_pair = ( new EC( 'secp256k1' ) )->keyFromPrivate( str_replace( '0x', '', $private_key ) );
 	}
 
