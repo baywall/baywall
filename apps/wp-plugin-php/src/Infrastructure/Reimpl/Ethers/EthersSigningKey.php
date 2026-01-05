@@ -27,7 +27,9 @@ class EthersSigningKey {
 	}
 
 	public function sign( string $digest ): string {
-		assert( preg_match( '/^0x[0-9a-f]{64}$/', $digest ) );
+		if ( ! preg_match( '/^0x[0-9a-f]{64}$/', $digest ) ) {
+			throw new InvalidArgumentException( "[74669166] Invalid digest. {$digest}" );
+		}
 
 		$signature = $this->key_pair->sign( str_replace( '0x', '', $digest ), array( 'canonical' => true ) );
 
