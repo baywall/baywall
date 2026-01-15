@@ -15,7 +15,7 @@ class Config {
 	public const ROOT_DIR = __DIR__ . '/../../..';
 
 	/** 販売者が利用規約に同意する時にウォレットに表示されるメッセージ */
-	public const SELLER_TERMS_SIGNING_MESSAGE = 'I agree to baywall’s Seller Terms of Service (Version 1).';
+	public const SELLER_TERMS_SIGNING_MESSAGE = 'I agree to the Terms of Service for baywall (Version 0) and the Privacy Policy for baywall (Version 0).';
 
 	private const BLOCK_BUILD_RELATIVE_DIR = 'build/block';
 	/** `block.json`へのパス */
