@@ -9,7 +9,6 @@ use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Entity\ServerSigner;
-use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\InvoiceService;
@@ -28,7 +27,6 @@ class ResolveIssueInvoiceV2 {
 
 	private UserAccessChecker $user_access_checker;
 	private TransactionService $transaction_service;
-	private SellerRepository $seller_repository;
 	private InvoiceService $invoice_service;
 	private TokenRepository $token_repository;
 	private ServerSignerRepository $server_signer_repository;
@@ -40,7 +38,6 @@ class ResolveIssueInvoiceV2 {
 	public function __construct(
 		UserAccessChecker $user_access_checker,
 		TransactionService $transaction_service,
-		SellerRepository $seller_repository,
 		InvoiceService $invoice_service,
 		TokenRepository $token_repository,
 		ServerSignerRepository $server_signer_repository,
@@ -51,7 +48,6 @@ class ResolveIssueInvoiceV2 {
 	) {
 		$this->user_access_checker           = $user_access_checker;
 		$this->transaction_service           = $transaction_service;
-		$this->seller_repository             = $seller_repository;
 		$this->invoice_service               = $invoice_service;
 		$this->token_repository              = $token_repository;
 		$this->server_signer_repository      = $server_signer_repository;
@@ -84,11 +80,6 @@ class ResolveIssueInvoiceV2 {
 			function () use ( $post_id, $payment_token, $customer_address ) {
 				// 署名用ウォレットを取得
 				$signer = $this->server_signer_repository->get();
-				// 販売者を取得
-				$seller = $this->seller_repository->get();
-				if ( $seller === null ) {
-					throw new \RuntimeException( '[4445C9A9] seller is null.' );
-				}
 
 				// 請求書を作成
 				$invoice = $this->invoice_service->issueInvoice( $customer_address, $post_id, $payment_token );
@@ -109,8 +100,6 @@ class ResolveIssueInvoiceV2 {
 				return array(
 					'message'              => $signing_message_bytes->hex()->value(),
 					'signature'            => $signature->hex()->value(),
-					'sellerSigningMessage' => $seller->signingMessage()->value(),
-					'sellerSignature'      => $seller->signature()->hex()->value(),
 					'paymentAmount'        => $invoice->paymentAmount()->value(),
 				);
 			}
