@@ -98,9 +98,9 @@ class ResolveIssueInvoiceV2 {
 				$this->cookie_writer->set( $cookie );
 
 				return array(
-					'message'              => $signing_message_bytes->hex()->value(),
-					'signature'            => $signature->hex()->value(),
-					'paymentAmount'        => $invoice->paymentAmount()->value(),
+					'message'       => $signing_message_bytes->hex()->value(),
+					'signature'     => $signature->hex()->value(),
+					'paymentAmount' => $invoice->paymentAmount()->value(),
 				);
 			}
 		);
