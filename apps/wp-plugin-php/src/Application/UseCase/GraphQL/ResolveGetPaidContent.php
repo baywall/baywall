@@ -41,17 +41,12 @@ class ResolveGetPaidContent {
 			}
 		);
 
-		return $this->transaction_service->transactional(
-			function () use ( $invoice_id ) {
-				// 有料コンテンツを取得
-				$paid_content_value = $this->get_paid_content->handle( $invoice_id->hex() );
-
-				return array(
-					// TODO: WordPressのフィルタを使っているのでApplication層に置くのは不適切。
-					// Presentation層に移動するか、Infrastructure層に移動する
-					'paidContent' => apply_filters( 'the_content', $paid_content_value ),
-				);
-			}
+		// 有料コンテンツを取得
+		$paid_content_value = $this->get_paid_content->handle( $invoice_id->hex() );
+		return array(
+			// TODO: WordPressのフィルタを使っているのでApplication層に置くのは不適切。
+			// Presentation層に移動するか、Infrastructure層に移動する
+			'paidContent' => apply_filters( 'the_content', $paid_content_value ),
 		);
 	}
 }
