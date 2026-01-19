@@ -6,6 +6,8 @@ namespace Cornix\Serendipity\Core\Infrastructure\DI;
 use Cornix\Serendipity\Core\Application\Service\AccessTokenExpirationProvider;
 use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
+use Cornix\Serendipity\Core\Application\Repository\PausedRepository;
+use Cornix\Serendipity\Core\Application\Repository\SctaUrlRepository;
 use Cornix\Serendipity\Core\Application\Service\Erc4361NonceProvider;
 use Cornix\Serendipity\Core\Application\Service\Erc4361PropertyProvider;
 use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
@@ -51,6 +53,8 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpNetwo
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpRefreshTokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpSellerRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpServerSignerRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpPausedRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpSctaUrlRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenExpirationProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361NonceProvider;
@@ -91,6 +95,8 @@ final class ContainerDefinitions {
 			RefreshTokenRepository::class        => autowire( WpRefreshTokenRepository::class ),
 			InvoiceTokenRepository::class        => autowire( WpInvoiceTokenRepository::class ),
 			Erc4361NonceRepository::class        => autowire( WpErc4361NonceRepository::class ),
+			PausedRepository::class              => autowire( WpPausedRepository::class ),
+			SctaUrlRepository::class             => autowire( WpSctaUrlRepository::class ),
 
 			// Service
 			PostTitleProvider::class             => autowire( WpPostTitleProvider::class ),
