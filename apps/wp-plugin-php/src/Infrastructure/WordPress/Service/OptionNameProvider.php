@@ -24,4 +24,9 @@ class OptionNameProvider {
 	public function jwtSecretKey(): string {
 		return $this->prefix . 'jwt_secret_key';
 	}
+
+	/** 「特定商取引法に基づく表記」のURL */
+	public function sctaUrl(): string {
+		return $this->prefix . 'scta_url';
+	}
 }
