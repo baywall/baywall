@@ -29,4 +29,9 @@ class OptionNameProvider {
 	public function sctaUrl(): string {
 		return $this->prefix . 'scta_url';
 	}
+
+	/** 一時停止状態 */
+	public function paused(): string {
+		return $this->prefix . 'paused';
+	}
 }
