@@ -21,6 +21,8 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolvePost;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSalesHistories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveChain;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveOracle;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSavePaused;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveSctaUrl;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveToken;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSeller;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSellingContent;
@@ -79,6 +81,8 @@ class RootValue {
 			'getPaidContent'                     => ResolveGetPaidContent::class,
 			'saveChain'                          => ResolveSaveChain::class,
 			'saveOracle'                         => ResolveSaveOracle::class,
+			'savePaused'                         => ResolveSavePaused::class,
+			'saveSctaUrl'                        => ResolveSaveSctaUrl::class,
 			'saveToken'                          => ResolveSaveToken::class,
 			'setSellerAgreedTerms'               => ResolveSetSellerAgreedTerms::class,
 		);
