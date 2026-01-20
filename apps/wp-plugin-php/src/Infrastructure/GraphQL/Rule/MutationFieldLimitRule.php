@@ -31,7 +31,7 @@ class MutationFieldLimitRule extends ValidationRule {
 
 				if ( $top_level_fields > $this->max_fields ) {
 					$context->reportError(
-						new Error( '[BBF09EBD] Only one top-level mutation field is allowed per request.' )
+						new Error( "[BBF09EBD] Only one top-level mutation field is allowed per request. max: {$this->max_fields}, actual: {$top_level_fields}" )
 					);
 				}
 			},
