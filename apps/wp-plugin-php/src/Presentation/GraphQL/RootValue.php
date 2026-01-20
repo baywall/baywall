@@ -16,16 +16,19 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategories
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategory;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveOracle;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveOracles;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolvePaused;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolvePost;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSalesHistories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveChain;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveOracle;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveSiteSettings;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveToken;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSeller;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSellingContent;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSellingPrice;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveServerSigner;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSetSellerAgreedTerms;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSctaUrl;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveToken;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveTokens;
 use Psr\Container\ContainerInterface;
@@ -66,6 +69,8 @@ class RootValue {
 			'seller'                             => ResolveSeller::class,
 			'serverSigner'                       => ResolveServerSigner::class,
 			'tokens'                             => ResolveTokens::class,
+			'paused'                             => ResolvePaused::class,
+			'sctaUrl'                            => ResolveSctaUrl::class,
 
 			// Mutation
 			'issueInvoice'                       => ResolveIssueInvoice::class,
@@ -75,6 +80,7 @@ class RootValue {
 			'getPaidContent'                     => ResolveGetPaidContent::class,
 			'saveChain'                          => ResolveSaveChain::class,
 			'saveOracle'                         => ResolveSaveOracle::class,
+			'saveSiteSettings'                   => ResolveSaveSiteSettings::class,
 			'saveToken'                          => ResolveSaveToken::class,
 			'setSellerAgreedTerms'               => ResolveSetSellerAgreedTerms::class,
 		);
