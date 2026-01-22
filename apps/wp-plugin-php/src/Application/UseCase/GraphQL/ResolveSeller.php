@@ -26,7 +26,10 @@ class ResolveSeller {
 		}
 
 		return array(
-			'agreedTerms' => $agreed_terms,
+			'agreedTerms'    => $agreed_terms, // TODO: 削除
+			'address'        => $seller ? $seller->address()->value() : null,
+			'signingMessage' => $seller ? $seller->signingMessage()->value() : null,
+			'signature'      => $seller ? $seller->signature()->hex()->value() : null,
 		);
 	}
 }
