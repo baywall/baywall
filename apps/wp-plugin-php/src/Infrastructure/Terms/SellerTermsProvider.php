@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 
+/** @deprecated */
 class SellerTermsProvider {
 
 	private const CURRENT_SELLER_TERMS_VERSION = 1;
