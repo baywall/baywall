@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueAccessTokenB
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueErc4361Message;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoiceV2;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNativeToken;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategory;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveOracle;
@@ -67,6 +68,7 @@ class RootValue {
 			'seller'                             => ResolveSeller::class,
 			'serverSigner'                       => ResolveServerSigner::class,
 			'tokens'                             => ResolveTokens::class,
+			'nativeToken'                        => ResolveNativeToken::class,
 			'paused'                             => ResolvePaused::class,
 			'sctaUrl'                            => ResolveSctaUrl::class,
 
