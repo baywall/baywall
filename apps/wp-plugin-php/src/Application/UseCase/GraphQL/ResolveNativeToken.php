@@ -5,14 +5,16 @@ namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\NativeTokenConstants;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Service\NativeTokenService;
 
 class ResolveNativeToken {
 
 	private UserAccessChecker $user_access_checker;
+	private NativeTokenService $native_token_service;
 
-	public function __construct( UserAccessChecker $user_access_checker ) {
-		$this->user_access_checker = $user_access_checker;
+	public function __construct( UserAccessChecker $user_access_checker, NativeTokenService $native_token_service ) {
+		$this->user_access_checker  = $user_access_checker;
+		$this->native_token_service = $native_token_service;
 	}
 
 	public function handle( array $root_value, array $args ): array {
@@ -20,15 +22,10 @@ class ResolveNativeToken {
 
 		$chain_id = ChainId::from( $args['chainId'] );
 
-		$def = NativeTokenConstants::DEFINITIONS[ $chain_id->value() ] ?? null;
-		if ( $def === null ) {
-			throw new \InvalidArgumentException( "[5A405D04] Native token is not defined for chain id: {$chain_id}" );
-		}
-
 		return array(
-			'symbol'   => $def['symbol'],
-			'name'     => $def['name'],
-			'decimals' => $def['decimals'],
+			'symbol'   => $this->native_token_service->getSymbol( $chain_id )->value(),
+			'name'     => $this->native_token_service->getName( $chain_id ),
+			'decimals' => $this->native_token_service->getDecimals( $chain_id )->value(),
 		);
 	}
 }
