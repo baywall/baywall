@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Repository;
 
-use Cornix\Serendipity\Core\Application\Repository\PausedRepository;
+use Cornix\Serendipity\Core\Domain\Repository\PausedRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option\BoolOption;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\OptionNameProvider;
 
