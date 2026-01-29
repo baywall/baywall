@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Repository;
+namespace Cornix\Serendipity\Core\Domain\Repository;
 
 /**
  * 一時停止状態を取得または設定するクラス
