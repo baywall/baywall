@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\Service;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
+use Cornix\Serendipity\Core\Domain\Repository\PausedRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
@@ -19,19 +20,22 @@ class InvoiceService {
 	private TokenAmountConverter $token_amount_converter;
 	private SellerRepository $seller_repository;
 	private InvoiceRepository $invoice_repository;
+	private PausedRepository $paused_repository;
 
 	public function __construct(
 		PostRepository $post_repository,
 		PriceExchangeService $price_exchange_service,
 		TokenAmountConverter $token_amount_converter,
 		SellerRepository $seller_repository,
-		InvoiceRepository $invoice_repository
+		InvoiceRepository $invoice_repository,
+		PausedRepository $paused_repository
 	) {
 		$this->post_repository        = $post_repository;
 		$this->price_exchange_service = $price_exchange_service;
 		$this->token_amount_converter = $token_amount_converter;
 		$this->seller_repository      = $seller_repository;
 		$this->invoice_repository     = $invoice_repository;
+		$this->paused_repository      = $paused_repository;
 	}
 
 	/** 請求書を発行します。 */
@@ -40,14 +44,18 @@ class InvoiceService {
 		$post     = $this->post_repository->get( $post_id );
 		// TODO: 対象の投稿が購入可能かどうかをチェック
 
-		$seller = $this->seller_repository->get();
-		if ( $seller === null ) {
-			throw new \RuntimeException( '[70C212C9] seller is null.' );
-		}
+		$seller        = $this->seller_repository->get();
 		$selling_price = $post->sellingPrice();
-		if ( $selling_price === null ) {
-			throw new \RuntimeException( "[45982ECE] selling_price is null. post_id: {$post_id}" );
+
+		// 事前チェック。ここを通らないように画面で制御すること
+		if ( $this->paused_repository->get() ) {
+			throw new \RuntimeException( '[F2EDAE53] paused.' );    // サイト一時停止状態
+		} elseif ( $seller === null ) {
+			throw new \RuntimeException( '[70C212C9] seller is null.' ); // 販売者未登録
+		} elseif ( $selling_price === null ) {
+			throw new \RuntimeException( "[45982ECE] selling_price is null. post_id: {$post_id}" ); // 販売価格未登録
 		}
+
 		// 支払い額を取得(この時点では 0,1 ETH のようなブロックチェーン上の小数点以下桁数が考慮されていない価格)
 		$payment_price = $this->price_exchange_service->exchange( $selling_price, $payment_token->symbol() );
 
