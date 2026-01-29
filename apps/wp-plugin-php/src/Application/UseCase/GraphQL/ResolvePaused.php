@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Repository\PausedRepository;
+use Cornix\Serendipity\Core\Domain\Repository\PausedRepository;
 
 class ResolvePaused {
 
