@@ -98,6 +98,19 @@ class MyWpdb {
 	}
 
 	/**
+	 * wpdb->get_results
+	 *
+	 * @return array|object|null
+	 */
+	public function getResults( string $query, string $output = OBJECT ) {
+		$results = $this->wpdb->get_results( $query, $output );
+		if ( ! empty( $this->wpdb->last_error ) ) {
+			throw new RuntimeException( '[FB1C88B8] Failed to get results. ' . $this->wpdb->last_error );
+		}
+		return $results;
+	}
+
+	/**
 	 *
 	 * @return string `DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci`のような文字列
 	 */
