@@ -69,9 +69,9 @@ class SymbolService {
 			->byIsPayable( true )
 			->apply( $target_network_all_tokens );
 
-		// レート変換無しで支払い可能なトークンが存在する場合は販売可能
-		// - ETHが支払い可能 => ETHで販売可能
-		// - USDCが支払い可能 => USDCで販売可能
+		// レート変換無しで支払可能なトークンが存在する場合は販売可能
+		// - ETHが支払可能 => ETHで販売可能
+		// - USDCが支払可能 => USDCで販売可能
 		if ( ! empty( $payable_symbol_tokens ) ) {
 			return true;
 		}
@@ -98,7 +98,7 @@ class SymbolService {
 			}
 		}
 
-		// symbolが'USD'または[symbol]/USDのOracleが存在する場合は、支払い可能なトークンに変換できる必要がある
+		// symbolが'USD'または[symbol]/USDのOracleが存在する場合は、支払可能なトークンに変換できる必要がある
 		// まずは[symbol]/USD以外のXXX/USDのOracle一覧を取得
 		$other_usd_quote_oracles = array_filter(
 			$usd_quote_oracles,

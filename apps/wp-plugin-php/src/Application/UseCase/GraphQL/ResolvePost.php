@@ -74,7 +74,7 @@ class ResolvePost {
 		);
 	}
 
-	/** 指定した投稿で支払い可能なトークン一覧を取得します */
+	/** 指定した投稿で支払可能なトークン一覧を取得します */
 	private function getPayableTokens( Post $post ) {
 		$selling_network_category_id = $post->sellingNetworkCategoryId();
 
@@ -92,7 +92,7 @@ class ResolvePost {
 		/** @var Token[] */
 		$result = array();
 
-		// 各チェーンに対して支払い可能なトークンを取得
+		// 各チェーンに対して支払可能なトークンを取得
 		$all_tokens = $this->token_repository->all();
 		foreach ( $payable_chains as $chain ) {
 			$payable_tokens = ( new TokensFilter() )
