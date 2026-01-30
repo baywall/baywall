@@ -43,7 +43,8 @@ class WpSellerRepository implements SellerRepository {
 		// 既存の販売者情報がある場合は削除
 		$prev_seller = $this->get();
 		if ( $prev_seller !== null ) {
-			$this->seller_table->delete( $prev_seller->address() );
+			$result = $this->seller_table->delete( $prev_seller->address() );
+			assert( $result === 1, "[D6A207D6] Failed to delete seller data. {$result}" );
 		}
 
 		$this->seller_table->add(

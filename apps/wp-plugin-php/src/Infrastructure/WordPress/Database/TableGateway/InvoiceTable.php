@@ -7,14 +7,20 @@ use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
 
 /**
  * 発行した請求書の情報を保存するテーブル
  */
-class InvoiceTable extends TableBase {
-	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
-		parent::__construct( $wpdb, $table_name_provider->invoice() );
+class InvoiceTable {
+
+	private MyWpdb $wpdb;
+	private string $table_name;
+
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+		$this->wpdb       = $wpdb;
+		$this->table_name = $table_name_provider->invoice();
 	}
 
 	/**
@@ -34,13 +40,12 @@ class InvoiceTable extends TableBase {
 				`payment_token_address`,
 				`payment_amount`,
 				`customer_address`
-			FROM `{$this->tableName()}`
-			WHERE `id` = %s
+			FROM `{$this->table_name}`
+			WHERE `id` = :invoice_id
 		SQL;
 
-		$sql = $this->prepare( $sql, $invoice_id->ulid() );
-
-		$record = $this->safeGetRow( $sql );
+		$sql    = $this->wpdb->prepare( $sql, array( ':invoice_id' => $invoice_id->ulid() ) );
+		$record = $this->wpdb->getRow( $sql );
 
 		return $record === null ? null : new InvoiceTableRecord( $record );
 	}
@@ -50,10 +55,10 @@ class InvoiceTable extends TableBase {
 		assert( $invoice->paymentAmount()->decimals()->equals( Decimals::from( 0 ) ), '[65AA4D6E] Payment amount must be an integer.' );
 
 		$sql = <<<SQL
-			INSERT INTO `{$this->tableName()}`
+			INSERT INTO `{$this->table_name}`
 				( `id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_amount`, `customer_address` )
 			VALUES
-				( %s, %d, %d, %s, %s, %s, %s, %s, %s )
+				( :invoice_id, :post_id, :chain_id, :selling_amount, :selling_symbol, :seller_address, :payment_token_address, :payment_amount, :customer_address )
 			ON DUPLICATE KEY UPDATE
 				`post_id` = VALUES(`post_id`),
 				`chain_id` = VALUES(`chain_id`),
@@ -65,19 +70,21 @@ class InvoiceTable extends TableBase {
 				`customer_address` = VALUES(`customer_address`)
 		SQL;
 
-		$sql = $this->prepare(
+		$sql = $this->wpdb->prepare(
 			$sql,
-			$invoice->id()->ulid(),
-			$invoice->postId()->value(),
-			$invoice->chainId()->value(),
-			$invoice->sellingPrice()->amount()->value(),
-			$invoice->sellingPrice()->symbol()->value(),
-			$invoice->sellerAddress()->value(),
-			$invoice->paymentTokenAddress()->value(),
-			$invoice->paymentAmount()->value(),
-			$invoice->customerAddress()->value(),
+			array(
+				':invoice_id'            => $invoice->id()->ulid(),
+				':post_id'               => $invoice->postId()->value(),
+				':chain_id'              => $invoice->chainId()->value(),
+				':selling_amount'        => $invoice->sellingPrice()->amount()->value(),
+				':selling_symbol'        => $invoice->sellingPrice()->symbol()->value(),
+				':seller_address'        => $invoice->sellerAddress()->value(),
+				':payment_token_address' => $invoice->paymentTokenAddress()->value(),
+				':payment_amount'        => $invoice->paymentAmount()->value(),
+				':customer_address'      => $invoice->customerAddress()->value(),
+			)
 		);
 
-		$this->safeQuery( $sql );
+		$this->wpdb->query( $sql );
 	}
 }
