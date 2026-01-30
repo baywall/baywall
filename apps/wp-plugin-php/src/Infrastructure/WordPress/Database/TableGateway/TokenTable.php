@@ -33,7 +33,7 @@ class TokenTable {
 			FROM `{$this->table_name}`
 		SQL;
 
-		$result = $this->wpdb->getResults( $sql );
+		$result = $this->wpdb->get_results( $sql );
 
 		return array_map(
 			fn( stdClass $record ) => new TokenTableRecord( $record ),

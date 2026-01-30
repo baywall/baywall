@@ -45,7 +45,7 @@ class InvoiceTable {
 		SQL;
 
 		$sql    = $this->wpdb->prepare( $sql, array( ':invoice_id' => $invoice_id->ulid() ) );
-		$record = $this->wpdb->getRow( $sql );
+		$record = $this->wpdb->get_row( $sql );
 
 		return $record === null ? null : new InvoiceTableRecord( $record );
 	}

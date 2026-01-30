@@ -104,7 +104,7 @@ class MyWpdb {
 	/**
 	 * wpdb->get_row
 	 */
-	public function getRow( string $query, string $output = OBJECT, int $y = 0 ) {
+	public function get_row( string $query, string $output = OBJECT, int $y = 0 ) {
 		$row = $this->wpdb->get_row( $query, $output, $y );
 		if ( $row === null && ! empty( $this->wpdb->last_error ) ) {
 			throw new RuntimeException( '[108B8388] Failed to get row. ' . $this->wpdb->last_error );
@@ -117,7 +117,7 @@ class MyWpdb {
 	 *
 	 * @return array|object|null
 	 */
-	public function getResults( string $query, string $output = OBJECT ) {
+	public function get_results( string $query, string $output = OBJECT ) {
 		$results = $this->wpdb->get_results( $query, $output );
 		if ( ! empty( $this->wpdb->last_error ) ) {
 			throw new RuntimeException( '[FB1C88B8] Failed to get results. ' . $this->wpdb->last_error );
@@ -130,7 +130,7 @@ class MyWpdb {
 	 *
 	 * @return string|null Database query result (as string), or null on failure.
 	 */
-	public function getVar( string $query, int $x = 0, int $y = 0 ) {
+	public function get_var( string $query, int $x = 0, int $y = 0 ) {
 		$var = $this->wpdb->get_var( $query, $x, $y );
 		if ( $var === null && ! empty( $this->wpdb->last_error ) ) {
 			throw new RuntimeException( '[B0B02673] Failed to get var. ' . $this->wpdb->last_error );

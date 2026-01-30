@@ -32,7 +32,7 @@ class CrawledBlockTable {
 			SELECT `chain_id`, `block_number`, `updated_at`
 			FROM `{$this->table_name}`
 		SQL;
-		$results = $this->wpdb->getResults( $sql );
+		$results = $this->wpdb->get_results( $sql );
 
 		return array_map(
 			fn( stdClass $record ) => new CrawledBlockTableRecord( $record ),

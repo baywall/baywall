@@ -30,7 +30,7 @@ class ChainTable {
 			SELECT `chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `block_explorer_url`
 			FROM `{$this->table_name}`
 		SQL;
-		$results = $this->wpdb->getResults( $sql );
+		$results = $this->wpdb->get_results( $sql );
 
 		return array_map(
 			fn( stdClass $record ) => new ChainTableRecord( $record ),

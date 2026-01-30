@@ -31,7 +31,7 @@ class Erc4361NonceTable {
 			array( ':wallet_address' => $address->value() )
 		);
 
-		$record = $this->wpdb->getRow( $sql );
+		$record = $this->wpdb->get_row( $sql );
 
 		return $record === null ? null : new Erc4361NonceTableRecord( $record );
 	}
