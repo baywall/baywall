@@ -118,7 +118,7 @@ class SalesHistoryView {
 			$sql .= ' WHERE ' . implode( ' AND ', $where_conditions );
 		}
 
-		$results = $this->wpdb->getResults( $sql );
+		$results = $this->wpdb->get_results( $sql );
 
 		return array_map(
 			static function ( stdClass $record ) {

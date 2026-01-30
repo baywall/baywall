@@ -59,7 +59,7 @@ class UnlockPaywallTransactionTable {
 		SQL;
 
 		$sql = $this->wpdb->prepare( $sql, array( ':invoice_id' => $invoice_id->ulid() ) );
-		$row = $this->wpdb->getRow( $sql );
+		$row = $this->wpdb->get_row( $sql );
 
 		return $row !== null ? new UnlockPaywallTransactionTableRecord( $row ) : null;
 	}
@@ -73,7 +73,7 @@ class UnlockPaywallTransactionTable {
 		SQL;
 
 		$sql = $this->wpdb->prepare( $sql, array( ':invoice_id' => $invoice_id->ulid() ) );
-		$row = $this->wpdb->getRow( $sql );
+		$row = $this->wpdb->get_row( $sql );
 
 		return $row !== null;
 	}

@@ -37,7 +37,7 @@ class PaidContentTable {
 
 		$sql = $this->wpdb->prepare( $sql, array( ':post_id' => $post_id->value() ) );
 
-		$record = $this->wpdb->getRow( $sql );
+		$record = $this->wpdb->get_row( $sql );
 
 		return $record === null ? null : new PaidContentTableRecord( $record );
 	}
@@ -88,6 +88,6 @@ class PaidContentTable {
 	 * テーブルが存在するかどうかを取得します。
 	 */
 	public function exists(): bool {
-		return (bool) $this->wpdb->getVar( "SHOW TABLES LIKE '{$this->table_name}'" );
+		return (bool) $this->wpdb->get_var( "SHOW TABLES LIKE '{$this->table_name}'" );
 	}
 }

@@ -30,7 +30,7 @@ class AppContractTable {
 			SELECT `chain_id`, `address`
 			FROM `{$this->table_name}`
 		SQL;
-		$results = $this->wpdb->getResults( $sql );
+		$results = $this->wpdb->get_results( $sql );
 
 		return array_map(
 			fn( stdClass $record ) => new AppContractTableRecord( $record ),

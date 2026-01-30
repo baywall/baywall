@@ -26,7 +26,7 @@ class ServerSignerTable {
 			FROM `{$this->table_name}`
 		SQL;
 
-		$results = $this->wpdb->getResults( $sql );
+		$results = $this->wpdb->get_results( $sql );
 		if ( count( $results ) > 1 ) {
 			// 2件以上データが存在することはない
 			throw new \RuntimeException( '[81CCE569] More than one server signer data found.' );
