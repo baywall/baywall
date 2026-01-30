@@ -16,11 +16,13 @@ class MyWpdb {
 	private wpdb $wpdb;
 	public MyMySQLi $dbh;
 	private NamedPlaceholder $named_placeholder;
+	public string $posts;
 
 	public function __construct( wpdb $wpdb ) {
 		$this->wpdb              = $wpdb;
 		$this->dbh               = new MyMySQLi( $wpdb->dbh );
 		$this->named_placeholder = new NamedPlaceholder( $wpdb );
+		$this->posts             = $wpdb->posts;
 	}
 
 	/**
@@ -87,6 +89,19 @@ class MyWpdb {
 	}
 
 	/**
+	 * wpdb->delete
+	 */
+	public function delete( string $table, array $where, $where_format = null ): int {
+		$result = $this->wpdb->delete( $table, $where, $where_format );
+		if ( $result === false ) {
+			throw new RuntimeException( "[64BB03B5] wpdb delete failed: {$this->wpdb->last_error}" );
+		}
+		assert( is_int( $result ), "[3F45CD57] {$result}" );
+
+		return $result;
+	}
+
+	/**
 	 * wpdb->get_row
 	 */
 	public function getRow( string $query, string $output = OBJECT, int $y = 0 ) {
@@ -108,6 +123,19 @@ class MyWpdb {
 			throw new RuntimeException( '[FB1C88B8] Failed to get results. ' . $this->wpdb->last_error );
 		}
 		return $results;
+	}
+
+	/**
+	 * wpdb->get_var
+	 *
+	 * @return string|null Database query result (as string), or null on failure.
+	 */
+	public function getVar( string $query, int $x = 0, int $y = 0 ) {
+		$var = $this->wpdb->get_var( $query, $x, $y );
+		if ( $var === null && ! empty( $this->wpdb->last_error ) ) {
+			throw new RuntimeException( '[B0B02673] Failed to get var. ' . $this->wpdb->last_error );
+		}
+		return $var;
 	}
 
 	/**

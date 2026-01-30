@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use stdClass;
@@ -13,17 +14,18 @@ use stdClass;
  *
  * このクラスは、ペイウォール解除イベントテーブル等の複数のテーブルを結合して販売履歴を取得するために使用します
  */
-class SalesHistoryView extends TableBase {
+class SalesHistoryView {
 
-	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
+	private MyWpdb $wpdb;
+
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+		$this->wpdb                = $wpdb;
 		$this->tx_table_name       = $table_name_provider->unlockPaywallTransaction();
 		$this->event_table_name    = $table_name_provider->unlockPaywallTransferEvent();
 		$this->invoice_table_name  = $table_name_provider->invoice();
 		$this->token_table_name    = $table_name_provider->token();
 		$this->chain_table_name    = $table_name_provider->chain();
 		$this->wp_posts_table_name = $wpdb->posts; // WordPressの投稿テーブル名を取得
-
-		parent::__construct( $wpdb, '' );
 	}
 	/** トランザクション情報が格納されているテーブル名 */
 	private string $tx_table_name;
@@ -109,14 +111,14 @@ class SalesHistoryView extends TableBase {
 		// 条件が指定されている場合はWHERE句を追加
 		$where_conditions = array();
 		if ( $filter_invoice_id !== null ) {
-			$where_conditions[] = 't1.invoice_id = ' . $this->prepare( '%s', (string) $filter_invoice_id );
+			$where_conditions[] = 't1.invoice_id = ' . $this->wpdb->prepare( ':invoice_id', array( ':invoice_id' => (string) $filter_invoice_id ) );
 		}
 
 		if ( ! empty( $where_conditions ) ) {
 			$sql .= ' WHERE ' . implode( ' AND ', $where_conditions );
 		}
 
-		$results = $this->safeGetResults( $sql );
+		$results = $this->wpdb->getResults( $sql );
 
 		return array_map(
 			static function ( stdClass $record ) {
