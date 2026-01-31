@@ -6,7 +6,6 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
-use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\SellerTableRecord;
@@ -32,7 +31,7 @@ class SellerTable {
 	 */
 	public function all(): array {
 		$sql = <<<SQL
-			SELECT `seller_address`, `agreed_terms_version`, `signing_message`, `signature`
+			SELECT `seller_address`, `signing_message`, `signature`
 			FROM `{$this->table_name}`
 		SQL;
 
@@ -47,14 +46,13 @@ class SellerTable {
 	/**
 	 * 販売者情報を追加します。
 	 */
-	public function add( Address $seller_address, TermsVersion $agreed_terms_version, SigningMessage $signing_message, Signature $signature ): void {
+	public function add( Address $seller_address, SigningMessage $signing_message, Signature $signature ): void {
 		$result = $this->wpdb->insert(
 			$this->table_name,
 			array(
-				'seller_address'       => $seller_address->value(),
-				'agreed_terms_version' => $agreed_terms_version->value(),
-				'signing_message'      => $signing_message->value(),
-				'signature'            => $signature->hex()->value(),
+				'seller_address'  => $seller_address->value(),
+				'signing_message' => $signing_message->value(),
+				'signature'       => $signature->hex()->value(),
 			)
 		);
 		assert( $result === 1, "[67195917] Failed to insert seller data. {$result}" );
