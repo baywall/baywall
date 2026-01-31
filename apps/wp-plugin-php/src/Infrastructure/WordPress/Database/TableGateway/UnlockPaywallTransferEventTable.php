@@ -9,21 +9,27 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 
 /**
  * ペイウォール解除イベントのログ
  */
-class UnlockPaywallTransferEventTable extends TableBase {
-	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
-		parent::__construct( $wpdb, $table_name_provider->unlockPaywallTransferEvent() );
+class UnlockPaywallTransferEventTable {
+
+	private MyWpdb $wpdb;
+	private string $table_name;
+
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+		$this->wpdb       = $wpdb;
+		$this->table_name = $table_name_provider->unlockPaywallTransferEvent();
 	}
 
 	public function save( InvoiceId $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, UnlockPaywallTransferType $transfer_type ): void {
 		// 数量に小数点が含まれることはない
 		assert( $amount->decimals()->equals( Decimals::from( 0 ) ), '[F48CCCE8] Amount must be an integer.' );
 
-		$result = $this->safeInsert(
-			$this->tableName(),
+		$result = $this->wpdb->insert(
+			$this->table_name,
 			array(
 				'invoice_id'    => $invoice_id->ulid(),
 				'log_index'     => $log_index,
