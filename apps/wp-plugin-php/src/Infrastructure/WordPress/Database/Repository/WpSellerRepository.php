@@ -8,7 +8,6 @@ use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
-use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\SellerTable;
 
 class WpSellerRepository implements SellerRepository {
@@ -33,7 +32,6 @@ class WpSellerRepository implements SellerRepository {
 		$record = $records[0];
 		return new Seller(
 			Address::from( $record->sellerAddressValue() ),
-			TermsVersion::from( $record->agreedTermsVersionValue() ),
 			SigningMessage::from( $record->signingMessageValue() ),
 			Signature::from( $record->signatureValue() )
 		);
@@ -49,7 +47,6 @@ class WpSellerRepository implements SellerRepository {
 
 		$this->seller_table->add(
 			$seller->address(),
-			$seller->agreedTermsVersion(),
 			$seller->signingMessage(),
 			$seller->signature()
 		);
