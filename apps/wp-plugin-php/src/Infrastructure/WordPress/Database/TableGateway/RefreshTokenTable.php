@@ -33,7 +33,7 @@ class RefreshTokenTable {
 			array( ':refresh_token_hash' => $wp_refresh_token_hash->value() )
 		);
 
-		$record = $this->wpdb->getRow( $sql );
+		$record = $this->wpdb->get_row( $sql );
 
 		return $record === null ? null : new RefreshTokenTableRecord( $record );
 	}

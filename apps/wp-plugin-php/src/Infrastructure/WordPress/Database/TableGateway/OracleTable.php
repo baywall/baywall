@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\OracleTableRecord;
 use stdClass;
@@ -11,10 +12,14 @@ use stdClass;
 /**
  * Oracleの情報を記録するテーブル
  */
-class OracleTable extends TableBase {
+class OracleTable {
 
-	public function __construct( \wpdb $wpdb, TableNameProvider $table_name_provider ) {
-		parent::__construct( $wpdb, $table_name_provider->oracle() );
+	private MyWpdb $wpdb;
+	private string $table_name;
+
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+		$this->wpdb       = $wpdb;
+		$this->table_name = $table_name_provider->oracle();
 	}
 
 	/**
@@ -26,10 +31,10 @@ class OracleTable extends TableBase {
 		// Oracleのデータ量は少ないので絞り込みは上位で行う
 		$sql = <<<SQL
 			SELECT `chain_id`, `address`, `base_symbol`, `quote_symbol`
-			FROM `{$this->tableName()}`
+			FROM `{$this->table_name}`
 		SQL;
 
-		$result = $this->safeGetResults( $sql );
+		$result = $this->wpdb->get_results( $sql );
 
 		return array_map(
 			fn( stdClass $record ) => new OracleTableRecord( $record ),
@@ -40,19 +45,21 @@ class OracleTable extends TableBase {
 	public function save( Oracle $oracle ): void {
 		// 一旦、ON DUPLICATE KEY UPDATEは不要なので使用しない。
 		$sql = <<<SQL
-			INSERT INTO `{$this->tableName()}`
+			INSERT INTO `{$this->table_name}`
 			(`chain_id`, `address`, `base_symbol`, `quote_symbol`)
-			VALUES (%d, %s, %s, %s)
+			VALUES ( :chain_id, :address, :base_symbol, :quote_symbol )
 		SQL;
 
-		$sql = $this->prepare(
+		$sql = $this->wpdb->prepare(
 			$sql,
-			$oracle->chainId()->value(),
-			$oracle->address()->value(),
-			$oracle->symbolPair()->base()->value(),
-			$oracle->symbolPair()->quote()->value()
+			array(
+				':chain_id'     => $oracle->chainId()->value(),
+				':address'      => $oracle->address()->value(),
+				':base_symbol'  => $oracle->symbolPair()->base()->value(),
+				':quote_symbol' => $oracle->symbolPair()->quote()->value(),
+			)
 		);
 
-		$this->safeQuery( $sql );
+		$this->wpdb->query( $sql );
 	}
 }
