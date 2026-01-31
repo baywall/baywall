@@ -10,7 +10,6 @@ use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
-use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 use Cornix\Serendipity\Core\Infrastructure\Terms\SellerTermsProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\SignatureService;
 
@@ -61,7 +60,6 @@ class ResolveSaveSeller {
 				$this->seller_repository->save(
 					new Seller(
 						$address,
-						TermsVersion::from( 1 ),  // TODO: 削除
 						$signing_message,
 						$signature,
 					)
