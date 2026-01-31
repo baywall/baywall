@@ -5,11 +5,9 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL;
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveChain;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveChains;
-use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveCustomerTermsVersion;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveGetPaidContent;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueAccessTokenByErc4361Signature;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueErc4361Message;
-use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoiceV2;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNativeToken;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategories;
@@ -60,7 +58,6 @@ class RootValue {
 
 			// Query
 			'chains'                             => ResolveChains::class,
-			'customerTermsVersion'               => ResolveCustomerTermsVersion::class,
 			'networkCategories'                  => ResolveNetworkCategories::class,
 			'oracles'                            => ResolveOracles::class,
 			'post'                               => ResolvePost::class,
@@ -73,7 +70,6 @@ class RootValue {
 			'sctaUrl'                            => ResolveSctaUrl::class,
 
 			// Mutation
-			'issueInvoice'                       => ResolveIssueInvoice::class,
 			'issueInvoiceV2'                     => ResolveIssueInvoiceV2::class,
 			'issueErc4361Message'                => ResolveIssueErc4361Message::class,
 			'issueAccessTokenByErc4361Signature' => ResolveIssueAccessTokenByErc4361Signature::class,
