@@ -6,7 +6,6 @@ namespace Cornix\Serendipity\Core\Infrastructure\Terms;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 
-/** @deprecated */
 class SellerTermsProvider {
 	/**
 	 * 販売者向け利用規約に署名する時のメッセージを取得します。

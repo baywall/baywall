@@ -28,7 +28,6 @@ class V20251106_070_CreateSellerTable extends MigrationBase {
 				`created_at`            timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`updated_at`            timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`seller_address`        varchar(191)            NOT NULL,
-				`agreed_terms_version`  int           unsigned  NOT NULL,
 				`signing_message`       varchar(191)            NOT NULL,
 				`signature`             varchar(191)            NOT NULL,
 				PRIMARY KEY (`seller_address`)
