@@ -3,28 +3,14 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3\Constants;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
-
 final class NetworkCategoryIdConstants {
 
-	private const MAINNET    = 1;
-	private const TESTNET    = 2;
-	private const PRIVATENET = 3;
-
-	/** メインネット */
-	public static function mainnet(): NetworkCategoryId {
-		return NetworkCategoryId::from( self::MAINNET );
-	}
-
-	/** テストネット */
-	public static function testnet(): NetworkCategoryId {
-		return NetworkCategoryId::from( self::TESTNET );
-	}
-
-	/** プライベートネット */
-	public static function privatenet(): NetworkCategoryId {
-		return NetworkCategoryId::from( self::PRIVATENET );
-	}
+	/** メインネット(Ethereumメインネット、Polygonメインネット等) */
+	public const MAINNET = 1;
+	/** テストネット(Ethereum Sepolia等) */
+	public const TESTNET = 2;
+	/** プライベートネット(Ganache、Hardhat等) */
+	public const PRIVATENET = 3;
 
 	private function __construct() {} // インスタンス生成禁止
 }
