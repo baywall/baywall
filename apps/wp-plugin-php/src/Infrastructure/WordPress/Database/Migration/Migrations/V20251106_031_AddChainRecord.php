@@ -6,7 +6,6 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Mi
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\ChainIdConstants;
