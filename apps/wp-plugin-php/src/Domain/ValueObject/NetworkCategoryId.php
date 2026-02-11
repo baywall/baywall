@@ -4,22 +4,14 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
 
 /**
  * ネットワークカテゴリIDを表すクラス
  */
 final class NetworkCategoryId implements ValueObject {
-	/** メインネット(Ethereumメインネット、Polygonメインネット等) */
-	private const MAINNET = 1;
-	/** テストネット(Ethereum Sepolia等) */
-	private const TESTNET = 2;
-	/** プライベートネット(Ganache、Hardhat等) */
-	private const PRIVATENET = 3;
-
 	private function __construct( int $network_category_id_value ) {
-		if ( $network_category_id_value < self::MAINNET || self::PRIVATENET < $network_category_id_value ) {
-			throw new \InvalidArgumentException( '[6AD1DCA2] Invalid network category ID: ' . $network_category_id_value );
-		}
+		$this->checkValue( $network_category_id_value );
 		$this->value = $network_category_id_value;
 	}
 
@@ -49,11 +41,11 @@ final class NetworkCategoryId implements ValueObject {
 
 	public function __toString(): string {
 		switch ( $this->value ) {
-			case self::MAINNET:
+			case NetworkCategoryIdConstants::MAINNET:
 				return 'mainnet';
-			case self::TESTNET:
+			case NetworkCategoryIdConstants::TESTNET:
 				return 'testnet';
-			case self::PRIVATENET:
+			case NetworkCategoryIdConstants::PRIVATENET:
 				return 'privatenet';
 			default:
 				// ここは通らない
@@ -61,14 +53,20 @@ final class NetworkCategoryId implements ValueObject {
 		}
 	}
 
-
-	public static function mainnet(): self {
-		return new self( self::MAINNET );
-	}
-	public static function testnet(): self {
-		return new self( self::TESTNET );
-	}
-	public static function privatenet(): self {
-		return new self( self::PRIVATENET );
+	private function checkValue( int $network_category_id_value ): void {
+		// NetworkCategoryIdConstantsに定義されている値のみ許容
+		$reflection       = new \ReflectionClass( NetworkCategoryIdConstants::class );
+		$public_constants = array_values(
+			array_map(
+				static fn( \ReflectionClassConstant $constant ): int => $constant->getValue(),
+				array_filter(
+					$reflection->getReflectionConstants(),
+					static fn( \ReflectionClassConstant $constant ): bool => $constant->isPublic()
+				)
+			)
+		);
+		if ( ! in_array( $network_category_id_value, $public_constants, true ) ) {
+			throw new \InvalidArgumentException( '[6AD1DCA2] Invalid network category ID: ' . $network_category_id_value );
+		}
 	}
 }

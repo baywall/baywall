@@ -45,9 +45,9 @@ class WpNetworkCategoryRepository implements NetworkCategoryRepository {
 
 	private function getName( NetworkCategoryId $network_category_id ): string {
 		$map = array(
-			NetworkCategoryIdConstants::mainnet()->value() => fn() => $this->i18n->mainnet(),
-			NetworkCategoryIdConstants::testnet()->value() => fn() => $this->i18n->testnet(),
-			NetworkCategoryIdConstants::privatenet()->value() => fn() => $this->i18n->privatenet(),
+			NetworkCategoryIdConstants::MAINNET    => fn() => $this->i18n->mainnet(),
+			NetworkCategoryIdConstants::TESTNET    => fn() => $this->i18n->testnet(),
+			NetworkCategoryIdConstants::PRIVATENET => fn() => $this->i18n->privatenet(),
 		);
 
 		if ( ! isset( $map[ $network_category_id->value() ] ) ) {
