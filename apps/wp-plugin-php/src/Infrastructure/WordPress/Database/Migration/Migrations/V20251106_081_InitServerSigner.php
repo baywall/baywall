@@ -30,7 +30,13 @@ class V20251106_081_InitServerSigner extends MigrationBase {
 	public function up(): void {
 		$this->transaction_service->transactional(
 			function () {
-				// TODO: すでにデータが存在する場合はエラーとする
+				// すでにデータが存在する場合はエラー
+				$row_count = $this->wpdb->get_var(
+					"SELECT COUNT(*) FROM `{$this->table_name}`;"
+				);
+				if ( $row_count > 0 ) {
+					throw new \RuntimeException( '[0ED45CC0] Server signer already initialized.' );
+				}
 
 				$signer           = EthersWallet::createRandom();
 				$private_key      = PrivateKey::from( $signer->privateKey() );
