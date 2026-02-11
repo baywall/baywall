@@ -11,22 +11,42 @@ class NativeTokenConstants {
 	// https://chainlistapi.com/chains/1
 
 	public const DEFINITIONS = array(
-		CHAIN_ID::ETHEREUM    => array(
+		CHAIN_ID::ETHEREUM     => array(
 			'symbol'   => 'ETH',
 			'decimals' => 18,
 			'name'     => 'Ether',
 		),
-		CHAIN_ID::SEPOLIA     => array(
+		CHAIN_ID::BASE         => array(
 			'symbol'   => 'ETH',
 			'decimals' => 18,
 			'name'     => 'Ether',
 		),
-		CHAIN_ID::PRIVATENET1 => array(
+		CHAIN_ID::POLYGON_POS  => array(
+			'symbol'   => 'POL',
+			'decimals' => 18,
+			'name'     => 'POL',
+		),
+		CHAIN_ID::SEPOLIA      => array(
 			'symbol'   => 'ETH',
 			'decimals' => 18,
 			'name'     => 'Ether',
 		),
-		CHAIN_ID::PRIVATENET2 => array(
+		CHAIN_ID::BASE_SEPOLIA => array(
+			'symbol'   => 'ETH',
+			'decimals' => 18,
+			'name'     => 'Ether',
+		),
+		CHAIN_ID::POLYGON_AMOY => array(
+			'symbol'   => 'POL',
+			'decimals' => 18,
+			'name'     => 'POL',
+		),
+		CHAIN_ID::PRIVATENET1  => array(
+			'symbol'   => 'ETH',
+			'decimals' => 18,
+			'name'     => 'Ether',
+		),
+		CHAIN_ID::PRIVATENET2  => array(
 			'symbol'   => 'POL',
 			'decimals' => 18,
 			'name'     => 'POL',

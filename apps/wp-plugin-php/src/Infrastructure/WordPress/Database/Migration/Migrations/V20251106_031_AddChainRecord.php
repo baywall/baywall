@@ -45,6 +45,24 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 					'https://etherscan.io'
 				);
 
+				// Base
+				$this->insert(
+					ChainIdConstants::BASE,
+					'Base',
+					NetworkCategoryIdConstants::MAINNET,
+					null, // RPC URLはnull
+					'https://basescan.org'
+				);
+
+				// Polygon PoS
+				$this->insert(
+					ChainIdConstants::POLYGON_POS,
+					'Polygon PoS',
+					NetworkCategoryIdConstants::MAINNET,
+					null, // RPC URLはnull
+					'https://polygonscan.com'
+				);
+
 				// Testnet --------------------
 				// Sepolia
 				$this->insert(
@@ -53,6 +71,24 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 					NetworkCategoryIdConstants::TESTNET,
 					null, // RPC URLはnull
 					'https://sepolia.etherscan.io'
+				);
+
+				// Base Sepolia
+				$this->insert(
+					ChainIdConstants::BASE_SEPOLIA,
+					'Base Sepolia',
+					NetworkCategoryIdConstants::TESTNET,
+					null, // RPC URLはnull
+					'https://sepolia.basescan.org'
+				);
+
+				// Polygon Amoy
+				$this->insert(
+					ChainIdConstants::POLYGON_AMOY,
+					'Polygon Amoy',
+					NetworkCategoryIdConstants::TESTNET,
+					null, // RPC URLはnull
+					'https://amoy.polygonscan.com'
 				);
 
 				// 開発、テスト時はプライベートネットのチェーン情報も登録
