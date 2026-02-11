@@ -46,7 +46,10 @@ class V20251106_021_AddAppContractRecord extends MigrationBase {
 
 					// テストネット
 					// このコントラクトを使うのは開発者だけなので影響は限定的
-					$this->insert( ChainIdConstants::SEPOLIA, '0x65fA00d60343da7AB6Ff1f805eCAE452da758Fa0' );
+					// ※ `0xf66018B75804AF732794DD3FFB231BDa0e4DC6b5` ウォレットからデプロイ
+					$this->insert( ChainIdConstants::SEPOLIA, '0x859eD583d87A32986551586674E6160F13BB9cC5' );
+					$this->insert( ChainIdConstants::BASE_SEPOLIA, '0x6a9214D8264C00d884225542d3af47cf5De2049f' );
+					$this->insert( ChainIdConstants::POLYGON_AMOY, '0x6a9214D8264C00d884225542d3af47cf5De2049f' );
 				} else {
 					throw new \RuntimeException( '[63F60D82] Unsupported environment' );
 				}
