@@ -25,6 +25,7 @@ class UnlockPaywallTransferEventRepository {
 			$event->invoiceId(),
 			$chain_id,
 			$event->blockNumber(),
+			$event->blockTimestamp(),
 			$event->transactionHash()
 		);
 
