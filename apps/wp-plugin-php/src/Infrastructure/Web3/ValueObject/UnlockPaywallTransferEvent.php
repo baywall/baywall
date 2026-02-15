@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
 
 class UnlockPaywallTransferEvent {
@@ -21,7 +22,8 @@ class UnlockPaywallTransferEvent {
 		Address $to_address,
 		Address $token_address,
 		Amount $amount,
-		UnlockPaywallTransferType $transfer_type
+		UnlockPaywallTransferType $transfer_type,
+		UnixTimestamp $block_timestamp
 	) {
 		$this->block_number          = $block_number;
 		$this->log_index             = $log_index;
@@ -33,6 +35,7 @@ class UnlockPaywallTransferEvent {
 		$this->token_address         = $token_address;
 		$this->amount                = $amount;
 		$this->transfer_type         = $transfer_type;
+		$this->block_timestamp       = $block_timestamp;
 	}
 	private BlockNumber $block_number;
 	private int $log_index;
@@ -44,6 +47,7 @@ class UnlockPaywallTransferEvent {
 	private Address $token_address;
 	private Amount $amount;
 	private UnlockPaywallTransferType $transfer_type;
+	private UnixTimestamp $block_timestamp;
 
 	public function blockNumber(): BlockNumber {
 		return $this->block_number;
@@ -74,5 +78,8 @@ class UnlockPaywallTransferEvent {
 	}
 	public function transferType(): UnlockPaywallTransferType {
 		return $this->transfer_type;
+	}
+	public function blockTimestamp(): UnixTimestamp {
+		return $this->block_timestamp;
 	}
 }
