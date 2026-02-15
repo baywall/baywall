@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Abi\Base\AbiBase;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
@@ -43,6 +44,7 @@ class AppContractAbi extends AbiBase {
 		assert( $decoded_event_params['amount'] instanceof BigInteger, '[AF7DF1B0] ' . var_export( $decoded_event_params['amount'], true ) );
 		assert( $decoded_event_params['invoiceId'] instanceof BigInteger, '[D454A801] ' . var_export( $decoded_event_params['invoiceId'], true ) );
 		assert( $decoded_event_params['transferType'] instanceof BigInteger, '[2CC10192] ' . var_export( $decoded_event_params['transferType'], true ) );
+		assert( $decoded_event_params['blockTimestamp'] instanceof BigInteger, '[5C9E047C] ' . var_export( $decoded_event_params['blockTimestamp'], true ) );
 
 		return new UnlockPaywallTransferEvent(
 			BlockNumber::fromHex( Hex::from( $log->blockNumber ) ), // block_number
@@ -54,7 +56,8 @@ class AppContractAbi extends AbiBase {
 			Address::from( $decoded_event_params['to'] ), // to_address
 			Address::from( $decoded_event_params['token'] ), // token_address
 			Amount::from( $decoded_event_params['amount']->toString() ), // amount
-			UnlockPaywallTransferType::from( (int) ( $decoded_event_params['transferType'] )->toString() ) // transfer_type
+			UnlockPaywallTransferType::from( (int) ( $decoded_event_params['transferType'] )->toString() ), // transfer_type
+			UnixTimestamp::from( (int) $decoded_event_params['blockTimestamp']->toString() ) // block_timestamp
 		);
 	}
 }
@@ -108,6 +111,12 @@ class AppContractAbiData {
 								"indexed": false,
 								"internalType": "uint256",
 								"name": "transferType",
+								"type": "uint256"
+							},
+							{
+								"indexed": false,
+								"internalType": "uint256",
+								"name": "blockTimestamp",
 								"type": "uint256"
 							}
 						],

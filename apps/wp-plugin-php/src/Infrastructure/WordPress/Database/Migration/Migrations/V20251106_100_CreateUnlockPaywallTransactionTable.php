@@ -29,6 +29,7 @@ class V20251106_100_CreateUnlockPaywallTransactionTable extends MigrationBase {
 				`invoice_id`          varchar(191)            NOT NULL,
 				`chain_id`            bigint        unsigned  NOT NULL,
 				`block_number`        bigint        unsigned  NOT NULL,
+				`block_timestamp`     bigint        unsigned  NOT NULL,
 				`transaction_hash`    varchar(191)            NOT NULL,
 				PRIMARY KEY (`invoice_id`),
 				KEY `idx_{$this->table_name}_1D00B82F` (`created_at`)
