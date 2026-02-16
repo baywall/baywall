@@ -66,18 +66,4 @@ class UnlockPaywallTransactionTable {
 
 		return $row !== null ? new UnlockPaywallTransactionTableRecord( $row ) : null;
 	}
-
-	/** @deprecated */
-	public function exists( InvoiceId $invoice_id ): bool {
-		$sql = <<<SQL
-			SELECT `invoice_id` FROM `{$this->table_name}`
-			WHERE `invoice_id` = :invoice_id
-			LIMIT 1
-		SQL;
-
-		$sql = $this->wpdb->prepare( $sql, array( ':invoice_id' => $invoice_id->ulid() ) );
-		$row = $this->wpdb->get_row( $sql );
-
-		return $row !== null;
-	}
 }
