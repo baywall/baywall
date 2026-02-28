@@ -1,0 +1,45 @@
+<?php
+declare(strict_types=1);
+
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
+
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
+use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
+
+/**
+ * ペイウォール解除イベントのログ
+ */
+class UnlockPaywallTransferEventTable {
+
+	private MyWpdb $wpdb;
+	private string $table_name;
+
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+		$this->wpdb       = $wpdb;
+		$this->table_name = $table_name_provider->unlockPaywallTransferEvent();
+	}
+
+	public function save( InvoiceId $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, UnlockPaywallTransferType $transfer_type ): void {
+		// 数量に小数点が含まれることはない
+		assert( $amount->decimals()->equals( Decimals::from( 0 ) ), '[F48CCCE8] Amount must be an integer.' );
+
+		$result = $this->wpdb->insert(
+			$this->table_name,
+			array(
+				'invoice_id'    => $invoice_id->ulid(),
+				'log_index'     => $log_index,
+				'from_address'  => $from->value(),
+				'to_address'    => $to->value(),
+				'token_address' => $token_address->value(),
+				'amount'        => $amount->value(),
+				'transfer_type' => $transfer_type->value(),
+			)
+		);
+		assert( $result === 1, "[1C8FE9F7] Failed to save unlock paywall transfer event. {$result}" );
+	}
+}

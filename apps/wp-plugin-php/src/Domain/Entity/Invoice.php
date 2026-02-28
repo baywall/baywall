@@ -1,0 +1,63 @@
+<?php
+declare(strict_types=1);
+
+namespace Cornix\Serendipity\Core\Domain\Entity;
+
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+
+class Invoice {
+
+	public function __construct( InvoiceId $id, PostId $post_id, ChainId $chain_id, Price $selling_price, Address $seller_address, Address $payment_token_address, Amount $payment_amount, Address $customer_address ) {
+		$this->id                    = $id;
+		$this->post_id               = $post_id;
+		$this->chain_id              = $chain_id;
+		$this->selling_price         = $selling_price;
+		$this->seller_address        = $seller_address;
+		$this->payment_token_address = $payment_token_address;
+		$this->payment_amount        = $payment_amount;
+		$this->customer_address      = $customer_address;
+	}
+
+	private InvoiceId $id;
+	private PostId $post_id;
+	private ChainId $chain_id;
+	private Price $selling_price;
+	private Address $seller_address;
+	private Address $payment_token_address;
+	private Amount $payment_amount;
+	private Address $customer_address;
+
+	public function id(): InvoiceId {
+		return $this->id;
+	}
+	public function postId(): PostId {
+		return $this->post_id;
+	}
+	public function chainId(): ChainId {
+		return $this->chain_id;
+	}
+	public function sellingPrice(): Price {
+		return $this->selling_price;
+	}
+	public function sellerAddress(): Address {
+		return $this->seller_address;
+	}
+	public function paymentTokenAddress(): Address {
+		return $this->payment_token_address;
+	}
+	public function paymentAmount(): Amount {
+		return $this->payment_amount;
+	}
+	public function customerAddress(): Address {
+		return $this->customer_address;
+	}
+
+	public function __toString() {
+		return (string) $this->id;
+	}
+}
