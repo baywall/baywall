@@ -1,0 +1,18 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+#fd9e15e3-9f4f-4537-8470-3da48e66d6e9 {
+	.components-base-control__field {
+		// SelectControlに`margin-bottom: 8px`が設定されているため、打ち消す
+		margin-bottom: 0 !important;
+	}
+
+	// `Twenty Twenty-One`テーマの時にselectのpaddingが指定されている影響で文字の上下が見切れるため、上下のpaddingを0にする
+	select {
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+	}
+}
