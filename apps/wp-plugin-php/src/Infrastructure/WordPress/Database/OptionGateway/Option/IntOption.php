@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
+
+/** WordPressのoptionsテーブルに数値を保存または取得するクラス */
+class IntOption {
+	public function __construct( string $option_key_name ) {
+		$this->option = new Option( $option_key_name );
+	}
+
+	private Option $option;
+
+	public function get( $default = null ): ?int {
+		$ret = $this->option->get( $default );
+		return is_null( $ret ) ? null : (int) $ret;
+	}
+
+	public function update( int $value, ?bool $autoload = null ): void {
+		$this->option->update( (string) $value, $autoload );
+		assert( $value === $this->get( $value ) );
+	}
+
+	public function delete(): void {
+		$this->option->delete();
+		assert( $this->get() === null );
+	}
+}
