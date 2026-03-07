@@ -1,0 +1,9 @@
+*.test.ts
+*.test.tsx
+*Test.php
+
+generated.ts
+
+node_modules/
+dist/
+build/
