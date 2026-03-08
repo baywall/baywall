@@ -6,5 +6,8 @@
   "packageManager": "pnpm@10.14.0",
   "scripts": {
     "build": "pnpm -r run build"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^27.9.0"
   }
 }
