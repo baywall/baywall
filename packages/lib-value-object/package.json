@@ -1,0 +1,49 @@
+{
+  "name": "@serendipity/lib-value-object",
+  "version": "0.0.0",
+  "description": "",
+  "private": true,
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "run-p build:*",
+    "build:cjs": "tsc -p ./tsconfig.cjs.json",
+    "build:esm": "tsc -p ./tsconfig.esm.json",
+    "check": "run-p check:*",
+    "check:cycles": "madge --circular --extensions ts,tsx src",
+    "check:license": "license-checker --production --excludePrivatePackages --onlyAllow '0BSD;Apache-2.0;BSD-3-Clause;ISC;MIT' > /dev/null",
+    "clean": "rm -rf dist",
+    "coverage": "bash ../../scripts/npm-scripts/coverage-jest.sh",
+    "dev": "tsc -w -p tsconfig.esm.json",
+    "format": "run-s format:*",
+    "format:eslint": "bash ../../scripts/npm-scripts/format-eslint.sh .",
+    "format:prettier": "bash ../../scripts/npm-scripts/format-prettier.sh .",
+    "lint": "run-p lint:*",
+    "lint:eslint": "bash ../../scripts/npm-scripts/lint-eslint.sh .",
+    "lint:prettier": "bash ../../scripts/npm-scripts/lint-prettier.sh .",
+    "test": "bash ../../scripts/npm-scripts/test-jest.sh"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "prettier": "npm:wp-prettier@^3.0.3"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "decimal.js": "^10.6.0"
+  }
+}

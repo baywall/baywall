@@ -1,0 +1,48 @@
+{
+  "name": "@serendipity/lib-frontend",
+  "version": "0.0.0",
+  "description": "",
+  "private": true,
+  "main": "dist/cjs/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "run-p build:*",
+    "build:cjs": "tsc -p ./tsconfig.cjs.json",
+    "build:esm": "tsc -p ./tsconfig.esm.json",
+    "clean": "rm -rf dist",
+    "coverage": "bash ../../scripts/npm-scripts/coverage-jest.sh",
+    "format": "run-s format:*",
+    "format:eslint": "bash ../../scripts/npm-scripts/format-eslint.sh .",
+    "format:prettier": "bash ../../scripts/npm-scripts/format-prettier.sh .",
+    "lint": "run-p lint:*",
+    "lint:eslint": "bash ../../scripts/npm-scripts/lint-eslint.sh .",
+    "lint:prettier": "bash ../../scripts/npm-scripts/lint-prettier.sh .",
+    "start": "npm run watch",
+    "test": "bash ../../scripts/npm-scripts/test-jest.sh",
+    "update:package": "npx npm-check-updates -u --target minor",
+    "watch": "tsc -w -p tsconfig.esm.json"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@serendipity/lib-date-format": "workspace:*",
+    "@serendipity/lib-logger": "workspace:*",
+    "@serendipity/lib-value-object": "workspace:*"
+  },
+  "devDependencies": {
+    "prettier": "npm:wp-prettier@^3.0.3"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0"
+  }
+}
