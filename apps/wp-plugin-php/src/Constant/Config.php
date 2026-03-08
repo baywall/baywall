@@ -12,12 +12,12 @@ class Config {
 	 * このプラグインのルートディレクトリ
 	 * (エントリファイルが存在するディレクトリのパス)
 	 */
-	public const ROOT_DIR = __DIR__ . '/../../..';
+	public const ROOT_DIR = __DIR__ . '/../..';
 
 	/** 販売者が利用規約に同意する時にウォレットに表示されるメッセージ */
 	public const SELLER_TERMS_SIGNING_MESSAGE = 'I agree to the Terms of Service for baywall (Version 0) and the Privacy Policy for baywall (Version 0).';
 
-	private const BLOCK_BUILD_RELATIVE_DIR = 'build/block';
+	private const BLOCK_BUILD_RELATIVE_DIR = 'public/block';
 	/** `block.json`へのパス */
 	public const BLOCK_JSON_PATH = self::ROOT_DIR . '/' . self::BLOCK_BUILD_RELATIVE_DIR . '/block.json';
 	/** ブロックエディタ用の『index.asset.php』ファイルへのパス */
