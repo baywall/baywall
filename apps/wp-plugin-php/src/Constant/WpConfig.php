@@ -11,6 +11,12 @@ class WpConfig {
 	// private const PLUGIN_NAME = 'baywall';
 
 	/**
+	 * ペイウォールブロックのブロック名
+	 * ※ block.jsonの"name"フィールドと整合性を取ること
+	 */
+	public const PAYWALL_BLOCK_NAME = 'baywall/paywall';
+
+	/**
 	 * ペイウォールブロックに付与するHTMLのCSSクラス名
 	 *
 	 * ※ TypeScript側と整合性を取ること

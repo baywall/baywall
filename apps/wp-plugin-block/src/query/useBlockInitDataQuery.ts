@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { Decimals, NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
-import { PostSettingQuery, usePostSettingQuery } from '../../types/gql/generated';
+import { PostSettingQuery, usePostSettingQuery } from '../types/gql/generated';
 import { NetworkCategory } from '../value-object/NetworkCategory';
 import { useLogger } from '@serendipity/lib-frontend';
 import { Token } from '../value-object/Token';

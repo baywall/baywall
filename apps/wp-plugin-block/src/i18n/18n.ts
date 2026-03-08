@@ -8,8 +8,8 @@ import LanguageDetector from 'i18next-browser-languagedetector';
  * - ブロックのファイルは小さいので翻訳ファイルをすべてバンドルする
  */
 
-import en from '../../../i18n/block/translation.en.json';
-import ja from '../../../i18n/block/translation.ja.json';
+import en from '../../i18n/translation.en.json';
+import ja from '../../i18n/translation.ja.json';
 
 const resources = {
 	en: { translation: en },

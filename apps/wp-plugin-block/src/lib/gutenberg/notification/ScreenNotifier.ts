@@ -1,6 +1,6 @@
 import { dispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
-import { WPNoticeAction } from '@wordpress/notices/build-types/store/actions';
+// import { WPNoticeAction } from '@wordpress/notices/build-types/store/actions';
 
 /** 通知を画面に表示するクラス */
 export class ScreenNotifier {
@@ -103,7 +103,7 @@ interface WPNoticeOption {
 	isDismissible?: boolean | undefined;
 	type?: 'default' | 'snackbar' | undefined;
 	speak?: boolean | undefined;
-	actions?: WPNoticeAction[] | undefined;
+	// actions?: WPNoticeAction[] | undefined;
 	/** 表示するアイコン（絵文字） */
 	icon?: string | undefined; // Only for type: 'snackbar'
 	explicitDismiss?: boolean | undefined; // Only for type: 'snackbar'
