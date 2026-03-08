@@ -1,0 +1,43 @@
+{
+  "name": "baywall",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Allows you to implement a paywall using crypto-assets.",
+  "license": "Split License",
+  "files": [
+    "build/**",
+    "includes/**/*.*",
+    "languages/**",
+    "public/**",
+    "src/**",
+    "*.php",
+    "LICENSE",
+    "licenses/**",
+    "readme.*"
+  ],
+  "scripts": {
+    "build": "run-s build:*",
+    "build:i18n": "bash scripts/npm/build-i18n.sh",
+    "check": "tsx .bin/check-php-license",
+    "clean": "rm -rf includes/cache/*.php",
+    "export-license": "export-license -s includes -o licenses/composer -m licenses/backend.json",
+    "format": "tests/vendor/bin/phpcbf . || tests/vendor/bin/phpcbf .",
+    "lint": "tests/vendor/bin/phpcbf .",
+    "// @wordpress/scripts@27.9.0ではサブディレクトリが作成されないためコメントアウト plugin-zip": "wp-scripts plugin-zip --root-folder=baywall && mv baywall.zip baywall.${npm_package_version}.zip",
+    "plugin-zip": "bash ./scripts/plugin-zip.sh",
+    "// 1つのファイルをテストする場合はテスト対象ファイルのパスを後ろに付与してください => pnpm test tests/classes/path-to-test-file.php": "",
+    "test": "pnpm clean && pnpm exec wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli tests/vendor/bin/phpunit -- -c phpunit.xml --testdox",
+    "// `WP_ENV_MYSQL_PORT`,`WP_ENV_TESTS_MYSQL_PORT`,`WP_ENV_PHPMYADMIN_PORT`,`WP_ENV_TESTS_PHPMYADMIN_PORT`を": "",
+    "// 指定すると証明書エラーが発生(原因未調査)": "",
+    "wp-env:start": "WP_ENV_PHP_VERSION=${PHP_VERSION} WP_ENV_CORE=WordPress/WordPress#${WP_VERSION} wp-env start --xdebug=develop,coverage,debug",
+    "wp-env:reset": "wp-env clean all && npm run wp-env:start",
+    "wp-env:destroy": "wp-env destroy"
+  },
+  "dependencies": {
+    "@serendipity/wp-plugin-block": "workspace:*"
+  },
+  "devDependencies": {
+    "@serendipity/export-license": "workspace:*",
+    "@wordpress/env": "~10.29.0"
+  }
+}

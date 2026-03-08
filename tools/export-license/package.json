@@ -1,0 +1,36 @@
+{
+  "name": "@serendipity/export-license",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "export-license": "dist/cjs/bin/index.js"
+  },
+  "scripts": {
+    "build": "run-p build:*",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "clean": "rm -rf dist/*",
+    "coverage": "bash ../../scripts/npm-scripts/coverage-jest.sh",
+    "format": "run-s format:*",
+    "format:eslint": "bash ../../scripts/npm-scripts/format-eslint.sh .",
+    "format:prettier": "bash ../../scripts/npm-scripts/format-prettier.sh .",
+    "lint": "run-p lint:*",
+    "lint:eslint": "bash ../../scripts/npm-scripts/lint-eslint.sh .",
+    "lint:prettier": "bash ../../scripts/npm-scripts/lint-prettier.sh .",
+    "test": "bash ../../scripts/npm-scripts/test-jest.sh"
+  },
+  "peerDependencies": {
+    "glob": "^11.0.0",
+    "license-checker": "^25.0.1"
+  }
+}
