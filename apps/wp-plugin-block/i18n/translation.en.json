@@ -1,0 +1,10 @@
+{
+  "dashboard_label": "Dashboard",
+  "enter_the_valid_price_message": "Please enter a valid price.",
+  "invalid_price_entered_message": "An invalid price has been entered.",
+  "network_category_label": "Network Category",
+  "price_label": "Price",
+  "select_network_category_and_price_message": "Please specify the network category and price for sale.",
+  "settings_incomplete_message": "The settings have not been completed yet.",
+  "too_many_decimal_places_message": "Too many decimal places."
+}
