@@ -1,0 +1,269 @@
+# ドメインエラーがあった場合、以下のように戻り値としてunionを返したいが、
+# graphql-phpでunion型を簡単に返す方法がわからないため、戻り値はすべてtypeで定義した型を返す実装となっている。
+# unionを簡単に返す方法が分かれば、リファクタを実施するかどうかを検討する。
+# ※ TypeScript側でunion型を受け取った時に別途`__typename`での判定が必要となり、
+# 　 errorフィールドを無視しづらい記述になるため可能であれば採用したい。
+# 参考: https://quramy.medium.com/graphql-error-%E4%B8%8B%E3%81%8B%E3%82%89%E8%A6%8B%E3%82%8B%E3%81%8B-%E6%A8%AA%E3%81%8B%E3%82%89%E8%A6%8B%E3%82%8B%E3%81%8B-3924880be51f
+#
+# type DomainErrors {
+# 	errorCodes: [String!]!
+# }
+# type Foo {
+#   someField: Int!
+# }
+# union FooResult = Foo | DomainErrors
+#
+
+# 以下のようなディレクティブでRoleによって呼び出せる項目を制御しようとしたが、
+# fn() => $root_value[`xxx`](...) のように`$root_value`を使って呼び出す際に
+# このディレクティブが動作しない（＝トップレベルのqueryでしかチェックできない）ため実装は見送り
+
+# directive @requiresRole(
+# 	role: String!
+# ) on FIELD_DEFINITION
+
+schema {
+	query: Query
+	mutation: Mutation
+}
+
+type Query {
+	# チェーン一覧を取得【管理者】
+	chains(filter: ChainsFilter): [Chain!]!
+
+	# ネットワークカテゴリ一覧を取得【投稿編集者】
+	networkCategories(filter: NetworkCategoryFilter): [NetworkCategory!]!
+
+	# オラクル一覧を取得【管理者】
+	oracles: [Oracle!]!
+
+	# 投稿情報を取得【ゲスト】
+	post(postId: Int!): Post!
+
+	# 履歴一覧を取得【管理者】
+	salesHistories(filter: SalesHistoriesFilter): [SalesHistory!]!
+
+	# 販売者情報を取得【ゲスト】
+	seller: Seller!
+
+	# 署名用ウォレット情報を取得【ゲスト】
+	serverSigner: ServerSigner
+
+	# このサイトに登録されているトークン一覧【管理者】
+	# (ネイティブトークン + 管理者が追加したERC20トークン)
+	tokens(filter: TokensFilter): [Token!]!
+
+	# ネイティブトークン情報を取得【管理者】
+	nativeToken(chainId: Int!): NativeToken!
+
+	# # 投稿一覧を取得
+	# allPosts: [Post!]!
+
+	# 一時停止状態を取得【ゲスト】
+	# 一時停止状態の場合、支払い関連の機能が利用不可となります
+	paused: Boolean!
+
+	# 「特定商取引法に基づく表記」のURL【ゲスト】
+	sctaUrl: String
+}
+
+type Mutation {
+	# 支払情報を発行【ゲスト】
+	issueInvoice(postId: Int!, chainId: Int!, tokenAddress: String!, customerAddress: String!): IssuedInvoice!
+	# 支払情報を発行(v2)【ゲスト】
+	issueInvoiceV2(postId: Int!, chainId: Int!, tokenAddress: String!, customerAddress: String!): IssuedInvoiceV2!
+
+	# 記事の続きを取得【ゲスト】
+	getPaidContent( invoiceId: String! ): GetPaidContentResponse!
+
+	# ERC-4361署名用メッセージを発行【ゲスト】
+	issueErc4361Message( invoiceId: String! ): IssueErc4361MessageResponse!
+
+	# ERC-4361署名を使ってアクセストークンを発行【ゲスト】
+	issueAccessTokenByErc4361Signature( invoiceId: String!, signature: String! ): IssueAccessTokenByErc4361SignatureResponse!
+
+	# 販売者情報を保存【管理者】
+	saveSeller( address: String!, signingMessage: String!, signature: String! ): Boolean!
+
+	# チェーン情報を保存【管理者】
+	saveChain(chainId: Int!, rpcUrl: String, confirmations: String!): Boolean!
+
+	# オラクル情報を保存【管理者】
+	saveOracle(chainId: Int!, address: String!): Boolean!
+
+	# トークン情報を保存【管理者】
+	saveToken(chainId: Int!, address: String!, isPayable: Boolean!): Boolean!
+
+	# サイト設定を保存【管理者】
+	saveSiteSettings(paused: Boolean!, sctaUrl: String): Boolean!
+}
+
+# 投稿に関する情報
+type Post {
+	id: Int!						# 投稿ID【ゲスト】
+	title: String!                  # 投稿タイトル【ゲスト】
+	sellingPrice: Price             # 現在の販売価格【ゲスト】
+	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報【ゲスト】
+	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧【ゲスト】
+}
+
+input TokensFilter {
+	chainId: Int
+	address: String
+}
+
+input ChainsFilter {
+	chainId: Int
+	isConnectable: Boolean	# サーバーから接続可能なチェーンのみ取得する場合にtrueを指定(トークン登録画面で使用)
+}
+
+input NetworkCategoryFilter {
+	networkCategoryId: Int	# ネットワークカテゴリを1つだけ取得する際に指定
+}
+
+type NetworkCategory {
+	id: Int!
+	name: String! # ネットワークカテゴリ名【ゲスト】
+	chains: [Chain!]! # このカテゴリに含まれるチェーン一覧【管理者】
+	sellableSymbols: [String!]!	# 販売価格として設定可能な通貨シンボル一覧【投稿編集者】
+}
+
+type Chain {
+	id: Int!	# チェーンID【ゲスト】
+	appContract: AppContract	# このチェーンにデプロイされているアプリケーションコントラクトの情報【ゲスト】
+	confirmations: String!		# ブロック確認数("1"などの10進数の文字列または"finalized"などのブロック位置)【ゲスト】
+	rpcUrl: String				# RPC URL(ユーザーが管理画面で登録した値)【管理者】
+	tokens: [Token!]!			# このチェーンに存在するトークン一覧【管理者】
+	networkCategory: NetworkCategory! # このチェーンが属するネットワークカテゴリ【管理者】
+	name: String!				# チェーン名(例: "Ethereum Mainnet", "Polygon"など)【ゲスト】
+	blockExplorerUrl: String	# ブロックエクスプローラーのURL(例: "https://etherscan.io/")【ゲスト】
+	connectable: Boolean!		# チェーンに接続可能かどうか【管理者】
+}
+
+type Oracle {
+	chain: Chain!  		# オラクルコントラクトがデプロイされているチェーン【管理者】
+	address: String!	# オラクルコントラクトアドレス【管理者】
+	baseSymbol: String!	# オラクルが提供するレートの基軸通貨シンボル【管理者】
+	quoteSymbol: String!# オラクルが提供するレートの決済通貨シンボル【管理者】
+}
+
+type AppContract {
+	address: String!	# アプリケーションコントラクトアドレス【ゲスト】
+}
+
+type NativeToken {
+	symbol: String!	# ネイティブトークンの通貨シンボル【管理者】
+	name: String!		# ネイティブトークンの名称【管理者】
+	decimals: Int!	# ネイティブトークンの小数点以下の桁数【管理者】
+}
+
+type Token {
+	chain: Chain!		# トークンが発行されているチェーン【ゲスト】
+	address: String!	# トークンのコントラクトアドレス【ゲスト】
+	symbol: String!     # トークンの通貨シンボル【ゲスト】
+	decimals: Int!		# トークンの小数点以下の桁数【投稿編集者】
+	isPayable: Boolean!	# 訪問者が支払に使用可能かどうかの設定【管理者】
+}
+
+type Price {
+	amount: String!	# 金額(10進数の文字列)
+	symbol: String! 	# 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。
+}
+
+# 販売対象となっている投稿コンテンツの(保存されているHTMLに関する)情報
+type SellingContent {
+	characterCount: Int!	# 文字数
+	# 単語数はPHPでカウントすることが難しいため見送り	wordCount: Int!			# 単語数
+	imageCount: Int!		# 画像数
+}
+
+# 請求書情報
+type Invoice {
+	id: String!	# 請求書ID
+	createdAt: String!	# 請求書作成日時
+	chain: Chain!	# 取引チェーン
+	post: Post!	# 投稿情報
+	sellingPrice: Price!	# 請求書が発行された時の販売価格
+}
+
+# 購入者が支払を行った際のトランザクション情報
+type UnlockPaywallTransaction {
+	chain: Chain!		# 取引チェーン
+	blockNumber: Int!	# 取引が行われたブロック番号
+	transactionHash: String!	# トランザクションハッシュ
+	sellerAddress: String!		# 販売者のアドレス
+	customerAddress: String!	# 購入者のアドレス
+	sellerProfitPrice: Price!	# 売上金額
+	handlingFeePrice: Price!	# 手数料
+}
+
+# 発行された請求書情報
+type IssuedInvoice {
+	invoiceIdHex: String!
+	serverMessage: String!      # サーバーで生成した署名対象メッセージ(クライアント側でコントラクトとの整合性を検証するために使用)
+	serverSignature: String!	# 署名用ウォレットで作成した署名
+	paymentAmount: String!		# 支払う数量(10進数の文字列)
+}
+
+type IssuedInvoiceV2 {
+	message: String!  				# 署名用ウォレットで署名するメッセージ
+	signature: String!				# 署名用ウォレットで作成した署名
+	paymentAmount: String!			# 支払う数量(10進数の文字列)
+}
+
+type GetPaidContentResponse {
+	paidContent: String! # 購入者に提供されるコンテンツ
+}
+
+type IssueErc4361MessageResponse {
+	message: String! # 発行されたERC-4361署名用メッセージ
+}
+
+type IssueAccessTokenByErc4361SignatureResponse {
+	accessToken: String! # 発行されたアクセストークン
+}
+
+type ServerSigner {
+	address: String! # 署名用ウォレットアドレス
+}
+
+# 販売者情報
+type Seller {
+	# 以下の`address`, `signingMessage`, `signature` は
+	# すべて値が格納されている、またはすべてnullの状態で取得される。
+	# ※ 販売者登録時にこれらの値がまとめて保存されるため
+	address: String # 販売者アドレス【ゲスト】
+	signingMessage: String # 販売者が署名したメッセージ【ゲスト】
+	signature: String # 販売者の署名【ゲスト】
+}
+
+# 販売履歴(1件分)
+type SalesHistory {
+	invoice: SalesHistoryInvoice!	# 販売履歴用請求書情報
+	postTitle: String!				# 投稿タイトル
+	txHash: String!					# トランザクションハッシュ
+
+	customerAddress: String!		# 購入者のアドレス
+	customerPaymentPrice: Price!	# 購入者が支払った価格
+	contractAddress: String!		# コントラクトアドレス
+	contractReceivedPrice: Price!	# コントラクトが受け取った価格
+	sellerAddress: String!			# 販売者のアドレス
+	sellerReceivedPrice: Price!		# 販売者が受け取った価格
+	affiliateAddress: String		# アフィリエイトのアドレス(存在しない場合はnull)
+	affiliateReceivedPrice: Price	# アフィリエイトが受け取った価格(存在しない場合はnull)
+}
+type SalesHistoryInvoice {	# 請求書情報(販売履歴用)
+	id: String!				# 請求書ID
+	createdAtUnix: Int!		# 請求書作成日時(UNIX時間)
+	postId: Int!			# 投稿ID
+	sellingPrice: Price!	# 請求書が発行された時の販売価格
+	chainId: Int!			# チェーンID
+	chainName: String!      # チェーン名
+}
+
+
+# 販売履歴フィルタ
+input SalesHistoriesFilter {
+	invoiceId: String	# 請求書ID
+	# TODO: 必要なフィルタを実装
+}
