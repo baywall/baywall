@@ -1,0 +1,8 @@
+{
+	"extends": "../../packages/config/tsconfig.react.json",
+	"compilerOptions": {
+		"declaration": true, // .d.ts を出力する
+		"outDir": "dist",
+		"sourceMap": true
+	}
+}
