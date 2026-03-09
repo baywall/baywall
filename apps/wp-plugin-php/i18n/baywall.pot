@@ -1,0 +1,43 @@
+# Copyright (C) 2026 yamaneyuta
+# This file is distributed under the Split License.
+msgid ""
+msgstr ""
+"Project-Id-Version: baywall 0.0.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-plugin-php\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-03-08T12:41:35+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: baywall\n"
+
+#. Plugin Name of the plugin
+#: baywall.php
+#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:11
+msgid "baywall"
+msgstr "baywall"
+
+#. Description of the plugin
+#: baywall.php
+msgid "You can set up a paywall for cryptocurrency or stablecoin payments."
+msgstr ""
+
+#. Author of the plugin
+#: baywall.php
+msgid "yamaneyuta"
+msgstr "yamaneyuta"
+
+#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:16
+msgid "Mainnet"
+msgstr "Mainnet"
+
+#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:21
+msgid "Testnet"
+msgstr "Testnet"
+
+#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:26
+msgid "Privatenet"
+msgstr "Privatenet"

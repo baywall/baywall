@@ -1,0 +1,22 @@
+{
+  "chains.confirmations": "確認数",
+  "chains.go_to_chain_settings_button": "チェーン設定へ",
+  "chains.rpc_url": "RPC URL",
+  "common.name": "名前",
+  "nav.data": "データ",
+  "notifications.no_payable_tokens_exist_message": "支払可能なトークンが存在しません。",
+  "seller.agree_seller_terms": "販売者規約に同意",
+  "seller.receiving_address_overwrite_notice_message": "登録すると受取アドレスが{{address}}に上書きされます。",
+  "seller.registered_seller_address_message": "登録済み販売者アドレス: {{address}}",
+  "seller.seller_terms_checkbox": "販売者規約に同意します",
+  "seller.sign": "署名",
+  "seller.sign_button": "署名",
+  "seller.signature_terms_description_message": "利用規約に同意し、署名を作成します。",
+  "seller.wallet_required_for_seller_registration_message": "販売者登録にはウォレットが必要です。",
+  "tokens.decimals": "小数桁",
+  "tokens.register_rpc_url_to_add_token_message": "トークンを追加するにはRPC URLを登録してください。",
+  "tokens.token_address": "トークンアドレス",
+  "wallet.connect_wallet_to_continue_message": "続行するにはウォレットを接続してください",
+  "wallet.get_metamask": "MetaMaskを入手",
+  "wallet.no_gas_fees_required_message": "ガス代は必要ありません。"
+}

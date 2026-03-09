@@ -1,0 +1,22 @@
+{
+  "chains.confirmations": "Confirmations",
+  "chains.go_to_chain_settings_button": "Go to chain settings",
+  "chains.rpc_url": "RPC URL",
+  "common.name": "Name",
+  "nav.data": "Data",
+  "notifications.no_payable_tokens_exist_message": "No payable tokens exist.",
+  "seller.agree_seller_terms": "Agree to the seller terms",
+  "seller.receiving_address_overwrite_notice_message": "By registering, the receiving address will be overwritten to {{address}}.",
+  "seller.registered_seller_address_message": "Registered seller address: {{address}}",
+  "seller.seller_terms_checkbox": "I agree to the seller terms",
+  "seller.sign": "Sign",
+  "seller.sign_button": "Sign",
+  "seller.signature_terms_description_message": "Agree to the terms of service and create a signature.",
+  "seller.wallet_required_for_seller_registration_message": "Wallet is required to register as a seller.",
+  "tokens.decimals": "Decimals",
+  "tokens.register_rpc_url_to_add_token_message": "To add a token, you need to register the RPC URL.",
+  "tokens.token_address": "Token Address",
+  "wallet.connect_wallet_to_continue_message": "Connect your wallet to continue",
+  "wallet.get_metamask": "Get MetaMask",
+  "wallet.no_gas_fees_required_message": "No gas fees required."
+}

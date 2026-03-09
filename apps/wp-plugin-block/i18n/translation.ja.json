@@ -1,0 +1,10 @@
+{
+  "dashboard_label": "ダッシュボード",
+  "enter_the_valid_price_message": "正しい価格を入力してください。",
+  "invalid_price_entered_message": "無効な価格が入力されました。",
+  "network_category_label": "ネットワークカテゴリ",
+  "price_label": "価格",
+  "select_network_category_and_price_message": "販売するネットワークカテゴリ及び価格を指定してください。",
+  "settings_incomplete_message": "設定がまだ完了していません。",
+  "too_many_decimal_places_message": "小数点以下の桁数が多すぎます。"
+}
