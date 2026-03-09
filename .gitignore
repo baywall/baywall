@@ -7,3 +7,6 @@ generated.ts
 node_modules/
 dist/
 build/
+
+# wp-plugin-php
+apps/wp-plugin-php/languages
