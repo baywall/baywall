@@ -1,0 +1,17 @@
+
+query PostSetting {
+	networkCategories {
+		id
+		name
+		sellableSymbols
+	}
+	tokens {
+		chain {
+			networkCategory {
+				id
+			}
+		}
+		symbol
+		decimals
+	}
+}
