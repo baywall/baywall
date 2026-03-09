@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       baywall
- * Description:       Allows you to implement a paywall using crypto-assets.
+ * Description:       You can set up a paywall for cryptocurrency or stablecoin payments.
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Version:           0.0.1
