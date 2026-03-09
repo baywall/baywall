@@ -2,7 +2,7 @@
   "name": "baywall",
   "version": "0.0.1",
   "private": true,
-  "description": "Allows you to implement a paywall using crypto-assets.",
+  "description": "You can set up a paywall for cryptocurrency or stablecoin payments.",
   "license": "Split License",
   "files": [
     "build/**",
