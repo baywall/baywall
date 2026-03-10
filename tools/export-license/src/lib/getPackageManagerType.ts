@@ -5,10 +5,17 @@ import path from 'node:path';
 export type PackageManagerType = { isNpm: boolean; isComposer: boolean };
 
 export const getPackageManagerType = ( start: string ): PackageManagerType => {
-	// 本プロジェクトでは、`composer.lock`と`package.json`の両方が同一ディレクトリに存在する状態にならないため、
-	// ここではディレクトリ指定のみ有効とする。
-	if ( ! fs.statSync( start ).isDirectory() ) {
-		throw new Error( `[4BBE66A8] Invalid argument. start: ${ start }` );
+	if ( fs.statSync( start ).isFile() ) {
+		const isNpm = path.basename( start ) === 'package.json';
+		const isComposer = path.basename( start ) === 'composer.lock';
+		assert(
+			[ isNpm, isComposer ].filter( ( v ) => v ).length === 1,
+			`[8666FE8A] Invalid argument. start: ${ start }`
+		);
+		return {
+			isNpm,
+			isComposer,
+		};
 	}
 
 	const result: PackageManagerType = {
