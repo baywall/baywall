@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // ライブラリ読み込み
-require_once __DIR__ . '/includes/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $main = function () {
 	$containerBuilder = new ContainerBuilder();

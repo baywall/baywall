@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import { copyLicenseFiles } from '../copyLicenseFiles';
 import { exportLicenseMeta } from '../exportLicenseMeta';
 import { getPackageManagerType, PackageManagerType } from '../getPackageManagerType';
@@ -38,7 +40,7 @@ const getPackagesInfo = async ( start: string, packageManagerType: PackageManage
 			production: true, // devDependencies は除外
 		} );
 	} else if ( packageManagerType.isComposer ) {
-		return getPackagesComposer( start );
+		return getPackagesComposer( fs.statSync( start ).isDirectory() ? start : path.dirname( start ) );
 	}
 	throw new Error( `[E45C292D] Invalid argument. start: ${ start }` );
 };
