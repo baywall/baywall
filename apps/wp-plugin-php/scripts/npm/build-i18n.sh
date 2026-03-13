@@ -23,7 +23,7 @@ i18n() {
 
 		# ①.potファイルの生成
 		# WordPressのi18nツールを使用して、翻訳テンプレートファイル(.pot)を生成します。
-		wp i18n make-pot . "$I18N_WORK_DIR/$TEXT_DOMAIN.pot" --domain=$TEXT_DOMAIN --include=src --merge="$I18N_WORK_DIR/$TEXT_DOMAIN.pot"
+		wp i18n make-pot . "$I18N_WORK_DIR/$TEXT_DOMAIN.pot" --domain=$TEXT_DOMAIN --include=src --merge="$I18N_WORK_DIR/$TEXT_DOMAIN.pot" --headers='{"POT-Creation-Date":"2026-03-08T12:41:35+00:00"}'
 
 		# ②.poファイルの生成/更新
 		# 各言語の翻訳ファイル(.po)が存在しない場合は.potファイルをコピーして作成します。

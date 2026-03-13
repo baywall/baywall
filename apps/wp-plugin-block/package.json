@@ -39,8 +39,6 @@
     "lint:js:eslint": "bash ../../scripts/npm-scripts/lint-eslint.sh .",
     "lint:js:prettier": "bash ../../scripts/npm-scripts/lint-prettier.sh .",
     "packages-update": "wp-scripts packages-update",
-    "// 支払データを初期化し、再度同一ページで購入できるようにします。※ブラウザ側のlocalstorageは手動で削除してください。": "",
-    "reset:payment-data": "wp-env run cli wp eval-file wp-content/plugins/${PWD##*/}/.bin/reset-payment-data.php",
     "start:docker": "run-p env:start my-docker:start",
     "test": "bash ../../scripts/npm-scripts/test-jest.sh",
     "pretest:storybook": "storybook build",
