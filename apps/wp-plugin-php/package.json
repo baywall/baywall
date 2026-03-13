@@ -26,6 +26,8 @@
     "lint": "tests/vendor/bin/phpcbf .",
     "// @wordpress/scripts@27.9.0ではサブディレクトリが作成されないためコメントアウト plugin-zip": "wp-scripts plugin-zip --root-folder=baywall && mv baywall.zip baywall.${npm_package_version}.zip",
     "plugin-zip": "bash ./scripts/plugin-zip.sh",
+    "// 支払データを初期化し、再度同一ページで購入できるようにします。※ブラウザ側のlocalstorageは手動で削除してください。": "",
+    "reset:payment-data": "wp-env run cli wp eval-file wp-content/plugins/${PWD##*/}/.bin/reset-payment-data.php",
     "// 1つのファイルをテストする場合はテスト対象ファイルのパスを後ろに付与してください => pnpm test tests/classes/path-to-test-file.php": "",
     "test": "pnpm clean && pnpm exec wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli tests/vendor/bin/phpunit -- -c phpunit.xml --testdox",
     "// `WP_ENV_MYSQL_PORT`,`WP_ENV_TESTS_MYSQL_PORT`,`WP_ENV_PHPMYADMIN_PORT`,`WP_ENV_TESTS_PHPMYADMIN_PORT`を": "",
