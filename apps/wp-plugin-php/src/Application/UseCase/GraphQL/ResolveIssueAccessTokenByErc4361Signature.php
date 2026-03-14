@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
 use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
+use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\AccessTokenService;
 use Cornix\Serendipity\Core\Application\Service\Erc4361Service;
 use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
@@ -30,10 +31,11 @@ class ResolveIssueAccessTokenByErc4361Signature {
 	private SignatureService $signature_service;
 	private RefreshTokenService $refresh_token_service;
 	private RefreshTokenCookieProvider $refresh_token_cookie_provider;
+	private AccessTokenCookieProvider $access_token_cookie_provider;
 	private AccessTokenService $access_token_service;
 	private CookieWriter $cookie_writer;
 
-	public function __construct( TransactionService $transaction_service, Erc4361Service $erc4361_service, Erc4361NonceRepository $erc4361_nonce_repository, InvoiceRepository $invoice_repository, UnlockPaywallChecker $unlock_paywall_checker, SignatureService $signature_service, RefreshTokenService $refresh_token_service, RefreshTokenCookieProvider $refresh_token_cookie_provider, AccessTokenService $access_token_service, CookieWriter $cookie_writer ) {
+	public function __construct( TransactionService $transaction_service, Erc4361Service $erc4361_service, Erc4361NonceRepository $erc4361_nonce_repository, InvoiceRepository $invoice_repository, UnlockPaywallChecker $unlock_paywall_checker, SignatureService $signature_service, RefreshTokenService $refresh_token_service, RefreshTokenCookieProvider $refresh_token_cookie_provider, AccessTokenCookieProvider $access_token_cookie_provider, AccessTokenService $access_token_service, CookieWriter $cookie_writer ) {
 		$this->transaction_service           = $transaction_service;
 		$this->erc4361_service               = $erc4361_service;
 		$this->erc4361_nonce_repository      = $erc4361_nonce_repository;
@@ -42,6 +44,7 @@ class ResolveIssueAccessTokenByErc4361Signature {
 		$this->signature_service             = $signature_service;
 		$this->refresh_token_service         = $refresh_token_service;
 		$this->refresh_token_cookie_provider = $refresh_token_cookie_provider;
+		$this->access_token_cookie_provider  = $access_token_cookie_provider;
 		$this->access_token_service          = $access_token_service;
 		$this->cookie_writer                 = $cookie_writer;
 	}
@@ -77,11 +80,12 @@ class ResolveIssueAccessTokenByErc4361Signature {
 				$this->cookie_writer->set( $refresh_token_cookie );
 
 				// アクセストークンを発行
-				$access_token = $this->access_token_service->issue( $customer_address );
+				$access_token        = $this->access_token_service->issue( $customer_address );
+				$access_token_cookie = $this->access_token_cookie_provider->get( $access_token );
+				$this->cookie_writer->set( $access_token_cookie );
 
-				// アクセストークンはbodyで返す
 				return array(
-					'accessToken' => $access_token->value(),
+					'success' => true,
 				);
 			}
 		);

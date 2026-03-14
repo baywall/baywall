@@ -11,4 +11,7 @@ use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
  */
 interface InvoiceTokenCookieProvider {
 	public function get( InvoiceToken $invoice_token ): Cookie;
+
+	/** 請求書トークンをCookieから削除する際のプロパティを取得します */
+	public function getExpired(): Cookie;
 }

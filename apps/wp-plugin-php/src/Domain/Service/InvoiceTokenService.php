@@ -67,4 +67,19 @@ class InvoiceTokenService {
 
 		return $new_invoice_token;
 	}
+
+	/**
+	 * 請求書トークンを無効化します
+	 */
+	public function revoke( InvoiceTokenString $invoice_token_string ): void {
+		$invoice_token = $this->invoice_token_repository->get( $invoice_token_string );
+
+		if ( $invoice_token === null || $invoice_token->isRevoked() ) {
+			// トークンが存在しない、または既に無効化されている場合は何もしない
+			return;
+		}
+
+		$invoice_token->revoke();
+		$this->invoice_token_repository->update( $invoice_token );
+	}
 }

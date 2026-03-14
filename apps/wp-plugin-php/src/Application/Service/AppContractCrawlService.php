@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Application\Exception\ChainConnectionException;
+use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
@@ -12,6 +13,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\UnlockP
 
 class AppContractCrawlService {
 
+	private AppLogger $logger;
 	private BlockNumberProvider $block_number_provider;
 	private AppContractRepository $app_contract_repository;
 	private AppContractClientFactory $app_contract_client_factory;
@@ -20,6 +22,7 @@ class AppContractCrawlService {
 	private UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository;
 
 	public function __construct(
+		AppLogger $logger,
 		BlockNumberProvider $block_number_provider,
 		AppContractRepository $app_contract_repository,
 		AppContractClientFactory $app_contract_client_factory,
@@ -27,6 +30,7 @@ class AppContractCrawlService {
 		ServerSignerRepository $server_signer_repository,
 		UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository
 	) {
+		$this->logger                                   = $logger;
 		$this->block_number_provider                    = $block_number_provider;
 		$this->app_contract_repository                  = $app_contract_repository;
 		$this->app_contract_client_factory              = $app_contract_client_factory;
@@ -50,6 +54,9 @@ class AppContractCrawlService {
 		// 既にクロール済みのブロック番号を取得
 		$crawled_block_number = $app_contract->crawledBlockNumber();
 		assert( $crawled_block_number !== null, "[87EF1686] Crawled block number is null for chain ID: {$chain_id}" );
+
+		// ログ出力
+		$this->logger->debug( "[A5114D7B] chain id: {$chain_id}, crawled block number: {$crawled_block_number}, latest block number: {$latest_block_number}" );
 
 		//
 		// TODO: 最後にクロールした時刻を現在時刻を比較して、一定時間経過していない場合はクロールしないようにする

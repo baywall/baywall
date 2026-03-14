@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\DI;
 
 use Cornix\Serendipity\Core\Application\Service\AccessTokenExpirationProvider;
+use Cornix\Serendipity\Core\Application\Service\AccessTokenRequestProvider;
+use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
 use Cornix\Serendipity\Core\Application\Repository\SctaUrlRepository;
@@ -57,6 +59,8 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpPausedReposito
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpSctaUrlRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenExpirationProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenCookieProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenRequestProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361NonceProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361PropertyProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenCookieProvider;
@@ -113,6 +117,8 @@ final class ContainerDefinitions {
 			JwtAlgorithmProvider::class          => autowire( WpJwtAlgorithmProvider::class ),
 			JwtSecretKeyProvider::class          => autowire( WpJwtSecretKeyProvider::class ),
 			AccessTokenExpirationProvider::class => autowire( WpAccessTokenExpirationProvider::class ),
+			AccessTokenRequestProvider::class    => autowire( WpAccessTokenRequestProvider::class ),
+			AccessTokenCookieProvider::class     => autowire( WpAccessTokenCookieProvider::class ),
 			RefreshTokenCookieProvider::class    => autowire( WpRefreshTokenCookieProvider::class ),
 			InvoiceTokenCookieProvider::class    => autowire( WpInvoiceTokenCookieProvider::class ),
 			RefreshTokenService::class           => autowire( WpRefreshTokenService::class ),

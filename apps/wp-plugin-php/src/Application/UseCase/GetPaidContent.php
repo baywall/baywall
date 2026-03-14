@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
+use Cornix\Serendipity\Core\Application\Service\AccessTokenRequestProvider;
 use Cornix\Serendipity\Core\Application\Service\AccessTokenService;
+use Cornix\Serendipity\Core\Application\Service\AppContractCrawlService;
 use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
@@ -17,43 +19,45 @@ use Cornix\Serendipity\Core\Domain\ValueObject\BlockHeight;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Infrastructure\Http\BearerTokenService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\UnlockPaywallTransferEventRepository;
 use RuntimeException;
 
 class GetPaidContent {
 
-	private BearerTokenService $bearer_token_service;
+	private AccessTokenRequestProvider $access_token_request_provider;
 	private AccessTokenService $access_token_service;
 	private InvoiceRepository $invoice_repository;
 	private ChainRepository $chain_repository;
 	private PostRepository $post_repository;
 	private BlockNumberProvider $block_number_provider;
 	private UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository;
+	private AppContractCrawlService $app_contract_crawl_service;
 
 	public function __construct(
-		BearerTokenService $bearer_token_service,
+		AccessTokenRequestProvider $access_token_request_provider,
 		AccessTokenService $access_token_service,
 		InvoiceRepository $invoice_repository,
 		ChainRepository $chain_repository,
 		PostRepository $post_repository,
 		BlockNumberProvider $block_number_provider,
-		UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository
+		UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository,
+		AppContractCrawlService $app_contract_crawl_service
 	) {
-		$this->bearer_token_service                     = $bearer_token_service;
+		$this->access_token_request_provider            = $access_token_request_provider;
 		$this->access_token_service                     = $access_token_service;
 		$this->invoice_repository                       = $invoice_repository;
 		$this->chain_repository                         = $chain_repository;
 		$this->post_repository                          = $post_repository;
 		$this->block_number_provider                    = $block_number_provider;
 		$this->unlock_paywall_transfer_event_repository = $unlock_paywall_transfer_event_repository;
+		$this->app_contract_crawl_service               = $app_contract_crawl_service;
 	}
 
 	public function handle( string $invoice_id_hex_value ): string {
 		$invoice_id = InvoiceId::fromHex( Hex::from( $invoice_id_hex_value ) );
 
-		// アクセストークンをHTTPヘッダから取得
-		$access_token_value = $this->bearer_token_service->get();
+		// アクセストークンをCookieから取得
+		$access_token_value = $this->access_token_request_provider->get();
 		if ( $access_token_value === null ) {
 			throw new UnauthorizedException( '[8AD8257F] Access token is missing.' );
 		}
@@ -77,6 +81,9 @@ class GetPaidContent {
 			// 購入者チェック。別のユーザーの請求書IDを指定した場合は例外をスロー
 			throw new ForbiddenException( "[200D84DE] Address mismatch. client: {$address}, invoice: {$invoice->customerAddress()}" );
 		}
+
+		// Appコントラクトのイベントをクロールして最新の支払い状況を反映させる
+		$this->app_contract_crawl_service->crawl( $invoice->chainId() );
 
 		// 支払い確認チェック。指定した待機ブロック数経過していない場合は例外をスロー
 		if ( ! $this->isConfirmed( $invoice ) ) {

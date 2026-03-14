@@ -335,6 +335,12 @@ class ContentDeleteHook {
 	 * 投稿が削除された時のアクション。有料記事の情報も削除します。
 	 */
 	public function deletePostAction( int $post_id ): void {
+		// プラグイン更新時のzipアップロード処理では、一時ファイルがattachmentとして作成・削除され、
+		// その削除でも`delete_post`が発火する。attachmentは有料記事の対象外なので処理しない。
+		if ( get_post_type( $post_id ) === 'attachment' ) {
+			return;
+		}
+
 		// テーブルが存在する時のみ削除(PHPUnit動作時のエラー回避)
 		if ( $this->paid_content_table->exists() ) {
 			$post = $this->post_repository->get( PostId::from( $post_id ) );
