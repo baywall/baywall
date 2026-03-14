@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL;
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveChain;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveChains;
-use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveGetPaidContent;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueAccessTokenByErc4361Signature;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueErc4361Message;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoiceV2;
@@ -73,7 +72,6 @@ class RootValue {
 			'issueInvoiceV2'                     => ResolveIssueInvoiceV2::class,
 			'issueErc4361Message'                => ResolveIssueErc4361Message::class,
 			'issueAccessTokenByErc4361Signature' => ResolveIssueAccessTokenByErc4361Signature::class,
-			'getPaidContent'                     => ResolveGetPaidContent::class,
 			'saveChain'                          => ResolveSaveChain::class,
 			'saveOracle'                         => ResolveSaveOracle::class,
 			'saveSeller'                         => ResolveSaveSeller::class,

@@ -3,9 +3,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
+use Cornix\Serendipity\Core\Application\UseCase\GetPaidContent;
 use Cornix\Serendipity\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
 use Cornix\Serendipity\Core\Application\UseCase\RefreshAccessToken;
 use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\ForbiddenException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
@@ -59,6 +62,18 @@ class RestApiHook extends HookBase {
 			)
 		);
 		assert( $success );
+
+		// 有料コンテンツを取得するAPIを登録
+		$success = register_rest_route(
+			WpConfig::REST_NAMESPACE,
+			WpConfig::REST_ROUTE_PAID_CONTENT,
+			array(
+				'methods'             => 'POST',
+				'callback'            => fn ( \WP_REST_Request $request ) => $this->paidContentHandler( $request ),
+				'permission_callback' => '__return_true',
+			)
+		);
+		assert( $success );
 	}
 
 	public function authRefreshHandler( \WP_REST_Request $request ) {
@@ -71,11 +86,8 @@ class RestApiHook extends HookBase {
 				throw new UnauthorizedException( '[A018971D] Refresh token is missing.' );
 			}
 
-			$access_token_value = $this->container->get( RefreshAccessToken::class )->handle( $refresh_token_value );
-
-			return array(
-				'access_token' => $access_token_value,
-			);
+			$this->container->get( RefreshAccessToken::class )->handle( $refresh_token_value );
+			return new WP_REST_Response( array(), self::HTTP_STATUS_200_OK );
 		} catch ( UnauthorizedException $e ) {
 			$this->container->get( AppLogger::class )->debug( $e );
 			// リフレッシュトークンが無効な場合、401エラーを返す
@@ -102,12 +114,8 @@ class RestApiHook extends HookBase {
 				throw new UnauthorizedException( '[A693201D] Invoice token is missing.' );
 			}
 
-			$result = $this->container->get( IssueAccessTokenByInvoiceToken::class )->handle( $invoice_token_string_value );
-			assert( array_key_exists( 'access_token', $result ) && is_string( $result['access_token'] ), '[F02C7C55] ' . json_encode( $result ) );
-			return new WP_REST_Response(
-				$result,
-				self::HTTP_STATUS_200_OK
-			);
+			$this->container->get( IssueAccessTokenByInvoiceToken::class )->handle( $invoice_token_string_value );
+			return new WP_REST_Response( array(), self::HTTP_STATUS_200_OK );
 		} catch ( UnauthorizedException $e ) {
 			$this->container->get( AppLogger::class )->debug( $e );
 			return new WP_REST_Response(
@@ -127,5 +135,63 @@ class RestApiHook extends HookBase {
 				self::HTTP_STATUS_500_INTERNAL_SERVER_ERROR
 			);
 		}
+	}
+
+	public function paidContentHandler( \WP_REST_Request $request ) {
+		try {
+			$invoice_id = $this->extractInvoiceId( $request );
+
+			$paid_content = $this->container->get( GetPaidContent::class )->handle( $invoice_id );
+			return new WP_REST_Response(
+				array( 'paidContent' => $paid_content ),
+				self::HTTP_STATUS_200_OK
+			);
+		} catch ( BadRequestException | InvalidArgumentException $e ) {
+			$this->container->get( AppLogger::class )->debug( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Bad Request' ),
+				self::HTTP_STATUS_400_BAD_REQUEST
+			);
+		} catch ( UnauthorizedException $e ) {
+			$this->container->get( AppLogger::class )->debug( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Unauthorized' ),
+				self::HTTP_STATUS_401_UNAUTHORIZED
+			);
+		} catch ( PaymentRequiredException $e ) {
+			$this->container->get( AppLogger::class )->debug( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Payment Required' ),
+				self::HTTP_STATUS_402_PAYMENT_REQUIRED
+			);
+		} catch ( ForbiddenException $e ) {
+			$this->container->get( AppLogger::class )->debug( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Forbidden' ),
+				self::HTTP_STATUS_403_FORBIDDEN
+			);
+		} catch ( Throwable $e ) {
+			$this->container->get( AppLogger::class )->error( $e );
+			return new WP_REST_Response(
+				array( 'message' => 'Internal Server Error' ),
+				self::HTTP_STATUS_500_INTERNAL_SERVER_ERROR
+			);
+		}
+	}
+
+	/** リクエストボディからinvoiceIdを抽出します */
+	private function extractInvoiceId( \WP_REST_Request $request ): string {
+		/** @var mixed */
+		$body = json_decode( $request->get_body(), true );
+		if ( ! is_array( $body ) || ! array_key_exists( 'invoiceId', $body ) ) {
+			throw new BadRequestException( '[EA4E29F2] invoiceId is required in request body.' );
+		}
+
+		$invoice_id = $body['invoiceId'];
+		if ( ! is_string( $invoice_id ) || $invoice_id === '' ) {
+			throw new BadRequestException( '[D974364F] Invalid invoiceId.' );
+		}
+
+		return $invoice_id;
 	}
 }

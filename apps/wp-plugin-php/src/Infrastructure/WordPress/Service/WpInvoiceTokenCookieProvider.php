@@ -29,6 +29,20 @@ class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 		);
 	}
 
+	/** @inheritDoc */
+	public function getExpired(): Cookie {
+		return Cookie::create(
+			WpConfig::COOKIE_NAME_INVOICE_TOKEN, // name
+			'', // value: 設定不要
+			time() - 3600, // expires: 過去日時をセットしてクッキーが削除されるようにする
+			$this->path(),
+			null, // domain: nullで発行元ホスト名が自動設定される
+			$this->secure(),
+			true, // httponly: trueに設定してJSからのアクセスを防止
+			'Strict' // samesite
+		);
+	}
+
 	/** Cookieに書き込むリフレッシュトークンのパスを取得します */
 	private function path(): string {
 		$api_root_url = $this->wp_property->apiRootUrl();

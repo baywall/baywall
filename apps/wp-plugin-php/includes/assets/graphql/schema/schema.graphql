@@ -73,9 +73,6 @@ type Mutation {
 	# 支払情報を発行(v2)【ゲスト】
 	issueInvoiceV2(postId: Int!, chainId: Int!, tokenAddress: String!, customerAddress: String!): IssuedInvoiceV2!
 
-	# 記事の続きを取得【ゲスト】
-	getPaidContent( invoiceId: String! ): GetPaidContentResponse!
-
 	# ERC-4361署名用メッセージを発行【ゲスト】
 	issueErc4361Message( invoiceId: String! ): IssueErc4361MessageResponse!
 
@@ -211,16 +208,12 @@ type IssuedInvoiceV2 {
 	paymentAmount: String!			# 支払う数量(10進数の文字列)
 }
 
-type GetPaidContentResponse {
-	paidContent: String! # 購入者に提供されるコンテンツ
-}
-
 type IssueErc4361MessageResponse {
 	message: String! # 発行されたERC-4361署名用メッセージ
 }
 
 type IssueAccessTokenByErc4361SignatureResponse {
-	accessToken: String! # 発行されたアクセストークン
+	success: Boolean! # Cookie発行に成功したかどうか
 }
 
 type ServerSigner {

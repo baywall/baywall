@@ -6,8 +6,10 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks\Base;
 abstract class HookBase {
 
 	protected const HTTP_STATUS_200_OK                    = 200;
+	protected const HTTP_STATUS_400_BAD_REQUEST           = 400;
 	protected const HTTP_STATUS_401_UNAUTHORIZED          = 401;
 	protected const HTTP_STATUS_402_PAYMENT_REQUIRED      = 402;
+	protected const HTTP_STATUS_403_FORBIDDEN             = 403;
 	protected const HTTP_STATUS_500_INTERNAL_SERVER_ERROR = 500;
 
 	/** フックを登録します */
