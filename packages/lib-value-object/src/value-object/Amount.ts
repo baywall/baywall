@@ -8,6 +8,7 @@ const brand: unique symbol = Symbol( 'Amount' );
 /** 数量を表すvalue-object */
 export class Amount implements ValueObject< Amount > {
 	/** 型区別用のフィールド */
+	// @ts-ignore: unused-variable
 	private [ brand ]!: void;
 
 	// 指数表記に変更する桁数

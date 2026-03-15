@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ModuleInfos } from 'license-checker';
 
-export const exportLicenseMeta = async ( packages: ModuleInfos, start: string, output: string, metaFile: string ) => {
+export const exportLicenseMeta = async ( packages: ModuleInfos, _start: string, output: string, metaFile: string ) => {
 	// metaFileから見たoutputの相対パスを取得
 	const metaFileRelative = path.relative( path.dirname( metaFile ), output ) || '.';
 

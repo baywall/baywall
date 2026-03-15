@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
@@ -39,12 +39,12 @@ class PostEditHook extends HookBase {
 		$handle = $handle_name_provider->blockScript();
 
 		// アセットファイルを読み込む。
-		$asset_file = include Config::BLOCK_ASSET_PATH;
+		$asset_file = include WpConfig::BLOCK_ASSET_PATH;
 
 		// ブロックスクリプトを登録
 		wp_enqueue_script(
 			$handle,
-			$plugin->toUrl( Config::BLOCK_JS_RELATIVE_PATH ),
+			$plugin->toUrl( WpConfig::BLOCK_JS_RELATIVE_PATH ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true,   // フッターに出力。
@@ -56,7 +56,7 @@ class PostEditHook extends HookBase {
 		// スタイルを登録
 		wp_enqueue_style(
 			'b99aafea0cf94d308e4edce4bc087709', // 適当なハンドル名(他で使用しない)
-			$plugin->toUrl( Config::BLOCK_CSS_RELATIVE_PATH ),
+			$plugin->toUrl( WpConfig::BLOCK_CSS_RELATIVE_PATH ),
 			array(),
 			$asset_file['version']
 		);

@@ -19,6 +19,7 @@ class JwtCodec {
 		$this->base64url = new Base64Url();
 	}
 
+	/** @disregard P1009 Undefined type */
 	public function encode(
 		string $alg,
 		array $payload,
@@ -52,6 +53,7 @@ class JwtCodec {
 		return $data . '.' . $signature_encoded;
 	}
 
+	/** @disregard P1009 Undefined type */
 	public function decode(
 		string $jwt,
 		#[\SensitiveParameter]

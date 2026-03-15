@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Application\Service\Erc4361PropertyProvider;
 use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Domain;
 use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Statement;
 use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Uri;
-use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Constant\Config;
 
 class WpErc4361PropertyProvider implements Erc4361PropertyProvider {
 
@@ -23,7 +23,7 @@ class WpErc4361PropertyProvider implements Erc4361PropertyProvider {
 	}
 
 	public function statement(): ?Erc4361Statement {
-		return Erc4361Statement::from( WpConfig::ERC4361_STATEMENT );
+		return Erc4361Statement::from( Config::ERC4361_STATEMENT );
 	}
 
 	public function uri(): Erc4361Uri {

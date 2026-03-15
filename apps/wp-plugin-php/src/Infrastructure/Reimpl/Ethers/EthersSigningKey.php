@@ -16,6 +16,7 @@ class EthersSigningKey {
 
 	private KeyPair $key_pair;
 
+	/** @disregard P1009 Undefined type */
 	public function __construct(
 		#[\SensitiveParameter]
 		string $private_key

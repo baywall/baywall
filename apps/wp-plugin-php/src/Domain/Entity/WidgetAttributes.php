@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
@@ -37,17 +37,17 @@ class WidgetAttributes {
 
 	public function toArray(): array {
 		return array(
-			Config::BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID => $this->selling_network_category_id ? $this->selling_network_category_id->value() : null,
-			Config::BLOCK_ATTR_NAME_SELLING_AMOUNT => $this->selling_amount ? $this->selling_amount->value() : null,
-			Config::BLOCK_ATTR_NAME_SELLING_SYMBOL => $this->selling_symbol ? $this->selling_symbol->value() : null,
+			WpConfig::BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID => $this->selling_network_category_id ? $this->selling_network_category_id->value() : null,
+			WpConfig::BLOCK_ATTR_NAME_SELLING_AMOUNT => $this->selling_amount ? $this->selling_amount->value() : null,
+			WpConfig::BLOCK_ATTR_NAME_SELLING_SYMBOL => $this->selling_symbol ? $this->selling_symbol->value() : null,
 		);
 	}
 
 	public static function fromArray( array $attrs ): self {
 		return self::from(
-			NetworkCategoryId::fromNullable( $attrs[ Config::BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID ] ?? null ),
-			Amount::fromNullable( $attrs[ Config::BLOCK_ATTR_NAME_SELLING_AMOUNT ] ?? null ),
-			Symbol::fromNullable( $attrs[ Config::BLOCK_ATTR_NAME_SELLING_SYMBOL ] ?? null )
+			NetworkCategoryId::fromNullable( $attrs[ WpConfig::BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID ] ?? null ),
+			Amount::fromNullable( $attrs[ WpConfig::BLOCK_ATTR_NAME_SELLING_AMOUNT ] ?? null ),
+			Symbol::fromNullable( $attrs[ WpConfig::BLOCK_ATTR_NAME_SELLING_SYMBOL ] ?? null )
 		);
 	}
 }

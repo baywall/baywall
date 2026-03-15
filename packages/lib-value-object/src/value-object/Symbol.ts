@@ -5,6 +5,7 @@ const brand: unique symbol = Symbol( 'Symbol' );
 /** 通貨記号を表すvalue-object */
 class TokenSymbol implements ValueObject< TokenSymbol > {
 	/** 型区別用のフィールド */
+	// @ts-ignore: unused-variable
 	private [ brand ]!: void;
 
 	public readonly value: string;

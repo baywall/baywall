@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nTextProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
@@ -64,12 +64,12 @@ class AdminPageHook extends HookBase {
 		$handle_name = $handle_name_provider->adminScript();
 
 		// アセットファイルを読み込む
-		$asset_file = include Config::ADMIN_ASSET_PATH;
+		$asset_file = include WpConfig::ADMIN_ASSET_PATH;
 
 		// 管理画面のスクリプト読み込み
 		wp_enqueue_script(
 			$handle_name,
-			$plugin->toUrl( Config::ADMIN_JS_RELATIVE_PATH ),
+			$plugin->toUrl( WpConfig::ADMIN_JS_RELATIVE_PATH ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true,   // フッターに出力。

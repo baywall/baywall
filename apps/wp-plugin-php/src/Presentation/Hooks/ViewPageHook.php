@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
@@ -35,12 +35,12 @@ class ViewPageHook extends HookBase {
 		$handle_name = $handle_name_provider->viewScript();
 
 		// アセットファイルを読み込む
-		$asset_file = include Config::VIEW_ASSET_PATH;
+		$asset_file = include WpConfig::VIEW_ASSET_PATH;
 
 		// スクリプトを登録
 		wp_enqueue_script(
 			$handle_name,
-			$plugin->toUrl( Config::VIEW_JS_RELATIVE_PATH ),
+			$plugin->toUrl( WpConfig::VIEW_JS_RELATIVE_PATH ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true   // フッターに出力 ※ 6.8.2でも`script_loader_tag`による`defer`挿入が可能であることを確認したため、配列にはせず`true`のままとする
@@ -51,7 +51,7 @@ class ViewPageHook extends HookBase {
 		// スタイルを登録
 		wp_enqueue_style(
 			'5bcfda3bcb3a77e70732c9e6e78195a5', // 適当なハンドル名(他で使用しない)
-			$plugin->toUrl( Config::VIEW_CSS_RELATIVE_PATH ),
+			$plugin->toUrl( WpConfig::VIEW_CSS_RELATIVE_PATH ),
 			array(),
 			$asset_file['version']
 		);
