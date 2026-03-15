@@ -5,6 +5,7 @@ const brand: unique symbol = Symbol( 'NetworkCategoryId' );
 /** ネットワークカテゴリIDを表すvalue-object */
 export class NetworkCategoryId implements ValueObject< NetworkCategoryId > {
 	/** 型区別用のフィールド */
+	// @ts-ignore: unused-variable
 	private [ brand ]!: void;
 
 	public readonly value: number;

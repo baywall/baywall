@@ -5,6 +5,7 @@ const brand: unique symbol = Symbol( 'Decimals' );
 /** 小数点以下桁数を表すvalue-object */
 export class Decimals implements ValueObject< Decimals > {
 	/** 型区別用のフィールド */
+	// @ts-ignore: unused-variable
 	private [ brand ]!: void;
 
 	public readonly value: number;

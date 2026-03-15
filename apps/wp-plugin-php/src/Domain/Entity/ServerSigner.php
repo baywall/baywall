@@ -12,6 +12,7 @@ class ServerSigner extends Signer {
 	/**
 	 * @param Address    $address
 	 * @param PrivateKey $private_key
+	 * @disregard P1009 Undefined type
 	 */
 	public function __construct(
 		Address $address,

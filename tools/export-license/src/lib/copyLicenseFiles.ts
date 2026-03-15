@@ -5,10 +5,10 @@ import { ModuleInfos } from 'license-checker';
 /**
  * ライセンスファイルをコピーします。
  * @param packages
- * @param start
+ * @param _start
  * @param output
  */
-export const copyLicenseFiles = ( packages: ModuleInfos, start: string, output: string ) => {
+export const copyLicenseFiles = ( packages: ModuleInfos, _start: string, output: string ) => {
 	// コピーしたファイル一覧を格納する配列
 	const copiedFiles: string[] = [];
 

@@ -27,6 +27,7 @@
     "lint": "run-p lint:*",
     "lint:eslint": "bash ../../scripts/npm-scripts/lint-eslint.sh .",
     "lint:prettier": "bash ../../scripts/npm-scripts/lint-prettier.sh .",
+    "lint:tsc": "bash ../../scripts/npm-scripts/lint-tsc.sh",
     "test": "bash ../../scripts/npm-scripts/test-jest.sh"
   },
   "peerDependencies": {

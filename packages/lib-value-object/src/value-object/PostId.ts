@@ -3,6 +3,7 @@ const brand: unique symbol = Symbol( 'PostId' );
 /** 投稿IDを表すvalue-object */
 export class PostId {
 	/** 型区別用のフィールド */
+	// @ts-ignore: unused-variable
 	private [ brand ]!: void;
 
 	public readonly value: number;

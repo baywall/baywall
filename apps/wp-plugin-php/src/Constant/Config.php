@@ -17,42 +17,20 @@ class Config {
 	/** 販売者が利用規約に同意する時にウォレットに表示されるメッセージ */
 	public const SELLER_TERMS_SIGNING_MESSAGE = 'I agree to the Terms of Service for baywall (Version 0) and the Privacy Policy for baywall (Version 0).';
 
-	private const BLOCK_BUILD_RELATIVE_DIR = 'public/block';
-	/** `block.json`へのパス */
-	public const BLOCK_JSON_PATH = self::ROOT_DIR . '/' . self::BLOCK_BUILD_RELATIVE_DIR . '/block.json';
-	/** ブロックエディタ用の『index.asset.php』ファイルへのパス */
-	public const BLOCK_ASSET_PATH = self::ROOT_DIR . '/' . self::BLOCK_BUILD_RELATIVE_DIR . '/index.asset.php';
-	/** ブロックエディタ用の『index.js』ファイルへの相対パス(URL生成に使用) */
-	public const BLOCK_JS_RELATIVE_PATH = self::BLOCK_BUILD_RELATIVE_DIR . '/index.js';
-	/** ブロックエディタ用の『index.css』ファイルへの相対パス(URL生成に使用) */
-	public const BLOCK_CSS_RELATIVE_PATH = self::BLOCK_BUILD_RELATIVE_DIR . '/index.css';
-
-
-	/** Gutenbergブロックで設定された販売ネットワークカテゴリIDの属性名 */
-	public const BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID = 'sellingNetworkCategoryId';
-	/** Gutenbergブロックで設定された販売価格の金額の属性名 */
-	public const BLOCK_ATTR_NAME_SELLING_AMOUNT = 'sellingAmount';
-	/** Gutenbergブロックで設定された販売価格の通貨の属性名 */
-	public const BLOCK_ATTR_NAME_SELLING_SYMBOL = 'sellingSymbol';
+	/**
+	 * ERC-4361の署名用メッセージに含めるユーザー向けの説明文。
+	 * トークンの有効期限や別ブラウザなど、認証情報が存在しない状況でリフレッシュトークンを発行する時に使用する。
+	 *
+	 * https://eips.ethereum.org/EIPS/eip-4361 には、
+	 * > A human-readable ASCII assertion that the user will sign which MUST NOT include '\n' (the byte 0x0a).
+	 * とあるので多言語対応は不要。
+	 */
+	public const ERC4361_STATEMENT = 'Sign this message to unlock the paywall.';
 
 	/** GraphQLスキーマファイルへのパス */
 	public const GRAPHQL_SCHEMA_PATH = self::ROOT_DIR . '/includes/assets/graphql/schema/schema.graphql';
 	/** GraphQLスキーマのキャッシュファイル(PHPファイル)へのパス */
 	public const GRAPHQL_CACHE_PATH = self::ROOT_DIR . '/includes/cache/graphql-schema.php';
-
-	private const ADMIN_BUILD_RELATIVE_DIR = 'public/admin';
-	// 管理画面用『index.asset.php』ファイルへのパス
-	public const ADMIN_ASSET_PATH = self::ROOT_DIR . '/' . self::ADMIN_BUILD_RELATIVE_DIR . '/index.asset.php';
-	// 管理画面用『index.js』ファイルへの相対パス(URL生成に使用)
-	public const ADMIN_JS_RELATIVE_PATH = self::ADMIN_BUILD_RELATIVE_DIR . '/index.js';
-
-	private const VIEW_BUILD_RELATIVE_DIR = 'public/view';
-	// ゲストユーザー(一般の訪問者)表示用『index.asset.php』ファイルへのパス
-	public const VIEW_ASSET_PATH = self::ROOT_DIR . '/' . self::VIEW_BUILD_RELATIVE_DIR . '/index.asset.php';
-	// ゲストユーザー(一般の訪問者)表示用『index.js』ファイルへの相対パス(URL生成に使用)
-	public const VIEW_JS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.js';
-	// ゲストユーザー(一般の訪問者)表示用『index.css』ファイルへの相対パス(URL生成に使用)
-	public const VIEW_CSS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.css';
 
 	/**
 	 * レートの一時データの有効期限(秒)

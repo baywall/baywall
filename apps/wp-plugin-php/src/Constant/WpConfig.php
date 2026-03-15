@@ -8,7 +8,11 @@ namespace Cornix\Serendipity\Core\Constant;
  */
 class WpConfig {
 
-	// private const PLUGIN_NAME = 'baywall';
+	/**
+	 * このプラグインのルートディレクトリ
+	 * (エントリファイルが存在するディレクトリのパス)
+	 */
+	public const ROOT_DIR = __DIR__ . '/../..';
 
 	/**
 	 * ペイウォールブロックのブロック名
@@ -29,16 +33,11 @@ class WpConfig {
 	 */
 	public const PHP_VAR_NAME = 'php_var_20792bdd';
 
-	/**
-	 * REST APIの名前空間
-	 *
-	 * プラグイン名を小文字にしたものを識別子として使用
-	 */
+	/** REST APIの名前空間 */
+	// プラグイン名を小文字にしたものを識別子として使用
 	public const REST_NAMESPACE = 'baywall';
 
-	/**
-	 * GraphQLのルート名
-	 */
+	/** GraphQLのルート名 */
 	public const GRAPHQL_ROUTE = 'graphql';
 
 	/** アクセストークンの有効期限(秒) */
@@ -67,35 +66,40 @@ class WpConfig {
 	/** 請求書トークンを保存するクッキー名 */
 	public const COOKIE_NAME_INVOICE_TOKEN = self::REST_NAMESPACE . '_invoice_token';
 
-	/**
-	 * ERC-4361の署名用メッセージに含めるユーザー向けの説明文。
-	 * トークンの有効期限や別ブラウザなど、認証情報が存在しない状況でリフレッシュトークンを発行する時に使用する。
-	 *
-	 * https://eips.ethereum.org/EIPS/eip-4361 には、
-	 * > A human-readable ASCII assertion that the user will sign which MUST NOT include '\n' (the byte 0x0a).
-	 * とあるので多言語対応は不要。
-	 */
-	public const ERC4361_STATEMENT = 'Sign this message to unlock the paywall.';
+	/** Gutenbergブロックで設定された販売ネットワークカテゴリIDの属性名 */
+	public const BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID = 'sellingNetworkCategoryId';
+	/** Gutenbergブロックで設定された販売価格の金額の属性名 */
+	public const BLOCK_ATTR_NAME_SELLING_AMOUNT = 'sellingAmount';
+	/** Gutenbergブロックで設定された販売価格の通貨の属性名 */
+	public const BLOCK_ATTR_NAME_SELLING_SYMBOL = 'sellingSymbol';
 
+	private const BLOCK_BUILD_RELATIVE_DIR = 'public/block';
+	/** `block.json`へのパス */
+	public const BLOCK_JSON_PATH = self::ROOT_DIR . '/' . self::BLOCK_BUILD_RELATIVE_DIR . '/block.json';
+	/** ブロックエディタ用の『index.asset.php』ファイルへのパス */
+	public const BLOCK_ASSET_PATH = self::ROOT_DIR . '/' . self::BLOCK_BUILD_RELATIVE_DIR . '/index.asset.php';
+	/** ブロックエディタ用の『index.js』ファイルへの相対パス(URL生成に使用) */
+	public const BLOCK_JS_RELATIVE_PATH = self::BLOCK_BUILD_RELATIVE_DIR . '/index.js';
+	/** ブロックエディタ用の『index.css』ファイルへの相対パス(URL生成に使用) */
+	public const BLOCK_CSS_RELATIVE_PATH = self::BLOCK_BUILD_RELATIVE_DIR . '/index.css';
+	/** ペイウォールブロックスクリプトのハンドル名 */
+	public const HANDLE_NAME_BLOCK_SCRIPT = '6e7ba80738b3f81da8c4f83d13e6a344'; // 『src/block/index.js』(文字列)のMD5ハッシュ値
 
-	/**
-	 * ペイウォールブロックスクリプトのハンドル名
-	 *
-	 * 『src/block/index.js』(文字列)のMD5ハッシュ値
-	 */
-	public const HANDLE_NAME_BLOCK_SCRIPT = '6e7ba80738b3f81da8c4f83d13e6a344';
+	private const ADMIN_BUILD_RELATIVE_DIR = 'public/admin';
+	/** 管理画面用『index.asset.php』ファイルへのパス */
+	public const ADMIN_ASSET_PATH = self::ROOT_DIR . '/' . self::ADMIN_BUILD_RELATIVE_DIR . '/index.asset.php';
+	/** 管理画面用『index.js』ファイルへの相対パス(URL生成に使用) */
+	public const ADMIN_JS_RELATIVE_PATH = self::ADMIN_BUILD_RELATIVE_DIR . '/index.js';
+	/** 管理画面スクリプトのハンドル名 */
+	public const HANDLE_NAME_ADMIN_SCRIPT = '4c452b4ecb0e32a9563a7a76a9d5ee2c'; // 『public/admin/index.js』(文字列)のMD5ハッシュ値
 
-	/**
-	 * 管理画面スクリプトのハンドル名
-	 *
-	 * 『public/admin/index.js』(文字列)のMD5ハッシュ値
-	 */
-	public const HANDLE_NAME_ADMIN_SCRIPT = '4c452b4ecb0e32a9563a7a76a9d5ee2c';
-
-	/**
-	 * 投稿表示用スクリプトのハンドル名
-	 *
-	 * 『public/view/index.js』(文字列)のMD5ハッシュ値
-	 */
-	public const HANDLE_NAME_VIEW_SCRIPT = '7f21752c82485b2bc9afb940ba2a6794';
+	private const VIEW_BUILD_RELATIVE_DIR = 'public/view';
+	/** ゲストユーザー(一般の訪問者)表示用『index.asset.php』ファイルへのパス */
+	public const VIEW_ASSET_PATH = self::ROOT_DIR . '/' . self::VIEW_BUILD_RELATIVE_DIR . '/index.asset.php';
+	/** ゲストユーザー(一般の訪問者)表示用『index.js』ファイルへの相対パス(URL生成に使用) */
+	public const VIEW_JS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.js';
+	/** ゲストユーザー(一般の訪問者)表示用『index.css』ファイルへの相対パス(URL生成に使用) */
+	public const VIEW_CSS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.css';
+	/** 投稿表示用スクリプトのハンドル名 */
+	public const HANDLE_NAME_VIEW_SCRIPT = '7f21752c82485b2bc9afb940ba2a6794'; // 『public/view/index.js』(文字列)のMD5ハッシュ値
 }

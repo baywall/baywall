@@ -45,13 +45,13 @@ class ResolveSaveSeller {
 		// 現在の販売者向け利用規約メッセージと一致しない場合は例外を投げる
 		$expected_message = $this->seller_terms_provider->getSigningMessage();
 		if ( ! $signing_message->equals( $expected_message ) ) {
-			throw new \InvalidArgumentException( "[] Invalid signing message. Expected: {$expected_message}, got: {$signing_message}" );
+			throw new \InvalidArgumentException( "[08965E9C] Invalid signing message. Expected: {$expected_message}, got: {$signing_message}" );
 		}
 
 		// 署名からアドレスを復元し、指定されたアドレスと一致することを確認
 		$recovered_address = $this->signature_service->recoverAddress( $signing_message, $signature );
 		if ( ! $recovered_address->equals( $address ) ) {
-			throw new \InvalidArgumentException( "[] Address mismatch. Expected: {$address}, got: {$recovered_address}" );
+			throw new \InvalidArgumentException( "[EA91F2D4] Address mismatch. Expected: {$address}, got: {$recovered_address}" );
 		}
 
 		// 販売者情報を保存

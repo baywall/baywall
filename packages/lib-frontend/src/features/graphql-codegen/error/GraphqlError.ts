@@ -2,6 +2,7 @@ const brand: unique symbol = Symbol( 'GraphqlError' );
 
 export class GraphqlError extends Error {
 	/** 型区別用のフィールド */
+	// @ts-ignore: unused-variable
 	private [ brand ]!: void;
 
 	private graphqlError: GraphqlErrorType;
