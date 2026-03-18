@@ -38,7 +38,8 @@ class V20251106_040_CreateInvoiceTable extends MigrationBase {
 				`customer_address`       varchar(191)               NOT NULL,
 				PRIMARY KEY (`id`),
 				KEY `idx_{$this->table_name}_2D6F4376` (`created_at`),
-				KEY `idx_{$this->table_name}_6970C683` (`id`, `chain_id`, `payment_token_address`)
+				KEY `idx_{$this->table_name}_6970C683` (`id`, `chain_id`, `payment_token_address`),
+				KEY `idx_{$this->table_name}_2068EC67` (`post_id`, `customer_address`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
 		$this->wpdb->dbh->query( $sql );

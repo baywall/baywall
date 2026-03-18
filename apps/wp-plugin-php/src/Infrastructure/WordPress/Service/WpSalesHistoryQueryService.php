@@ -6,14 +6,16 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 use Cornix\Serendipity\Core\Application\Dto\PriceDto;
 use Cornix\Serendipity\Core\Application\Dto\SalesHistoryDto;
 use Cornix\Serendipity\Core\Application\Dto\SalesHistoryInvoiceDto;
-use Cornix\Serendipity\Core\Application\Service\SalesHistoryService;
+use Cornix\Serendipity\Core\Application\Service\SalesHistoryQueryService;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\SalesHistoryView;
 
-class WpSalesHistoryService implements SalesHistoryService {
+class WpSalesHistoryQueryService implements SalesHistoryQueryService {
 
 	private SalesHistoryView $sales_history_view;
 
@@ -59,5 +61,10 @@ class WpSalesHistoryService implements SalesHistoryService {
 			$record->affiliate_address,
 			$to_price_dto_callback( $record->affiliate_received_amount )
 		);
+	}
+
+	/** @inheritDoc */
+	public function existsByPostIdAndCustomerAddress( PostId $post_id, Address $customer_address ): bool {
+		return $this->sales_history_view->existsByPostIdAndCustomerAddress( $post_id, $customer_address );
 	}
 }

@@ -16,7 +16,7 @@ use Cornix\Serendipity\Core\Application\Service\JwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtSecretKeyProvider;
 use Cornix\Serendipity\Core\Application\Service\PaidContentService;
 use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\Service\SalesHistoryService;
+use Cornix\Serendipity\Core\Application\Service\SalesHistoryQueryService;
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
@@ -71,7 +71,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpUserAccessProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpSalesHistoryService;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpSalesHistoryQueryService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpTransactionService;
 use wpdb;
 
@@ -113,7 +113,7 @@ final class ContainerDefinitions {
 			PaidContentService::class            => autowire( PaidContentServiceImpl::class ),
 			BlockNumberProvider::class           => autowire( BlockNumberProviderImpl::class ),
 			TransactionService::class            => autowire( WpTransactionService::class ),
-			SalesHistoryService::class           => autowire( WpSalesHistoryService::class ),
+			SalesHistoryQueryService::class      => autowire( WpSalesHistoryQueryService::class ),
 			JwtAlgorithmProvider::class          => autowire( WpJwtAlgorithmProvider::class ),
 			JwtSecretKeyProvider::class          => autowire( WpJwtSecretKeyProvider::class ),
 			AccessTokenExpirationProvider::class => autowire( WpAccessTokenExpirationProvider::class ),
