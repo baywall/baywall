@@ -4,6 +4,7 @@
   "agreement.privacy_policy": "Privacy Policy (Japanese only)",
   "agreement.terms_of_service": "Terms of Service (Japanese only)",
   "app_contract.paused_message": "Payment services are currently unavailable due to maintenance.\nPlease try again after the maintenance is complete.",
+  "common.cookie_required_message": "To use this service, you need to enable cookies. Please check your browser settings.",
   "common.loading_label": "Loading...",
   "common.select_an_option": "Select an option",
   "common.server_error": "Server Error",
