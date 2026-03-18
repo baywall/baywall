@@ -4,18 +4,18 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
 use Cornix\Serendipity\Core\Application\Dto\SalesHistoryDto;
-use Cornix\Serendipity\Core\Application\Service\SalesHistoryService;
+use Cornix\Serendipity\Core\Application\Service\SalesHistoryQueryService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 
 class ResolveSalesHistories {
 
 	private UserAccessChecker $user_access_checker;
-	private SalesHistoryService $sales_history_service;
+	private SalesHistoryQueryService $sales_history_service;
 
 	public function __construct(
 		UserAccessChecker $user_access_checker,
-		SalesHistoryService $sales_history_service
+		SalesHistoryQueryService $sales_history_service
 	) {
 		$this->user_access_checker   = $user_access_checker;
 		$this->sales_history_service = $sales_history_service;

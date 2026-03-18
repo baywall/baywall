@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
@@ -126,5 +128,34 @@ class SalesHistoryView {
 			},
 			$results
 		);
+	}
+
+
+	/**
+	 * 販売履歴に指定した投稿IDと購入者アドレスが存在するかどうか(=購入済みかどうか)を返します
+	 */
+	public function existsByPostIdAndCustomerAddress( PostId $post_id, Address $customer_address ): bool {
+		$sql = <<<SQL
+			SELECT
+				COUNT(*) AS count
+			FROM
+				{$this->tx_table_name} AS t1
+			INNER JOIN
+				{$this->invoice_table_name} AS t2
+				ON t1.invoice_id = t2.id
+			WHERE
+				t2.post_id = :post_id AND t2.customer_address = :customer_address
+		SQL;
+
+		$sql    = $this->wpdb->prepare(
+			$sql,
+			array(
+				':post_id'          => $post_id->value(),
+				':customer_address' => $customer_address->value(),
+			)
+		);
+		$result = $this->wpdb->get_row( $sql );
+
+		return isset( $result->count ) && (int) $result->count > 0;
 	}
 }

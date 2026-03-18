@@ -139,9 +139,9 @@ class RestApiHook extends HookBase {
 
 	public function paidContentHandler( \WP_REST_Request $request ) {
 		try {
-			$invoice_id = $this->extractInvoiceId( $request );
+			$post_id = $this->extractPostId( $request );
 
-			$paid_content = $this->container->get( GetPaidContent::class )->handle( $invoice_id );
+			$paid_content = $this->container->get( GetPaidContent::class )->handle( $post_id );
 			return new WP_REST_Response(
 				array( 'paidContent' => $paid_content ),
 				self::HTTP_STATUS_200_OK
@@ -179,19 +179,18 @@ class RestApiHook extends HookBase {
 		}
 	}
 
-	/** リクエストボディからinvoiceIdを抽出します */
-	private function extractInvoiceId( \WP_REST_Request $request ): string {
-		/** @var mixed */
+	/** リクエストボディからpostIdを抽出します */
+	private function extractPostId( \WP_REST_Request $request ): int {
 		$body = json_decode( $request->get_body(), true );
-		if ( ! is_array( $body ) || ! array_key_exists( 'invoiceId', $body ) ) {
-			throw new BadRequestException( '[EA4E29F2] invoiceId is required in request body.' );
+		if ( ! is_array( $body ) || ! array_key_exists( 'postId', $body ) ) {
+			throw new BadRequestException( '[EA4E29F2] postId is required in request body.' );
 		}
 
-		$invoice_id = $body['invoiceId'];
-		if ( ! is_string( $invoice_id ) || $invoice_id === '' ) {
-			throw new BadRequestException( '[D974364F] Invalid invoiceId.' );
+		$post_id = $body['postId'];
+		if ( ! is_int( $post_id ) || $post_id <= 0 ) {
+			throw new BadRequestException( '[D974364F] Invalid postId.' );
 		}
 
-		return $invoice_id;
+		return $post_id;
 	}
 }

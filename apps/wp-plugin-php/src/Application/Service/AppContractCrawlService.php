@@ -66,6 +66,8 @@ class AppContractCrawlService {
 		$from_block_number = $crawled_block_number->add( 1 );
 		$to_block_number   = $this->eth_get_logs_to_block_provider->get( $chain_id, $from_block_number, $latest_block_number );
 
+		$this->logger->debug( "[1C4E693B] Crawl chain id: {$chain_id}, from block: {$from_block_number->int()}, to block: {$to_block_number->int()}" );
+
 		// フィルタ条件となる署名用ウォレットアドレスを取得
 		$server_signer_address = $this->server_signer_repository->get()->address();
 		// Appコントラクトからイベントを取得

@@ -74,10 +74,10 @@ type Mutation {
 	issueInvoiceV2(postId: Int!, chainId: Int!, tokenAddress: String!, customerAddress: String!): IssuedInvoiceV2!
 
 	# ERC-4361署名用メッセージを発行【ゲスト】
-	issueErc4361Message( invoiceId: String! ): IssueErc4361MessageResponse!
+	issueErc4361Message( address: String!, chainId: Int! ): IssueErc4361MessageResponse!
 
 	# ERC-4361署名を使ってアクセストークンを発行【ゲスト】
-	issueAccessTokenByErc4361Signature( invoiceId: String!, signature: String! ): IssueAccessTokenByErc4361SignatureResponse!
+	issueAccessTokenByErc4361Signature( address: String!, chainId: Int!, signature: String! ): IssueAccessTokenByErc4361SignatureResponse!
 
 	# 販売者情報を保存【管理者】
 	saveSeller( address: String!, signingMessage: String!, signature: String! ): Boolean!
