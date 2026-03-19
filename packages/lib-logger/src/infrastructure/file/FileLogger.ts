@@ -8,7 +8,6 @@ import { LogLevel } from '../../domain/types/LogLevel';
 export class FileLogger implements Logger {
 	private readonly argsFormatter: ArgsFormatter = new ArgsFormatter();
 
-	// eslint-disable-next-line no-useless-constructor
 	public constructor( private logFilePath: string ) {}
 
 	public log( _: LogLevel, ...args: any[] ): void {

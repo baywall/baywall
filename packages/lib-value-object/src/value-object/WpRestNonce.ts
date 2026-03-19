@@ -12,7 +12,6 @@ export class WpRestNonce implements ValueObject< WpRestNonce > {
 	// @ts-ignore: unused-variable
 	private [ brand ]!: void;
 
-	// eslint-disable-next-line no-useless-constructor
 	private constructor( public readonly value: string ) {}
 
 	static from( value: string ): WpRestNonce {
