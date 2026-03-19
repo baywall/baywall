@@ -8,7 +8,6 @@ import { Logger } from './Logger';
  * 各ログレベルに対応したメソッドを提供し、内部で指定されたLoggerのlogメソッドを呼び出す
  */
 export class ApplicationLogger {
-	// eslint-disable-next-line no-useless-constructor
 	public constructor( private readonly logger: Logger ) {}
 
 	public debug( ...args: any[] ): void {

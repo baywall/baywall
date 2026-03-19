@@ -1,5 +1,5 @@
 export class Config {
-	private constructor() {} // eslint-disable-line no-useless-constructor
+	private constructor() {}
 
 	// ※ PHP側と整合性を取ること
 	/** ブロックの要素に指定するCSSのクラス名 */

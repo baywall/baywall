@@ -7,7 +7,6 @@ export class Token implements ValueObject< Token > {
 	// @ts-ignore: unused-variable
 	private [ brand ]!: void;
 
-	// eslint-disable-next-line no-useless-constructor
 	private constructor(
 		public readonly networkCategoryId: NetworkCategoryId,
 		public readonly symbol: TokenSymbol,
