@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Application\Exception\ChainConnectionException;
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
+use Cornix\Serendipity\Core\Domain\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\UnlockPaywallTransferEventRepository;

@@ -6,7 +6,6 @@ namespace Cornix\Serendipity\Core\Infrastructure\DI;
 use Cornix\Serendipity\Core\Application\Service\AccessTokenExpirationProvider;
 use Cornix\Serendipity\Core\Application\Service\AccessTokenRequestProvider;
 use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
 use Cornix\Serendipity\Core\Application\Repository\SctaUrlRepository;
 use Cornix\Serendipity\Core\Application\Service\Erc4361NonceProvider;
@@ -31,6 +30,8 @@ use Cornix\Serendipity\Core\Domain\Repository\RefreshTokenRepository;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Domain\Service\AppContractDataProvider;
+use Cornix\Serendipity\Core\Domain\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenProvider;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
@@ -46,6 +47,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpToken
 use Cornix\Serendipity\Core\Infrastructure\Logging\Handler\SimpleLogger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Service\AppContractDataProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
@@ -111,6 +113,7 @@ final class ContainerDefinitions {
 			// ),
 			UserAccessProvider::class            => autowire( WpUserAccessProvider::class ),
 			PaidContentService::class            => autowire( PaidContentServiceImpl::class ),
+			AppContractDataProvider::class       => autowire( AppContractDataProviderImpl::class ),
 			BlockNumberProvider::class           => autowire( BlockNumberProviderImpl::class ),
 			TransactionService::class            => autowire( WpTransactionService::class ),
 			SalesHistoryQueryService::class      => autowire( WpSalesHistoryQueryService::class ),
