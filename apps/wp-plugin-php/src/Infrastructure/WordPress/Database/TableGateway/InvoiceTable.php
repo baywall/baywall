@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
+use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
 
@@ -25,10 +25,10 @@ class InvoiceTable {
 
 	/**
 	 *
-	 * @param InvoiceId $invoice_id
-	 * @return null|InvoiceTableRecord
+	 * @param InvoiceSearchCondition $condition 検索条件
+	 * @return InvoiceTableRecord[]
 	 */
-	public function select( InvoiceId $invoice_id ) {
+	public function select( InvoiceSearchCondition $condition ): array {
 		$sql = <<<SQL
 			SELECT
 				`id`,
@@ -41,13 +41,23 @@ class InvoiceTable {
 				`payment_amount`,
 				`customer_address`
 			FROM `{$this->table_name}`
-			WHERE `id` = :invoice_id
 		SQL;
 
-		$sql    = $this->wpdb->prepare( $sql, array( ':invoice_id' => $invoice_id->ulid() ) );
-		$record = $this->wpdb->get_row( $sql );
+		$where_clauses = array();
+		if ( ! is_null( $condition->invoiceId() ) ) {
+			$where_clauses[] = $this->wpdb->prepare( 'id = :invoice_id', array( ':invoice_id' => $condition->invoiceId()->ulid() ) );
+		}
+		if ( ! is_null( $condition->postId() ) ) {
+			$where_clauses[] = $this->wpdb->prepare( 'post_id = :post_id', array( ':post_id' => $condition->postId()->value() ) );
+		}
+		if ( ! is_null( $condition->customerAddress() ) ) {
+			$where_clauses[] = $this->wpdb->prepare( 'customer_address = :customer_address', array( ':customer_address' => $condition->customerAddress()->value() ) );
+		}
 
-		return $record === null ? null : new InvoiceTableRecord( $record );
+		$sql     = $where_clauses ? $sql . ' WHERE ' . implode( ' AND ', $where_clauses ) : $sql;
+		$records = $this->wpdb->get_results( $sql );
+
+		return array_values( array_map( fn( \stdClass $record ) => new InvoiceTableRecord( $record ), $records ) );
 	}
 
 	public function save( Invoice $invoice ): void {

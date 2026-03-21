@@ -64,8 +64,8 @@ class AppContractClient {
 
 				$result = new GetPaywallStatusResult(
 					$is_unlocked,
-					InvoiceId::fromHex( Hex::from( '0x' . $invoice_id->toHex() ) ),
-					BlockNumber::fromHex( Hex::from( '0x' . $unlocked_block_number->toHex() ) )
+					$is_unlocked ? InvoiceId::fromHex( Hex::from( '0x' . $invoice_id->toHex() ) ) : null,
+					$is_unlocked ? BlockNumber::fromHex( Hex::from( '0x' . $unlocked_block_number->toHex() ) ) : null
 				);
 			}
 		);

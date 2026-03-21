@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
 
-use Cornix\Serendipity\Core\Application\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Domain\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;

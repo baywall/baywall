@@ -40,10 +40,4 @@ class UnlockPaywallTransferEventRepository {
 			$event->transferType()
 		);
 	}
-
-	/** 指定した請求書IDのトランザクションが書き込まれているブロック番号を取得します */
-	public function getBlockNumber( InvoiceId $invoice_id ): ?BlockNumber {
-		$record = $this->unlock_paywall_transaction_table->get( $invoice_id );
-		return BlockNumber::fromIntNullable( $record ? $record->blockNumberValue() : null );
-	}
 }

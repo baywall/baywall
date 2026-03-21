@@ -6,11 +6,13 @@ namespace Cornix\Serendipity\Core\Domain\Service;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
+use Cornix\Serendipity\Core\Domain\Repository\InvoiceTokenRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PausedRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 
 class InvoiceService {
@@ -20,6 +22,7 @@ class InvoiceService {
 	private TokenAmountConverter $token_amount_converter;
 	private SellerRepository $seller_repository;
 	private InvoiceRepository $invoice_repository;
+	private InvoiceTokenRepository $invoice_token_repository;
 	private PausedRepository $paused_repository;
 
 	public function __construct(
@@ -28,14 +31,31 @@ class InvoiceService {
 		TokenAmountConverter $token_amount_converter,
 		SellerRepository $seller_repository,
 		InvoiceRepository $invoice_repository,
+		InvoiceTokenRepository $invoice_token_repository,
 		PausedRepository $paused_repository
 	) {
-		$this->post_repository        = $post_repository;
-		$this->price_exchange_service = $price_exchange_service;
-		$this->token_amount_converter = $token_amount_converter;
-		$this->seller_repository      = $seller_repository;
-		$this->invoice_repository     = $invoice_repository;
-		$this->paused_repository      = $paused_repository;
+		$this->post_repository          = $post_repository;
+		$this->price_exchange_service   = $price_exchange_service;
+		$this->token_amount_converter   = $token_amount_converter;
+		$this->seller_repository        = $seller_repository;
+		$this->invoice_repository       = $invoice_repository;
+		$this->invoice_token_repository = $invoice_token_repository;
+		$this->paused_repository        = $paused_repository;
+	}
+
+	/** 請求書トークンの文字列から請求書を取得します。 */
+	public function getByInvoiceTokenString( InvoiceTokenString $invoice_token_string ): Invoice {
+
+		$invoice_token = $this->invoice_token_repository->get( $invoice_token_string );
+		if ( $invoice_token === null ) {
+			throw new \InvalidArgumentException( "[BCD15F61] Invalid invoice token: {$invoice_token_string}" );
+		}
+		$invoice = $this->invoice_repository->get( $invoice_token->invoiceId() );
+		if ( $invoice === null ) {
+			throw new \InvalidArgumentException( "[AD1EB338] Invoice not found for invoice token: {$invoice_token_string}" );
+		}
+
+		return $invoice;
 	}
 
 	/** 請求書を発行します。 */

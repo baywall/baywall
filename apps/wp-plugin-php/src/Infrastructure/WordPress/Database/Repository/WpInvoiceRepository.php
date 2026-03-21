@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
+use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
@@ -31,8 +32,15 @@ class WpInvoiceRepository implements InvoiceRepository {
 
 	/** @inheritdoc */
 	public function get( InvoiceId $invoice_id ): ?Invoice {
-		$invoice_record = $this->invoice_table->select( $invoice_id );
-		return is_null( $invoice_record ) ? null : new InvoiceImpl( $invoice_record );
+		$invoice_records = $this->invoice_table->select( ( new InvoiceSearchCondition() )->setInvoiceId( $invoice_id ) );
+		assert( count( $invoice_records ) <= 1, '[406F62EA]' );
+		return empty( $invoice_records ) ? null : new InvoiceImpl( $invoice_records[0] );
+	}
+
+	/** @inheritdoc */
+	public function findBy( InvoiceSearchCondition $condition ): array {
+		$invoice_records = $this->invoice_table->select( $condition );
+		return array_map( fn( InvoiceTableRecord $record ) => new InvoiceImpl( $record ), $invoice_records );
 	}
 }
 
