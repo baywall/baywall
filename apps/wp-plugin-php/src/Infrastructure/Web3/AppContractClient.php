@@ -103,9 +103,14 @@ class AppContractClient {
 		$results = array();
 		$this->blockchain_client->ethGetLogs(
 			$filter,
-			function ( $err, array $logs ) use ( &$results ) {
+			function ( $err, $logs ) use ( &$results ) {
 				if ( $err ) {
 					throw $err;
+				}
+				// $logsがnullの可能性があるため、nullの場合は空配列に置き換える
+				// [ERROR] TypeError: Argument 2 passed to Cornix\\Serendipity\\Core\\Infrastructure\\Web3\\AppContractClient::Cornix\\Serendipity\\Core\\Infrastructure\\Web3\\{closure}() must be of the type array, null given
+				if ( is_null( $logs ) ) {
+					$logs = array();
 				}
 
 				$results = array();
