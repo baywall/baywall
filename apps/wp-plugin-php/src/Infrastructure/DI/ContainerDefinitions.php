@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Application\Service\Erc4361PropertyProvider;
 use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtSecretKeyProvider;
+use Cornix\Serendipity\Core\Application\Service\LockService;
 use Cornix\Serendipity\Core\Application\Service\PaidContentService;
 use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\SalesHistoryQueryService;
@@ -69,6 +70,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenCooki
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpLockService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenService;
@@ -116,6 +118,7 @@ final class ContainerDefinitions {
 			AppContractDataProvider::class       => autowire( AppContractDataProviderImpl::class ),
 			BlockNumberProvider::class           => autowire( BlockNumberProviderImpl::class ),
 			TransactionService::class            => autowire( WpTransactionService::class ),
+			LockService::class                   => autowire( WpLockService::class ),
 			SalesHistoryQueryService::class      => autowire( WpSalesHistoryQueryService::class ),
 			JwtAlgorithmProvider::class          => autowire( WpJwtAlgorithmProvider::class ),
 			JwtSecretKeyProvider::class          => autowire( WpJwtSecretKeyProvider::class ),
