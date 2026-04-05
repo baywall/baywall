@@ -1,12 +1,12 @@
 import { useMemo } from '@wordpress/element';
-import { useBlockInitDataQuery } from '../../../query/useBlockInitDataQuery';
 import { isSettingsComplete } from './lib/isSettingsComplete';
 import { SettingsErrorNotificationProps } from './SettingsErrorNotification';
 import { UrlProvider } from '../../../lib/url/UrlProvider';
+import { useBlockInitRawDataQuery } from '../../../query/useBlockInitRawDataQuery';
 
 export const useSettingsErrorNotificationProps = (): SettingsErrorNotificationProps => {
 	return {
-		isSettingsComplete: isSettingsComplete( useBlockInitDataQuery().data ),
+		isSettingsComplete: isSettingsComplete( useBlockInitRawDataQuery().data ),
 		urlProvider: useMemo( () => new UrlProvider(), [] ),
 	};
 };

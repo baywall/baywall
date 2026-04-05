@@ -1,22 +1,25 @@
 import { Placeholder } from '@wordpress/components';
-import { SellingPriceSymbolSelect } from './features/selling-price-symbol/SellingPriceSymbolSelect';
-import { useSellingPriceSymbolSelectProps } from './features/selling-price-symbol/useSellingSymbolSelectProps';
-import { SellingNetworkCategorySelect } from './features/selling-network-category/SellingNetworkCategorySelect';
-import { useSellingNetworkCategorySelectProps } from './features/selling-network-category/useSellingNetworkCategorySelectProps';
-import { SellingPriceAmount } from './features/selling-price-amount/SellingPriceAmount';
-import { useSellingPriceAmountProps } from './features/selling-price-amount/useSellingPriceAmountProps';
+import { SellingPriceSymbolSelect } from './features/selling-price-symbol/components/SellingPriceSymbolSelect';
+import { useSellingPriceSymbolSelectProps } from './features/selling-price-symbol/components/useSellingSymbolSelectProps';
+import { SellingNetworkCategorySelect } from './features/selling-network-category/components/SellingNetworkCategorySelect';
+import { useSellingNetworkCategorySelectProps } from './features/selling-network-category/components/useSellingNetworkCategorySelectProps';
+import { SellingPriceAmount } from './features/selling-price-amount/components/selling-price-amount/SellingPriceAmount';
+import { useSellingPriceAmountProps } from './features/selling-price-amount/components/selling-price-amount/useSellingPriceAmountProps';
 import { useSyncWidgetAttributes } from './features/widget-attributes/useSyncWidgetAttributes';
-import { AmountErrorNotification } from './features/notification/amount-error/AmountErrorNotification';
-import { useAmountErrorNotificationProps } from './features/notification/amount-error/useAmountErrorNotificationProps';
+import { AmountErrorNotification } from './features/selling-price-amount/components/selling-price-amount-error/AmountErrorNotification';
+import { useAmountErrorNotificationProps } from './features/selling-price-amount/components/selling-price-amount-error/useAmountErrorNotificationProps';
 import { SettingsErrorNotification } from './features/notification/settings-error/SettingsErrorNotification';
 import { ApiErrorNotification } from './features/notification/api-error/ApiErrorNotification';
 import { useControlEditorSaving } from './features/control-editor-saving/useControlEditorSaving';
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
-import { InvalidDecimalsNotification } from './features/notification/invalid-decimals/InvalidDecimalsNotification';
-import { useInvalidDecimalsNotificationProps } from './features/notification/invalid-decimals/useInvalidDecimalsNotificationProps';
+import { InvalidDecimalsNotification } from './features/selling-price-amount/components/selling-price-decimals-error/InvalidDecimalsNotification';
+import { useInvalidDecimalsNotificationProps } from './features/selling-price-amount/components/selling-price-decimals-error/useInvalidDecimalsNotificationProps';
 import { useTranslation } from 'react-i18next';
 import { useSettingsErrorNotificationProps } from './features/notification/settings-error/useSettingsErrorNotificationProps';
 import { useApiErrorNotificationProps } from './features/notification/api-error/useApiErrorNotificationProps';
+import { useAutoSelectSellingNetworkCategory } from './features/selling-network-category/hooks/useAutoSelectSellingNetworkCategory';
+import { useAutoSelectSellingPriceSymbol } from './features/selling-price-symbol/hooks/useAutoSelectSellingPriceSymbol';
+import { useInitSellingPriceAmountValue } from './features/selling-price-amount/hooks/useInitSellingPriceAmountValue';
 
 type GutenbergPostEditProps = {};
 
@@ -24,6 +27,9 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 	const { t } = useTranslation();
 	useSyncWidgetAttributes(); // Attributesと画面の状態を同期
 	useControlEditorSaving(); // 投稿の保存制御
+	useAutoSelectSellingNetworkCategory(); // 販売ネットワークカテゴリの自動選択
+	useInitSellingPriceAmountValue(); // 販売価格の初期値設定
+	useAutoSelectSellingPriceSymbol(); // 販売価格の通貨シンボルの自動選択
 
 	return (
 		<Placeholder

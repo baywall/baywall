@@ -1,6 +1,7 @@
 {
   "agreement.agree_privacy_policy": "I agree to the <0>Privacy Policy (Japanese only)</0>",
   "agreement.agree_terms_of_service": "I agree to the <0>Terms of Service (Japanese only)</0>",
+  "agreement.legal_docs_fetch_error_message": "Failed to retrieve the Terms of Service. Please check your network connection and try again.",
   "agreement.privacy_policy": "Privacy Policy (Japanese only)",
   "agreement.terms_of_service": "Terms of Service (Japanese only)",
   "app_contract.paused_message": "Payment services are currently unavailable due to maintenance.\nPlease try again after the maintenance is complete.",

@@ -1,6 +1,7 @@
 {
   "agreement.agree_privacy_policy": "<0>プライバシーポリシー</0>に同意する",
   "agreement.agree_terms_of_service": "<0>利用規約</0>に同意する",
+  "agreement.legal_docs_fetch_error_message": "利用規約の取得に失敗しました。ネットワーク接続を確認して、再度お試しください。",
   "agreement.privacy_policy": "プライバシーポリシー",
   "agreement.terms_of_service": "利用規約",
   "app_contract.paused_message": "現在、決済サービスメンテナンス中のためご利用いただけません。\nメンテナンス終了後に再度お試しください。",

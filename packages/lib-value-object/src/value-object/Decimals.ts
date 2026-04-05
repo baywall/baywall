@@ -27,6 +27,16 @@ export class Decimals implements ValueObject< Decimals > {
 		return this.value === other.value;
 	}
 
+	public compare( other: Decimals ): number {
+		if ( this.value < other.value ) {
+			return -1;
+		} else if ( this.value > other.value ) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
 	private static checkDecimalsValue( decimalsValue: number ): void {
 		if ( ! Number.isInteger( decimalsValue ) || decimalsValue < 0 ) {
 			throw new Error(

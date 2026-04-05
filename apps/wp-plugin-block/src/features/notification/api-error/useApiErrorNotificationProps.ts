@@ -1,8 +1,8 @@
-import { useBlockInitDataQuery } from '../../../query/useBlockInitDataQuery';
+import { useBlockInitRawDataQuery } from '../../../query/useBlockInitRawDataQuery';
 import { ApiErrorNotificationProps } from './ApiErrorNotification';
 
 export const useApiErrorNotificationProps = (): ApiErrorNotificationProps => {
 	return {
-		error: useBlockInitDataQuery().error,
+		error: useBlockInitRawDataQuery().error,
 	};
 };

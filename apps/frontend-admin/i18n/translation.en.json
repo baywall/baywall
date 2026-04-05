@@ -1,4 +1,5 @@
 {
+  "agreement.legal_docs_fetch_error_message": "Failed to retrieve the Terms of Service. Please check your network connection and try again.",
   "agreements.agree_privacy_policy": "I agree to the <0>Privacy Policy (Japanese only)</0>",
   "agreements.agree_terms_of_service": "I agree to the <0>Terms of Service (Japanese only)</0>",
   "agreements.no_gas_cost_message": "No gas charges will be incurred by operating this screen.",

@@ -31,6 +31,12 @@ export class Amount implements ValueObject< Amount > {
 		return new Amount( amountValue );
 	}
 
+	/** 小数点以下桁数を取得します */
+	public get decimals(): Decimals {
+		const decimalPart = this.value.split( '.' )[ 1 ];
+		return Decimals.from( decimalPart ? decimalPart.length : 0 );
+	}
+
 	public add( other: Amount ): Amount {
 		const D = Decimal.clone( {
 			toExpNeg: Amount.TO_EXP_NEG,

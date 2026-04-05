@@ -1,34 +1,37 @@
 import { useMemo } from 'react';
-import { Symbol } from '@serendipity/lib-value-object';
-import { useBlockInitDataQuery } from '../../../query/useBlockInitDataQuery';
-import { useSelectedNetworkCategoryIdState } from '../../selling-network-category/hooks/useSelectedNetworkCategoryIdState';
+import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { useLogger } from '@serendipity/lib-frontend';
+import { useBlockInitRawDataQuery } from '../../../query/useBlockInitRawDataQuery';
 
-/** 画面に表示する販売可能な通貨シンボル一覧を取得します */
-export const useSellableSymbols = (): Symbol[] | null | undefined => {
+/**
+ * 販売可能な通貨シンボル一覧を取得します
+ * @param selectedNetworkCategoryId
+ */
+export const useSellableSymbols = (
+	selectedNetworkCategoryId: NetworkCategoryId | null | undefined
+): Symbol[] | null | undefined => {
 	const logger = useLogger();
-	const [ selectedNetworkCategoryId ] = useSelectedNetworkCategoryIdState();
-	const { data } = useBlockInitDataQuery();
+	const { data } = useBlockInitRawDataQuery();
 
 	return useMemo( () => {
 		if ( selectedNetworkCategoryId === undefined || data === undefined ) {
 			return undefined;
 		} else if ( selectedNetworkCategoryId === null ) {
-			return null;
+			return [];
 		}
 
-		const sellableSymbols = data.sellableNetworkCategories.find( ( n ) => n.id.equals( selectedNetworkCategoryId ) )
-			?.sellableSymbols;
+		const sellableSymbols = data.networkCategories
+			.find( ( n ) => NetworkCategoryId.from( n.id ).equals( selectedNetworkCategoryId ) )
+			?.sellableSymbols.map( ( s ) => Symbol.from( s ) );
 
-		if ( sellableSymbols === undefined || sellableSymbols.length === 0 ) {
+		if ( sellableSymbols === undefined ) {
 			// 期待しない状態なのでログを出力しておく
 			logger.warn(
 				`[89175506] selectedNetworkCategoryId: ${ selectedNetworkCategoryId }, sellableSymbols: ${ sellableSymbols }`
 			);
+			return null;
 		}
 
-		// 空配列が返される条件
-		// - 現時点では選択できないネットワークカテゴリが過去に登録され、現在はそれをロードした
-		return sellableSymbols ?? [];
+		return sellableSymbols;
 	}, [ logger, selectedNetworkCategoryId, data ] );
 };
