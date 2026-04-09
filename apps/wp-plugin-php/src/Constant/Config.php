@@ -14,9 +14,6 @@ class Config {
 	 */
 	public const ROOT_DIR = __DIR__ . '/../..';
 
-	/** 販売者が利用規約に同意する時にウォレットに表示されるメッセージ */
-	public const SELLER_TERMS_SIGNING_MESSAGE = 'I agree to the Terms of Service for baywall (Version 0) and the Privacy Policy for baywall (Version 0).';
-
 	/**
 	 * ERC-4361の署名用メッセージに含めるユーザー向けの説明文。
 	 * トークンの有効期限や別ブラウザなど、認証情報が存在しない状況でリフレッシュトークンを発行する時に使用する。

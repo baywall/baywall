@@ -15,8 +15,8 @@ final class Address implements ValueObject {
 
 	private function __construct( string $address_value ) {
 		self::checkValidAddressFormat( $address_value );
-		// アドレスは常にチェックサムアドレスで保持する
-		$this->address_value = \Web3\Utils::toChecksumAddress( $address_value );
+		// アドレスは常に小文字で保持する
+		$this->address_value = strtolower( $address_value );
 	}
 	private string $address_value;
 

@@ -30,6 +30,7 @@ class V20251106_130_CreateRefreshTokenTable extends MigrationBase {
 				`wallet_address`      varchar(191)  NOT NULL,
 				`expires_at`          timestamp     NOT NULL,
 				`revoked_at`          timestamp         NULL DEFAULT NULL,
+				CONSTRAINT `chk_{$this->table_name}_wallet_address` CHECK (`wallet_address` REGEXP '^0x[0-9a-f]{40}$'),
 				PRIMARY KEY (`refresh_token_hash`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;

@@ -30,6 +30,7 @@ class V20251106_070_CreateSellerTable extends MigrationBase {
 				`seller_address`        varchar(191)            NOT NULL,
 				`signing_message`       varchar(191)            NOT NULL,
 				`signature`             varchar(191)            NOT NULL,
+				CONSTRAINT `chk_{$this->table_name}_seller_address` CHECK (`seller_address` REGEXP '^0x[0-9a-f]{40}$'),
 				PRIMARY KEY (`seller_address`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;

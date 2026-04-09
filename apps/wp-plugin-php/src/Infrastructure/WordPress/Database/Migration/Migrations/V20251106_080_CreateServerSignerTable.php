@@ -34,6 +34,7 @@ class V20251106_080_CreateServerSignerTable extends MigrationBase {
 				`updated_at`        timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`address`           varchar(191)   NOT NULL,
 				`base64_key`        varchar(191)   NOT NULL,
+				CONSTRAINT `chk_{$this->table_name}_address` CHECK (`address` REGEXP '^0x[0-9a-f]{40}$'),
 				PRIMARY KEY (`address`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;

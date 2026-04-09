@@ -27,12 +27,15 @@ class V20251106_090_CreateTokenTable extends MigrationBase {
 			CREATE TABLE `{$this->table_name}` (
 				`created_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`updated_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`id`             bigint        unsigned  NOT NULL AUTO_INCREMENT,
 				`chain_id`       bigint        unsigned  NOT NULL,
 				`address`        varchar(191)            NOT NULL,
 				`symbol`         varchar(191)            NOT NULL,
 				`decimals`       int                     NOT NULL,
 				`is_payable`     boolean                 NOT NULL,
-				PRIMARY KEY (`chain_id`, `address`)
+				CONSTRAINT `chk_{$this->table_name}_address` CHECK (`address` REGEXP '^0x[0-9a-f]{40}$'),
+				PRIMARY KEY (`id`),
+				UNIQUE KEY `uq_{$this->table_name}_E13B473D` (`chain_id`, `address`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
 		$this->wpdb->dbh->query( $sql );

@@ -29,7 +29,8 @@ class V20251106_020_CreateAppContractTable extends MigrationBase {
 				`updated_at`                       timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`chain_id`                         bigint        unsigned  NOT NULL,
 				`address`                          varchar(191)            NOT NULL,
-				PRIMARY KEY (`chain_id`)
+				PRIMARY KEY (`chain_id`),
+				CONSTRAINT `chk_{$this->table_name}_address_format` CHECK (`address` REGEXP '^0x[0-9a-f]{40}$')
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
 		$this->wpdb->dbh->query( $sql );

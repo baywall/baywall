@@ -34,6 +34,7 @@ class V20251106_140_CreateErc4361NonceTable extends MigrationBase {
 				`wallet_address`      varchar(191)  NOT NULL,
 				`erc4361_nonce`       varchar(191)  NOT NULL,
 				`issued_at`           timestamp     NOT NULL,
+				CONSTRAINT `chk_{$this->table_name}_wallet_address` CHECK (`wallet_address` REGEXP '^0x[0-9a-f]{40}$'),
 				PRIMARY KEY (`wallet_address`),
 				KEY `idx_{$this->table_name}_C56F9034` (`issued_at`)
 			) {$this->wpdb->get_charset_collate()};
