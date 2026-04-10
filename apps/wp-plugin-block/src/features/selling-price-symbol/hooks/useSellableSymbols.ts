@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo } from '@wordpress/element';
 import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
 import { useLogger } from '@serendipity/lib-frontend';
 import { useBlockInitRawDataQuery } from '../../../query/useBlockInitRawDataQuery';

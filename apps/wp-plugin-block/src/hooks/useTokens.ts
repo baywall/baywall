@@ -1,7 +1,7 @@
 import { Decimals, NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
+import { useMemo } from '@wordpress/element';
 import { useBlockInitRawDataQuery } from '../query/useBlockInitRawDataQuery';
 import { Token } from '../value-object/Token';
-import { useMemo } from 'react';
 
 /** サイトに登録されているトークンを取得します */
 export const useTokens = (): Token[] | undefined => {

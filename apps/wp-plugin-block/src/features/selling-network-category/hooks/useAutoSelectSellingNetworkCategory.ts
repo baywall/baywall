@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from '@wordpress/element';
 import { useSavedSellingNetworkCategoryId } from '../../widget-attributes/useSavedSellingNetworkCategoryId';
 import { useSelectedNetworkCategoryIdState } from './useSelectedNetworkCategoryIdState';
 import { useSellableNetworkCategories } from './useSellableNetworkCategories';

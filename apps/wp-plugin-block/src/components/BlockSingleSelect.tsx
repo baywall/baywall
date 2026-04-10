@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo } from '@wordpress/element';
 import { SelectControl } from '@wordpress/components';
 
 type SelectControlProps = React.ComponentProps< typeof SelectControl >;

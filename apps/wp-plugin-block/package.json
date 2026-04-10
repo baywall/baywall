@@ -40,8 +40,6 @@
     "start:docker": "run-p env:start my-docker:start",
     "test": "bash ../../scripts/npm-scripts/test-jest.sh",
     "pretest:storybook": "storybook build",
-    "test:storybook": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"http-server storybook-static --port 6006 --silent\" \" wait-on tcp:6006 && run-s test-storybook\"",
-    "test-storybook": "test-storybook --url http://localhost:6006 --coverage --browsers firefox chromium",
     "storybook": "storybook dev -p 6006",
     "update:php-package": "cd includes && composer update",
     "update:package": "npx npm-check-updates -u --target minor",
@@ -83,11 +81,15 @@
     "i18next": "^25.10.4",
     "i18next-browser-languagedetector": "8.2.1",
     "jotai": "^2.18.1",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
     "react-i18next": "^16.6.0"
   },
   "devDependencies": {
-    "@serendipity/export-license": "workspace:*"
+    "@serendipity/export-license": "workspace:*",
+    "@storybook/react-webpack5": "^10.3.5",
+    "@testing-library/react": "^16.3.2",
+    "prettier": "npm:wp-prettier@^3.0.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "storybook": "^10.3.5"
   }
 }

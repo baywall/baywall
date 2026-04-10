@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback } from '@wordpress/element';
 import { Symbol } from '@serendipity/lib-value-object';
 import { useSelectedSellingPriceSymbolState } from '../hooks/useSelectedSellingPriceSymbolState';
 import { type SellingPriceSymbolSelectProps } from './SellingPriceSymbolSelect';

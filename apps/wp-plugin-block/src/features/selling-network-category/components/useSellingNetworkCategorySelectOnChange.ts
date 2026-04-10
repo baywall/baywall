@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback } from '@wordpress/element';
 import { NetworkCategoryId } from '@serendipity/lib-value-object';
 import { type SellingNetworkCategorySelectProps } from './SellingNetworkCategorySelect';
 import { useSelectedNetworkCategoryIdState } from '../hooks/useSelectedNetworkCategoryIdState';

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback } from '@wordpress/element';
 import { type SellingPriceAmountProps } from './SellingPriceAmount';
 import { useSellingPriceAmountValueState } from '../../hooks/useSellingPriceAmountValueState';
 

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from '@wordpress/element';
 import { Symbol } from '@serendipity/lib-value-object';
 import { useSavedSellingSymbol } from '../../widget-attributes/useSavedSellingSymbol';
 import { useSellingPriceSymbolSelectOptions } from '../components/useSellingPriceSymbolSelectOptions';

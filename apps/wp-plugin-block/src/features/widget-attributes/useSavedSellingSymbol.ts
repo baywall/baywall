@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from '@wordpress/element';
 import { Symbol } from '@serendipity/lib-value-object';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 
