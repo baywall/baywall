@@ -21,11 +21,12 @@ const config: CodegenConfig = {
 				//    対して、WordPress組み込みのReact@18になるのは WordPress@6.2以降
 				//    https://make.wordpress.org/core/2023/03/07/upgrading-to-react-18-and-common-pitfalls-of-concurrent-mode/
 				//    WordPress@5.8(2025/7/25時点)で開発しているため、@tanstack/react-query@5は導入していない
+				//    -> 2026/4/10にWordPressバージョンの最小要件を6.6に引き上げたため、@tanstack/react-query@5を導入
 
 				// https://github.com/dotansimha/graphql-code-generator/issues/9786#issuecomment-1938602063
+				*/
 				addSuspeneQuery: true,
 				reactQueryVersion: 5,
-				*/
 			},
 		},
 	},

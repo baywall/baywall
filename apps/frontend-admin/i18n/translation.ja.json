@@ -25,7 +25,7 @@
   "chains.invalid_rpc_url_message": "無効なRPC URLです",
   "chains.network": "ネットワーク",
   "chains.rpc_url_helper_message": "ブロックチェーンノードと通信するための RPC URL を指定します。",
-  "chains.rpc_url_notice_message": "RPC URLは信頼できるものを指定してください。\nパブリックRPCでも動作しますが、アカウントごとに発行される専用RPC URLを使うことを推奨します。",
+  "chains.rpc_url_notice_message": "RPC URLは信頼できるものを指定してください。",
   "common.add_button": "追加",
   "common.address": "アドレス",
   "common.apply_button": "適用",

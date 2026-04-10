@@ -7,7 +7,7 @@ const NUMERIC_INPUT_PATTERN = /^-?[0-9]*\.?[0-9]*$/;
  * @param props
  */
 export const BlockNumber: React.FC< BlockNumberProps > = ( props ) => {
-	let { pattern, onChange, onCut, onKeyDownCapture, onPaste, ...rest } = props;
+	let { pattern, onChange, onCut, onKeyDownCapture, onPaste, style, ...rest } = props;
 
 	// patternが指定されていない場合、数値のパターンを設定
 	pattern = pattern ? pattern : NUMERIC_INPUT_PATTERN.source;
@@ -24,6 +24,7 @@ export const BlockNumber: React.FC< BlockNumberProps > = ( props ) => {
 			onCut={ useOnCut( onCut ) }
 			onKeyDownCapture={ useOnKeyDownCapture( onKeyDownCapture ) }
 			onPaste={ useOnPaste( onPaste, pattern ) }
+			style={ { height: '40px', ...style } }
 			{ ...rest }
 		/>
 	);

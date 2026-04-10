@@ -25,7 +25,7 @@
   "chains.invalid_rpc_url_message": "Invalid RPC URL",
   "chains.network": "Network",
   "chains.rpc_url_helper_message": "Specifies the RPC URL for communicating with a blockchain node.",
-  "chains.rpc_url_notice_message": "Please use a trusted RPC URL.\nPublic RPCs also work, but we recommend using a dedicated RPC URL issued per account.",
+  "chains.rpc_url_notice_message": "Please use a trusted RPC URL.",
   "common.add_button": "Add",
   "common.address": "Address",
   "common.apply_button": "Apply",

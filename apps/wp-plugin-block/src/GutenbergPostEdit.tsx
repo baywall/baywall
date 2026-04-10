@@ -64,7 +64,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 							<div style={ { display: 'flex', alignItems: 'center', gap: '0.75em' } }>
 								<SellingPriceAmount
 									{ ...useSellingPriceAmountProps() }
-									style={ { width: '135px', maxHeight: '32px', minHeight: '32px' } }
+									style={ { width: '135px', borderRadius: '3px' } }
 								/>
 								<SellingPriceSymbolSelect { ...useSellingPriceSymbolSelectProps() } />
 
