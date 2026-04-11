@@ -31,6 +31,7 @@
     "reset:payment-data": "wp-env run cli wp eval-file wp-content/plugins/${PWD##*/}/.bin/reset-payment-data.php",
     "// 1つのファイルをテストする場合はテスト対象ファイルのパスを後ろに付与してください => pnpm test tests/classes/path-to-test-file.php": "",
     "test": "pnpm clean && pnpm exec wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli tests/vendor/bin/phpunit -- -c phpunit.xml --testdox",
+    "update:package": "composer update",
     "// `WP_ENV_MYSQL_PORT`,`WP_ENV_TESTS_MYSQL_PORT`,`WP_ENV_PHPMYADMIN_PORT`,`WP_ENV_TESTS_PHPMYADMIN_PORT`を": "",
     "// 指定すると証明書エラーが発生(原因未調査)": "",
     "wp-env:start": "WP_ENV_PHP_VERSION=${PHP_VERSION} WP_ENV_CORE=WordPress/WordPress#${WP_VERSION} wp-env start --xdebug=develop,coverage,debug",
