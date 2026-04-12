@@ -26,6 +26,7 @@ class V20251106_045_CreateInvoiceTokenTable extends MigrationBase {
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
 				`created_at`          timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`updated_at`          timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`invoice_id`          varchar(191)  NOT NULL,
 				`invoice_token_hash`  varchar(191)  NOT NULL,
 				`expires_at`          timestamp     NOT NULL,

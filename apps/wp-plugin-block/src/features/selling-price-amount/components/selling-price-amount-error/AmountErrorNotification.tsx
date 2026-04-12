@@ -12,7 +12,7 @@ export interface AmountErrorNotificationProps {
  * 販売価格の数量の入力が不正な場合にエラーを通知（表示）するコンポーネント
  * @param props
  */
-export const AmountErrorNotification: React.FC< AmountErrorNotificationProps > = ( props ) => {
+export const AmountErrorNotification = ( props: AmountErrorNotificationProps ) => {
 	const { t } = useTranslation();
 	const { isError, screenNotifier } = props;
 

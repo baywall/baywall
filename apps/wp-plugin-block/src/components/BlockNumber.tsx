@@ -6,7 +6,7 @@ const NUMERIC_INPUT_PATTERN = /^-?[0-9]*\.?[0-9]*$/;
  * ブロックエディタで描画する数値入力コンポーネント
  * @param props
  */
-export const BlockNumber: React.FC< BlockNumberProps > = ( props ) => {
+export const BlockNumber = ( props: BlockNumberProps ) => {
 	let { pattern, onChange, onCut, onKeyDownCapture, onPaste, style, ...rest } = props;
 
 	// patternが指定されていない場合、数値のパターンを設定

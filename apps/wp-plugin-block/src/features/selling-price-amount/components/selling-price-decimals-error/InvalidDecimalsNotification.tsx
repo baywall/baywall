@@ -7,7 +7,7 @@ export interface InvalidDecimalsNotificationProps {
 	screenNotifier: ScreenNotifier;
 }
 
-export const InvalidDecimalsNotification: React.FC< InvalidDecimalsNotificationProps > = ( props ) => {
+export const InvalidDecimalsNotification = ( props: InvalidDecimalsNotificationProps ) => {
 	const { t } = useTranslation();
 	const { isError, screenNotifier } = props;
 

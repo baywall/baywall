@@ -13,7 +13,7 @@ export type ApiErrorNotificationProps = Omit< React.ComponentProps< typeof Notic
  * 初期データ取得時のAPIエラー通知
  * @param props
  */
-export const ApiErrorNotification: React.FC< ApiErrorNotificationProps > = ( props ) => {
+export const ApiErrorNotification = ( props: ApiErrorNotificationProps ) => {
 	const { error, ...rest } = props;
 
 	const notice: Notices[ number ] | null = useMemo( () => {

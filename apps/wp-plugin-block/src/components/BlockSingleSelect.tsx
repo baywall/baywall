@@ -11,7 +11,7 @@ export interface BlockSingleSelectProps extends Omit< Extract< SelectControlProp
  * ブロックエディタで描画する選択コンポーネント（一つだけ選択可能）
  * @param props
  */
-export const BlockSingleSelect: React.FC< BlockSingleSelectProps > = ( props ) => {
+export const BlockSingleSelect = ( props: BlockSingleSelectProps ) => {
 	const { options: propsOptions, ...rest } = props;
 
 	// `@wordpress/components`からインポートした`SelectControl`の`options`がundefinedや空配列の場合、

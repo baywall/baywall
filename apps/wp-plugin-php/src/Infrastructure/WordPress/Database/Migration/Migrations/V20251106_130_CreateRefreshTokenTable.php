@@ -26,6 +26,7 @@ class V20251106_130_CreateRefreshTokenTable extends MigrationBase {
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
 				`created_at`          timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`updated_at`          timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`refresh_token_hash`  varchar(191)  NOT NULL,
 				`wallet_address`      varchar(191)  NOT NULL,
 				`expires_at`          timestamp     NOT NULL,

@@ -16,7 +16,7 @@ export type SettingsErrorNotificationProps = Omit< React.ComponentProps< typeof 
  * 設定が不正な場合に表示するエラー
  * @param props
  */
-export const SettingsErrorNotification: React.FC< SettingsErrorNotificationProps > = ( props ) => {
+export const SettingsErrorNotification = ( props: SettingsErrorNotificationProps ) => {
 	const { isSettingsComplete, urlProvider } = props;
 	const { t } = useTranslation();
 

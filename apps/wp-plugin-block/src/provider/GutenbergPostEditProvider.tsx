@@ -18,10 +18,7 @@ type GutenbergPostEditProviderProps = {
 	blockEditProps: BlockEditProps< WidgetAttributes >;
 };
 
-export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps > = ( {
-	blockEditProps,
-	children,
-} ) => {
+export const GutenbergPostEditProvider = ( { blockEditProps, children }: GutenbergPostEditProviderProps ) => {
 	return (
 		<>
 			<QueryClientProvider client={ client }>

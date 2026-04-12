@@ -17,6 +17,6 @@ type BlockEditPropsProviderProps = {
  * @param root0.children
  * @param root0.blockEditProps
  */
-export const BlockEditPropsProvider: React.FC< BlockEditPropsProviderProps > = ( { blockEditProps, children } ) => {
+export const BlockEditPropsProvider = ( { blockEditProps, children }: BlockEditPropsProviderProps ) => {
 	return <BlockEditPropsContext.Provider value={ blockEditProps }>{ children }</BlockEditPropsContext.Provider>;
 };

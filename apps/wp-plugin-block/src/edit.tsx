@@ -33,7 +33,7 @@ import { WidgetAttributes } from './types/WidgetAttributes';
  * @param props
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  */
-const Edit: React.FC< BlockEditProps< WidgetAttributes > > = ( props ) => {
+const Edit = ( props: BlockEditProps< WidgetAttributes > ) => {
 	const blockProps = useBlockProps?.() ?? {};
 
 	return (

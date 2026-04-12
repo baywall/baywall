@@ -31,6 +31,7 @@ class V20251106_140_CreateErc4361NonceTable extends MigrationBase {
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
 				`created_at`          timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`updated_at`          timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`wallet_address`      varchar(191)  NOT NULL,
 				`erc4361_nonce`       varchar(191)  NOT NULL,
 				`issued_at`           timestamp     NOT NULL,

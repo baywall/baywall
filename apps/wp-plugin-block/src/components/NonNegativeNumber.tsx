@@ -4,7 +4,7 @@ const NON_NEGATIVE_NUMERIC_INPUT_PATTERN = /^[0-9]*\.?[0-9]*$/;
 
 export interface NonNegativeNumberProps extends BlockNumberProps {}
 
-export const NonNegativeNumber: React.FC< NonNegativeNumberProps > = ( props ) => {
+export const NonNegativeNumber = ( props: NonNegativeNumberProps ) => {
 	return (
 		<BlockNumber
 			{ ...props }

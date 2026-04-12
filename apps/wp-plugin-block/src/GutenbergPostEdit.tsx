@@ -21,9 +21,7 @@ import { useAutoSelectSellingNetworkCategory } from './features/selling-network-
 import { useAutoSelectSellingPriceSymbol } from './features/selling-price-symbol/hooks/useAutoSelectSellingPriceSymbol';
 import { useInitSellingPriceAmountValue } from './features/selling-price-amount/hooks/useInitSellingPriceAmountValue';
 
-type GutenbergPostEditProps = {};
-
-export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
+export const GutenbergPostEdit = () => {
 	const { t } = useTranslation();
 	useSyncWidgetAttributes(); // Attributesと画面の状態を同期
 	useControlEditorSaving(); // 投稿の保存制御

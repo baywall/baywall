@@ -6,7 +6,7 @@ export interface SellingPriceSymbolSelectProps extends BlockSingleSelectProps {}
  * 販売価格の通貨シンボル選択コンポーネント
  * @param props
  */
-export const SellingPriceSymbolSelect: React.FC< SellingPriceSymbolSelectProps > = ( props ) => {
+export const SellingPriceSymbolSelect = ( props: SellingPriceSymbolSelectProps ) => {
 	const { ...rest } = props;
 	return <BlockSingleSelect { ...rest } />;
 };
