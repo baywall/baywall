@@ -53,4 +53,9 @@ class WpRefreshTokenRepository implements RefreshTokenRepository {
 	public function update( RefreshToken $refresh_token ): void {
 		$this->refresh_token_table->update( $refresh_token );
 	}
+
+	/** @inheritdoc */
+	public function deleteByCreatedAt( UnixTimestamp $target_time ): void {
+		$this->refresh_token_table->deleteByCreatedAt( $target_time );
+	}
 }

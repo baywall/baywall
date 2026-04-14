@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Service;
 
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Entity\InvoiceToken;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceTokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 
 class InvoiceTokenService {
 
@@ -81,5 +83,11 @@ class InvoiceTokenService {
 
 		$invoice_token->revoke();
 		$this->invoice_token_repository->update( $invoice_token );
+	}
+
+	/** 古い請求書トークンデータを削除します */
+	public function purgeOldRepositoryData(): void {
+		$expiration_threshold = UnixTimestamp::now()->addSeconds( -Config::INVOICE_TOKEN_DATA_EXPIRATION );
+		$this->invoice_token_repository->deleteByCreatedAt( $expiration_threshold );
 	}
 }

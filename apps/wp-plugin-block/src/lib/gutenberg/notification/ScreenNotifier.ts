@@ -70,8 +70,7 @@ export class ScreenNotifier {
 				case NOTICE_STATUS.WARNING:
 					return '⚠️';
 				default:
-					// ここは通らない
-					throw new Error( `[A0858D69] Unsupported status: ${ status }` );
+					return status satisfies never; // ここは通らない
 			}
 		} else {
 			// ここは通らない

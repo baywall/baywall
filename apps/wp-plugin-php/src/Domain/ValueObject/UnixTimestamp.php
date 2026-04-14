@@ -46,6 +46,11 @@ class UnixTimestamp implements ValueObject {
 		return $this->timestamp;
 	}
 
+	/** 指定した秒数を加算した新しいUnixTimestampインスタンスを返します */
+	public function addSeconds( int $seconds ): self {
+		return self::from( $this->timestamp + $seconds );
+	}
+
 	public static function now(): self {
 		return new self( time() );
 	}

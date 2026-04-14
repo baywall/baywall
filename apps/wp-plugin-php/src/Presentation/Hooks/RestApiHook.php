@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\ForbiddenException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
 use InvalidArgumentException;
@@ -77,8 +78,10 @@ class RestApiHook extends HookBase {
 	}
 
 	public function authRefreshHandler( \WP_REST_Request $request ) {
+		$cookie_name_provider = $this->container->get( CookieNameProvider::class );
+
 		// リフレッシュトークンを取得
-		$refresh_token_value = $_COOKIE[ WpConfig::COOKIE_NAME_REFRESH_TOKEN ] ?? null;
+		$refresh_token_value = $_COOKIE[ $cookie_name_provider->refreshToken() ] ?? null;
 
 		try {
 			// リフレッシュトークンが送信されていない場合は例外をスロー
@@ -105,9 +108,11 @@ class RestApiHook extends HookBase {
 	}
 
 	public function authTokenInvoiceHandler( \WP_REST_Request $request ) {
+		$cookie_name_provider = $this->container->get( CookieNameProvider::class );
+
 		// 請求書トークンをCookieから取得
 		/** @var string|null */
-		$invoice_token_string_value = $_COOKIE[ WpConfig::COOKIE_NAME_INVOICE_TOKEN ] ?? null;
+		$invoice_token_string_value = $_COOKIE[ $cookie_name_provider->invoiceToken() ] ?? null;
 
 		try {
 			if ( $invoice_token_string_value === null ) {

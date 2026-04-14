@@ -28,6 +28,10 @@ class ResolveIssueErc4361Message {
 		$address  = Address::from( $args['address'] );
 		$chain_id = ChainId::from( $args['chainId'] );
 
+		// 古いnonceデータを削除
+		// ※ タイミングはどこでも良いが、リクエストも多いのでここで削除する
+		$this->erc4361_service->purgeExpiredNonceData();
+
 		return $this->transaction_service->transactional(
 			function () use ( $address, $chain_id ) {
 				// nonceを生成し、アドレスと紐づけて保存

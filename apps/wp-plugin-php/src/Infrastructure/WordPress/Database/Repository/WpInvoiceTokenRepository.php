@@ -40,4 +40,9 @@ class WpInvoiceTokenRepository implements InvoiceTokenRepository {
 	public function update( InvoiceToken $invoice_token ): void {
 		$this->invoice_token_table->update( $invoice_token );
 	}
+
+	/** @inheritdoc */
+	public function deleteByCreatedAt( UnixTimestamp $target_time ): void {
+		$this->invoice_token_table->deleteByCreatedAt( $target_time );
+	}
 }

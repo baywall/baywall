@@ -6,19 +6,22 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
+use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
 
 class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 
 	private WordPressPropertyProvider $wp_property;
+	private CookieNameProvider $cookie_name_provider;
 
-	public function __construct( WordPressPropertyProvider $wp_property ) {
-		$this->wp_property = $wp_property;
+	public function __construct( WordPressPropertyProvider $wp_property, CookieNameProvider $cookie_name_provider ) {
+		$this->wp_property          = $wp_property;
+		$this->cookie_name_provider = $cookie_name_provider;
 	}
 
 	public function get( RefreshToken $refresh_token ): Cookie {
 		return Cookie::create(
-			WpConfig::COOKIE_NAME_REFRESH_TOKEN, // name
+			$this->cookie_name_provider->refreshToken(), // name
 			$refresh_token->token()->value(), // value
 			$refresh_token->expiresAt()->value(), // expires
 			$this->path(),

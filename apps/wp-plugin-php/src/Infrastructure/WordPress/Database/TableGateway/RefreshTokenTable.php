@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\RefreshTokenTableRecord;
@@ -79,5 +80,27 @@ class RefreshTokenTable {
 		if ( $result !== 1 ) {
 			throw new \RuntimeException( '[2AFE05DC] Failed to update refresh token record.' );
 		}
+	}
+
+	/**
+	 * 指定した日時よりも前に作成されたリフレッシュトークンのレコードを削除します
+	 * ※ ただし、削除の対象となるのは「期限切れ」または「無効化された」レコードに限定
+	 */
+	public function deleteByCreatedAt( UnixTimestamp $target_time ): void {
+		$current_time = UnixTimestamp::now();
+
+		$this->wpdb->query(
+			$this->wpdb->prepare(
+				<<<SQL
+					DELETE FROM `{$this->table_name}`
+					WHERE `created_at` < :target_time
+					AND ( `expires_at` < :current_time OR `revoked_at` IS NOT NULL )
+				SQL,
+				array(
+					':target_time'  => $target_time->toMySqlValue(),
+					':current_time' => $current_time->toMySqlValue(),
+				)
+			)
+		);
 	}
 }

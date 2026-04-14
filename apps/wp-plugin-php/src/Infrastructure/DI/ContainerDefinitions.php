@@ -33,6 +33,7 @@ use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\AppContractDataProvider;
 use Cornix\Serendipity\Core\Domain\Service\BlockNumberProvider;
+use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
 use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenProvider;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
@@ -63,6 +64,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpSctaUrlReposit
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenExpirationProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenCookieProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpCookieNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenRequestProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361NonceProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361PropertyProvider;
@@ -124,6 +126,7 @@ final class ContainerDefinitions {
 			JwtSecretKeyProvider::class          => autowire( WpJwtSecretKeyProvider::class ),
 			AccessTokenExpirationProvider::class => autowire( WpAccessTokenExpirationProvider::class ),
 			AccessTokenRequestProvider::class    => autowire( WpAccessTokenRequestProvider::class ),
+			CookieNameProvider::class            => autowire( WpCookieNameProvider::class ),
 			AccessTokenCookieProvider::class     => autowire( WpAccessTokenCookieProvider::class ),
 			RefreshTokenCookieProvider::class    => autowire( WpRefreshTokenCookieProvider::class ),
 			InvoiceTokenCookieProvider::class    => autowire( WpInvoiceTokenCookieProvider::class ),

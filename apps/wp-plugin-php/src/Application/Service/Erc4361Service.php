@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
 use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Message;
 use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Nonce;
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ERC4361\Erc4361MessageBuilder;
 
 class Erc4361Service {
@@ -15,10 +18,12 @@ class Erc4361Service {
 
 	private Erc4361PropertyProvider $erc4361_property_provider;
 	private Erc4361MessageBuilder $message_builder;
+	private Erc4361NonceRepository $repository;
 
-	public function __construct( Erc4361PropertyProvider $erc4361_property_provider, Erc4361MessageBuilder $message_builder ) {
+	public function __construct( Erc4361PropertyProvider $erc4361_property_provider, Erc4361MessageBuilder $message_builder, Erc4361NonceRepository $repository ) {
 		$this->erc4361_property_provider = $erc4361_property_provider;
 		$this->message_builder           = $message_builder;
+		$this->repository                = $repository;
 	}
 
 	/**
@@ -42,5 +47,11 @@ class Erc4361Service {
 				$nonce->issuedAt()->toRfc3339Value()
 			)
 		);
+	}
+
+	/** 古いERC-4361用のnonceデータをリポジトリから削除します */
+	public function purgeExpiredNonceData(): void {
+		$expirationTime = UnixTimestamp::from( UnixTimestamp::now()->value() - Config::ERC4361_NONCE_DATA_EXPIRATION );
+		$this->repository->deleteExpired( $expirationTime );
 	}
 }

@@ -49,6 +49,21 @@ class Config {
 	 */
 	public const CRON_INTERVAL_APP_CONTRACT_CRAWL = 60 * 1; // 1分
 
+	/** ERC-4361用のnonceデータをリポジトリから削除する基準（秒） */
+	public const ERC4361_NONCE_DATA_EXPIRATION = 60 * 60 * 24 * 3; // 3日
+
+	/**
+	 * 請求書トークンのデータをリポジトリから削除する基準（秒）
+	 * ※ ただし、削除の対象となるのは「期限切れ」または「無効化された」レコードに限定
+	 */
+	public const INVOICE_TOKEN_DATA_EXPIRATION = 60 * 60 * 24 * 3; // 3日
+
+	/**
+	 * リフレッシュトークンのデータをリポジトリから削除する基準（秒）
+	 * ※ ただし、削除の対象となるのは「期限切れ」または「無効化された」レコードに限定
+	 */
+	public const REFRESH_TOKEN_DATA_EXPIRATION = 60 * 60 * 24 * 3; // 3日
+
 	/**
 	 * 最小のブロック待機数
 	 * ブロックにトランザクションが取り込まれた時点で1とカウントする

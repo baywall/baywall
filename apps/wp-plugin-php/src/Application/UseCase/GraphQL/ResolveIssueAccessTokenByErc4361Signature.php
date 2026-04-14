@@ -47,21 +47,22 @@ class ResolveIssueAccessTokenByErc4361Signature {
 		$chain_id  = ChainId::from( $args['chainId'] );
 		$signature = Signature::from( $args['signature'] );
 
+		// 指定されたアドレスから、保存済みのnonceを取得
+		$stored_nonce = $this->erc4361_nonce_repository->get( $address );
+
+		// 保存済みのnonceを使って署名用メッセージを再構築
+		$message = $this->erc4361_service->createMessage( $address, $chain_id, $stored_nonce );
+		// 再構築したメッセージと、受け取った署名からアドレスを計算
+		$recovered_address = $this->signature_service->recoverAddress( $message, $signature );
+
+		if ( ! $address->equals( $recovered_address ) ) {
+			// 署名の検証に失敗した場合はエラー
+			// ※ 第三者がリクエストを送信している可能性もあるため、保存済みnonce削除は行わない
+			throw new BadRequestException( "[27FA5840] ERC-4361 signature verification failed for address: {$address}" );
+		}
+
 		return $this->transaction_service->transactional(
-			function () use ( $address, $chain_id, $signature ) {
-				// 指定されたアドレスから、保存済みのnonceを取得
-				$stored_nonce = $this->erc4361_nonce_repository->get( $address );
-
-				// 保存済みのnonceを使って署名用メッセージを再構築
-				$message = $this->erc4361_service->createMessage( $address, $chain_id, $stored_nonce );
-				// 再構築したメッセージと、受け取った署名からアドレスを計算
-				$recovered_address = $this->signature_service->recoverAddress( $message, $signature );
-
-				if ( ! $address->equals( $recovered_address ) ) {
-					// 署名の検証に失敗した場合はエラー
-					throw new BadRequestException( "[27FA5840] ERC-4361 signature verification failed for address: {$address}" );
-				}
-
+			function () use ( $address ) {
 				// リフレッシュトークンを発行し、クッキーに保存
 				$refresh_token        = $this->refresh_token_service->issue( $address );
 				$refresh_token_cookie = $this->refresh_token_cookie_provider->get( $refresh_token );

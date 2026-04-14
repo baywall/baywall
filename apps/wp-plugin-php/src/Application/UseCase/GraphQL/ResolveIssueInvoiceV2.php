@@ -75,6 +75,10 @@ class ResolveIssueInvoiceV2 {
 			throw new \RuntimeException( '[DA891FEC] Server signer is not configured.' );
 		}
 
+		// 古い請求書トークンデータを削除
+		// ※ タイミングはどこでもよいが、確実に動作するようにここで実行する。
+		$this->invoice_token_service->purgeOldRepositoryData();
+
 		// 請求書番号を発行(+現在の販売価格を記録)
 		return $this->transaction_service->transactional(
 			function () use ( $post_id, $payment_token, $customer_address ) {

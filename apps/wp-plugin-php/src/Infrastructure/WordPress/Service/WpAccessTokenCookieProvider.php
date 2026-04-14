@@ -5,20 +5,23 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
+use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
 
 class WpAccessTokenCookieProvider implements AccessTokenCookieProvider {
 
 	private WordPressPropertyProvider $wp_property;
+	private CookieNameProvider $cookie_name_provider;
 
-	public function __construct( WordPressPropertyProvider $wp_property ) {
-		$this->wp_property = $wp_property;
+	public function __construct( WordPressPropertyProvider $wp_property, CookieNameProvider $cookie_name_provider ) {
+		$this->wp_property          = $wp_property;
+		$this->cookie_name_provider = $cookie_name_provider;
 	}
 
 	public function get( AccessToken $access_token ): Cookie {
 		return Cookie::create(
-			WpConfig::COOKIE_NAME_ACCESS_TOKEN, // name
+			$this->cookie_name_provider->accessToken(), // name
 			$access_token->value(), // value
 			time() + WpConfig::ACCESS_TOKEN_EXPIRATION, // expires
 			$this->path(),

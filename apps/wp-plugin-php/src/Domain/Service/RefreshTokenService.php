@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Service;
 
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Domain\Repository\RefreshTokenRepository;
@@ -71,5 +72,11 @@ abstract class RefreshTokenService {
 		$this->refresh_token_repository->add( $new_refresh_token );
 
 		return $new_refresh_token;
+	}
+
+	/** 古いリフレッシュトークンデータを削除します */
+	public function purgeOldRepositoryData(): void {
+		$expiration_threshold = UnixTimestamp::now()->addSeconds( -Config::REFRESH_TOKEN_DATA_EXPIRATION );
+		$this->refresh_token_repository->deleteByCreatedAt( $expiration_threshold );
 	}
 }

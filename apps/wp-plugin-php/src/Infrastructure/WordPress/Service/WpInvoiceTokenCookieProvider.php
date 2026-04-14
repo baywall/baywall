@@ -6,19 +6,22 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Domain\Entity\InvoiceToken;
+use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
 
 class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 
 	private WordPressPropertyProvider $wp_property;
+	private CookieNameProvider $cookie_name_provider;
 
-	public function __construct( WordPressPropertyProvider $wp_property ) {
-		$this->wp_property = $wp_property;
+	public function __construct( WordPressPropertyProvider $wp_property, CookieNameProvider $cookie_name_provider ) {
+		$this->wp_property          = $wp_property;
+		$this->cookie_name_provider = $cookie_name_provider;
 	}
 
 	public function get( InvoiceToken $invoice_token ): Cookie {
 		return Cookie::create(
-			WpConfig::COOKIE_NAME_INVOICE_TOKEN, // name
+			$this->cookie_name_provider->invoiceToken(), // name
 			$invoice_token->token()->value(), // value
 			$invoice_token->expiresAt()->value(), // expires
 			$this->path(),
@@ -32,7 +35,7 @@ class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 	/** @inheritDoc */
 	public function getExpired(): Cookie {
 		return Cookie::create(
-			WpConfig::COOKIE_NAME_INVOICE_TOKEN, // name
+			$this->cookie_name_provider->invoiceToken(), // name
 			'', // value: 設定不要
 			time() - 3600, // expires: 過去日時をセットしてクッキーが削除されるようにする
 			$this->path(),

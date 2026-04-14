@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Domain\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\InvoiceToken;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 
 interface InvoiceTokenRepository {
 	/** 指定した請求書トークン文字列に合致する請求書情報を取得します。 */
@@ -15,4 +16,7 @@ interface InvoiceTokenRepository {
 
 	/** 請求書トークン情報を更新します。 */
 	public function update( InvoiceToken $invoice_token ): void;
+
+	/** 指定した日時よりも前に作成された請求書トークンを削除します */
+	public function deleteByCreatedAt( UnixTimestamp $target_time ): void;
 }

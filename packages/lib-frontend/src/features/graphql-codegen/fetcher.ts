@@ -11,13 +11,16 @@ export const fetcher = < TData, TVariables >( query: string, variables?: TVariab
 	}
 
 	return async (): Promise< TData > => {
+		const headers = new Headers( requestInit?.headers );
+
+		headers.set( 'Content-Type', 'application/json' );
+		headers.set( 'X-WP-Nonce', nonce.value );
+
 		const res = await fetch( endpoint.value, {
+			...requestInit,
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-WP-Nonce': nonce.value,
-				...requestInit?.headers,
-			},
+			credentials: requestInit?.credentials ?? 'same-origin',
+			headers,
 			body: JSON.stringify( { query, variables } ),
 		} );
 

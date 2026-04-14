@@ -47,6 +47,11 @@ class RefreshAccessToken {
 	}
 
 	public function handle( string $refresh_token_value ): void {
+
+		// 古いリフレッシュトークンデータを削除
+		// ※ タイミングはどこでもよいが、確実に動作するようにここで実行する。
+		$this->refresh_token_service->purgeOldRepositoryData();
+
 		$this->transaction_service->transactional(
 			function () use ( $refresh_token_value ) {
 				// トークンローテーションを実行
