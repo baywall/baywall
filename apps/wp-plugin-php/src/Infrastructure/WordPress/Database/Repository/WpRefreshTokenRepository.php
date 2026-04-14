@@ -37,7 +37,7 @@ class WpRefreshTokenRepository implements RefreshTokenRepository {
 		if ( $record === null ) {
 			return null;
 		}
-		assert( $record->refreshTokenHashValue() === $refresh_token_hash_string->value(), '[43E7665D]' );
+		assert( hash_equals( $record->refreshTokenHashValue(), $refresh_token_hash_string->value() ), '[43E7665D]' );
 
 		return RefreshToken::create(
 			$refresh_token_string,

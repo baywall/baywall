@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
+use Cornix\Serendipity\Core\Domain\ValueObject\Base\SecureStringValueObject;
 
 /**
  * ERC-4361 Nonce 文字列を表すクラス
  */
-class Erc4361NonceString extends StringValueObject {
+class Erc4361NonceString extends SecureStringValueObject {
 
 	protected function __construct( string $nonce_string_value ) {
 		parent::__construct( $nonce_string_value );

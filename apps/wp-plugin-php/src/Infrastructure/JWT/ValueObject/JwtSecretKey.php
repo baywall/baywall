@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
+use Cornix\Serendipity\Core\Domain\ValueObject\Base\SecureStringValueObject;
 
 /**
  * JWTで使用する共通鍵を表すクラス
  */
-final class JwtSecretKey extends StringValueObject {
+final class JwtSecretKey extends SecureStringValueObject {
 
 	private function __construct( string $jwt_secret_key_value ) {
 		parent::__construct( $jwt_secret_key_value );

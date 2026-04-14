@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
+use Cornix\Serendipity\Core\Domain\ValueObject\Base\SecureStringValueObject;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
 
-class WpInvoiceTokenHashString extends StringValueObject {
+class WpInvoiceTokenHashString extends SecureStringValueObject {
 	private const HASH_ALGORITHM = 'sha256';
 
 	private function __construct( string $wp_invoice_token_hash_value ) {

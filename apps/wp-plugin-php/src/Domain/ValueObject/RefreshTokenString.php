@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
+use Cornix\Serendipity\Core\Domain\ValueObject\Base\SecureStringValueObject;
 
 /**
  * リフレッシュトークン文字列を表すクラス
  *
  * - リフレッシュトークン文字列のフォーマットは実装次第のため、ここではチェックしない
  */
-class RefreshTokenString extends StringValueObject {
+class RefreshTokenString extends SecureStringValueObject {
 	protected function __construct( string $refresh_token_value ) {
 		parent::__construct( $refresh_token_value );
 	}

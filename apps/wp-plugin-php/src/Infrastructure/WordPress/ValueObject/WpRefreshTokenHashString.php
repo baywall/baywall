@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
+use Cornix\Serendipity\Core\Domain\ValueObject\Base\SecureStringValueObject;
 use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
 
-class WpRefreshTokenHashString extends StringValueObject {
+class WpRefreshTokenHashString extends SecureStringValueObject {
 	private const HASH_ALGORITHM = 'sha256';
 
 	private function __construct( string $wp_refresh_token_hash_value ) {
