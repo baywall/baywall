@@ -109,6 +109,7 @@
   "tokens.enter_symbol_placeholder_message": "シンボルを入力してください（例: JPY, USDC, ...）",
   "tokens.handling_fee_price": "手数料",
   "tokens.is_payable_simple_explanation": "サイト訪問者がこのトークンで決済できるかどうかを指定します。",
+  "tokens.native_token_warning_message": "セキュリティ強化のため、ネイティブトークンは将来的に制限される可能性があります。リスクを軽減するため、ラップドトークンの使用をご検討ください。",
   "tokens.payable": "支払可能",
   "tokens.register_rpc_url_if_network_not_displayed_message": "ネットワークが表示されない場合はRPC URLを登録します。",
   "tokens.symbol": "シンボル",

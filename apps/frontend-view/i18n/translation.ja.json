@@ -31,6 +31,7 @@
   "post.summary_remaining_chars": "残り文字数",
   "post.summary_title": "タイトル",
   "site.paused_message": "取引はサイト管理者によって一時停止されています。",
+  "site.seller_address_unregistered_message": "販売者ウォレットが未登録です。サイト管理者にお問い合わせください。",
   "wallet.ask_disconnect_wallet_message": "ウォレットを切断しますか？",
   "wallet.connect": "ウォレットを接続",
   "wallet.connecting": "接続中...",
@@ -49,6 +50,7 @@
   "widget.already_purchased_link": "購入済みの場合",
   "widget.already_purchased_title": "購入済みの場合",
   "widget.continue_reading": "続きを読む",
+  "widget.payment_button.gas_fee_note": "別途ガス代（ネットワーク手数料）がかかります。金額はウォレットで確認してください。",
   "widget.screen_title.payment_status": "決済ステータス",
   "widget.screen_title.unlock_article": "全文を読む",
   "widget.scta_link_text": "特定商取引法に基づく表記"

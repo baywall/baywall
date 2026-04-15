@@ -31,6 +31,7 @@
   "post.summary_remaining_chars": "Remaining characters",
   "post.summary_title": "Title",
   "site.paused_message": "Transactions are temporarily suspended by the site administrator.",
+  "site.seller_address_unregistered_message": "The seller wallet is not registered. Please contact the site administrator.",
   "wallet.ask_disconnect_wallet_message": "Disconnect wallet?",
   "wallet.connect": "Connect Wallet",
   "wallet.connecting": "Connecting...",
@@ -49,6 +50,7 @@
   "widget.already_purchased_link": "Already purchased?",
   "widget.already_purchased_title": "Already purchased?",
   "widget.continue_reading": "Continue reading",
+  "widget.payment_button.gas_fee_note": "A separate gas fee (network fee) will be charged. Please check the amount in your wallet.",
   "widget.screen_title.payment_status": "Payment Status",
   "widget.screen_title.unlock_article": "Unlock Article",
   "widget.scta_link_text": "Specified Commercial Transactions Act"

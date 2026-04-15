@@ -1,3 +1,5 @@
+import { LOG_LEVEL } from '@serendipity/lib-logger';
+
 export class Config {
 	// istanbul ignore next
 	private constructor() {}
@@ -8,6 +10,16 @@ export class Config {
 	 * ※ ローカルストレージのキーなどで使用
 	 */
 	public static APP_ID = 'baywall';
+
+	/** URLのクエリパラメータで使用するログレベルのキー */
+	public static readonly LOG_LEVEL_KEY = 'log-level';
+
+	/**
+	 * デフォルトのログレベル
+	 *
+	 * ※ URLのクエリパラメータに指定がない場合に使用される
+	 */
+	public static readonly DEFAULT_LOG_LEVEL = LOG_LEVEL.WARN;
 
 	/** WordPressで使用しているテキストドメイン */
 	public static readonly TEXT_DOMAIN = 'baywall';
