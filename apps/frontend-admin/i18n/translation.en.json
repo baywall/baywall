@@ -52,6 +52,7 @@
   "dashboard.inconsistent_token_settings_message": "Some tokens are disabled due to inconsistent settings.",
   "dashboard.no_alert_message": "There are no notifications.",
   "dashboard.no_connectable_chain_message": "There are no connectable chains. Register an RPC URL now to start using the app's features.",
+  "dashboard.no_payable_token_message": "No payable token is available. Update token settings so you can receive tokens.",
   "dashboard.seller_wallet_not_registered_message": "The wallet is not registered. Register it now so you can receive tokens.",
   "dashboard.site_paused_message": "Maintenance mode is enabled.",
   "dashboard.token_not_registered_message": "The payment token is not registered. Register it now so you can receive tokens.",

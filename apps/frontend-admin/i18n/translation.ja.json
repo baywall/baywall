@@ -52,6 +52,7 @@
   "dashboard.inconsistent_token_settings_message": "設定に不整合があるため、一部のトークンが無効になっています。",
   "dashboard.no_alert_message": "通知はありません。",
   "dashboard.no_connectable_chain_message": "接続可能なチェーンがありません。今すぐRPC URLを登録して、アプリの機能を使い始めましょう。",
+  "dashboard.no_payable_token_message": "支払い可能なトークンがありません。トークン設定を編集して、トークンを受け取れるようにしましょう。",
   "dashboard.seller_wallet_not_registered_message": "ウォレットが未登録です。今すぐ登録して、トークンを受け取れるようにしましょう。",
   "dashboard.site_paused_message": "メンテナンスモードが有効です。",
   "dashboard.token_not_registered_message": "支払用トークンが登録されていません。今すぐ登録して、トークンを受け取れるようにしましょう。",
