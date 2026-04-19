@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Application\Service\LockService;
+use RuntimeException;
 use wpdb;
 
 class WpLockService extends LockService {
@@ -20,8 +21,11 @@ class WpLockService extends LockService {
 		// @see https://dev.mysql.com/doc/refman/8.0/ja/locking-functions.html#function_get-lock
 		$sql    = $this->wpdb->prepare( 'SELECT GET_LOCK(%s, %d)', $key, $timeout );
 		$result = $this->wpdb->get_var( $sql );
-		assert( $result === '1' || $result === '0' || is_null( $result ), "[2B7D3C13] result: {$result}" );
-		return is_null( $result ) ? false : (bool) $result;
+		if ( is_null( $result ) ) {
+			throw new RuntimeException( "[D888EC75] GET_LOCK failed: {$this->wpdb->last_error}" );
+		}
+		assert( $result === '1' || $result === '0', "[2B7D3C13] result: {$result}" );
+		return (bool) $result;
 	}
 
 	/** @inheritdoc */

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
+use Cornix\Serendipity\Core\Application\Exception\LockAcquisitionException;
+use Cornix\Serendipity\Core\Application\Service\LockService;
 use Cornix\Serendipity\Core\Application\UseCase\CrawlAllAppContract;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\CronActionNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
@@ -20,6 +22,7 @@ use Psr\Container\ContainerInterface;
 class AppContractCrawlCronHook extends HookBase {
 
 	private ContainerInterface $container;
+	private const LOCK_NAME = '05f69f89-24d8-4c72-b2a2-2c8ecfb24343'; // 排他制御用の適当な文字列
 
 	public function __construct( ContainerInterface $container ) {
 		$this->container = $container;
@@ -53,16 +56,29 @@ class AppContractCrawlCronHook extends HookBase {
 		// => https://developer.wordpress.org/reference/functions/wp_schedule_single_event/
 		// > Note that scheduling an event to occur within 10 minutes of an existing event with the same action hook
 		// > will be ignored unless you pass unique $args values for each scheduled event.
-		// これは、予約を2つ以上登録する際の制限。
-		// `wp_next_scheduled`でチェックして存在しない場合に登録する方法であれば、10分の制限は受けない。(30秒ごとに実行、のようなことも可能)
+		// これは重複予約時の制限。
+		// なお、`wp_schedule_single_event`で登録した単発イベントは実行されると消費されるため、
+		// 同一アクション名の次回予約は未登録状態に戻る前提で都度再登録する。
+		// 10分ルール自体は常に有効だが、`wp_next_scheduled`で既存イベントの有無を確認し、
+		// 未登録のときに1件だけ登録する方式であれば、重複による拒否を避けやすい。
 		//
 
-		// 予約がされていない場合のみ登録
-		if ( false === wp_next_scheduled( $action_name ) ) {
-			$next_time = time() + Config::CRON_INTERVAL_APP_CONTRACT_CRAWL; // 次回の実行時刻
-
-			$success = wp_schedule_single_event( $next_time, $action_name );
-			assert( $success === true, '[28D837C0] wp_schedule_single_event failed. ' . var_export( $success, true ) );
+		try {
+			$this->container->get( LockService::class )->withLock(
+				self::LOCK_NAME,
+				function () use ( $action_name ) {
+					// 予約がされていない場合のみ登録
+					if ( false === wp_next_scheduled( $action_name ) ) {
+						$next_time = time() + Config::CRON_INTERVAL_APP_CONTRACT_CRAWL; // 次回の実行時刻
+						$success   = wp_schedule_single_event( $next_time, $action_name );
+						assert( $success === true, '[28D837C0] wp_schedule_single_event failed. ' . var_export( $success, true ) );
+					}
+				}
+			);
+		} catch ( LockAcquisitionException $e ) {
+			// ロックの取得に失敗した場合（同時リクエスト時）は、
+			// 他のリクエストが登録処理を行っているはずなので何もせず終了する
+			// Do Nothing.
 		}
 	}
 

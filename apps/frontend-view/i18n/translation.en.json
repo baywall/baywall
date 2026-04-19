@@ -15,6 +15,7 @@
   "payment.awaiting_confirmations_step_active": "Waiting for block confirmation",
   "payment.awaiting_confirmations_step_completed": "Block confirmations completed",
   "payment.awaiting_confirmations_step_title": "Awaiting block confirmations",
+  "payment.confirmations_waiting_alert_message": "An additional confirmation time of approximately {{waitSec}} seconds is required to finalize the transaction.",
   "payment.pay": "Pay",
   "payment.payment_token": "Payment Token",
   "payment.processing_error": "An error occurred during payment processing",

@@ -15,6 +15,7 @@
   "payment.awaiting_confirmations_step_active": "ブロック承認を待機しています",
   "payment.awaiting_confirmations_step_completed": "ブロック承認が完了しました",
   "payment.awaiting_confirmations_step_title": "ブロック承認",
+  "payment.confirmations_waiting_alert_message": "取引を確定させるため、約{{waitSec}}秒の追加確認時間が必要です。",
   "payment.pay": "支払う",
   "payment.payment_token": "支払トークン",
   "payment.processing_error": "支払処理中にエラーが発生しました",
