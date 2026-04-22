@@ -65,6 +65,9 @@ type Query {
 
 	# 「特定商取引法に基づく表記」のURL【ゲスト】
 	sctaUrl: String
+
+	# インストール時のURLと現在のサイトURLが変更されたかどうか【ゲスト】
+	installOriginUrlChanged: Boolean!
 }
 
 type Mutation {

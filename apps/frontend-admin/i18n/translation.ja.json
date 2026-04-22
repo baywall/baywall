@@ -50,6 +50,7 @@
   "common.search_button": "検索",
   "common.show_button": "表示",
   "dashboard.inconsistent_token_settings_message": "設定に不整合があるため、一部のトークンが無効になっています。",
+  "dashboard.install_origin_url_changed_message": "サイトURLの変更を検知しました。安全のため一部機能が制限されています。",
   "dashboard.no_alert_message": "通知はありません。",
   "dashboard.no_connectable_chain_message": "接続可能なチェーンがありません。今すぐRPC URLを登録して、アプリの機能を使い始めましょう。",
   "dashboard.no_payable_token_message": "支払い可能なトークンがありません。トークン設定を編集して、トークンを受け取れるようにしましょう。",

@@ -50,6 +50,7 @@
   "common.search_button": "Search",
   "common.show_button": "Show",
   "dashboard.inconsistent_token_settings_message": "Some tokens are disabled due to inconsistent settings.",
+  "dashboard.install_origin_url_changed_message": "A site URL change has been detected. Some features are restricted for security.",
   "dashboard.no_alert_message": "There are no notifications.",
   "dashboard.no_connectable_chain_message": "There are no connectable chains. Register an RPC URL now to start using the app's features.",
   "dashboard.no_payable_token_message": "No payable token is available. Update token settings so you can receive tokens.",

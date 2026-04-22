@@ -1,6 +1,6 @@
 {
   "name": "baywall",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "You can set up a paywall for cryptocurrency or stablecoin payments.",
   "license": "Split License",

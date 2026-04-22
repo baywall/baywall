@@ -31,6 +31,7 @@
   "post.summary_price": "価格",
   "post.summary_remaining_chars": "残り文字数",
   "post.summary_title": "タイトル",
+  "site.install_origin_url_changed_message": "設定に不備があるため機能が制限されています。サイト管理者にお問い合わせください。",
   "site.paused_message": "取引はサイト管理者によって一時停止されています。",
   "site.seller_address_unregistered_message": "販売者ウォレットが未登録です。サイト管理者にお問い合わせください。",
   "wallet.ask_disconnect_wallet_message": "ウォレットを切断しますか？",

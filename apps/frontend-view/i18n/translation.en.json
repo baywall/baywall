@@ -31,6 +31,7 @@
   "post.summary_price": "Price",
   "post.summary_remaining_chars": "Remaining characters",
   "post.summary_title": "Title",
+  "site.install_origin_url_changed_message": "Some features are restricted due to a configuration issue. Please contact the site administrator.",
   "site.paused_message": "Transactions are temporarily suspended by the site administrator.",
   "site.seller_address_unregistered_message": "The seller wallet is not registered. Please contact the site administrator.",
   "wallet.ask_disconnect_wallet_message": "Disconnect wallet?",

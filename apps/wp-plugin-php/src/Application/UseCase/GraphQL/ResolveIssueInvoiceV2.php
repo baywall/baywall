@@ -9,10 +9,12 @@ use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Entity\ServerSigner;
+use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\InvoiceService;
 use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenService;
+use Cornix\Serendipity\Core\Domain\Service\SiteService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Bytes;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
@@ -34,6 +36,7 @@ class ResolveIssueInvoiceV2 {
 	private InvoiceTokenService $invoice_token_service;
 	private InvoiceTokenCookieProvider $invoice_token_cookie_provider;
 	private CookieWriter $cookie_writer;
+	private SiteService $site_service;
 
 	public function __construct(
 		UserAccessChecker $user_access_checker,
@@ -44,7 +47,8 @@ class ResolveIssueInvoiceV2 {
 		InitCrawledBlockNumber $init_crawled_block_number,
 		InvoiceTokenService $invoice_token_service,
 		InvoiceTokenCookieProvider $invoice_token_cookie_provider,
-		CookieWriter $cookie_writer
+		CookieWriter $cookie_writer,
+		SiteService $site_service
 	) {
 		$this->user_access_checker           = $user_access_checker;
 		$this->transaction_service           = $transaction_service;
@@ -55,6 +59,7 @@ class ResolveIssueInvoiceV2 {
 		$this->invoice_token_service         = $invoice_token_service;
 		$this->invoice_token_cookie_provider = $invoice_token_cookie_provider;
 		$this->cookie_writer                 = $cookie_writer;
+		$this->site_service                  = $site_service;
 	}
 
 	public function handle( array $root_value, array $args ) {
@@ -73,6 +78,11 @@ class ResolveIssueInvoiceV2 {
 		$server_signer = $this->server_signer_repository->get();
 		if ( $server_signer === null ) {
 			throw new \RuntimeException( '[DA891FEC] Server signer is not configured.' );
+		}
+
+		// サイトURLが変更されている時は請求書発行を拒否（フロントエンドではボタンを無効化するため例外スローで対応）
+		if ( $this->site_service->isInstallOriginUrlChanged() ) {
+			throw new BadRequestException( '[D94C9765] Site URL has changed since install origin URL was recorded.' );
 		}
 
 		// 古い請求書トークンデータを削除
