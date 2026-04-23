@@ -7,14 +7,16 @@ use Cornix\Serendipity\Core\Application\Service\AccessTokenExpirationProvider;
 use Cornix\Serendipity\Core\Application\Service\AccessTokenRequestProvider;
 use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
+use Cornix\Serendipity\Core\Application\Repository\JwtSecretKeyRepository;
 use Cornix\Serendipity\Core\Application\Repository\SctaUrlRepository;
 use Cornix\Serendipity\Core\Application\Service\Erc4361NonceProvider;
 use Cornix\Serendipity\Core\Application\Service\Erc4361PropertyProvider;
 use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtAlgorithmProvider;
-use Cornix\Serendipity\Core\Application\Service\JwtSecretKeyProvider;
 use Cornix\Serendipity\Core\Application\Service\LockService;
 use Cornix\Serendipity\Core\Application\Service\PaidContentService;
+use Cornix\Serendipity\Core\Application\Service\PluginMigrationService;
+use Cornix\Serendipity\Core\Application\Service\PluginTeardownService;
 use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\SalesHistoryQueryService;
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
@@ -50,7 +52,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpPostR
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpTokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\Logging\Handler\SimpleLogger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
-use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
+use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelRepository;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\AppContractDataProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
@@ -64,7 +66,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpServe
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpInstallOriginUrl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpPausedRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpSctaUrlRepository;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpLogLevelProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpLogLevelRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenExpirationProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenCookieProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpCookieNameProvider;
@@ -74,9 +76,11 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361PropertyPr
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenCookieProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpJwtSecretKeyRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpLockService;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginMigrationService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginTeardownService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenCookieProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpSiteService;
@@ -112,6 +116,7 @@ final class ContainerDefinitions {
 			PausedRepository::class              => autowire( WpPausedRepository::class ),
 			SctaUrlRepository::class             => autowire( WpSctaUrlRepository::class ),
 			InstallOriginUrl::class              => autowire( WpInstallOriginUrl::class ),
+			JwtSecretKeyRepository::class        => autowire( WpJwtSecretKeyRepository::class ),
 
 			// Service
 			PostTitleProvider::class             => autowire( WpPostTitleProvider::class ),
@@ -128,7 +133,6 @@ final class ContainerDefinitions {
 			LockService::class                   => autowire( WpLockService::class ),
 			SalesHistoryQueryService::class      => autowire( WpSalesHistoryQueryService::class ),
 			JwtAlgorithmProvider::class          => autowire( WpJwtAlgorithmProvider::class ),
-			JwtSecretKeyProvider::class          => autowire( WpJwtSecretKeyProvider::class ),
 			AccessTokenExpirationProvider::class => autowire( WpAccessTokenExpirationProvider::class ),
 			AccessTokenRequestProvider::class    => autowire( WpAccessTokenRequestProvider::class ),
 			CookieNameProvider::class            => autowire( WpCookieNameProvider::class ),
@@ -140,13 +144,15 @@ final class ContainerDefinitions {
 			Erc4361PropertyProvider::class       => autowire( WpErc4361PropertyProvider::class ),
 			Erc4361NonceProvider::class          => autowire( WpErc4361NonceProvider::class ),
 			SiteService::class                   => autowire( WpSiteService::class ),
+			PluginMigrationService::class        => autowire( WpPluginMigrationService::class ),
+			PluginTeardownService::class         => autowire( WpPluginTeardownService::class ),
 
 			// Cache
 			OracleRateCache::class               => autowire( WpOracleRateCache::class ),
 
 			// Logging
 			Logger::class                        => autowire( SimpleLogger::class ),
-			LogLevelProvider::class              => autowire( WpLogLevelProvider::class ),
+			LogLevelRepository::class            => autowire( WpLogLevelRepository::class ),
 		);
 	}
 }

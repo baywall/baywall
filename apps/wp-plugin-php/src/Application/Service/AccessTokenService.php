@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Application\Repository\JwtSecretKeyRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
@@ -14,14 +15,14 @@ class AccessTokenService {
 
 	private JwtService $jwt_service;
 	private JwtAlgorithmProvider $jwt_algorithm_provider;
-	private JwtSecretKeyProvider $jwt_secret_key_provider;
+	private JwtSecretKeyRepository $jwt_secret_key_repository;
 	private AccessTokenExpirationProvider $expiration_provider;
 
-	public function __construct( JwtService $jwt_service, JwtAlgorithmProvider $jwt_algorithm_provider, JwtSecretKeyProvider $jwt_secret_key_provider, AccessTokenExpirationProvider $access_token_expiration_provider ) {
-		$this->jwt_service             = $jwt_service;
-		$this->jwt_algorithm_provider  = $jwt_algorithm_provider;
-		$this->jwt_secret_key_provider = $jwt_secret_key_provider;
-		$this->expiration_provider     = $access_token_expiration_provider;
+	public function __construct( JwtService $jwt_service, JwtAlgorithmProvider $jwt_algorithm_provider, JwtSecretKeyRepository $jwt_secret_key_repository, AccessTokenExpirationProvider $access_token_expiration_provider ) {
+		$this->jwt_service               = $jwt_service;
+		$this->jwt_algorithm_provider    = $jwt_algorithm_provider;
+		$this->jwt_secret_key_repository = $jwt_secret_key_repository;
+		$this->expiration_provider       = $access_token_expiration_provider;
 	}
 
 	/** 指定したウォレットアドレスに対するアクセストークンを発行します */
@@ -37,7 +38,7 @@ class AccessTokenService {
 		);
 
 		// 署名用の秘密鍵を取得
-		$secret_key = $this->jwt_secret_key_provider->get();
+		$secret_key = $this->jwt_secret_key_repository->get();
 
 		// JWTトークンを生成
 		$jwt = $this->jwt_service->encode( $algorithm, $payload, $secret_key );
@@ -63,7 +64,7 @@ class AccessTokenService {
 		$jwt = Jwt::from( $access_token->value() );
 
 		// 署名用の秘密鍵を取得
-		$secret_key = $this->jwt_secret_key_provider->get();
+		$secret_key = $this->jwt_secret_key_repository->get();
 
 		return $this->jwt_service->decode( $jwt, $secret_key );
 	}

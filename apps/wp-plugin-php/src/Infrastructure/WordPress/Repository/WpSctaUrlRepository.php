@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Repository;
 
 use Cornix\Serendipity\Core\Application\Repository\SctaUrlRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\SctaUrl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\OptionNameProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
 /**
  * 「特定商取引法に基づく表記」のURLを取得または保存するクラス
@@ -14,8 +14,8 @@ class WpSctaUrlRepository implements SctaUrlRepository {
 
 	private string $option_name;
 
-	public function __construct( OptionNameProvider $option_name_provider ) {
-		$this->option_name = $option_name_provider->sctaUrl();
+	public function __construct() {
+		$this->option_name = WpOptionName::SCTA_URL;
 	}
 
 	/** 「特定商取引法に基づく表記」のURLを取得します */

@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Constant\Config;
 
-class PluginInfoProvider {
+class WpPluginInfoProvider {
 
 	public function __construct() {
 		$this->plugin_main_file = PluginMainFile::getInstance();

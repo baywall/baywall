@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
 use Psr\Container\ContainerInterface;
@@ -28,7 +28,7 @@ class ViewPageHook extends HookBase {
 		}
 
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
-		$plugin               = $this->container->get( PluginInfoProvider::class );
+		$plugin               = $this->container->get( WpPluginInfoProvider::class );
 		$php_var_exporter     = $this->container->get( PhpVarExporter::class );
 
 		// ゲストユーザー(一般の訪問者)表示用の登録する際のハンドル名を取得

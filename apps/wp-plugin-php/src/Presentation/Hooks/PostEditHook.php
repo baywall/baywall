@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
 use Psr\Container\ContainerInterface;
@@ -32,7 +32,7 @@ class PostEditHook extends HookBase {
 		}
 
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
-		$plugin               = $this->container->get( PluginInfoProvider::class );
+		$plugin               = $this->container->get( WpPluginInfoProvider::class );
 		$php_var_exporter     = $this->container->get( PhpVarExporter::class );
 
 		// ブロックエディタで使用するスクリプトを登録するときのハンドル名を取得。

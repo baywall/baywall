@@ -5,12 +5,6 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 class PrefixProvider {
 
-	/** optionsテーブルに格納する際のキー名に付与するプレフィックスを取得します。 */
-	public function optionKey(): string {
-		$text_domain = $this->convertedTextDomain();
-		return "{$text_domain}_";
-	}
-
 	/** 本プラグインで使用するテーブル名のプレフィックスを取得します。 */
 	public function tableName(): string {
 		global $wpdb;
@@ -38,7 +32,7 @@ class PrefixProvider {
 	 * @return string
 	 */
 	private function convertedTextDomain(): string {
-		$text_domain = ( new PluginInfoProvider() )->textDomain();
+		$text_domain = ( new WpPluginInfoProvider() )->textDomain();
 
 		// プラグインのテキストドメインのハイフンをアンダーバーに変換
 		$result = str_replace( '-', '_', $text_domain );

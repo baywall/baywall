@@ -1,21 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Logging;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Repository;
 
-use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
+use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelRepository;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
-class WpLogLevelProvider implements LogLevelProvider {
-	public function __construct( PrefixProvider $prefix_provider ) {
-		$this->prefix_provider = $prefix_provider;
+class WpLogLevelRepository implements LogLevelRepository {
+	public function __construct() {
 	}
-	private PrefixProvider $prefix_provider;
 
 	/** @inheritdoc */
-	public function getLogLevel( LogCategory $category ): LogLevel {
+	public function get( LogCategory $category ): LogLevel {
 		$log_level_name = get_option( $this->getOptionName( $category ), null );
 		// 初期化時に設定されているためnullになることは無い
 		assert( $log_level_name !== null, "[F6F7CFF9] Log level for category {$category->name()} is not set." );
@@ -23,7 +21,7 @@ class WpLogLevelProvider implements LogLevelProvider {
 	}
 
 	/** @inheritdoc */
-	public function setLogLevel( LogCategory $category, LogLevel $level ): void {
+	public function set( LogCategory $category, LogLevel $level ): void {
 		update_option( $this->getOptionName( $category ), $level->name() );
 	}
 
@@ -33,6 +31,12 @@ class WpLogLevelProvider implements LogLevelProvider {
 	}
 
 	private function getOptionName( LogCategory $category ): string {
-		return $this->prefix_provider->optionKey() . 'log_level_' . $category->name();
+		if ( $category->equals( LogCategory::app() ) ) {
+			return WpOptionName::LOG_LEVEL_APP;
+		} elseif ( $category->equals( LogCategory::audit() ) ) {
+			return WpOptionName::LOG_LEVEL_AUDIT;
+		} else {
+			throw new \RuntimeException( "[CAF0CE2E] Invalid log category: {$category->name()}" );
+		}
 	}
 }

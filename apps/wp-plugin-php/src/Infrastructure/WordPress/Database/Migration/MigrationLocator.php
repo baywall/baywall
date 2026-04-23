@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration;
 
 use Cornix\Serendipity\Core\Infrastructure\Util\NamespaceParser;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\PluginVersion;
+use Cornix\Serendipity\Core\Application\ValueObject\PluginVersion;
 use Psr\Container\ContainerInterface;
 
 /** マイグレーション対象となるクラスインスタンス一覧を取得します */

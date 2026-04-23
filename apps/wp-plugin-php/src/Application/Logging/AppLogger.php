@@ -4,21 +4,21 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\Logging;
 
 use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
-use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
+use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelRepository;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
 
 class AppLogger {
-	public function __construct( Logger $logger, LogLevelProvider $log_level_provider ) {
-		$this->logger             = $logger;
-		$this->log_level_provider = $log_level_provider;
+	public function __construct( Logger $logger, LogLevelRepository $log_level_repository ) {
+		$this->logger               = $logger;
+		$this->log_level_repository = $log_level_repository;
 	}
 	private Logger $logger;
-	private LogLevelProvider $log_level_provider;
+	private LogLevelRepository $log_level_repository;
 
 	private function log( LogLevel $level, $message_or_exception ): void {
 		try {
-			$current_log_level = $this->log_level_provider->getLogLevel( LogCategory::app() );
+			$current_log_level = $this->log_level_repository->get( LogCategory::app() );
 			if ( $current_log_level->allows( $level ) ) {
 				// 現在設定されているログレベルで出力する場合に限り、ログを出力する
 				$this->logger->log( $level, $message_or_exception );

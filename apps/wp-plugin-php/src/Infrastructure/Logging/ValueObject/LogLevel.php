@@ -8,40 +8,28 @@ class LogLevel {
 
 	// ログレベルの定義
 	// 値が大きいほど詳細なログを表す
-	private const NONE  = 0;
-	private const ERROR = 100;
-	private const WARN  = 200;
-	private const INFO  = 300;
-	private const DEBUG = 400;
+	private const NONE  = 'none';
+	private const ERROR = 'error';
+	private const WARN  = 'warn';
+	private const INFO  = 'info';
+	private const DEBUG = 'debug';
 
-	private static array $levels = array(
-		self::NONE  => 'NONE',
-		self::ERROR => 'ERROR',
-		self::WARN  => 'WARN',
-		self::INFO  => 'INFO',
-		self::DEBUG => 'DEBUG',
-	);
+	private static array $levels = array( self::NONE, self::ERROR, self::WARN, self::INFO, self::DEBUG );
 
-	private function __construct( int $log_level_value ) {
-		assert( isset( self::$levels[ $log_level_value ] ), "[CFB9AB28] Invalid log level value: {$log_level_value}" );
+	private function __construct( string $log_level_value ) {
+		$log_level_value = strtolower( $log_level_value );
+		assert( in_array( $log_level_value, self::$levels, true ), "[CFB9AB28] Invalid log level value: {$log_level_value}" );
 		$this->log_level_value = $log_level_value;
 	}
 
-	private int $log_level_value;
+	private string $log_level_value;
 
 	public function name(): string {
-		assert( isset( self::$levels[ $this->log_level_value ] ), "[E1304104] Invalid log level: {$this->log_level_value}" );
-		return self::$levels[ $this->log_level_value ];
+		return $this->log_level_value;
 	}
 
-	public static function from( string $log_level_name ): self {
-		$log_level_name = strtoupper( $log_level_name );
-		foreach ( self::$levels as $value => $name ) {
-			if ( $name === $log_level_name ) {
-				return new self( $value );
-			}
-		}
-		throw new \InvalidArgumentException( "[B36E6C92] Invalid log level name: {$log_level_name}" );
+	public static function from( string $log_level_value ): self {
+		return new self( $log_level_value );
 	}
 
 	/**
@@ -55,7 +43,13 @@ class LogLevel {
 	 * @return bool 指定されたログレベルを出力すべき場合はtrue、そうでなければfalse
 	 */
 	public function allows( LogLevel $log_level ): bool {
-		return $this->log_level_value >= $log_level->log_level_value;
+		// $this->levelsのインデックスを取得
+		$this_index = array_search( $this->log_level_value, self::$levels, true );
+		assert( $this_index !== false, "[896D928D] {$this->log_level_value}" );
+		$other_index = array_search( $log_level->log_level_value, self::$levels, true );
+		assert( $other_index !== false, "[6C95E96D] {$log_level->log_level_value}" );
+
+		return $other_index <= $this_index;
 	}
 
 

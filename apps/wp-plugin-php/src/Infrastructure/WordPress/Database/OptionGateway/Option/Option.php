@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
 use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
 class Option {
 	public function __construct( string $option_key_name ) {
-		assert( 0 === Strings::strpos( $option_key_name, ( new PrefixProvider() )->optionKey() ) );
+		assert( 0 === Strings::strpos( $option_key_name, WpOptionName::PREFIX ) );
 		$this->option_key_name = $option_key_name;
 	}
 	private string $option_key_name;

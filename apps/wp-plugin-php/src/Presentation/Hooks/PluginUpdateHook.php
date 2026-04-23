@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Application\UseCase\Migrate;
+use Cornix\Serendipity\Core\Application\Service\PluginMigrationService;
 use Cornix\Serendipity\Core\Infrastructure\System\ArchitectureChecker;
 use Cornix\Serendipity\Core\Infrastructure\System\PhpExtChecker;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\PluginVersionOption;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 use Psr\Container\ContainerInterface;
 use Throwable;
@@ -45,21 +44,19 @@ class PluginUpdateHook extends HookBase {
 	public function addActionAdminInit(): void {
 		assert( is_admin() );
 		try {
-			$plugin_version_option = $this->container->get( PluginVersionOption::class );
-			$plugin_info           = $this->container->get( PluginInfoProvider::class );
-			// バージョンチェック
-			$prev_installed_version = $plugin_version_option->get() ?? '0.0.0';
-			$to_version             = $plugin_info->version();
-			if ( version_compare( $prev_installed_version, $to_version, '<' ) ) {
-				// 動作環境のチェック
-				$this->checkSystem();
+			$plugin_migrate_service = $this->container->get( PluginMigrationService::class );
 
-				// マイグレーション実行
-				$this->container->get( Migrate::class )->handle( $prev_installed_version, $to_version );
-
-				// プラグインのバージョンを更新
-				$plugin_version_option->update( $to_version, false );
+			// マイグレーション処理が不要な場合は処理抜け
+			if ( ! $plugin_migrate_service->required() ) {
+				return;
 			}
+
+			// 動作環境のチェック
+			$this->checkSystem();
+
+			// マイグレーション実行
+			$plugin_migrate_service->migrate();
+
 		} catch ( Throwable $e ) {
 			// アップデートに失敗した場合はプラグインを無効化
 			$this->deactivatePlugin();
@@ -91,6 +88,6 @@ class PluginUpdateHook extends HookBase {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 		// プラグインを無効化
-		deactivate_plugins( plugin_basename( $this->container->get( PluginInfoProvider::class )->mainFilePath() ) );
+		deactivate_plugins( plugin_basename( $this->container->get( WpPluginInfoProvider::class )->mainFilePath() ) );
 	}
 }

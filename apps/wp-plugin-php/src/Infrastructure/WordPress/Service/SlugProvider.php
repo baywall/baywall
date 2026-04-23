@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 
 class SlugProvider {
 	public function __construct() {
-		$this->text_domain = ( new PluginInfoProvider() )->textDomain();
+		$this->text_domain = ( new WpPluginInfoProvider() )->textDomain();
 	}
 	private string $text_domain;
 

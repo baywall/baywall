@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 use Cornix\Serendipity\Core\Constant\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nTextProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PluginInfoProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\SlugProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
@@ -58,7 +58,7 @@ class AdminPageHook extends HookBase {
 
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
 		$php_var_exporter     = $this->container->get( PhpVarExporter::class );
-		$plugin               = $this->container->get( PluginInfoProvider::class );
+		$plugin               = $this->container->get( WpPluginInfoProvider::class );
 
 		// 管理画面用のスクリプトを登録する際のハンドル名を取得
 		$handle_name = $handle_name_provider->adminScript();

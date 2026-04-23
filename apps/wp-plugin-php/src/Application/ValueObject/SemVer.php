@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
+namespace Cornix\Serendipity\Core\Application\ValueObject;
 
 /**
  * セマンティックバージョンを表す値オブジェクト
