@@ -40,10 +40,10 @@ class V20251106_140_CreateErc4361NonceTable extends MigrationBase {
 				KEY `idx_{$this->table_name}_C56F9034` (`issued_at`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
-		$this->wpdb->dbh->query( $sql );
+		$this->wpdb->query( $sql );
 	}
 
 	public function down(): void {
-		$this->wpdb->dbh->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
+		$this->wpdb->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
 	}
 }

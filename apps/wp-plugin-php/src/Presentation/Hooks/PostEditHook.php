@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;

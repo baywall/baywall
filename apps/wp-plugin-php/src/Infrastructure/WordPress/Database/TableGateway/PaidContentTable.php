@@ -35,7 +35,7 @@ class PaidContentTable {
 			WHERE `post_id` = :post_id
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, array( ':post_id' => $post_id->value() ) );
+		$sql = $this->wpdb->named_prepare( $sql, array( ':post_id' => $post_id->value() ) );
 
 		$record = $this->wpdb->get_row( $sql );
 
@@ -59,7 +59,7 @@ class PaidContentTable {
 				`selling_symbol` = :selling_symbol
 		SQL;
 
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			$sql,
 			array(
 				':post_id'                     => $post_id->value(),
@@ -79,7 +79,7 @@ class PaidContentTable {
 			DELETE FROM `{$this->table_name}` WHERE `post_id` = :post_id
 		SQL;
 
-		$sql    = $this->wpdb->prepare( $sql, array( ':post_id' => $post_id->value() ) );
+		$sql    = $this->wpdb->named_prepare( $sql, array( ':post_id' => $post_id->value() ) );
 		$result = $this->wpdb->query( $sql );
 		assert( $result <= 1, "[64CF23D9] Failed to delete paid content data. - post_id: {$post_id}, result: {$result}" );
 	}

@@ -6,17 +6,17 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Mi
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
-use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpLogLevelRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpEnvironment;
 
 class V20251106_011_InitLogLevelWpOptions extends MigrationBase {
 
 	private TransactionService $transaction_service;
-	private Environment $environment;
+	private WpEnvironment $environment;
 	private WpLogLevelRepository $log_level_repository;
 
-	public function __construct( TransactionService $transaction_service, Environment $environment, WpLogLevelRepository $log_level_repository ) {
+	public function __construct( TransactionService $transaction_service, WpEnvironment $environment, WpLogLevelRepository $log_level_repository ) {
 		$this->transaction_service  = $transaction_service;
 		$this->environment          = $environment;
 		$this->log_level_repository = $log_level_repository;

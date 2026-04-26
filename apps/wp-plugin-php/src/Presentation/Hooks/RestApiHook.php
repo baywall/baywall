@@ -6,7 +6,7 @@ use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Application\UseCase\GetPaidContent;
 use Cornix\Serendipity\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
 use Cornix\Serendipity\Core\Application\UseCase\RefreshAccessToken;
-use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\ForbiddenException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;

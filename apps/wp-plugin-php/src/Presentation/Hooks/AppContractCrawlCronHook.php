@@ -6,9 +6,9 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 use Cornix\Serendipity\Core\Application\Exception\LockAcquisitionException;
 use Cornix\Serendipity\Core\Application\Service\LockService;
 use Cornix\Serendipity\Core\Application\UseCase\CrawlAllAppContract;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\CronActionNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpCronName;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Psr\Container\ContainerInterface;
 
@@ -30,7 +30,7 @@ class AppContractCrawlCronHook extends HookBase {
 
 	public function register(): void {
 		// Cronアクション名を取得
-		$action_name = $this->container->get( CronActionNameProvider::class )->appContractCrawl();
+		$action_name = WpCronName::APP_CONTRACT_CRAWL;
 
 		// Appコントラクトのログをクロールするアクションを追加
 		add_action( $action_name, array( $this, 'execute' ) );

@@ -55,6 +55,6 @@ class V20251106_081_InitServerSigner extends MigrationBase {
 	}
 
 	public function down(): void {
-		$this->wpdb->dbh->query( "TRUNCATE TABLE `{$this->table_name}`;" );
+		$this->wpdb->query( "TRUNCATE TABLE `{$this->table_name}`;" );
 	}
 }

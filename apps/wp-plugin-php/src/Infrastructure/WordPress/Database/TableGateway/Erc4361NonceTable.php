@@ -21,7 +21,7 @@ class Erc4361NonceTable {
 	}
 
 	public function get( Address $address ): ?Erc4361NonceTableRecord {
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			<<<SQL
 				SELECT `erc4361_nonce`, `wallet_address`, `issued_at`
 				FROM `{$this->table_name}`
@@ -37,7 +37,7 @@ class Erc4361NonceTable {
 	}
 
 	public function save( Address $address, Erc4361NonceString $erc4361_nonce_string, UnixTimestamp $issued_at ): void {
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			<<<SQL
 				INSERT INTO `{$this->table_name}` (
 					`wallet_address`,
@@ -64,7 +64,7 @@ class Erc4361NonceTable {
 	}
 
 	public function delete( Address $address ): void {
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			<<<SQL
 				DELETE FROM `{$this->table_name}`
 				WHERE `wallet_address` = :wallet_address
@@ -76,7 +76,7 @@ class Erc4361NonceTable {
 	}
 
 	public function deleteExpired( UnixTimestamp $target_time ): void {
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			<<<SQL
 				DELETE FROM `{$this->table_name}`
 				WHERE `issued_at` < :target_time

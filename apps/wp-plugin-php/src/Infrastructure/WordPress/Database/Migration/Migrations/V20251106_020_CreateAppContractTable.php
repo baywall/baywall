@@ -33,10 +33,10 @@ class V20251106_020_CreateAppContractTable extends MigrationBase {
 				CONSTRAINT `chk_{$this->table_name}_address_format` CHECK (`address` REGEXP '^0x[0-9a-f]{40}$')
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
-		$this->wpdb->dbh->query( $sql );
+		$this->wpdb->query( $sql );
 	}
 
 	public function down(): void {
-		$this->wpdb->dbh->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
+		$this->wpdb->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
 	}
 }

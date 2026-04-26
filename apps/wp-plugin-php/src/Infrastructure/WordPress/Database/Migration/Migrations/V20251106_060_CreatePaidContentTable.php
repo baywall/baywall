@@ -41,10 +41,10 @@ class V20251106_060_CreatePaidContentTable extends MigrationBase {
 				PRIMARY KEY (`post_id`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
-		$this->wpdb->dbh->query( $sql );
+		$this->wpdb->query( $sql );
 	}
 
 	public function down(): void {
-		$this->wpdb->dbh->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
+		$this->wpdb->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
 	}
 }

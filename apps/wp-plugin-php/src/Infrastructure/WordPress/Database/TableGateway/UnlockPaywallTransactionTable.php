@@ -38,7 +38,7 @@ class UnlockPaywallTransactionTable {
 				`transaction_hash` = VALUES(`transaction_hash`)
 		SQL;
 
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			$sql,
 			array(
 				':invoice_id'       => $invoice_id->ulid(),
@@ -61,7 +61,7 @@ class UnlockPaywallTransactionTable {
 			LIMIT 1
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, array( ':invoice_id' => $invoice_id->ulid() ) );
+		$sql = $this->wpdb->named_prepare( $sql, array( ':invoice_id' => $invoice_id->ulid() ) );
 		$row = $this->wpdb->get_row( $sql );
 
 		return $row !== null ? new UnlockPaywallTransactionTableRecord( $row ) : null;

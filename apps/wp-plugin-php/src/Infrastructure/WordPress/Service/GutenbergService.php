@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Cornix\Serendipity\Core\Domain\Entity\WidgetAttributes;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Content;
@@ -15,12 +16,10 @@ class GutenbergService {
 
 	private PostRepository $post_repository;
 	private BlockNameProvider $block_name_provider;
-	private ClassNameProvider $class_name_provider;
 
-	public function __construct( PostRepository $post_repository, BlockNameProvider $block_name_provider, ClassNameProvider $class_name_provider ) {
+	public function __construct( PostRepository $post_repository, BlockNameProvider $block_name_provider ) {
 		$this->post_repository     = $post_repository;
 		$this->block_name_provider = $block_name_provider;
-		$this->class_name_provider = $class_name_provider;
 	}
 
 	public function getWidgetAttributes( WP_Block $block ): WidgetAttributes {
@@ -39,7 +38,7 @@ class GutenbergService {
 		$attrs            = $widget_attributes->toArray();
 		$block_name_value = $this->block_name_provider->get()->value();
 
-		$class_name         = $this->class_name_provider->paywallBlock();
+		$class_name         = WpConfig::PAYWALL_BLOCK_CSS_CLASS_NAME;
 		$default_class_name = 'wp-block-' . str_replace( '/', '-', $block_name_value );
 		$html               = '<aside class="' . esc_attr( $default_class_name ) . ' ' . esc_attr( $class_name ) . '"></aside>';
 

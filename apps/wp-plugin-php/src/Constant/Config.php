@@ -7,13 +7,6 @@ namespace Cornix\Serendipity\Core\Constant;
  * システム固定の設定値を取得するためのクラス
  */
 class Config {
-
-	/**
-	 * このプラグインのルートディレクトリ
-	 * (エントリファイルが存在するディレクトリのパス)
-	 */
-	public const ROOT_DIR = __DIR__ . '/../..';
-
 	/**
 	 * ERC-4361の署名用メッセージに含めるユーザー向けの説明文。
 	 * トークンの有効期限や別ブラウザなど、認証情報が存在しない状況でリフレッシュトークンを発行する時に使用する。
@@ -23,11 +16,6 @@ class Config {
 	 * とあるので多言語対応は不要。
 	 */
 	public const ERC4361_STATEMENT = 'Sign this message to unlock the paywall.';
-
-	/** GraphQLスキーマファイルへのパス */
-	public const GRAPHQL_SCHEMA_PATH = self::ROOT_DIR . '/includes/assets/graphql/schema/schema.graphql';
-	/** GraphQLスキーマのキャッシュファイル(PHPファイル)へのパス */
-	public const GRAPHQL_CACHE_PATH = self::ROOT_DIR . '/includes/cache/graphql-schema.php';
 
 	/**
 	 * レートの一時データの有効期限(秒)

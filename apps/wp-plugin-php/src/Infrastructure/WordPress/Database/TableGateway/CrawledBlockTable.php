@@ -49,7 +49,7 @@ class CrawledBlockTable {
 			ON DUPLICATE KEY UPDATE
 				`block_number` = VALUES(`block_number`)
 		SQL;
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			$sql,
 			array(
 				':chain_id'     => $chain_id->value(),

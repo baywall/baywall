@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 
 class WpPluginInfoProvider {
 
@@ -117,9 +117,9 @@ class PluginMainFile {
 	 */
 	public function path(): string {
 		if ( $this->path === null ) {
-			$ret = glob( Config::ROOT_DIR . '/*.php' );
+			$ret = glob( WpConfig::ROOT_DIR . '/baywall.php' );
 			assert( count( $ret ) === 1 );
-			assert( count( glob( Config::ROOT_DIR . '/readme.txt' ) ) === 1 );
+			assert( count( glob( WpConfig::ROOT_DIR . '/readme.txt' ) ) === 1 );
 			$this->path = realpath( $ret[0] );
 		}
 		return $this->path;

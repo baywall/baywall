@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks\Service;
 
-use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
 class PhpVarExporter {

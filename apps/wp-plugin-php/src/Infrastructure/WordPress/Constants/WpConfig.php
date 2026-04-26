@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Constant;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Constants;
 
 /**
  * WordPressにのみ関連する設定値を取得するためのクラス
@@ -12,7 +12,7 @@ class WpConfig {
 	 * このプラグインのルートディレクトリ
 	 * (エントリファイルが存在するディレクトリのパス)
 	 */
-	public const ROOT_DIR = __DIR__ . '/../..';
+	public const ROOT_DIR = __DIR__ . '/../../../..';
 
 	/**
 	 * ペイウォールブロックのブロック名
@@ -21,11 +21,18 @@ class WpConfig {
 	public const PAYWALL_BLOCK_NAME = 'baywall/paywall';
 
 	/**
+	 * ペイウォールブロックのダミーブロック名
+	 * ※ 確実に他のプラグインと競合しないブロック名を指定。
+	 * この文字列は`wp_posts`テーブルの`post_content`列に書き込まれるため原則変更不可。
+	 * ⚠️ プラグイン名等が変更されたとしても（DBの更新をしないまま）この値を変更してはいけない。
+	 */
+	public const PAYWALL_BLOCK_DUMMY_NAME = 'ed8f6bb06b7a/b0fe5c007751';
+
+	/**
 	 * ペイウォールブロックに付与するHTMLのCSSクラス名
-	 *
 	 * ※ TypeScript側と整合性を取ること
 	 */
-	public const PAYWALL_BLOCK_CLASS_NAME = 'ae6cefc4-82d4-4220-840b-d74538ea7284';
+	public const PAYWALL_BLOCK_CSS_CLASS_NAME = 'ae6cefc4-82d4-4220-840b-d74538ea7284';
 
 	/**
 	 * PHPから渡される変数名
@@ -39,6 +46,10 @@ class WpConfig {
 
 	/** GraphQLのルート名 */
 	public const GRAPHQL_ROUTE = 'graphql';
+	/** GraphQLスキーマファイルへのパス */
+	public const GRAPHQL_SCHEMA_PATH = self::ROOT_DIR . '/includes/assets/graphql/schema/schema.graphql';
+	/** GraphQLスキーマのキャッシュファイル(PHPファイル)へのパス */
+	public const GRAPHQL_CACHE_PATH = self::ROOT_DIR . '/includes/cache/graphql-schema.php';
 
 	/** アクセストークンの有効期限(秒) */
 	public const ACCESS_TOKEN_EXPIRATION = 60 * 15; // 15分
@@ -60,11 +71,11 @@ class WpConfig {
 	public const REST_ROUTE_PAID_CONTENT = 'paid-content';
 
 	/** リフレッシュトークンを保存するクッキー名 */
-	public const COOKIE_NAME_REFRESH_TOKEN = self::REST_NAMESPACE . '_refresh_token';
+	public const COOKIE_NAME_REFRESH_TOKEN = 'baywall_refresh_token';
 	/** アクセストークンを保存するクッキー名 */
-	public const COOKIE_NAME_ACCESS_TOKEN = self::REST_NAMESPACE . '_access_token';
+	public const COOKIE_NAME_ACCESS_TOKEN = 'baywall_access_token';
 	/** 請求書トークンを保存するクッキー名 */
-	public const COOKIE_NAME_INVOICE_TOKEN = self::REST_NAMESPACE . '_invoice_token';
+	public const COOKIE_NAME_INVOICE_TOKEN = 'baywall_invoice_token';
 
 	/** Gutenbergブロックで設定された販売ネットワークカテゴリIDの属性名 */
 	public const BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID = 'sellingNetworkCategoryId';
@@ -90,6 +101,8 @@ class WpConfig {
 	public const ADMIN_ASSET_PATH = self::ROOT_DIR . '/' . self::ADMIN_BUILD_RELATIVE_DIR . '/index.asset.php';
 	/** 管理画面用『index.js』ファイルへの相対パス(URL生成に使用) */
 	public const ADMIN_JS_RELATIVE_PATH = self::ADMIN_BUILD_RELATIVE_DIR . '/index.js';
+	/** 管理画面アプリをマウントするルート要素のID */
+	public const ADMIN_ROOT_DIV_ID = 'b1196eb9-a07c-4c41-9d75-ee6830ce7321';
 	/** 管理画面スクリプトのハンドル名 */
 	public const HANDLE_NAME_ADMIN_SCRIPT = '4c452b4ecb0e32a9563a7a76a9d5ee2c'; // 『public/admin/index.js』(文字列)のMD5ハッシュ値
 

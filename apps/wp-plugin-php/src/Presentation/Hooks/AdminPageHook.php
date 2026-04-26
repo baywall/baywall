@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nTextProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
@@ -35,7 +35,7 @@ class AdminPageHook extends HookBase {
 
 		$capability    = 'manage_options'; // ユーザー権限(`manage_options`は、管理画面の`設定`へアクセス可能な権限)
 		$page_callback = function () {
-			$div_id = 'b1196eb9-a07c-4c41-9d75-ee6830ce7321';
+			$div_id = WpConfig::ADMIN_ROOT_DIV_ID;
 			echo '<div id="' . esc_attr( $div_id ) . '"></div>';
 		};
 

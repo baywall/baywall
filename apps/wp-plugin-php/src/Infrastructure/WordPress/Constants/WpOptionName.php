@@ -20,6 +20,8 @@ final class WpOptionName {
 	public const SCTA_URL = self::PREFIX . 'scta_url';
 	/** 一時停止状態 */
 	public const PAUSED = self::PREFIX . 'paused';
+	/** アンインストール時にデータを完全削除するかどうか */
+	public const PURGE_ON_UNINSTALL = self::PREFIX . 'purge_on_uninstall';
 	/** インストール時のサイトURL */
 	public const INSTALL_ORIGIN_URL = self::PREFIX . 'install_origin_url';
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
 use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
-use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Cornix\Serendipity\Core\Domain\Entity\InvoiceToken;
 use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;

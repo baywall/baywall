@@ -24,7 +24,7 @@ class RefreshTokenTable {
 	}
 
 	public function get( WpRefreshTokenHashString $wp_refresh_token_hash ): ?RefreshTokenTableRecord {
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			<<<SQL
 				SELECT `refresh_token_hash`, `wallet_address`, `expires_at`, `revoked_at`
 				FROM `{$this->table_name}`
@@ -90,7 +90,7 @@ class RefreshTokenTable {
 		$current_time = UnixTimestamp::now();
 
 		$this->wpdb->query(
-			$this->wpdb->prepare(
+			$this->wpdb->named_prepare(
 				<<<SQL
 					DELETE FROM `{$this->table_name}`
 					WHERE `created_at` < :target_time

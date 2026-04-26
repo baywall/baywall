@@ -3,89 +3,79 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PrefixProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpTableCoreName;
+use wpdb;
 
 class TableNameProvider {
 
-	private PrefixProvider $prefix_provider;
+	private string $prefix;
 
-	public function __construct( PrefixProvider $prefix_provider ) {
-		$this->prefix_provider = $prefix_provider;
-	}
-
-	// 定数の値(テーブル名)は変更しないでください
-	// テーブル作成済みの実環境と不整合が発生し、テストは通るが実環境でエラーが発生する、という状況になります。
-
-	/**
-	 * 指定されたテーブル名に接頭辞をつけて返します
-	 * 作成するテーブル名はこのメソッドを使用してください
-	 */
-	private function addPrefix( string $table_name ): string {
-		return $this->prefix_provider->tableName() . $table_name;
+	public function __construct( wpdb $wpdb ) {
+		$this->prefix = $wpdb->prefix;
 	}
 
 	/** 発行した請求書情報を記録するテーブル名 */
 	public function invoice(): string {
-		return $this->addPrefix( 'invoice' );
+		return $this->prefix . WpTableCoreName::INVOICE;
 	}
 
 	/** 発行した請求書トークンを記録するテーブル名 */
 	public function invoiceToken(): string {
-		return $this->addPrefix( 'invoice_token' );
+		return $this->prefix . WpTableCoreName::INVOICE_TOKEN;
 	}
 
 	/** ペイウォール解除時のトランザクションに関するデータを記録するテーブル名 */
 	public function unlockPaywallTransaction(): string {
-		return $this->addPrefix( 'unlock_paywall_transaction' );
+		return $this->prefix . WpTableCoreName::UNLOCK_PAYWALL_TRANSACTION;
 	}
 
 	/** ペイウォール解除時のトークン転送イベントの内容を記録するテーブル名 */
 	public function unlockPaywallTransferEvent(): string {
-		return $this->addPrefix( 'unlock_paywall_transfer_event' );
+		return $this->prefix . WpTableCoreName::UNLOCK_PAYWALL_TRANSFER_EVENT;
 	}
 
 	/** Appコントラクトの情報を記録するテーブル名 */
 	public function appContract(): string {
-		return $this->addPrefix( 'app_contract' );
+		return $this->prefix . WpTableCoreName::APP_CONTRACT;
 	}
 
 	/** チェーンの情報を記録するテーブル名 */
 	public function chain(): string {
-		return $this->addPrefix( 'chain' );
+		return $this->prefix . WpTableCoreName::CHAIN;
 	}
 
 	/** (支払時に使用する)トークンの情報を記録するテーブル名 */
 	public function token(): string {
-		return $this->addPrefix( 'token' );
+		return $this->prefix . WpTableCoreName::TOKEN;
 	}
 
 	/** Oracleの定義を記録するテーブル名 */
 	public function oracle(): string {
-		return $this->addPrefix( 'oracle' );
+		return $this->prefix . WpTableCoreName::ORACLE;
 	}
 
 	public function paidContent(): string {
-		return $this->addPrefix( 'paid_content' );
+		return $this->prefix . WpTableCoreName::PAID_CONTENT;
 	}
 
 	public function serverSigner(): string {
-		return $this->addPrefix( 'server_signer' );
+		return $this->prefix . WpTableCoreName::SERVER_SIGNER;
 	}
 
 	public function seller(): string {
-		return $this->addPrefix( 'seller' );
+		return $this->prefix . WpTableCoreName::SELLER;
 	}
 
 	/** クロール済みのブロックを記録するテーブル名 */
 	public function crawledBlock(): string {
-		return $this->addPrefix( 'crawled_block' );
+		return $this->prefix . WpTableCoreName::CRAWLED_BLOCK;
 	}
 
 	public function refreshToken(): string {
-		return $this->addPrefix( 'refresh_token' );
+		return $this->prefix . WpTableCoreName::REFRESH_TOKEN;
 	}
 
 	public function erc4361Nonce(): string {
-		return $this->addPrefix( 'erc4361_nonce' );
+		return $this->prefix . WpTableCoreName::ERC4361_NONCE;
 	}
 }

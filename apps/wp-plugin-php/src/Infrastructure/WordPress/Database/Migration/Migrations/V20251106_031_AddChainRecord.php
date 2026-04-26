@@ -7,21 +7,21 @@ use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
-use Cornix\Serendipity\Core\Infrastructure\System\Environment;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\ChainIdConstants;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpEnvironment;
 
 class V20251106_031_AddChainRecord extends MigrationBase {
 
 	private TransactionService $transaction_service;
 	private MyWpdb $wpdb;
 	private string $table_name;
-	private Environment $environment;
+	private WpEnvironment $environment;
 
-	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider, Environment $environment ) {
+	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider, WpEnvironment $environment ) {
 		$this->transaction_service = $transaction_service;
 		$this->wpdb                = $wpdb;
 		$this->table_name          = $table_name_provider->chain();
@@ -118,7 +118,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 	}
 
 	public function down(): void {
-		$this->wpdb->dbh->query( "TRUNCATE TABLE `{$this->table_name}`;" );
+		$this->wpdb->query( "TRUNCATE TABLE `{$this->table_name}`;" );
 	}
 
 	private function insert( int $chain_id_value, string $name, int $network_category_id, ?string $rpc_url_value, string $block_explorer_url ): void {

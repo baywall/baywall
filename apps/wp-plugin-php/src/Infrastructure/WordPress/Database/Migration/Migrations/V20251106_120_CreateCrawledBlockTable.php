@@ -32,10 +32,10 @@ class V20251106_120_CreateCrawledBlockTable extends MigrationBase {
 				PRIMARY KEY (`chain_id`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
-		$this->wpdb->dbh->query( $sql );
+		$this->wpdb->query( $sql );
 	}
 
 	public function down(): void {
-		$this->wpdb->dbh->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
+		$this->wpdb->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
 	}
 }

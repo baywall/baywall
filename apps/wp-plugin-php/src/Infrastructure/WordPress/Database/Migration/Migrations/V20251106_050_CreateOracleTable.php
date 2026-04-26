@@ -36,10 +36,10 @@ class V20251106_050_CreateOracleTable extends MigrationBase {
 				UNIQUE KEY `uq_{$this->table_name}_C269159C` (`chain_id`, `base_symbol`, `quote_symbol`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
-		$this->wpdb->dbh->query( $sql );
+		$this->wpdb->query( $sql );
 	}
 
 	public function down(): void {
-		$this->wpdb->dbh->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
+		$this->wpdb->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
 	}
 }

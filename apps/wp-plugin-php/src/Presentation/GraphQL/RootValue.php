@@ -16,6 +16,7 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveOracle;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveOracles;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolvePaused;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolvePost;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolvePurgeOnUninstall;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSalesHistories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveChain;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSaveOracle;
@@ -68,6 +69,7 @@ class RootValue {
 			'nativeToken'                        => ResolveNativeToken::class,
 			'paused'                             => ResolvePaused::class,
 			'sctaUrl'                            => ResolveSctaUrl::class,
+			'purgeOnUninstall'                   => ResolvePurgeOnUninstall::class,
 			'installOriginUrlChanged'            => ResolveInstallOriginUrlChanged::class,
 
 			// Mutation

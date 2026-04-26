@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\System;
+namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 
 /**
  * インストールされている環境から情報を取得するクラス。
  * マシンに配置されているファイルやインストール済みのデータベースなど、実行環境によって異なる情報を取得する場合に使用します。
  */
-class Environment {
+class WpEnvironment {
 
 	/** developmentモードを判定するためのディレクトリパス */
-	private const DEVELOPMENT_MODE_CHECK_DIR = Config::ROOT_DIR . '/node_modules';
+	private const DEVELOPMENT_MODE_CHECK_DIR = WpConfig::ROOT_DIR . '/node_modules';
 
 	/**
 	 * 本番環境かどうかを取得します。

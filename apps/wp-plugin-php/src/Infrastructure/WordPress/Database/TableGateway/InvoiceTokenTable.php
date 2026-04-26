@@ -24,7 +24,7 @@ class InvoiceTokenTable {
 	}
 
 	public function get( WpInvoiceTokenHashString $wp_invoice_token_hash ): ?InvoiceTokenTableRecord {
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			<<<SQL
 				SELECT `invoice_token_hash`, `invoice_id`, `expires_at`, `revoked_at`
 				FROM `{$this->table_name}`
@@ -93,7 +93,7 @@ class InvoiceTokenTable {
 		$current_time = UnixTimestamp::now();
 
 		$this->wpdb->query(
-			$this->wpdb->prepare(
+			$this->wpdb->named_prepare(
 				<<<SQL
 					DELETE FROM `{$this->table_name}`
 					WHERE `created_at` < :target_time

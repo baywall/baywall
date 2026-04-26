@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database;
 
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Util\NamedPlaceholder;
-use mysqli;
-use mysqli_result;
 use RuntimeException;
 use wpdb;
 
@@ -14,25 +12,39 @@ use wpdb;
  */
 class MyWpdb {
 	private wpdb $wpdb;
-	public MyMySQLi $dbh;
 	private NamedPlaceholder $named_placeholder;
 	public string $posts;
 
 	public function __construct( wpdb $wpdb ) {
 		$this->wpdb              = $wpdb;
-		$this->dbh               = new MyMySQLi( $wpdb->dbh );
 		$this->named_placeholder = new NamedPlaceholder( $wpdb );
 		$this->posts             = $wpdb->posts;
 	}
 
 	/**
+	 * wpdb->prepare
+	 *
+	 * @deprecated Use named_prepare instead.
+	 * @param string $query
+	 * @param mixed  ...$args
+	 * @return string|null
+	 */
+	public function prepare( string $query, ...$args ) {
+		// wpdb->prepareは、WordPress6.2以降で`%i`(テーブル名やフィールド名)が使用可能。
+		// 本プラグインのサポートバージョンは6.6以降(2026年4月26日現在)のため、`%i`のチェックは不要。
+		// @see https://developer.wordpress.org/reference/classes/wpdb/prepare/#changelog
+		return $this->wpdb->prepare( $query, ...$args );
+	}
+
+	/**
 	 * Named placeholder を使用して SQL クエリを構築します
+	 * ※ prepareと異なり、`null`は`NULL`として扱われます。（prepareは`null`を空文字として扱う）
 	 * ※プレースホルダは、キーがコロンで始まる形式（例: `:key`）で指定してください。
 	 *
 	 * @param string              $query
 	 * @param array<string,mixed> $args プレースホルダに対応する値の連想配列
 	 */
-	public function prepare( string $query, array $args ): string {
+	public function named_prepare( string $query, array $args ): string {
 		return $this->named_placeholder->prepare( $query, $args );
 	}
 
@@ -40,16 +52,14 @@ class MyWpdb {
 	 * wpdb->query
 	 *
 	 * @param string $query
-	 * @return int
+	 * @return int|true
 	 */
-	public function query( string $query ): int {
+	public function query( string $query ) {
 		$result = $this->wpdb->query( $query );
 		if ( $result === false ) {
 			throw new RuntimeException( "[D76677B0] SQL query failed: {$query}. " . $this->wpdb->last_error );
 		}
-		// CREATE,ALTER等の時はtrueが返ってくるが、DDLは$this->dbh->queryで実行するため、
-		// ここは必ずintになる
-		assert( is_int( $result ), "[4E471767] {$result}" );
+		assert( $result === true || is_int( $result ), "[4E471767] {$result}" );
 		return $result;
 	}
 
@@ -144,33 +154,5 @@ class MyWpdb {
 	 */
 	public function get_charset_collate(): string {
 		return $this->wpdb->get_charset_collate();
-	}
-}
-
-/**
- * mysqliクラスのような振る舞いをする独自クラス
- */
-class MyMySQLi {
-	private mysqli $mysqli;
-
-	public function __construct( mysqli $mysqli ) {
-		$this->mysqli = $mysqli;
-	}
-
-	/**
-	 * Performs a query on the database
-	 *
-	 * @param string $query
-	 * @param int    $result_mode
-	 * @return mysqli_result|bool
-	 * @throws RuntimeException
-	 */
-	public function query( string $query, int $result_mode = MYSQLI_STORE_RESULT ) {
-		$result = $this->mysqli->query( $query, $result_mode );
-		if ( $result === false ) {
-			throw new RuntimeException( "[2ACD4F6A] SQL query failed: {$query}. " . $this->mysqli->error );
-		}
-		assert( $result instanceof mysqli_result || $result === true, '[2D4F8743] Invalid query result type.' );
-		return $result;
 	}
 }

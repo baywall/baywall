@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
 use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
-use Cornix\Serendipity\Core\Constant\WpConfig;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
 
 class WpAccessTokenCookieProvider implements AccessTokenCookieProvider {

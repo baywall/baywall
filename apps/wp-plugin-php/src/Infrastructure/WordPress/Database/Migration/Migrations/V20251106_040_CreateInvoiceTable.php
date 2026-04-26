@@ -45,10 +45,10 @@ class V20251106_040_CreateInvoiceTable extends MigrationBase {
 				KEY `idx_{$this->table_name}_2068EC67` (`post_id`, `customer_address`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
-		$this->wpdb->dbh->query( $sql );
+		$this->wpdb->query( $sql );
 	}
 
 	public function down(): void {
-		$this->wpdb->dbh->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
+		$this->wpdb->query( "DROP TABLE IF EXISTS `{$this->table_name}`;" );
 	}
 }

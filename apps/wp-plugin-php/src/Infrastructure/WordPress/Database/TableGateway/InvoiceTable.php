@@ -45,13 +45,13 @@ class InvoiceTable {
 
 		$where_clauses = array();
 		if ( ! is_null( $condition->invoiceId() ) ) {
-			$where_clauses[] = $this->wpdb->prepare( 'id = :invoice_id', array( ':invoice_id' => $condition->invoiceId()->ulid() ) );
+			$where_clauses[] = $this->wpdb->named_prepare( 'id = :invoice_id', array( ':invoice_id' => $condition->invoiceId()->ulid() ) );
 		}
 		if ( ! is_null( $condition->postId() ) ) {
-			$where_clauses[] = $this->wpdb->prepare( 'post_id = :post_id', array( ':post_id' => $condition->postId()->value() ) );
+			$where_clauses[] = $this->wpdb->named_prepare( 'post_id = :post_id', array( ':post_id' => $condition->postId()->value() ) );
 		}
 		if ( ! is_null( $condition->customerAddress() ) ) {
-			$where_clauses[] = $this->wpdb->prepare( 'customer_address = :customer_address', array( ':customer_address' => $condition->customerAddress()->value() ) );
+			$where_clauses[] = $this->wpdb->named_prepare( 'customer_address = :customer_address', array( ':customer_address' => $condition->customerAddress()->value() ) );
 		}
 
 		$sql     = $where_clauses ? $sql . ' WHERE ' . implode( ' AND ', $where_clauses ) : $sql;
@@ -80,7 +80,7 @@ class InvoiceTable {
 				`customer_address` = VALUES(`customer_address`)
 		SQL;
 
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			$sql,
 			array(
 				':invoice_id'            => $invoice->id()->ulid(),

@@ -50,7 +50,7 @@ class OracleTable {
 			VALUES ( :chain_id, :address, :base_symbol, :quote_symbol )
 		SQL;
 
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			$sql,
 			array(
 				':chain_id'     => $oracle->chainId()->value(),

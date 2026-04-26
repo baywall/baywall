@@ -113,7 +113,7 @@ class SalesHistoryView {
 		// 条件が指定されている場合はWHERE句を追加
 		$where_conditions = array();
 		if ( $filter_invoice_id !== null ) {
-			$where_conditions[] = 't1.invoice_id = ' . $this->wpdb->prepare( ':invoice_id', array( ':invoice_id' => (string) $filter_invoice_id ) );
+			$where_conditions[] = 't1.invoice_id = ' . $this->wpdb->named_prepare( ':invoice_id', array( ':invoice_id' => (string) $filter_invoice_id ) );
 		}
 
 		if ( ! empty( $where_conditions ) ) {
@@ -147,7 +147,7 @@ class SalesHistoryView {
 				t2.post_id = :post_id AND t2.customer_address = :customer_address
 		SQL;
 
-		$sql    = $this->wpdb->prepare(
+		$sql    = $this->wpdb->named_prepare(
 			$sql,
 			array(
 				':post_id'          => $post_id->value(),

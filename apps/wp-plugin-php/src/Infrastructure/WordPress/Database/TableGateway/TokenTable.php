@@ -55,7 +55,7 @@ class TokenTable {
 				`is_payable` = :is_payable
 		SQL;
 
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			$sql,
 			array(
 				':chain_id'   => $token->chainId()->value(),

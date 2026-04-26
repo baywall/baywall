@@ -98,6 +98,8 @@
   "site.advanced_settings": "Advanced settings",
   "site.paused": "Maintenance mode",
   "site.paused_helper_message": "Disables the plugin's transaction features.",
+  "site.purge_on_uninstall": "Purge data on uninstall",
+  "site.purge_on_uninstall_warning_message": "All data, including purchaser purchase records and paid content of articles, will be destroyed. It cannot be restored even if the plugin is reinstalled.",
   "site.scta_url": "URL for the page containing disclosures required under the Specified Commercial Transactions Act",
   "site.scta_url_domain_mismatch_message": "The domain does not match the current site.",
   "site.scta_url_helper_message": "URL for the “Specified Commercial Transactions Act” link displayed near the payment button",

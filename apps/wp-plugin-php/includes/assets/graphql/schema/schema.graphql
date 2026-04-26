@@ -66,6 +66,9 @@ type Query {
 	# 「特定商取引法に基づく表記」のURL【ゲスト】
 	sctaUrl: String
 
+	# アンインストール時にデータを完全削除するかどうか【管理者】
+	purgeOnUninstall: Boolean!
+
 	# インストール時のURLと現在のサイトURLが変更されたかどうか【ゲスト】
 	installOriginUrlChanged: Boolean!
 }
@@ -95,7 +98,13 @@ type Mutation {
 	saveToken(chainId: Int!, address: String!, isPayable: Boolean!): Boolean!
 
 	# サイト設定を保存【管理者】
-	saveSiteSettings(paused: Boolean!, sctaUrl: String): Boolean!
+	saveSiteSettings(input: SaveSiteSettingsInput!): Boolean!
+}
+
+input SaveSiteSettingsInput {
+	paused: Boolean!
+	sctaUrl: String
+	purgeOnUninstall: Boolean!
 }
 
 # 投稿に関する情報

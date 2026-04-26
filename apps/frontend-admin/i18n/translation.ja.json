@@ -98,6 +98,8 @@
   "site.advanced_settings": "高度な設定",
   "site.paused": "メンテナンスモード",
   "site.paused_helper_message": "プラグインの取引機能を停止します。",
+  "site.purge_on_uninstall": "アンインストール時にデータを完全削除",
+  "site.purge_on_uninstall_warning_message": "購入者の購入記録、記事の有料販売部分等のデータはすべて破棄されます。プラグインを再インストールしても復元することはできません。",
   "site.scta_url": "特定商取引法に基づく表記ページのURL",
   "site.scta_url_domain_mismatch_message": "現在のサイトのドメインと一致しません。",
   "site.scta_url_helper_message": "支払ボタンの近くに表示される「特定商取引法に基づく表記」リンクのURL",

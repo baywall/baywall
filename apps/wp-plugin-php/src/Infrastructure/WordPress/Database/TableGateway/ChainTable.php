@@ -51,7 +51,7 @@ class ChainTable {
 				`confirmations` = VALUES(`confirmations`),
 				`block_explorer_url` = VALUES(`block_explorer_url`)
 		SQL;
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb->named_prepare(
 			$sql,
 			array(
 				':chain_id'            => $chain->id()->value(),
