@@ -21,6 +21,12 @@ class I18nTextProvider {
 		return __( 'Testnet', 'baywall' );
 	}
 
+	/** 設定 */
+	public function settings(): string {
+		// 設定はデフォルトのテキストドメインを使用（第二引数の指定なし）
+		return __( 'Settings' );
+	}
+
 	/** プライベートネット */
 	public function privatenet(): string {
 		return __( 'Privatenet', 'baywall' );

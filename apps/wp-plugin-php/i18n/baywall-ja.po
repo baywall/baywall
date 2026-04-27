@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baywall 0.0.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-plugin-php\n"
-"POT-Creation-Date: 2026-03-08T11:36:24+00:00\n"
+"POT-Creation-Date: 2026-03-08T12:41:35+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,8 @@ msgstr "baywall"
 
 #. Description of the plugin
 #: baywall.php
-msgid "You can set up a paywall for cryptocurrency or stablecoin payments."
-msgstr "暗号資産やステーブルコイン決済のペイウォールを設置できます。"
+msgid "You can set up a paywall for blockchain payments."
+msgstr "ブロックチェーン決済のペイウォールを設置できます。"
 
 #. Author of the plugin
 #: baywall.php
@@ -38,6 +38,6 @@ msgstr "Mainnet"
 msgid "Testnet"
 msgstr "Testnet"
 
-#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:26
+#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:32
 msgid "Privatenet"
 msgstr "Privatenet"

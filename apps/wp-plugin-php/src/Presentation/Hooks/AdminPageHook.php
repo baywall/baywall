@@ -25,6 +25,14 @@ class AdminPageHook extends HookBase {
 
 		// 管理画面のスクリプト読み込み。
 		add_action( 'admin_enqueue_scripts', array( $this, 'addActionAdminEnqueueScripts' ) );
+
+		// プラグイン一覧のアクションリンクに`設定`を追加。
+		$plugin_file_path = realpath( __DIR__ . '/../../../baywall.php' );
+		if ( $plugin_file_path === false ) {
+			throw new \RuntimeException( '[B3E5333F] Failed to resolve plugin file path.' );
+		}
+		$hook_name = 'plugin_action_links_' . plugin_basename( $plugin_file_path );
+		add_filter( $hook_name, array( $this, 'addFilterPluginActionLinks' ) );
 	}
 
 	public function addActionAdminMenu(): void {
@@ -77,5 +85,22 @@ class AdminPageHook extends HookBase {
 
 		// インラインスクリプトを追加
 		$php_var_exporter->addInlineScript( $handle_name );
+	}
+
+	/**
+	 * プラグイン一覧のアクションリンクに`設定`を追加します。
+	 *
+	 * @param string[] $actions
+	 * @return string[]
+	 */
+	public function addFilterPluginActionLinks( array $actions ): array {
+		// @see (example) https://developer.wordpress.org/reference/hooks/plugin_action_links_plugin_file/#more-information
+
+		$i18n          = $this->container->get( I18nTextProvider::class );
+		$slug_provider = $this->container->get( SlugProvider::class );
+		$settings_url  = admin_url( 'admin.php?page=' . $slug_provider->adminMenuRoot() );
+
+		$settings_link = '<a href="' . esc_url( $settings_url ) . '">' . esc_html( $i18n->settings() ) . '</a>';
+		return array_merge( array( 'settings' => $settings_link ), $actions );
 	}
 }

@@ -22,7 +22,7 @@ msgstr "baywall"
 
 #. Description of the plugin
 #: baywall.php
-msgid "You can set up a paywall for cryptocurrency or stablecoin payments."
+msgid "You can set up a paywall for blockchain payments."
 msgstr ""
 
 #. Author of the plugin
@@ -38,6 +38,7 @@ msgstr "Mainnet"
 msgid "Testnet"
 msgstr "Testnet"
 
-#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:26
+#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:31
+#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:32
 msgid "Privatenet"
 msgstr "Privatenet"
