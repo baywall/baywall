@@ -100,7 +100,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 						ChainIdConstants::PRIVATENET1,
 						'Privatenet1',
 						NetworkCategoryIdConstants::PRIVATENET,
-						$is_development ? 'http://privatenet-1.test' : 'http://tests-privatenet-1.test',
+						$is_development ? 'http://privatenet-1' : 'http://tests-privatenet-1',
 						'http://localhost:10101'    // ブロックエクスプローラーURL
 					);
 
@@ -109,7 +109,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 						ChainIdConstants::PRIVATENET2,
 						'Privatenet2',
 						NetworkCategoryIdConstants::PRIVATENET,
-						$is_development ? 'http://privatenet-2.test' : 'http://tests-privatenet-2.test',
+						$is_development ? 'http://privatenet-2' : 'http://tests-privatenet-2',
 						'http://localhost:10102'    // ブロックエクスプローラーURL
 					);
 				}
