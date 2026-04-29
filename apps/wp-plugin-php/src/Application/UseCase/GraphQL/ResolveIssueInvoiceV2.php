@@ -10,6 +10,7 @@ use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Entity\ServerSigner;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
+use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\InvoiceService;
@@ -30,6 +31,7 @@ class ResolveIssueInvoiceV2 {
 	private UserAccessChecker $user_access_checker;
 	private TransactionService $transaction_service;
 	private InvoiceService $invoice_service;
+	private PostRepository $post_repository;
 	private TokenRepository $token_repository;
 	private ServerSignerRepository $server_signer_repository;
 	private InitCrawledBlockNumber $init_crawled_block_number;
@@ -42,6 +44,7 @@ class ResolveIssueInvoiceV2 {
 		UserAccessChecker $user_access_checker,
 		TransactionService $transaction_service,
 		InvoiceService $invoice_service,
+		PostRepository $post_repository,
 		TokenRepository $token_repository,
 		ServerSignerRepository $server_signer_repository,
 		InitCrawledBlockNumber $init_crawled_block_number,
@@ -53,6 +56,7 @@ class ResolveIssueInvoiceV2 {
 		$this->user_access_checker           = $user_access_checker;
 		$this->transaction_service           = $transaction_service;
 		$this->invoice_service               = $invoice_service;
+		$this->post_repository               = $post_repository;
 		$this->token_repository              = $token_repository;
 		$this->server_signer_repository      = $server_signer_repository;
 		$this->init_crawled_block_number     = $init_crawled_block_number;
@@ -97,6 +101,14 @@ class ResolveIssueInvoiceV2 {
 
 				// 請求書を作成
 				$invoice = $this->invoice_service->issueInvoice( $customer_address, $post_id, $payment_token );
+
+				// 販売価格が0でないのに支払額が0になっている場合はエラー（fail safe）
+				$post           = $this->post_repository->get( $post_id );
+				$selling_amount = $post->sellingPrice()->amount();
+				$payment_amount = $invoice->paymentAmount();
+				if ( ! $selling_amount->isZero() && $payment_amount->isZero() ) {
+					throw new \RuntimeException( "[9E978B09] Payment amount is zero for non-zero selling price. post_id: {$post_id}, payment_token: {$payment_token}, payment_amount: {$payment_amount}" );
+				}
 
 				// 署名対象となるメッセージを作成
 				$signing_message_bytes = $this->createSigningMessageBytes( $signer, $invoice );
