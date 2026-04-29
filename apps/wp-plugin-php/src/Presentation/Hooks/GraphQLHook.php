@@ -12,7 +12,9 @@ use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Infrastructure\GraphQL\PluginSchemaProvider;
 use Cornix\Serendipity\Core\Infrastructure\GraphQL\Rule\MutationFieldLimitRule;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\RestPropertyProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpNonceService;
 use GraphQL\GraphQL;
 use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\DisableIntrospection;
@@ -44,11 +46,30 @@ class GraphQLHook extends HookBase {
 			array(
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->callback( $request ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => fn ( \WP_REST_Request $request ) => $this->permissionCallback( $request ),
 			)
 		);
 
 		assert( $success );
+	}
+
+	/**
+	 * GraphQL RESTエンドポイントの実行可否を判定します。
+	 *
+	 * @return true|WP_Error
+	 */
+	private function permissionCallback( \WP_REST_Request $request ) {
+		$logger              = $this->container->get( AppLogger::class );
+		$nonce_service       = $this->container->get( WpNonceService::class );
+		$exception_converter = $this->container->get( WpExceptionConverter::class );
+
+		try {
+			$nonce_service->checkRequestHeader( $request );
+			return true;
+		} catch ( \Throwable $e ) {
+			$logger->debug( $e );
+			return $exception_converter->toWpError( $e );
+		}
 	}
 
 	public function callback( \WP_REST_Request $request ) {

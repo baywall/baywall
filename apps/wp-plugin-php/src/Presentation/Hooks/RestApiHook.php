@@ -6,15 +6,15 @@ use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Application\UseCase\GetPaidContent;
 use Cornix\Serendipity\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
 use Cornix\Serendipity\Core\Application\UseCase\RefreshAccessToken;
+use Cornix\Serendipity\Core\Constant\HttpStatus;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\ForbiddenException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
 use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpNonceService;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
-use InvalidArgumentException;
 use Throwable;
 use WP_REST_Response;
 
@@ -47,7 +47,7 @@ class RestApiHook extends HookBase {
 			array(
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->authRefreshHandler( $request ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => fn ( \WP_REST_Request $request ) => $this->permissionCallback( $request ),
 			)
 		);
 		assert( $success );
@@ -59,7 +59,7 @@ class RestApiHook extends HookBase {
 			array(
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->authTokenInvoiceHandler( $request ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => fn ( \WP_REST_Request $request ) => $this->permissionCallback( $request ),
 			)
 		);
 		assert( $success );
@@ -71,10 +71,30 @@ class RestApiHook extends HookBase {
 			array(
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->paidContentHandler( $request ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => fn ( \WP_REST_Request $request ) => $this->permissionCallback( $request ),
 			)
 		);
 		assert( $success );
+	}
+
+
+	/**
+	 * REST エンドポイントの実行可否を判定します。
+	 *
+	 * @return true|WP_Error
+	 */
+	private function permissionCallback( \WP_REST_Request $request ) {
+		$logger              = $this->container->get( AppLogger::class );
+		$nonce_service       = $this->container->get( WpNonceService::class );
+		$exception_converter = $this->container->get( WpExceptionConverter::class );
+
+		try {
+			$nonce_service->checkRequestHeader( $request );
+			return true;
+		} catch ( \Throwable $e ) {
+			$logger->debug( $e );
+			return $exception_converter->toWpError( $e );
+		}
 	}
 
 	public function authRefreshHandler( \WP_REST_Request $request ) {
@@ -90,20 +110,17 @@ class RestApiHook extends HookBase {
 			}
 
 			$this->container->get( RefreshAccessToken::class )->handle( $refresh_token_value );
-			return new WP_REST_Response( array(), self::HTTP_STATUS_200_OK );
-		} catch ( UnauthorizedException $e ) {
-			$this->container->get( AppLogger::class )->debug( $e );
-			// リフレッシュトークンが無効な場合、401エラーを返す
-			return new WP_REST_Response(
-				array( 'message' => 'Unauthorized' ),
-				self::HTTP_STATUS_401_UNAUTHORIZED
-			);
+			return new WP_REST_Response( array(), HttpStatus::OK );
 		} catch ( Throwable $e ) {
-			$this->container->get( AppLogger::class )->error( $e );
-			return new WP_REST_Response(
-				array( 'message' => 'Internal Server Error' ),
-				self::HTTP_STATUS_500_INTERNAL_SERVER_ERROR
-			);
+			if ( $e instanceof UnauthorizedException ) {
+				// アクセストークンが存在しない状態でも
+				// 初回アクセス時にアクセスするためログレベルを抑制
+				$this->container->get( AppLogger::class )->debug( $e );
+			} else {
+				$this->container->get( AppLogger::class )->error( $e );
+			}
+
+			return $this->container->get( WpExceptionConverter::class )->toWpResponse( $e );
 		}
 	}
 
@@ -120,25 +137,10 @@ class RestApiHook extends HookBase {
 			}
 
 			$this->container->get( IssueAccessTokenByInvoiceToken::class )->handle( $invoice_token_string_value );
-			return new WP_REST_Response( array(), self::HTTP_STATUS_200_OK );
-		} catch ( UnauthorizedException $e ) {
-			$this->container->get( AppLogger::class )->debug( $e );
-			return new WP_REST_Response(
-				array( 'message' => 'Unauthorized' ),
-				self::HTTP_STATUS_401_UNAUTHORIZED
-			);
-		} catch ( PaymentRequiredException $e ) {
-			$this->container->get( AppLogger::class )->debug( $e );
-			return new WP_REST_Response(
-				array( 'message' => 'Payment Required' ),
-				self::HTTP_STATUS_402_PAYMENT_REQUIRED
-			);
+			return new WP_REST_Response( array(), HttpStatus::OK );
 		} catch ( Throwable $e ) {
 			$this->container->get( AppLogger::class )->error( $e );
-			return new WP_REST_Response(
-				array( 'message' => 'Internal Server Error' ),
-				self::HTTP_STATUS_500_INTERNAL_SERVER_ERROR
-			);
+			return $this->container->get( WpExceptionConverter::class )->toWpResponse( $e );
 		}
 	}
 
@@ -149,38 +151,11 @@ class RestApiHook extends HookBase {
 			$paid_content = $this->container->get( GetPaidContent::class )->handle( $post_id );
 			return new WP_REST_Response(
 				array( 'paidContent' => $paid_content ),
-				self::HTTP_STATUS_200_OK
-			);
-		} catch ( BadRequestException | InvalidArgumentException $e ) {
-			$this->container->get( AppLogger::class )->debug( $e );
-			return new WP_REST_Response(
-				array( 'message' => 'Bad Request' ),
-				self::HTTP_STATUS_400_BAD_REQUEST
-			);
-		} catch ( UnauthorizedException $e ) {
-			$this->container->get( AppLogger::class )->debug( $e );
-			return new WP_REST_Response(
-				array( 'message' => 'Unauthorized' ),
-				self::HTTP_STATUS_401_UNAUTHORIZED
-			);
-		} catch ( PaymentRequiredException $e ) {
-			$this->container->get( AppLogger::class )->debug( $e );
-			return new WP_REST_Response(
-				array( 'message' => 'Payment Required' ),
-				self::HTTP_STATUS_402_PAYMENT_REQUIRED
-			);
-		} catch ( ForbiddenException $e ) {
-			$this->container->get( AppLogger::class )->debug( $e );
-			return new WP_REST_Response(
-				array( 'message' => 'Forbidden' ),
-				self::HTTP_STATUS_403_FORBIDDEN
+				HttpStatus::OK
 			);
 		} catch ( Throwable $e ) {
 			$this->container->get( AppLogger::class )->error( $e );
-			return new WP_REST_Response(
-				array( 'message' => 'Internal Server Error' ),
-				self::HTTP_STATUS_500_INTERNAL_SERVER_ERROR
-			);
+			return $this->container->get( WpExceptionConverter::class )->toWpResponse( $e );
 		}
 	}
 
