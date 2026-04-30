@@ -18,6 +18,7 @@ class OracleRateProvider implements RateProvider {
 	private OracleClientFactory $oracle_client_factory;
 	private OracleResolver $oracle_resolver;
 
+	/** @inheritdoc */
 	public function getRate( SymbolPair $symbol_pair ): Rate {
 		// 接続可能なオラクルを取得
 		$oracle = $this->oracle_resolver->resolveRateOracle( $symbol_pair );
@@ -35,5 +36,12 @@ class OracleRateProvider implements RateProvider {
 
 		$rate_amount = Amount::fromBaseUnitAndDecimals( $answer->toString(), $decimals );
 		return Rate::from( $symbol_pair, $rate_amount );
+	}
+
+	/** @inheritdoc */
+	public function supports( SymbolPair $symbol_pair ): bool {
+		// 接続可能なオラクルを取得
+		$oracle = $this->oracle_resolver->resolveRateOracle( $symbol_pair );
+		return $oracle !== null;
 	}
 }

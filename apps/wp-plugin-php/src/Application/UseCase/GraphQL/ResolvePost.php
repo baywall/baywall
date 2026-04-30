@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
+use Cornix\Serendipity\Core\Domain\Service\PriceExchangeService;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
@@ -23,6 +24,7 @@ class ResolvePost {
 	private ChainRepository $chain_repository;
 	private TokenRepository $token_repository;
 	private PostTitleProvider $post_title_provider;
+	private PriceExchangeService $price_exchange_service;
 
 	public function __construct(
 		AppLogger $logger,
@@ -30,14 +32,16 @@ class ResolvePost {
 		PostRepository $post_repository,
 		ChainRepository $chain_repository,
 		TokenRepository $token_repository,
-		PostTitleProvider $post_title_provider
+		PostTitleProvider $post_title_provider,
+		PriceExchangeService $price_exchange_service
 	) {
-		$this->logger              = $logger;
-		$this->user_access_checker = $user_access_checker;
-		$this->post_repository     = $post_repository;
-		$this->chain_repository    = $chain_repository;
-		$this->token_repository    = $token_repository;
-		$this->post_title_provider = $post_title_provider;
+		$this->logger                 = $logger;
+		$this->user_access_checker    = $user_access_checker;
+		$this->post_repository        = $post_repository;
+		$this->chain_repository       = $chain_repository;
+		$this->token_repository       = $token_repository;
+		$this->post_title_provider    = $post_title_provider;
+		$this->price_exchange_service = $price_exchange_service;
 	}
 
 	public function handle( array $root_value, array $args ) {
@@ -95,10 +99,20 @@ class ResolvePost {
 		// 各チェーンに対して支払可能なトークンを取得
 		$all_tokens = $this->token_repository->all();
 		foreach ( $payable_chains as $chain ) {
+			// 支払可能と設定されているトークンを抽出
 			$payable_tokens = ( new TokensFilter() )
 				->byChainId( $chain->id() )
 				->byIsPayable( true )
 				->apply( $all_tokens );
+
+			// そのうち、レート変換が可能なトークンのみを残す
+			$payable_tokens = array_filter(
+				$payable_tokens,
+				fn( Token $token ) => $this->price_exchange_service->exchangeable(
+					$post->sellingPrice(),
+					$token->symbol()
+				)
+			);
 
 			array_push( $result, ...$payable_tokens );
 		}
