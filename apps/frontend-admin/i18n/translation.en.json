@@ -113,7 +113,7 @@
   "tokens.enter_symbol_placeholder_message": "Enter symbol (e.g. JPY, USDC, ...)",
   "tokens.handling_fee_price": "Handling Fee Price",
   "tokens.is_payable_simple_explanation": "Specifies whether site visitors can pay using this token.",
-  "tokens.native_token_warning_message": "To enhance security, native tokens may be restricted in the future. Please consider using wrapped tokens to mitigate risks.",
+  "tokens.native_token_warning_message": "For security enhancement, native tokens may be restricted in the future. Please consider using wrapped tokens instead.",
   "tokens.payable": "Payable",
   "tokens.register_rpc_url_if_network_not_displayed_message": "Register the RPC URL if the network is not displayed.",
   "tokens.symbol": "Symbol",
