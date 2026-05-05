@@ -19,10 +19,10 @@
   "scripts": {
     "build": "run-s build:*",
     "build:i18n": "bash scripts/npm/build-i18n.sh",
-    "check": "tsx .bin/check-php-license",
+    "check": "MODE=CHECK tsx ../../scripts/npm-scripts/composer-license-tools.ts",
     "clean": "rm -rf includes/cache/*.php",
 		"coverage": "pnpm test --coverage-html coverage/phpunit",
-    "export-license": "export-license -s composer.lock -o licenses/composer -m licenses/backend.json",
+    "export-license": "MODE=EXPORT tsx ../../scripts/npm-scripts/composer-license-tools.ts",
     "format": "tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} . || tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} .",
 		"// phpcsはドキュメントの警告が多いためphpcbfで代用": "",
     "lint": "tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} .",
@@ -43,7 +43,6 @@
     "@serendipity/wp-plugin-block": "workspace:*"
   },
   "devDependencies": {
-    "@serendipity/export-license": "workspace:*",
     "@wordpress/env": "~10.29.0"
   }
 }

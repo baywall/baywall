@@ -12,7 +12,7 @@
     "build:js": "wp-scripts build",
     "check": "run-p check:*",
     "check:cycles": "madge --circular --extensions ts,tsx src",
-    "check:license": "license-checker --production --excludePrivatePackages --onlyAllow '0BSD;Apache-2.0 WITH LLVM-exception;BSD-2-Clause;BSD-3-Clause;CC0-1.0;CC-BY-3.0;GPL-2.0-or-later;ISC;MIT' > /dev/null",
+    "check:license": "MODE=CHECK tsx ../../scripts/npm-scripts/pnpm-license-tool.ts",
     "clean": "run-p clean:*",
     "clean:coverage": "rm -rf coverage",
     "clean:js": "rm -rf build/*",
@@ -23,8 +23,7 @@
     "postcoverage:php": "test -f coverage/phpunit/index.html || exit 1",
     "premy-docker:start": "bash ./.devcontainer/development-internal/update-compose-network.sh",
     "my-docker:start": "bash ./.devcontainer/development-internal/start.sh",
-    "export-license": "run-s export-license:*",
-    "export-license:block": "export-license -o licenses/npm -m licenses/block.json",
+    "export-license": "MODE=EXPORT tsx ../../scripts/npm-scripts/pnpm-license-tool.ts",
     "format": "run-p format:*",
     "format:js": "run-s format:js:*",
     "format:js:eslint": "bash ../../scripts/npm-scripts/format-eslint.sh .",
@@ -83,7 +82,6 @@
     "react-i18next": "^16.6.0"
   },
   "devDependencies": {
-    "@serendipity/export-license": "workspace:*",
     "@storybook/react-webpack5": "^10.3.5",
     "@testing-library/react": "^16.3.2",
     "prettier": "npm:wp-prettier@^3.0.3",

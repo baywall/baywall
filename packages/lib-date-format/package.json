@@ -23,7 +23,7 @@
     "build:esm": "tsc -p ./tsconfig.esm.json",
     "check": "run-p check:*",
     "check:cycles": "madge --circular --extensions ts,tsx src",
-    "check:license": "license-checker --production --excludePrivatePackages --onlyAllow '0BSD;Apache-2.0;BSD-3-Clause;ISC;MIT' > /dev/null",
+    "check:license": "MODE=CHECK tsx ../../scripts/npm-scripts/pnpm-license-tool.ts",
     "clean": "rm -rf dist",
     "coverage": "bash ../../scripts/npm-scripts/coverage-jest.sh",
     "dev": "tsc -w -p tsconfig.esm.json",
