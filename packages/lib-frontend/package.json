@@ -40,6 +40,8 @@
     "@serendipity/lib-value-object": "workspace:*"
   },
   "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "prettier": "npm:wp-prettier@^3.0.3"
   },
   "peerDependencies": {
