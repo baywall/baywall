@@ -88,7 +88,7 @@
   "oracles.oracle_search_description_message": "Search for the contract address of an Oracle on the blockchain that provides USD-denominated rates, using a symbol name (e.g., JPY, USDC, ...).",
   "oracles.pair": "Pair",
   "oracles.try_another_symbol_message": "Please try another symbol.",
-  "sales.customer": "Customer",
+  "sales.buyer": "Buyer",
   "sales.datetime": "DateTime",
   "sales.sales_histories_heading": "SalesHistories",
   "sales.sales_history": "Sales History",

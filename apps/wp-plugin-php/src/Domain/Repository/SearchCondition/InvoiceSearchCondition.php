@@ -9,9 +9,9 @@ use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 
 class InvoiceSearchCondition {
 
-	private ?InvoiceId $invoice_id     = null;
-	private ?PostId $post_id           = null;
-	private ?Address $customer_address = null;
+	private ?InvoiceId $invoice_id  = null;
+	private ?PostId $post_id        = null;
+	private ?Address $buyer_address = null;
 
 	/** 請求書IDを取得します */
 	public function invoiceId(): ?InvoiceId {
@@ -34,12 +34,12 @@ class InvoiceSearchCondition {
 	}
 
 	/** 購入者アドレスを取得します */
-	public function customerAddress(): ?Address {
-		return $this->customer_address;
+	public function buyerAddress(): ?Address {
+		return $this->buyer_address;
 	}
 	/** 購入者アドレスを設定します */
-	public function setCustomerAddress( ?Address $customer_address ): self {
-		$this->customer_address = $customer_address;
+	public function setBuyerAddress( ?Address $buyer_address ): self {
+		$this->buyer_address = $buyer_address;
 		return $this;
 	}
 }

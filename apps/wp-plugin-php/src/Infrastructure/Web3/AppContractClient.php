@@ -40,7 +40,7 @@ class AppContractClient {
 		return $this->contract;
 	}
 
-	public function getPaywallStatus( Address $signer_address, PostId $post_id, Address $customer_address ): GetPaywallStatusResult {
+	public function getPaywallStatus( Address $signer_address, PostId $post_id, Address $buyer_address ): GetPaywallStatusResult {
 
 		/** @var GetPaywallStatusResult|null */
 		$result = null;
@@ -48,7 +48,7 @@ class AppContractClient {
 			'getPaywallStatus',
 			$signer_address->value(),
 			$post_id->value(),
-			$customer_address->value(),
+			$buyer_address->value(),
 			function ( $err, $res ) use ( &$result ) {
 				if ( $err ) {
 					throw $err;

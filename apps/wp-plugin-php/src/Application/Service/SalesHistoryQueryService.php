@@ -23,5 +23,5 @@ interface SalesHistoryQueryService {
 	/**
 	 * 指定された投稿IDと購入者アドレスに対応する販売履歴が存在するかどうかを取得します。
 	 */
-	public function existsByPostIdAndCustomerAddress( PostId $post_id, Address $customer_address ): bool;
+	public function existsByPostIdAndBuyerAddress( PostId $post_id, Address $buyer_address ): bool;
 }

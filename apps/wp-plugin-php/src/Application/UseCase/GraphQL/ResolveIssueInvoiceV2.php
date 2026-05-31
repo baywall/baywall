@@ -67,10 +67,10 @@ class ResolveIssueInvoiceV2 {
 	}
 
 	public function handle( array $root_value, array $args ) {
-		$post_id          = PostId::from( $args['postId'] );
-		$chain_id         = ChainId::from( $args['chainId'] );
-		$token_address    = Address::from( $args['tokenAddress'] );
-		$customer_address = Address::from( $args['customerAddress'] ); // 購入者のアドレス
+		$post_id       = PostId::from( $args['postId'] );
+		$chain_id      = ChainId::from( $args['chainId'] );
+		$token_address = Address::from( $args['tokenAddress'] );
+		$buyer_address = Address::from( $args['buyerAddress'] ); // 購入者のアドレス
 
 		// 投稿を閲覧できる権限があることをチェック
 		$this->user_access_checker->checkCanViewPost( $post_id );
@@ -95,12 +95,12 @@ class ResolveIssueInvoiceV2 {
 
 		// 請求書番号を発行(+現在の販売価格を記録)
 		return $this->transaction_service->transactional(
-			function () use ( $post_id, $payment_token, $customer_address ) {
+			function () use ( $post_id, $payment_token, $buyer_address ) {
 				// 署名用ウォレットを取得
 				$signer = $this->server_signer_repository->get();
 
 				// 請求書を作成
-				$invoice = $this->invoice_service->issueInvoice( $customer_address, $post_id, $payment_token );
+				$invoice = $this->invoice_service->issueInvoice( $buyer_address, $post_id, $payment_token );
 
 				// 販売価格が0でないのに支払額が0になっている場合はエラー（fail safe）
 				$post           = $this->post_repository->get( $post_id );
@@ -148,7 +148,7 @@ class ResolveIssueInvoiceV2 {
 			$invoice->chainId()->value(),
 			$server_signer->address()->value(),
 			$invoice->sellerAddress()->value(),
-			$invoice->customerAddress()->value(),
+			$invoice->buyerAddress()->value(),
 			$invoice->postId()->value(),
 			$invoice->id()->hex(),
 			$invoice->paymentTokenAddress()->value(),

@@ -58,7 +58,7 @@ class SalesHistoryView {
 				t1.transaction_hash,
 				-- t2_agg.token_address, => t3.payment_token_address
 				-- t2_agg.total_amount, => t3.payment_amount
-				-- t2_agg.customer_address, => t3.customer_address
+				-- t2_agg.buyer_address, => t3.buyer_address
 				t2_agg.contract_address,
 				t2_agg.contract_received_amount,
 				-- t2_agg.seller_address, => t3.seller_address
@@ -72,7 +72,7 @@ class SalesHistoryView {
 				t3.seller_address,
 				t3.payment_token_address,
 				t3.payment_amount,
-				t3.customer_address,
+				t3.buyer_address,
 				t4.symbol AS payment_token_symbol,
 				t4.decimals AS payment_token_decimals,
 				t5.post_title
@@ -83,7 +83,7 @@ class SalesHistoryView {
 					invoice_id,
 					-- MAX(token_address) AS token_address, => t3.payment_token_address と同じ
 					-- SUM(amount) AS total_amount, => t3.payment_amount と同じ
-					-- MAX(from_address) AS customer_address, => t3.customer_address と同じ
+					-- MAX(from_address) AS buyer_address, => t3.buyer_address と同じ
 					MAX(CASE WHEN transfer_type = 1 THEN to_address END) AS contract_address,
 					MAX(CASE WHEN transfer_type = 1 THEN amount END) AS contract_received_amount,
 					-- MAX(CASE WHEN transfer_type = 2 THEN to_address END) AS seller_address, => t3.seller_address と同じ
@@ -134,7 +134,7 @@ class SalesHistoryView {
 	/**
 	 * 販売履歴に指定した投稿IDと購入者アドレスが存在するかどうか(=購入済みかどうか)を返します
 	 */
-	public function existsByPostIdAndCustomerAddress( PostId $post_id, Address $customer_address ): bool {
+	public function existsByPostIdAndBuyerAddress( PostId $post_id, Address $buyer_address ): bool {
 		$sql = <<<SQL
 			SELECT
 				COUNT(*) AS count
@@ -144,14 +144,14 @@ class SalesHistoryView {
 				{$this->invoice_table_name} AS t2
 				ON t1.invoice_id = t2.id
 			WHERE
-				t2.post_id = :post_id AND t2.customer_address = :customer_address
+				t2.post_id = :post_id AND t2.buyer_address = :buyer_address
 		SQL;
 
 		$sql    = $this->wpdb->named_prepare(
 			$sql,
 			array(
-				':post_id'          => $post_id->value(),
-				':customer_address' => $customer_address->value(),
+				':post_id'       => $post_id->value(),
+				':buyer_address' => $buyer_address->value(),
 			)
 		);
 		$result = $this->wpdb->get_row( $sql );

@@ -58,7 +58,7 @@ class InvoiceImpl extends Invoice {
 			Address::from( $invoice_record->sellerAddressValue() ),
 			Address::from( $invoice_record->paymentTokenAddressValue() ),
 			Amount::from( $invoice_record->paymentAmountValue() ),
-			Address::from( $invoice_record->customerAddressValue() ),
+			Address::from( $invoice_record->buyerAddressValue() ),
 		);
 	}
 }

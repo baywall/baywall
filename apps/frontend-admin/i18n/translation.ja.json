@@ -88,7 +88,7 @@
   "oracles.oracle_search_description_message": "ブロックチェーン上でUSD建てレートを提供するオラクルのコントラクトアドレスを、シンボル名（例: JPY, USDC, ...）で検索してください。",
   "oracles.pair": "ペア",
   "oracles.try_another_symbol_message": "別のシンボルをお試しください。",
-  "sales.customer": "購入者",
+  "sales.buyer": "購入者",
   "sales.datetime": "日時",
   "sales.sales_histories_heading": "販売履歴",
   "sales.sales_history": "販売履歴",

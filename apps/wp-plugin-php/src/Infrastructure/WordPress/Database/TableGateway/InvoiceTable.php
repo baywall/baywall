@@ -39,7 +39,7 @@ class InvoiceTable {
 				`seller_address`,
 				`payment_token_address`,
 				`payment_amount`,
-				`customer_address`
+				`buyer_address`
 			FROM `{$this->table_name}`
 		SQL;
 
@@ -50,8 +50,8 @@ class InvoiceTable {
 		if ( ! is_null( $condition->postId() ) ) {
 			$where_clauses[] = $this->wpdb->named_prepare( 'post_id = :post_id', array( ':post_id' => $condition->postId()->value() ) );
 		}
-		if ( ! is_null( $condition->customerAddress() ) ) {
-			$where_clauses[] = $this->wpdb->named_prepare( 'customer_address = :customer_address', array( ':customer_address' => $condition->customerAddress()->value() ) );
+		if ( ! is_null( $condition->buyerAddress() ) ) {
+			$where_clauses[] = $this->wpdb->named_prepare( 'buyer_address = :buyer_address', array( ':buyer_address' => $condition->buyerAddress()->value() ) );
 		}
 
 		$sql     = $where_clauses ? $sql . ' WHERE ' . implode( ' AND ', $where_clauses ) : $sql;
@@ -66,9 +66,9 @@ class InvoiceTable {
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-				( `id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_amount`, `customer_address` )
+				( `id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_amount`, `buyer_address` )
 			VALUES
-				( :invoice_id, :post_id, :chain_id, :selling_amount, :selling_symbol, :seller_address, :payment_token_address, :payment_amount, :customer_address )
+				( :invoice_id, :post_id, :chain_id, :selling_amount, :selling_symbol, :seller_address, :payment_token_address, :payment_amount, :buyer_address )
 			ON DUPLICATE KEY UPDATE
 				`post_id` = VALUES(`post_id`),
 				`chain_id` = VALUES(`chain_id`),
@@ -77,7 +77,7 @@ class InvoiceTable {
 				`seller_address` = VALUES(`seller_address`),
 				`payment_token_address` = VALUES(`payment_token_address`),
 				`payment_amount` = VALUES(`payment_amount`),
-				`customer_address` = VALUES(`customer_address`)
+				`buyer_address` = VALUES(`buyer_address`)
 		SQL;
 
 		$sql = $this->wpdb->named_prepare(
@@ -91,7 +91,7 @@ class InvoiceTable {
 				':seller_address'        => $invoice->sellerAddress()->value(),
 				':payment_token_address' => $invoice->paymentTokenAddress()->value(),
 				':payment_amount'        => $invoice->paymentAmount()->value(),
-				':customer_address'      => $invoice->customerAddress()->value(),
+				':buyer_address'         => $invoice->buyerAddress()->value(),
 			)
 		);
 

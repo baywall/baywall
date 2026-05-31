@@ -59,7 +59,7 @@ class InvoiceService {
 	}
 
 	/** 請求書を発行します。 */
-	public function issueInvoice( Address $customer_address, PostId $post_id, Token $payment_token ): Invoice {
+	public function issueInvoice( Address $buyer_address, PostId $post_id, Token $payment_token ): Invoice {
 		$chain_id = $payment_token->chainId();
 		$post     = $this->post_repository->get( $post_id );
 		// TODO: 対象の投稿が購入可能かどうかをチェック
@@ -90,7 +90,7 @@ class InvoiceService {
 			$seller->address(),
 			$payment_token->address(),
 			$payment_amount,
-			$customer_address
+			$buyer_address
 		);
 
 		// 作成した請求書を保存

@@ -21,7 +21,7 @@ class InvoiceTableRecord extends TableRecordBase {
 	protected string $seller_address;
 	protected string $payment_token_address;
 	protected string $payment_amount;
-	protected string $customer_address;
+	protected string $buyer_address;
 
 	public function idValue(): string {
 		return $this->id;
@@ -47,7 +47,7 @@ class InvoiceTableRecord extends TableRecordBase {
 	public function paymentAmountValue(): string {
 		return $this->payment_amount;
 	}
-	public function customerAddressValue(): string {
-		return $this->customer_address;
+	public function buyerAddressValue(): string {
+		return $this->buyer_address;
 	}
 }

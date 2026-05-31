@@ -52,7 +52,7 @@ class WpSalesHistoryQueryService implements SalesHistoryQueryService {
 			$invoice_dto,
 			$record->post_title,
 			$record->transaction_hash,
-			$record->customer_address,
+			$record->buyer_address,
 			$to_price_dto_callback( $record->payment_amount ),
 			$record->contract_address,
 			$to_price_dto_callback( $record->contract_received_amount ),
@@ -64,7 +64,7 @@ class WpSalesHistoryQueryService implements SalesHistoryQueryService {
 	}
 
 	/** @inheritDoc */
-	public function existsByPostIdAndCustomerAddress( PostId $post_id, Address $customer_address ): bool {
-		return $this->sales_history_view->existsByPostIdAndCustomerAddress( $post_id, $customer_address );
+	public function existsByPostIdAndBuyerAddress( PostId $post_id, Address $buyer_address ): bool {
+		return $this->sales_history_view->existsByPostIdAndBuyerAddress( $post_id, $buyer_address );
 	}
 }

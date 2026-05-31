@@ -30,9 +30,9 @@ class ConfirmationsService {
 	 *
 	 * ※ 販売履歴のチェックは行いません
 	 */
-	public function isConfirmed( ChainId $chain_id, PostId $post_id, Address $customer_address ): bool {
+	public function isConfirmed( ChainId $chain_id, PostId $post_id, Address $buyer_address ): bool {
 		// 購入時のブロック番号をコントラクトから取得
-		$unlocked_block_number = $this->app_contract_data_provider->unlockedBlockNumber( $chain_id, $post_id, $customer_address );
+		$unlocked_block_number = $this->app_contract_data_provider->unlockedBlockNumber( $chain_id, $post_id, $buyer_address );
 		if ( $unlocked_block_number === null ) {
 			return false; // コントラクトのストレージに解除済みの記録がない場合は支払いが確認できないとみなす
 		}

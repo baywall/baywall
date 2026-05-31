@@ -58,7 +58,7 @@ class IssueAccessTokenByInvoiceToken {
 		$invoice = $this->invoice_service->getByInvoiceTokenString( $invoice_token_string );
 
 		// 支払いの確認が取れたかどうかを取得
-		$is_confirmed = $this->confirmations_service->isConfirmed( $invoice->chainId(), $invoice->postId(), $invoice->customerAddress() );
+		$is_confirmed = $this->confirmations_service->isConfirmed( $invoice->chainId(), $invoice->postId(), $invoice->buyerAddress() );
 
 		if ( $is_confirmed === false ) {
 			// （まだ）支払いが確認できない場合は請求書トークンのローテーションを行い、例外をスロー
@@ -82,15 +82,15 @@ class IssueAccessTokenByInvoiceToken {
 			}
 
 			// 購入者ウォレットアドレスを取得
-			$customer_address = $invoice->customerAddress();
+			$buyer_address = $invoice->buyerAddress();
 
 			// リフレッシュトークンを発行し、クッキーに保存
-			$refresh_token        = $this->refresh_token_service->issue( $customer_address );
+			$refresh_token        = $this->refresh_token_service->issue( $buyer_address );
 			$refresh_token_cookie = $this->refresh_token_cookie_provider->get( $refresh_token );
 			$this->cookie_writer->set( $refresh_token_cookie );
 
 			// アクセストークンを発行
-			$access_token        = $this->access_token_service->issue( $customer_address );
+			$access_token        = $this->access_token_service->issue( $buyer_address );
 			$access_token_cookie = $this->access_token_cookie_provider->get( $access_token );
 			$this->cookie_writer->set( $access_token_cookie );
 

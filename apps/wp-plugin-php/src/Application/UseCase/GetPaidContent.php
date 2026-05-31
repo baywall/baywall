@@ -80,11 +80,11 @@ class GetPaidContent {
 		$address = $this->access_token_service->getWalletAddress( $access_token );
 
 		// 販売履歴に記事の続きを要求したウォレットが指定した投稿を支払済みかどうかを取得
-		$is_paid = $this->sales_history_query_service->existsByPostIdAndCustomerAddress( $post_id, $address );
+		$is_paid = $this->sales_history_query_service->existsByPostIdAndBuyerAddress( $post_id, $address );
 
 		// 販売履歴に存在しない場合はブロックチェーンから情報を取得して確認する
 		if ( ! $is_paid ) {
-			$invoices = $this->invoice_repository->findBy( ( new InvoiceSearchCondition() )->setPostId( $post_id )->setCustomerAddress( $address ) );
+			$invoices = $this->invoice_repository->findBy( ( new InvoiceSearchCondition() )->setPostId( $post_id )->setBuyerAddress( $address ) );
 
 			/** @var int[] チェック対象のチェーンID一覧 */
 			$invoice_chain_id_values = array_reduce(

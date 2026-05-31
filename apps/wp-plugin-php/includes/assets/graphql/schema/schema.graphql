@@ -75,9 +75,9 @@ type Query {
 
 type Mutation {
 	# 支払情報を発行【ゲスト】
-	issueInvoice(postId: Int!, chainId: Int!, tokenAddress: String!, customerAddress: String!): IssuedInvoice!
+	issueInvoice(postId: Int!, chainId: Int!, tokenAddress: String!, buyerAddress: String!): IssuedInvoice!
 	# 支払情報を発行(v2)【ゲスト】
-	issueInvoiceV2(postId: Int!, chainId: Int!, tokenAddress: String!, customerAddress: String!): IssuedInvoiceV2!
+	issueInvoiceV2(postId: Int!, chainId: Int!, tokenAddress: String!, buyerAddress: String!): IssuedInvoiceV2!
 
 	# ERC-4361署名用メッセージを発行【ゲスト】
 	issueErc4361Message( address: String!, chainId: Int! ): IssueErc4361MessageResponse!
@@ -201,7 +201,7 @@ type UnlockPaywallTransaction {
 	blockNumber: Int!	# 取引が行われたブロック番号
 	transactionHash: String!	# トランザクションハッシュ
 	sellerAddress: String!		# 販売者のアドレス
-	customerAddress: String!	# 購入者のアドレス
+	buyerAddress: String!	# 購入者のアドレス
 	sellerProfitPrice: Price!	# 売上金額
 	handlingFeePrice: Price!	# 手数料
 }
@@ -248,8 +248,8 @@ type SalesHistory {
 	postTitle: String!				# 投稿タイトル
 	txHash: String!					# トランザクションハッシュ
 
-	customerAddress: String!		# 購入者のアドレス
-	customerPaymentPrice: Price!	# 購入者が支払った価格
+	buyerAddress: String!		# 購入者のアドレス
+	buyerPaymentPrice: Price!	# 購入者が支払った価格
 	contractAddress: String!		# コントラクトアドレス
 	contractReceivedPrice: Price!	# コントラクトが受け取った価格
 	sellerAddress: String!			# 販売者のアドレス

@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 
 class Invoice {
 
-	public function __construct( InvoiceId $id, PostId $post_id, ChainId $chain_id, Price $selling_price, Address $seller_address, Address $payment_token_address, Amount $payment_amount, Address $customer_address ) {
+	public function __construct( InvoiceId $id, PostId $post_id, ChainId $chain_id, Price $selling_price, Address $seller_address, Address $payment_token_address, Amount $payment_amount, Address $buyer_address ) {
 		$this->id                    = $id;
 		$this->post_id               = $post_id;
 		$this->chain_id              = $chain_id;
@@ -20,7 +20,7 @@ class Invoice {
 		$this->seller_address        = $seller_address;
 		$this->payment_token_address = $payment_token_address;
 		$this->payment_amount        = $payment_amount;
-		$this->customer_address      = $customer_address;
+		$this->buyer_address         = $buyer_address;
 	}
 
 	private InvoiceId $id;
@@ -30,7 +30,7 @@ class Invoice {
 	private Address $seller_address;
 	private Address $payment_token_address;
 	private Amount $payment_amount;
-	private Address $customer_address;
+	private Address $buyer_address;
 
 	public function id(): InvoiceId {
 		return $this->id;
@@ -53,8 +53,8 @@ class Invoice {
 	public function paymentAmount(): Amount {
 		return $this->payment_amount;
 	}
-	public function customerAddress(): Address {
-		return $this->customer_address;
+	public function buyerAddress(): Address {
+		return $this->buyer_address;
 	}
 
 	public function __toString() {

@@ -44,10 +44,10 @@ class ResolveSalesHistories {
 				'postTitle'              => $sales_history_dto->post_title,
 				'txHash'                 => $sales_history_dto->tx_hash,
 
-				'customerAddress'        => $sales_history_dto->customer_address,
-				'customerPaymentPrice'   => array(
-					'amount' => $sales_history_dto->customer_payment_price->amount,
-					'symbol' => $sales_history_dto->customer_payment_price->symbol,
+				'buyerAddress'           => $sales_history_dto->buyer_address,
+				'buyerPaymentPrice'      => array(
+					'amount' => $sales_history_dto->buyer_payment_price->amount,
+					'symbol' => $sales_history_dto->buyer_payment_price->symbol,
 				),
 				'contractAddress'        => $sales_history_dto->contract_address,
 				'contractReceivedPrice'  => array(
