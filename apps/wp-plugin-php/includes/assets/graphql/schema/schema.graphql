@@ -74,8 +74,6 @@ type Query {
 }
 
 type Mutation {
-	# 支払情報を発行【ゲスト】
-	issueInvoice(postId: Int!, chainId: Int!, tokenAddress: String!, buyerAddress: String!): IssuedInvoice!
 	# 支払情報を発行(v2)【ゲスト】
 	issueInvoiceV2(postId: Int!, chainId: Int!, tokenAddress: String!, buyerAddress: String!): IssuedInvoiceV2!
 
