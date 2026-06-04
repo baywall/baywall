@@ -52,7 +52,7 @@ class RestApiHook extends HookBase {
 		);
 		assert( $success );
 
-		// 請求書トークンを用いてアクセストークンを発行するAPIを登録
+		// 請求書トークンを用いてリフレッシュトークン＋アクセストークンを発行するAPIを登録
 		$success = register_rest_route(
 			WpConfig::REST_NAMESPACE,
 			WpConfig::REST_ROUTE_AUTH_TOKEN_INVOICE,
