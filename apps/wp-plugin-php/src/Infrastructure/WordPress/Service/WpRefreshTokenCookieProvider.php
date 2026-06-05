@@ -35,12 +35,30 @@ class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 	/** Cookieに書き込むリフレッシュトークンのパスを取得します */
 	private function path(): string {
 		$api_root_url = $this->wp_property->apiRootUrl();
-		return parse_url( trailingslashit( $api_root_url ) . WpConfig::REST_NAMESPACE . '/' . WpConfig::REST_ROUTE_AUTH_REFRESH, PHP_URL_PATH );
+		return parse_url( trailingslashit( $api_root_url ) . WpConfig::REST_NAMESPACE . '/' . WpConfig::REST_ROUTE_AUTH_PREFIX, PHP_URL_PATH );
 	}
 
 	private function secure(): bool {
 		// ローカル環境のみ、HTTPSでなくてもクッキーを送信する
 		// ※ HTTP環境のWordPressでは本プラグインは動作しないため、インストール時にチェックが必要
 		return $this->wp_property->getEnvironmentType() === 'local' ? $this->wp_property->isSsl() : true;
+	}
+
+	/**
+	 * リフレッシュトークンを無効化するための期限切れCookieを返します。
+	 *
+	 * name, path, domain, secure, httponly, samesite が get() と完全に一致し、expires が過去の Cookie を返します。
+	 */
+	public function getExpired(): Cookie {
+		return Cookie::create(
+			$this->cookie_name_provider->refreshToken(), // name: get()と同一
+			'', // value: 空文字
+			time() - 3600, // expires: 過去（1時間前）
+			$this->path(),
+			null, // domain: get()と同一
+			$this->secure(),
+			true, // httponly: get()と同一
+			'Strict' // samesite: get()と同一
+		);
 	}
 }

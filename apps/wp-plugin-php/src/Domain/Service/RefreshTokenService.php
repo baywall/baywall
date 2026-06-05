@@ -74,6 +74,25 @@ abstract class RefreshTokenService {
 		return $new_refresh_token;
 	}
 
+	/**
+	 * リフレッシュトークンを無効化します。
+	 *
+	 * refresh token が存在しない、または既に revoke 済みの場合でも例外を投げません。
+	 *
+	 * @param RefreshTokenString $refresh_token_string 無効化するリフレッシュトークン文字列
+	 */
+	public function revoke( RefreshTokenString $refresh_token_string ): void {
+		$refresh_token = $this->refresh_token_repository->get( $refresh_token_string );
+
+		// 存在しない、または既に revoke 済みの場合は何もしない（冪等）
+		if ( $refresh_token === null || $refresh_token->isRevoked() ) {
+			return;
+		}
+
+		$refresh_token->revoke();
+		$this->refresh_token_repository->update( $refresh_token );
+	}
+
 	/** 古いリフレッシュトークンデータを削除します */
 	public function purgeOldRepositoryData(): void {
 		$expiration_threshold = UnixTimestamp::now()->addSeconds( -Config::REFRESH_TOKEN_DATA_EXPIRATION );

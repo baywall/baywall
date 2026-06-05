@@ -63,10 +63,14 @@ class WpConfig {
 	/** JWTの秘密鍵の長さ(文字数) */
 	public const JWT_SECRET_KEY_LENGTH = 64;
 
+	/** 認証系REST APIのルートプレフィックス */
+	public const REST_ROUTE_AUTH_PREFIX = 'auth';
 	/** アクセストークン(+リフレッシュトークン)更新のルート名 */
-	public const REST_ROUTE_AUTH_REFRESH = 'auth/token/refresh';
+	public const REST_ROUTE_AUTH_REFRESH = 'auth/refresh';
+	/** ログアウトのルート名 */
+	public const REST_ROUTE_AUTH_LOGOUT = 'auth/logout';
 	/** 請求書トークンをアクセストークン(+リフレッシュトークン)と引き換えるルート名 */
-	public const REST_ROUTE_AUTH_TOKEN_INVOICE = 'auth/token/invoice';
+	public const REST_ROUTE_AUTH_TOKEN_INVOICE = 'auth/invoice';
 	/** 有料コンテンツを取得するルート名 */
 	public const REST_ROUTE_PAID_CONTENT = 'paid-content';
 

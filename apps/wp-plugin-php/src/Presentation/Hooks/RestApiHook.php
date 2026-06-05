@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Presentation\Hooks;
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Application\UseCase\GetPaidContent;
 use Cornix\Serendipity\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
+use Cornix\Serendipity\Core\Application\UseCase\LogoutAuth;
 use Cornix\Serendipity\Core\Application\UseCase\RefreshAccessToken;
 use Cornix\Serendipity\Core\Constant\HttpStatus;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
@@ -75,6 +76,18 @@ class RestApiHook extends HookBase {
 			)
 		);
 		assert( $success );
+
+		// ログアウトAPIを登録
+		$success = register_rest_route(
+			WpConfig::REST_NAMESPACE,
+			WpConfig::REST_ROUTE_AUTH_LOGOUT,
+			array(
+				'methods'             => 'POST',
+				'callback'            => fn ( \WP_REST_Request $request ) => $this->authLogoutHandler( $request ),
+				'permission_callback' => fn ( \WP_REST_Request $request ) => $this->permissionCallback( $request ),
+			)
+		);
+		assert( $success );
 	}
 
 
@@ -137,6 +150,22 @@ class RestApiHook extends HookBase {
 			}
 
 			$this->container->get( IssueAccessTokenByInvoiceToken::class )->handle( $invoice_token_string_value );
+			return new WP_REST_Response( array(), HttpStatus::OK );
+		} catch ( Throwable $e ) {
+			$this->container->get( AppLogger::class )->error( $e );
+			return $this->container->get( WpExceptionConverter::class )->toWpResponse( $e );
+		}
+	}
+
+	public function authLogoutHandler( \WP_REST_Request $request ) {
+		$cookie_name_provider = $this->container->get( CookieNameProvider::class );
+
+		// リフレッシュトークンをCookieから取得
+		/** @var string|null */
+		$refresh_token_value = $_COOKIE[ $cookie_name_provider->refreshToken() ] ?? null;
+
+		try {
+			$this->container->get( LogoutAuth::class )->handle( $refresh_token_value );
 			return new WP_REST_Response( array(), HttpStatus::OK );
 		} catch ( Throwable $e ) {
 			$this->container->get( AppLogger::class )->error( $e );

@@ -48,4 +48,22 @@ class WpAccessTokenCookieProvider implements AccessTokenCookieProvider {
 		// ※ HTTP環境のWordPressでは本プラグインは動作しないため、インストール時にチェックが必要
 		return $this->wp_property->getEnvironmentType() === 'local' ? $this->wp_property->isSsl() : true;
 	}
+
+	/**
+	 * アクセストークンを無効化するための期限切れCookieを返します。
+	 *
+	 * name, path, domain, secure, httponly, samesite が get() と完全に一致し、expires が過去の Cookie を返します。
+	 */
+	public function getExpired(): Cookie {
+		return Cookie::create(
+			$this->cookie_name_provider->accessToken(), // name: get()と同一
+			'', // value: 空文字
+			time() - 3600, // expires: 過去（1時間前）
+			$this->path(),
+			null, // domain: get()と同一
+			$this->secure(),
+			true, // httponly: get()と同一
+			'Strict' // samesite: get()と同一
+		);
+	}
 }
