@@ -268,5 +268,6 @@ type SalesHistoryInvoice {	# 請求書情報(販売履歴用)
 # 販売履歴フィルタ
 input SalesHistoriesFilter {
 	invoiceId: String	# 請求書ID
-	# TODO: 必要なフィルタを実装
+	dateFrom: Int		# 開始日時 (Unixタイムスタンプ, 秒)
+	dateTo: Int			# 終了日時 (Unixタイムスタンプ, 秒)
 }

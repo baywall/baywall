@@ -6,7 +6,9 @@ namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 use Cornix\Serendipity\Core\Application\Dto\SalesHistoryDto;
 use Cornix\Serendipity\Core\Application\Service\SalesHistoryQueryService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
+use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use InvalidArgumentException;
 
 class ResolveSalesHistories {
 
@@ -24,9 +26,34 @@ class ResolveSalesHistories {
 	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		$filter_invoice_id = InvoiceId::fromUlidValueNullable( $args['filter']['invoiceId'] ?? null );
+		// 検索条件の構築
+		$condition = new SalesHistorySearchCondition();
+		$condition->setInvoiceId(
+			InvoiceId::fromUlidValueNullable( $args['filter']['invoiceId'] ?? null )
+		);
 
-		$sales_histories = $this->sales_history_service->find( $filter_invoice_id );
+		// 日付フィルタの取得とバリデーション
+		$date_from = isset( $args['filter']['dateFrom'] ) ? (int) $args['filter']['dateFrom'] : null;
+		$date_to   = isset( $args['filter']['dateTo'] ) ? (int) $args['filter']['dateTo'] : null;
+
+		// バリデーション: 負のタイムスタンプは不正として例外をスロー
+		if ( $date_from !== null && $date_from < 0 ) {
+			throw new InvalidArgumentException( 'dateFrom must be a non-negative Unix timestamp.' );
+		}
+		if ( $date_to !== null && $date_to < 0 ) {
+			throw new InvalidArgumentException( 'dateTo must be a non-negative Unix timestamp.' );
+		}
+
+		// バリデーション: dateFrom > dateTo の場合は自動入れ替え（ユーザー利便性のため）
+		if ( $date_from !== null && $date_to !== null && $date_from > $date_to ) {
+			[ $date_from, $date_to ] = array( $date_to, $date_from );
+		}
+
+		$condition
+			->setDateFrom( $date_from )
+			->setDateTo( $date_to );
+
+		$sales_histories = $this->sales_history_service->find( $condition );
 
 		return array_map(
 			fn ( SalesHistoryDto $sales_history_dto ) => array(

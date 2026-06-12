@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
@@ -46,7 +48,7 @@ class SalesHistoryView {
 	 *
 	 * @return SalesHistoryViewRecord[]
 	 */
-	public function select( ?InvoiceId $filter_invoice_id ) {
+	public function select( SalesHistorySearchCondition $condition ) {
 		// ※ 時刻は invoice が作成された時刻を使用
 
 		$sql = <<<SQL
@@ -112,13 +114,29 @@ class SalesHistoryView {
 
 		// 条件が指定されている場合はWHERE句を追加
 		$where_conditions = array();
+
+		// 請求書IDフィルタ
+		$filter_invoice_id = $condition->invoiceId();
 		if ( $filter_invoice_id !== null ) {
 			$where_conditions[] = 't1.invoice_id = ' . $this->wpdb->named_prepare( ':invoice_id', array( ':invoice_id' => (string) $filter_invoice_id ) );
+		}
+
+		// 日付範囲フィルタ（invoice.created_at を使用）
+		$date_from = $condition->dateFrom();
+		if ( $date_from !== null ) {
+			$where_conditions[] = 't3.created_at >= FROM_UNIXTIME(' . $this->wpdb->named_prepare( ':date_from', array( ':date_from' => $date_from ) ) . ')';
+		}
+		$date_to = $condition->dateTo();
+		if ( $date_to !== null ) {
+			$where_conditions[] = 't3.created_at <= FROM_UNIXTIME(' . $this->wpdb->named_prepare( ':date_to', array( ':date_to' => $date_to ) ) . ')';
 		}
 
 		if ( ! empty( $where_conditions ) ) {
 			$sql .= ' WHERE ' . implode( ' AND ', $where_conditions );
 		}
+
+		$sql .= ' ORDER BY t3.created_at DESC';
+		$sql .= ' LIMIT ' . $this->wpdb->named_prepare( ':limit', array( ':limit' => Config::SALES_HISTORIES_MAX_RESULTS ) );
 
 		$results = $this->wpdb->get_results( $sql );
 

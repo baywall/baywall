@@ -7,10 +7,10 @@ use Cornix\Serendipity\Core\Application\Dto\PriceDto;
 use Cornix\Serendipity\Core\Application\Dto\SalesHistoryDto;
 use Cornix\Serendipity\Core\Application\Dto\SalesHistoryInvoiceDto;
 use Cornix\Serendipity\Core\Application\Service\SalesHistoryQueryService;
+use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\SalesHistoryView;
@@ -24,10 +24,10 @@ class WpSalesHistoryQueryService implements SalesHistoryQueryService {
 	}
 
 	/** @inheritDoc */
-	public function find( ?InvoiceId $filter_invoice_id ): array {
+	public function find( SalesHistorySearchCondition $condition ): array {
 		return array_map(
 			fn ( SalesHistoryViewRecord $record ) => $this->recordToDto( $record ),
-			$this->sales_history_view->select( $filter_invoice_id )
+			$this->sales_history_view->select( $condition )
 		);
 	}
 

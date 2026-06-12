@@ -90,6 +90,8 @@
   "oracles.try_another_symbol_message": "Please try another symbol.",
   "sales.buyer": "Buyer",
   "sales.datetime": "DateTime",
+  "sales.filter.date_from": "From",
+  "sales.filter.date_to": "To",
   "sales.sales_histories_heading": "SalesHistories",
   "sales.sales_history": "Sales History",
   "sales.sales_price": "Sales Price",

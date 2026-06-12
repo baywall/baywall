@@ -90,6 +90,8 @@
   "oracles.try_another_symbol_message": "別のシンボルをお試しください。",
   "sales.buyer": "購入者",
   "sales.datetime": "日時",
+  "sales.filter.date_from": "開始日",
+  "sales.filter.date_to": "終了日",
   "sales.sales_histories_heading": "販売履歴",
   "sales.sales_history": "販売履歴",
   "sales.sales_price": "売上",

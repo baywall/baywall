@@ -110,4 +110,9 @@ class Config {
 	 * mutation呼び出し時に許容するフィールド数の上限（独自ルール）
 	 */
 	public const GRAPHQL_MUTATION_FIELD_MAX_COUNT = 1;
+
+	/**
+	 * 販売履歴の最大取得件数
+	 */
+	public const SALES_HISTORIES_MAX_RESULTS = 1000;
 }
