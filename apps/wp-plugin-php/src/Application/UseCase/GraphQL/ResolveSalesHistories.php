@@ -58,15 +58,15 @@ class ResolveSalesHistories {
 		return array_map(
 			fn ( SalesHistoryDto $sales_history_dto ) => array(
 				'invoice'                => array(
-					'id'            => $sales_history_dto->invoice->id,
-					'createdAtUnix' => $sales_history_dto->invoice->created_at_unix,
-					'postId'        => $sales_history_dto->invoice->post_id,
-					'sellingPrice'  => array(
+					'id'             => $sales_history_dto->invoice->id,
+					'blockTimestamp' => $sales_history_dto->invoice->block_timestamp,
+					'postId'         => $sales_history_dto->invoice->post_id,
+					'sellingPrice'   => array(
 						'amount' => $sales_history_dto->invoice->selling_price->amount,
 						'symbol' => $sales_history_dto->invoice->selling_price->symbol,
 					),
-					'chainId'       => $sales_history_dto->invoice->chain_id,
-					'chainName'     => $sales_history_dto->invoice->chain_name,
+					'chainId'        => $sales_history_dto->invoice->chain_id,
+					'chainName'      => $sales_history_dto->invoice->chain_name,
 				),
 				'postTitle'              => $sales_history_dto->post_title,
 				'txHash'                 => $sales_history_dto->tx_hash,

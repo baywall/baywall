@@ -11,7 +11,7 @@ class SalesHistoryViewRecord extends RecordBase {
 	public function __construct( stdClass $record ) {
 		$record->chain_id               = (int) $record->chain_id;
 		$record->block_number           = (int) $record->block_number;
-		$record->created_at_unix        = (int) $record->created_at_unix;
+		$record->block_timestamp        = (int) $record->block_timestamp;
 		$record->post_id                = (int) $record->post_id;
 		$record->payment_token_decimals = (int) $record->payment_token_decimals;
 
@@ -28,7 +28,7 @@ class SalesHistoryViewRecord extends RecordBase {
 	public string $seller_received_amount;
 	public ?string $affiliate_address;
 	public ?string $affiliate_received_amount;
-	public int $created_at_unix;
+	public int $block_timestamp;
 	public int $post_id;
 	public string $selling_amount;
 	public string $selling_symbol;

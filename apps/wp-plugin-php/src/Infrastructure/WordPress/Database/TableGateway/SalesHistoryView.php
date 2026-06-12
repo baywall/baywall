@@ -49,7 +49,7 @@ class SalesHistoryView {
 	 * @return SalesHistoryViewRecord[]
 	 */
 	public function select( SalesHistorySearchCondition $condition ) {
-		// ※ 時刻は invoice が作成された時刻を使用
+		// ※ 時刻はブロックタイムスタンプを使用
 
 		$sql = <<<SQL
 			SELECT
@@ -67,7 +67,7 @@ class SalesHistoryView {
 				t2_agg.seller_received_amount,
 				t2_agg.affiliate_address,
 				t2_agg.affiliate_received_amount,
-				UNIX_TIMESTAMP(t3.created_at) AS created_at_unix,
+				t1.block_timestamp AS block_timestamp,
 				t3.post_id,
 				t3.selling_amount,
 				t3.selling_symbol,
@@ -121,21 +121,21 @@ class SalesHistoryView {
 			$where_conditions[] = 't1.invoice_id = ' . $this->wpdb->named_prepare( ':invoice_id', array( ':invoice_id' => (string) $filter_invoice_id ) );
 		}
 
-		// 日付範囲フィルタ（invoice.created_at を使用）
+		// 日付範囲フィルタ（block_timestamp を使用）
 		$date_from = $condition->dateFrom();
 		if ( $date_from !== null ) {
-			$where_conditions[] = 't3.created_at >= FROM_UNIXTIME(' . $this->wpdb->named_prepare( ':date_from', array( ':date_from' => $date_from ) ) . ')';
+			$where_conditions[] = 't1.block_timestamp >= ' . $this->wpdb->named_prepare( ':date_from', array( ':date_from' => $date_from ) );
 		}
 		$date_to = $condition->dateTo();
 		if ( $date_to !== null ) {
-			$where_conditions[] = 't3.created_at <= FROM_UNIXTIME(' . $this->wpdb->named_prepare( ':date_to', array( ':date_to' => $date_to ) ) . ')';
+			$where_conditions[] = 't1.block_timestamp <= ' . $this->wpdb->named_prepare( ':date_to', array( ':date_to' => $date_to ) );
 		}
 
 		if ( ! empty( $where_conditions ) ) {
 			$sql .= ' WHERE ' . implode( ' AND ', $where_conditions );
 		}
 
-		$sql .= ' ORDER BY t3.created_at DESC';
+		$sql .= ' ORDER BY t1.block_timestamp DESC';
 		$sql .= ' LIMIT ' . $this->wpdb->named_prepare( ':limit', array( ':limit' => Config::SALES_HISTORIES_MAX_RESULTS ) );
 
 		$results = $this->wpdb->get_results( $sql );

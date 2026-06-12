@@ -257,7 +257,7 @@ type SalesHistory {
 }
 type SalesHistoryInvoice {	# 請求書情報(販売履歴用)
 	id: String!				# 請求書ID
-	createdAtUnix: Int!		# 請求書作成日時(UNIX時間)
+	blockTimestamp: Int!	# ブロックタイムスタンプ(UNIX時間)
 	postId: Int!			# 投稿ID
 	sellingPrice: Price!	# 請求書が発行された時の販売価格
 	chainId: Int!			# チェーンID

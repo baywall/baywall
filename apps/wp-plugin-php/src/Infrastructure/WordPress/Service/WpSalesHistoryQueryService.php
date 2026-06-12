@@ -35,7 +35,7 @@ class WpSalesHistoryQueryService implements SalesHistoryQueryService {
 
 		$invoice_dto = new SalesHistoryInvoiceDto(
 			$record->invoice_id,
-			$record->created_at_unix,
+			$record->block_timestamp,
 			$record->post_id,
 			new PriceDto( $record->selling_amount, $record->selling_symbol ),
 			$record->chain_id,
