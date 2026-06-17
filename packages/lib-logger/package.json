@@ -22,6 +22,8 @@
     "build": "run-p build:*",
     "build:cjs": "tsc -p ./tsconfig.cjs.json",
     "build:esm": "tsc -p ./tsconfig.esm.json",
+    "check": "run-p check:*",
+    "check:cycles": "madge --circular --extensions ts,tsx src",
     "clean": "rm -rf dist",
     "coverage": "bash ../../scripts/npm-scripts/coverage-jest.sh",
     "format": "run-s format:*",
