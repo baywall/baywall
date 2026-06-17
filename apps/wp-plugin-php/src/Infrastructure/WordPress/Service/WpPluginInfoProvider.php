@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
+use Cornix\Serendipity\Core\Domain\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 
-class WpPluginInfoProvider {
+class WpPluginInfoProvider implements PluginInfoProvider {
 
 	public function __construct() {
 		$this->plugin_main_file = PluginMainFile::getInstance();

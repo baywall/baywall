@@ -40,6 +40,7 @@ use Cornix\Serendipity\Core\Domain\Service\AppContractDataProvider;
 use Cornix\Serendipity\Core\Domain\Service\BlockNumberProvider;
 use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
 use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenProvider;
+use Cornix\Serendipity\Core\Domain\Service\PluginInfoProvider;
 use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
 use Cornix\Serendipity\Core\Domain\Service\RateProvider;
 use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
@@ -82,6 +83,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpInvoiceTokenProvi
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpJwtSecretKeyRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpLockService;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginMigrationService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginTeardownService;
@@ -150,6 +152,7 @@ final class ContainerDefinitions {
 			Erc4361NonceProvider::class          => autowire( WpErc4361NonceProvider::class ),
 			GraphQLService::class                => autowire( WpGraphQLService::class ),
 			SiteService::class                   => autowire( WpSiteService::class ),
+			PluginInfoProvider::class            => autowire( WpPluginInfoProvider::class ),
 			PluginMigrationService::class        => autowire( WpPluginMigrationService::class ),
 			PluginTeardownService::class         => autowire( WpPluginTeardownService::class ),
 

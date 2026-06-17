@@ -33,6 +33,7 @@
   "post.summary_title": "タイトル",
   "site.install_origin_url_changed_message": "設定に不備があるため機能が制限されています。サイト管理者にお問い合わせください。",
   "site.paused_message": "取引はサイト管理者によって一時停止されています。",
+  "site.plugin_version_too_low_message": "baywallアプリケーションのバージョンが古いため、購入機能をご利用いただけません。サイト管理者にお問い合わせください。",
   "site.seller_address_unregistered_message": "販売者ウォレットが未登録です。サイト管理者にお問い合わせください。",
   "wallet.ask_disconnect_wallet_message": "ウォレットを切断しますか？",
   "wallet.connect": "ウォレットを接続",
