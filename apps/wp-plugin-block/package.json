@@ -56,7 +56,8 @@
     "//        ⇒ https://github.com/ccampbell/mousetrap/issues/421": "",
     "// - devDependencies: ": "",
     "//   - @wordpress/scripts": "",
-    "//     - WordPress6.5以前を対象とする場合、はv27を使う必要がある ": "",
+    "//     - ^32.4.1 は WordPress 6.8 以降を対象とする": "",
+    "//     - WordPress 6.5 以前を対象とする場合は v27 を使う必要がある": "",
     "//       => https://github.com/WordPress/gutenberg/blob/d649865283aff3545f9754a01c92982e37602dc8/packages/scripts/CHANGELOG.md#breaking-changes-2": ""
   },
   "dependencies": {
@@ -86,6 +87,7 @@
     "@testing-library/react": "^16.3.2",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
+    "@wordpress/scripts": "^32.4.1",
     "prettier": "npm:wp-prettier@^3.0.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",

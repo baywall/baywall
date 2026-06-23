@@ -43,6 +43,6 @@
     "@serendipity/wp-plugin-block": "workspace:*"
   },
   "devDependencies": {
-    "@wordpress/env": "~10.29.0"
+    "@wordpress/env": "^11.8.1"
   }
 }

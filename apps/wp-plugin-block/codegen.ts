@@ -8,8 +8,13 @@ const config: CodegenConfig = {
 		'./src/types/gql/generated.ts': {
 			// `preset: 'client'`を使用しない場合はファイル名を指定
 			// preset: 'client',
-			plugins: [ 'typescript', 'typescript-operations', 'typescript-react-query' ],
+			// codegen v7 では `typescript` plugin と `typescript-operations` plugin が
+			// 同名 Input 型を重複生成して Duplicate identifier エラーになるため、
+			// `typescript` plugin を外し `preResolveTypes: true` で operation 型を
+			// インライン展開して基底型(Scalars 等)非依存にする
+			plugins: [ 'typescript-operations', 'typescript-react-query' ],
 			config: {
+				preResolveTypes: true,
 				// ※ jestで`Cannot find module`が発生するため、相対パスで記述している
 				fetcher: '@serendipity/lib-frontend#fetcher', // 相対パスの場合は、生成されるファイルからのパス
 				// isReactHook: true,
