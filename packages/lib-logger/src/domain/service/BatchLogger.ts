@@ -1,5 +1,5 @@
-import { LogLevel } from '../types/LogLevel';
-import { Logger } from './Logger';
+import { LogLevel } from '../types/LogLevel.js';
+import { Logger } from './Logger.js';
 
 /** 複数のLoggerに対して一括でログ出力を行うためのクラス */
 export class BatchLogger implements Logger {

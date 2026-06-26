@@ -1,4 +1,4 @@
-import { ValueObject } from './base/ValueObject';
+import { ValueObject } from './base/ValueObject.js';
 
 const brand: unique symbol = Symbol( 'Symbol' );
 

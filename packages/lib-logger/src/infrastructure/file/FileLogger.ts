@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import util from 'node:util';
-import { Logger } from '../../domain/service/Logger';
-import { LogLevel } from '../../domain/types/LogLevel';
+import { Logger } from '../../domain/service/Logger.js';
+import { LogLevel } from '../../domain/types/LogLevel.js';
 
 /** 指定したファイルにログを出力するLogger */
 export class FileLogger implements Logger {

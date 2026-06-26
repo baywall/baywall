@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
-import { DivideByZeroError } from '../error/DivideByZeroError';
-import { ValueObject } from './base/ValueObject';
-import { Decimals } from './Decimals';
+import { DivideByZeroError } from '../error/DivideByZeroError.js';
+import { ValueObject } from './base/ValueObject.js';
+import { Decimals } from './Decimals.js';
 
 const brand: unique symbol = Symbol( 'Amount' );
 

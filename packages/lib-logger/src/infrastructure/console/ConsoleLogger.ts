@@ -1,6 +1,6 @@
-import { LOG_LEVEL } from '../../constant/LogLevel';
-import { Logger } from '../../domain/service/Logger';
-import { LogLevel } from '../../domain/types/LogLevel';
+import { LOG_LEVEL } from '../../constant/LogLevel.js';
+import { Logger } from '../../domain/service/Logger.js';
+import { LogLevel } from '../../domain/types/LogLevel.js';
 
 /* eslint-disable no-console */
 

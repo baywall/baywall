@@ -1,6 +1,6 @@
-import { LOG_LEVEL } from '../../constant/LogLevel';
-import { LogLevel } from '../types/LogLevel';
-import { Logger } from './Logger';
+import { LOG_LEVEL } from '../../constant/LogLevel.js';
+import { LogLevel } from '../types/LogLevel.js';
+import { Logger } from './Logger.js';
 
 /**
  * アプリケーションから利用されるLogger

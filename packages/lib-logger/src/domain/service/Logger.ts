@@ -1,4 +1,4 @@
-import { LogLevel } from '../types/LogLevel';
+import { LogLevel } from '../types/LogLevel.js';
 
 /** 指定された引数をログ出力(出力先は継承先で決定)するためのインターフェース */
 export interface Logger {

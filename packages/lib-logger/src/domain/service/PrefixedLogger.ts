@@ -1,6 +1,6 @@
-import { LogLevel } from '../types/LogLevel';
-import { LogPrefixProvider } from './LogPrefixProvider';
-import { Logger } from './Logger';
+import { LogLevel } from '../types/LogLevel.js';
+import { LogPrefixProvider } from './LogPrefixProvider.js';
+import { Logger } from './Logger.js';
 
 /** ログの先頭に指定された文字列を付与してログ出力するLoggerの実装 */
 export class PrefixedLogger implements Logger {
