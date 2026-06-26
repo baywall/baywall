@@ -1,4 +1,4 @@
-import { fetcher } from './fetcher';
+import { fetcher } from './fetcher.js';
 
 /**
  * @param      query

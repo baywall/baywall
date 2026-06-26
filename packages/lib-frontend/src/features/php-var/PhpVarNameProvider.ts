@@ -1,4 +1,4 @@
-import { Config } from '../../constant/Config';
+import { Config } from '../../constant/Config.js';
 
 /** サーバーから出力されるグローバル変数の名前を取得するクラス */
 export class PhpVarNameProvider {

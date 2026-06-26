@@ -7,9 +7,9 @@ import {
 	LevelFilteredLogger,
 	LOG_LEVEL,
 	Logger,
+	LogLevel,
 } from '@serendipity/lib-logger';
-import { Config } from '../../constant/Config';
-import { LogLevel } from '../../../../lib-logger/dist/cjs';
+import { Config } from '../../constant/Config.js';
 
 /**
  * 本プロジェクトで使用するloggerを取得します

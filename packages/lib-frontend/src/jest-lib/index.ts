@@ -1,2 +1,2 @@
-export * from './render';
-export * from './silentRenderHook';
+export * from './render.js';
+export * from './silentRenderHook.js';

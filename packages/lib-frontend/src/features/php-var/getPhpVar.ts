@@ -1,5 +1,5 @@
-import { PhpVar } from '../../types/PhpVar';
-import { PhpVarNameProvider } from './PhpVarNameProvider';
+import { PhpVar } from '../../types/PhpVar.js';
+import { PhpVarNameProvider } from './PhpVarNameProvider.js';
 
 export const getPhpVar = (): PhpVar | null => {
 	const varName = new PhpVarNameProvider().get();

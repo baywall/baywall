@@ -1,5 +1,5 @@
 import { WpRestNonce } from '@serendipity/lib-value-object';
-import { getPhpVar } from '../getPhpVar';
+import { getPhpVar } from '../getPhpVar.js';
 
 export const getWpRestNonce = (): WpRestNonce | null => {
 	const phpVar = getPhpVar();

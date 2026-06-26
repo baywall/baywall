@@ -1,6 +1,6 @@
-import { getWpRestNonce } from '../php-var/wp-rest-nonce/getWpRestNonce';
-import { getGraphQlUrl } from '../graphql-url/getGraphQlUrl';
-import { GraphqlError } from './error/GraphqlError';
+import { getWpRestNonce } from '../php-var/wp-rest-nonce/getWpRestNonce.js';
+import { getGraphQlUrl } from '../graphql-url/getGraphQlUrl.js';
+import { GraphqlError } from './error/GraphqlError.js';
 
 /**
  * GraphQL クエリ文字列を受け取る型。
