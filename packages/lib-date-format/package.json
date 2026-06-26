@@ -38,7 +38,5 @@
     "test": "bash ../../scripts/npm-scripts/test-jest.sh"
   },
   "keywords": [],
-  "devDependencies": {
-    "prettier": "npm:wp-prettier@^3.0.3"
-  }
+  "devDependencies": {}
 }

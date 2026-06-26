@@ -4,5 +4,5 @@ import { getGraphQlUrl } from './getGraphQlUrl.js';
 
 /** GraphQLのURLを取得します */
 export const useGraphQlUrl = (): HttpUrl | null | undefined => {
-	return useMemo( () => getGraphQlUrl(), [] );
+	return useMemo(() => getGraphQlUrl(), []);
 };

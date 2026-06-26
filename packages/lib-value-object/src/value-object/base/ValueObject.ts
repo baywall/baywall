@@ -1,5 +1,5 @@
-export interface ValueObject< T > {
-	equals: ( other: T ) => boolean;
+export interface ValueObject<T> {
+	equals: (other: T) => boolean;
 
 	toString: () => string;
 }

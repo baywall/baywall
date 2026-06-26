@@ -10,13 +10,13 @@ declare global {
 export class UrlProvider {
 	/** 管理画面のURLを取得します */
 	private get admin(): URL {
-		return new URL( window.ajaxurl.replace( /admin-ajax\.php$/, '' ), window.location.origin );
+		return new URL(window.ajaxurl.replace(/admin-ajax\.php$/, ''), window.location.origin);
 	}
 
 	/** 本プラグインのダッシュボードのURLを取得します */
 	public get dashboard(): URL {
-		const settingsPageUrl = new URL( 'admin.php', this.admin );
-		settingsPageUrl.searchParams.set( 'page', blockJson.textdomain );
+		const settingsPageUrl = new URL('admin.php', this.admin);
+		settingsPageUrl.searchParams.set('page', blockJson.textdomain);
 		return settingsPageUrl;
 	}
 }

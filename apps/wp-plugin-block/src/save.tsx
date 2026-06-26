@@ -19,6 +19,6 @@ export default function save() {
 		className: new ClassNameProvider().block,
 	};
 	//	ウィジェット表示用のクラス名を付与
-	const props = useBlockProps?.save( myProps ) ?? myProps;
-	return <aside { ...props }></aside>;
+	const props = useBlockProps?.save(myProps) ?? myProps;
+	return <aside {...props}></aside>;
 }

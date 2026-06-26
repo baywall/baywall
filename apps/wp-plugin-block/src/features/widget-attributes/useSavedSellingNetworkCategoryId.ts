@@ -13,7 +13,7 @@ export const useSavedSellingNetworkCategoryId = (): NetworkCategoryId | null => 
 		attributes: { sellingNetworkCategoryId: networkCategoryIdValue },
 	} = useBlockEditProps();
 
-	return useState< NetworkCategoryId | null >(
-		networkCategoryIdValue ? NetworkCategoryId.from( networkCategoryIdValue ) : null
-	)[ 0 ];
+	return useState<NetworkCategoryId | null>(
+		networkCategoryIdValue ? NetworkCategoryId.from(networkCategoryIdValue) : null
+	)[0];
 };

@@ -7,26 +7,26 @@ export interface InvalidDecimalsNotificationProps {
 	screenNotifier: ScreenNotifier;
 }
 
-export const InvalidDecimalsNotification = ( props: InvalidDecimalsNotificationProps ) => {
+export const InvalidDecimalsNotification = (props: InvalidDecimalsNotificationProps) => {
 	const { t } = useTranslation();
 	const { isError, screenNotifier } = props;
 
-	useEffect( () => {
+	useEffect(() => {
 		const id = '8bbdd02d-67ea-4b1b-8896-a32925dfca74'; // 通知に使用する一意のID（適当な値）
 
-		if ( isError ) {
-			screenNotifier.showWarnSnackbar( t( 'too_many_decimal_places_message' ), {
+		if (isError) {
+			screenNotifier.showWarnSnackbar(t('too_many_decimal_places_message'), {
 				id,
 				isDismissible: false, // クリックで閉じない
 				explicitDismiss: true, // 閉じるボタンを表示し、時間経過で閉じない
-			} );
+			});
 		} else {
-			screenNotifier.hide( id );
+			screenNotifier.hide(id);
 		}
 
 		// クリーンアップ時に通知を消す
-		return () => screenNotifier.hide( id );
-	}, [ t, isError, screenNotifier ] );
+		return () => screenNotifier.hide(id);
+	}, [t, isError, screenNotifier]);
 
 	// 通知はsnackbarを使って行うため、このコンポーネント自体は描画しない
 	return null;

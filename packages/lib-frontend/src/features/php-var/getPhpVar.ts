@@ -3,5 +3,5 @@ import { PhpVarNameProvider } from './PhpVarNameProvider.js';
 
 export const getPhpVar = (): PhpVar | null => {
 	const varName = new PhpVarNameProvider().get();
-	return ( window as any )[ varName ] ?? null;
+	return (window as any)[varName] ?? null;
 };

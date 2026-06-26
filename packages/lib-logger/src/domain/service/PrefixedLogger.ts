@@ -9,8 +9,8 @@ export class PrefixedLogger implements Logger {
 		private logger: Logger
 	) {}
 
-	public log( logLevel: LogLevel, ...args: any[] ): void {
-		const prefix = this.logPrefixProvider.get( logLevel );
-		this.logger.log( logLevel, prefix, ...args );
+	public log(logLevel: LogLevel, ...args: any[]): void {
+		const prefix = this.logPrefixProvider.get(logLevel);
+		this.logger.log(logLevel, prefix, ...args);
 	}
 }

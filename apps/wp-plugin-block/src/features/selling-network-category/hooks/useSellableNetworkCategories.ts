@@ -9,13 +9,13 @@ import { NetworkCategoryId } from '@serendipity/lib-value-object';
 export const useSellableNetworkCategories = (): NetworkCategory[] | undefined => {
 	const { data } = useBlockInitRawDataQuery();
 
-	return useMemo( () => {
-		if ( data === undefined ) {
+	return useMemo(() => {
+		if (data === undefined) {
 			return undefined;
 		}
 
 		return data.networkCategories
-			.filter( ( c ) => c.sellableSymbols.length > 0 )
-			.map( ( c ) => NetworkCategory.from( NetworkCategoryId.from( c.id ), c.name ) );
-	}, [ data ] );
+			.filter((c) => c.sellableSymbols.length > 0)
+			.map((c) => NetworkCategory.from(NetworkCategoryId.from(c.id), c.name));
+	}, [data]);
 };

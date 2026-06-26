@@ -30,8 +30,8 @@ import './i18n/i18n'; // i18n初期化処理を実行
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-registerBlockType< WidgetAttributes >( metadata.name, {
-	...( metadata as any ),
+registerBlockType<WidgetAttributes>(metadata.name, {
+	...(metadata as any),
 	icon: new BlockIconProvider().get(),
 	attributes: {
 		// ※ デフォルト値を設定する場合は、`includes/classes/Types/WidgetAttributesType.php`の設定も確認すること。
@@ -57,4 +57,4 @@ registerBlockType< WidgetAttributes >( metadata.name, {
 	 * @see ./save.js
 	 */
 	save,
-} );
+});

@@ -11,36 +11,32 @@ import { GraphqlError } from './error/GraphqlError.js';
  */
 export type GraphqlQuery = string | { toString: () => string };
 
-export const fetcher = < TData, TVariables >(
-	query: GraphqlQuery,
-	variables?: TVariables,
-	requestInit?: RequestInit
-) => {
+export const fetcher = <TData, TVariables>(query: GraphqlQuery, variables?: TVariables, requestInit?: RequestInit) => {
 	const endpoint = getGraphQlUrl();
 	const nonce = getWpRestNonce();
 
-	if ( ! endpoint || ! nonce ) {
-		throw new Error( `[EC048815] endpoint: ${ endpoint }, nonce: ${ nonce }` );
+	if (!endpoint || !nonce) {
+		throw new Error(`[EC048815] endpoint: ${endpoint}, nonce: ${nonce}`);
 	}
 
-	return async (): Promise< TData > => {
-		const headers = new Headers( requestInit?.headers );
+	return async (): Promise<TData> => {
+		const headers = new Headers(requestInit?.headers);
 
-		headers.set( 'Content-Type', 'application/json' );
-		headers.set( 'X-WP-Nonce', nonce.value );
+		headers.set('Content-Type', 'application/json');
+		headers.set('X-WP-Nonce', nonce.value);
 
-		const res = await fetch( endpoint.value, {
+		const res = await fetch(endpoint.value, {
 			...requestInit,
 			method: 'POST',
 			credentials: requestInit?.credentials ?? 'same-origin',
 			headers,
-			body: JSON.stringify( { query, variables } ),
-		} );
+			body: JSON.stringify({ query, variables }),
+		});
 
 		const json = await res.json();
 
-		if ( json.errors ) {
-			throw new GraphqlError( json.errors[ 0 ] );
+		if (json.errors) {
+			throw new GraphqlError(json.errors[0]);
 		}
 
 		return json.data;

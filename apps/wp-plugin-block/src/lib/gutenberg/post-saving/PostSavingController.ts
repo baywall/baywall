@@ -16,15 +16,15 @@ export class PostSavingController {
 	 * 投稿の保存をロックします
 	 * @param lockName
 	 */
-	public lock( lockName: string ) {
-		dispatch( editorStore ).lockPostSaving( lockName );
+	public lock(lockName: string) {
+		dispatch(editorStore).lockPostSaving(lockName);
 	}
 
 	/**
 	 * 投稿の保存のロックを解除します
 	 * @param lockName
 	 */
-	public unlock( lockName: string ) {
-		dispatch( editorStore ).unlockPostSaving( lockName );
+	public unlock(lockName: string) {
+		dispatch(editorStore).unlockPostSaving(lockName);
 	}
 }

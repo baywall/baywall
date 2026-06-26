@@ -1,35 +1,33 @@
-const brand: unique symbol = Symbol( 'PostId' );
+const brand: unique symbol = Symbol('PostId');
 
 /** 投稿IDを表すvalue-object */
 export class PostId {
 	/** 型区別用のフィールド */
 	// @ts-ignore: unused-variable
-	private [ brand ]!: void;
+	private [brand]!: void;
 
 	public readonly value: number;
 
-	private constructor( value: number ) {
-		PostId.checkPostIdValue( value );
+	private constructor(value: number) {
+		PostId.checkPostIdValue(value);
 		this.value = value;
 	}
 
-	public static from( postIdValue: number ): PostId {
-		return new PostId( postIdValue );
+	public static from(postIdValue: number): PostId {
+		return new PostId(postIdValue);
 	}
 
 	public toString(): string {
-		return `${ this.value }`;
+		return `${this.value}`;
 	}
 
-	public equals( other: PostId ): boolean {
+	public equals(other: PostId): boolean {
 		return this.value === other.value;
 	}
 
-	private static checkPostIdValue( postIdValue: number ): void {
-		if ( ! Number.isInteger( postIdValue ) || postIdValue <= 0 ) {
-			throw new Error(
-				`[260F997A] PostId must be a positive integer. ${ postIdValue } (${ typeof postIdValue })`
-			);
+	private static checkPostIdValue(postIdValue: number): void {
+		if (!Number.isInteger(postIdValue) || postIdValue <= 0) {
+			throw new Error(`[260F997A] PostId must be a positive integer. ${postIdValue} (${typeof postIdValue})`);
 		}
 	}
 }

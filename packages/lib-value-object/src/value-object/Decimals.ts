@@ -1,46 +1,46 @@
 import { ValueObject } from './base/ValueObject.js';
 
-const brand: unique symbol = Symbol( 'Decimals' );
+const brand: unique symbol = Symbol('Decimals');
 
 /** 小数点以下桁数を表すvalue-object */
-export class Decimals implements ValueObject< Decimals > {
+export class Decimals implements ValueObject<Decimals> {
 	/** 型区別用のフィールド */
 	// @ts-ignore: unused-variable
-	private [ brand ]!: void;
+	private [brand]!: void;
 
 	public readonly value: number;
 
-	private constructor( value: number ) {
-		Decimals.checkDecimalsValue( value );
+	private constructor(value: number) {
+		Decimals.checkDecimalsValue(value);
 		this.value = value;
 	}
 
-	public static from( decimalsValue: number ): Decimals {
-		return new Decimals( decimalsValue );
+	public static from(decimalsValue: number): Decimals {
+		return new Decimals(decimalsValue);
 	}
 
 	public toString(): string {
-		return `${ this.value }`;
+		return `${this.value}`;
 	}
 
-	public equals( other: Decimals ): boolean {
+	public equals(other: Decimals): boolean {
 		return this.value === other.value;
 	}
 
-	public compare( other: Decimals ): number {
-		if ( this.value < other.value ) {
+	public compare(other: Decimals): number {
+		if (this.value < other.value) {
 			return -1;
-		} else if ( this.value > other.value ) {
+		} else if (this.value > other.value) {
 			return 1;
 		} else {
 			return 0;
 		}
 	}
 
-	private static checkDecimalsValue( decimalsValue: number ): void {
-		if ( ! Number.isInteger( decimalsValue ) || decimalsValue < 0 ) {
+	private static checkDecimalsValue(decimalsValue: number): void {
+		if (!Number.isInteger(decimalsValue) || decimalsValue < 0) {
 			throw new Error(
-				`[844AB833] Decimals must be a non negative integer. ${ decimalsValue } (${ typeof decimalsValue })`
+				`[844AB833] Decimals must be a non negative integer. ${decimalsValue} (${typeof decimalsValue})`
 			);
 		}
 	}

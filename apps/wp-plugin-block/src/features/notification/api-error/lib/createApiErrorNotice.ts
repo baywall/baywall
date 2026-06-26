@@ -1,6 +1,6 @@
 import { NoticeList } from '@wordpress/components';
 
-type Notices = React.ComponentProps< typeof NoticeList >[ 'notices' ];
+type Notices = React.ComponentProps<typeof NoticeList>['notices'];
 
 const API_ERROR_NOTICE_ID = 'cd890884-9b16-4b09-8d8b-435b71bea425'; // 適当なID
 
@@ -9,8 +9,8 @@ const API_ERROR_NOTICE_ID = 'cd890884-9b16-4b09-8d8b-435b71bea425'; // 適当な
  *
  * @param error useQueryのerrorプロパティ
  */
-export const createApiErrorNotice = ( error: unknown ): Notices[ number ] | null => {
-	if ( ! error ) {
+export const createApiErrorNotice = (error: unknown): Notices[number] | null => {
+	if (!error) {
 		return null;
 	}
 
@@ -18,6 +18,6 @@ export const createApiErrorNotice = ( error: unknown ): Notices[ number ] | null
 		id: API_ERROR_NOTICE_ID,
 		status: 'error',
 		isDismissible: false,
-		content: String( error ),
+		content: String(error),
 	};
 };

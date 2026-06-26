@@ -13,5 +13,5 @@ export const useSavedSellingSymbol = (): Symbol | null => {
 		attributes: { sellingSymbol: symbolValue },
 	} = useBlockEditProps();
 
-	return useState< Symbol | null >( symbolValue ? Symbol.from( symbolValue ) : null )[ 0 ];
+	return useState<Symbol | null>(symbolValue ? Symbol.from(symbolValue) : null)[0];
 };

@@ -9,10 +9,10 @@ export const useIsDecimalPlacesError = (
 	inputAmount: Amount | null | undefined,
 	maxDecimals: Decimals | null | undefined
 ) => {
-	if ( ! inputAmount || ! maxDecimals ) {
+	if (!inputAmount || !maxDecimals) {
 		// 値が取得できない場合はエラーの状態でないという判定にする
 		return false;
 	}
 
-	return inputAmount.decimals.compare( maxDecimals ) > 0;
+	return inputAmount.decimals.compare(maxDecimals) > 0;
 };

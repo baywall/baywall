@@ -14,21 +14,21 @@ export const useMaxAllowedDecimals = (
 ) => {
 	const tokens = useTokens();
 
-	return useMemo( () => {
-		if ( tokens === undefined || networkCategoryId === undefined || symbol === undefined ) {
+	return useMemo(() => {
+		if (tokens === undefined || networkCategoryId === undefined || symbol === undefined) {
 			return undefined;
-		} else if ( networkCategoryId === null || symbol === null ) {
+		} else if (networkCategoryId === null || symbol === null) {
 			return null;
 		}
 
 		// 同一ネットワークカテゴリのToken一覧から最大小数点以下桁数を取得できる場合はその値を返す
-		const networkTokens = tokens.filter( ( t ) => t.networkCategoryId.equals( networkCategoryId ) );
-		const networkMaxDecimals = getMaxDecimals( symbol, networkTokens );
-		if ( networkMaxDecimals ) {
+		const networkTokens = tokens.filter((t) => t.networkCategoryId.equals(networkCategoryId));
+		const networkMaxDecimals = getMaxDecimals(symbol, networkTokens);
+		if (networkMaxDecimals) {
 			return networkMaxDecimals;
 		}
 
 		// 見つからない場合は全ネットワークから最大小数点以下桁数を取得して返す
-		return getMaxDecimals( symbol, tokens );
-	}, [ tokens, networkCategoryId, symbol ] );
+		return getMaxDecimals(symbol, tokens);
+	}, [tokens, networkCategoryId, symbol]);
 };

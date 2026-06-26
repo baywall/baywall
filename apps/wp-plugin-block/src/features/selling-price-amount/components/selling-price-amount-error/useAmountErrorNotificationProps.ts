@@ -6,7 +6,7 @@ import { useInputSellingPriceAmount } from '../../hooks/useInputSellingPriceAmou
 export const useAmountErrorNotificationProps = (): AmountErrorNotificationProps => {
 	return {
 		isError: useIsError(),
-		screenNotifier: useMemo( () => new ScreenNotifier(), [] ),
+		screenNotifier: useMemo(() => new ScreenNotifier(), []),
 	};
 };
 

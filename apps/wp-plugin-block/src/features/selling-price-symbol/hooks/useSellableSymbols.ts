@@ -13,25 +13,25 @@ export const useSellableSymbols = (
 	const logger = useLogger();
 	const { data } = useBlockInitRawDataQuery();
 
-	return useMemo( () => {
-		if ( selectedNetworkCategoryId === undefined || data === undefined ) {
+	return useMemo(() => {
+		if (selectedNetworkCategoryId === undefined || data === undefined) {
 			return undefined;
-		} else if ( selectedNetworkCategoryId === null ) {
+		} else if (selectedNetworkCategoryId === null) {
 			return [];
 		}
 
 		const sellableSymbols = data.networkCategories
-			.find( ( n ) => NetworkCategoryId.from( n.id ).equals( selectedNetworkCategoryId ) )
-			?.sellableSymbols.map( ( s ) => Symbol.from( s ) );
+			.find((n) => NetworkCategoryId.from(n.id).equals(selectedNetworkCategoryId))
+			?.sellableSymbols.map((s) => Symbol.from(s));
 
-		if ( sellableSymbols === undefined ) {
+		if (sellableSymbols === undefined) {
 			// 期待しない状態なのでログを出力しておく
 			logger.warn(
-				`[89175506] selectedNetworkCategoryId: ${ selectedNetworkCategoryId }, sellableSymbols: ${ sellableSymbols }`
+				`[89175506] selectedNetworkCategoryId: ${selectedNetworkCategoryId}, sellableSymbols: ${sellableSymbols}`
 			);
 			return null;
 		}
 
 		return sellableSymbols;
-	}, [ logger, selectedNetworkCategoryId, data ] );
+	}, [logger, selectedNetworkCategoryId, data]);
 };

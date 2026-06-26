@@ -11,17 +11,17 @@ import { useShouldLockEditorSaving } from './hooks/useShouldLockEditorSaving';
 export const useControlEditorSaving = () => {
 	const shouldLock = useShouldLockEditorSaving();
 
-	useEffect( () => {
+	useEffect(() => {
 		const lockName = '38f6569d-91bb-424d-8e94-4f7e35c64edd'; // 適当なロック名
 		const postSavingController = new PostSavingController();
-		if ( shouldLock ) {
-			postSavingController.lock( lockName );
+		if (shouldLock) {
+			postSavingController.lock(lockName);
 		} else {
-			postSavingController.unlock( lockName );
+			postSavingController.unlock(lockName);
 		}
 		return () => {
 			// クリーンアップ時にロックを解除
-			postSavingController.unlock( lockName );
+			postSavingController.unlock(lockName);
 		};
-	}, [ shouldLock ] );
+	}, [shouldLock]);
 };

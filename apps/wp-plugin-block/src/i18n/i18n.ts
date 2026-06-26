@@ -16,16 +16,16 @@ const resources = {
 	ja: { translation: ja },
 };
 
-const languageDetector = new LanguageDetector( null, {
+const languageDetector = new LanguageDetector(null, {
 	// localStorageやcookieにキャッシュを保存しない
 	// ※ ユーザーに言語切り替えのUIを提供しないため、キャッシュは不要
 	caches: [],
-} );
+});
 
 i18next
-	.use( languageDetector )
-	.use( initReactI18next )
-	.init( {
+	.use(languageDetector)
+	.use(initReactI18next)
+	.init({
 		resources,
 		// lng: ⇒ `LanguageDetector`を使用しているため`lng`は指定しない
 		fallbackLng: 'en',
@@ -34,6 +34,6 @@ i18next
 		},
 		// 空文字列を有効な翻訳として許可するかどうか(true: 許可する, false: 許可しない)
 		returnEmptyString: false,
-	} );
+	});
 
 export default i18next;

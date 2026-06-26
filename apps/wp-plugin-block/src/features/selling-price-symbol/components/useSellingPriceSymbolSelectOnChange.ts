@@ -4,13 +4,13 @@ import { useSelectedSellingPriceSymbolState } from '../hooks/useSelectedSellingP
 import { type SellingPriceSymbolSelectProps } from './SellingPriceSymbolSelect';
 
 /** 販売価格の通貨シンボルの選択肢が変更されたときのコールバックを取得します */
-export const useSellingPriceSymbolSelectOnChange = (): SellingPriceSymbolSelectProps[ 'onChange' ] => {
-	const [ , setSellingPriceSymbol ] = useSelectedSellingPriceSymbolState();
+export const useSellingPriceSymbolSelectOnChange = (): SellingPriceSymbolSelectProps['onChange'] => {
+	const [, setSellingPriceSymbol] = useSelectedSellingPriceSymbolState();
 
-	return useCallback< NonNullable< SellingPriceSymbolSelectProps[ 'onChange' ] > >(
-		( value ) => {
-			setSellingPriceSymbol( Symbol.from( value ) );
+	return useCallback<NonNullable<SellingPriceSymbolSelectProps['onChange']>>(
+		(value) => {
+			setSellingPriceSymbol(Symbol.from(value));
 		},
-		[ setSellingPriceSymbol ]
+		[setSellingPriceSymbol]
 	);
 };

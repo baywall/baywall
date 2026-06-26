@@ -10,16 +10,16 @@ import { useMaxAllowedDecimals } from '../../hooks/useMaxAllowedDecimals';
 export const useInvalidDecimalsNotificationProps = (): InvalidDecimalsNotificationProps => {
 	return {
 		isError: useIsError(),
-		screenNotifier: useMemo( () => new ScreenNotifier(), [] ),
+		screenNotifier: useMemo(() => new ScreenNotifier(), []),
 	};
 };
 
 const useIsError = (): boolean => {
 	const inputAmount = useInputSellingPriceAmount();
-	const [ selectedNetworkCategoryId ] = useSelectedNetworkCategoryIdState();
-	const [ selectedSellingPriceSymbol ] = useSelectedSellingPriceSymbolState();
+	const [selectedNetworkCategoryId] = useSelectedNetworkCategoryIdState();
+	const [selectedSellingPriceSymbol] = useSelectedSellingPriceSymbolState();
 
-	const maxDecimals = useMaxAllowedDecimals( selectedNetworkCategoryId, selectedSellingPriceSymbol );
+	const maxDecimals = useMaxAllowedDecimals(selectedNetworkCategoryId, selectedSellingPriceSymbol);
 
-	return useIsDecimalPlacesError( inputAmount, maxDecimals );
+	return useIsDecimalPlacesError(inputAmount, maxDecimals);
 };

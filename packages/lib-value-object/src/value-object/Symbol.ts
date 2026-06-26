@@ -1,25 +1,25 @@
 import { ValueObject } from './base/ValueObject.js';
 
-const brand: unique symbol = Symbol( 'Symbol' );
+const brand: unique symbol = Symbol('Symbol');
 
 /** 通貨記号を表すvalue-object */
-class TokenSymbol implements ValueObject< TokenSymbol > {
+class TokenSymbol implements ValueObject<TokenSymbol> {
 	/** 型区別用のフィールド */
 	// @ts-ignore: unused-variable
-	private [ brand ]!: void;
+	private [brand]!: void;
 
 	public readonly value: string;
 
-	private constructor( symbolValue: string ) {
-		TokenSymbol.checkSymbol( symbolValue );
+	private constructor(symbolValue: string) {
+		TokenSymbol.checkSymbol(symbolValue);
 		this.value = symbolValue;
 	}
 
-	public static from( symbolValue: string ): TokenSymbol {
-		return new TokenSymbol( symbolValue );
+	public static from(symbolValue: string): TokenSymbol {
+		return new TokenSymbol(symbolValue);
 	}
 
-	public equals( other: TokenSymbol ): boolean {
+	public equals(other: TokenSymbol): boolean {
 		return this.value === other.value;
 	}
 
@@ -27,12 +27,12 @@ class TokenSymbol implements ValueObject< TokenSymbol > {
 		return this.value;
 	}
 
-	private static checkSymbol( symbolValue: string ): void {
-		if ( ! TokenSymbol.isSymbol( symbolValue ) ) {
-			throw new Error( `[7D19A592] Invalid symbol value: '${ symbolValue }'` );
+	private static checkSymbol(symbolValue: string): void {
+		if (!TokenSymbol.isSymbol(symbolValue)) {
+			throw new Error(`[7D19A592] Invalid symbol value: '${symbolValue}'`);
 		}
 	}
-	private static isSymbol( symbolValue: string ): boolean {
+	private static isSymbol(symbolValue: string): boolean {
 		return symbolValue.length > 0 && symbolValue.trim() === symbolValue;
 	}
 }

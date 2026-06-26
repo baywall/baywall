@@ -6,6 +6,6 @@ export interface SellingNetworkCategorySelectProps extends BlockSingleSelectProp
  * 販売ネットワークカテゴリ選択コンポーネント
  * @param props
  */
-export const SellingNetworkCategorySelect = ( props: SellingNetworkCategorySelectProps ) => {
-	return <BlockSingleSelect { ...props } />;
+export const SellingNetworkCategorySelect = (props: SellingNetworkCategorySelectProps) => {
+	return <BlockSingleSelect {...props} />;
 };

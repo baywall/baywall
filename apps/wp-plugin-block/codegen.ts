@@ -2,7 +2,7 @@ import { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
 	schema: '../wp-plugin-php/includes/assets/graphql/schema/schema.graphql',
-	documents: [ './graphql/block/*.graphql' ],
+	documents: ['./graphql/block/*.graphql'],
 	ignoreNoDocuments: true, // for better experience with the watcher
 	generates: {
 		'./src/types/gql/generated.ts': {
@@ -12,7 +12,7 @@ const config: CodegenConfig = {
 			// 同名 Input 型を重複生成して Duplicate identifier エラーになるため、
 			// `typescript` plugin を外し `preResolveTypes: true` で operation 型を
 			// インライン展開して基底型(Scalars 等)非依存にする
-			plugins: [ 'typescript-operations', 'typescript-react-query' ],
+			plugins: ['typescript-operations', 'typescript-react-query'],
 			config: {
 				preResolveTypes: true,
 				// ※ jestで`Cannot find module`が発生するため、相対パスで記述している

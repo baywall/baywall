@@ -31,45 +31,45 @@ export const GutenbergPostEdit = () => {
 
 	return (
 		<Placeholder
-			icon={ new BlockIconProvider().get() }
-			label={ 'baywall' }
-			instructions={ t( 'select_network_category_and_price_message' ) }
+			icon={new BlockIconProvider().get()}
+			label={'baywall'}
+			instructions={t('select_network_category_and_price_message')}
 			id="fd9e15e3-9f4f-4537-8470-3da48e66d6e9"
 		>
-			{ /* エラー表示 */ }
-			<div style={ { width: '100%' } }>
-				<ApiErrorNotification { ...useApiErrorNotificationProps() } />
-				<SettingsErrorNotification { ...useSettingsErrorNotificationProps() } />
+			{/* エラー表示 */}
+			<div style={{ width: '100%' }}>
+				<ApiErrorNotification {...useApiErrorNotificationProps()} />
+				<SettingsErrorNotification {...useSettingsErrorNotificationProps()} />
 			</div>
 
-			{ /* 設定項目 ※管理画面のcss(.from-table)を流用 */ }
+			{/* 設定項目 ※管理画面のcss(.from-table)を流用 */}
 			<table className="form-table">
 				<tbody>
-					{ /* ネットワークカテゴリ設定 */ }
+					{/* ネットワークカテゴリ設定 */}
 					<tr>
-						<th scope="row">{ t( 'network_category_label' ) }:</th>
+						<th scope="row">{t('network_category_label')}:</th>
 						<td>
-							<div style={ { display: 'flex', alignItems: 'center', gap: '0.75em' } }>
-								<SellingNetworkCategorySelect { ...useSellingNetworkCategorySelectProps() } />
+							<div style={{ display: 'flex', alignItems: 'center', gap: '0.75em' }}>
+								<SellingNetworkCategorySelect {...useSellingNetworkCategorySelectProps()} />
 							</div>
 						</td>
 					</tr>
 
-					{ /* 販売価格設定 */ }
+					{/* 販売価格設定 */}
 					<tr>
-						<th scope="row">{ t( 'price_label' ) }:</th>
+						<th scope="row">{t('price_label')}:</th>
 						<td>
-							<div style={ { display: 'flex', alignItems: 'center', gap: '0.75em' } }>
+							<div style={{ display: 'flex', alignItems: 'center', gap: '0.75em' }}>
 								<SellingPriceAmount
-									{ ...useSellingPriceAmountProps() }
-									style={ { width: '135px', borderRadius: '3px' } }
+									{...useSellingPriceAmountProps()}
+									style={{ width: '135px', borderRadius: '3px' }}
 								/>
-								<SellingPriceSymbolSelect { ...useSellingPriceSymbolSelectProps() } />
+								<SellingPriceSymbolSelect {...useSellingPriceSymbolSelectProps()} />
 
-								{ /* 販売価格の値が不正な時に通知を行うコンポーネント */ }
-								<AmountErrorNotification { ...useAmountErrorNotificationProps() } />
-								{ /* 販売価格の小数点以下桁数が不正な時に通知を行うコンポーネント */ }
-								<InvalidDecimalsNotification { ...useInvalidDecimalsNotificationProps() } />
+								{/* 販売価格の値が不正な時に通知を行うコンポーネント */}
+								<AmountErrorNotification {...useAmountErrorNotificationProps()} />
+								{/* 販売価格の小数点以下桁数が不正な時に通知を行うコンポーネント */}
+								<InvalidDecimalsNotification {...useInvalidDecimalsNotificationProps()} />
 							</div>
 						</td>
 					</tr>

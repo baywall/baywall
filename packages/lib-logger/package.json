@@ -38,7 +38,5 @@
     "update:package": "npx npm-check-updates -u --target minor",
     "watch": "tsc -w -p tsconfig.esm.json"
   },
-  "devDependencies": {
-    "prettier": "npm:wp-prettier@^3.0.3"
-  }
+  "devDependencies": {}
 }

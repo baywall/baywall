@@ -5,5 +5,5 @@
 		"moduleResolution": "node",
 		"outDir": "./dist/cjs"
 	},
-	"exclude": [ "dist", "src/**/*.test.ts", "src/**/*.test.tsx" ]
+	"exclude": ["dist", "src/**/*.test.ts", "src/**/*.test.tsx"]
 }

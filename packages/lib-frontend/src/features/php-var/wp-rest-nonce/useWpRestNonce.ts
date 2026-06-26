@@ -4,5 +4,5 @@ import { getWpRestNonce } from './getWpRestNonce.js';
 
 /** WordPressのAPIリクエスト用nonceを取得します */
 export const useWpRestNonce = (): WpRestNonce | null | undefined => {
-	return useMemo( () => getWpRestNonce(), [] );
+	return useMemo(() => getWpRestNonce(), []);
 };

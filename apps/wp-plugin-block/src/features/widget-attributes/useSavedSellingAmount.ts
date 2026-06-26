@@ -13,5 +13,5 @@ export const useSavedSellingAmount = (): Amount | null => {
 		attributes: { sellingAmount: amountValue },
 	} = useBlockEditProps();
 
-	return useState< Amount | null >( amountValue ? Amount.from( amountValue ) : null )[ 0 ];
+	return useState<Amount | null>(amountValue ? Amount.from(amountValue) : null)[0];
 };

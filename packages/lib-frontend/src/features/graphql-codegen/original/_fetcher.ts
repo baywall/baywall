@@ -8,25 +8,25 @@
  * @param      variables
  */
 // istanbul ignore next
-export function fetcher< TData, TVariables >(
+export function fetcher<TData, TVariables>(
 	endpoint: string,
 	requestInit: RequestInit,
 	query: string,
 	variables?: TVariables
 ) {
-	return async (): Promise< TData > => {
-		const res = await fetch( endpoint, {
+	return async (): Promise<TData> => {
+		const res = await fetch(endpoint, {
 			method: 'POST',
 			...requestInit,
-			body: JSON.stringify( { query, variables } ),
-		} );
+			body: JSON.stringify({ query, variables }),
+		});
 
 		const json = await res.json();
 
-		if ( json.errors ) {
-			const { message } = json.errors[ 0 ];
+		if (json.errors) {
+			const { message } = json.errors[0];
 
-			throw new Error( message );
+			throw new Error(message);
 		}
 
 		return json.data;

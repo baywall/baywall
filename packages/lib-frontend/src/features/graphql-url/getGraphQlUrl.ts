@@ -6,9 +6,9 @@ import { getApiRoot } from '../php-var/api-root/getApiRoot.js';
 export const getGraphQlUrl = (): HttpUrl | null => {
 	const apiRoot = getApiRoot();
 
-	if ( apiRoot === null ) {
+	if (apiRoot === null) {
 		return null;
 	} else {
-		return HttpUrl.from( apiRoot.value.replace( /\/+$/, '' ) + '/' + Config.GRAPHQL_ENDPOINT_PATH );
+		return HttpUrl.from(apiRoot.value.replace(/\/+$/, '') + '/' + Config.GRAPHQL_ENDPOINT_PATH);
 	}
 };

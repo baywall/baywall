@@ -7,6 +7,6 @@ import { fetcher } from './fetcher.js';
  * useXXMutation関数がReact Hooksに対応できていないためfetcherを使ってください。
  * @see ./fetcher.ts
  */
-export const useFetcher = < TData, TVariables >( query: string, variables?: TVariables ) => {
-	return fetcher< TData, TVariables >( query, variables );
+export const useFetcher = <TData, TVariables>(query: string, variables?: TVariables) => {
+	return fetcher<TData, TVariables>(query, variables);
 };

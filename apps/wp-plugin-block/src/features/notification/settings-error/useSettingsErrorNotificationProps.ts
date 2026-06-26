@@ -6,7 +6,7 @@ import { useBlockInitRawDataQuery } from '../../../query/useBlockInitRawDataQuer
 
 export const useSettingsErrorNotificationProps = (): SettingsErrorNotificationProps => {
 	return {
-		isSettingsComplete: isSettingsComplete( useBlockInitRawDataQuery().data ),
-		urlProvider: useMemo( () => new UrlProvider(), [] ),
+		isSettingsComplete: isSettingsComplete(useBlockInitRawDataQuery().data),
+		urlProvider: useMemo(() => new UrlProvider(), []),
 	};
 };

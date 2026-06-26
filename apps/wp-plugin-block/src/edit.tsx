@@ -33,12 +33,12 @@ import { WidgetAttributes } from './types/WidgetAttributes';
  * @param props
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  */
-const Edit = ( props: BlockEditProps< WidgetAttributes > ) => {
+const Edit = (props: BlockEditProps<WidgetAttributes>) => {
 	const blockProps = useBlockProps?.() ?? {};
 
 	return (
-		<div { ...blockProps }>
-			<GutenbergPostEditProvider blockEditProps={ props }>
+		<div {...blockProps}>
+			<GutenbergPostEditProvider blockEditProps={props}>
 				<GutenbergPostEdit />
 			</GutenbergPostEditProvider>
 		</div>

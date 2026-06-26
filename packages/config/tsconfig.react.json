@@ -5,6 +5,6 @@
 		"target": "ESNext",
 		"module": "ESNext",
 		"jsx": "react-jsx",
-		"lib": [ "ESNext", "DOM", "DOM.Iterable" ]
+		"lib": ["ESNext", "DOM", "DOM.Iterable"]
 	}
 }

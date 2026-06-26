@@ -3,10 +3,10 @@ import { isDebugMode } from './isDebugMode.js';
 
 /** デバッグモードで動作しているかどうかを取得します */
 export const useIsDebugMode = (): boolean => {
-	return useMemo( () => {
+	return useMemo(() => {
 		// ReactRouterやhistory.pushStateなどといった手段で
 		// デバッグ用のパラメータが付与されることは無いので
 		// 初回レンダリング時での評価で問題ない
 		return isDebugMode();
-	}, [] );
+	}, []);
 };

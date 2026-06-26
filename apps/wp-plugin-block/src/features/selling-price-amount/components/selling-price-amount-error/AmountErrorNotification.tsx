@@ -12,29 +12,26 @@ export interface AmountErrorNotificationProps {
  * 販売価格の数量の入力が不正な場合にエラーを通知（表示）するコンポーネント
  * @param props
  */
-export const AmountErrorNotification = ( props: AmountErrorNotificationProps ) => {
+export const AmountErrorNotification = (props: AmountErrorNotificationProps) => {
 	const { t } = useTranslation();
 	const { isError, screenNotifier } = props;
 
-	useEffect( () => {
+	useEffect(() => {
 		const id = '8d75df90-3d6b-44c0-a690-19d861b0431c'; // 通知に使用する一意のID（適当な値）
 
-		if ( isError ) {
-			screenNotifier.showWarnSnackbar(
-				t( 'invalid_price_entered_message' ) + t( 'enter_the_valid_price_message' ),
-				{
-					id,
-					isDismissible: false, // クリックで閉じない
-					explicitDismiss: true, // 閉じるボタンを表示し、時間経過で閉じない
-				}
-			);
+		if (isError) {
+			screenNotifier.showWarnSnackbar(t('invalid_price_entered_message') + t('enter_the_valid_price_message'), {
+				id,
+				isDismissible: false, // クリックで閉じない
+				explicitDismiss: true, // 閉じるボタンを表示し、時間経過で閉じない
+			});
 		} else {
-			screenNotifier.hide( id );
+			screenNotifier.hide(id);
 		}
 
 		// クリーンアップ時に通知を消す
-		return () => screenNotifier.hide( id );
-	}, [ t, isError, screenNotifier ] );
+		return () => screenNotifier.hide(id);
+	}, [t, isError, screenNotifier]);
 
 	return null; // 通知はsnackbarを使って行うため、このコンポーネント自体は描画しない
 };

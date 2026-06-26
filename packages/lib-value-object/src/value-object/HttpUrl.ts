@@ -1,25 +1,25 @@
 import { ValueObject } from './base/ValueObject.js';
 
-const brand: unique symbol = Symbol( 'HttpUrl' );
+const brand: unique symbol = Symbol('HttpUrl');
 
 /** HTTPのURLを表すvalue-object */
-export class HttpUrl implements ValueObject< HttpUrl > {
+export class HttpUrl implements ValueObject<HttpUrl> {
 	/** 型区別用のフィールド */
 	// @ts-ignore: unused-variable
-	private [ brand ]!: void;
+	private [brand]!: void;
 
 	public readonly value: string;
 
-	private constructor( httpUrlValue: string ) {
-		HttpUrl.checkUrl( httpUrlValue );
+	private constructor(httpUrlValue: string) {
+		HttpUrl.checkUrl(httpUrlValue);
 		this.value = httpUrlValue;
 	}
 
-	public static from( httpUrlValue: string ): HttpUrl {
-		return new HttpUrl( httpUrlValue );
+	public static from(httpUrlValue: string): HttpUrl {
+		return new HttpUrl(httpUrlValue);
 	}
 
-	public equals( other: HttpUrl ): boolean {
+	public equals(other: HttpUrl): boolean {
 		return this.value === other.value;
 	}
 
@@ -27,14 +27,14 @@ export class HttpUrl implements ValueObject< HttpUrl > {
 		return this.value;
 	}
 
-	private static checkUrl( httpUrlValue: string ): void {
-		if ( ! HttpUrl.isUrl( httpUrlValue ) ) {
-			throw new Error( `[2265B3FC] Invalid url value: '${ httpUrlValue }'` );
+	private static checkUrl(httpUrlValue: string): void {
+		if (!HttpUrl.isUrl(httpUrlValue)) {
+			throw new Error(`[2265B3FC] Invalid url value: '${httpUrlValue}'`);
 		}
 	}
-	private static isUrl( httpUrlValue: string ): boolean {
+	private static isUrl(httpUrlValue: string): boolean {
 		try {
-			const url = new URL( httpUrlValue );
+			const url = new URL(httpUrlValue);
 			return url.protocol === 'http:' || url.protocol === 'https:';
 		} catch {
 			return false;

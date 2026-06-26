@@ -3,7 +3,7 @@ import { queries } from '@testing-library/dom';
 import { renderHook as _renderHook, Queries, RenderHookOptions, RenderHookResult } from '@testing-library/react';
 
 type RendererableContainer = ReactDOMClient.Container;
-type HydrateableContainer = Parameters< ( typeof ReactDOMClient )[ 'hydrateRoot' ] >[ 0 ];
+type HydrateableContainer = Parameters<(typeof ReactDOMClient)['hydrateRoot']>[0];
 
 /**
  * renderHookに例外が発生する関数オブジェクトを渡すとエラーログが出力されるので、それを抑制するラッパー関数。
@@ -20,13 +20,13 @@ export const silentRenderHook = <
 	Container extends RendererableContainer | HydrateableContainer = HTMLElement,
 	BaseElement extends RendererableContainer | HydrateableContainer = Container,
 >(
-	render: ( initialProps: Props ) => Result,
-	options?: RenderHookOptions< Props, Q, Container, BaseElement >
-): RenderHookResult< Result, Props > => {
+	render: (initialProps: Props) => Result,
+	options?: RenderHookOptions<Props, Q, Container, BaseElement>
+): RenderHookResult<Result, Props> => {
 	// eslint-disable-next-line @wordpress/no-unused-vars-before-return
-	const spy = jest.spyOn( console, 'error' ).mockImplementation( () => {} );
+	const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
 	try {
-		return _renderHook( render, options );
+		return _renderHook(render, options);
 	} finally {
 		spy.mockRestore();
 	}
