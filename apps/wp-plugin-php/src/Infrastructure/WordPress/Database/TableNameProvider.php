@@ -78,4 +78,9 @@ class TableNameProvider {
 	public function erc4361Nonce(): string {
 		return $this->prefix . WpTableCoreName::ERC4361_NONCE;
 	}
+
+	/** ログを記録するテーブル名 */
+	public function log(): string {
+		return $this->prefix . WpTableCoreName::LOG;
+	}
 }

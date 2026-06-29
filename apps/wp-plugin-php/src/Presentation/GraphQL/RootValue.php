@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueAccessTokenB
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueErc4361Message;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveIssueInvoiceV2;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveInstallOriginUrlChanged;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveLogs;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNativeToken;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategories;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveNetworkCategory;
@@ -73,6 +74,7 @@ class RootValue {
 			'purgeOnUninstall'                   => ResolvePurgeOnUninstall::class,
 			'installOriginUrlChanged'            => ResolveInstallOriginUrlChanged::class,
 			'pluginVersion'                      => ResolvePluginVersion::class,
+			'logs'                               => ResolveLogs::class,
 
 			// Mutation
 			'issueInvoiceV2'                     => ResolveIssueInvoiceV2::class,

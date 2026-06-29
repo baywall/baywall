@@ -37,6 +37,9 @@ class Config {
 	 */
 	public const CRON_INTERVAL_APP_CONTRACT_CRAWL = 60 * 1; // 1分
 
+	/** ログデータの保持期間(秒) */
+	public const LOG_DATA_EXPIRATION = 60 * 60 * 24 * 7; // 7日
+
 	/** ERC-4361用のnonceデータをリポジトリから削除する基準（秒） */
 	public const ERC4361_NONCE_DATA_EXPIRATION = 60 * 60 * 24 * 3; // 3日
 
@@ -115,4 +118,9 @@ class Config {
 	 * 販売履歴の最大取得件数
 	 */
 	public const SALES_HISTORIES_MAX_RESULTS = 1000;
+
+	/**
+	 * ログの最大取得件数
+	 */
+	public const LOGS_MAX_RESULTS = 1000;
 }

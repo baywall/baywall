@@ -16,6 +16,7 @@ use Cornix\Serendipity\Core\Application\Service\GraphQLService;
 use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
 use Cornix\Serendipity\Core\Application\Service\JwtAlgorithmProvider;
 use Cornix\Serendipity\Core\Application\Service\LockService;
+use Cornix\Serendipity\Core\Application\Service\LogQueryService;
 use Cornix\Serendipity\Core\Application\Service\PaidContentService;
 use Cornix\Serendipity\Core\Application\Service\PluginMigrationService;
 use Cornix\Serendipity\Core\Application\Service\PluginTeardownService;
@@ -55,6 +56,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpPostR
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpTokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\Logging\Handler\SimpleLogger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\WpDatabaseLogger;
 use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelRepository;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\AppContractDataProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
@@ -91,6 +93,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenCooki
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpRefreshTokenService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpSiteService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpUserAccessProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpLogQueryService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpSalesHistoryQueryService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpTransactionService;
 use wpdb;
@@ -139,6 +142,7 @@ final class ContainerDefinitions {
 			TransactionService::class            => autowire( WpTransactionService::class ),
 			LockService::class                   => autowire( WpLockService::class ),
 			SalesHistoryQueryService::class      => autowire( WpSalesHistoryQueryService::class ),
+			LogQueryService::class               => autowire( WpLogQueryService::class ),
 			JwtAlgorithmProvider::class          => autowire( WpJwtAlgorithmProvider::class ),
 			AccessTokenExpirationProvider::class => autowire( WpAccessTokenExpirationProvider::class ),
 			AccessTokenRequestProvider::class    => autowire( WpAccessTokenRequestProvider::class ),
@@ -160,7 +164,8 @@ final class ContainerDefinitions {
 			OracleRateCache::class               => autowire( WpOracleRateCache::class ),
 
 			// Logging
-			Logger::class                        => autowire( SimpleLogger::class ),
+			Logger::class                        => autowire( WpDatabaseLogger::class ),
+			SimpleLogger::class                  => autowire(),
 			LogLevelRepository::class            => autowire( WpLogLevelRepository::class ),
 		);
 	}

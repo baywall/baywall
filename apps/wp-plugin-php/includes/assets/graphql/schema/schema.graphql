@@ -74,6 +74,17 @@ type Query {
 
 	# プラグインのバージョン【ゲスト】
 	pluginVersion: String!
+
+	# ログ一覧を取得【管理者】
+	logs: [Log!]!
+}
+
+type Log {
+	id: ID!
+	createdAt: Float! # UNIXタイムスタンプ(秒)
+	level: String!
+	category: String!
+	message: String!
 }
 
 type Mutation {

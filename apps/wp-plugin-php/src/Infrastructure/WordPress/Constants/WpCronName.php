@@ -9,4 +9,7 @@ final class WpCronName {
 
 	/** Appコントラクトのクロール処理を行うCronアクション名 */
 	public const APP_CONTRACT_CRAWL = self::PREFIX . 'app_contract_crawl';
+
+	/** ログクリーンアップを行うCronアクション名 */
+	public const LOG_CLEANUP = self::PREFIX . 'log_cleanup';
 }

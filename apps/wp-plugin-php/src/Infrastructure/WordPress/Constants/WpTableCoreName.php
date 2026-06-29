@@ -19,6 +19,8 @@ final class WpTableCoreName {
 	public const INVOICE = self::PREFIX . 'invoice';
 	/** 発行した請求書トークンを格納するテーブル */
 	public const INVOICE_TOKEN = self::PREFIX . 'invoice_token';
+	/** ログを格納するテーブル */
+	public const LOG = self::PREFIX . 'log';
 	/** Oracleの定義を格納するテーブル */
 	public const ORACLE = self::PREFIX . 'oracle';
 	/** 有料コンテンツの情報を格納するテーブル */
