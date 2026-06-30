@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Application\Exception\LockAcquisitionException;
 use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
@@ -98,7 +97,8 @@ class AppContractCrawlService {
 
 				// クロールの開始ブロック番号及び終了ブロック番号を計算
 				$from_block      = $this->app_contract_repository->get( $chain_id )->crawledBlockNumber()->add( 1 );
-				$to_block        = $from_block->add( Config::GET_LOGS_MAX_RANGE - 1 );
+				$chain           = $this->chain_repository->get( $chain_id );
+				$to_block        = $from_block->add( $chain->maxLogsRange() - 1 );
 				$crawl_end_block = $crawl_end_blocks[ $index ];
 				if ( $to_block->compare( $crawl_end_block ) > 0 ) {
 					$to_block = $crawl_end_block; // オーバーランしないように調整

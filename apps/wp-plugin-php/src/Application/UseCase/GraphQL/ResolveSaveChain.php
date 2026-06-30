@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 use Cornix\Serendipity\Core\Application\Service\ChainIdChecker;
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
@@ -38,9 +39,16 @@ class ResolveSaveChain {
 		/** @var string */
 		$confirmations_value = $args['confirmations'];
 		$confirmations       = Confirmations::from( $confirmations_value );
+		/** @var int */
+		$max_logs_range = $args['maxLogsRange'];
+
+		// maxLogsRange の範囲チェック
+		if ( $max_logs_range < 1 || $max_logs_range > Config::GET_LOGS_MAX_RANGE ) {
+			throw new \InvalidArgumentException( '[5F7E23AA] maxLogsRange must be between 1 and ' . Config::GET_LOGS_MAX_RANGE . ". given: {$max_logs_range}" );
+		}
 
 		return $this->transaction_service->transactional(
-			function () use ( $chain_id, $rpc_url, $confirmations ) {
+			function () use ( $chain_id, $rpc_url, $confirmations, $max_logs_range ) {
 
 				// 更新前のチェーン情報を取得
 				$chain = $this->chain_repository->get( $chain_id );
@@ -53,6 +61,7 @@ class ResolveSaveChain {
 				// チェーン情報を更新
 				$chain->setRpcUrl( $rpc_url );
 				$chain->setConfirmations( $confirmations );
+				$chain->setMaxLogsRange( $max_logs_range );
 
 				// 値を更新したチェーン情報を保存
 				$this->chain_repository->save( $chain );

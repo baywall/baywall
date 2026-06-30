@@ -16,14 +16,16 @@ class Chain {
 	 * @param NetworkCategoryId $network_category_id
 	 * @param null|RpcUrl       $rpc_url
 	 * @param Confirmations     $confirmations
+	 * @param int               $max_logs_range
 	 * @param null|string       $block_explorer_url
 	 */
-	protected function __construct( ChainId $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, Confirmations $confirmations, ?string $block_explorer_url ) {
+	protected function __construct( ChainId $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, Confirmations $confirmations, int $max_logs_range, ?string $block_explorer_url ) {
 		$this->id                  = $chain_id;
 		$this->name                = $name;
 		$this->network_category_id = $network_category_id;
 		$this->rpc_url             = $rpc_url;
 		$this->confirmations       = $confirmations;
+		$this->max_logs_range      = $max_logs_range;
 		$this->block_explorer_url  = $block_explorer_url;
 	}
 
@@ -32,6 +34,7 @@ class Chain {
 	private NetworkCategoryId $network_category_id;
 	private ?RpcUrl $rpc_url;
 	private Confirmations $confirmations;
+	private int $max_logs_range;
 	private ?string $block_explorer_url;
 
 	public function id(): ChainId {
@@ -74,5 +77,23 @@ class Chain {
 
 	public function networkCategoryId(): NetworkCategoryId {
 		return $this->network_category_id;
+	}
+
+	/**
+	 * このチェーンのログ取得ブロック範囲最大値を取得します
+	 *
+	 * @return int
+	 */
+	public function maxLogsRange(): int {
+		return $this->max_logs_range;
+	}
+
+	/**
+	 * このチェーンのログ取得ブロック範囲最大値を設定します
+	 *
+	 * @param int $max_logs_range
+	 */
+	public function setMaxLogsRange( int $max_logs_range ): void {
+		$this->max_logs_range = $max_logs_range;
 	}
 }

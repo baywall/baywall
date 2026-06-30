@@ -27,7 +27,7 @@ class ChainTable {
 	 */
 	public function all(): array {
 		$sql     = <<<SQL
-			SELECT `chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `block_explorer_url`
+			SELECT `chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `max_logs_range`, `block_explorer_url`
 			FROM `{$this->table_name}`
 		SQL;
 		$results = $this->wpdb->get_results( $sql );
@@ -41,14 +41,15 @@ class ChainTable {
 	public function save( Chain $chain ): void {
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-				(`chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `block_explorer_url`)
+				(`chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `max_logs_range`, `block_explorer_url`)
 			VALUES
-				(:chain_id, :name, :network_category_id, :rpc_url, :confirmations, :block_explorer_url)
+				(:chain_id, :name, :network_category_id, :rpc_url, :confirmations, :max_logs_range, :block_explorer_url)
 			ON DUPLICATE KEY UPDATE
 				`name` = VALUES(`name`),
 				`network_category_id` = VALUES(`network_category_id`),
 				`rpc_url` = VALUES(`rpc_url`),
 				`confirmations` = VALUES(`confirmations`),
+				`max_logs_range` = VALUES(`max_logs_range`),
 				`block_explorer_url` = VALUES(`block_explorer_url`)
 		SQL;
 		$sql = $this->wpdb->named_prepare(
@@ -59,6 +60,7 @@ class ChainTable {
 				':network_category_id' => $chain->networkCategoryId()->value(),
 				':rpc_url'             => $chain->rpcUrl() ? $chain->rpcUrl()->value() : null,
 				':confirmations'       => (string) $chain->confirmations()->value(),
+				':max_logs_range'      => $chain->maxLogsRange(),
 				':block_explorer_url'  => $chain->blockExplorerUrl(),
 			)
 		);

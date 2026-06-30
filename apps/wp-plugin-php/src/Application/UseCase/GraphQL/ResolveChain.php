@@ -79,6 +79,11 @@ class ResolveChain {
 			return $chain->connectable();
 		};
 
+		$max_logs_range_callback = function () use ( $chain ) {
+			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
+			return $chain->maxLogsRange();
+		};
+
 		return array(
 			'id'               => $chain->id()->value(),
 			'name'             => $chain->name(),
@@ -89,6 +94,7 @@ class ResolveChain {
 			'networkCategory'  => $network_category_callback,
 			'blockExplorerUrl' => $chain->blockExplorerUrl(),
 			'connectable'      => $connectable_callback,
+			'maxLogsRange'     => $max_logs_range_callback,
 		);
 	}
 }

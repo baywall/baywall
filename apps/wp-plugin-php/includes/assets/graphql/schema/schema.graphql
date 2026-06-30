@@ -101,7 +101,7 @@ type Mutation {
 	saveSeller( address: String!, signingMessage: String!, signature: String! ): Boolean!
 
 	# チェーン情報を保存【管理者】
-	saveChain(chainId: Int!, rpcUrl: String, confirmations: String!): Boolean!
+	saveChain(chainId: Int!, rpcUrl: String, confirmations: String!, maxLogsRange: Int!): Boolean!
 
 	# オラクル情報を保存【管理者】
 	saveOracle(chainId: Int!, address: String!): Boolean!
@@ -159,6 +159,7 @@ type Chain {
 	name: String!				# チェーン名(例: "Ethereum Mainnet", "Polygon"など)【ゲスト】
 	blockExplorerUrl: String	# ブロックエクスプローラーのURL(例: "https://etherscan.io/")【ゲスト】
 	connectable: Boolean!		# チェーンに接続可能かどうか【管理者】
+	maxLogsRange: Int!			# ログ取得ブロック範囲最大値【管理者】
 }
 
 type Oracle {
@@ -196,34 +197,6 @@ type SellingContent {
 	characterCount: Int!	# 文字数
 	# 単語数はPHPでカウントすることが難しいため見送り	wordCount: Int!			# 単語数
 	imageCount: Int!		# 画像数
-}
-
-# 請求書情報
-type Invoice {
-	id: String!	# 請求書ID
-	createdAt: String!	# 請求書作成日時
-	chain: Chain!	# 取引チェーン
-	post: Post!	# 投稿情報
-	sellingPrice: Price!	# 請求書が発行された時の販売価格
-}
-
-# 購入者が支払を行った際のトランザクション情報
-type UnlockPaywallTransaction {
-	chain: Chain!		# 取引チェーン
-	blockNumber: Int!	# 取引が行われたブロック番号
-	transactionHash: String!	# トランザクションハッシュ
-	sellerAddress: String!		# 販売者のアドレス
-	buyerAddress: String!	# 購入者のアドレス
-	sellerProfitPrice: Price!	# 売上金額
-	handlingFeePrice: Price!	# 手数料
-}
-
-# 発行された請求書情報
-type IssuedInvoice {
-	invoiceIdHex: String!
-	serverMessage: String!      # サーバーで生成した署名対象メッセージ(クライアント側でコントラクトとの整合性を検証するために使用)
-	serverSignature: String!	# 署名用ウォレットで作成した署名
-	paymentAmount: String!		# 支払う数量(10進数の文字列)
 }
 
 type IssuedInvoiceV2 {
