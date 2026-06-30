@@ -25,15 +25,19 @@ class V20260629_010_AddMaxLogsRangeToChainTable extends MigrationBase {
 		// max_logs_range 列を追加
 		$sql = <<<SQL
 			ALTER TABLE `{$this->table_name}`
-			ADD COLUMN `max_logs_range` int unsigned NOT NULL DEFAULT 150
+			ADD COLUMN `max_logs_range` int unsigned NOT NULL DEFAULT 100
 			AFTER `confirmations`
 		SQL;
 		$this->wpdb->query( $sql );
 
-		// 既存レコードの max_logs_range を 150 に更新
+		// 既存レコードの max_logs_range を 100 に更新
+		// ※ https://publicnode.com/ の RPC URL で 101 以上の値を指定するとエラーが発生するようになったため
+		// 参考:
+		// - Ethereum(12s/block) => 20分
+		// - Base(2s/block) => 3分20秒
 		$sql = <<<SQL
 			UPDATE `{$this->table_name}`
-			SET `max_logs_range` = 150
+			SET `max_logs_range` = 100
 		SQL;
 		$this->wpdb->query( $sql );
 	}
