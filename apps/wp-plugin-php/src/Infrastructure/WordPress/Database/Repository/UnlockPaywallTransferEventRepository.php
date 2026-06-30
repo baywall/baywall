@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\UnlockPaywallTransactionTable;
 

@@ -6,7 +6,6 @@ namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;

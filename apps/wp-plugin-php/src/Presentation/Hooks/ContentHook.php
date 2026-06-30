@@ -15,7 +15,6 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\GutenbergService;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Psr\Container\ContainerInterface;
 use WP_Block;
-use WP_Post;
 
 /**
  * 投稿内容を保存、または取得時のhooksを登録するクラス

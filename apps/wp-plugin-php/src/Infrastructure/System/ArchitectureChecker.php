@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\System;
 
-use RuntimeException;
-
 class ArchitectureChecker {
 	/** 64ビットのPHP環境であることを確認します。 */
 	public function checkIs64bit(): void {
