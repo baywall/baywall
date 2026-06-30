@@ -12,20 +12,17 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConst
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpEnvironment;
 
 class V20251106_031_AddChainRecord extends MigrationBase {
 
 	private TransactionService $transaction_service;
 	private MyWpdb $wpdb;
 	private string $table_name;
-	private WpEnvironment $environment;
 
-	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider, WpEnvironment $environment ) {
+	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->transaction_service = $transaction_service;
 		$this->wpdb                = $wpdb;
 		$this->table_name          = $table_name_provider->chain();
-		$this->environment         = $environment;
 	}
 
 	public function version(): string {
@@ -90,29 +87,6 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 					null, // RPC URLはnull
 					'https://amoy.polygonscan.com'
 				);
-
-				// 開発、テスト時はプライベートネットのチェーン情報も登録
-				if ( $this->environment->isDevelopment() || $this->environment->isTesting() ) {
-					$is_development = $this->environment->isDevelopment();
-
-					// Privatenet 1
-					$this->insert(
-						ChainIdConstants::PRIVATENET1,
-						'Privatenet1',
-						NetworkCategoryIdConstants::PRIVATENET,
-						$is_development ? 'http://privatenet-1.test' : 'http://tests-privatenet-1.test',
-						'http://localhost:10101'    // ブロックエクスプローラーURL
-					);
-
-					// Privatenet 2
-					$this->insert(
-						ChainIdConstants::PRIVATENET2,
-						'Privatenet2',
-						NetworkCategoryIdConstants::PRIVATENET,
-						$is_development ? 'http://privatenet-2.test' : 'http://tests-privatenet-2.test',
-						'http://localhost:10102'    // ブロックエクスプローラーURL
-					);
-				}
 			}
 		);
 	}
