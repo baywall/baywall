@@ -80,7 +80,7 @@ type Query {
 }
 
 type Log {
-	id: ID!
+	id: Int!
 	createdAt: Float! # UNIXタイムスタンプ(秒)
 	level: String!
 	category: String!
