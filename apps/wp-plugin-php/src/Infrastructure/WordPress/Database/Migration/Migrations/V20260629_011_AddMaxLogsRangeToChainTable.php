@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migratio
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
-class V20260629_010_AddMaxLogsRangeToChainTable extends MigrationBase {
+class V20260629_011_AddMaxLogsRangeToChainTable extends MigrationBase {
 
 	private MyWpdb $wpdb;
 	private string $table_name;

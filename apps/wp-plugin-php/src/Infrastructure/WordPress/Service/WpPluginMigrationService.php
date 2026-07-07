@@ -76,5 +76,15 @@ class WpPluginMigrationService implements PluginMigrationService {
 
 		// マイグレーションに成功した場合は、インストール済みバージョンを更新
 		$this->plugin_version_option->update( $target_version );
+
+		// 開発環境、テスト環境でのみ実行するスクリプトを実行
+		// ※ テスト環境のデータベース初期化は Hook 経由でないため、PluginUpdateHook では呼び出さず、ここで呼び出す
+		$env = new WpEnvironment();
+		if ( $env->isDevelopment() || $env->isTesting() ) {
+			// テスト環境で毎回呼び出す必要があるため require_once ではなく require を使用する
+			require __DIR__ . '/../../../../scripts/wp-env/setup-devtest-db.php';
+		} else {
+			assert( $env->isProduction(), '[8DE77AE4]' );
+		}
 	}
 }
