@@ -38,6 +38,7 @@ class GraphQLHook extends HookBase {
 	}
 
 	public function addActionRestApiInit(): void {
+		/** @var RestPropertyProvider */
 		$rest_property = $this->container->get( RestPropertyProvider::class );
 		// GraphQLのエンドポイントを登録
 		$success = register_rest_route(
@@ -59,8 +60,11 @@ class GraphQLHook extends HookBase {
 	 * @return true|WP_Error
 	 */
 	private function permissionCallback( \WP_REST_Request $request ) {
-		$logger              = $this->container->get( AppLogger::class );
-		$nonce_service       = $this->container->get( WpNonceService::class );
+		/** @var AppLogger */
+		$logger = $this->container->get( AppLogger::class );
+		/** @var WpNonceService */
+		$nonce_service = $this->container->get( WpNonceService::class );
+		/** @var WpExceptionConverter */
 		$exception_converter = $this->container->get( WpExceptionConverter::class );
 
 		try {
@@ -78,8 +82,12 @@ class GraphQLHook extends HookBase {
 		$query           = $input['query'];
 		$variable_values = isset( $input['variables'] ) ? $input['variables'] : null;
 
-		$schema     = $this->container->get( PluginSchemaProvider::class )->get();
-		$root_value = $this->container->get( RootValue::class )->get();
+		/** @var PluginSchemaProvider */
+		$schema_instance = $this->container->get( PluginSchemaProvider::class );
+		$schema          = $schema_instance->get();
+		/** @var RootValue */
+		$root_value_instance = $this->container->get( RootValue::class );
+		$root_value          = $root_value_instance->get();
 
 		// クエリの複雑度制限を追加
 		DocumentValidator::addRule( new QueryComplexity( Config::GRAPHQL_MAX_COMPLEXITY ) );
@@ -101,6 +109,7 @@ class GraphQLHook extends HookBase {
 						function ( \GraphQL\Error\Error $error ) use ( $formatter ) {
 							$prev_error = $error->getPrevious();
 
+							/** @var AppLogger */
 							$app_logger = $this->container->get( AppLogger::class );
 							$app_logger->error( $error );
 							if ( $prev_error ) {

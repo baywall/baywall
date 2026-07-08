@@ -36,8 +36,10 @@ class LogCleanupCronHook extends HookBase {
 		add_action( $action_name, array( $this, 'execute' ) );
 
 		// プラグインが無効化された時に登録したアクションを削除
+		/** @var WpPluginInfoProvider */
+		$plugin_info_provider = $this->container->get( WpPluginInfoProvider::class );
 		register_deactivation_hook(
-			$this->container->get( WpPluginInfoProvider::class )->mainFilePath(),
+			$plugin_info_provider->mainFilePath(),
 			function () use ( $action_name ) {
 				wp_clear_scheduled_hook( $action_name );
 			}
@@ -64,7 +66,9 @@ class LogCleanupCronHook extends HookBase {
 		//
 
 		try {
-			$this->container->get( LockService::class )->withLock(
+			/** @var LockService */
+			$lock_service = $this->container->get( LockService::class );
+			$lock_service->withLock(
 				self::LOCK_NAME,
 				function () use ( $action_name ) {
 					// 予約がされていない場合のみ登録
@@ -84,7 +88,9 @@ class LogCleanupCronHook extends HookBase {
 
 	public function execute(): void {
 		try {
-			$this->container->get( LogTable::class )->deleteOldRecords( Config::LOG_DATA_EXPIRATION );
+			/** @var LogTable */
+			$log_table = $this->container->get( LogTable::class );
+			$log_table->deleteOldRecords( Config::LOG_DATA_EXPIRATION );
 		} finally {
 			try {
 				$this->registerSchedule( WpCronName::LOG_CLEANUP );

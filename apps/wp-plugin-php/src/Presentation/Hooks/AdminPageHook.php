@@ -38,7 +38,9 @@ class AdminPageHook extends HookBase {
 	public function addActionAdminMenu(): void {
 		assert( is_admin() );
 
-		$i18n          = $this->container->get( I18nTextProvider::class );
+		/** @var I18nTextProvider */
+		$i18n = $this->container->get( I18nTextProvider::class );
+		/** @var SlugProvider */
 		$slug_provider = $this->container->get( SlugProvider::class );
 
 		$capability    = 'manage_options'; // ユーザー権限(`manage_options`は、管理画面の`設定`へアクセス可能な権限)
@@ -64,9 +66,12 @@ class AdminPageHook extends HookBase {
 	public function addActionAdminEnqueueScripts(): void {
 		assert( is_admin() );
 
+		/** @var HandleNameProvider */
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
-		$php_var_exporter     = $this->container->get( PhpVarExporter::class );
-		$plugin               = $this->container->get( WpPluginInfoProvider::class );
+		/** @var PhpVarExporter */
+		$php_var_exporter = $this->container->get( PhpVarExporter::class );
+		/** @var WpPluginInfoProvider */
+		$plugin = $this->container->get( WpPluginInfoProvider::class );
 
 		// 管理画面用のスクリプトを登録する際のハンドル名を取得
 		$handle_name = $handle_name_provider->adminScript();
@@ -96,7 +101,9 @@ class AdminPageHook extends HookBase {
 	public function addFilterPluginActionLinks( array $actions ): array {
 		// @see (example) https://developer.wordpress.org/reference/hooks/plugin_action_links_plugin_file/#more-information
 
-		$i18n          = $this->container->get( I18nTextProvider::class );
+		/** @var I18nTextProvider */
+		$i18n = $this->container->get( I18nTextProvider::class );
+		/** @var SlugProvider */
 		$slug_provider = $this->container->get( SlugProvider::class );
 		$settings_url  = admin_url( 'admin.php?page=' . $slug_provider->adminMenuRoot() );
 

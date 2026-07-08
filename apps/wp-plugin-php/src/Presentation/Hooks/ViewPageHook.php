@@ -27,9 +27,12 @@ class ViewPageHook extends HookBase {
 			return;
 		}
 
+		/** @var HandleNameProvider */
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
-		$plugin               = $this->container->get( WpPluginInfoProvider::class );
-		$php_var_exporter     = $this->container->get( PhpVarExporter::class );
+		/** @var WpPluginInfoProvider */
+		$plugin = $this->container->get( WpPluginInfoProvider::class );
+		/** @var PhpVarExporter */
+		$php_var_exporter = $this->container->get( PhpVarExporter::class );
 
 		// ゲストユーザー(一般の訪問者)表示用の登録する際のハンドル名を取得
 		$handle_name = $handle_name_provider->viewScript();
@@ -62,6 +65,7 @@ class ViewPageHook extends HookBase {
 		// WordPress 7.0 での動作が確認できたため`wp_enqueue_script`側の対応はそのままとする。
 		// https://note.com/hapiclo_leaves/n/n044526d7e82f
 
+		/** @var HandleNameProvider */
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
 
 		// view用のスクリプトの場合、`defer`属性を追加する

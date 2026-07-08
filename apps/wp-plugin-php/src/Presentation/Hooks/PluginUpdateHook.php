@@ -44,6 +44,7 @@ class PluginUpdateHook extends HookBase {
 	public function addActionAdminInit(): void {
 		assert( is_admin() );
 		try {
+			/** @var PluginMigrationService */
 			$plugin_migrate_service = $this->container->get( PluginMigrationService::class );
 
 			// マイグレーション処理が不要な場合は処理抜け
@@ -72,13 +73,19 @@ class PluginUpdateHook extends HookBase {
 	 */
 	private function checkSystem(): void {
 		// 64ビットのPHP環境であることを確認
-		$this->container->get( ArchitectureChecker::class )->checkIs64bit();
+		/** @var ArchitectureChecker */
+		$architecture_checker = $this->container->get( ArchitectureChecker::class );
+		$architecture_checker->checkIs64bit();
 
 		// PHP拡張のチェック
-		$this->container->get( PhpExtChecker::class )->checkPhpExtensions();
+		/** @var PhpExtChecker */
+		$php_ext_checker = $this->container->get( PhpExtChecker::class );
+		$php_ext_checker->checkPhpExtensions();
 
 		// マルチサイト構成でないことを確認
-		if ( $this->container->get( WordPressPropertyProvider::class )->isMultisite() ) {
+		/** @var WordPressPropertyProvider */
+		$wp_property_provider = $this->container->get( WordPressPropertyProvider::class );
+		if ( $wp_property_provider->isMultisite() ) {
 			throw new \RuntimeException( '[CFE0F8E3] This plugin does not support WordPress Multisite.' );
 		}
 	}
@@ -88,6 +95,8 @@ class PluginUpdateHook extends HookBase {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 		// プラグインを無効化
-		deactivate_plugins( plugin_basename( $this->container->get( WpPluginInfoProvider::class )->mainFilePath() ) );
+		/** @var WpPluginInfoProvider */
+		$plugin_info_provider = $this->container->get( WpPluginInfoProvider::class );
+		deactivate_plugins( plugin_basename( $plugin_info_provider->mainFilePath() ) );
 	}
 }

@@ -31,9 +31,12 @@ class PostEditHook extends HookBase {
 			return;
 		}
 
+		/** @var HandleNameProvider */
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
-		$plugin               = $this->container->get( WpPluginInfoProvider::class );
-		$php_var_exporter     = $this->container->get( PhpVarExporter::class );
+		/** @var WpPluginInfoProvider */
+		$plugin = $this->container->get( WpPluginInfoProvider::class );
+		/** @var PhpVarExporter */
+		$php_var_exporter = $this->container->get( PhpVarExporter::class );
 
 		// ブロックエディタで使用するスクリプトを登録するときのハンドル名を取得。
 		$handle = $handle_name_provider->blockScript();
