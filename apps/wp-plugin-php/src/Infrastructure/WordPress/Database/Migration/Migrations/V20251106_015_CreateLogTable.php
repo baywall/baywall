@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migratio
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
-class V20260627_010_CreateLogTable extends MigrationBase {
+class V20251106_015_CreateLogTable extends MigrationBase {
 
 	private MyWpdb $wpdb;
 	private string $table_name;
@@ -18,7 +18,7 @@ class V20260627_010_CreateLogTable extends MigrationBase {
 	}
 
 	public function version(): string {
-		return '0.0.3';
+		return '0.0.1';
 	}
 
 	public function up(): void {

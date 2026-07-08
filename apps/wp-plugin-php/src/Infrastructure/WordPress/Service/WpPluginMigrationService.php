@@ -56,8 +56,20 @@ class WpPluginMigrationService implements PluginMigrationService {
 				// マイグレーションを実行
 				$migration->up();
 				$executed[] = $migration; // 実行済み一覧に追加
-				// 一番最初のマイグレーション処理でログレベルが設定されるので、ログ出力はそれ以降に行う
-				$this->logger->info( '[E923FBC1] Applied migration: ' . get_class( $migration ) );
+
+				// v0.0.1 でログテーブルが作成されるので、ログ出力はそれ以降。
+				//
+				// 背景:
+				// `wpdb::_insert_replace_helper()` 経由で `SHOW FULL COLUMNS FROM <table>` が呼び出され、
+				// それが例外を投げずに以下のエラーを管理画面に表示するので、それを抑制する。
+				//
+				// エラー内容:
+				// WordPress database error: [Table 'wordpress.wp_baywall_log' doesn't exist]
+				// SHOW FULL COLUMNS FROM `wp_baywall_log`
+				if ( version_compare( '0.0.1', $migration->version(), '<' ) ) {
+					// 一番最初のマイグレーション処理でログレベルが設定されるので、ログ出力はそれ以降に行う
+					$this->logger->info( '[E923FBC1] Applied migration: ' . get_class( $migration ) );
+				}
 			} catch ( \Throwable $e ) {
 				$this->logger->error( $e );
 				$this->logger->info( '[B9A8BB31] Rolling back applied migrations...' );
