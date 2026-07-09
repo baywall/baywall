@@ -20,14 +20,14 @@
   ],
   "scripts": {
     "build": "run-p build:*",
-    "build:cjs": "tsc -p ./tsconfig.cjs.json",
-    "build:esm": "tsc -p ./tsconfig.esm.json",
+    "build:cjs": "pnpm exec tsc -p ./tsconfig.cjs.json",
+    "build:esm": "pnpm exec tsc -p ./tsconfig.esm.json",
     "check": "run-p check:*",
     "check:cycles": "madge --circular --extensions ts,tsx src",
     "check:license": "MODE=CHECK tsx ../../scripts/npm-scripts/pnpm-license-tool.ts",
     "clean": "rm -rf dist",
     "coverage": "bash ../../scripts/npm-scripts/coverage-jest.sh",
-    "dev": "tsc -w -p tsconfig.esm.json",
+    "dev": "pnpm exec tsc -w -p tsconfig.esm.json",
     "format": "run-s format:*",
     "format:eslint": "bash ../../scripts/npm-scripts/format-eslint.sh .",
     "format:prettier": "bash ../../scripts/npm-scripts/format-prettier.sh .",
@@ -38,5 +38,7 @@
     "test": "bash ../../scripts/npm-scripts/test-jest.sh"
   },
   "keywords": [],
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/jest": "^30.0.0"
+  }
 }

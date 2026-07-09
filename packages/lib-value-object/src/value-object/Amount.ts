@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js';
+import { Decimal } from 'decimal.js';
 import { DivideByZeroError } from '../error/DivideByZeroError.js';
 import { ValueObject } from './base/ValueObject.js';
 import { Decimals } from './Decimals.js';

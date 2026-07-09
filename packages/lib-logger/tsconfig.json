@@ -3,7 +3,9 @@
 	"compilerOptions": {
 		"declaration": true, // .d.ts を出力する
 		"outDir": "dist",
-		"sourceMap": true
+		"rootDir": "./src",
+		"sourceMap": true,
+		"types": ["jest", "node"]
 	},
 	"include": ["src/**/*.ts"]
 }

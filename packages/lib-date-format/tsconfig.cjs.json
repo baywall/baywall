@@ -1,9 +1,10 @@
 {
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"outDir": "./dist/cjs"
+		"module": "Node16",
+		"moduleResolution": "Node16",
+		"outDir": "./dist/cjs",
+		"rootDir": "./src"
 	},
 	"exclude": ["dist", "src/**/*.test.ts", "src/**/*.test.tsx"]
 }

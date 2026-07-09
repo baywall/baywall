@@ -3,6 +3,7 @@
 	"compilerOptions": {
 		"declaration": true, // .d.ts を出力する
 		"outDir": "dist",
-		"sourceMap": true
+		"sourceMap": true,
+		"types": ["jest", "node"]
 	}
 }
