@@ -21,10 +21,10 @@
     "build:i18n": "bash scripts/npm/build-i18n.sh",
     "check": "MODE=CHECK tsx ../../scripts/npm-scripts/composer-license-tools.ts",
     "clean": "rm -rf includes/cache/*.php",
-		"coverage": "pnpm test --coverage-html coverage/phpunit",
+    "coverage": "pnpm test --coverage-html coverage/phpunit",
     "export-license": "MODE=EXPORT tsx ../../scripts/npm-scripts/composer-license-tools.ts",
     "format": "tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} . || tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} .",
-		"// phpcsはドキュメントの警告が多いためphpcbfで代用": "",
+    "// phpcsはドキュメントの警告が多いためphpcbfで代用": "",
     "lint": "tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} .",
     "// @wordpress/scripts@27.9.0ではサブディレクトリが作成されないためコメントアウト plugin-zip": "wp-scripts plugin-zip --root-folder=baywall && mv baywall.zip baywall.${npm_package_version}.zip",
     "plugin-zip": "bash ./scripts/plugin-zip.sh",
@@ -43,6 +43,6 @@
     "@serendipity/wp-plugin-block": "workspace:*"
   },
   "devDependencies": {
-    "@wordpress/env": "^11.8.1"
+    "@wordpress/env": "^11.10.0"
   }
 }
