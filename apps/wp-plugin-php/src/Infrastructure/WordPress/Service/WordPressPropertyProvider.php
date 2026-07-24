@@ -47,6 +47,15 @@ class WordPressPropertyProvider {
 	}
 
 	/**
+	 * WordPressのバージョン文字列を取得します。
+	 *
+	 * `get_bloginfo( 'version' )` をラップし、文字列型として返します。
+	 */
+	public function wpVersion(): string {
+		return get_bloginfo( 'version' );
+	}
+
+	/**
 	 *
 	 * @return 'local'|'development'|'staging'|'production'
 	 */

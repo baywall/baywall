@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Infrastructure\System\PhpExtChecker;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressVersionChecker;
 use Psr\Container\ContainerInterface;
 use Throwable;
 
@@ -88,6 +89,11 @@ class PluginUpdateHook extends HookBase {
 		if ( $wp_property_provider->isMultisite() ) {
 			throw new \RuntimeException( '[CFE0F8E3] This plugin does not support WordPress Multisite.' );
 		}
+
+		// WordPressバージョンのチェック(wp2shell脆弱バージョンの拒否)
+		/** @var WordPressVersionChecker */
+		$wp_version_checker = $this->container->get( WordPressVersionChecker::class );
+		$wp_version_checker->checkVersion( $wp_property_provider->wpVersion() );
 	}
 
 	private function deactivatePlugin(): void {
