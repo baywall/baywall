@@ -12,6 +12,7 @@
 		"yamaneyuta/ulid": "^1.0",
 		"simplito/elliptic-php": "^1.0",
 		"php-di/php-di": "^6.4",
-		"tuupola/base62": "^2.1"
+		"tuupola/base62": "^2.1",
+		"composer/semver": "^3.4"
 	}
 }

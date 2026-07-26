@@ -76,7 +76,7 @@ class PluginUpdateHook extends HookBase {
 		// 64ビットのPHP環境であることを確認
 		/** @var ArchitectureChecker */
 		$architecture_checker = $this->container->get( ArchitectureChecker::class );
-		$architecture_checker->checkIs64bit();
+		$architecture_checker->checkIs64bit( PHP_INT_SIZE );
 
 		// PHP拡張のチェック
 		/** @var PhpExtChecker */
@@ -90,7 +90,7 @@ class PluginUpdateHook extends HookBase {
 			throw new \RuntimeException( '[CFE0F8E3] This plugin does not support WordPress Multisite.' );
 		}
 
-		// WordPressバージョンのチェック(wp2shell脆弱バージョンの拒否)
+		// WordPressバージョンのチェック(最新マイナーバージョン一覧を基準にサポート対象外バージョンを拒否)
 		/** @var WordPressVersionChecker */
 		$wp_version_checker = $this->container->get( WordPressVersionChecker::class );
 		$wp_version_checker->checkVersion( $wp_property_provider->wpVersion() );

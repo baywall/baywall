@@ -96,6 +96,8 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpUserAccessProvide
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpLogQueryService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpSalesHistoryQueryService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpTransactionService;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressCoreLatestVersionService;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpWordPressCoreLatestVersionService;
 use wpdb;
 
 use function DI\autowire;
@@ -104,69 +106,70 @@ use function DI\get;
 final class ContainerDefinitions {
 	public static function getDefinitions(): array {
 		return array(
-			wpdb::class                          => fn() => $GLOBALS['wpdb'],
+			wpdb::class                              => fn() => $GLOBALS['wpdb'],
 
 			// TableGateway
 			// ChainTable::class => autowire(),
 
 			// Repository
-			AppContractRepository::class         => autowire( WpAppContractRepository::class ),
-			ChainRepository::class               => autowire( WpChainRepository::class ),
-			InvoiceRepository::class             => autowire( WpInvoiceRepository::class ),
-			NetworkCategoryRepository::class     => autowire( WpNetworkCategoryRepository::class ),
-			OracleRepository::class              => autowire( WpOracleRepository::class ),
-			PostRepository::class                => autowire( WpPostRepository::class ),
-			ServerSignerRepository::class        => autowire( WpServerSignerRepository::class ),
-			TokenRepository::class               => autowire( WpTokenRepository::class ),
-			SellerRepository::class              => autowire( WpSellerRepository::class ),
-			RefreshTokenRepository::class        => autowire( WpRefreshTokenRepository::class ),
-			InvoiceTokenRepository::class        => autowire( WpInvoiceTokenRepository::class ),
-			Erc4361NonceRepository::class        => autowire( WpErc4361NonceRepository::class ),
-			PausedRepository::class              => autowire( WpPausedRepository::class ),
-			SctaUrlRepository::class             => autowire( WpSctaUrlRepository::class ),
-			PurgeOnUninstallRepository::class    => autowire( WpPurgeOnUninstallRepository::class ),
-			InstallOriginUrl::class              => autowire( WpInstallOriginUrl::class ),
-			JwtSecretKeyRepository::class        => autowire( WpJwtSecretKeyRepository::class ),
+			AppContractRepository::class             => autowire( WpAppContractRepository::class ),
+			ChainRepository::class                   => autowire( WpChainRepository::class ),
+			InvoiceRepository::class                 => autowire( WpInvoiceRepository::class ),
+			NetworkCategoryRepository::class         => autowire( WpNetworkCategoryRepository::class ),
+			OracleRepository::class                  => autowire( WpOracleRepository::class ),
+			PostRepository::class                    => autowire( WpPostRepository::class ),
+			ServerSignerRepository::class            => autowire( WpServerSignerRepository::class ),
+			TokenRepository::class                   => autowire( WpTokenRepository::class ),
+			SellerRepository::class                  => autowire( WpSellerRepository::class ),
+			RefreshTokenRepository::class            => autowire( WpRefreshTokenRepository::class ),
+			InvoiceTokenRepository::class            => autowire( WpInvoiceTokenRepository::class ),
+			Erc4361NonceRepository::class            => autowire( WpErc4361NonceRepository::class ),
+			PausedRepository::class                  => autowire( WpPausedRepository::class ),
+			SctaUrlRepository::class                 => autowire( WpSctaUrlRepository::class ),
+			PurgeOnUninstallRepository::class        => autowire( WpPurgeOnUninstallRepository::class ),
+			InstallOriginUrl::class                  => autowire( WpInstallOriginUrl::class ),
+			JwtSecretKeyRepository::class            => autowire( WpJwtSecretKeyRepository::class ),
 
 			// Service
-			PostTitleProvider::class             => autowire( WpPostTitleProvider::class ),
-			RateProvider::class                  => get( CachedOracleRateProvider::class ),
+			PostTitleProvider::class                 => autowire( WpPostTitleProvider::class ),
+			RateProvider::class                      => get( CachedOracleRateProvider::class ),
 			// CachedRateProvider::class    => autowire()->constructor(
 			// get( RateTransient::class ),
 			// get( OracleRateProviderImpl::class )
 			// ),
-			UserAccessProvider::class            => autowire( WpUserAccessProvider::class ),
-			PaidContentService::class            => autowire( PaidContentServiceImpl::class ),
-			AppContractDataProvider::class       => autowire( AppContractDataProviderImpl::class ),
-			BlockNumberProvider::class           => autowire( BlockNumberProviderImpl::class ),
-			TransactionService::class            => autowire( WpTransactionService::class ),
-			LockService::class                   => autowire( WpLockService::class ),
-			SalesHistoryQueryService::class      => autowire( WpSalesHistoryQueryService::class ),
-			LogQueryService::class               => autowire( WpLogQueryService::class ),
-			JwtAlgorithmProvider::class          => autowire( WpJwtAlgorithmProvider::class ),
-			AccessTokenExpirationProvider::class => autowire( WpAccessTokenExpirationProvider::class ),
-			AccessTokenRequestProvider::class    => autowire( WpAccessTokenRequestProvider::class ),
-			CookieNameProvider::class            => autowire( WpCookieNameProvider::class ),
-			AccessTokenCookieProvider::class     => autowire( WpAccessTokenCookieProvider::class ),
-			RefreshTokenCookieProvider::class    => autowire( WpRefreshTokenCookieProvider::class ),
-			InvoiceTokenCookieProvider::class    => autowire( WpInvoiceTokenCookieProvider::class ),
-			RefreshTokenService::class           => autowire( WpRefreshTokenService::class ),
-			InvoiceTokenProvider::class          => autowire( WpInvoiceTokenProvider::class ),
-			Erc4361PropertyProvider::class       => autowire( WpErc4361PropertyProvider::class ),
-			Erc4361NonceProvider::class          => autowire( WpErc4361NonceProvider::class ),
-			GraphQLService::class                => autowire( WpGraphQLService::class ),
-			SiteService::class                   => autowire( WpSiteService::class ),
-			PluginInfoProvider::class            => autowire( WpPluginInfoProvider::class ),
-			PluginMigrationService::class        => autowire( WpPluginMigrationService::class ),
-			PluginTeardownService::class         => autowire( WpPluginTeardownService::class ),
+			UserAccessProvider::class                => autowire( WpUserAccessProvider::class ),
+			PaidContentService::class                => autowire( PaidContentServiceImpl::class ),
+			AppContractDataProvider::class           => autowire( AppContractDataProviderImpl::class ),
+			BlockNumberProvider::class               => autowire( BlockNumberProviderImpl::class ),
+			TransactionService::class                => autowire( WpTransactionService::class ),
+			LockService::class                       => autowire( WpLockService::class ),
+			SalesHistoryQueryService::class          => autowire( WpSalesHistoryQueryService::class ),
+			LogQueryService::class                   => autowire( WpLogQueryService::class ),
+			JwtAlgorithmProvider::class              => autowire( WpJwtAlgorithmProvider::class ),
+			AccessTokenExpirationProvider::class     => autowire( WpAccessTokenExpirationProvider::class ),
+			AccessTokenRequestProvider::class        => autowire( WpAccessTokenRequestProvider::class ),
+			CookieNameProvider::class                => autowire( WpCookieNameProvider::class ),
+			AccessTokenCookieProvider::class         => autowire( WpAccessTokenCookieProvider::class ),
+			RefreshTokenCookieProvider::class        => autowire( WpRefreshTokenCookieProvider::class ),
+			InvoiceTokenCookieProvider::class        => autowire( WpInvoiceTokenCookieProvider::class ),
+			RefreshTokenService::class               => autowire( WpRefreshTokenService::class ),
+			InvoiceTokenProvider::class              => autowire( WpInvoiceTokenProvider::class ),
+			Erc4361PropertyProvider::class           => autowire( WpErc4361PropertyProvider::class ),
+			Erc4361NonceProvider::class              => autowire( WpErc4361NonceProvider::class ),
+			GraphQLService::class                    => autowire( WpGraphQLService::class ),
+			SiteService::class                       => autowire( WpSiteService::class ),
+			PluginInfoProvider::class                => autowire( WpPluginInfoProvider::class ),
+			PluginMigrationService::class            => autowire( WpPluginMigrationService::class ),
+			PluginTeardownService::class             => autowire( WpPluginTeardownService::class ),
+			WordPressCoreLatestVersionService::class => autowire( WpWordPressCoreLatestVersionService::class ),
 
 			// Cache
-			OracleRateCache::class               => autowire( WpOracleRateCache::class ),
+			OracleRateCache::class                   => autowire( WpOracleRateCache::class ),
 
 			// Logging
-			Logger::class                        => autowire( WpDatabaseLogger::class ),
-			SimpleLogger::class                  => autowire(),
-			LogLevelRepository::class            => autowire( WpLogLevelRepository::class ),
+			Logger::class                            => autowire( WpDatabaseLogger::class ),
+			SimpleLogger::class                      => autowire(),
+			LogLevelRepository::class                => autowire( WpLogLevelRepository::class ),
 		);
 	}
 }
