@@ -32,7 +32,7 @@ class V20251106_090_CreateTokenTable extends MigrationBase {
 				`symbol`         varchar(191)            NOT NULL,
 				`decimals`       int                     NOT NULL,
 				`is_payable`     boolean                 NOT NULL,
-				CONSTRAINT `chk_{$this->table_name}_address` CHECK (`address` REGEXP '^0x[0-9a-f]{40}$'),
+				CONSTRAINT `chk_{$this->table_name}_address` CHECK (`address` REGEXP BINARY '^0x[0-9a-f]{40}$'),
 				PRIMARY KEY (`chain_id`, `address`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;

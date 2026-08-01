@@ -33,9 +33,9 @@ class V20251106_110_CreateUnlockPaywallTransferEventTable extends MigrationBase 
 				`token_address`  varchar(191)     NOT NULL,
 				`amount`         decimal(35, 0 )  NOT NULL,
 				`transfer_type`  int              NOT NULL,
-				CONSTRAINT `chk_{$this->table_name}_from_address` CHECK (`from_address` REGEXP '^0x[0-9a-f]{40}$'),
-				CONSTRAINT `chk_{$this->table_name}_to_address` CHECK (`to_address` REGEXP '^0x[0-9a-f]{40}$'),
-				CONSTRAINT `chk_{$this->table_name}_token_address` CHECK (`token_address` REGEXP '^0x[0-9a-f]{40}$'),
+				CONSTRAINT `chk_{$this->table_name}_from_address` CHECK (`from_address` REGEXP BINARY '^0x[0-9a-f]{40}$'),
+				CONSTRAINT `chk_{$this->table_name}_to_address` CHECK (`to_address` REGEXP BINARY '^0x[0-9a-f]{40}$'),
+				CONSTRAINT `chk_{$this->table_name}_token_address` CHECK (`token_address` REGEXP BINARY '^0x[0-9a-f]{40}$'),
 				PRIMARY KEY (`invoice_id`, `log_index`),
 				KEY `idx_{$this->table_name}_E1160E22` (`created_at`),
 				KEY `idx_{$this->table_name}_05504FB6` (`invoice_id`, `transfer_type`)

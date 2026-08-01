@@ -31,7 +31,7 @@ class V20251106_050_CreateOracleTable extends MigrationBase {
 				`address`        varchar(191)            NOT NULL,
 				`base_symbol`    varchar(191)            NOT NULL,
 				`quote_symbol`   varchar(191)            NOT NULL,
-				CONSTRAINT `chk_{$this->table_name}_address` CHECK (`address` REGEXP '^0x[0-9a-f]{40}$'),
+				CONSTRAINT `chk_{$this->table_name}_address` CHECK (`address` REGEXP BINARY '^0x[0-9a-f]{40}$'),
 				PRIMARY KEY (`chain_id`, `address`),
 				UNIQUE KEY `uq_{$this->table_name}_C269159C` (`chain_id`, `base_symbol`, `quote_symbol`)
 			) {$this->wpdb->get_charset_collate()};

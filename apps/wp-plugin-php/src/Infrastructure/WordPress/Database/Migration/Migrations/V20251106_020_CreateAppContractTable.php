@@ -30,7 +30,7 @@ class V20251106_020_CreateAppContractTable extends MigrationBase {
 				`chain_id`                         bigint        unsigned  NOT NULL,
 				`address`                          varchar(191)            NOT NULL,
 				PRIMARY KEY (`chain_id`),
-				CONSTRAINT `chk_{$this->table_name}_address_format` CHECK (`address` REGEXP '^0x[0-9a-f]{40}$')
+				CONSTRAINT `chk_{$this->table_name}_address_format` CHECK (`address` REGEXP BINARY '^0x[0-9a-f]{40}$')
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
 		$this->wpdb->query( $sql );
