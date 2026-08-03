@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
-use Cornix\Serendipity\Core\Infrastructure\Web3\OracleClient;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Client\OracleClient;
 
 /**
  * Oracle情報をサーバーに登録します。

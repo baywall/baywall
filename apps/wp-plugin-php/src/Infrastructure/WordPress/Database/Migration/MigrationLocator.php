@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration;
 
 use Cornix\Serendipity\Core\Infrastructure\Util\NamespaceParser;
+use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Cornix\Serendipity\Core\Application\ValueObject\PluginVersion;
 use Psr\Container\ContainerInterface;
@@ -33,7 +34,7 @@ class MigrationLocator {
 		$files = scandir( self::MIGRATIONS_DIR, SCANDIR_SORT_ASCENDING );
 		assert( is_array( $files ), '[CF0D36ED] Failed to scan migrations directory' );
 		// .phpで終わるファイルのみ抽出
-		$php_files = array_filter( $files, fn( string $file ): bool => str_ends_with( $file, '.php' ) );
+		$php_files = array_filter( $files, fn( string $file ): bool => Strings::ends_with( $file, '.php' ) );
 		/** @var MigrationBase[] */
 		$migrations = array();
 

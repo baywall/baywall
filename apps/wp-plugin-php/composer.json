@@ -4,6 +4,16 @@
 			"Cornix\\Serendipity\\Core\\": "./src"
 		}
 	},
+	"scripts": {
+		"format": "pnpm format",
+		"lint": "pnpm lint",
+		"test": "pnpm test"
+	},
+	"scripts-descriptions": {
+		"format": "PHP コードをフォーマットします（引数指定不可）",
+		"lint": "PHP コードを静的解析します（引数指定不可）",
+		"test": "PHPUnit テストを wp-env 内で実行します（wp-env は起動済み）。引数は1つまで指定可能で、テストファイルを tests/... のパスで指定できます。"
+	},
 	"require": {
 		"php": ">=7.4",
 		"ext-bcmath": "*",

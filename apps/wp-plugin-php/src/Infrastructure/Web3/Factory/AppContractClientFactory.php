@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3\Factory;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Abi\AppContractAbi;
-use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Client\AppContractClient;
 
 class AppContractClientFactory {
 

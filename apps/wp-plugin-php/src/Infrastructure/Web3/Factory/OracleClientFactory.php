@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3\Factory;
 
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Infrastructure\Web3\OracleClient;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Client\OracleClient;
 
 class OracleClientFactory {
 

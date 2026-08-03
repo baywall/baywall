@@ -48,16 +48,16 @@ class ViewPageHook extends HookBase {
 			$asset_file['version'],
 			true   // フッターに出力 ※ 7.0.2でも`script_loader_tag`による`defer`挿入が可能であることを確認したため、配列にはせず`true`のままとする
 		);
-		// インラインスクリプトを追加
-		$php_var_exporter->addInlineScript( $handle_name );
 
-		// スタイルを登録
-		wp_enqueue_style(
-			'5bcfda3bcb3a77e70732c9e6e78195a5', // 適当なハンドル名(他で使用しない)
-			$plugin->toUrl( WpConfig::VIEW_CSS_RELATIVE_PATH ),
-			array(),
-			$asset_file['version']
-		);
+		// ウィジェットCSSのURLを生成する(キャッシュバスティングのためバージョンクエリを付与)
+		// フロントエンドは本URLを Shadow DOM 内に`<link>`で注入してスタイルを適用する
+		$view_css_url = add_query_arg( 'ver', $asset_file['version'], $plugin->toUrl( WpConfig::VIEW_CSS_RELATIVE_PATH ) );
+
+		// インラインスクリプトを追加(CSS URLをフロントエンドへ受け渡す)
+		$php_var_exporter->addInlineScript( $handle_name, $view_css_url );
+
+		// ※ ウィジェット用CSSの`wp_enqueue_style`は廃止した。
+		// CSSは Shadow DOM 内の`<link>`注入のみで適用するため、ライトDOMへの`<link>`出力は行わない。
 	}
 
 	public function addFilterScriptLoaderTag( string $tag, string $handle, string $src ): string {

@@ -140,6 +140,39 @@ class Ethers {
 	}
 
 	/**
+	 * ENS名からnamehashを計算します（EIP-137）。
+	 *
+	 * ラベルを右から左へ順に Keccak-256 でハッシュし、32バイトのノードIDを生成します。
+	 *
+	 * @param string $name ENS名（例: 'baywall.eth'）。空文字の場合はゼロハッシュを返します。
+	 * @return string namehash（`0x`で始まる64文字のHEX文字列）
+	 *
+	 * @see https://eips.ethereum.org/EIPS/eip-137
+	 * @see https://docs.ethers.org/v6/api/hashing/#namehash
+	 * @see https://docs.ens.domains/resolution/names/#hashing-names
+	 * @example
+	 * namehash( '' );          // '0x0000000000000000000000000000000000000000000000000000000000000000'
+	 * namehash( 'eth' );       // '0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae'
+	 * namehash( 'foo.eth' );   // '0xde9b09fd7c5f901e23a3f19fecc54828e9c848539801e86591bd9801b019f84f'
+	 */
+	public static function namehash( string $name ): string {
+		// 空文字の場合は32バイトのゼロハッシュ
+		$node = str_repeat( "\x00", 32 );
+
+		if ( '' !== $name ) {
+			$labels = explode( '.', $name );
+			for ( $i = count( $labels ) - 1; $i >= 0; $i-- ) {
+				$label_hash = hex2bin( Keccak::hash( $labels[ $i ], 256 ) );
+				$node       = hex2bin( Keccak::hash( $node . $label_hash, 256 ) );
+			}
+		}
+
+		$result = '0x' . bin2hex( $node );
+		assert( preg_match( '/^0x[0-9a-f]{64}$/', $result ) );
+		return $result;
+	}
+
+	/**
 	 * UTF-8の文字列を受け取り、32バイトのIDを返す単純なハッシュ関数
 	 *
 	 * @param string $value UTF-8の文字列

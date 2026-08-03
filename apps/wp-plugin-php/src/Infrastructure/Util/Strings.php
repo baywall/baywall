@@ -26,7 +26,12 @@ class Strings {
 				return mb_substr( $string, $start, $length, $encoding );
 			}
 		} else {
-			return substr( $string, $start, $length );
+			// PHP7.xではsubstr()の第3引数にnullを渡せない
+			if ( is_null( $length ) ) {
+				return substr( $string, $start );
+			} else {
+				return substr( $string, $start, $length );
+			}
 		}
 	}
 
@@ -96,5 +101,15 @@ class Strings {
 	public static function starts_with( string $string, string $prefix ): bool {
 		// str_starts_with()はphp8.0以上で使用可
 		return self::substr( $string, 0, self::strlen( $prefix ) ) === $prefix;
+	}
+
+	public static function ends_with( string $string, string $suffix ): bool {
+		// str_ends_with()はphp8.0以上で使用可
+		// 空文字が指定された場合はtrueを返す
+		// => https://www.php.net/manual/ja/function.str-ends-with.php
+		if ( $suffix === '' ) {
+			return true;
+		}
+		return self::substr( $string, -self::strlen( $suffix ) ) === $suffix;
 	}
 }

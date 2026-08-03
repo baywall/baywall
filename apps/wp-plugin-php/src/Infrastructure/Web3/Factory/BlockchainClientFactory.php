@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3\Factory;
 
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Client\BlockchainClient;
 
 class BlockchainClientFactory {
 

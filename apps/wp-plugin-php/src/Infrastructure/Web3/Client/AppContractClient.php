@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3;
+namespace Cornix\Serendipity\Core\Infrastructure\Web3\Client;
 
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Abi\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\GetPaywallStatusResult;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
-use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\ContractFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
@@ -108,7 +107,7 @@ class AppContractClient {
 					throw $err;
 				}
 				// $logsがnullの可能性があるため、nullの場合は空配列に置き換える
-				// [ERROR] TypeError: Argument 2 passed to Cornix\\Serendipity\\Core\\Infrastructure\\Web3\\AppContractClient::Cornix\\Serendipity\\Core\\Infrastructure\\Web3\\{closure}() must be of the type array, null given
+				// [ERROR] TypeError: Argument 2 passed to Cornix\\Serendipity\\Core\\Infrastructure\\Web3\\Client\\AppContractClient::Cornix\\Serendipity\\Core\\Infrastructure\\Web3\\Client\\{closure}() must be of the type array, null given
 				if ( is_null( $logs ) ) {
 					$logs = array();
 				}

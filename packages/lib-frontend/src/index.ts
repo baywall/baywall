@@ -4,6 +4,7 @@ export { useIsDebugMode } from './features/debug-mode/useIsDebugMode.js';
 export { useFetcher } from './features/graphql-codegen/useFetcher.js';
 export { useGraphQlUrl } from './features/graphql-url/useGraphQlUrl.js';
 export { useLogger } from './features/logger/useLogger.js';
+export { getPhpVar } from './features/php-var/getPhpVar.js';
 export { useApiRoot } from './features/php-var/api-root/useApiRoot.js';
 export { usePostId } from './features/php-var/post-id/usePostId.js';
 export { useWpRestNonce } from './features/php-var/wp-rest-nonce/useWpRestNonce.js';

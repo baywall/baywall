@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
-use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Client\BlockchainClient;
 
 class BlockNumberProviderImpl implements BlockNumberProvider {
 

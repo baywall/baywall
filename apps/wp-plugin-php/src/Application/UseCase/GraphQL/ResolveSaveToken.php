@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\NativeTokenService;
-use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Client\TokenClient;
 
 /**
  * トークンの情報をサーバーに登録します。
