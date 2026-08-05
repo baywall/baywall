@@ -1,5 +1,26 @@
 import { dispatch } from '@wordpress/data';
-import { store as editorStore } from '@wordpress/editor';
+
+/**
+ * 投稿エディターストア。
+ *
+ * 'core/editor' ストアの型付き `store` オブジェクトではなく文字列を直接使用します。
+ * 型付きオブジェクトを提供するパッケージから直接 import すると、mediabunny (MPL-2.0) を含む
+ * 依存ツリー(upload-media → video-conversion 経由)が pnpm の本番依存ツリーに
+ * 引き込まれるため、それを回避するのが目的です。
+ * 詳細な経緯は package.json の "# note" の該当コメントを参照してください。
+ */
+const EDITOR_STORE_NAME = 'core/editor';
+
+/**
+ * 'core/editor' ストアで本クラスが使用するアクションの型定義
+ *
+ * dispatch(文字列) の戻り値型が unknown になるため、
+ * any ではなく最小限の型を定義してキャストします。
+ */
+interface EditorStoreActions {
+	lockPostSaving: (lockName: string) => void;
+	unlockPostSaving: (lockName: string) => void;
+}
 
 /**
  * 投稿の保存機能を制御するクラス
@@ -17,7 +38,7 @@ export class PostSavingController {
 	 * @param lockName
 	 */
 	public lock(lockName: string) {
-		dispatch(editorStore).lockPostSaving(lockName);
+		(dispatch(EDITOR_STORE_NAME) as EditorStoreActions).lockPostSaving(lockName);
 	}
 
 	/**
@@ -25,6 +46,6 @@ export class PostSavingController {
 	 * @param lockName
 	 */
 	public unlock(lockName: string) {
-		dispatch(editorStore).unlockPostSaving(lockName);
+		(dispatch(EDITOR_STORE_NAME) as EditorStoreActions).unlockPostSaving(lockName);
 	}
 }
