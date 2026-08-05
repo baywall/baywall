@@ -56,6 +56,13 @@ class WpPluginInfoProvider implements PluginInfoProvider {
 	public function requiresWP(): string {
 		return $this->plugin_main_file->getProperty( 'RequiresWP' );
 	}
+
+	/**
+	 * プラグインのUpdate URIを取得します。
+	 */
+	public function updateUri(): string {
+		return $this->plugin_main_file->getProperty( 'UpdateURI' );
+	}
 }
 
 

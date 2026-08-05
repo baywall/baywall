@@ -35,6 +35,12 @@ class WpConfig {
 	public const PAYWALL_BLOCK_CSS_CLASS_NAME = 'ae6cefc4-82d4-4220-840b-d74538ea7284';
 
 	/**
+	 * ペイウォールウィジェットのホスト要素に出力するテーマ属性名
+	 * ※ TypeScript側と整合性を取ること
+	 */
+	public const THEME_ATTRIBUTE_NAME = 'data-baywall-theme';
+
+	/**
 	 * PHPから渡される変数名
 	 * ※ TypeScript側と整合性を取ること
 	 */

@@ -128,4 +128,29 @@ class Config {
 	 * ログの最大取得件数
 	 */
 	public const LOGS_MAX_RESULTS = 1000;
+
+	/**
+	 * プラグインのUpdate URI（baywall.phpヘッダの`Update URI`と一致させること）
+	 */
+	public const UPDATE_URI = 'https://baywall.net/';
+
+	/**
+	 * app-manifest.jsonの配信URL
+	 */
+	public const APP_MANIFEST_URL = 'https://static.baywall.net/app-manifest.json';
+
+	/**
+	 * app manifest取得リクエストのタイムアウト(秒)
+	 */
+	public const APP_MANIFEST_REQUEST_TIMEOUT = 5;
+
+	/**
+	 * 更新チェックで使用するリリースチャンネル名
+	 */
+	public const PLUGIN_UPDATE_CHANNEL_NAME = 'stable';
+
+	/**
+	 * 更新用zipのダウンロードタイムアウト(秒)。コアのdownload_url()既定値(300)と同等
+	 */
+	public const PLUGIN_UPDATE_PACKAGE_DOWNLOAD_TIMEOUT = 300;
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
 
+use Cornix\Serendipity\Core\Application\Repository\ThemeSettingRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Cornix\Serendipity\Core\Domain\Entity\WidgetAttributes;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
@@ -16,10 +17,12 @@ class GutenbergService {
 
 	private PostRepository $post_repository;
 	private BlockNameProvider $block_name_provider;
+	private ThemeSettingRepository $theme_setting_repository;
 
-	public function __construct( PostRepository $post_repository, BlockNameProvider $block_name_provider ) {
-		$this->post_repository     = $post_repository;
-		$this->block_name_provider = $block_name_provider;
+	public function __construct( PostRepository $post_repository, BlockNameProvider $block_name_provider, ThemeSettingRepository $theme_setting_repository ) {
+		$this->post_repository          = $post_repository;
+		$this->block_name_provider      = $block_name_provider;
+		$this->theme_setting_repository = $theme_setting_repository;
 	}
 
 	public function getWidgetAttributes( WP_Block $block ): WidgetAttributes {
@@ -40,7 +43,16 @@ class GutenbergService {
 
 		$class_name         = WpConfig::PAYWALL_BLOCK_CSS_CLASS_NAME;
 		$default_class_name = 'wp-block-' . str_replace( '/', '-', $block_name_value );
-		$html               = '<aside class="' . esc_attr( $default_class_name ) . ' ' . esc_attr( $class_name ) . '"></aside>';
+
+		// テーマ設定がauto以外の場合のみホスト要素にテーマ属性を出力する。
+		// (autoの場合は属性を付与せず、ブラウザ側でOS設定を同期解決する)
+		$theme_attribute = '';
+		$theme_setting   = $this->theme_setting_repository->get();
+		if ( ! $theme_setting->isAuto() ) {
+			$theme_attribute = ' ' . WpConfig::THEME_ATTRIBUTE_NAME . '="' . esc_attr( $theme_setting->value() ) . '"';
+		}
+
+		$html = '<aside class="' . esc_attr( $default_class_name ) . ' ' . esc_attr( $class_name ) . '"' . $theme_attribute . '></aside>';
 
 		return new WP_Block(
 			array(

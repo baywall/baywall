@@ -30,6 +30,7 @@ use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSellingContent;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSellingPrice;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveServerSigner;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveSctaUrl;
+use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveThemeSetting;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveToken;
 use Cornix\Serendipity\Core\Application\UseCase\GraphQL\ResolveTokens;
 use Psr\Container\ContainerInterface;
@@ -71,6 +72,7 @@ class RootValue {
 			'nativeToken'                        => ResolveNativeToken::class,
 			'paused'                             => ResolvePaused::class,
 			'sctaUrl'                            => ResolveSctaUrl::class,
+			'themeSetting'                       => ResolveThemeSetting::class,
 			'purgeOnUninstall'                   => ResolvePurgeOnUninstall::class,
 			'installOriginUrlChanged'            => ResolveInstallOriginUrlChanged::class,
 			'pluginVersion'                      => ResolvePluginVersion::class,

@@ -10,6 +10,7 @@ use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
 use Cornix\Serendipity\Core\Application\Repository\JwtSecretKeyRepository;
 use Cornix\Serendipity\Core\Application\Repository\PurgeOnUninstallRepository;
 use Cornix\Serendipity\Core\Application\Repository\SctaUrlRepository;
+use Cornix\Serendipity\Core\Application\Repository\ThemeSettingRepository;
 use Cornix\Serendipity\Core\Application\Service\Erc4361NonceProvider;
 use Cornix\Serendipity\Core\Application\Service\Erc4361PropertyProvider;
 use Cornix\Serendipity\Core\Application\Service\GraphQLService;
@@ -72,11 +73,13 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpInstallOriginU
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpPausedRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpPurgeOnUninstallRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpSctaUrlRepository;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpThemeSettingRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpLogLevelRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenExpirationProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenCookieProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpCookieNameProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAccessTokenRequestProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361NonceProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpErc4361PropertyProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpGraphQLService;
@@ -86,6 +89,8 @@ use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvi
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpJwtSecretKeyRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpLockService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginPackageChecksumVerifier;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginUpdateChecker;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginMigrationService;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPostTitleProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginTeardownService;
@@ -126,6 +131,7 @@ final class ContainerDefinitions {
 			Erc4361NonceRepository::class            => autowire( WpErc4361NonceRepository::class ),
 			PausedRepository::class                  => autowire( WpPausedRepository::class ),
 			SctaUrlRepository::class                 => autowire( WpSctaUrlRepository::class ),
+			ThemeSettingRepository::class            => autowire( WpThemeSettingRepository::class ),
 			PurgeOnUninstallRepository::class        => autowire( WpPurgeOnUninstallRepository::class ),
 			InstallOriginUrl::class                  => autowire( WpInstallOriginUrl::class ),
 			JwtSecretKeyRepository::class            => autowire( WpJwtSecretKeyRepository::class ),
@@ -162,6 +168,10 @@ final class ContainerDefinitions {
 			PluginMigrationService::class            => autowire( WpPluginMigrationService::class ),
 			PluginTeardownService::class             => autowire( WpPluginTeardownService::class ),
 			WordPressCoreLatestVersionService::class => autowire( WpWordPressCoreLatestVersionService::class ),
+			// プラグイン自動アップデートチェック用
+			WpAppManifestFetcher::class              => autowire(),
+			WpPluginUpdateChecker::class             => autowire(),
+			WpPluginPackageChecksumVerifier::class   => autowire(),
 
 			// Cache
 			OracleRateCache::class                   => autowire( WpOracleRateCache::class ),

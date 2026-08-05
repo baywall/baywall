@@ -8,6 +8,7 @@
  * Author:            yamaneyuta
  * License:           Split License
  * License URI:       ./LICENSE
+ * Update URI:        https://baywall.net/
  * Text Domain:       baywall
  * Domain Path:       /languages
  */
@@ -23,6 +24,7 @@ use Cornix\Serendipity\Core\Presentation\Hooks\AppContractCrawlCronHook;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
 use Cornix\Serendipity\Core\Presentation\Hooks\GraphQLHook;
 use Cornix\Serendipity\Core\Presentation\Hooks\LogCleanupCronHook;
+use Cornix\Serendipity\Core\Presentation\Hooks\PluginUpdateCheckHook;
 use Cornix\Serendipity\Core\Presentation\Hooks\PluginUpdateHook;
 use Cornix\Serendipity\Core\Presentation\Hooks\PostEditHook;
 use Cornix\Serendipity\Core\Presentation\Hooks\RestApiHook;
@@ -52,6 +54,7 @@ $main = function () {
 		ViewPageHook::class,     // 投稿表示画面
 		ContentHook::class,    // 投稿を保存または取得する時のフィルタ処理
 		LogCleanupCronHook::class, // ログクリーンアップCronの登録
+		PluginUpdateCheckHook::class, // プラグインの自動アップデートチェック
 	);
 	foreach ( $hook_classes as $hook_class ) {
 		$container->get( $hook_class )->register();

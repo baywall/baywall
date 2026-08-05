@@ -5,10 +5,12 @@ namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
 
 use Cornix\Serendipity\Core\Application\Repository\PurgeOnUninstallRepository;
 use Cornix\Serendipity\Core\Application\Repository\SctaUrlRepository;
+use Cornix\Serendipity\Core\Application\Repository\ThemeSettingRepository;
 use Cornix\Serendipity\Core\Application\Service\TransactionService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\PausedRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\SctaUrl;
+use Cornix\Serendipity\Core\Domain\ValueObject\ThemeSetting;
 use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
@@ -18,6 +20,7 @@ class ResolveSaveSiteSettings {
 	private PausedRepository $paused_repository;
 	private SctaUrlRepository $scta_url_repository;
 	private PurgeOnUninstallRepository $purge_on_uninstall_repository;
+	private ThemeSettingRepository $theme_setting_repository;
 	private TransactionService $transaction_service;
 	private WordPressPropertyProvider $wordpress_property_provider;
 
@@ -26,6 +29,7 @@ class ResolveSaveSiteSettings {
 		PausedRepository $paused_repository,
 		SctaUrlRepository $scta_url_repository,
 		PurgeOnUninstallRepository $purge_on_uninstall_repository,
+		ThemeSettingRepository $theme_setting_repository,
 		TransactionService $transaction_service,
 		WordPressPropertyProvider $wordpress_property_provider
 	) {
@@ -33,6 +37,7 @@ class ResolveSaveSiteSettings {
 		$this->paused_repository             = $paused_repository;
 		$this->scta_url_repository           = $scta_url_repository;
 		$this->purge_on_uninstall_repository = $purge_on_uninstall_repository;
+		$this->theme_setting_repository      = $theme_setting_repository;
 		$this->transaction_service           = $transaction_service;
 		$this->wordpress_property_provider   = $wordpress_property_provider;
 	}
@@ -40,7 +45,7 @@ class ResolveSaveSiteSettings {
 	public function handle( array $root_value, array $args ): bool {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		/** @var array{paused: bool, sctaUrl?: string|null, purgeOnUninstall: bool} */
+		/** @var array{paused: bool, sctaUrl?: string|null, purgeOnUninstall: bool, themeSetting: string} */
 		$input = $args['input'];
 
 		/** @var bool */
@@ -48,6 +53,10 @@ class ResolveSaveSiteSettings {
 
 		/** @var bool */
 		$purge_on_uninstall = $input['purgeOnUninstall'];
+
+		/** @var string */
+		$theme_setting_value = $input['themeSetting'];
+		$theme_setting       = ThemeSetting::from( $theme_setting_value ); // 値の妥当性を検証
 
 		/** @var string|null */
 		$scta_url_value = $input['sctaUrl'] ?? null;
@@ -60,10 +69,11 @@ class ResolveSaveSiteSettings {
 		$scta_url = SctaUrl::fromNullable( $scta_url_value );
 
 		return $this->transaction_service->transactional(
-			function () use ( $paused, $scta_url, $purge_on_uninstall ) {
+			function () use ( $paused, $scta_url, $purge_on_uninstall, $theme_setting ) {
 				$this->paused_repository->save( $paused );
 				$this->scta_url_repository->save( $scta_url );
 				$this->purge_on_uninstall_repository->save( $purge_on_uninstall );
+				$this->theme_setting_repository->save( $theme_setting );
 
 				return true;
 			}

@@ -15,7 +15,8 @@ use Throwable;
 
 // ■プラグインがインストールされた時や更新時のhookに関して
 // - `update_plugins_{$host_name}`
-// 　-> WP5.8.0以降で使用可能。2025/7/25にWPの最低バージョンを5.8に更新したが、現時点では未使用
+// 　-> WP5.8.0以降で使用可能。2025/7/25にWPの最低バージョンを5.8に更新済みで、
+// 　   現在は `PluginUpdateCheckHook` でプラグインの自動アップデートチェックに使用中
 // 　   https://wordpress.stackexchange.com/a/419585
 // - `plugins_loaded`, `init`
 // 　-> FTPやSVNでプラグインを更新した場合でも検知できるが、フロントエンドを含む全てのページで実行される欠点あり

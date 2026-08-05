@@ -18,6 +18,8 @@ final class WpOptionName {
 	public const JWT_SECRET_KEY = self::PREFIX . 'jwt_secret_key';
 	/** 特定商取引法に基づく表記のURL */
 	public const SCTA_URL = self::PREFIX . 'scta_url';
+	/** テーマ設定(auto / light / dark) */
+	public const THEME = self::PREFIX . 'theme';
 	/** 一時停止状態 */
 	public const PAUSED = self::PREFIX . 'paused';
 	/** アンインストール時にデータを完全削除するかどうか */
