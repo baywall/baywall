@@ -1,4 +1,4 @@
-import { useMemo } from '@wordpress/element';
+import { useMemo } from 'react';
 import { type SellingNetworkCategorySelectProps } from './SellingNetworkCategorySelect';
 import { useSelectedNetworkCategoryIdState } from '../hooks/useSelectedNetworkCategoryIdState';
 import { useSellableNetworkCategories } from '../hooks/useSellableNetworkCategories';

@@ -1,4 +1,4 @@
-import { useMemo } from '@wordpress/element';
+import { useMemo } from 'react';
 import { isSettingsComplete } from './lib/isSettingsComplete';
 import { SettingsErrorNotificationProps } from './SettingsErrorNotification';
 import { UrlProvider } from '../../../lib/url/UrlProvider';

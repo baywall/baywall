@@ -1,5 +1,3 @@
-import { dispatch } from '@wordpress/data';
-import { store as noticesStore } from '@wordpress/notices';
 // import { WPNoticeAction } from '@wordpress/notices/build-types/store/actions';
 
 /** 通知を画面に表示するクラス */
@@ -31,7 +29,7 @@ export class ScreenNotifier {
 	}
 
 	private show(status: NoticeStatus, message: string, option?: NoticeOption) {
-		dispatch(noticesStore).createNotice(status, message, {
+		window.wp.data.dispatch('core/notices').createNotice(status, message, {
 			...option,
 			type: 'default',
 		});
@@ -39,7 +37,7 @@ export class ScreenNotifier {
 
 	private showSnackbar(status: NoticeStatus, message: string, option?: NoticeSnackbarOption) {
 		const { icon, ...rest } = option || {};
-		dispatch(noticesStore).createNotice(status, message, {
+		window.wp.data.dispatch('core/notices').createNotice(status, message, {
 			...rest,
 			type: 'snackbar',
 			icon: this.defaultSnackbarIcon(status, icon),
@@ -79,7 +77,7 @@ export class ScreenNotifier {
 	}
 
 	public hide(id: string, context?: string) {
-		dispatch(noticesStore).removeNotice(id, context);
+		window.wp.data.dispatch('core/notices').removeNotice(id, context);
 	}
 }
 

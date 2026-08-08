@@ -1,5 +1,5 @@
-import { BlockEditProps } from '@wordpress/blocks';
-import { useEffect } from '@wordpress/element';
+import { BlockEditProps } from '../../types/BlockEditProps';
+import { useEffect } from 'react';
 import { WidgetAttributes } from '../../types/WidgetAttributes';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 import { useSelectedNetworkCategoryIdState } from '../selling-network-category/hooks/useSelectedNetworkCategoryIdState';

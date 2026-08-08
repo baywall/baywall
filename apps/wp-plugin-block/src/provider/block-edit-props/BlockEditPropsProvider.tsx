@@ -1,5 +1,5 @@
-import { BlockEditProps } from '@wordpress/blocks';
-import { createContext } from '@wordpress/element';
+import { BlockEditProps } from '../../types/BlockEditProps';
+import { createContext } from 'react';
 import { WidgetAttributes } from '../../types/WidgetAttributes';
 
 type BlockEditPropsContextType = BlockEditProps<WidgetAttributes>;

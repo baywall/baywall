@@ -1,4 +1,4 @@
-import { useEffect } from '@wordpress/element';
+import { useEffect } from 'react';
 import { ScreenNotifier } from '../../../../lib/gutenberg/notification/ScreenNotifier';
 import { useTranslation } from 'react-i18next';
 

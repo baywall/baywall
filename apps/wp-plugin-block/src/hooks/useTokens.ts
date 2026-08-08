@@ -1,5 +1,5 @@
 import { Decimals, NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
-import { useMemo } from '@wordpress/element';
+import { useMemo } from 'react';
 import { useBlockInitRawDataQuery } from '../query/useBlockInitRawDataQuery';
 import { Token } from '../value-object/Token';
 

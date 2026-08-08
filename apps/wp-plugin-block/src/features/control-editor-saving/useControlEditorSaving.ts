@@ -1,4 +1,4 @@
-import { useEffect } from '@wordpress/element';
+import { useEffect } from 'react';
 import { PostSavingController } from '../../lib/gutenberg/post-saving/PostSavingController';
 import { useShouldLockEditorSaving } from './hooks/useShouldLockEditorSaving';
 

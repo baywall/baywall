@@ -1,4 +1,4 @@
-import { useMemo } from '@wordpress/element';
+import { useMemo } from 'react';
 import { ScreenNotifier } from '../../../../lib/gutenberg/notification/ScreenNotifier';
 import { InvalidDecimalsNotificationProps } from './InvalidDecimalsNotification';
 import { useIsDecimalPlacesError } from '../../hooks/useIsDecimalPlacesError';

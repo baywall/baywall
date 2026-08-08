@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BlockEditPropsProvider } from './block-edit-props/BlockEditPropsProvider';
-import { BlockEditProps } from '@wordpress/blocks';
+import { BlockEditProps } from '../types/BlockEditProps';
 import { WidgetAttributes } from '../types/WidgetAttributes';
 import { Provider } from 'jotai';
 

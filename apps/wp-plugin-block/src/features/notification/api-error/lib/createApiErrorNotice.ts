@@ -1,4 +1,4 @@
-import { NoticeList } from '@wordpress/components';
+import type { NoticeList } from '@wordpress/components';
 
 type Notices = React.ComponentProps<typeof NoticeList>['notices'];
 

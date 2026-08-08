@@ -1,4 +1,4 @@
-import { useMemo } from '@wordpress/element';
+import { useMemo } from 'react';
 import { Amount } from '@serendipity/lib-value-object';
 import { useSellingPriceAmountValueState } from './useSellingPriceAmountValueState';
 

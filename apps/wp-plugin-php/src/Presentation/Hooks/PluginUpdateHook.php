@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Application\Service\PluginMigrationService;
 use Cornix\Serendipity\Core\Infrastructure\System\ArchitectureChecker;
 use Cornix\Serendipity\Core\Infrastructure\System\PhpExtChecker;
 use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpInstalledPluginVersionRepository;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressVersionChecker;
@@ -54,8 +55,13 @@ class PluginUpdateHook extends HookBase {
 				return;
 			}
 
-			// 動作環境のチェック
-			$this->checkSystem();
+			// 初回インストールかどうか（前回保存バージョンが null の場合を初回インストールとみなす）
+			/** @var WpInstalledPluginVersionRepository */
+			$wp_installed_plugin_version_repository = $this->container->get( WpInstalledPluginVersionRepository::class );
+			$is_first_install                       = $this->isFirstInstall( $wp_installed_plugin_version_repository );
+
+			// 動作環境のチェック（環境チェック一式は初回・更新時とも実行し、WordPressのバージョンチェックは初回インストール時のみ実行）
+			$this->checkSystem( $is_first_install );
 
 			// マイグレーション実行
 			$plugin_migrate_service->migrate();
@@ -72,8 +78,10 @@ class PluginUpdateHook extends HookBase {
 
 	/**
 	 * 動作環境のチェックを行います
+	 *
+	 * @param bool $check_wordpress_version WordPressのバージョンチェックを実行するかどうか（初回インストール時のみ true）
 	 */
-	private function checkSystem(): void {
+	private function checkSystem( bool $check_wordpress_version ): void {
 		// 64ビットのPHP環境であることを確認
 		/** @var ArchitectureChecker */
 		$architecture_checker = $this->container->get( ArchitectureChecker::class );
@@ -91,10 +99,25 @@ class PluginUpdateHook extends HookBase {
 			throw new \RuntimeException( '[CFE0F8E3] This plugin does not support WordPress Multisite.' );
 		}
 
-		// WordPressバージョンのチェック(最新マイナーバージョン一覧を基準にサポート対象外バージョンを拒否)
-		/** @var WordPressVersionChecker */
-		$wp_version_checker = $this->container->get( WordPressVersionChecker::class );
-		$wp_version_checker->checkVersion( $wp_property_provider->wpVersion() );
+		// WordPressバージョンのチェックは初回インストール時のみ実行する。
+		// プラグイン更新時は、プラグインの自動更新機能(PluginUpdateCheckHook)導入以降、
+		// 更新のたびにWordPressコアのバージョンチェックが走るのは不適切なため、初回インストール時に限定する。
+		if ( $check_wordpress_version ) {
+			/** @var WordPressVersionChecker */
+			$wp_version_checker = $this->container->get( WordPressVersionChecker::class );
+			$wp_version_checker->checkVersion( $wp_property_provider->wpVersion() );
+		}
+	}
+
+	/**
+	 * 初回インストールかどうかを判定します。
+	 *
+	 * 前回保存されているプラグインバージョンが null（未保存）の場合を初回インストールとみなします。
+	 *
+	 * @param WpInstalledPluginVersionRepository $repository インストール済みプラグインバージョンのリポジトリ
+	 */
+	private function isFirstInstall( WpInstalledPluginVersionRepository $repository ): bool {
+		return $repository->get() === null;
 	}
 
 	private function deactivatePlugin(): void {

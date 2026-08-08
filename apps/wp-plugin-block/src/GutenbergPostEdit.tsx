@@ -1,4 +1,5 @@
-import { Placeholder } from '@wordpress/components';
+import type { Placeholder as PlaceholderType } from '@wordpress/components';
+const Placeholder = window.wp.components.Placeholder as typeof PlaceholderType;
 import { SellingPriceSymbolSelect } from './features/selling-price-symbol/components/SellingPriceSymbolSelect';
 import { useSellingPriceSymbolSelectProps } from './features/selling-price-symbol/components/useSellingSymbolSelectProps';
 import { SellingNetworkCategorySelect } from './features/selling-network-category/components/SellingNetworkCategorySelect';

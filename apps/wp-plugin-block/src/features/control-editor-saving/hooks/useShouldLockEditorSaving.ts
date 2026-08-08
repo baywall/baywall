@@ -1,4 +1,4 @@
-import { useMemo } from '@wordpress/element';
+import { useMemo } from 'react';
 import { useBlockEditProps } from '../../../provider/block-edit-props/useBlockEditProps';
 import { useInvalidDecimalsNotificationProps } from '../../selling-price-amount/components/selling-price-decimals-error/useInvalidDecimalsNotificationProps';
 

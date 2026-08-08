@@ -1,12 +1,13 @@
-import { useMemo } from '@wordpress/element';
-import { NoticeList } from '@wordpress/components';
+import { useMemo } from 'react';
+import type { NoticeList as NoticeListType } from '@wordpress/components';
 import { UrlProvider } from '../../../lib/url/UrlProvider';
 import { useTranslation } from 'react-i18next';
 import { createSettingsErrorNotice } from './lib/createSettingsErrorNotice';
 
-type Notices = React.ComponentProps<typeof NoticeList>['notices'];
+const NoticeList = window.wp.components.NoticeList as typeof NoticeListType;
+type Notices = React.ComponentProps<typeof NoticeListType>['notices'];
 
-export type SettingsErrorNotificationProps = Omit<React.ComponentProps<typeof NoticeList>, 'notices'> & {
+export type SettingsErrorNotificationProps = Omit<React.ComponentProps<typeof NoticeListType>, 'notices'> & {
 	/** 設定が正しい場合はtrue */
 	isSettingsComplete: boolean | undefined;
 	urlProvider: UrlProvider;

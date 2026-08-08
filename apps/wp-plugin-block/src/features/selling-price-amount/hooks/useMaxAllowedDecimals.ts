@@ -1,4 +1,4 @@
-import { useMemo } from '@wordpress/element';
+import { useMemo } from 'react';
 import { useTokens } from '../../../hooks/useTokens';
 import { getMaxDecimals } from '../lib/getMaxDecimals';
 import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';

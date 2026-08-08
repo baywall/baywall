@@ -3,7 +3,6 @@
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-import { registerBlockType } from '@wordpress/blocks';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -20,7 +19,6 @@ import './style.scss';
 import Edit from './edit';
 import save from './save';
 import metadata from './block.json';
-import { WidgetAttributes } from './types/WidgetAttributes';
 import { BlockIconProvider } from './lib/icon/BlockIconProvider';
 
 import './i18n/i18n'; // i18n初期化処理を実行
@@ -30,7 +28,7 @@ import './i18n/i18n'; // i18n初期化処理を実行
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-registerBlockType<WidgetAttributes>(metadata.name, {
+window.wp.blocks.registerBlockType(metadata.name, {
 	...(metadata as any),
 	icon: new BlockIconProvider().get(),
 	attributes: {

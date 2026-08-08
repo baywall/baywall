@@ -1,10 +1,11 @@
-import { useMemo } from '@wordpress/element';
-import { NoticeList } from '@wordpress/components';
+import { useMemo } from 'react';
+import type { NoticeList as NoticeListType } from '@wordpress/components';
 import { createApiErrorNotice } from './lib/createApiErrorNotice';
 
-type Notices = React.ComponentProps<typeof NoticeList>['notices'];
+const NoticeList = window.wp.components.NoticeList as typeof NoticeListType;
+type Notices = React.ComponentProps<typeof NoticeListType>['notices'];
 
-export type ApiErrorNotificationProps = Omit<React.ComponentProps<typeof NoticeList>, 'notices'> & {
+export type ApiErrorNotificationProps = Omit<React.ComponentProps<typeof NoticeListType>, 'notices'> & {
 	/** useQueryのerrorプロパティ */
 	error: unknown;
 };

@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { BlockEditPropsContext } from './BlockEditPropsProvider';
-import { useContext } from '@wordpress/element';
+import { useContext } from 'react';
 
 /**
  * ブロックのプロパティを取得または設定する機能を提供します。

@@ -5,23 +5,9 @@
  */
 // import { __ } from '@wordpress/i18n';
 
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
- */
-import { useBlockProps } from '@wordpress/block-editor';
-
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
 import './editor.scss';
 
-import { BlockEditProps } from '@wordpress/blocks';
+import { BlockEditProps } from './types/BlockEditProps';
 import { GutenbergPostEdit } from './GutenbergPostEdit';
 import { GutenbergPostEditProvider } from './provider/GutenbergPostEditProvider';
 import { WidgetAttributes } from './types/WidgetAttributes';
@@ -34,7 +20,7 @@ import { WidgetAttributes } from './types/WidgetAttributes';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  */
 const Edit = (props: BlockEditProps<WidgetAttributes>) => {
-	const blockProps = useBlockProps?.() ?? {};
+	const blockProps = window.wp.blockEditor.useBlockProps?.() ?? {};
 
 	return (
 		<div {...blockProps}>

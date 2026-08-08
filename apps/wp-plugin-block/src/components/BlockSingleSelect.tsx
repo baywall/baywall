@@ -1,7 +1,8 @@
-import { useMemo } from '@wordpress/element';
-import { SelectControl } from '@wordpress/components';
+import { useMemo } from 'react';
+import type { SelectControl as SelectControlType } from '@wordpress/components';
 
-type SelectControlProps = React.ComponentProps<typeof SelectControl>;
+const SelectControl = window.wp.components.SelectControl as typeof SelectControlType;
+type SelectControlProps = React.ComponentProps<typeof SelectControlType>;
 
 export interface BlockSingleSelectProps extends Omit<Extract<SelectControlProps, { multiple?: false }>, 'options'> {
 	options: SelectControlProps['options'] | null | undefined;

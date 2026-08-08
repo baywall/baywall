@@ -16,7 +16,7 @@ use Cornix\Serendipity\Core\Constant\Config;
  * 空配列をそのまま返すと全バージョンが拒否されるため、必ずフォールバックします。
  *
  * Transientキャッシュは導入しません。
- * 本チェックはプラグインのインストール・更新時(`checkSystem()`)にのみ実行されるため、キャッシュは不要です。
+ * 本チェックはプラグインの初回インストール時のみ実行されるため、キャッシュは不要です。
  */
 class WpWordPressCoreLatestVersionService implements WordPressCoreLatestVersionService {
 
