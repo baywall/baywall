@@ -49,6 +49,6 @@
   },
   "devDependencies": {
     "@wordpress/env": "^11.12.0",
-    "wrangler": "4.118.0"
+    "wrangler": "^4.120.1"
   }
 }
