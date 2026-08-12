@@ -27,7 +27,6 @@ export const BlockSingleSelect = (props: BlockSingleSelectProps) => {
 	// 通常の`select`コントロールを使用するとテーマにスタイルが影響されるため、
 	// WordPressが提供する`SelectControl`コンポーネントを使用
 	//
-	// `__next40pxDefaultSize`は以下の警告を回避するために設定
-	// 36px default size for wp.components.SelectControl is deprecated since version 6.8 and will be removed in version 7.1. Note: Set the `__next40pxDefaultSize` prop to true to start opting into the new default size, which will become the default in a future version.
-	return <SelectControl __next40pxDefaultSize {...rest} options={options} />;
+	// 40pxデフォルトサイズは@wordpress/components@37.0.0以降で標準化されている（`__next40pxDefaultSize`不要）
+	return <SelectControl {...rest} options={options} />;
 };
