@@ -11,11 +11,12 @@ use Cornix\Serendipity\Core\Constant\Config;
  * プラグインの更新可否を判定し、コアの`update_plugins_{host}`フィルターに渡すペイロードを構築するサービス。
  *
  * 判定順序:
- * 1. manifestのバージョンがインストール済みバージョンより大きいこと
- * 2. 現在WordPressバージョンが`requiresWordPress`以上であること
- * 3. 現在PHPバージョンが`requiresPhp`以上であること
+ * 1. manifestのバージョンがインストール済み以下（更新なし）なら`no_update`用ペイロードを返す
+ * 2. manifestのバージョンがインストール済みより新しく、かつ現在のWordPressバージョンが
+ *    `requiresWordPress`以上、かつ現在のPHPバージョンが`requiresPhp`以上なら更新ペイロードを返す
+ * 3. 更新はあるが要件未達の場合はnull（更新非提示）を返す
  *
- * 全てを満たす場合のみペイロード配列を返し、それ以外はnull（更新非提示）を返します。
+ * 戻り値は「更新ペイロード / `no_update`用ペイロード / null」の3状態を取ります。
  */
 class WpPluginUpdateChecker {
 
@@ -26,7 +27,10 @@ class WpPluginUpdateChecker {
 	 * @param string              $installed_version   インストール済みプラグインバージョン
 	 * @param string              $current_wp_version  現在のWordPressバージョン
 	 * @param string              $current_php_version 現在のPHPバージョン
-	 * @return array|null 更新提示時はペイロード配列、更新不要（または要件未達）の場合はnull
+	 * @return array|null 戻り値は以下の3状態:
+	 *                    - 更新ペイロード配列（更新あり・要件充足）
+	 *                    - `no_update`用ペイロード配列（更新なし）
+	 *                    - null（更新ありだが要件未達）
 	 */
 	public function buildUpdateResponse(
 		PluginUpdateChannel $channel,
@@ -34,11 +38,28 @@ class WpPluginUpdateChecker {
 		string $current_wp_version,
 		string $current_php_version
 	): ?array {
-		// manifestのバージョンがインストール済みより新しい場合のみ更新対象
+		// manifestのバージョンがインストール済み以下の場合は更新なしと判定し、
+		// コアが`no_update`に登録できる有効なペイロードを返す。
+		// これによりプラグイン一覧の`update-supported`がtrueとなり「自動更新を有効化」リンクが常時表示される。
+		// ※ リンク表示（update-supported）は`response`/`no_update`への登録有無で決まり、`package`には依存しない。
+		// `package`は将来`response`に入った際の実ダウンロードに必要なため含めている。
 		// ※ semverとして解釈不能なバージョン文字列が来た場合はComparatorが例外を投げるため、
 		// 呼び出し側（フック）で\Throwableを捕捉して更新非提示に倒す
 		if ( ! Comparator::greaterThan( $channel->version(), $installed_version ) ) {
-			return null;
+			// 更新なしパスでは要件チェックを行わないため、環境要件未達でも`requires`/`requires_php`が
+			// そのまま載る。ただし`no_update`はコアがプラグイン一覧に表示しないため実害はない。
+			return array(
+				// コアは`version`フィールドが必須（無いと更新情報として無視される）
+				'version'      => $installed_version,
+				// インストール済み以下にすることでコアの`version_compare`がfalseとなり`no_update`に登録される
+				'new_version'  => $installed_version,
+				// 「詳細を見る」のリンク先。`slug`は意図的に含めない（含めると詳細モーダルがwordpress.orgへ遷移するため）
+				'url'          => Config::UPDATE_URI,
+				// 更新用zipのURL。将来`response`に入った際の実ダウンロードに必要
+				'package'      => $channel->url(),
+				'requires'     => $channel->requiresWordPress(),
+				'requires_php' => $channel->requiresPhp(),
+			);
 		}
 
 		// WordPressの要件チェック
