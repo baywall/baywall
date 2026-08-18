@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 /**
  * WordPressの設定情報を取得するクラス。

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\ValueObject;
 
 /**
  * Gutenbergのブロック名を表す値オブジェクト

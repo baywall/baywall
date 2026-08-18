@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Entity\Base;
+namespace Baywall\Core\Domain\Entity\Base;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\PrivateKey;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\PrivateKey;
 
 class Signer {
 

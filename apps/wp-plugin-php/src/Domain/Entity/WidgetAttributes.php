@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Entity;
+namespace Baywall\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
+use Baywall\Core\Domain\ValueObject\Symbol;
 
 /** Gutenbergで配置したブロックの属性(画面で設定された値) */
 class WidgetAttributes {

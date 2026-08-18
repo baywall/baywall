@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
-use Cornix\Serendipity\Core\Application\Service\TransactionService;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpLogLevelRepository;
+use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Baywall\Core\Infrastructure\WordPress\Repository\WpLogLevelRepository;
 
 class V20251106_011_InitLogLevelWpOptions extends MigrationBase {
 

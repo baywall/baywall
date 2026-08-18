@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Repository;
+namespace Baywall\Core\Application\Repository;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\SctaUrl;
+use Baywall\Core\Domain\ValueObject\SctaUrl;
 
 interface SctaUrlRepository {
 

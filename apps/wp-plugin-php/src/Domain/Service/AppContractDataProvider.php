@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Service;
+namespace Baywall\Core\Domain\Service;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 /** Appコントラクトから必要なデータを取得するインターフェース */
 interface AppContractDataProvider {

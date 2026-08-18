@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Service;
+namespace Baywall\Core\Domain\Service;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 interface PostTitleProvider {
 	/** 指定された投稿IDのタイトルを取得します。 */

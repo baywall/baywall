@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\Exception\ChainIdMismatchException;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Client\BlockchainClient;
+use Baywall\Core\Application\Exception\ChainIdMismatchException;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\RpcUrl;
+use Baywall\Core\Infrastructure\Web3\Client\BlockchainClient;
 
 class ChainIdChecker {
 	/**

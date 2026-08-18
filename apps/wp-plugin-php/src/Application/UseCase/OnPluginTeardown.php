@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase;
+namespace Baywall\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Application\Service\PluginTeardownService;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Service\PluginTeardownService;
 
 /**
  * アンインストール時の処理を実行します

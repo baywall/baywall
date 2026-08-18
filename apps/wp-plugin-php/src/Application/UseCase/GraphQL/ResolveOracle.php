@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
-use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Repository\OracleRepository;
+use Baywall\Core\Domain\Specification\OraclesFilter;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\ChainId;
 
 class ResolveOracle {
 

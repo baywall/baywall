@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\Seller;
-use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
-use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\SellerTable;
+use Baywall\Core\Domain\Entity\Seller;
+use Baywall\Core\Domain\Repository\SellerRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Signature;
+use Baywall\Core\Domain\ValueObject\SigningMessage;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\SellerTable;
 
 class WpSellerRepository implements SellerRepository {
 

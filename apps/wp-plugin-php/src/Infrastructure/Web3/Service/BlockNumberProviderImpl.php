@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
+namespace Baywall\Core\Infrastructure\Web3\Service;
 
-use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Service\BlockNumberProvider;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Client\BlockchainClient;
+use Baywall\Core\Domain\Entity\Chain;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Service\BlockNumberProvider;
+use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Domain\ValueObject\BlockTag;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\RpcUrl;
+use Baywall\Core\Infrastructure\Web3\Client\BlockchainClient;
 
 class BlockNumberProviderImpl implements BlockNumberProvider {
 

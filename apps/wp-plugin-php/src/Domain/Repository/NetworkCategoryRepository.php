@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Repository;
+namespace Baywall\Core\Domain\Repository;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
+use Baywall\Core\Domain\ValueObject\NetworkCategory;
+use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 
 interface NetworkCategoryRepository {
 	/**

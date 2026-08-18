@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\Invoice;
-use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
-use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\InvoiceTable;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Price;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
+use Baywall\Core\Domain\Entity\Invoice;
+use Baywall\Core\Domain\Repository\InvoiceRepository;
+use Baywall\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\InvoiceTable;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\ValueObject\Price;
+use Baywall\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
 
 class WpInvoiceRepository implements InvoiceRepository {
 

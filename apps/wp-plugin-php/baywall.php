@@ -17,18 +17,18 @@
 
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Infrastructure\DI\ContainerDefinitions;
-use Cornix\Serendipity\Core\Presentation\Hooks\AdminPageHook;
-use Cornix\Serendipity\Core\Presentation\Hooks\ContentHook;
-use Cornix\Serendipity\Core\Presentation\Hooks\AppContractCrawlCronHook;
-use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
-use Cornix\Serendipity\Core\Presentation\Hooks\GraphQLHook;
-use Cornix\Serendipity\Core\Presentation\Hooks\LogCleanupCronHook;
-use Cornix\Serendipity\Core\Presentation\Hooks\PluginUpdateCheckHook;
-use Cornix\Serendipity\Core\Presentation\Hooks\PluginUpdateHook;
-use Cornix\Serendipity\Core\Presentation\Hooks\PostEditHook;
-use Cornix\Serendipity\Core\Presentation\Hooks\RestApiHook;
-use Cornix\Serendipity\Core\Presentation\Hooks\ViewPageHook;
+use Baywall\Core\Infrastructure\DI\ContainerDefinitions;
+use Baywall\Core\Presentation\Hooks\AdminPageHook;
+use Baywall\Core\Presentation\Hooks\ContentHook;
+use Baywall\Core\Presentation\Hooks\AppContractCrawlCronHook;
+use Baywall\Core\Presentation\Hooks\Base\HookBase;
+use Baywall\Core\Presentation\Hooks\GraphQLHook;
+use Baywall\Core\Presentation\Hooks\LogCleanupCronHook;
+use Baywall\Core\Presentation\Hooks\PluginUpdateCheckHook;
+use Baywall\Core\Presentation\Hooks\PluginUpdateHook;
+use Baywall\Core\Presentation\Hooks\PostEditHook;
+use Baywall\Core\Presentation\Hooks\RestApiHook;
+use Baywall\Core\Presentation\Hooks\ViewPageHook;
 use DI\ContainerBuilder;
 
 if ( ! defined( 'ABSPATH' ) ) {

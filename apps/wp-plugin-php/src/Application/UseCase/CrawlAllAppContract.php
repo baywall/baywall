@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase;
+namespace Baywall\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Service\AppContractCrawlService;
-use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\Domain\Service\CrawlableChainsService;
+use Baywall\Core\Application\Service\AppContractCrawlService;
+use Baywall\Core\Domain\Entity\Chain;
+use Baywall\Core\Domain\Service\CrawlableChainsService;
 
 /**
  * すべてのチェーンに対してAppコントラクトのイベント収集を行います

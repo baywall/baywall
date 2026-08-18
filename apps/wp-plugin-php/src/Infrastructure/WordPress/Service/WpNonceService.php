@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\Exception\HttpStatus\BadRequestException;
+use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use WP_REST_Request;
 
 /** X-WP-Nonceを関連サービス */

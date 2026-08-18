@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Abi;
+namespace Baywall\Core\Infrastructure\Web3\Abi;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Abi\Base\AbiBase;
-use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Domain\ValueObject\Hex;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\TransactionHash;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferType;
+use Baywall\Core\Infrastructure\Web3\Abi\Base\AbiBase;
+use Baywall\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
 use phpseclib\Math\BigInteger;
 use stdClass;
 

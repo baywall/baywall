@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Constant\Config;
+use Baywall\Core\Constant\Config;
 
 /**
  * WordPress公式REST APIからWordPressコアの最新マイナーバージョン一覧を取得するサービス。

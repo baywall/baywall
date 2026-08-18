@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Dto;
+namespace Baywall\Core\Application\Dto;
 
 /** 価格 */
 class PriceDto {

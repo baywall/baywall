@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject;
+namespace Baywall\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
-use Cornix\Serendipity\Core\Infrastructure\Format\Padding;
-use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
+use Baywall\Core\Infrastructure\Format\Padding;
+use Baywall\Core\Infrastructure\Util\Strings;
 
 /**
  * アドレス(ウォレットアドレス/コントラクトアドレス)を表すクラス

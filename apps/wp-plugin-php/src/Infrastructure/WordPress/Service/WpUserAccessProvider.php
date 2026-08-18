@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Application\Service\UserAccessProvider;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 class WpUserAccessProvider implements UserAccessProvider {
 

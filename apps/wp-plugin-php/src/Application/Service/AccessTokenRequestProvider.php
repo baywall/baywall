@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
 /**
  * リクエストからアクセストークンを取得します。

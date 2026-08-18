@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
+namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Domain\Entity\InvoiceToken;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTokenTableRecord;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\WpInvoiceTokenHashString;
+use Baywall\Core\Domain\Entity\InvoiceToken;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
+use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTokenTableRecord;
+use Baywall\Core\Infrastructure\WordPress\ValueObject\WpInvoiceTokenHashString;
 
 /**
  * 請求書トークンの情報を記録するテーブル

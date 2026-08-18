@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Service\TransactionService;
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\Entity\Seller;
-use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
-use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Service\SignatureService;
+use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Domain\Entity\Seller;
+use Baywall\Core\Domain\Repository\SellerRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Signature;
+use Baywall\Core\Domain\ValueObject\SigningMessage;
+use Baywall\Core\Infrastructure\Web3\Service\SignatureService;
 
 class ResolveSaveSeller {
 

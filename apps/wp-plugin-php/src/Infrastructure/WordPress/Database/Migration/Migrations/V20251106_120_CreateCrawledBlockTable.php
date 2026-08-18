@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
+use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
 class V20251106_120_CreateCrawledBlockTable extends MigrationBase {
 

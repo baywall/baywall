@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
-use Cornix\Serendipity\Core\Domain\Entity\Post;
-use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\PaidContentTableRecord;
+use Baywall\Core\Domain\ValueObject\PaidContent;
+use Baywall\Core\Domain\Entity\Post;
+use Baywall\Core\Domain\Repository\PostRepository;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
+use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
+use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\PaidContentTableRecord;
 
 class WpPostRepository implements PostRepository {
 

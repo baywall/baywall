@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3;
+namespace Baywall\Core\Infrastructure\Web3;
 
-use Cornix\Serendipity\Core\Infrastructure\Retry\Retryer;
-use Cornix\Serendipity\Core\Constant\Config;
+use Baywall\Core\Infrastructure\Retry\Retryer;
+use Baywall\Core\Constant\Config;
 
 class BlockchainRetryer {
 	public function __construct() {

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject;
+namespace Baywall\Core\Infrastructure\JWT\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\SecureStringValueObject;
+use Baywall\Core\Domain\ValueObject\Base\SecureStringValueObject;
 
 /**
  * JWTで使用する共通鍵を表すクラス

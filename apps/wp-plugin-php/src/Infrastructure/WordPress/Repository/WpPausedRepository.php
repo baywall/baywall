@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Repository;
 
-use Cornix\Serendipity\Core\Domain\Repository\PausedRepository;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option\BoolOption;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Domain\Repository\PausedRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\BoolOption;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
 /**
  * 一時停止状態を取得または保存するクラス

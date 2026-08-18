@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
+namespace Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
 
 /** WordPressのoptionsテーブルにbool値を保存または取得するクラス */
 class BoolOption {

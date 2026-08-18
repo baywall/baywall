@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\ERC4361;
+namespace Baywall\Core\Infrastructure\Web3\ERC4361;
 
 /**
  * ERC-4361のフォーマットに従ったメッセージを構築するクラス

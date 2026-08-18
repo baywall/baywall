@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject;
+namespace Baywall\Core\Infrastructure\Web3\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Domain\ValueObject\Hex;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use stdClass;
 
 class EthBlock {

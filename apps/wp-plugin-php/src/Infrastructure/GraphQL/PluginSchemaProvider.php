@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Infrastructure\GraphQL;
+namespace Baywall\Core\Infrastructure\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Service\GraphQLService;
+use Baywall\Core\Application\Service\GraphQLService;
 use GraphQL\Language\Parser;
 use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;

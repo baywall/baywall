@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Entity;
+namespace Baywall\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
-use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
+use Baywall\Core\Domain\ValueObject\Confirmations;
+use Baywall\Core\Domain\ValueObject\RpcUrl;
 
 class Chain {
 	/**

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base;
 
 /**
  * マイグレーションの基底クラス

@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
+namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Domain\Entity\Invoice;
-use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
-use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
+use Baywall\Core\Domain\Entity\Invoice;
+use Baywall\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
+use Baywall\Core\Domain\ValueObject\Decimals;
+use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
+use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
 
 /**
  * 発行した請求書の情報を保存するテーブル

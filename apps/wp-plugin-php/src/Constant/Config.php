@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Constant;
+namespace Baywall\Core\Constant;
 
 /**
  * システム固定の設定値を取得するためのクラス

@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase;
+namespace Baywall\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\Service\AccessTokenService;
-use Cornix\Serendipity\Core\Application\Service\AppContractCrawlService;
-use Cornix\Serendipity\Core\Application\Service\ConfirmationsService;
-use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
-use Cornix\Serendipity\Core\Domain\Service\InvoiceService;
-use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenService;
-use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
-use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Service\AccessTokenCookieProvider;
+use Baywall\Core\Application\Service\AccessTokenService;
+use Baywall\Core\Application\Service\AppContractCrawlService;
+use Baywall\Core\Application\Service\ConfirmationsService;
+use Baywall\Core\Application\Service\InvoiceTokenCookieProvider;
+use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
+use Baywall\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
+use Baywall\Core\Domain\Service\InvoiceService;
+use Baywall\Core\Domain\Service\InvoiceTokenService;
+use Baywall\Core\Domain\Service\RefreshTokenService;
+use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
+use Baywall\Core\Infrastructure\Cookie\CookieWriter;
 
 /**
  * 請求書トークンとアクセストークン(+リフレッシュトークン)の引き換えを行うクラス

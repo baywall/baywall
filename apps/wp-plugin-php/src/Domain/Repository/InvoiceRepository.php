@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Repository;
+namespace Baywall\Core\Domain\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\Invoice;
-use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\Entity\Invoice;
+use Baywall\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
 
 interface InvoiceRepository {
 	/** 指定した請求書IDに合致する請求書情報を取得します。 */

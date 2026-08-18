@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject;
+namespace Baywall\Core\Infrastructure\JWT\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\ArrayValueObject;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Base\ArrayValueObject;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 /**
  * 本プラグインで使用するJWT形式のアクセストークンのペイロードを表すクラス

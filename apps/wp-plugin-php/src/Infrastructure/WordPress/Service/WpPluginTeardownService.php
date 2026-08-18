@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Repository\PurgeOnUninstallRepository;
-use Cornix\Serendipity\Core\Application\Service\PluginTeardownService;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpTableCoreName;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpTransientName;
+use Baywall\Core\Application\Repository\PurgeOnUninstallRepository;
+use Baywall\Core\Application\Service\PluginTeardownService;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpTableCoreName;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpTransientName;
 use wpdb;
 
 /** WordPressからプラグインが削除される際のクリーンアップ処理を行うクラス */

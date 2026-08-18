@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Logging;
+namespace Baywall\Core\Infrastructure\Logging;
 
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
 
 interface Logger {
 	/**

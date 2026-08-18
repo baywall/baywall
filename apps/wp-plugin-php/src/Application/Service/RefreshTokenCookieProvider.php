@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
-use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
+use Baywall\Core\Domain\Entity\RefreshToken;
+use Baywall\Core\Infrastructure\Cookie\Cookie;
 
 /**
  * リフレッシュトークンをCookieに書き込む際のプロパティを提供します

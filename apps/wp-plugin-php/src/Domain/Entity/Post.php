@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Entity;
+namespace Baywall\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
-use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Price;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
+use Baywall\Core\Domain\ValueObject\PaidContent;
+use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\ValueObject\Price;
+use Baywall\Core\Domain\ValueObject\Symbol;
 
 class Post {
 

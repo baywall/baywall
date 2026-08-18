@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Repository;
 
-use Cornix\Serendipity\Core\Domain\Repository\InstallOriginUrl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option\StringOption;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Domain\Repository\InstallOriginUrl;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\StringOption;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 use RuntimeException;
 
 class WpInstallOriginUrl implements InstallOriginUrl {

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Entity;
+namespace Baywall\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\RefreshTokenString;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 /**
  * リフレッシュトークンを表すクラス

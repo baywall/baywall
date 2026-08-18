@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Cache;
+namespace Baywall\Core\Infrastructure\WordPress\Cache;
 
-use Cornix\Serendipity\Core\Domain\Entity\Oracle;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
-use Cornix\Serendipity\Core\Infrastructure\Cache\OracleRateCache;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpTransientName;
+use Baywall\Core\Domain\Entity\Oracle;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\Rate;
+use Baywall\Core\Infrastructure\Cache\OracleRateCache;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpTransientName;
 
 class WpOracleRateCache implements OracleRateCache {
 

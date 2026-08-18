@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpJwtSecretKeyRepository;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Repository\WpPausedRepository;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyService;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\WordPress\Repository\WpJwtSecretKeyRepository;
+use Baywall\Core\Infrastructure\WordPress\Repository\WpPausedRepository;
+use Baywall\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyService;
 
 class V20260419_011_AddOptions extends MigrationBase {
 

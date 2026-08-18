@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Bytes;
-use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
+use Baywall\Core\Domain\ValueObject\Bytes;
+use Baywall\Core\Domain\ValueObject\RefreshTokenString;
 use DateTimeImmutable;
 
 class WpRefreshTokenString extends RefreshTokenString {

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Infrastructure\GraphQL\Rule;
+namespace Baywall\Core\Infrastructure\GraphQL\Rule;
 
 use GraphQL\Error\Error;
 use GraphQL\Language\AST\OperationDefinitionNode;

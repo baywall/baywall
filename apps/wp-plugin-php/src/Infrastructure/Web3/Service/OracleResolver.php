@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
+namespace Baywall\Core\Infrastructure\Web3\Service;
 
-use Cornix\Serendipity\Core\Domain\Entity\Oracle;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
-use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Baywall\Core\Domain\Entity\Oracle;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Repository\OracleRepository;
+use Baywall\Core\Domain\Specification\OraclesFilter;
+use Baywall\Core\Domain\ValueObject\SymbolPair;
 
 class OracleResolver {
 	private ChainRepository $chain_repository;

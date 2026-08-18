@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Repository\SearchCondition;
+namespace Baywall\Core\Domain\Repository\SearchCondition;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
 
 /**
  * 販売履歴の検索条件をカプセル化するValueObject

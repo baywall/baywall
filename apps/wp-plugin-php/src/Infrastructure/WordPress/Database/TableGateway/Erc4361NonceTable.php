@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
+namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361NonceString;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\Erc4361NonceTableRecord;
+use Baywall\Core\Application\ValueObject\Erc4361NonceString;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
+use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\Erc4361NonceTableRecord;
 
 class Erc4361NonceTable {
 

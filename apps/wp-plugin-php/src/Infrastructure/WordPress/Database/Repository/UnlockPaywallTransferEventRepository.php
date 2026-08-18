@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\UnlockPaywallTransferEventTable;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\UnlockPaywallTransactionTable;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\UnlockPaywallTransferEventTable;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\UnlockPaywallTransactionTable;
 
 class UnlockPaywallTransferEventRepository {
 	private UnlockPaywallTransactionTable $unlock_paywall_transaction_table;

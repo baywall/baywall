@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Util;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Util;
 
 use InvalidArgumentException;
 use wpdb;

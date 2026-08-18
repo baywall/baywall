@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Client;
+namespace Baywall\Core\Infrastructure\Web3\Client;
 
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
-use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainRetryer;
-use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\EthBlock;
-use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
+use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Domain\ValueObject\BlockTag;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Hex;
+use Baywall\Core\Infrastructure\Web3\BlockchainRetryer;
+use Baywall\Core\Infrastructure\Web3\ValueObject\EthBlock;
+use Baywall\Core\Domain\ValueObject\RpcUrl;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
 use Web3\Eth;

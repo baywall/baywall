@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\ValueObject;
 
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361NonceString;
+use Baywall\Core\Application\ValueObject\Erc4361NonceString;
 use Tuupola\Base62;
 
 class WpErc4361NonceString extends Erc4361NonceString {

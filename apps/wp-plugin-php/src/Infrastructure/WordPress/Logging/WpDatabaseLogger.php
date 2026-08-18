@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Logging;
+namespace Baywall\Core\Infrastructure\WordPress\Logging;
 
-use Cornix\Serendipity\Core\Infrastructure\Logging\Handler\SimpleLogger;
-use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
+use Baywall\Core\Infrastructure\Logging\Handler\SimpleLogger;
+use Baywall\Core\Infrastructure\Logging\Logger;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
 
 class WpDatabaseLogger implements Logger {
 

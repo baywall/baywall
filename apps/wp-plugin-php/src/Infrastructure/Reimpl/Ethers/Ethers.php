@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Reimpl\Ethers;
+namespace Baywall\Core\Infrastructure\Reimpl\Ethers;
 
 use Elliptic\EC;
 use kornrunner\Keccak;

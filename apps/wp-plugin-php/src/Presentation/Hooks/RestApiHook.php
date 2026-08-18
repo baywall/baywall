@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Presentation\Hooks;
+namespace Baywall\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Application\UseCase\GetPaidContent;
-use Cornix\Serendipity\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
-use Cornix\Serendipity\Core\Application\UseCase\LogoutAuth;
-use Cornix\Serendipity\Core\Application\UseCase\RefreshAccessToken;
-use Cornix\Serendipity\Core\Constant\HttpStatus;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
-use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpNonceService;
-use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\UseCase\GetPaidContent;
+use Baywall\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
+use Baywall\Core\Application\UseCase\LogoutAuth;
+use Baywall\Core\Application\UseCase\RefreshAccessToken;
+use Baywall\Core\Constant\HttpStatus;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Domain\Exception\HttpStatus\BadRequestException;
+use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\Service\CookieNameProvider;
+use Baywall\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
+use Baywall\Core\Infrastructure\WordPress\Service\WpNonceService;
+use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
 use Throwable;
 use WP_REST_Response;

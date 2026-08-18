@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Dto\PriceDto;
-use Cornix\Serendipity\Core\Application\Dto\SalesHistoryDto;
-use Cornix\Serendipity\Core\Application\Dto\SalesHistoryInvoiceDto;
-use Cornix\Serendipity\Core\Application\Service\SalesHistoryQueryService;
-use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\SalesHistoryView;
+use Baywall\Core\Application\Dto\PriceDto;
+use Baywall\Core\Application\Dto\SalesHistoryDto;
+use Baywall\Core\Application\Dto\SalesHistoryInvoiceDto;
+use Baywall\Core\Application\Service\SalesHistoryQueryService;
+use Baywall\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\Decimals;
+use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\SalesHistoryView;
 
 class WpSalesHistoryQueryService implements SalesHistoryQueryService {
 

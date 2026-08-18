@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
+namespace Baywall\Core\Infrastructure\Web3\Service;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
-use Cornix\Serendipity\Core\Infrastructure\Reimpl\Ethers\Ethers;
-use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Exception\ResolverNotFoundException;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\EnsRegistryClientFactory;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\EnsResolverClientFactory;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\RpcUrl;
+use Baywall\Core\Infrastructure\Reimpl\Ethers\Ethers;
+use Baywall\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Infrastructure\Web3\Exception\ResolverNotFoundException;
+use Baywall\Core\Infrastructure\Web3\Factory\EnsRegistryClientFactory;
+use Baywall\Core\Infrastructure\Web3\Factory\EnsResolverClientFactory;
 
 /**
  * ENS から情報を取得するサービスです。

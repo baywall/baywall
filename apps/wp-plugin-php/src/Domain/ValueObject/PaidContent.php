@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject;
+namespace Baywall\Core\Domain\ValueObject;
 
 /** 記事の有料部分を表現するクラス */
 class PaidContent extends Content {

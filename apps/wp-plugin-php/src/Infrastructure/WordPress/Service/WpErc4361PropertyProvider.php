@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Service\Erc4361PropertyProvider;
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Domain;
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Statement;
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Uri;
-use Cornix\Serendipity\Core\Constant\Config;
+use Baywall\Core\Application\Service\Erc4361PropertyProvider;
+use Baywall\Core\Application\ValueObject\Erc4361Domain;
+use Baywall\Core\Application\ValueObject\Erc4361Statement;
+use Baywall\Core\Application\ValueObject\Erc4361Uri;
+use Baywall\Core\Constant\Config;
 
 class WpErc4361PropertyProvider implements Erc4361PropertyProvider {
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Exception;
+namespace Baywall\Core\Application\Exception;
 
 /** チェーンへ接続できない時に発生する例外 */
 class ChainConnectionException extends \RuntimeException {

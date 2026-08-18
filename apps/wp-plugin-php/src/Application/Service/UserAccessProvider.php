@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 interface UserAccessProvider {
 	/**

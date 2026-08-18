@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
+namespace Baywall\Core\Infrastructure\Web3\Service;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\NativeTokenConstants;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Decimals;
+use Baywall\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Infrastructure\Web3\Constants\NativeTokenConstants;
 
 class NativeTokenService {
 	/** 指定したチェーンのネイティブトークンシンボルを取得します (例: ETH) */

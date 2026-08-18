@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
+namespace Baywall\Core\Infrastructure\Web3\Service;
 
-use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
-use Cornix\Serendipity\Core\Domain\Service\AppContractDataProvider;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
+use Baywall\Core\Domain\Repository\ServerSignerRepository;
+use Baywall\Core\Domain\Service\AppContractDataProvider;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
 
 class AppContractDataProviderImpl implements AppContractDataProvider {
 

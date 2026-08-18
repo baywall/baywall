@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\Token;
-use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\TokenTable;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Domain\Entity\Token;
+use Baywall\Core\Domain\Repository\TokenRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\TokenTable;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Decimals;
+use Baywall\Core\Domain\ValueObject\Symbol;
 
 class WpTokenRepository implements TokenRepository {
 

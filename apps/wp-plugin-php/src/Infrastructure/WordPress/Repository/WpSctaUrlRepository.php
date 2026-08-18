@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Repository;
 
-use Cornix\Serendipity\Core\Application\Repository\SctaUrlRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\SctaUrl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Application\Repository\SctaUrlRepository;
+use Baywall\Core\Domain\ValueObject\SctaUrl;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
 /**
  * 「特定商取引法に基づく表記」のURLを取得または保存するクラス

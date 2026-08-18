@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\ValueObject;
+namespace Baywall\Core\Application\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
+use Baywall\Core\Domain\ValueObject\SigningMessage;
 
 /**
  * ERC-4361のメッセージを表すクラス

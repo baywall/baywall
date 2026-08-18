@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Composer\Semver\Comparator;
-use Cornix\Serendipity\Core\Application\ValueObject\PluginUpdateChannel;
-use Cornix\Serendipity\Core\Constant\Config;
+use Baywall\Core\Application\ValueObject\PluginUpdateChannel;
+use Baywall\Core\Constant\Config;
 
 /**
  * プラグインの更新可否を判定し、コアの`update_plugins_{host}`フィルターに渡すペイロードを構築するサービス。

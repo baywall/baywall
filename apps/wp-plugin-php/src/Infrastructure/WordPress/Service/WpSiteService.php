@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Domain\Repository\InstallOriginUrl;
-use Cornix\Serendipity\Core\Domain\Service\SiteService;
+use Baywall\Core\Domain\Repository\InstallOriginUrl;
+use Baywall\Core\Domain\Service\SiteService;
 
 class WpSiteService implements SiteService {
 

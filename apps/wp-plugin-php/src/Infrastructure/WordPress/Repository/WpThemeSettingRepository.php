@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Repository;
 
-use Cornix\Serendipity\Core\Application\Repository\ThemeSettingRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\ThemeSetting;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Application\Repository\ThemeSettingRepository;
+use Baywall\Core\Domain\ValueObject\ThemeSetting;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
 /**
  * テーマ設定を取得または保存するクラス

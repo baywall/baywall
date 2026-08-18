@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
+namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
+use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
 /**
  * ログを記録するテーブル

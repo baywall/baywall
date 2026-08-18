@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database;
+namespace Baywall\Core\Infrastructure\WordPress\Database;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpTableCoreName;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpTableCoreName;
 use wpdb;
 
 class TableNameProvider {

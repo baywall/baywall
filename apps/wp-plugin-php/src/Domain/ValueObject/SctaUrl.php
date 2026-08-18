@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject;
+namespace Baywall\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\UrlBase;
-use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+use Baywall\Core\Domain\ValueObject\Base\UrlBase;
+use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
 /**
  * 「特定商取引法に基づく表記」のURLを表すValueObjectクラス

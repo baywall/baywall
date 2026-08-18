@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
-use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
+use Baywall\Core\Application\Service\AccessTokenCookieProvider;
+use Baywall\Core\Application\ValueObject\AccessToken;
+use Baywall\Core\Domain\Service\CookieNameProvider;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\Cookie\Cookie;
 
 class WpAccessTokenCookieProvider implements AccessTokenCookieProvider {
 

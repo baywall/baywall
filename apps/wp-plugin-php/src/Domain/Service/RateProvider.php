@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Service;
+namespace Baywall\Core\Domain\Service;
 
-use Cornix\Serendipity\Core\Domain\Exception\RateNotFoundException;
-use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
-use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Baywall\Core\Domain\Exception\RateNotFoundException;
+use Baywall\Core\Domain\ValueObject\Rate;
+use Baywall\Core\Domain\ValueObject\SymbolPair;
 
 /**
  * 指定した通貨ペアのレートを取得するサービスインターフェース

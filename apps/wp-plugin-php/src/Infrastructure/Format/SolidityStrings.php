@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Format;
+namespace Baywall\Core\Infrastructure\Format;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Address;
 use phpseclib\Math\BigInteger;
 
 /**

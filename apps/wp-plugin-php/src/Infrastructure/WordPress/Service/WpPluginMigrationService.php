@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Application\Service\PluginMigrationService;
-use Cornix\Serendipity\Core\Application\ValueObject\PluginVersion;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\MigrationLocator;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpInstalledPluginVersionRepository;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Service\PluginMigrationService;
+use Baywall\Core\Application\ValueObject\PluginVersion;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\MigrationLocator;
+use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInstalledPluginVersionRepository;
 
 class WpPluginMigrationService implements PluginMigrationService {
 

@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Constant\HttpStatus;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\ForbiddenException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Constant\HttpStatus;
+use Baywall\Core\Domain\Exception\HttpStatus\BadRequestException;
+use Baywall\Core\Domain\Exception\HttpStatus\ForbiddenException;
+use Baywall\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
+use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use InvalidArgumentException;
 use WP_Error;
 use WP_REST_Response;

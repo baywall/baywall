@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Service\AccessTokenRequestProvider;
-use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
+use Baywall\Core\Application\Service\AccessTokenRequestProvider;
+use Baywall\Core\Domain\Service\CookieNameProvider;
 
 class WpAccessTokenRequestProvider implements AccessTokenRequestProvider {
 	private CookieNameProvider $cookie_name_provider;

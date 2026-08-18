@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Composer\Semver\VersionParser;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 
 /**
  * ローカルJSONファイルからWordPressコアの最新マイナーバージョン一覧を取得するサービス。

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Repository;
+namespace Baywall\Core\Domain\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\Oracle;
+use Baywall\Core\Domain\Entity\Oracle;
 
 interface OracleRepository {
 	/**

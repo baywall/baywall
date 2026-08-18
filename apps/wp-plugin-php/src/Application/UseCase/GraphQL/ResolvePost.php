@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\Entity\Post;
-use Cornix\Serendipity\Core\Domain\Entity\Token;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
-use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
-use Cornix\Serendipity\Core\Domain\Service\PriceExchangeService;
-use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
-use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Domain\Entity\Post;
+use Baywall\Core\Domain\Entity\Token;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Repository\PostRepository;
+use Baywall\Core\Domain\Repository\TokenRepository;
+use Baywall\Core\Domain\Service\PostTitleProvider;
+use Baywall\Core\Domain\Service\PriceExchangeService;
+use Baywall\Core\Domain\Specification\ChainsFilter;
+use Baywall\Core\Domain\Specification\TokensFilter;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 class ResolvePost {
 

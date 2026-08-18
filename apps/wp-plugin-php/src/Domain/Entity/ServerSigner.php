@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Entity;
+namespace Baywall\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Domain\Entity\Base\Signer;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\PrivateKey;
+use Baywall\Core\Domain\Entity\Base\Signer;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\PrivateKey;
 
 /** サーバーの署名用ウォレット */
 class ServerSigner extends Signer {

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject;
+namespace Baywall\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\SecureStringValueObject;
+use Baywall\Core\Domain\ValueObject\Base\SecureStringValueObject;
 
 /**
  * リフレッシュトークン文字列を表すクラス

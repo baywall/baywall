@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Domain\Entity\Chain;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Specification\ChainsFilter;
+use Baywall\Core\Domain\ValueObject\ChainId;
 
 class ResolveChains {
 

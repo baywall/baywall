@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 class UserAccessChecker {
 	public function __construct( UserAccessProvider $user_access_provider ) {

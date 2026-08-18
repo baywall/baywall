@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Infrastructure\Cache;
+namespace Baywall\Core\Infrastructure\Cache;
 
-use Cornix\Serendipity\Core\Domain\Entity\Oracle;
-use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
+use Baywall\Core\Domain\Entity\Oracle;
+use Baywall\Core\Domain\ValueObject\Rate;
 
 interface OracleRateCache {
 

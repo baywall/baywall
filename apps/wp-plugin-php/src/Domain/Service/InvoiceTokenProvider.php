@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Service;
+namespace Baywall\Core\Domain\Service;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 interface InvoiceTokenProvider {
 	/** 請求書トークン文字列を生成します */

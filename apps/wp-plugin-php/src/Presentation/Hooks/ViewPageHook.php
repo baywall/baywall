@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Presentation\Hooks;
+namespace Baywall\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\HandleNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
-use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
-use Cornix\Serendipity\Core\Presentation\Hooks\Service\PhpVarExporter;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Service\HandleNameProvider;
+use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
+use Baywall\Core\Presentation\Hooks\Base\HookBase;
+use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
 use Psr\Container\ContainerInterface;
 
 class ViewPageHook extends HookBase {

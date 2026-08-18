@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Exception;
+namespace Baywall\Core\Domain\Exception;
 
 class PriceExchangeException extends \RuntimeException {
 	/**

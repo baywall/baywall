@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Cornix\Serendipity\Core\Domain\Repository\RefreshTokenRepository;
-use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
-use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\WpRefreshTokenString;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Domain\Repository\RefreshTokenRepository;
+use Baywall\Core\Domain\Service\RefreshTokenService;
+use Baywall\Core\Domain\ValueObject\RefreshTokenString;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Infrastructure\WordPress\ValueObject\WpRefreshTokenString;
 
 class WpRefreshTokenService extends RefreshTokenService {
 

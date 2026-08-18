@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Entity;
+namespace Baywall\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 /**
  * 請求書トークンを表すクラス

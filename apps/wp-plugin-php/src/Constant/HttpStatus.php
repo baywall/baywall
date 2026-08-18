@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Constant;
+namespace Baywall\Core\Constant;
 
 /** HTTPステータスコードを定義するクラス */
 class HttpStatus {

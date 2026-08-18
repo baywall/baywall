@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Repository;
 
-use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelRepository;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\Logging\LogLevelRepository;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
 class WpLogLevelRepository implements LogLevelRepository {
 	public function __construct() {

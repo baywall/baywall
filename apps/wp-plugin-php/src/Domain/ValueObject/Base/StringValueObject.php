@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject\Base;
+namespace Baywall\Core\Domain\ValueObject\Base;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
 /**
  * 文字列の値を表す基底クラス

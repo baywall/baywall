@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Service\TransactionService;
 use wpdb;
 
 class WpTransactionService extends TransactionService {

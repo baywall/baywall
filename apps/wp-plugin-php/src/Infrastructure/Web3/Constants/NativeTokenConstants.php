@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Constants;
+namespace Baywall\Core\Infrastructure\Web3\Constants;
 
-use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\ChainIdConstants as CHAIN_ID;
+use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants as CHAIN_ID;
 
 /** ネイティブトークンの定義 */
 class NativeTokenConstants {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Constants;
+namespace Baywall\Core\Infrastructure\WordPress\Constants;
 
 final class WpTableCoreName {
 	/** テーブル名に付与するプレフィックス */

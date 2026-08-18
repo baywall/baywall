@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Message;
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Nonce;
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Infrastructure\Web3\ERC4361\Erc4361MessageBuilder;
+use Baywall\Core\Application\Repository\Erc4361NonceRepository;
+use Baywall\Core\Application\ValueObject\Erc4361Message;
+use Baywall\Core\Application\ValueObject\Erc4361Nonce;
+use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Infrastructure\Web3\ERC4361\Erc4361MessageBuilder;
 
 class Erc4361Service {
 

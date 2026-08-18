@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject\Base;
+namespace Baywall\Core\Domain\ValueObject\Base;
 
 /**
  * 推測されるとまずい文字列の値を表す基底クラス

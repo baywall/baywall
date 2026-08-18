@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject;
+namespace Baywall\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
+use Baywall\Core\Domain\ValueObject\Symbol;
 
 class SymbolPair implements ValueObject {
 	private function __construct( Symbol $base_symbol, Symbol $quote_symbol ) {

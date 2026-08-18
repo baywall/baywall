@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\Oracle;
-use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
-use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\OracleTable;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\OracleTableRecord;
+use Baywall\Core\Domain\Entity\Oracle;
+use Baywall\Core\Domain\Repository\OracleRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Domain\ValueObject\SymbolPair;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\OracleTable;
+use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\OracleTableRecord;
 
 class WpOracleRepository implements OracleRepository {
 

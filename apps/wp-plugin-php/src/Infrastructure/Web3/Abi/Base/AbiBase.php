@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Abi\Base;
+namespace Baywall\Core\Infrastructure\Web3\Abi\Base;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Address;
 use kornrunner\Keccak;
 use stdClass;
 use Web3\Contracts\Ethabi;

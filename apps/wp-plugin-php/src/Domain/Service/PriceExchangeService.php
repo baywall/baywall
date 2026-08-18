@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Service;
+namespace Baywall\Core\Domain\Service;
 
-use Cornix\Serendipity\Core\Domain\Exception\PriceExchangeException;
-use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
-use Cornix\Serendipity\Core\Domain\ValueObject\Price;
-use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
-use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Baywall\Core\Domain\Exception\PriceExchangeException;
+use Baywall\Core\Domain\ValueObject\Decimals;
+use Baywall\Core\Domain\ValueObject\Price;
+use Baywall\Core\Domain\ValueObject\Rate;
+use Baywall\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Domain\ValueObject\SymbolPair;
 
 class PriceExchangeService {
 

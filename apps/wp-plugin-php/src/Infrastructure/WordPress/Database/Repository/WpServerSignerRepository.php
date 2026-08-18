@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\ServerSigner;
-use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\PrivateKey;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\ServerSignerTable;
+use Baywall\Core\Domain\Entity\ServerSigner;
+use Baywall\Core\Domain\Repository\ServerSignerRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\PrivateKey;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\ServerSignerTable;
 
 class WpServerSignerRepository implements ServerSignerRepository {
 

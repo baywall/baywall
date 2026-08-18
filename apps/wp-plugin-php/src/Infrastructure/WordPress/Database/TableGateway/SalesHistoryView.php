@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway;
+namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\MyWpdb;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use stdClass;
 
 /**

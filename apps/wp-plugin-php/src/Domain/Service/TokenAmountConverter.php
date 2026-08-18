@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Service;
+namespace Baywall\Core\Domain\Service;
 
-use Cornix\Serendipity\Core\Domain\Entity\Token;
-use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
-use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Decimals;
-use Cornix\Serendipity\Core\Domain\ValueObject\Price;
-use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Domain\Entity\Token;
+use Baywall\Core\Domain\Repository\TokenRepository;
+use Baywall\Core\Domain\Specification\TokensFilter;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Decimals;
+use Baywall\Core\Domain\ValueObject\Price;
+use Baywall\Core\Domain\ValueObject\Symbol;
 
 class TokenAmountConverter {
 	public function __construct( TokenRepository $token_repository ) {

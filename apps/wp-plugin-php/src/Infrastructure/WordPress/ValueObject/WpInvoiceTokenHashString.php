@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\SecureStringValueObject;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
+use Baywall\Core\Domain\ValueObject\Base\SecureStringValueObject;
+use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 
 class WpInvoiceTokenHashString extends SecureStringValueObject {
 	private const HASH_ALGORITHM = 'sha256';

@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Service\AppContractDataProvider;
-use Cornix\Serendipity\Core\Domain\Service\BlockNumberProvider;
-use Cornix\Serendipity\Core\Domain\Specification\ConfirmationsSpecification;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Service\AppContractDataProvider;
+use Baywall\Core\Domain\Service\BlockNumberProvider;
+use Baywall\Core\Domain\Specification\ConfirmationsSpecification;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 class ConfirmationsService {
 

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Domain\Service\PluginInfoProvider;
+use Baywall\Core\Domain\Service\PluginInfoProvider;
 
 class ResolvePluginVersion {
 

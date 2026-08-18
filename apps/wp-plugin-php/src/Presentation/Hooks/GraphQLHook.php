@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Presentation\Hooks;
+namespace Baywall\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\ForbiddenException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
-use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
-use Cornix\Serendipity\Core\Infrastructure\GraphQL\PluginSchemaProvider;
-use Cornix\Serendipity\Core\Infrastructure\GraphQL\Rule\MutationFieldLimitRule;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\RestPropertyProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
-use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpNonceService;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\Exception\HttpStatus\BadRequestException;
+use Baywall\Core\Domain\Exception\HttpStatus\ForbiddenException;
+use Baywall\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
+use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Presentation\GraphQL\RootValue;
+use Baywall\Core\Infrastructure\GraphQL\PluginSchemaProvider;
+use Baywall\Core\Infrastructure\GraphQL\Rule\MutationFieldLimitRule;
+use Baywall\Core\Infrastructure\WordPress\Service\RestPropertyProvider;
+use Baywall\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
+use Baywall\Core\Presentation\Hooks\Base\HookBase;
+use Baywall\Core\Infrastructure\WordPress\Service\WpNonceService;
 use GraphQL\GraphQL;
 use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\DisableIntrospection;

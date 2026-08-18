@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Domain;
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Statement;
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Uri;
+use Baywall\Core\Application\ValueObject\Erc4361Domain;
+use Baywall\Core\Application\ValueObject\Erc4361Statement;
+use Baywall\Core\Application\ValueObject\Erc4361Uri;
 
 interface Erc4361PropertyProvider {
 

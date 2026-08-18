@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject;
+namespace Baywall\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
+use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
+use Baywall\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
 
 /**
  * ネットワークカテゴリIDを表すクラス

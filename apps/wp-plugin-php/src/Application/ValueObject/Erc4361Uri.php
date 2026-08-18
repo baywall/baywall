@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\ValueObject;
+namespace Baywall\Core\Application\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Base\StringValueObject;
+use Baywall\Core\Domain\ValueObject\Base\StringValueObject;
 
 /**
  * ERC-4361 URI 文字列を表すクラス

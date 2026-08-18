@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Constants;
+namespace Baywall\Core\Infrastructure\Web3\Constants;
 
 final class ChainIdConstants {
 	// ==================== Mainnet ====================

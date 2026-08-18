@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Nonce;
+use Baywall\Core\Application\ValueObject\Erc4361Nonce;
 
 interface Erc4361NonceProvider {
 	/** ERC4361で使用するNonceを生成します */

@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
+namespace Baywall\Core\Infrastructure\Web3\Service;
 
-use Cornix\Serendipity\Core\Domain\Entity\Base\Signer;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Bytes32;
-use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
-use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
-use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
-use Cornix\Serendipity\Core\Infrastructure\Reimpl\Ethers\Ethers;
-use Cornix\Serendipity\Core\Infrastructure\Reimpl\Ethers\EthersWallet;
+use Baywall\Core\Domain\Entity\Base\Signer;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Bytes32;
+use Baywall\Core\Domain\ValueObject\Hex;
+use Baywall\Core\Domain\ValueObject\Signature;
+use Baywall\Core\Domain\ValueObject\SigningMessage;
+use Baywall\Core\Infrastructure\Reimpl\Ethers\Ethers;
+use Baywall\Core\Infrastructure\Reimpl\Ethers\EthersWallet;
 
 /** 署名関連のサービスクラス */
 class SignatureService {

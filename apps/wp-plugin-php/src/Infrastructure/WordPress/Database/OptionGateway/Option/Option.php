@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
+namespace Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
 
-use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
 class Option {
 	public function __construct( string $option_key_name ) {

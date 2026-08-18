@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\JWT;
+namespace Baywall\Core\Infrastructure\JWT;
 
-use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\Jwt;
-use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\JwtAlgorithm;
-use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\JwtPayload;
-use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
-use Cornix\Serendipity\Core\Infrastructure\Reimpl\JWT\JwtCodec;
+use Baywall\Core\Infrastructure\JWT\ValueObject\Jwt;
+use Baywall\Core\Infrastructure\JWT\ValueObject\JwtAlgorithm;
+use Baywall\Core\Infrastructure\JWT\ValueObject\JwtPayload;
+use Baywall\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
+use Baywall\Core\Infrastructure\Reimpl\JWT\JwtCodec;
 
 class JwtService {
 

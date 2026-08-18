@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Exception;
+namespace Baywall\Core\Application\Exception;
 
 class ChainIdMismatchException extends \RuntimeException {
 	/**

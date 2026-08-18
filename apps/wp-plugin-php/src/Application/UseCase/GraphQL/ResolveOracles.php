@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\Entity\Oracle;
-use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Domain\Entity\Oracle;
+use Baywall\Core\Domain\Repository\OracleRepository;
 
 class ResolveOracles {
 

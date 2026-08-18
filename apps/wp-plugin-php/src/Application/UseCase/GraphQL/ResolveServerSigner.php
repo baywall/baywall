@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
+use Baywall\Core\Domain\Repository\ServerSignerRepository;
 
 class ResolveServerSigner {
 

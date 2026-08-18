@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Constant\Config;
+use Baywall\Core\Constant\Config;
 
 /**
  * プラグイン更新用zipパッケージのsha256チェックサムを検証するクラス。

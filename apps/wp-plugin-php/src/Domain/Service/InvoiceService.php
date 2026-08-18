@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Service;
+namespace Baywall\Core\Domain\Service;
 
-use Cornix\Serendipity\Core\Domain\Entity\Invoice;
-use Cornix\Serendipity\Core\Domain\Entity\Token;
-use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
-use Cornix\Serendipity\Core\Domain\Repository\InvoiceTokenRepository;
-use Cornix\Serendipity\Core\Domain\Repository\PausedRepository;
-use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Domain\Repository\SellerRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\Entity\Invoice;
+use Baywall\Core\Domain\Entity\Token;
+use Baywall\Core\Domain\Repository\InvoiceRepository;
+use Baywall\Core\Domain\Repository\InvoiceTokenRepository;
+use Baywall\Core\Domain\Repository\PausedRepository;
+use Baywall\Core\Domain\Repository\PostRepository;
+use Baywall\Core\Domain\Repository\SellerRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 class InvoiceService {
 

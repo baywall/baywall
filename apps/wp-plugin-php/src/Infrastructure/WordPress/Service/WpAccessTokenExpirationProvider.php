@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Service\AccessTokenExpirationProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Application\Service\AccessTokenExpirationProvider;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 /** WordPress環境におけるアクセストークンの有効期限提供クラス */
 class WpAccessTokenExpirationProvider implements AccessTokenExpirationProvider {

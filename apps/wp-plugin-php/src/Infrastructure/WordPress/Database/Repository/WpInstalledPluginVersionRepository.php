@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Application\ValueObject\PluginVersion;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option\StringOption;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Application\ValueObject\PluginVersion;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\StringOption;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
 /**
  * プラグインバージョンを取得または保存するクラス

@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Specification;
+namespace Baywall\Core\Domain\Specification;
 
-use Cornix\Serendipity\Core\Domain\Entity\Oracle;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\Entity\Oracle;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\SymbolPair;
+use Baywall\Core\Domain\ValueObject\ChainId;
 
 class OraclesFilter {
 

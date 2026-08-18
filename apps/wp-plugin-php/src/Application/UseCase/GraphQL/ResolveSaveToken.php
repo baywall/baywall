@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\Entity\Token;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Service\NativeTokenService;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Client\TokenClient;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Domain\Entity\Token;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Repository\TokenRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Infrastructure\Web3\Service\NativeTokenService;
+use Baywall\Core\Infrastructure\Web3\Client\TokenClient;
 
 /**
  * トークンの情報をサーバーに登録します。

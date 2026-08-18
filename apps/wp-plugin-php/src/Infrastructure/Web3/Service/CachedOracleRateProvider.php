@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
+namespace Baywall\Core\Infrastructure\Web3\Service;
 
-use Cornix\Serendipity\Core\Domain\Exception\RateNotFoundException;
-use Cornix\Serendipity\Core\Domain\Service\RateProvider;
-use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
-use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
-use Cornix\Serendipity\Core\Infrastructure\Cache\OracleRateCache;
+use Baywall\Core\Domain\Exception\RateNotFoundException;
+use Baywall\Core\Domain\Service\RateProvider;
+use Baywall\Core\Domain\ValueObject\SymbolPair;
+use Baywall\Core\Domain\ValueObject\Rate;
+use Baywall\Core\Infrastructure\Cache\OracleRateCache;
 
 class CachedOracleRateProvider implements RateProvider {
 	public function __construct( OracleRateProvider $oracle_rate_provider, OracleResolver $oracle_resolver, OracleRateCache $oracle_rate_cache ) {

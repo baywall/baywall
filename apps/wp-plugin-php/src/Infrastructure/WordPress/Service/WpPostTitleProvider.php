@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Domain\Service\PostTitleProvider;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\Service\PostTitleProvider;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 class WpPostTitleProvider implements PostTitleProvider {
 

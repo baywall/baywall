@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Nonce;
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361NonceString;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\Erc4361NonceTable;
+use Baywall\Core\Application\Repository\Erc4361NonceRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Application\ValueObject\Erc4361Nonce;
+use Baywall\Core\Application\ValueObject\Erc4361NonceString;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\Erc4361NonceTable;
 
 class WpErc4361NonceRepository implements Erc4361NonceRepository {
 

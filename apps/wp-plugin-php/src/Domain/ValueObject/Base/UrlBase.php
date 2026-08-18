@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject\Base;
+namespace Baywall\Core\Domain\ValueObject\Base;
 
-use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Infrastructure\Util\Strings;
 
 /**
  * URLを表すValueObjectの基底クラス

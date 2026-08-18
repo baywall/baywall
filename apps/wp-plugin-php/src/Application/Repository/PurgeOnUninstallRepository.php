@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Repository;
+namespace Baywall\Core\Application\Repository;
 
 interface PurgeOnUninstallRepository {
 

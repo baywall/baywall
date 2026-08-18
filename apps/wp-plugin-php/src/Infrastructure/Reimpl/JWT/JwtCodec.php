@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Reimpl\JWT;
+namespace Baywall\Core\Infrastructure\Reimpl\JWT;
 
-use Cornix\Serendipity\Core\Infrastructure\Reimpl\Base64Url\Base64Url;
+use Baywall\Core\Infrastructure\Reimpl\Base64Url\Base64Url;
 
 class JwtCodec {
 

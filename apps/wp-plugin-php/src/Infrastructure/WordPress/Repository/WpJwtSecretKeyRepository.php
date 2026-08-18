@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Repository;
 
-use Cornix\Serendipity\Core\Application\Repository\JwtSecretKeyRepository;
-use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option\ArrayOption;
+use Baywall\Core\Application\Repository\JwtSecretKeyRepository;
+use Baywall\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\ArrayOption;
 
 class WpJwtSecretKeyRepository implements JwtSecretKeyRepository {
 

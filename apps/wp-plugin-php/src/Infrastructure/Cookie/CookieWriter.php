@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Cookie;
+namespace Baywall\Core\Infrastructure\Cookie;
 
 class CookieWriter {
 	public function set( Cookie $cookie ): bool {

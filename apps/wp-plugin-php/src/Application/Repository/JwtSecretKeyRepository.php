@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Repository;
+namespace Baywall\Core\Application\Repository;
 
-use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
+use Baywall\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
 
 /** JWTの共通鍵を保管するインタフェース */
 interface JwtSecretKeyRepository {

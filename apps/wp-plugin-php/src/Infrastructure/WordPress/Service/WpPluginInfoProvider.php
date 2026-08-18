@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Domain\Service\PluginInfoProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Domain\Service\PluginInfoProvider;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 
 class WpPluginInfoProvider implements PluginInfoProvider {
 
@@ -106,7 +106,7 @@ class PluginMainFile {
 		// 　 `get_plugin_data`関数内では`_get_plugin_data_markup_translate`が呼び出され、そこから`translate`関数が呼び出される。
 		// 　 ここでは、`_get_plugin_data_markup_translate`が呼び出されないように第二引数、第三引数を共にfalseにしている
 		// 　 (翻訳済みのプラグインの説明などが必要であれば`translate`関数を呼び出す必要があるが、本プラグイン内の使用範囲では不要)
-		// 　 参考: https://github.com/WordPress/wordpress-develop/blob/7.0.3/src/wp-admin/includes/plugin.php#L74-L121
+		// 　 参考: https://github.com/WordPress/wordpress-develop/blob/7.0.4/src/wp-admin/includes/plugin.php#L74-L121
 		$this->plugin_data = get_plugin_data( $this->path(), false, false );
 	}
 

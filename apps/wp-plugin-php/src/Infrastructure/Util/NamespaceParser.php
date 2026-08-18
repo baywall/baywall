@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Util;
+namespace Baywall\Core\Infrastructure\Util;
 
 /** PHPファイルを解析して名前空間を取得するクラス */
 class NamespaceParser {

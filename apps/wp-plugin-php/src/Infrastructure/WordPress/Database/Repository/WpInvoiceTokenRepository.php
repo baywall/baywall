@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\InvoiceToken;
-use Cornix\Serendipity\Core\Domain\Repository\InvoiceTokenRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\InvoiceTokenTable;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\WpInvoiceTokenHashString;
+use Baywall\Core\Domain\Entity\InvoiceToken;
+use Baywall\Core\Domain\Repository\InvoiceTokenRepository;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\InvoiceTokenTable;
+use Baywall\Core\Infrastructure\WordPress\ValueObject\WpInvoiceTokenHashString;
 
 class WpInvoiceTokenRepository implements InvoiceTokenRepository {
 

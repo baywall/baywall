@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\Hooks;
+namespace Baywall\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpEnvironment;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginPackageChecksumVerifier;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginUpdateChecker;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
-use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Constant\Config;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
+use Baywall\Core\Infrastructure\WordPress\Service\WpEnvironment;
+use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
+use Baywall\Core\Infrastructure\WordPress\Service\WpPluginPackageChecksumVerifier;
+use Baywall\Core\Infrastructure\WordPress\Service\WpPluginUpdateChecker;
+use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
+use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Psr\Container\ContainerInterface;
 
 /**

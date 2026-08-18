@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\ValueObject;
+namespace Baywall\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
+use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
 /**
  * `latest`など、evm_getBlockByNumber等で指定できるタグを表すクラス

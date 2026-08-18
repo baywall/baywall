@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Repository\Erc4361NonceRepository;
-use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\Service\AccessTokenService;
-use Cornix\Serendipity\Core\Application\Service\Erc4361Service;
-use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\Service\TransactionService;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
-use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
-use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Service\SignatureService;
+use Baywall\Core\Application\Repository\Erc4361NonceRepository;
+use Baywall\Core\Application\Service\AccessTokenCookieProvider;
+use Baywall\Core\Application\Service\AccessTokenService;
+use Baywall\Core\Application\Service\Erc4361Service;
+use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
+use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Domain\Exception\HttpStatus\BadRequestException;
+use Baywall\Core\Domain\Service\RefreshTokenService;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Signature;
+use Baywall\Core\Infrastructure\Cookie\CookieWriter;
+use Baywall\Core\Infrastructure\Web3\Service\SignatureService;
 
 /** ERC-4361の署名を検証してアクセストークン(+リフレッシュトークン)を発行するクラス */
 class ResolveIssueAccessTokenByErc4361Signature {

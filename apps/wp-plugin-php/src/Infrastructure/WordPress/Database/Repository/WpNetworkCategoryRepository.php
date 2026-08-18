@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Repository\NetworkCategoryRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\I18nTextProvider;
+use Baywall\Core\Domain\Repository\NetworkCategoryRepository;
+use Baywall\Core\Domain\ValueObject\NetworkCategory;
+use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
+use Baywall\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
+use Baywall\Core\Infrastructure\WordPress\Service\I18nTextProvider;
 
 class WpNetworkCategoryRepository implements NetworkCategoryRepository {
 

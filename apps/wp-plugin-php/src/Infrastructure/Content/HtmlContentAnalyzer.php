@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Infrastructure\Content;
+namespace Baywall\Core\Infrastructure\Content;
 
-use Cornix\Serendipity\Core\Infrastructure\Format\HtmlFormat;
-use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Infrastructure\Format\HtmlFormat;
+use Baywall\Core\Infrastructure\Util\Strings;
 
 class HtmlContentAnalyzer {
 

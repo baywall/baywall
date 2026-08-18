@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\AppContract;
-use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\AppContractTable;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\CrawledBlockTable;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\CrawledBlockTableRecord;
+use Baywall\Core\Domain\Entity\AppContract;
+use Baywall\Core\Domain\Entity\Chain;
+use Baywall\Core\Domain\Repository\AppContractRepository;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\AppContractTable;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\CrawledBlockTable;
+use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\CrawledBlockTableRecord;
 
 class WpAppContractRepository implements AppContractRepository {
 	public function __construct( AppContractTable $app_contract_table, CrawledBlockTable $crawled_block_table, ChainRepository $chain_repository ) {

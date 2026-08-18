@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Cornix\Serendipity\Core\Domain\Entity\InvoiceToken;
-use Cornix\Serendipity\Core\Domain\Service\CookieNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\Cookie\Cookie;
+use Baywall\Core\Application\Service\InvoiceTokenCookieProvider;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Domain\Entity\InvoiceToken;
+use Baywall\Core\Domain\Service\CookieNameProvider;
+use Baywall\Core\Infrastructure\Cookie\Cookie;
 
 class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 

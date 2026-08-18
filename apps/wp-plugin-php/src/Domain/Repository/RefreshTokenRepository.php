@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Repository;
+namespace Baywall\Core\Domain\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
-use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Domain\Entity\RefreshToken;
+use Baywall\Core\Domain\ValueObject\RefreshTokenString;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 interface RefreshTokenRepository {
 	/** 指定したリフレッシュトークン文字列からリフレッシュトークンの情報を取得します */

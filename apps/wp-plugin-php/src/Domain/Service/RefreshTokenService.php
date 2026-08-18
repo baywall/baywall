@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Service;
+namespace Baywall\Core\Domain\Service;
 
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
-use Cornix\Serendipity\Core\Domain\Repository\RefreshTokenRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\Entity\RefreshToken;
+use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\Repository\RefreshTokenRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\RefreshTokenString;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 abstract class RefreshTokenService {
 

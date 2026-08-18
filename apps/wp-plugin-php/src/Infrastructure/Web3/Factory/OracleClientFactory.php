@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Factory;
+namespace Baywall\Core\Infrastructure\Web3\Factory;
 
-use Cornix\Serendipity\Core\Domain\Entity\Oracle;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Client\OracleClient;
+use Baywall\Core\Domain\Entity\Oracle;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Infrastructure\Web3\Client\OracleClient;
 
 class OracleClientFactory {
 

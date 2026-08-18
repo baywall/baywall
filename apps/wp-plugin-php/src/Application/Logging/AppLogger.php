@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Logging;
+namespace Baywall\Core\Application\Logging;
 
-use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
-use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelRepository;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Infrastructure\Logging\Logger;
+use Baywall\Core\Infrastructure\Logging\LogLevelRepository;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
 
 class AppLogger {
 	public function __construct( Logger $logger, LogLevelRepository $log_level_repository ) {

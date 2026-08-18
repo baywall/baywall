@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Constants;
+namespace Baywall\Core\Infrastructure\WordPress\Constants;
 
 /**
  * WordPressにのみ関連する設定値を取得するためのクラス

@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Service;
+namespace Baywall\Core\Domain\Service;
 
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Domain\Entity\InvoiceToken;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
-use Cornix\Serendipity\Core\Domain\Repository\InvoiceTokenRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceTokenString;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\Entity\InvoiceToken;
+use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\Repository\InvoiceTokenRepository;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 class InvoiceTokenService {
 

@@ -1,25 +1,25 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase;
+namespace Baywall\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Application\Service\AccessTokenRequestProvider;
-use Cornix\Serendipity\Core\Application\Service\AccessTokenService;
-use Cornix\Serendipity\Core\Application\Service\AppContractCrawlService;
-use Cornix\Serendipity\Core\Application\Service\ConfirmationsService;
-use Cornix\Serendipity\Core\Application\Service\SalesHistoryQueryService;
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
-use Cornix\Serendipity\Core\Domain\Entity\Invoice;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\UnauthorizedException;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
-use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Service\AccessTokenRequestProvider;
+use Baywall\Core\Application\Service\AccessTokenService;
+use Baywall\Core\Application\Service\AppContractCrawlService;
+use Baywall\Core\Application\Service\ConfirmationsService;
+use Baywall\Core\Application\Service\SalesHistoryQueryService;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Application\ValueObject\AccessToken;
+use Baywall\Core\Domain\Entity\Invoice;
+use Baywall\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
+use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Repository\InvoiceRepository;
+use Baywall\Core\Domain\Repository\PostRepository;
+use Baywall\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 class GetPaidContent {
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\ValueObject;
+namespace Baywall\Core\Application\ValueObject;
 
 /**
  * app-manifest.json の `wordPressPlugin.channels.{channel}` エントリを表す値オブジェクト。

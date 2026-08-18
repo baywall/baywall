@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Service;
+namespace Baywall\Core\Domain\Service;
 
 interface CookieNameProvider {
 	/** アクセストークンのCookie名を取得します。 */

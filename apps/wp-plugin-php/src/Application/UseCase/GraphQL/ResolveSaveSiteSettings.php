@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Repository\PurgeOnUninstallRepository;
-use Cornix\Serendipity\Core\Application\Repository\SctaUrlRepository;
-use Cornix\Serendipity\Core\Application\Repository\ThemeSettingRepository;
-use Cornix\Serendipity\Core\Application\Service\TransactionService;
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\Repository\PausedRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\SctaUrl;
-use Cornix\Serendipity\Core\Domain\ValueObject\ThemeSetting;
-use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
+use Baywall\Core\Application\Repository\PurgeOnUninstallRepository;
+use Baywall\Core\Application\Repository\SctaUrlRepository;
+use Baywall\Core\Application\Repository\ThemeSettingRepository;
+use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Domain\Repository\PausedRepository;
+use Baywall\Core\Domain\ValueObject\SctaUrl;
+use Baywall\Core\Domain\ValueObject\ThemeSetting;
+use Baywall\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
 class ResolveSaveSiteSettings {
 

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Repository;
 
-use Cornix\Serendipity\Core\Application\Repository\PurgeOnUninstallRepository;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpOptionName;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\OptionGateway\Option\BoolOption;
+use Baywall\Core\Application\Repository\PurgeOnUninstallRepository;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\BoolOption;
 
 /**
  * アンインストール時にデータを完全削除するかどうかを取得または保存するクラス

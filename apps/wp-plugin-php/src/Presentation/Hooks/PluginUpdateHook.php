@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\Hooks;
+namespace Baywall\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Application\Service\PluginMigrationService;
-use Cornix\Serendipity\Core\Infrastructure\System\ArchitectureChecker;
-use Cornix\Serendipity\Core\Infrastructure\System\PhpExtChecker;
-use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\WpInstalledPluginVersionRepository;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressVersionChecker;
+use Baywall\Core\Application\Service\PluginMigrationService;
+use Baywall\Core\Infrastructure\System\ArchitectureChecker;
+use Baywall\Core\Infrastructure\System\PhpExtChecker;
+use Baywall\Core\Presentation\Hooks\Base\HookBase;
+use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInstalledPluginVersionRepository;
+use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
+use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
+use Baywall\Core\Infrastructure\WordPress\Service\WordPressVersionChecker;
 use Psr\Container\ContainerInterface;
 use Throwable;
 

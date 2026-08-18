@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase;
+namespace Baywall\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\Service\AccessTokenService;
-use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\Service\TransactionService;
-use Cornix\Serendipity\Core\Domain\Entity\RefreshToken;
-use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
-use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
-use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Service\AccessTokenCookieProvider;
+use Baywall\Core\Application\Service\AccessTokenService;
+use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
+use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Domain\Entity\RefreshToken;
+use Baywall\Core\Domain\Service\RefreshTokenService;
+use Baywall\Core\Domain\ValueObject\RefreshTokenString;
+use Baywall\Core\Infrastructure\Cookie\CookieWriter;
 
 /**
  * アクセストークンを更新します

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Migration;
 
-use Cornix\Serendipity\Core\Infrastructure\Util\NamespaceParser;
-use Cornix\Serendipity\Core\Infrastructure\Util\Strings;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
-use Cornix\Serendipity\Core\Application\ValueObject\PluginVersion;
+use Baywall\Core\Infrastructure\Util\NamespaceParser;
+use Baywall\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Baywall\Core\Application\ValueObject\PluginVersion;
 use Psr\Container\ContainerInterface;
 
 /** マイグレーション対象となるクラスインスタンス一覧を取得します */

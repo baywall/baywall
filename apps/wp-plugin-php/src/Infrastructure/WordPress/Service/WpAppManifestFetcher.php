@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\ValueObject\PluginUpdateChannel;
-use Cornix\Serendipity\Core\Constant\Config;
+use Baywall\Core\Application\ValueObject\PluginUpdateChannel;
+use Baywall\Core\Constant\Config;
 
 /**
  * app-manifest.jsonを取得し、WordPressプラグインのリリースチャンネル情報を返すサービス。

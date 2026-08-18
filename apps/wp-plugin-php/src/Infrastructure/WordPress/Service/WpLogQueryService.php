@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Dto\LogDto;
-use Cornix\Serendipity\Core\Application\Service\LogQueryService;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
+use Baywall\Core\Application\Dto\LogDto;
+use Baywall\Core\Application\Service\LogQueryService;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
 
 class WpLogQueryService implements LogQueryService {
 

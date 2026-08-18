@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\ValueObject;
+namespace Baywall\Core\Application\ValueObject;
 
 /**
  * プラグインバージョンを表す値オブジェクト

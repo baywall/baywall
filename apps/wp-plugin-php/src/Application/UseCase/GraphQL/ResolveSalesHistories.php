@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Dto\SalesHistoryDto;
-use Cornix\Serendipity\Core\Application\Service\SalesHistoryQueryService;
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Application\Dto\SalesHistoryDto;
+use Baywall\Core\Application\Service\SalesHistoryQueryService;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
 use InvalidArgumentException;
 
 class ResolveSalesHistories {

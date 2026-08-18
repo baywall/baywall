@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\Exception\LockAcquisitionException;
+use Baywall\Core\Application\Exception\LockAcquisitionException;
 
 /** ロック機構(排他制御)を提供する抽象クラス */
 abstract class LockService {

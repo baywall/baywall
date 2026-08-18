@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Client;
+namespace Baywall\Core\Infrastructure\Web3\Client;
 
-use Cornix\Serendipity\Core\Domain\Entity\AppContract;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Abi\AppContractAbi;
-use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\GetPaywallStatusResult;
-use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\ContractFactory;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\Entity\AppContract;
+use Baywall\Core\Infrastructure\Web3\Abi\AppContractAbi;
+use Baywall\Core\Infrastructure\Web3\ValueObject\GetPaywallStatusResult;
+use Baywall\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
+use Baywall\Core\Infrastructure\Web3\Factory\ContractFactory;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Domain\ValueObject\Hex;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\PostId;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
@@ -107,7 +107,7 @@ class AppContractClient {
 					throw $err;
 				}
 				// $logsがnullの可能性があるため、nullの場合は空配列に置き換える
-				// [ERROR] TypeError: Argument 2 passed to Cornix\\Serendipity\\Core\\Infrastructure\\Web3\\Client\\AppContractClient::Cornix\\Serendipity\\Core\\Infrastructure\\Web3\\Client\\{closure}() must be of the type array, null given
+				// [ERROR] TypeError: Argument 2 passed to Baywall\\Core\\Infrastructure\\Web3\\Client\\AppContractClient::Baywall\\Core\\Infrastructure\\Web3\\Client\\{closure}() must be of the type array, null given
 				if ( is_null( $logs ) ) {
 					$logs = array();
 				}

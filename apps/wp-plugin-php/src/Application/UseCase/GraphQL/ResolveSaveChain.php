@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Service\ChainIdChecker;
-use Cornix\Serendipity\Core\Application\Service\TransactionService;
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
-use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
+use Baywall\Core\Application\Service\ChainIdChecker;
+use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Confirmations;
+use Baywall\Core\Domain\ValueObject\RpcUrl;
 
 class ResolveSaveChain {
 

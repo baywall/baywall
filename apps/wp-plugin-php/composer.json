@@ -1,7 +1,7 @@
 {
 	"autoload": {
 		"psr-4": {
-			"Cornix\\Serendipity\\Core\\": "./src"
+			"Baywall\\Core\\": "./src"
 		}
 	},
 	"scripts": {

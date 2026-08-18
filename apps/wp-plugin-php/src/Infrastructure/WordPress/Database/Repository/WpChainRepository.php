@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
-use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryId;
-use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\ValueObject\ChainTableRecord;
+use Baywall\Core\Domain\Entity\Chain;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
+use Baywall\Core\Domain\Specification\ChainsFilter;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Confirmations;
+use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
+use Baywall\Core\Domain\ValueObject\RpcUrl;
+use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\ChainTableRecord;
 
 class WpChainRepository implements ChainRepository {
 

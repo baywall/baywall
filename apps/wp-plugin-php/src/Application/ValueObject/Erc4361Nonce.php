@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\ValueObject;
+namespace Baywall\Core\Application\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Interfaces\ValueObject;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 class Erc4361Nonce implements ValueObject {
 

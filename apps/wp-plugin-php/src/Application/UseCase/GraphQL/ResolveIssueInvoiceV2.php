@@ -1,30 +1,30 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Service\InvoiceTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\Service\TransactionService;
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
-use Cornix\Serendipity\Core\Domain\Entity\Invoice;
-use Cornix\Serendipity\Core\Domain\Entity\ServerSigner;
-use Cornix\Serendipity\Core\Domain\Exception\HttpStatus\BadRequestException;
-use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
-use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
-use Cornix\Serendipity\Core\Domain\Service\InvoiceService;
-use Cornix\Serendipity\Core\Domain\Service\InvoiceTokenService;
-use Cornix\Serendipity\Core\Domain\Service\SiteService;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\Bytes;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Hex;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
-use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
-use Cornix\Serendipity\Core\Infrastructure\Reimpl\Ethers\Ethers;
-use Cornix\Serendipity\Core\Infrastructure\Reimpl\Ethers\EthersSigningKey;
+use Baywall\Core\Application\Service\InvoiceTokenCookieProvider;
+use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Application\UseCase\InitCrawledBlockNumber;
+use Baywall\Core\Domain\Entity\Invoice;
+use Baywall\Core\Domain\Entity\ServerSigner;
+use Baywall\Core\Domain\Exception\HttpStatus\BadRequestException;
+use Baywall\Core\Domain\Repository\PostRepository;
+use Baywall\Core\Domain\Repository\ServerSignerRepository;
+use Baywall\Core\Domain\Repository\TokenRepository;
+use Baywall\Core\Domain\Service\InvoiceService;
+use Baywall\Core\Domain\Service\InvoiceTokenService;
+use Baywall\Core\Domain\Service\SiteService;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Bytes;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Hex;
+use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\ValueObject\Signature;
+use Baywall\Core\Infrastructure\Cookie\CookieWriter;
+use Baywall\Core\Infrastructure\Reimpl\Ethers\Ethers;
+use Baywall\Core\Infrastructure\Reimpl\Ethers\EthersSigningKey;
 
 class ResolveIssueInvoiceV2 {
 

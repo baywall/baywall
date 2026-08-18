@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\Dto\LogDto;
+use Baywall\Core\Application\Dto\LogDto;
 
 /**
  * ログ取得Serviceのインターフェース

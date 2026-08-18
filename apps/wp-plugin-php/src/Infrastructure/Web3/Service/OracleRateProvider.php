@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\Service;
+namespace Baywall\Core\Infrastructure\Web3\Service;
 
-use Cornix\Serendipity\Core\Domain\Exception\RateNotFoundException;
-use Cornix\Serendipity\Core\Domain\Service\RateProvider;
-use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
-use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
-use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\OracleClientFactory;
+use Baywall\Core\Domain\Exception\RateNotFoundException;
+use Baywall\Core\Domain\Service\RateProvider;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\SymbolPair;
+use Baywall\Core\Domain\ValueObject\Rate;
+use Baywall\Core\Infrastructure\Web3\Factory\OracleClientFactory;
 
 class OracleRateProvider implements RateProvider {
 	public function __construct( OracleClientFactory $oracle_client_factory, OracleResolver $oracle_resolver ) {

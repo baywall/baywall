@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase;
+namespace Baywall\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Application\Service\AccessTokenCookieProvider;
-use Cornix\Serendipity\Core\Application\Service\RefreshTokenCookieProvider;
-use Cornix\Serendipity\Core\Domain\Service\RefreshTokenService;
-use Cornix\Serendipity\Core\Domain\ValueObject\RefreshTokenString;
-use Cornix\Serendipity\Core\Infrastructure\Cookie\CookieWriter;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Service\AccessTokenCookieProvider;
+use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
+use Baywall\Core\Domain\Service\RefreshTokenService;
+use Baywall\Core\Domain\ValueObject\RefreshTokenString;
+use Baywall\Core\Infrastructure\Cookie\CookieWriter;
 
 /**
  * ログアウト処理を行います。

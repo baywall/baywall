@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject;
+namespace Baywall\Core\Infrastructure\Web3\ValueObject;
 
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Domain\ValueObject\InvoiceId;
 
 class GetPaywallStatusResult {
 	public function __construct( bool $is_unlocked, ?InvoiceId $invoice_id, ?BlockNumber $unlocked_block_number ) {

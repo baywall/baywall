@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\Repository\JwtSecretKeyRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Application\ValueObject\AccessToken;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Infrastructure\JWT\JwtService;
-use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\Jwt;
-use Cornix\Serendipity\Core\Infrastructure\JWT\ValueObject\JwtPayload;
+use Baywall\Core\Application\Repository\JwtSecretKeyRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Application\ValueObject\AccessToken;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Infrastructure\JWT\JwtService;
+use Baywall\Core\Infrastructure\JWT\ValueObject\Jwt;
+use Baywall\Core\Infrastructure\JWT\ValueObject\JwtPayload;
 
 class AccessTokenService {
 

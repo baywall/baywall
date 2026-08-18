@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Reimpl\ENS;
+namespace Baywall\Core\Infrastructure\Reimpl\ENS;
 
 /**
  * ENS で使用する coinType への変換を行います。

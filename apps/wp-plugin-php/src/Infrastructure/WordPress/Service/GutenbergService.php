@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Repository\ThemeSettingRepository;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Cornix\Serendipity\Core\Domain\Entity\WidgetAttributes;
-use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Content;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\ValueObject\BlockName;
+use Baywall\Core\Application\Repository\ThemeSettingRepository;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Domain\Entity\WidgetAttributes;
+use Baywall\Core\Domain\Repository\PostRepository;
+use Baywall\Core\Domain\ValueObject\Content;
+use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Infrastructure\WordPress\ValueObject\BlockName;
 use WP_Block;
 
 /** WordPressのGutenberg関連のサービスを提供します。 */

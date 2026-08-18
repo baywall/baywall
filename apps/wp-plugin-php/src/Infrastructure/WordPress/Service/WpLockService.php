@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Service;
+namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Cornix\Serendipity\Core\Application\Service\LockService;
+use Baywall\Core\Application\Service\LockService;
 use RuntimeException;
 use wpdb;
 

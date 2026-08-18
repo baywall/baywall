@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Presentation\Hooks\Service;
+namespace Baywall\Core\Presentation\Hooks\Service;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
 class PhpVarExporter {
 

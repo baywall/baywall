@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\Dto\SalesHistoryDto;
-use Cornix\Serendipity\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Application\Dto\SalesHistoryDto;
+use Baywall\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\PostId;
 
 /**
  * 売上データを取得するクラス

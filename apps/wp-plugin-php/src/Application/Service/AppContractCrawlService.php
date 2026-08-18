@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Service;
+namespace Baywall\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\Exception\LockAcquisitionException;
-use Cornix\Serendipity\Core\Application\Logging\AppLogger;
-use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Repository\ServerSignerRepository;
-use Cornix\Serendipity\Core\Domain\Service\BlockNumberProvider;
-use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Domain\ValueObject\ChainId;
-use Cornix\Serendipity\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Repository\UnlockPaywallTransferEventRepository;
+use Baywall\Core\Application\Exception\LockAcquisitionException;
+use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Domain\Repository\AppContractRepository;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Repository\ServerSignerRepository;
+use Baywall\Core\Domain\Service\BlockNumberProvider;
+use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
+use Baywall\Core\Infrastructure\WordPress\Database\Repository\UnlockPaywallTransferEventRepository;
 
 class AppContractCrawlService {
 

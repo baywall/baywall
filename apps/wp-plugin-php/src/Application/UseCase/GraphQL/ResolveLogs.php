@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\UseCase\GraphQL;
+namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Cornix\Serendipity\Core\Application\Dto\LogDto;
-use Cornix\Serendipity\Core\Application\Service\LogQueryService;
-use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
-use Cornix\Serendipity\Core\Constant\Config;
+use Baywall\Core\Application\Dto\LogDto;
+use Baywall\Core\Application\Service\LogQueryService;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Constant\Config;
 
 class ResolveLogs {
 

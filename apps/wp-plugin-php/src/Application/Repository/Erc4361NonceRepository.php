@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Repository;
+namespace Baywall\Core\Application\Repository;
 
-use Cornix\Serendipity\Core\Application\ValueObject\Erc4361Nonce;
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Application\ValueObject\Erc4361Nonce;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 /**
  * ERC-4361で使用するNonceを永続化するリポジトリ

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\Logging\Handler;
+namespace Baywall\Core\Infrastructure\Logging\Handler;
 
-use Cornix\Serendipity\Core\Infrastructure\Logging\Logger;
-use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Infrastructure\Logging\Logger;
+use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
 use DateTimeImmutable;
 
 class SimpleLogger implements Logger {

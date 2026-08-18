@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\Hooks;
+namespace Baywall\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
-use Cornix\Serendipity\Core\Domain\ValueObject\PaidContent;
-use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Domain\ValueObject\Content;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\BlockNameProvider;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\GutenbergService;
-use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
+use Baywall\Core\Application\Service\UserAccessProvider;
+use Baywall\Core\Domain\ValueObject\PaidContent;
+use Baywall\Core\Domain\Repository\PostRepository;
+use Baywall\Core\Domain\ValueObject\Content;
+use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
+use Baywall\Core\Infrastructure\WordPress\Service\BlockNameProvider;
+use Baywall\Core\Infrastructure\WordPress\Service\GutenbergService;
+use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Psr\Container\ContainerInterface;
 use WP_Block;
 

@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Presentation\Hooks;
+namespace Baywall\Core\Presentation\Hooks;
 
-use Cornix\Serendipity\Core\Application\Exception\LockAcquisitionException;
-use Cornix\Serendipity\Core\Application\Service\LockService;
-use Cornix\Serendipity\Core\Application\UseCase\CrawlAllAppContract;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Constants\WpCronName;
-use Cornix\Serendipity\Core\Presentation\Hooks\Base\HookBase;
+use Baywall\Core\Application\Exception\LockAcquisitionException;
+use Baywall\Core\Application\Service\LockService;
+use Baywall\Core\Application\UseCase\CrawlAllAppContract;
+use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
+use Baywall\Core\Constant\Config;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
+use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Psr\Container\ContainerInterface;
 
 /**

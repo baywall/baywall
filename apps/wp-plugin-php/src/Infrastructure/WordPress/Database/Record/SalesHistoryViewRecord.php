@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Record;
 
-use Cornix\Serendipity\Core\Infrastructure\WordPress\Database\Record\Base\RecordBase;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\Base\RecordBase;
 use stdClass;
 
 class SalesHistoryViewRecord extends RecordBase {

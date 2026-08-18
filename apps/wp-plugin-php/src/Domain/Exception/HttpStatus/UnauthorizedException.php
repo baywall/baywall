@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Domain\Exception\HttpStatus;
+namespace Baywall\Core\Domain\Exception\HttpStatus;
 
 /**
  * 401 Unauthorized
