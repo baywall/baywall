@@ -4,7 +4,7 @@
  * Description:       You can set up a paywall for blockchain payments.
  * Requires at least: 6.6
  * Requires PHP:      7.4
- * Version:           0.0.6
+ * Version:           0.0.7-alpha.1
  * Author:            yamaneyuta
  * License:           Split License
  * License URI:       ./LICENSE
