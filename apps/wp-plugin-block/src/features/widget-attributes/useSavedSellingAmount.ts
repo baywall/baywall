@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Amount } from '@serendipity/lib-value-object';
+import { Amount } from '@baywall/lib-value-object';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 
 /**

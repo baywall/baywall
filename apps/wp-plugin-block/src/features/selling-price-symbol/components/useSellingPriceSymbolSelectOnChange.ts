@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Symbol } from '@serendipity/lib-value-object';
+import { Symbol } from '@baywall/lib-value-object';
 import { useSelectedSellingPriceSymbolState } from '../hooks/useSelectedSellingPriceSymbolState';
 import { type SellingPriceSymbolSelectProps } from './SellingPriceSymbolSelect';
 

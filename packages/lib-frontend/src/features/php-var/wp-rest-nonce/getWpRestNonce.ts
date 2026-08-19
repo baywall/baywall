@@ -1,4 +1,4 @@
-import { WpRestNonce } from '@serendipity/lib-value-object';
+import { WpRestNonce } from '@baywall/lib-value-object';
 import { getPhpVar } from '../getPhpVar.js';
 
 export const getWpRestNonce = (): WpRestNonce | null => {

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { DateFormatter } from '@serendipity/lib-date-format';
+import { DateFormatter } from '@baywall/lib-date-format';
 import {
 	ApplicationLogger,
 	ConsoleLogger,
@@ -8,7 +8,7 @@ import {
 	LOG_LEVEL,
 	Logger,
 	LogLevel,
-} from '@serendipity/lib-logger';
+} from '@baywall/lib-logger';
 import { Config } from '../../constant/Config.js';
 
 /**

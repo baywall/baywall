@@ -1,4 +1,4 @@
-import { Decimals, NetworkCategoryId, Symbol as TokenSymbol, ValueObject } from '@serendipity/lib-value-object';
+import { Decimals, NetworkCategoryId, Symbol as TokenSymbol, ValueObject } from '@baywall/lib-value-object';
 
 const brand: unique symbol = Symbol('Token');
 

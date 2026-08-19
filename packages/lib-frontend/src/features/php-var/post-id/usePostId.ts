@@ -1,4 +1,4 @@
-import { PostId } from '@serendipity/lib-value-object';
+import { PostId } from '@baywall/lib-value-object';
 import { useMemo } from 'react';
 import { getPostId } from './getPostId.js';
 

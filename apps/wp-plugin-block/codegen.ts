@@ -16,7 +16,7 @@ const config: CodegenConfig = {
 			config: {
 				preResolveTypes: true,
 				// ※ jestで`Cannot find module`が発生するため、相対パスで記述している
-				fetcher: '@serendipity/lib-frontend#fetcher', // 相対パスの場合は、生成されるファイルからのパス
+				fetcher: '@baywall/lib-frontend#fetcher', // 相対パスの場合は、生成されるファイルからのパス
 				// isReactHook: true,
 				// exposeQueryKeys: true,
 

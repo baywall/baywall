@@ -1,5 +1,5 @@
 {
-  "name": "@serendipity/lib-frontend",
+  "name": "@baywall/lib-frontend",
   "version": "0.0.0",
   "description": "",
   "private": true,
@@ -38,9 +38,9 @@
   },
   "keywords": [],
   "dependencies": {
-    "@serendipity/lib-date-format": "workspace:*",
-    "@serendipity/lib-logger": "workspace:*",
-    "@serendipity/lib-value-object": "workspace:*"
+    "@baywall/lib-date-format": "workspace:*",
+    "@baywall/lib-logger": "workspace:*",
+    "@baywall/lib-value-object": "workspace:*"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

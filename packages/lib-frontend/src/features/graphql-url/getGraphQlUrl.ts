@@ -1,4 +1,4 @@
-import { HttpUrl } from '@serendipity/lib-value-object';
+import { HttpUrl } from '@baywall/lib-value-object';
 import { Config } from '../../constant/Config.js';
 import { getApiRoot } from '../php-var/api-root/getApiRoot.js';
 

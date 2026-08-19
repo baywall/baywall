@@ -1,4 +1,4 @@
-import { LOG_LEVEL } from '@serendipity/lib-logger';
+import { LOG_LEVEL } from '@baywall/lib-logger';
 
 export class Config {
 	// istanbul ignore next

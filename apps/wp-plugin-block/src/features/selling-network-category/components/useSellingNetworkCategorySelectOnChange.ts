@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { NetworkCategoryId } from '@serendipity/lib-value-object';
+import { NetworkCategoryId } from '@baywall/lib-value-object';
 import { type SellingNetworkCategorySelectProps } from './SellingNetworkCategorySelect';
 import { useSelectedNetworkCategoryIdState } from '../hooks/useSelectedNetworkCategoryIdState';
 

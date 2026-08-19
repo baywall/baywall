@@ -45,7 +45,7 @@
     "wp-env:destroy:tests": "wp-env --config .wp-env.tests.json destroy"
   },
   "dependencies": {
-    "@serendipity/wp-plugin-block": "workspace:*"
+    "@baywall/wp-plugin-block": "workspace:*"
   },
   "devDependencies": {
     "@wordpress/env": "^11.13.0",

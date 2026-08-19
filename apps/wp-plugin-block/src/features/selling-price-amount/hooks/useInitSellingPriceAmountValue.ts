@@ -1,4 +1,4 @@
-import { Amount } from '@serendipity/lib-value-object';
+import { Amount } from '@baywall/lib-value-object';
 import { useEffect } from 'react';
 import { useSavedSellingAmount } from '../../widget-attributes/useSavedSellingAmount';
 import { useSellingPriceAmountValueState } from './useSellingPriceAmountValueState';

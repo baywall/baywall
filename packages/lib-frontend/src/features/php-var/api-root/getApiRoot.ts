@@ -1,4 +1,4 @@
-import { HttpUrl } from '@serendipity/lib-value-object';
+import { HttpUrl } from '@baywall/lib-value-object';
 import { getPhpVar } from '../getPhpVar.js';
 
 export const getApiRoot = (): HttpUrl | null => {

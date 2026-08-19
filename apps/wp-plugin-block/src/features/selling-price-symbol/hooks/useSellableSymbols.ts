@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
-import { useLogger } from '@serendipity/lib-frontend';
+import { NetworkCategoryId, Symbol } from '@baywall/lib-value-object';
+import { useLogger } from '@baywall/lib-frontend';
 import { useBlockInitRawDataQuery } from '../../../query/useBlockInitRawDataQuery';
 
 /**

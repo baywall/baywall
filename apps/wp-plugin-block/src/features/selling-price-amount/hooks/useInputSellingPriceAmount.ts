@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Amount } from '@serendipity/lib-value-object';
+import { Amount } from '@baywall/lib-value-object';
 import { useSellingPriceAmountValueState } from './useSellingPriceAmountValueState';
 
 /** ユーザーが入力した販売価格をAmount型で取得します */

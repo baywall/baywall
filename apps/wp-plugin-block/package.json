@@ -1,5 +1,5 @@
 {
-  "name": "@serendipity/wp-plugin-block",
+  "name": "@baywall/wp-plugin-block",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -61,8 +61,8 @@
     "//       => https://github.com/WordPress/gutenberg/blob/d649865283aff3545f9754a01c92982e37602dc8/packages/scripts/CHANGELOG.md#breaking-changes-2": ""
   },
   "dependencies": {
-    "@serendipity/lib-frontend": "workspace:*",
-    "@serendipity/lib-value-object": "workspace:*",
+    "@baywall/lib-frontend": "workspace:*",
+    "@baywall/lib-value-object": "workspace:*",
     "@tanstack/react-query": "^5.101.4",
     "@wordpress/icons": "^15.4.0",
     "assert": "^2.1.0",

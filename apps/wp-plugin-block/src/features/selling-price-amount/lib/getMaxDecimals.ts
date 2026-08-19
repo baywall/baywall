@@ -1,4 +1,4 @@
-import { Decimals, Symbol } from '@serendipity/lib-value-object';
+import { Decimals, Symbol } from '@baywall/lib-value-object';
 import { Token } from '../../../value-object/Token';
 import { getLegalCurrencyDecimals } from './getLegalCurrencyDecimals';
 

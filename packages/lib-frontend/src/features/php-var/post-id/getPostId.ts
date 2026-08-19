@@ -1,4 +1,4 @@
-import { PostId } from '@serendipity/lib-value-object';
+import { PostId } from '@baywall/lib-value-object';
 import { getPhpVar } from '../getPhpVar.js';
 
 export const getPostId = (): PostId | null => {

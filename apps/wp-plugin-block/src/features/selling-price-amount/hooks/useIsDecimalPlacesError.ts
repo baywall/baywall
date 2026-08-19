@@ -1,4 +1,4 @@
-import { Amount, Decimals } from '@serendipity/lib-value-object';
+import { Amount, Decimals } from '@baywall/lib-value-object';
 
 /**
  * 入力された金額の小数点以下が最大桁数を超えてエラーの状態になっているかどうかを取得します。

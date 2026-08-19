@@ -1,5 +1,5 @@
 {
-  "name": "@serendipity/lib-logger",
+  "name": "@baywall/lib-logger",
   "version": "0.0.0",
   "private": true,
   "type": "module",

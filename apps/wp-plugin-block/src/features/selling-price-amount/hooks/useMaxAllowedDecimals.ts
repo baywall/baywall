@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTokens } from '../../../hooks/useTokens';
 import { getMaxDecimals } from '../lib/getMaxDecimals';
-import { NetworkCategoryId, Symbol } from '@serendipity/lib-value-object';
+import { NetworkCategoryId, Symbol } from '@baywall/lib-value-object';
 
 /**
  * 指定可能な小数点以下桁数の最大値を取得します

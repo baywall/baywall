@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NetworkCategoryId } from '@serendipity/lib-value-object';
+import { NetworkCategoryId } from '@baywall/lib-value-object';
 import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
 
 /**

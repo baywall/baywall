@@ -1,5 +1,5 @@
 import cc from 'currency-codes';
-import { Decimals, Symbol } from '@serendipity/lib-value-object';
+import { Decimals, Symbol } from '@baywall/lib-value-object';
 
 /**
  * 指定した法定通貨の小数点以下桁数を取得します

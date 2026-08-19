@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Symbol } from '@serendipity/lib-value-object';
+import { Symbol } from '@baywall/lib-value-object';
 
 const selectedSellingPriceSymbolAtom = atom<Symbol | null | undefined>(undefined);
 

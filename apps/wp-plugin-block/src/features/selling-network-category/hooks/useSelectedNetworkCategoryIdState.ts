@@ -1,4 +1,4 @@
-import { NetworkCategoryId } from '@serendipity/lib-value-object';
+import { NetworkCategoryId } from '@baywall/lib-value-object';
 import { atom, useAtom } from 'jotai';
 
 const selectedNetworkCategoryIdAtom = atom<NetworkCategoryId | null | undefined>(undefined);
