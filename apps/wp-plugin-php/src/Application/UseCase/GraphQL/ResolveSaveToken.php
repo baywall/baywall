@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Application\UseCase\GraphQL;
 
 use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\Entity\Token;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\TokenRepository;
@@ -61,6 +62,11 @@ class ResolveSaveToken {
 			// decimals, symbolは保存されていた値を使用する
 			$decimals = $token->decimals();
 			$symbol   = $token->symbol();
+		}
+
+		// 小数点以下桁数が上限を超えるトークンは登録不可
+		if ( $decimals->value() > Config::MAX_TOKEN_DECIMALS ) {
+			throw new \InvalidArgumentException( '[01BD8D9A] Token decimals must be no greater than ' . Config::MAX_TOKEN_DECIMALS . ". decimals: {$decimals->value()}" );
 		}
 
 		// トークン情報を保存

@@ -153,4 +153,12 @@ class Config {
 	 * 更新用zipのダウンロードタイムアウト(秒)。コアのdownload_url()既定値(300)と同等
 	 */
 	public const PLUGIN_UPDATE_PACKAGE_DOWNLOAD_TIMEOUT = 300;
+
+	/**
+	 * トークンに登録できる小数点以下桁数の最大値
+	 *
+	 * ERC20の仕様上 decimals は 0〜18 が一般的であり、18を超える桁数のトークンは
+	 * 金額計算（10^18ベースの扱い）で問題が生じる恐れがあるため、登録を拒否する。
+	 */
+	public const MAX_TOKEN_DECIMALS = 18;
 }
