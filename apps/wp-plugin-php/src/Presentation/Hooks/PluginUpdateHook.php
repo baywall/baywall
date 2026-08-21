@@ -72,7 +72,8 @@ class PluginUpdateHook extends HookBase {
 			// wp_redirect( admin_url( 'plugins.php' ) ); // プラグイン一覧ページにリダイレクト
 
 			// エラー内容を画面に表示して終了
-			wp_die( (string) $e, '', array( 'back_link' => true ) );
+			// ※ 管理画面に表示されるため、詳細なスタックトレースは省略
+			wp_die( $e->getMessage(), '', array( 'back_link' => true ) );
 		}
 	}
 
