@@ -23,13 +23,23 @@
     "clean": "rm -rf includes/cache/*.php",
     "coverage": "pnpm test --coverage-html coverage/phpunit",
     "export-license": "MODE=EXPORT tsx ../../scripts/npm-scripts/composer-license-tools.ts",
-    "format": "tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} . || tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} .",
+    "format": "run-s format:*",
     "// phpcsはドキュメントの警告が多いためphpcbfで代用": "",
-    "lint": "tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} .",
+    "format:php": "tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} . || tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} .",
+    "format:eslint": "bash ../../scripts/npm-scripts/format-eslint.sh e2e scripts",
+    "format:prettier": "bash ../../scripts/npm-scripts/format-prettier.sh .",
+    "lint": "run-p lint:*",
+    "lint:php": "tests/vendor/bin/phpcbf --parallel=${PHPCS_PARALLEL:-$(nproc)} .",
+    "lint:eslint": "bash ../../scripts/npm-scripts/lint-eslint.sh e2e scripts",
+    "lint:prettier": "bash ../../scripts/npm-scripts/lint-prettier.sh .",
+    "// ルートにtsconfigがないためe2eのプロジェクトを明示的に指定します": "",
+    "lint:tsc": "bash ../../scripts/npm-scripts/lint-tsc.sh -p e2e",
     "// @wordpress/scripts@27.9.0ではサブディレクトリが作成されないためコメントアウト plugin-zip": "wp-scripts plugin-zip --root-folder=baywall && mv baywall.zip baywall.${npm_package_version}.zip",
     "plugin-zip": "bash ./scripts/plugin-zip.sh",
     "// 支払データを初期化し、再度同一ページで購入できるようにします。※ブラウザ側のlocalstorageは手動で削除してください。": "",
     "reset:payment-data": "wp-env run cli wp eval-file wp-content/plugins/${PWD##*/}/.bin/reset-payment-data.php",
+    "// E2Eテスト(Playwright)。事前に pnpm build（frontend-admin の public/admin 生成）と wp-env:start:tests が必須": "",
+    "e2e": "STORAGE_STATE_PATH=e2e/.auth/admin.json playwright test --config=e2e/playwright.config.ts",
     "// テスト実行環境(DevContainer/GitHub Actions)を判別し、マーカーファイル(.test-environment)を書き込みます": "",
     "pretest": "bash scripts/npm/write-test-environment.sh",
     "// 1つのファイルをテストする場合はテスト対象ファイルのパスを後ろに付与してください => pnpm test tests/classes/path-to-test-file.php": "",
@@ -48,7 +58,10 @@
     "@baywall/wp-plugin-block": "workspace:*"
   },
   "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "@wordpress/e2e-test-utils-playwright": "1.53.0",
     "@wordpress/env": "^11.13.0",
+    "ethers": "6.17.0",
     "wrangler": "^4.123.0"
   }
 }

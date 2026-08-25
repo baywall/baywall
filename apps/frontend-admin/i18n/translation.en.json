@@ -66,6 +66,7 @@
   "dialog.close": "Close",
   "help.logs": "Logs",
   "license.package": "Package",
+  "license.title": "License",
   "license.version": "Version",
   "logs.empty": "No logs available",
   "logs.error": "Failed to load logs",

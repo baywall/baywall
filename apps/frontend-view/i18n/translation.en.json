@@ -29,7 +29,7 @@
   "payment.view_on_explorer": "View on Explorer",
   "payment.wallet_signature_required_message": "Wallet signature is required to proceed.",
   "post.summary_price": "Price",
-  "post.summary_remaining_chars": "Remaining characters",
+  "post.summary_remaining_chars": "Characters left",
   "post.summary_title": "Title",
   "site.install_origin_url_changed_message": "Some features are restricted due to a configuration issue. Please contact the site administrator.",
   "site.paused_message": "Transactions are temporarily suspended by the site administrator.",

@@ -66,6 +66,7 @@
   "dialog.close": "閉じる",
   "help.logs": "ログ",
   "license.package": "パッケージ",
+  "license.title": "ライセンス",
   "license.version": "バージョン",
   "logs.empty": "ログはありません",
   "logs.error": "ログの取得に失敗しました",
