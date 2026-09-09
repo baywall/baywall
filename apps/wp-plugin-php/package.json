@@ -59,9 +59,9 @@
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",
-    "@wordpress/e2e-test-utils-playwright": "1.53.0",
-    "@wordpress/env": "^11.13.0",
-    "ethers": "6.17.0",
-    "wrangler": "^4.123.0"
+    "@wordpress/e2e-test-utils-playwright": "^1.54.0",
+    "@wordpress/env": "^11.14.0",
+    "ethers": "^6.17.0",
+    "wrangler": "^4.129.0"
   }
 }

@@ -15,7 +15,7 @@
 		"test": "PHPUnit テストを wp-env 内で実行します（wp-env は起動済み）。引数は1つまで指定可能で、テストファイルを tests/... のパスで指定できます。"
 	},
 	"require": {
-		"php": ">=7.4",
+		"php": ">=8.1",
 		"ext-bcmath": "*",
 		"web3p/web3.php": "dev-master",
 		"webonyx/graphql-php": "^15.12.5",
