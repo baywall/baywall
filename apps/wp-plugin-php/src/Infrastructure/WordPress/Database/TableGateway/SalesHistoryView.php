@@ -26,7 +26,6 @@ class SalesHistoryView {
 		$this->tx_table_name       = $table_name_provider->unlockPaywallTransaction();
 		$this->event_table_name    = $table_name_provider->unlockPaywallTransferEvent();
 		$this->invoice_table_name  = $table_name_provider->invoice();
-		$this->token_table_name    = $table_name_provider->token();
 		$this->chain_table_name    = $table_name_provider->chain();
 		$this->wp_posts_table_name = $wpdb->posts; // WordPressの投稿テーブル名を取得
 	}
@@ -36,8 +35,6 @@ class SalesHistoryView {
 	private string $event_table_name;
 	/** インボイステーブル名 */
 	private string $invoice_table_name;
-	/** トークンテーブル名 */
-	private string $token_table_name;
 	/** WordPressの投稿テーブル名 */
 	private string $wp_posts_table_name;
 	/** チェーンテーブル名 */
@@ -54,70 +51,70 @@ class SalesHistoryView {
 			SELECT
 				t1.invoice_id,
 				t1.chain_id,
-				t6.name AS chain_name,
+				t5.name AS chain_name,
 				t1.block_number,
 				t1.transaction_hash,
-				-- t2_agg.token_address, => t3.payment_token_address
-				-- t2_agg.total_amount, => t3.payment_amount
-				-- t2_agg.buyer_address, => t3.buyer_address
-				t2_agg.contract_address,
-				t2_agg.contract_received_amount,
-				-- t2_agg.seller_address, => t3.seller_address
-				t2_agg.seller_received_amount,
-				t2_agg.affiliate_address,
-				t2_agg.affiliate_received_amount,
+				( SELECT MAX( e_contract.to_address ) FROM {$this->event_table_name} AS e_contract
+					WHERE e_contract.chain_id = t1.chain_id AND e_contract.transaction_hash = t1.transaction_hash AND e_contract.invoice_id = t1.invoice_id AND e_contract.transfer_type = 1 ) AS contract_address,
+				( SELECT MAX( e_contract_amount.amount ) FROM {$this->event_table_name} AS e_contract_amount
+					WHERE e_contract_amount.chain_id = t1.chain_id AND e_contract_amount.transaction_hash = t1.transaction_hash AND e_contract_amount.invoice_id = t1.invoice_id AND e_contract_amount.transfer_type = 1 ) AS contract_received_amount,
+				( SELECT MAX( e_seller_amount.amount ) FROM {$this->event_table_name} AS e_seller_amount
+					WHERE e_seller_amount.chain_id = t1.chain_id AND e_seller_amount.transaction_hash = t1.transaction_hash AND e_seller_amount.invoice_id = t1.invoice_id AND e_seller_amount.transfer_type = 2 ) AS seller_received_amount,
+				( SELECT MAX( e_affiliate.to_address ) FROM {$this->event_table_name} AS e_affiliate
+					WHERE e_affiliate.chain_id = t1.chain_id AND e_affiliate.transaction_hash = t1.transaction_hash AND e_affiliate.invoice_id = t1.invoice_id AND e_affiliate.transfer_type = 3 ) AS affiliate_address,
+				( SELECT MAX( e_affiliate_amount.amount ) FROM {$this->event_table_name} AS e_affiliate_amount
+					WHERE e_affiliate_amount.chain_id = t1.chain_id AND e_affiliate_amount.transaction_hash = t1.transaction_hash AND e_affiliate_amount.invoice_id = t1.invoice_id AND e_affiliate_amount.transfer_type = 3 ) AS affiliate_received_amount,
 				t1.block_timestamp AS block_timestamp,
 				t3.post_id,
 				t3.selling_amount,
 				t3.selling_symbol,
 				t3.seller_address,
 				t3.payment_token_address,
+				t3.payment_token_symbol,
+				t3.payment_token_decimals,
 				t3.payment_amount,
 				t3.buyer_address,
-				t4.symbol AS payment_token_symbol,
-				t4.decimals AS payment_token_decimals,
-				t5.post_title
+				t4.post_title
 			FROM
-				{$this->tx_table_name} AS t1
-			INNER JOIN (
-				SELECT
-					invoice_id,
-					-- MAX(token_address) AS token_address, => t3.payment_token_address と同じ
-					-- SUM(amount) AS total_amount, => t3.payment_amount と同じ
-					-- MAX(from_address) AS buyer_address, => t3.buyer_address と同じ
-					MAX(CASE WHEN transfer_type = 1 THEN to_address END) AS contract_address,
-					MAX(CASE WHEN transfer_type = 1 THEN amount END) AS contract_received_amount,
-					-- MAX(CASE WHEN transfer_type = 2 THEN to_address END) AS seller_address, => t3.seller_address と同じ
-					MAX(CASE WHEN transfer_type = 2 THEN amount END) AS seller_received_amount,
-					MAX(CASE WHEN transfer_type = 3 THEN to_address END) AS affiliate_address,
-					MAX(CASE WHEN transfer_type = 3 THEN amount END) AS affiliate_received_amount
-				FROM
-					{$this->event_table_name}
-				GROUP BY
-					invoice_id
-			) AS t2_agg
-				ON t1.invoice_id = t2_agg.invoice_id
+				{$this->tx_table_name} AS t1 FORCE INDEX FOR ORDER BY ( idx_{$this->tx_table_name}_B156B02C )
 			INNER JOIN
 				{$this->invoice_table_name} AS t3
-				ON t1.invoice_id = t3.id
+				ON t1.invoice_id = t3.invoice_id
 			LEFT JOIN
-				{$this->token_table_name} AS t4
-				ON t3.chain_id = t4.chain_id AND t3.payment_token_address = t4.address
+				{$this->wp_posts_table_name} AS t4
+				ON t3.post_id = t4.ID
 			LEFT JOIN
-				{$this->wp_posts_table_name} AS t5
-				ON t3.post_id = t5.ID
-			LEFT JOIN
-				{$this->chain_table_name} AS t6
-				ON t3.chain_id = t6.chain_id
+				{$this->chain_table_name} AS t5
+				ON t3.chain_id = t5.chain_id
+		SQL;
+
+		$where_conditions = array();
+
+		// 必ず適用する条件
+		// イベント行が1行も無いトランザクションを返すと、SalesHistoryViewRecord の非 nullable プロパティへ NULL が入り TypeError になるため行集合を絞る
+		// ※ EXISTS は MariaDB で semijoin (duplicate weedout) に書き換えられ、イベントテーブルを全件スキャンするため使わない
+		$where_conditions[] = <<<SQL
+			( SELECT COUNT(*) FROM {$this->event_table_name} AS e_exists
+				WHERE e_exists.chain_id = t1.chain_id AND e_exists.transaction_hash = t1.transaction_hash AND e_exists.invoice_id = t1.invoice_id ) > 0
 		SQL;
 
 		// 条件が指定されている場合はWHERE句を追加
-		$where_conditions = array();
-
 		// 請求書IDフィルタ
 		$filter_invoice_id = $condition->invoiceId();
 		if ( $filter_invoice_id !== null ) {
 			$where_conditions[] = 't1.invoice_id = ' . $this->wpdb->named_prepare( ':invoice_id', array( ':invoice_id' => (string) $filter_invoice_id ) );
+		}
+
+		// チェーンIDフィルタ
+		$filter_chain_id = $condition->chainId();
+		if ( $filter_chain_id !== null ) {
+			$where_conditions[] = 't1.chain_id = ' . $this->wpdb->named_prepare( ':chain_id', array( ':chain_id' => $filter_chain_id->value() ) );
+		}
+
+		// トランザクションハッシュフィルタ
+		$filter_transaction_hash = $condition->transactionHash();
+		if ( $filter_transaction_hash !== null ) {
+			$where_conditions[] = 't1.transaction_hash = ' . $this->wpdb->named_prepare( ':transaction_hash', array( ':transaction_hash' => $filter_transaction_hash->value() ) );
 		}
 
 		// 日付範囲フィルタ（block_timestamp を使用）
@@ -130,9 +127,7 @@ class SalesHistoryView {
 			$where_conditions[] = 't1.block_timestamp <= ' . $this->wpdb->named_prepare( ':date_to', array( ':date_to' => $date_to ) );
 		}
 
-		if ( ! empty( $where_conditions ) ) {
-			$sql .= ' WHERE ' . implode( ' AND ', $where_conditions );
-		}
+		$sql .= ' WHERE ' . implode( ' AND ', $where_conditions );
 
 		$sql .= ' ORDER BY t1.block_timestamp DESC';
 		$sql .= ' LIMIT ' . $this->wpdb->named_prepare( ':limit', array( ':limit' => Config::SALES_HISTORIES_MAX_RESULTS ) );
@@ -159,7 +154,7 @@ class SalesHistoryView {
 				{$this->tx_table_name} AS t1
 			INNER JOIN
 				{$this->invoice_table_name} AS t2
-				ON t1.invoice_id = t2.id
+				ON t1.invoice_id = t2.invoice_id
 			WHERE
 				t2.post_id = :post_id AND t2.buyer_address = :buyer_address
 		SQL;

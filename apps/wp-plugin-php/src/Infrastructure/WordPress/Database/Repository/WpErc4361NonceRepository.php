@@ -23,7 +23,7 @@ class WpErc4361NonceRepository implements Erc4361NonceRepository {
 		$record = $this->erc4361_nonce_table->get( $address );
 		return $record !== null ? Erc4361Nonce::from(
 			Erc4361NonceString::from( $record->erc4361NonceValue() ),
-			UnixTimestamp::fromMySql( $record->issuedAtValue() )
+			UnixTimestamp::from( $record->issuedAtValue() )
 		) : null;
 	}
 

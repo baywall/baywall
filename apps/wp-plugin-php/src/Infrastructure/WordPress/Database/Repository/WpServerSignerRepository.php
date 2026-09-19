@@ -17,8 +17,14 @@ class WpServerSignerRepository implements ServerSignerRepository {
 		$this->server_signer_table = $server_signer_table;
 	}
 
-	private function decodeKeyFromBase64( string $base64_key ): PrivateKey {
-		$decoded = base64_decode( $base64_key, true );
+	/**
+	 * 平文のBase64で保存された秘密鍵を復号します
+	 *
+	 * `private_key`の値域はCHECK制約で88文字のBase64に固定されているため、CHECK制約が執行されるDBでは
+	 * `base64_decode()`は失敗しません（CHECK制約が執行されないDBへのfail-safeとして分岐を残しています）
+	 */
+	private function decodePlainBase64Key( string $stored_value ): PrivateKey {
+		$decoded = base64_decode( $stored_value, true );
 		if ( $decoded === false ) {
 			throw new \RuntimeException( '[3E4C4478] Failed to decode base64 private key.' );
 		}
@@ -36,7 +42,7 @@ class WpServerSignerRepository implements ServerSignerRepository {
 
 		return new ServerSigner(
 			Address::from( $record->addressValue() ),
-			$this->decodeKeyFromBase64( $record->base64KeyValue() )
+			$this->decodePlainBase64Key( $record->privateKeyValue() )
 		);
 	}
 }

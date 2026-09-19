@@ -30,12 +30,14 @@ class V20251106_140_CreateErc4361NonceTable extends MigrationBase {
 		// nonceに関しては、第三者が取得したとしても署名を作成することができないのでハッシュ化は不要
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`          timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`          timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`created_at`          bigint unsigned NOT NULL COMMENT 'First insert time of the record. Not updated on UPSERT',
+				`updated_at`          bigint unsigned NOT NULL,
 				`wallet_address`      varchar(191)  NOT NULL,
 				`erc4361_nonce`       varchar(191)  NOT NULL,
-				`issued_at`           timestamp     NOT NULL,
-				CONSTRAINT `chk_{$this->table_name}_wallet_address` CHECK (`wallet_address` REGEXP BINARY '^0x[0-9a-f]{40}$'),
+				`issued_at`           bigint unsigned NOT NULL COMMENT 'Issue time of the currently stored nonce. Used to check expiration',
+				CONSTRAINT `chk_{$this->table_name}_wallet_address` CHECK (CONVERT(`wallet_address` USING utf8mb4) COLLATE utf8mb4_bin REGEXP '^0x[0-9a-f]{40}$'),
+				-- @see Infrastructure/WordPress/ValueObject/WpErc4361NonceString::generate()（Base62 の 8〜11 文字。大小文字の正準形は無く長さと文字集合だけを固定する）
+				CONSTRAINT `chk_{$this->table_name}_erc4361_nonce` CHECK (CONVERT(`erc4361_nonce` USING utf8mb4) COLLATE utf8mb4_bin REGEXP '^[0-9A-Za-z]{8,11}$'),
 				PRIMARY KEY (`wallet_address`),
 				KEY `idx_{$this->table_name}_C56F9034` (`issued_at`)
 			) {$this->wpdb->get_charset_collate()};

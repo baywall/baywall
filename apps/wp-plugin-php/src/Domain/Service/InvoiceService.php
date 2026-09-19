@@ -89,6 +89,8 @@ class InvoiceService {
 			$selling_price,
 			$seller->address(),
 			$payment_token->address(),
+			$payment_token->symbol(),
+			$payment_token->decimals(),
 			$payment_amount,
 			$buyer_address
 		);

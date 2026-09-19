@@ -10,14 +10,14 @@ class InvoiceTokenTableRecord extends TableRecordBase {
 
 	protected string $invoice_token_hash;
 	protected string $invoice_id;
-	protected string $expires_at;
-	protected ?string $revoked_at;
+	protected int $expires_at;
+	protected ?int $revoked_at;
 
 	public function __construct( stdClass $record ) {
 		$record->invoice_id         = (string) $record->invoice_id;
 		$record->invoice_token_hash = (string) $record->invoice_token_hash;
-		$record->expires_at         = (string) $record->expires_at;
-		$record->revoked_at         = $record->revoked_at !== null ? (string) $record->revoked_at : null;
+		$record->expires_at         = (int) $record->expires_at;
+		$record->revoked_at         = $record->revoked_at !== null ? (int) $record->revoked_at : null;
 
 		$this->import( $record );
 	}
@@ -28,10 +28,10 @@ class InvoiceTokenTableRecord extends TableRecordBase {
 	public function invoiceTokenHashValue(): string {
 		return $this->invoice_token_hash;
 	}
-	public function expiresAtValue(): string {
+	public function expiresAtValue(): int {
 		return $this->expires_at;
 	}
-	public function revokedAtValue(): ?string {
+	public function revokedAtValue(): ?int {
 		return $this->revoked_at;
 	}
 }

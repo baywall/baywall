@@ -73,15 +73,10 @@ class InitCrawledBlockNumber {
 
 		// confirmationsを考慮したブロック番号を計算
 		$confirmations       = $chain->confirmations();
-		$confirmations_value = $confirmations->value();
-		if ( is_int( $confirmations_value ) ) {
-			$safety_block_number = BlockNumber::fromInt(
-				max( $safety_block_number->int() - $confirmations_value, 1 ) // マイナスにならないように調整
-			);
-		} else {
-			// BlockTagの場合は現在サポートしていない
-			throw new \Exception( '[D8DACAB1] Not supported confirmations type: ' . (string) $confirmations_value );
-		}
+		$safety_block_number = BlockNumber::fromInt(
+			// マイナスにならないように調整
+			max( $safety_block_number->int() - $confirmations->value(), 1 )
+		);
 
 		return $safety_block_number;
 	}

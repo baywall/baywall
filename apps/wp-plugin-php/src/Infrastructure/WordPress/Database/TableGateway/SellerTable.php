@@ -6,6 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Signature;
 use Baywall\Core\Domain\ValueObject\SigningMessage;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\SellerTableRecord;
@@ -47,13 +48,17 @@ class SellerTable {
 	 * 販売者情報を追加します。
 	 */
 	public function add( Address $seller_address, SigningMessage $signing_message, Signature $signature ): void {
+		$now    = UnixTimestamp::now()->value();
 		$result = $this->wpdb->insert(
 			$this->table_name,
 			array(
 				'seller_address'  => $seller_address->value(),
 				'signing_message' => $signing_message->value(),
 				'signature'       => $signature->hex()->value(),
-			)
+				'created_at'      => $now,
+				'updated_at'      => $now,
+			),
+			array( '%s', '%s', '%s', '%d', '%d' )
 		);
 		assert( $result === 1, "[67195917] Failed to insert seller data. {$result}" );
 	}

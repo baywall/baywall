@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Baywall\Core\Domain\Entity\Oracle;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\OracleTableRecord;
@@ -44,10 +45,11 @@ class OracleTable {
 
 	public function save( Oracle $oracle ): void {
 		// 一旦、ON DUPLICATE KEY UPDATEは不要なので使用しない。
+		$now = UnixTimestamp::now()->value();
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-			(`chain_id`, `address`, `base_symbol`, `quote_symbol`)
-			VALUES ( :chain_id, :address, :base_symbol, :quote_symbol )
+			(`chain_id`, `address`, `base_symbol`, `quote_symbol`, `created_at`, `updated_at`)
+			VALUES ( :chain_id, :address, :base_symbol, :quote_symbol, :created_at, :updated_at )
 		SQL;
 
 		$sql = $this->wpdb->named_prepare(
@@ -57,6 +59,8 @@ class OracleTable {
 				':address'      => $oracle->address()->value(),
 				':base_symbol'  => $oracle->symbolPair()->base()->value(),
 				':quote_symbol' => $oracle->symbolPair()->quote()->value(),
+				':created_at'   => $now,
+				':updated_at'   => $now,
 			)
 		);
 

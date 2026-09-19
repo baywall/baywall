@@ -151,8 +151,6 @@ class AppContractCrawlService {
 		// 該当チェーンの待機ブロック数を取得
 		$confirmations = $this->chain_repository->get( $chain_id )->confirmations();
 
-		assert( is_int( $confirmations->value() ), '[0683F910]' ); // confirmationsは整数のみ対応
-
 		// 待機ブロック数を考慮して終了ブロック番号を計算して返す
 		// 例: confirmationsが3の場合、最新ブロックから2ブロック前までをクロール対象とする
 		return $latest_block_number->sub( $confirmations->value() - 1 );

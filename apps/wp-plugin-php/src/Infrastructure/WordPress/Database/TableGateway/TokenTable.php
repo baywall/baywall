@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Baywall\Core\Domain\Entity\Token;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\TokenTableRecord;
@@ -47,12 +48,14 @@ class TokenTable {
 	public function save( Token $token ): void {
 
 		// データが存在する時はレコードの更新を行うが、symbol, decimalsの値は変更しない
+		$now = UnixTimestamp::now()->value();
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-			(`chain_id`, `address`, `symbol`, `decimals`, `is_payable`)
-			VALUES (:chain_id, :address, :symbol, :decimals, :is_payable)
+			(`chain_id`, `address`, `symbol`, `decimals`, `is_payable`, `created_at`, `updated_at`)
+			VALUES (:chain_id, :address, :symbol, :decimals, :is_payable, :created_at, :updated_at)
 			ON DUPLICATE KEY UPDATE
-				`is_payable` = :is_payable
+				`is_payable` = :is_payable,
+				`updated_at` = :updated_at
 		SQL;
 
 		$sql = $this->wpdb->named_prepare(
@@ -63,6 +66,8 @@ class TokenTable {
 				':symbol'     => $token->symbol()->value(),
 				':decimals'   => $token->decimals()->value(),
 				':is_payable' => $token->isPayable(),
+				':created_at' => $now,
+				':updated_at' => $now,
 			)
 		);
 

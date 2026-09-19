@@ -36,7 +36,7 @@ class ResolveSaveChain {
 
 		$chain_id = ChainId::from( $args['chainId'] );
 		$rpc_url  = RpcUrl::fromNullable( $args['rpcUrl'] );
-		/** @var string */
+		/** @var int */
 		$confirmations_value = $args['confirmations'];
 		$confirmations       = Confirmations::from( $confirmations_value );
 		/** @var int */

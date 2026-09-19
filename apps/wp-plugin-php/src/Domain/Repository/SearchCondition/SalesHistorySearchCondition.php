@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Domain\Repository\SearchCondition;
 
+use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\TransactionHash;
 
 /**
  * 販売履歴の検索条件をカプセル化するValueObject
@@ -14,9 +16,11 @@ use Baywall\Core\Domain\ValueObject\InvoiceId;
  */
 class SalesHistorySearchCondition {
 
-	private ?InvoiceId $invoice_id = null;
-	private ?int $date_from        = null;
-	private ?int $date_to          = null;
+	private ?InvoiceId $invoice_id             = null;
+	private ?ChainId $chain_id                 = null;
+	private ?TransactionHash $transaction_hash = null;
+	private ?int $date_from                    = null;
+	private ?int $date_to                      = null;
 
 	/** 請求書IDを取得します */
 	public function invoiceId(): ?InvoiceId {
@@ -25,6 +29,26 @@ class SalesHistorySearchCondition {
 	/** 請求書IDを設定します */
 	public function setInvoiceId( ?InvoiceId $invoice_id ): self {
 		$this->invoice_id = $invoice_id;
+		return $this;
+	}
+
+	/** チェーンIDを取得します */
+	public function chainId(): ?ChainId {
+		return $this->chain_id;
+	}
+	/** チェーンIDを設定します */
+	public function setChainId( ?ChainId $chain_id ): self {
+		$this->chain_id = $chain_id;
+		return $this;
+	}
+
+	/** トランザクションハッシュを取得します */
+	public function transactionHash(): ?TransactionHash {
+		return $this->transaction_hash;
+	}
+	/** トランザクションハッシュを設定します */
+	public function setTransactionHash( ?TransactionHash $transaction_hash ): self {
+		$this->transaction_hash = $transaction_hash;
 		return $this;
 	}
 

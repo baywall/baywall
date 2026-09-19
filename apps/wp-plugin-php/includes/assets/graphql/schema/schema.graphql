@@ -104,7 +104,7 @@ type Mutation {
 	saveSeller( address: String!, signingMessage: String!, signature: String! ): Boolean!
 
 	# チェーン情報を保存【管理者】
-	saveChain(chainId: Int!, rpcUrl: String, confirmations: String!, maxLogsRange: Int!): Boolean!
+	saveChain(chainId: Int!, rpcUrl: String, confirmations: Int!, maxLogsRange: Int!): Boolean!
 
 	# オラクル情報を保存【管理者】
 	saveOracle(chainId: Int!, address: String!): Boolean!
@@ -156,7 +156,7 @@ type NetworkCategory {
 type Chain {
 	id: Int!	# チェーンID【ゲスト】
 	appContract: AppContract	# このチェーンにデプロイされているアプリケーションコントラクトの情報【ゲスト】
-	confirmations: String!		# ブロック確認数("1"などの10進数の文字列または"finalized"などのブロック位置)【ゲスト】
+	confirmations: Int!			# ブロック確認数【ゲスト】
 	rpcUrl: String				# RPC URL(ユーザーが管理画面で登録した値)【管理者】
 	tokens: [Token!]!			# このチェーンに存在するトークン一覧【管理者】
 	networkCategory: NetworkCategory! # このチェーンが属するネットワークカテゴリ【管理者】
@@ -259,6 +259,8 @@ type SalesHistoryInvoice {	# 請求書情報(販売履歴用)
 # 販売履歴フィルタ
 input SalesHistoriesFilter {
 	invoiceId: String	# 請求書ID
+	chainId: Int		# チェーンID
+	txHash: String		# トランザクションハッシュ
 	dateFrom: Int		# 開始日時 (Unixタイムスタンプ, 秒)
 	dateTo: Int			# 終了日時 (Unixタイムスタンプ, 秒)
 }

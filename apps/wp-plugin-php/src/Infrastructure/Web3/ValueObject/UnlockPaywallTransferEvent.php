@@ -5,6 +5,7 @@ namespace Baywall\Core\Infrastructure\Web3\ValueObject;
 
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\BlockHash;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\TransactionHash;
@@ -23,7 +24,9 @@ class UnlockPaywallTransferEvent {
 		Address $token_address,
 		Amount $amount,
 		UnlockPaywallTransferType $transfer_type,
-		UnixTimestamp $block_timestamp
+		UnixTimestamp $block_timestamp,
+		BlockHash $block_hash,
+		bool $removed
 	) {
 		$this->block_number          = $block_number;
 		$this->log_index             = $log_index;
@@ -36,6 +39,8 @@ class UnlockPaywallTransferEvent {
 		$this->amount                = $amount;
 		$this->transfer_type         = $transfer_type;
 		$this->block_timestamp       = $block_timestamp;
+		$this->block_hash            = $block_hash;
+		$this->removed               = $removed;
 	}
 	private BlockNumber $block_number;
 	private int $log_index;
@@ -48,6 +53,8 @@ class UnlockPaywallTransferEvent {
 	private Amount $amount;
 	private UnlockPaywallTransferType $transfer_type;
 	private UnixTimestamp $block_timestamp;
+	private BlockHash $block_hash;
+	private bool $removed;
 
 	public function blockNumber(): BlockNumber {
 		return $this->block_number;
@@ -81,5 +88,11 @@ class UnlockPaywallTransferEvent {
 	}
 	public function blockTimestamp(): UnixTimestamp {
 		return $this->block_timestamp;
+	}
+	public function blockHash(): BlockHash {
+		return $this->block_hash;
+	}
+	public function removed(): bool {
+		return $this->removed;
 	}
 }

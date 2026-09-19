@@ -7,6 +7,7 @@ use Baywall\Core\Application\Service\TransactionService;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Confirmations;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
 use Baywall\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
@@ -30,8 +31,9 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 	}
 
 	public function up(): void {
+		$now = UnixTimestamp::now()->value();
 		$this->transaction_service->transactional(
-			function () {
+			function () use ( $now ) {
 				// Mainnet --------------------
 				// Ethereum
 				$this->insert(
@@ -39,7 +41,8 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 					'Ethereum',
 					NetworkCategoryIdConstants::MAINNET,
 					null, // RPC URLはnull
-					'https://etherscan.io'
+					'https://etherscan.io',
+					$now
 				);
 
 				// Base
@@ -48,7 +51,8 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 					'Base',
 					NetworkCategoryIdConstants::MAINNET,
 					null, // RPC URLはnull
-					'https://basescan.org'
+					'https://basescan.org',
+					$now
 				);
 
 				// Polygon PoS
@@ -57,7 +61,8 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 					'Polygon PoS',
 					NetworkCategoryIdConstants::MAINNET,
 					null, // RPC URLはnull
-					'https://polygonscan.com'
+					'https://polygonscan.com',
+					$now
 				);
 
 				// Testnet --------------------
@@ -67,7 +72,8 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 					'Sepolia',
 					NetworkCategoryIdConstants::TESTNET,
 					null, // RPC URLはnull
-					'https://sepolia.etherscan.io'
+					'https://sepolia.etherscan.io',
+					$now
 				);
 
 				// Base Sepolia
@@ -76,7 +82,8 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 					'Base Sepolia',
 					NetworkCategoryIdConstants::TESTNET,
 					null, // RPC URLはnull
-					'https://sepolia.basescan.org'
+					'https://sepolia.basescan.org',
+					$now
 				);
 
 				// Polygon Amoy
@@ -85,7 +92,8 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 					'Polygon Amoy',
 					NetworkCategoryIdConstants::TESTNET,
 					null, // RPC URLはnull
-					'https://amoy.polygonscan.com'
+					'https://amoy.polygonscan.com',
+					$now
 				);
 			}
 		);
@@ -95,7 +103,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 		$this->wpdb->query( "TRUNCATE TABLE `{$this->table_name}`;" );
 	}
 
-	private function insert( int $chain_id_value, string $name, int $network_category_id, ?string $rpc_url_value, string $block_explorer_url ): void {
+	private function insert( int $chain_id_value, string $name, int $network_category_id, ?string $rpc_url_value, string $block_explorer_url, int $now ): void {
 		$chain_id      = ChainId::from( $chain_id_value );
 		$confirmations = Confirmations::from( 1 ); // 初期値として設定する確認数は1
 		$rpc_url       = RpcUrl::fromNullable( $rpc_url_value );
@@ -106,8 +114,10 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 				'name'                => $name,
 				'network_category_id' => $network_category_id,
 				'rpc_url'             => $rpc_url ? $rpc_url->value() : null,
-				'confirmations'       => (string) $confirmations,
+				'confirmations'       => $confirmations->value(),
 				'block_explorer_url'  => $block_explorer_url,
+				'created_at'          => $now,
+				'updated_at'          => $now,
 			)
 		);
 	}

@@ -6,6 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 use Baywall\Core\Domain\Entity\Invoice;
 use Baywall\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
 use Baywall\Core\Domain\ValueObject\Decimals;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
@@ -31,13 +32,15 @@ class InvoiceTable {
 	public function select( InvoiceSearchCondition $condition ): array {
 		$sql = <<<SQL
 			SELECT
-				`id`,
+				`invoice_id`,
 				`post_id`,
 				`chain_id`,
 				`selling_amount`,
 				`selling_symbol`,
 				`seller_address`,
 				`payment_token_address`,
+				`payment_token_symbol`,
+				`payment_token_decimals`,
 				`payment_amount`,
 				`buyer_address`
 			FROM `{$this->table_name}`
@@ -45,7 +48,7 @@ class InvoiceTable {
 
 		$where_clauses = array();
 		if ( ! is_null( $condition->invoiceId() ) ) {
-			$where_clauses[] = $this->wpdb->named_prepare( 'id = :invoice_id', array( ':invoice_id' => $condition->invoiceId()->ulid() ) );
+			$where_clauses[] = $this->wpdb->named_prepare( 'invoice_id = :invoice_id', array( ':invoice_id' => $condition->invoiceId()->ulid() ) );
 		}
 		if ( ! is_null( $condition->postId() ) ) {
 			$where_clauses[] = $this->wpdb->named_prepare( 'post_id = :post_id', array( ':post_id' => $condition->postId()->value() ) );
@@ -64,11 +67,12 @@ class InvoiceTable {
 		// 支払い数量に小数点が含まれることはない
 		assert( $invoice->paymentAmount()->decimals()->equals( Decimals::from( 0 ) ), '[65AA4D6E] Payment amount must be an integer.' );
 
+		$now = UnixTimestamp::now()->value();
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-				( `id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_amount`, `buyer_address` )
+				( `invoice_id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_token_symbol`, `payment_token_decimals`, `payment_amount`, `buyer_address`, `created_at`, `updated_at` )
 			VALUES
-				( :invoice_id, :post_id, :chain_id, :selling_amount, :selling_symbol, :seller_address, :payment_token_address, :payment_amount, :buyer_address )
+				( :invoice_id, :post_id, :chain_id, :selling_amount, :selling_symbol, :seller_address, :payment_token_address, :payment_token_symbol, :payment_token_decimals, :payment_amount, :buyer_address, :created_at, :updated_at )
 			ON DUPLICATE KEY UPDATE
 				`post_id` = VALUES(`post_id`),
 				`chain_id` = VALUES(`chain_id`),
@@ -76,22 +80,29 @@ class InvoiceTable {
 				`selling_symbol` = VALUES(`selling_symbol`),
 				`seller_address` = VALUES(`seller_address`),
 				`payment_token_address` = VALUES(`payment_token_address`),
+				`payment_token_symbol` = VALUES(`payment_token_symbol`),
+				`payment_token_decimals` = VALUES(`payment_token_decimals`),
 				`payment_amount` = VALUES(`payment_amount`),
-				`buyer_address` = VALUES(`buyer_address`)
+				`buyer_address` = VALUES(`buyer_address`),
+				`updated_at` = VALUES(`updated_at`)
 		SQL;
 
 		$sql = $this->wpdb->named_prepare(
 			$sql,
 			array(
-				':invoice_id'            => $invoice->id()->ulid(),
-				':post_id'               => $invoice->postId()->value(),
-				':chain_id'              => $invoice->chainId()->value(),
-				':selling_amount'        => $invoice->sellingPrice()->amount()->value(),
-				':selling_symbol'        => $invoice->sellingPrice()->symbol()->value(),
-				':seller_address'        => $invoice->sellerAddress()->value(),
-				':payment_token_address' => $invoice->paymentTokenAddress()->value(),
-				':payment_amount'        => $invoice->paymentAmount()->value(),
-				':buyer_address'         => $invoice->buyerAddress()->value(),
+				':invoice_id'             => $invoice->id()->ulid(),
+				':post_id'                => $invoice->postId()->value(),
+				':chain_id'               => $invoice->chainId()->value(),
+				':selling_amount'         => $invoice->sellingPrice()->amount()->value(),
+				':selling_symbol'         => $invoice->sellingPrice()->symbol()->value(),
+				':seller_address'         => $invoice->sellerAddress()->value(),
+				':payment_token_address'  => $invoice->paymentTokenAddress()->value(),
+				':payment_token_symbol'   => $invoice->paymentTokenSymbol()->value(),
+				':payment_token_decimals' => $invoice->paymentTokenDecimals()->value(),
+				':payment_amount'         => $invoice->paymentAmount()->value(),
+				':buyer_address'          => $invoice->buyerAddress()->value(),
+				':created_at'             => $now,
+				':updated_at'             => $now,
 			)
 		);
 

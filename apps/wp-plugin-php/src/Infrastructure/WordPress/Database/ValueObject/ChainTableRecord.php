@@ -9,6 +9,7 @@ class ChainTableRecord extends TableRecordBase {
 	public function __construct( stdClass $record ) {
 		$record->chain_id            = (int) $record->chain_id;
 		$record->network_category_id = (int) $record->network_category_id;
+		$record->confirmations       = (int) $record->confirmations;
 		$record->max_logs_range      = (int) $record->max_logs_range;
 
 		$this->import( $record );
@@ -18,7 +19,7 @@ class ChainTableRecord extends TableRecordBase {
 	protected string $name;
 	protected int $network_category_id;
 	protected ?string $rpc_url;
-	protected string $confirmations; // テーブル定義はvarcharなのでstring型で定義する
+	protected int $confirmations; // テーブル定義はint unsignedなのでint型で定義する
 	protected int $max_logs_range;
 	protected ?string $block_explorer_url;
 
@@ -38,7 +39,7 @@ class ChainTableRecord extends TableRecordBase {
 		return $this->rpc_url;
 	}
 
-	public function confirmationsValue(): string {
+	public function confirmationsValue(): int {
 		return $this->confirmations;
 	}
 

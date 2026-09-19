@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
 use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
@@ -32,11 +33,12 @@ class LogTable {
 		$this->wpdb->insert(
 			$this->table_name,
 			array(
-				'level'    => $level->name(),
-				'category' => $category->name(),
-				'message'  => $message,
+				'level'      => $level->name(),
+				'category'   => $category->name(),
+				'message'    => $message,
+				'created_at' => UnixTimestamp::now()->value(),
 			),
-			array( '%s', '%s', '%s' )
+			array( '%s', '%s', '%s', '%d' )
 		);
 	}
 
@@ -47,7 +49,7 @@ class LogTable {
 	 */
 	public function deleteOldRecords( int $expiration_seconds ): void {
 		$table_name = $this->table_name;
-		$cutoff     = gmdate( 'Y-m-d H:i:s', time() - $expiration_seconds );
+		$cutoff     = time() - $expiration_seconds;
 		$sql        = $this->wpdb->named_prepare(
 			"DELETE FROM `{$table_name}` WHERE `created_at` < :cutoff",
 			array( ':cutoff' => $cutoff )
@@ -63,7 +65,7 @@ class LogTable {
 	 */
 	public function selectRecent( int $limit ): array {
 		$sql = $this->wpdb->named_prepare(
-			"SELECT `id`, `created_at`, `level`, `category`, `message` FROM `{$this->table_name}` ORDER BY `created_at` DESC LIMIT :limit",
+			"SELECT `log_id`, `created_at`, `level`, `category`, `message` FROM `{$this->table_name}` ORDER BY `created_at` DESC, `log_id` DESC LIMIT :limit",
 			array( ':limit' => $limit )
 		);
 		return $this->wpdb->get_results( $sql, ARRAY_A ) ?: array();

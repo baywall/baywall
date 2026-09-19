@@ -24,12 +24,16 @@ class UnlockPaywallTransferEventRepository {
 			$chain_id,
 			$event->blockNumber(),
 			$event->blockTimestamp(),
-			$event->transactionHash()
+			$event->transactionHash(),
+			$event->blockHash(),
+			$event->removed()
 		);
 
 		// トークン転送インベント情報を保存
 		$this->unlock_paywall_transfer_event_table->save(
 			$event->invoiceId(),
+			$chain_id,
+			$event->transactionHash(),
 			$event->logIndex(),
 			$event->fromAddress(),
 			$event->toAddress(),

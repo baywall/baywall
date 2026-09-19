@@ -9,50 +9,40 @@ use Baywall\Core\Domain\Repository\AppContractRepository;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
-use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\AppContractTable;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\AppContractTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\AppContractViewRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\AppContractView;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\CrawledBlockTable;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\CrawledBlockTableRecord;
 
 class WpAppContractRepository implements AppContractRepository {
-	public function __construct( AppContractTable $app_contract_table, CrawledBlockTable $crawled_block_table, ChainRepository $chain_repository ) {
-		$this->app_contract_table  = $app_contract_table;
+	public function __construct( AppContractView $app_contract_view, CrawledBlockTable $crawled_block_table, ChainRepository $chain_repository ) {
+		$this->app_contract_view   = $app_contract_view;
 		$this->crawled_block_table = $crawled_block_table;
 		$this->chain_repository    = $chain_repository;
 	}
-	private AppContractTable $app_contract_table;
+	private AppContractView $app_contract_view;
 	private CrawledBlockTable $crawled_block_table;
 	private ChainRepository $chain_repository;
 
 	/** @inheritdoc */
 	public function get( ChainId $chain_id ): ?AppContract {
-		$records = $this->app_contract_table->all();
+		$records = $this->app_contract_view->all();
 		$records = array_filter(
 			$records,
-			fn( $record ) => $record->chainIdValue() === $chain_id->value()
+			fn( $record ) => $record->chain_id === $chain_id->value()
 		);
 		assert( count( $records ) <= 1, '[68E05B97] should return at most one record. - ' . count( $records ) );
 
-		$crawled_block_number_records = $this->crawled_block_table->all();
-		$crawled_block_number_records = array_filter(
-			$crawled_block_number_records,
-			fn( $record ) => $record->chainIdValue() === $chain_id->value()
-		);
-		assert( count( $crawled_block_number_records ) <= 1, '[C5AB3471] should return at most one record. - ' . count( $crawled_block_number_records ) );
-
 		return empty( $records ) ? null : new AppContractImpl(
 			$this->chain_repository->get( $chain_id ),
-			array_values( $records )[0],
-			empty( $crawled_block_number_records ) ? null : array_values( $crawled_block_number_records )[0]
+			array_values( $records )[0]
 		);
 	}
 
 	/** @inheritdoc */
 	public function save( AppContract $app_contract ): void {
 		// コントラクト情報はプラグインインストール時に設定され、以降変更されないため保存処理は不要
-		// $this->app_contract_table->save( $app_contract );
 
 		// クロール済みブロック番号の更新
 		if ( $app_contract->crawledBlockNumber() !== null ) {
@@ -66,12 +56,12 @@ class WpAppContractRepository implements AppContractRepository {
 
 /** @internal */
 class AppContractImpl extends AppContract {
-	public function __construct( Chain $chain, AppContractTableRecord $record, ?CrawledBlockTableRecord $crawled_block_record ) {
+	public function __construct( Chain $chain, AppContractViewRecord $record ) {
 		parent::__construct(
 			$chain,
-			Address::from( $record->addressValue() ),
-			$crawled_block_record ? BlockNumber::fromInt( $crawled_block_record->blockNumberValue() ) : null,
-			$crawled_block_record ? UnixTimestamp::fromMySQL( $crawled_block_record->updatedAtValue() ) : null
+			Address::from( $record->address ),
+			BlockNumber::fromIntNullable( $record->block_number ),
+			$record->updated_at === null ? null : UnixTimestamp::from( $record->updated_at )
 		);
 	}
 }

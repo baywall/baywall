@@ -25,10 +25,10 @@ class V20251106_120_CreateCrawledBlockTable extends MigrationBase {
 		// 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`    timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`    timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`created_at`    bigint     unsigned  NOT NULL,
+				`updated_at`    bigint     unsigned  NOT NULL,
 				`chain_id`      bigint     unsigned  NOT NULL,
-				`block_number`  bigint     unsigned,
+				`block_number`  bigint     unsigned  NOT NULL,
 				PRIMARY KEY (`chain_id`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;

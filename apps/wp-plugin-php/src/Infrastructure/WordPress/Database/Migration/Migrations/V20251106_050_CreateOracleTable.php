@@ -25,13 +25,13 @@ class V20251106_050_CreateOracleTable extends MigrationBase {
 		// 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`created_at`     bigint        unsigned  NOT NULL,
+				`updated_at`     bigint        unsigned  NOT NULL,
 				`chain_id`       bigint        unsigned  NOT NULL,
 				`address`        varchar(191)            NOT NULL,
 				`base_symbol`    varchar(191)            NOT NULL,
 				`quote_symbol`   varchar(191)            NOT NULL,
-				CONSTRAINT `chk_{$this->table_name}_address` CHECK (`address` REGEXP BINARY '^0x[0-9a-f]{40}$'),
+				CONSTRAINT `chk_{$this->table_name}_address` CHECK (CONVERT(`address` USING utf8mb4) COLLATE utf8mb4_bin REGEXP '^0x[0-9a-f]{40}$'),
 				PRIMARY KEY (`chain_id`, `address`),
 				UNIQUE KEY `uq_{$this->table_name}_C269159C` (`chain_id`, `base_symbol`, `quote_symbol`)
 			) {$this->wpdb->get_charset_collate()};

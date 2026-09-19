@@ -31,11 +31,11 @@ class V20251106_060_CreatePaidContentTable extends MigrationBase {
 		// 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`                   timestamp            NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`                   timestamp            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`created_at`                   bigint     unsigned  NOT NULL,
+				`updated_at`                   bigint     unsigned  NOT NULL,
 				`post_id`                      bigint     unsigned  NOT NULL,
 				`paid_content`                 longtext             NOT NULL,
-				`selling_network_category_id`  int,
+				`selling_network_category_id`  int        unsigned,
 				`selling_amount`               decimal(65, 30),
 				`selling_symbol`               varchar(191),
 				PRIMARY KEY (`post_id`)

@@ -25,12 +25,14 @@ class V20251106_070_CreateSellerTable extends MigrationBase {
 		// 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`            timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`            timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`created_at`            bigint        unsigned  NOT NULL,
+				`updated_at`            bigint        unsigned  NOT NULL,
 				`seller_address`        varchar(191)            NOT NULL,
-				`signing_message`       varchar(191)            NOT NULL,
+				`signing_message`       text                    NOT NULL,
 				`signature`             varchar(191)            NOT NULL,
-				CONSTRAINT `chk_{$this->table_name}_seller_address` CHECK (`seller_address` REGEXP BINARY '^0x[0-9a-f]{40}$'),
+				CONSTRAINT `chk_{$this->table_name}_seller_address` CHECK (CONVERT(`seller_address` USING utf8mb4) COLLATE utf8mb4_bin REGEXP '^0x[0-9a-f]{40}$'),
+				-- @see Domain/ValueObject/Signature
+				CONSTRAINT `chk_{$this->table_name}_signature` CHECK (CONVERT(`signature` USING utf8mb4) COLLATE utf8mb4_bin REGEXP '^0x[0-9a-f]{130}$'),
 				PRIMARY KEY (`seller_address`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;

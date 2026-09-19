@@ -18,21 +18,6 @@ class UnixTimestamp implements ValueObject {
 		return new self( $timestamp );
 	}
 
-	public static function fromMySql( string $mysql_datetime ): self {
-		$datetime = DateTimeImmutable::createFromFormat( 'Y-m-d H:i:s', $mysql_datetime );
-		if ( false === $datetime ) {
-			throw new \InvalidArgumentException( '[5D7C87DE] Invalid MySQL DATETIME format: ' . $mysql_datetime );
-		}
-		return self::from( $datetime->getTimestamp() );
-	}
-
-	public static function fromMySqlNullable( ?string $mysql_datetime ): ?self {
-		return $mysql_datetime === null ? null : self::fromMySql( $mysql_datetime );
-	}
-
-	public function toMySqlValue(): string {
-		return ( new DateTimeImmutable() )->setTimestamp( $this->timestamp )->format( 'Y-m-d H:i:s' );
-	}
 	/**
 	 * RFC3339形式の文字列を取得します
 	 *
@@ -60,6 +45,6 @@ class UnixTimestamp implements ValueObject {
 	}
 
 	public function __toString(): string {
-		return $this->toMySqlValue();
+		return (string) $this->timestamp;
 	}
 }

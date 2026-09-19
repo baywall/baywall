@@ -9,6 +9,7 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\Symbol;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\PaidContentTableRecord;
 
@@ -43,20 +44,24 @@ class PaidContentTable {
 	}
 
 	public function set( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryId $selling_network_category_id, ?Amount $selling_amount, ?Symbol $selling_symbol ): void {
+		$now = UnixTimestamp::now()->value();
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}` (
 				`post_id`,
 				`paid_content`,
 				`selling_network_category_id`,
 				`selling_amount`,
-				`selling_symbol`
+				`selling_symbol`,
+				`created_at`,
+				`updated_at`
 			) VALUES (
-				:post_id, :paid_content, :selling_network_category_id, :selling_amount, :selling_symbol
+				:post_id, :paid_content, :selling_network_category_id, :selling_amount, :selling_symbol, :created_at, :updated_at
 			) ON DUPLICATE KEY UPDATE
 				`paid_content` = :paid_content,
 				`selling_network_category_id` = :selling_network_category_id,
 				`selling_amount` = :selling_amount,
-				`selling_symbol` = :selling_symbol
+				`selling_symbol` = :selling_symbol,
+				`updated_at` = :updated_at
 		SQL;
 
 		$sql = $this->wpdb->named_prepare(
@@ -67,6 +72,8 @@ class PaidContentTable {
 				':selling_network_category_id' => $selling_network_category_id ? $selling_network_category_id->value() : null,
 				':selling_amount'              => $selling_amount ? $selling_amount->value() : null,
 				':selling_symbol'              => $selling_symbol ? $selling_symbol->value() : null,
+				':created_at'                  => $now,
+				':updated_at'                  => $now,
 			)
 		);
 

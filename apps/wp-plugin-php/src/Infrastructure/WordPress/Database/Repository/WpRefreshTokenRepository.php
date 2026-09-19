@@ -42,8 +42,8 @@ class WpRefreshTokenRepository implements RefreshTokenRepository {
 		return RefreshToken::create(
 			$refresh_token_string,
 			Address::from( $record->walletAddressValue() ),
-			UnixTimestamp::fromMySql( $record->expiresAtValue() ),
-			UnixTimestamp::fromMySqlNullable( $record->revokedAtValue() )
+			UnixTimestamp::from( $record->expiresAtValue() ),
+			$record->revokedAtValue() !== null ? UnixTimestamp::from( $record->revokedAtValue() ) : null
 		);
 	}
 

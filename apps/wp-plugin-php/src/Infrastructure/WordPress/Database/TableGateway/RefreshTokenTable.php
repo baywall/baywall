@@ -45,14 +45,19 @@ class RefreshTokenTable {
 			throw new \InvalidArgumentException( '[991AECA4] When adding a new refresh token, revoked_at must be null.' );
 		}
 
+		$now = UnixTimestamp::now()->value();
+
 		$result = $this->wpdb->insert(
 			$this->table_name,
 			array(
 				'refresh_token_hash' => WpRefreshTokenHashString::from( $refresh_token->token() )->value(),
 				'wallet_address'     => $refresh_token->walletAddress()->value(),
-				'expires_at'         => $refresh_token->expiresAt()->toMySqlValue(),
+				'expires_at'         => $refresh_token->expiresAt()->value(),
 				'revoked_at'         => null, // 追加時はrevoked_atはNULLで登録
-			)
+				'created_at'         => $now,
+				'updated_at'         => $now,
+			),
+			array( '%s', '%s', '%d', '%d', '%d', '%d' )
 		);
 
 		if ( $result !== 1 ) {
@@ -62,7 +67,7 @@ class RefreshTokenTable {
 
 	public function update( RefreshToken $refresh_token ): void {
 		$revoked_at_value         = $refresh_token->revokedAt() !== null
-			? $refresh_token->revokedAt()->toMySqlValue()
+			? $refresh_token->revokedAt()->value()
 			: null;
 		$refresh_token_hash_value = WpRefreshTokenHashString::from( $refresh_token->token() )->value();
 
@@ -71,10 +76,13 @@ class RefreshTokenTable {
 			array(
 				// ※ `expires_at`は更新しないこと
 				'revoked_at' => $revoked_at_value,
+				'updated_at' => UnixTimestamp::now()->value(),
 			),
 			array(
 				'refresh_token_hash' => $refresh_token_hash_value,
-			)
+			),
+			array( '%d', '%d' ),
+			array( '%s' )
 		);
 
 		if ( $result !== 1 ) {
@@ -97,8 +105,8 @@ class RefreshTokenTable {
 					AND ( `expires_at` < :current_time OR `revoked_at` IS NOT NULL )
 				SQL,
 				array(
-					':target_time'  => $target_time->toMySqlValue(),
-					':current_time' => $current_time->toMySqlValue(),
+					':target_time'  => $target_time->value(),
+					':current_time' => $current_time->value(),
 				)
 			)
 		);

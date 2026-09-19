@@ -7,7 +7,9 @@ use Baywall\Core\Application\Dto\SalesHistoryDto;
 use Baywall\Core\Application\Service\SalesHistoryQueryService;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
+use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\TransactionHash;
 use InvalidArgumentException;
 
 class ResolveSalesHistories {
@@ -28,9 +30,10 @@ class ResolveSalesHistories {
 
 		// 検索条件の構築
 		$condition = new SalesHistorySearchCondition();
-		$condition->setInvoiceId(
-			InvoiceId::fromUlidValueNullable( $args['filter']['invoiceId'] ?? null )
-		);
+		$condition
+			->setInvoiceId( InvoiceId::fromUlidValueNullable( $args['filter']['invoiceId'] ?? null ) )
+			->setChainId( ChainId::fromNullable( $args['filter']['chainId'] ?? null ) )
+			->setTransactionHash( TransactionHash::fromNullable( $args['filter']['txHash'] ?? null ) );
 
 		// 日付フィルタの取得とバリデーション
 		$date_from = isset( $args['filter']['dateFrom'] ) ? (int) $args['filter']['dateFrom'] : null;

@@ -37,25 +37,33 @@ class Erc4361NonceTable {
 	}
 
 	public function save( Address $address, Erc4361NonceString $erc4361_nonce_string, UnixTimestamp $issued_at ): void {
+		$now = UnixTimestamp::now()->value();
 		$sql = $this->wpdb->named_prepare(
 			<<<SQL
 				INSERT INTO `{$this->table_name}` (
 					`wallet_address`,
 					`erc4361_nonce`,
-					`issued_at`
+					`issued_at`,
+					`created_at`,
+					`updated_at`
 				) VALUES (
 					:wallet_address,
 					:erc4361_nonce,
-					:issued_at
+					:issued_at,
+					:created_at,
+					:updated_at
 				)
 				ON DUPLICATE KEY UPDATE
 					`erc4361_nonce` = VALUES(`erc4361_nonce`),
-					`issued_at` = VALUES(`issued_at`)
+					`issued_at` = VALUES(`issued_at`),
+					`updated_at` = VALUES(`updated_at`)
 			SQL,
 			array(
 				':wallet_address' => $address->value(),
 				':erc4361_nonce'  => $erc4361_nonce_string->value(),
-				':issued_at'      => $issued_at->toMySqlValue(),
+				':issued_at'      => $issued_at->value(),
+				':created_at'     => $now,
+				':updated_at'     => $now,
 			)
 		);
 
@@ -81,7 +89,7 @@ class Erc4361NonceTable {
 				DELETE FROM `{$this->table_name}`
 				WHERE `issued_at` < :target_time
 			SQL,
-			array( ':target_time' => $target_time->toMySqlValue() )
+			array( ':target_time' => $target_time->value() )
 		);
 
 		$this->wpdb->query( $sql );

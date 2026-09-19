@@ -5,6 +5,7 @@ namespace Baywall\Core\Infrastructure\Web3\Abi;
 
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\BlockHash;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\Hex;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
@@ -57,7 +58,9 @@ class AppContractAbi extends AbiBase {
 			Address::from( $decoded_event_params['token'] ), // token_address
 			Amount::from( $decoded_event_params['amount']->toString() ), // amount
 			UnlockPaywallTransferType::from( (int) ( $decoded_event_params['transferType'] )->toString() ), // transfer_type
-			UnixTimestamp::from( (int) $decoded_event_params['blockTimestamp']->toString() ) // block_timestamp
+			UnixTimestamp::from( (int) $decoded_event_params['blockTimestamp']->toString() ), // block_timestamp
+			BlockHash::from( $log->blockHash ), // block_hash
+			$log->removed // removed
 		);
 	}
 }

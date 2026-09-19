@@ -25,13 +25,19 @@ class V20251106_045_CreateInvoiceTokenTable extends MigrationBase {
 		// 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`          timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`          timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`created_at`          bigint unsigned NOT NULL,
+				`updated_at`          bigint unsigned NOT NULL,
 				`invoice_id`          varchar(191)  NOT NULL,
 				`invoice_token_hash`  varchar(191)  NOT NULL,
-				`expires_at`          timestamp     NOT NULL,
-				`revoked_at`          timestamp         NULL DEFAULT NULL,
-				PRIMARY KEY (`invoice_token_hash`)
+				`expires_at`          bigint unsigned NOT NULL,
+				`revoked_at`          bigint unsigned   NULL DEFAULT NULL,
+				-- @see Domain/ValueObject/InvoiceId（Crockford Base32。I/L/O/U は使わない）
+				CONSTRAINT `chk_{$this->table_name}_invoice_id` CHECK (CONVERT(`invoice_id` USING utf8mb4) COLLATE utf8mb4_bin REGEXP '^[0-9A-HJKMNP-TV-Z]{26}$'),
+				-- @see Infrastructure/WordPress/ValueObject/WpInvoiceTokenHashString::checkWpInvoiceTokenHashFormat()（`\.` は SQL 文字列リテラルで `.` に潰れるため `[.]` と書く）
+				CONSTRAINT `chk_{$this->table_name}_invoice_token_hash` CHECK (CONVERT(`invoice_token_hash` USING utf8mb4) COLLATE utf8mb4_bin REGEXP '^[0-9]{17}[.][0-9a-f]{64}$'),
+				PRIMARY KEY (`invoice_token_hash`),
+				KEY `idx_{$this->table_name}_C9AF5E8B` (`created_at`),
+				KEY `idx_{$this->table_name}_60BBA227` (`invoice_id`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
 		$this->wpdb->query( $sql );

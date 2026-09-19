@@ -9,6 +9,7 @@ use Baywall\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Amount;
 use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Decimals;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\InvoiceTable;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\PostId;
@@ -48,7 +49,7 @@ class WpInvoiceRepository implements InvoiceRepository {
 class InvoiceImpl extends Invoice {
 	public function __construct( InvoiceTableRecord $invoice_record ) {
 		parent::__construct(
-			InvoiceId::fromUlidValue( $invoice_record->idValue() ),
+			InvoiceId::fromUlidValue( $invoice_record->invoiceIdValue() ),
 			PostId::from( $invoice_record->postIdValue() ),
 			ChainId::from( $invoice_record->chainIdValue() ),
 			Price::from(
@@ -57,6 +58,8 @@ class InvoiceImpl extends Invoice {
 			),
 			Address::from( $invoice_record->sellerAddressValue() ),
 			Address::from( $invoice_record->paymentTokenAddressValue() ),
+			Symbol::from( $invoice_record->paymentTokenSymbolValue() ),
+			Decimals::from( $invoice_record->paymentTokenDecimalsValue() ),
 			Amount::from( $invoice_record->paymentAmountValue() ),
 			Address::from( $invoice_record->buyerAddressValue() ),
 		);

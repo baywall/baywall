@@ -9,14 +9,14 @@ namespace Baywall\Core\Application\Dto;
 class LogDto {
 
 	public int $id;
-	public float $createdAt;
+	public int $createdAt;
 	public string $level;
 	public string $category;
 	public string $message;
 
 	public function __construct(
 		int $id,
-		float $createdAt,
+		int $createdAt,
 		string $level,
 		string $category,
 		string $message

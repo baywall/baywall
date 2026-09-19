@@ -7,24 +7,27 @@ use stdClass;
 
 class InvoiceTableRecord extends TableRecordBase {
 	public function __construct( stdClass $record ) {
-		$record->post_id  = (int) $record->post_id;
-		$record->chain_id = (int) $record->chain_id;
+		$record->post_id                = (int) $record->post_id;
+		$record->chain_id               = (int) $record->chain_id;
+		$record->payment_token_decimals = (int) $record->payment_token_decimals;
 
 		$this->import( $record );
 	}
 
-	protected string $id;
+	protected string $invoice_id;
 	protected int $post_id;
 	protected int $chain_id;
 	protected string $selling_amount;
 	protected string $selling_symbol;
 	protected string $seller_address;
 	protected string $payment_token_address;
+	protected string $payment_token_symbol;
+	protected int $payment_token_decimals;
 	protected string $payment_amount;
 	protected string $buyer_address;
 
-	public function idValue(): string {
-		return $this->id;
+	public function invoiceIdValue(): string {
+		return $this->invoice_id;
 	}
 	public function postIdValue(): int {
 		return $this->post_id;
@@ -43,6 +46,12 @@ class InvoiceTableRecord extends TableRecordBase {
 	}
 	public function paymentTokenAddressValue(): string {
 		return $this->payment_token_address;
+	}
+	public function paymentTokenSymbolValue(): string {
+		return $this->payment_token_symbol;
+	}
+	public function paymentTokenDecimalsValue(): int {
+		return $this->payment_token_decimals;
 	}
 	public function paymentAmountValue(): string {
 		return $this->payment_amount;

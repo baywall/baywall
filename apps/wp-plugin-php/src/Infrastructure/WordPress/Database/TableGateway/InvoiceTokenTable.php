@@ -47,14 +47,19 @@ class InvoiceTokenTable {
 			throw new \InvalidArgumentException( '[41E831F5] When adding a new invoice token, revoked_at must be null.' );
 		}
 
+		$now = UnixTimestamp::now()->value();
+
 		$result = $this->wpdb->insert(
 			$this->table_name,
 			array(
 				'invoice_id'         => $invoice_token->invoiceId()->ulid(),
 				'invoice_token_hash' => WpInvoiceTokenHashString::from( $invoice_token->token() )->value(),
-				'expires_at'         => $invoice_token->expiresAt()->toMySqlValue(),
+				'expires_at'         => $invoice_token->expiresAt()->value(),
 				'revoked_at'         => null, // 追加時はrevoked_atはNULLで登録
-			)
+				'created_at'         => $now,
+				'updated_at'         => $now,
+			),
+			array( '%s', '%s', '%d', '%d', '%d', '%d' )
 		);
 
 		if ( $result !== 1 ) {
@@ -64,7 +69,7 @@ class InvoiceTokenTable {
 
 	public function update( InvoiceToken $invoice_token ): void {
 		$revoked_at_value         = $invoice_token->revokedAt() !== null
-			? $invoice_token->revokedAt()->toMySqlValue()
+			? $invoice_token->revokedAt()->value()
 			: null;
 		$invoice_token_hash_value = WpInvoiceTokenHashString::from( $invoice_token->token() )->value();
 
@@ -73,11 +78,14 @@ class InvoiceTokenTable {
 			array(
 				// ※ `expires_at`は更新しないこと
 				'revoked_at' => $revoked_at_value,
+				'updated_at' => UnixTimestamp::now()->value(),
 			),
 			array(
 				'invoice_id'         => $invoice_token->invoiceId()->ulid(),
 				'invoice_token_hash' => $invoice_token_hash_value,
-			)
+			),
+			array( '%d', '%d' ),
+			array( '%s', '%s' )
 		);
 
 		if ( $result !== 1 ) {
@@ -100,8 +108,8 @@ class InvoiceTokenTable {
 					AND ( `expires_at` < :current_time OR `revoked_at` IS NOT NULL )
 				SQL,
 				array(
-					':target_time'  => $target_time->toMySqlValue(),
-					':current_time' => $current_time->toMySqlValue(),
+					':target_time'  => $target_time->value(),
+					':current_time' => $current_time->value(),
 				)
 			)
 		);

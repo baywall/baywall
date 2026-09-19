@@ -5,7 +5,7 @@ namespace Baywall\Core\Domain\ValueObject;
 
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
-class TransactionHash implements ValueObject {
+class BlockHash implements ValueObject {
 	private function __construct( string $hash ) {
 		$this->hash = $hash;
 	}
@@ -13,7 +13,7 @@ class TransactionHash implements ValueObject {
 	private string $hash;
 
 	/**
-	 * トランザクションハッシュを取得します。
+	 * ブロックハッシュを取得します。
 	 */
 	public function value(): string {
 		return $this->hash;
@@ -22,14 +22,10 @@ class TransactionHash implements ValueObject {
 	public static function from( string $hash ): self {
 		// フォーマットチェック
 		if ( ! preg_match( '/^0x[a-f0-9]{64}$/', $hash ) ) {
-			throw new \InvalidArgumentException( '[7AF48A4D] Invalid transaction hash format: ' . $hash );
+			throw new \InvalidArgumentException( '[843A97F7] Invalid block hash format: ' . $hash );
 		}
 
 		return new self( $hash );
-	}
-
-	public static function fromNullable( ?string $hash ): ?self {
-		return is_null( $hash ) ? null : self::from( $hash );
 	}
 
 	public function equals( self $other ): bool {
@@ -37,7 +33,7 @@ class TransactionHash implements ValueObject {
 	}
 
 	/**
-	 * トランザクションハッシュを文字列として返します。
+	 * ブロックハッシュを文字列として返します。
 	 */
 	public function __toString(): string {
 		return $this->hash;

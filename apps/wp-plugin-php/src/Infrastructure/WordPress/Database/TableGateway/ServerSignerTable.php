@@ -22,7 +22,7 @@ class ServerSignerTable {
 
 	public function get(): ?ServerSignerTableRecord {
 		$sql = <<<SQL
-			SELECT `address`, `base64_key`
+			SELECT `address`, `private_key`
 			FROM `{$this->table_name}`
 		SQL;
 

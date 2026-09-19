@@ -25,14 +25,15 @@ class V20251106_090_CreateTokenTable extends MigrationBase {
 		// 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`created_at`     bigint        unsigned  NOT NULL,
+				`updated_at`     bigint        unsigned  NOT NULL,
 				`chain_id`       bigint        unsigned  NOT NULL,
 				`address`        varchar(191)            NOT NULL,
 				`symbol`         varchar(191)            NOT NULL,
 				`decimals`       int                     NOT NULL,
 				`is_payable`     boolean                 NOT NULL,
-				CONSTRAINT `chk_{$this->table_name}_address` CHECK (`address` REGEXP BINARY '^0x[0-9a-f]{40}$'),
+				CONSTRAINT `chk_{$this->table_name}_address` CHECK (CONVERT(`address` USING utf8mb4) COLLATE utf8mb4_bin REGEXP '^0x[0-9a-f]{40}$'),
+				CONSTRAINT `chk_{$this->table_name}_decimals` CHECK (`decimals` BETWEEN 0 AND 18),
 				PRIMARY KEY (`chain_id`, `address`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;

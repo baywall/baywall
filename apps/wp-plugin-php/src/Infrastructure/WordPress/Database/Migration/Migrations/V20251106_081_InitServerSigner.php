@@ -6,10 +6,12 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 use Baywall\Core\Application\Service\TransactionService;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\PrivateKey;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\Reimpl\Ethers\EthersWallet;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
+use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\PrivateKeyEncryptionType;
 
 class V20251106_081_InitServerSigner extends MigrationBase {
 
@@ -28,8 +30,9 @@ class V20251106_081_InitServerSigner extends MigrationBase {
 	}
 
 	public function up(): void {
+		$now = UnixTimestamp::now()->value();
 		$this->transaction_service->transactional(
-			function () {
+			function () use ( $now ) {
 				// すでにデータが存在する場合はエラー
 				$row_count = $this->wpdb->get_var(
 					"SELECT COUNT(*) FROM `{$this->table_name}`;"
@@ -38,16 +41,19 @@ class V20251106_081_InitServerSigner extends MigrationBase {
 					throw new \RuntimeException( '[0ED45CC0] Server signer already initialized.' );
 				}
 
-				$signer           = EthersWallet::createRandom();
-				$private_key      = PrivateKey::from( $signer->privateKey() );
-				$address          = Address::from( $signer->address() );
-				$base64_key_value = base64_encode( $private_key->value() );
+				$signer            = EthersWallet::createRandom();
+				$private_key       = PrivateKey::from( $signer->privateKey() );
+				$address           = Address::from( $signer->address() );
+				$private_key_value = base64_encode( $private_key->value() );
 
 				$this->wpdb->insert(
 					$this->table_name,
 					array(
-						'address'    => $address->value(),
-						'base64_key' => $base64_key_value,
+						'address'              => $address->value(),
+						'private_key'          => $private_key_value,
+						'private_key_enc_type' => PrivateKeyEncryptionType::from( 1 )->value(),
+						'created_at'           => $now,
+						'updated_at'           => $now,
 					)
 				);
 			}

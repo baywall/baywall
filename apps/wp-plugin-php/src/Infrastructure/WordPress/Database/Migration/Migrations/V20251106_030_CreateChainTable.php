@@ -22,19 +22,19 @@ class V20251106_030_CreateChainTable extends MigrationBase {
 	}
 
 	public function up(): void {
-		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
-		// - `confirmations`は将来的に`latest`のような文字列が入る可能性があるため、`varchar(191)`とする
+		// 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`created_at`                   bigint        unsigned  NOT NULL,
+				`updated_at`                   bigint        unsigned  NOT NULL,
 				`chain_id`                     bigint        unsigned  NOT NULL,
 				`name`                         varchar(191)            NOT NULL,
 				`network_category_id`          int           unsigned  NOT NULL,
-				`rpc_url`                      varchar(191),
-				`confirmations`                varchar(191)            NOT NULL,
-				`block_explorer_url`           varchar(191),
-				PRIMARY KEY (`chain_id`)
+				`rpc_url`                      varchar(512),
+				`confirmations`                int           unsigned  NOT NULL,
+				`block_explorer_url`           varchar(512),
+				PRIMARY KEY (`chain_id`),
+				UNIQUE KEY `uq_{$this->table_name}_A136F88F` (`name`)
 			) {$this->wpdb->get_charset_collate()};
 		SQL;
 		$this->wpdb->query( $sql );

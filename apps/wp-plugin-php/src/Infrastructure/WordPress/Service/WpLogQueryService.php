@@ -21,8 +21,8 @@ class WpLogQueryService implements LogQueryService {
 		return array_map(
 			function ( array $row ) {
 				return new LogDto(
-					(int) $row['id'],
-					(float) ( strtotime( $row['created_at'] ) ?: 0.0 ),
+					(int) $row['log_id'],
+					(int) $row['created_at'],
 					$row['level'],
 					$row['category'],
 					$row['message']

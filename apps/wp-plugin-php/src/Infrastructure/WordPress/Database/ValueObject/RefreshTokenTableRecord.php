@@ -10,14 +10,14 @@ class RefreshTokenTableRecord extends TableRecordBase {
 
 	protected string $refresh_token_hash;
 	protected string $wallet_address;
-	protected string $expires_at;
-	protected ?string $revoked_at;
+	protected int $expires_at;
+	protected ?int $revoked_at;
 
 	public function __construct( stdClass $record ) {
 		$record->refresh_token_hash = (string) $record->refresh_token_hash;
 		$record->wallet_address     = (string) $record->wallet_address;
-		$record->expires_at         = (string) $record->expires_at;
-		$record->revoked_at         = $record->revoked_at !== null ? (string) $record->revoked_at : null;
+		$record->expires_at         = (int) $record->expires_at;
+		$record->revoked_at         = $record->revoked_at !== null ? (int) $record->revoked_at : null;
 
 		$this->import( $record );
 	}
@@ -28,10 +28,10 @@ class RefreshTokenTableRecord extends TableRecordBase {
 	public function walletAddressValue(): string {
 		return $this->wallet_address;
 	}
-	public function expiresAtValue(): string {
+	public function expiresAtValue(): int {
 		return $this->expires_at;
 	}
-	public function revokedAtValue(): ?string {
+	public function revokedAtValue(): ?int {
 		return $this->revoked_at;
 	}
 }

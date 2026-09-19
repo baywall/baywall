@@ -26,8 +26,8 @@ class WpInvoiceTokenRepository implements InvoiceTokenRepository {
 		return $record !== null ? InvoiceToken::create(
 			InvoiceId::fromUlidValue( $record->invoiceIdValue() ),
 			$invoice_token_string,
-			UnixTimestamp::fromMySql( $record->expiresAtValue() ),
-			UnixTimestamp::fromMySqlNullable( $record->revokedAtValue() )
+			UnixTimestamp::from( $record->expiresAtValue() ),
+			$record->revokedAtValue() !== null ? UnixTimestamp::from( $record->revokedAtValue() ) : null
 		) : null;
 	}
 
