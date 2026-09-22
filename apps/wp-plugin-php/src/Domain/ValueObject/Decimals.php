@@ -16,7 +16,7 @@ class Decimals implements ValueObject {
 		}
 		$this->decimals_value = $decimals_value;
 	}
-	private int $decimals_value;
+	private readonly int $decimals_value;
 
 	public function value(): int {
 		return $this->decimals_value;

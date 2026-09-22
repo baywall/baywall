@@ -22,7 +22,7 @@ class LogLevel {
 		$this->log_level_value = $log_level_value;
 	}
 
-	private string $log_level_value;
+	private readonly string $log_level_value;
 
 	public function name(): string {
 		return $this->log_level_value;

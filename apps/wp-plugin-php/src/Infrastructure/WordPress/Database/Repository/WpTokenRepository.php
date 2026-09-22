@@ -13,11 +13,8 @@ use Baywall\Core\Domain\ValueObject\Symbol;
 
 class WpTokenRepository implements TokenRepository {
 
-	public function __construct( TokenTable $token_table ) {
-		$this->token_table = $token_table;
-	}
+	public function __construct( private readonly TokenTable $token_table ) {}
 
-	private TokenTable $token_table;
 
 
 	/** @inheritdoc */

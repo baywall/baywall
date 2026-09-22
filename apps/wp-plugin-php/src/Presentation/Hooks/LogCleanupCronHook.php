@@ -21,12 +21,9 @@ use Psr\Container\ContainerInterface;
  */
 class LogCleanupCronHook extends HookBase {
 
-	private ContainerInterface $container;
 	private const LOCK_NAME = 'E1AE6C84'; // 排他制御用の適当な文字列
 
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
-	}
+	public function __construct( private readonly ContainerInterface $container ) {}
 
 	public function register(): void {
 		// Cronアクション名を取得

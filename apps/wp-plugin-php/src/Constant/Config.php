@@ -6,7 +6,7 @@ namespace Baywall\Core\Constant;
 /**
  * システム固定の設定値を取得するためのクラス
  */
-class Config {
+final class Config {
 	/**
 	 * ERC-4361の署名用メッセージに含めるユーザー向けの説明文。
 	 * トークンの有効期限や別ブラウザなど、認証情報が存在しない状況でリフレッシュトークンを発行する時に使用する。

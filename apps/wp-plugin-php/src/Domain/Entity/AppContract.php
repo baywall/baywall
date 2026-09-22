@@ -9,17 +9,13 @@ use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 class AppContract {
-	protected function __construct( Chain $chain, Address $address, ?BlockNumber $crawled_block_number, ?UnixTimestamp $crawled_block_number_updated_at ) {
-		$this->chain                           = $chain;
-		$this->address                         = $address;
-		$this->crawled_block_number            = $crawled_block_number;
-		$this->crawled_block_number_updated_at = $crawled_block_number_updated_at;
-	}
+	protected function __construct(
+		private readonly Chain $chain,
+		private readonly Address $address,
+		private ?BlockNumber $crawled_block_number,
+		private ?UnixTimestamp $crawled_block_number_updated_at
+	) {}
 
-	private Chain $chain;
-	private Address $address;
-	private ?BlockNumber $crawled_block_number;
-	private ?UnixTimestamp $crawled_block_number_updated_at;
 
 	public function chain(): Chain {
 		return $this->chain;

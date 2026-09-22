@@ -11,11 +11,8 @@ use Psr\Container\ContainerInterface;
 
 class ViewPageHook extends HookBase {
 
-	private ContainerInterface $container;
 
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
-	}
+	public function __construct( private readonly ContainerInterface $container ) {}
 
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueueViewScripts' ) );

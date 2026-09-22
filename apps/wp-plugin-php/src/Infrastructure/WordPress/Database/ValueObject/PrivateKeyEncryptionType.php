@@ -22,7 +22,7 @@ class PrivateKeyEncryptionType implements ValueObject {
 		$this->value = $private_key_enc_type_value;
 	}
 
-	private int $value;
+	private readonly int $value;
 
 	public function value(): int {
 		return $this->value;

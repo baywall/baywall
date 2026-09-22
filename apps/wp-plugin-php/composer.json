@@ -17,6 +17,7 @@
 	"require": {
 		"php": ">=8.1",
 		"ext-bcmath": "*",
+		"ext-mbstring": "*",
 		"web3p/web3.php": "dev-master",
 		"webonyx/graphql-php": "^15.12.5",
 		"yamaneyuta/ulid": "^1.0",

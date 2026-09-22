@@ -11,12 +11,10 @@ use Baywall\Core\Domain\ValueObject\Rate;
 use Baywall\Core\Infrastructure\Web3\Factory\OracleClientFactory;
 
 class OracleRateProvider implements RateProvider {
-	public function __construct( OracleClientFactory $oracle_client_factory, OracleResolver $oracle_resolver ) {
-		$this->oracle_client_factory = $oracle_client_factory;
-		$this->oracle_resolver       = $oracle_resolver;
-	}
-	private OracleClientFactory $oracle_client_factory;
-	private OracleResolver $oracle_resolver;
+	public function __construct(
+		private readonly OracleClientFactory $oracle_client_factory,
+		private readonly OracleResolver $oracle_resolver
+	) {}
 
 	/** @inheritdoc */
 	public function getRate( SymbolPair $symbol_pair ): Rate {

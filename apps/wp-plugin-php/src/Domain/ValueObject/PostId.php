@@ -17,7 +17,7 @@ class PostId implements ValueObject {
 		$this->post_id = $post_id;
 	}
 
-	private int $post_id;
+	private readonly int $post_id;
 
 	public function value(): int {
 		return $this->post_id;

@@ -8,11 +8,8 @@ use DateTimeImmutable;
 
 class UnixTimestamp implements ValueObject {
 
-	private int $timestamp;
 
-	private function __construct( int $timestamp ) {
-		$this->timestamp = $timestamp;
-	}
+	private function __construct( private readonly int $timestamp ) {}
 
 	public static function from( int $timestamp ): self {
 		return new self( $timestamp );

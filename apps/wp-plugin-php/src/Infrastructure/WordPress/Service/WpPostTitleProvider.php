@@ -10,7 +10,6 @@ class WpPostTitleProvider implements PostTitleProvider {
 
 	/** @inheritdoc */
 	public function getPostTitle( PostId $post_id ): ?string {
-		$post = get_post( $post_id->value() );
-		return $post ? $post->post_title : null;
+		return get_post( $post_id->value() )?->post_title;
 	}
 }

@@ -13,7 +13,7 @@ class HtmlContentAnalyzer {
 	}
 
 	/** 投稿内容(HTMLコメントは含まない / HTMLタグを含む) */
-	private string $content;
+	private readonly string $content;
 
 	/**
 	 * 文字数を取得します。

@@ -27,11 +27,8 @@ use Psr\Container\ContainerInterface;
  */
 class GraphQLHook extends HookBase {
 
-	private ContainerInterface $container;
 
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
-	}
+	public function __construct( private readonly ContainerInterface $container ) {}
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'addActionRestApiInit' ) );
@@ -46,8 +43,8 @@ class GraphQLHook extends HookBase {
 			$rest_property->graphQlRoute(),
 			array(
 				'methods'             => 'POST',
-				'callback'            => fn ( \WP_REST_Request $request ) => $this->callback( $request ),
-				'permission_callback' => fn ( \WP_REST_Request $request ) => $this->permissionCallback( $request ),
+				'callback'            => $this->callback( ... ),
+				'permission_callback' => $this->permissionCallback( ... ),
 			)
 		);
 

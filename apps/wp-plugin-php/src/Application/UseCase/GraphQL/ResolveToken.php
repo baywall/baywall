@@ -10,13 +10,11 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 
 class ResolveToken {
 
-	private UserAccessChecker $user_access_checker;
-	private TokenRepository $token_repository;
 
-	public function __construct( UserAccessChecker $user_access_checker, TokenRepository $token_repository ) {
-		$this->user_access_checker = $user_access_checker;
-		$this->token_repository    = $token_repository;
-	}
+	public function __construct(
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly TokenRepository $token_repository
+	) {}
 
 	public function handle( array $root_value, array $args ) {
 		$chain_id = ChainId::from( $args['chainId'] );

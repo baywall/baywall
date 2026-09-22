@@ -7,11 +7,8 @@ use Baywall\Core\Domain\Repository\ServerSignerRepository;
 
 class ResolveServerSigner {
 
-	private ServerSignerRepository $server_signer_repository;
 
-	public function __construct( ServerSignerRepository $server_signer_repository ) {
-		$this->server_signer_repository = $server_signer_repository;
-	}
+	public function __construct( private readonly ServerSignerRepository $server_signer_repository ) {}
 
 	public function handle( array $root_value, array $args ) {
 

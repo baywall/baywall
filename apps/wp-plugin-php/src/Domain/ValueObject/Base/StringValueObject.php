@@ -10,10 +10,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  */
 abstract class StringValueObject implements ValueObject {
 
-	protected function __construct( string $string_value ) {
-		$this->string_value = $string_value;
-	}
-	private string $string_value;
+	protected function __construct( private readonly string $string_value ) {}
 
 	public function value(): string {
 		return $this->string_value;

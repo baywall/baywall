@@ -17,11 +17,8 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\SalesHistoryView
 
 class WpSalesHistoryQueryService implements SalesHistoryQueryService {
 
-	private SalesHistoryView $sales_history_view;
 
-	public function __construct( SalesHistoryView $sales_history_view ) {
-		$this->sales_history_view = $sales_history_view;
-	}
+	public function __construct( private readonly SalesHistoryView $sales_history_view ) {}
 
 	/** @inheritDoc */
 	public function find( SalesHistorySearchCondition $condition ): array {

@@ -10,19 +10,14 @@ use Baywall\Core\Domain\ValueObject\Symbol;
 
 class Token {
 
-	public function __construct( ChainId $chain_id, Address $address, Symbol $symbol, Decimals $decimals, bool $is_payable ) {
-		$this->chain_id   = $chain_id;
-		$this->address    = $address;
-		$this->symbol     = $symbol;
-		$this->decimals   = $decimals;
-		$this->is_payable = $is_payable;
-	}
+	public function __construct(
+		private readonly ChainId $chain_id,
+		private readonly Address $address,
+		private readonly Symbol $symbol,
+		private readonly Decimals $decimals,
+		private bool $is_payable
+	) {}
 
-	private ChainId $chain_id;
-	private Address $address;
-	private Symbol $symbol;
-	private Decimals $decimals;
-	private bool $is_payable;
 
 	public function chainId(): ChainId {
 		return $this->chain_id;

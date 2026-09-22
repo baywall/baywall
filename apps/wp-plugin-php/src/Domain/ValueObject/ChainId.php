@@ -16,7 +16,7 @@ class ChainId implements ValueObject {
 		}
 		$this->chain_id_value = $chain_id_value;
 	}
-	private int $chain_id_value;
+	private readonly int $chain_id_value;
 
 	public function value(): int {
 		return $this->chain_id_value;

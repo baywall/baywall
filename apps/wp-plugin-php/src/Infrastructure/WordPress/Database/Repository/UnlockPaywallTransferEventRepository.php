@@ -9,13 +9,11 @@ use Baywall\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\UnlockPaywallTransactionTable;
 
 class UnlockPaywallTransferEventRepository {
-	private UnlockPaywallTransactionTable $unlock_paywall_transaction_table;
-	private UnlockPaywallTransferEventTable $unlock_paywall_transfer_event_table;
 
-	public function __construct( UnlockPaywallTransactionTable $unlock_paywall_transaction_table, UnlockPaywallTransferEventTable $unlock_paywall_transfer_event_table ) {
-		$this->unlock_paywall_transaction_table    = $unlock_paywall_transaction_table;
-		$this->unlock_paywall_transfer_event_table = $unlock_paywall_transfer_event_table;
-	}
+	public function __construct(
+		private readonly UnlockPaywallTransactionTable $unlock_paywall_transaction_table,
+		private readonly UnlockPaywallTransferEventTable $unlock_paywall_transfer_event_table
+	) {}
 
 	public function save( ChainId $chain_id, UnlockPaywallTransferEvent $event ) {
 		// トランザクション情報を保存

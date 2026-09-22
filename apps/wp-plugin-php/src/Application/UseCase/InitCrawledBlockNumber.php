@@ -17,13 +17,11 @@ class InitCrawledBlockNumber {
 
 	private const SAFETY_MARGIN_SECONDS = 60 * 5; // 5分
 
-	public function __construct( AppContractRepository $app_contract_repository, ChainRepository $chain_repository ) {
-		$this->app_contract_repository = $app_contract_repository;
-		$this->chain_repository        = $chain_repository;
-	}
+	public function __construct(
+		private readonly AppContractRepository $app_contract_repository,
+		private readonly ChainRepository $chain_repository
+	) {}
 
-	private AppContractRepository $app_contract_repository;
-	private ChainRepository $chain_repository;
 
 	public function handle( int $chain_id_value ): void {
 		$chain_id = ChainId::from( $chain_id_value );

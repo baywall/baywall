@@ -10,11 +10,8 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  */
 class BlockNumber implements ValueObject {
 
-	private function __construct( int $block_number_value ) {
-		$this->block_number_value = $block_number_value;
-	}
+	private function __construct( private readonly int $block_number_value ) {}
 
-	private int $block_number_value;
 
 	public static function fromInt( int $block_number_value ): self {
 		return new self( $block_number_value );

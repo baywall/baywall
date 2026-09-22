@@ -9,15 +9,15 @@ use Baywall\Core\Domain\ValueObject\Decimals;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\InvoiceTableRecord;
 
 /**
  * 発行した請求書の情報を保存するテーブル
  */
 class InvoiceTable {
 
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb       = $wpdb;

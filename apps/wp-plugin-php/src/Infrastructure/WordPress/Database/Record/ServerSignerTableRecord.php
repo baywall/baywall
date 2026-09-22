@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Database\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Record;
 
+use Baywall\Core\Infrastructure\WordPress\Database\Record\Base\RecordBase;
 use stdClass;
 
-class ServerSignerTableRecord extends TableRecordBase {
+class ServerSignerTableRecord extends RecordBase {
 	/** @disregard P1009 Undefined type */
 	public function __construct(
 		#[\SensitiveParameter]

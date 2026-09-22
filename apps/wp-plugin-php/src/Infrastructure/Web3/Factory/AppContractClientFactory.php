@@ -10,13 +10,11 @@ use Baywall\Core\Infrastructure\Web3\Client\AppContractClient;
 
 class AppContractClientFactory {
 
-	private AppContractRepository $app_contract_repository;
-	private AppContractAbi $app_contract_abi;
 
-	public function __construct( AppContractRepository $app_contract_repository, AppContractAbi $app_contract_abi ) {
-		$this->app_contract_repository = $app_contract_repository;
-		$this->app_contract_abi        = $app_contract_abi;
-	}
+	public function __construct(
+		private readonly AppContractRepository $app_contract_repository,
+		private readonly AppContractAbi $app_contract_abi
+	) {}
 
 	/**
 	 * 指定したチェーンにのAppコントラクトへ接続するオブジェクトを生成します。

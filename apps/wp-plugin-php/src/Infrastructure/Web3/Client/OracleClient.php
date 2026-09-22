@@ -11,7 +11,7 @@ use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
 class OracleClient {
-	private Contract $oracle_contract;
+	private readonly Contract $oracle_contract;
 
 	public function __construct( RpcUrl $rpc_url, Address $address ) {
 		$this->oracle_contract = ( new ContractFactory() )->create( $rpc_url, ( new OracleAbi() )->get(), $address );
@@ -191,11 +191,11 @@ class OracleRoundData {
 		$this->answered_in_round = $answered_in_round;
 	}
 
-	private BigInteger $round_id;
-	private BigInteger $answer;
-	private BigInteger $started_at;
-	private BigInteger $updated_at;
-	private BigInteger $answered_in_round;
+	private readonly BigInteger $round_id;
+	private readonly BigInteger $answer;
+	private readonly BigInteger $started_at;
+	private readonly BigInteger $updated_at;
+	private readonly BigInteger $answered_in_round;
 
 	public function roundId(): BigInteger {
 		return $this->round_id;

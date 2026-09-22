@@ -9,7 +9,7 @@ use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\ArrayOpt
 
 class WpJwtSecretKeyRepository implements JwtSecretKeyRepository {
 
-	private ArrayOption $option;
+	private readonly ArrayOption $option;
 
 	public function __construct() {
 		$this->option = new ArrayOption( WpOptionName::JWT_SECRET_KEY );

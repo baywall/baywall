@@ -7,7 +7,7 @@ use Baywall\Core\Domain\Entity\InvoiceToken;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTokenTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\InvoiceTokenTableRecord;
 use Baywall\Core\Infrastructure\WordPress\ValueObject\WpInvoiceTokenHashString;
 
 /**
@@ -15,8 +15,8 @@ use Baywall\Core\Infrastructure\WordPress\ValueObject\WpInvoiceTokenHashString;
  */
 class InvoiceTokenTable {
 
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb       = $wpdb;
@@ -68,9 +68,7 @@ class InvoiceTokenTable {
 	}
 
 	public function update( InvoiceToken $invoice_token ): void {
-		$revoked_at_value         = $invoice_token->revokedAt() !== null
-			? $invoice_token->revokedAt()->value()
-			: null;
+		$revoked_at_value         = $invoice_token->revokedAt()?->value();
 		$invoice_token_hash_value = WpInvoiceTokenHashString::from( $invoice_token->token() )->value();
 
 		$result = $this->wpdb->update(

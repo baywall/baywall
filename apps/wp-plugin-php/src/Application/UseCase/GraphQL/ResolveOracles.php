@@ -9,16 +9,11 @@ use Baywall\Core\Domain\Repository\OracleRepository;
 
 class ResolveOracles {
 
-	private UserAccessChecker $user_access_checker;
-	private OracleRepository $oracle_repository;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		OracleRepository $oracle_repository
-	) {
-		$this->user_access_checker = $user_access_checker;
-		$this->oracle_repository   = $oracle_repository;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly OracleRepository $oracle_repository
+	) {}
 
 	public function handle( array $root_value, array $args ): array {
 		$this->user_access_checker->checkHasAdminRole();  // 管理者権限が必要

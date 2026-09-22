@@ -17,7 +17,7 @@ final class BlockTag implements ValueObject {
 	// private const SAFE = 'safe';
 	// private const FINALIZED = 'finalized';
 
-	private string $tag;
+	private readonly string $tag;
 
 	private function __construct( string $tag ) {
 		if ( ! in_array( $tag, array( self::LATEST /*, self::EARLIEST, self::PENDING, self::SAFE, self::FINALIZED */ ), true ) ) {

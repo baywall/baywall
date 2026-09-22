@@ -28,43 +28,20 @@ use Baywall\Core\Infrastructure\Reimpl\Ethers\EthersSigningKey;
 
 class ResolveIssueInvoiceV2 {
 
-	private UserAccessChecker $user_access_checker;
-	private TransactionService $transaction_service;
-	private InvoiceService $invoice_service;
-	private PostRepository $post_repository;
-	private TokenRepository $token_repository;
-	private ServerSignerRepository $server_signer_repository;
-	private InitCrawledBlockNumber $init_crawled_block_number;
-	private InvoiceTokenService $invoice_token_service;
-	private InvoiceTokenCookieProvider $invoice_token_cookie_provider;
-	private CookieWriter $cookie_writer;
-	private SiteService $site_service;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		TransactionService $transaction_service,
-		InvoiceService $invoice_service,
-		PostRepository $post_repository,
-		TokenRepository $token_repository,
-		ServerSignerRepository $server_signer_repository,
-		InitCrawledBlockNumber $init_crawled_block_number,
-		InvoiceTokenService $invoice_token_service,
-		InvoiceTokenCookieProvider $invoice_token_cookie_provider,
-		CookieWriter $cookie_writer,
-		SiteService $site_service
-	) {
-		$this->user_access_checker           = $user_access_checker;
-		$this->transaction_service           = $transaction_service;
-		$this->invoice_service               = $invoice_service;
-		$this->post_repository               = $post_repository;
-		$this->token_repository              = $token_repository;
-		$this->server_signer_repository      = $server_signer_repository;
-		$this->init_crawled_block_number     = $init_crawled_block_number;
-		$this->invoice_token_service         = $invoice_token_service;
-		$this->invoice_token_cookie_provider = $invoice_token_cookie_provider;
-		$this->cookie_writer                 = $cookie_writer;
-		$this->site_service                  = $site_service;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly TransactionService $transaction_service,
+		private readonly InvoiceService $invoice_service,
+		private readonly PostRepository $post_repository,
+		private readonly TokenRepository $token_repository,
+		private readonly ServerSignerRepository $server_signer_repository,
+		private readonly InitCrawledBlockNumber $init_crawled_block_number,
+		private readonly InvoiceTokenService $invoice_token_service,
+		private readonly InvoiceTokenCookieProvider $invoice_token_cookie_provider,
+		private readonly CookieWriter $cookie_writer,
+		private readonly SiteService $site_service
+	) {}
 
 	public function handle( array $root_value, array $args ) {
 		$post_id       = PostId::from( $args['postId'] );

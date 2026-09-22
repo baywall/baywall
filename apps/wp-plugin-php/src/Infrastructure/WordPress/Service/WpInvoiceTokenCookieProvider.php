@@ -11,13 +11,11 @@ use Baywall\Core\Infrastructure\Cookie\Cookie;
 
 class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 
-	private WordPressPropertyProvider $wp_property;
-	private CookieNameProvider $cookie_name_provider;
 
-	public function __construct( WordPressPropertyProvider $wp_property, CookieNameProvider $cookie_name_provider ) {
-		$this->wp_property          = $wp_property;
-		$this->cookie_name_provider = $cookie_name_provider;
-	}
+	public function __construct(
+		private readonly WordPressPropertyProvider $wp_property,
+		private readonly CookieNameProvider $cookie_name_provider
+	) {}
 
 	public function get( InvoiceToken $invoice_token ): Cookie {
 		return Cookie::create(

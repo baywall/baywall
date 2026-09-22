@@ -15,9 +15,9 @@ use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\PrivateKeyEncrypt
 
 class V20251106_081_InitServerSigner extends MigrationBase {
 
-	private TransactionService $transaction_service;
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly TransactionService $transaction_service;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->transaction_service = $transaction_service;

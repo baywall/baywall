@@ -25,7 +25,7 @@ final class Amount implements ValueObject {
 	}
 
 	/** 値を10進数の文字列で保持 */
-	private string $amount_text;
+	private readonly string $amount_text;
 
 	/** 10進数の文字列からインスタンスを作成します。 */
 	public static function from( string $amount_text ): self {

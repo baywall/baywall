@@ -10,11 +10,8 @@ class WpCookieNameProvider implements CookieNameProvider {
 
 	private const SECURE_PREFIX = '__Secure-';
 
-	private WordPressPropertyProvider $wp_property;
 
-	public function __construct( WordPressPropertyProvider $wp_property ) {
-		$this->wp_property = $wp_property;
-	}
+	public function __construct( private readonly WordPressPropertyProvider $wp_property ) {}
 
 	/** @inheritdoc */
 	public function accessToken(): string {

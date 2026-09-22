@@ -17,7 +17,7 @@ final class ThemeSetting implements ValueObject {
 	public const LIGHT = 'light';
 	public const DARK  = 'dark';
 
-	private string $theme;
+	private readonly string $theme;
 
 	private function __construct( string $theme ) {
 		if ( ! in_array( $theme, array( self::AUTO, self::LIGHT, self::DARK ), true ) ) {

@@ -29,13 +29,13 @@ class Chain {
 		$this->block_explorer_url  = $block_explorer_url;
 	}
 
-	private ChainId $id;
-	private string $name;
-	private NetworkCategoryId $network_category_id;
+	private readonly ChainId $id;
+	private readonly string $name;
+	private readonly NetworkCategoryId $network_category_id;
 	private ?RpcUrl $rpc_url;
 	private Confirmations $confirmations;
 	private int $max_logs_range;
-	private ?string $block_explorer_url;
+	private readonly ?string $block_explorer_url;
 
 	public function id(): ChainId {
 		return $this->id;

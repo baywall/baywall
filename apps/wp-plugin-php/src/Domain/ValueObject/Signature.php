@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 /** 署名データ */
 class Signature implements ValueObject {
 
-	private Bytes $value;
+	private readonly Bytes $value;
 
 	private function __construct( Bytes $value ) {
 		$this->checkValue( $value );

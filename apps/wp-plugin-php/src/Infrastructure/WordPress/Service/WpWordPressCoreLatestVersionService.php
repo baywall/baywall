@@ -23,12 +23,8 @@ class WpWordPressCoreLatestVersionService implements WordPressCoreLatestVersionS
 	/** WordPressコアのバージョンチェックAPIのURL */
 	private const API_URL = 'https://api.wordpress.org/core/version-check/1.7/';
 
-	/** @var LocalWordPressCoreLatestVersionService フォールバック用のローカルJSON実装 */
-	private LocalWordPressCoreLatestVersionService $fallback;
 
-	public function __construct( LocalWordPressCoreLatestVersionService $fallback ) {
-		$this->fallback = $fallback;
-	}
+	public function __construct( private readonly LocalWordPressCoreLatestVersionService $fallback ) {}
 
 	/**
 	 * @inheritdoc

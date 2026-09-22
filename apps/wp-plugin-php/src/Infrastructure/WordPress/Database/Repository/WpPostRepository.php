@@ -11,15 +11,12 @@ use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\Symbol;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\PaidContentTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\PaidContentTableRecord;
 
 class WpPostRepository implements PostRepository {
 
-	public function __construct( PaidContentTable $paid_content_table ) {
-		$this->paid_content_table = $paid_content_table;
-	}
+	public function __construct( private readonly PaidContentTable $paid_content_table ) {}
 
-	private PaidContentTable $paid_content_table;
 
 	/** @inheritdoc */
 	public function get( PostId $post_id ): Post {

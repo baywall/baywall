@@ -8,7 +8,7 @@ use Elliptic\EC;
 class EthersWallet {
 
 	/** 署名用のキー */
-	private EthersSigningKey $signing_key;
+	private readonly EthersSigningKey $signing_key;
 
 	/** @disregard P1009 Undefined type */
 	public function __construct(

@@ -11,13 +11,11 @@ use Baywall\Core\Infrastructure\WordPress\Repository\WpLogLevelRepository;
 
 class V20251106_011_InitLogLevelWpOptions extends MigrationBase {
 
-	private TransactionService $transaction_service;
-	private WpLogLevelRepository $log_level_repository;
 
-	public function __construct( TransactionService $transaction_service, WpLogLevelRepository $log_level_repository ) {
-		$this->transaction_service  = $transaction_service;
-		$this->log_level_repository = $log_level_repository;
-	}
+	public function __construct(
+		private readonly TransactionService $transaction_service,
+		private readonly WpLogLevelRepository $log_level_repository
+	) {}
 
 	public function version(): string {
 		return '0.0.1';

@@ -7,13 +7,8 @@ use Baywall\Core\Domain\Service\PluginInfoProvider;
 
 class ResolvePluginVersion {
 
-	private PluginInfoProvider $plugin_info_provider;
 
-	public function __construct(
-		PluginInfoProvider $plugin_info_provider
-	) {
-		$this->plugin_info_provider = $plugin_info_provider;
-	}
+	public function __construct( private readonly PluginInfoProvider $plugin_info_provider ) {}
 
 	public function handle( array $root_value, array $args ): string {
 		// アクセス制御は不要

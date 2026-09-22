@@ -35,10 +35,7 @@ use Throwable;
 
 class PluginUpdateHook extends HookBase {
 
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
-	}
-	private ContainerInterface $container;
+	public function __construct( private readonly ContainerInterface $container ) {}
 
 	public function register(): void {
 		add_action( 'admin_init', array( $this, 'addActionAdminInit' ) );

@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Database\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Record;
 
+use Baywall\Core\Infrastructure\WordPress\Database\Record\Base\RecordBase;
 use stdClass;
 
-class PaidContentTableRecord extends TableRecordBase {
+class PaidContentTableRecord extends RecordBase {
 	public function __construct( stdClass $record ) {
 		$record->post_id                     = (int) $record->post_id;
 		$record->selling_network_category_id = $record->selling_network_category_id === null ? null : (int) $record->selling_network_category_id;

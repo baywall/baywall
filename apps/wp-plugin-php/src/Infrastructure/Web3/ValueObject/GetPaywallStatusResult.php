@@ -7,14 +7,11 @@ use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 
 class GetPaywallStatusResult {
-	public function __construct( bool $is_unlocked, ?InvoiceId $invoice_id, ?BlockNumber $unlocked_block_number ) {
-		$this->is_unlocked           = $is_unlocked;
-		$this->invoice_id            = $invoice_id;
-		$this->unlocked_block_number = $unlocked_block_number;
-	}
-	private bool $is_unlocked;
-	private ?InvoiceId $invoice_id;
-	private ?BlockNumber $unlocked_block_number;
+	public function __construct(
+		private readonly bool $is_unlocked,
+		private readonly ?InvoiceId $invoice_id,
+		private readonly ?BlockNumber $unlocked_block_number
+	) {}
 
 	/** ペイウォールが解除済みかどうかを取得します。 */
 	public function isUnlocked(): bool {

@@ -19,37 +19,18 @@ class AppContractCrawlService {
 	private const LOCK_NAME            = '6cb0475a-47f7-4468-b733-c7a97e34802b';
 	private const LOCK_TIMEOUT_SECONDS = 0;
 
-	private AppLogger $logger;
-	private LockService $lock_service;
-	private TransactionService $transaction_service;
-	private BlockNumberProvider $block_number_provider;
-	private AppContractRepository $app_contract_repository;
-	private AppContractClientFactory $app_contract_client_factory;
-	private ServerSignerRepository $server_signer_repository;
-	private UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository;
-	private ChainRepository $chain_repository;
 
 	public function __construct(
-		AppLogger $logger,
-		LockService $lock_service,
-		TransactionService $transaction_service,
-		BlockNumberProvider $block_number_provider,
-		AppContractRepository $app_contract_repository,
-		AppContractClientFactory $app_contract_client_factory,
-		ServerSignerRepository $server_signer_repository,
-		UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository,
-		ChainRepository $chain_repository
-	) {
-		$this->logger                                   = $logger;
-		$this->lock_service                             = $lock_service;
-		$this->transaction_service                      = $transaction_service;
-		$this->block_number_provider                    = $block_number_provider;
-		$this->app_contract_repository                  = $app_contract_repository;
-		$this->app_contract_client_factory              = $app_contract_client_factory;
-		$this->server_signer_repository                 = $server_signer_repository;
-		$this->unlock_paywall_transfer_event_repository = $unlock_paywall_transfer_event_repository;
-		$this->chain_repository                         = $chain_repository;
-	}
+		private readonly AppLogger $logger,
+		private readonly LockService $lock_service,
+		private readonly TransactionService $transaction_service,
+		private readonly BlockNumberProvider $block_number_provider,
+		private readonly AppContractRepository $app_contract_repository,
+		private readonly AppContractClientFactory $app_contract_client_factory,
+		private readonly ServerSignerRepository $server_signer_repository,
+		private readonly UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository,
+		private readonly ChainRepository $chain_repository
+	) {}
 
 	/**
 	 * Appコントラクトのログを取得します

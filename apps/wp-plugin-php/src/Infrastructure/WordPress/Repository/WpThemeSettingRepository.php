@@ -12,7 +12,7 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
  */
 class WpThemeSettingRepository implements ThemeSettingRepository {
 
-	private string $option_name;
+	private readonly string $option_name;
 
 	public function __construct() {
 		$this->option_name = WpOptionName::THEME;

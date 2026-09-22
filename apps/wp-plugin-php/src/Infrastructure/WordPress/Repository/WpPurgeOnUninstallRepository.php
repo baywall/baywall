@@ -12,7 +12,7 @@ use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\BoolOpti
  */
 class WpPurgeOnUninstallRepository implements PurgeOnUninstallRepository {
 
-	private BoolOption $option;
+	private readonly BoolOption $option;
 
 	public function __construct() {
 		$this->option = new BoolOption( WpOptionName::PURGE_ON_UNINSTALL );

@@ -9,14 +9,12 @@ use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
 use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
 
 class AppLogger {
-	public function __construct( Logger $logger, LogLevelRepository $log_level_repository ) {
-		$this->logger               = $logger;
-		$this->log_level_repository = $log_level_repository;
-	}
-	private Logger $logger;
-	private LogLevelRepository $log_level_repository;
+	public function __construct(
+		private readonly Logger $logger,
+		private readonly LogLevelRepository $log_level_repository
+	) {}
 
-	private function log( LogLevel $level, $message_or_exception ): void {
+	private function log( LogLevel $level, string|\Throwable $message_or_exception ): void {
 		try {
 			$current_log_level = $this->log_level_repository->get( LogCategory::app() );
 			if ( $current_log_level->allows( $level ) ) {
@@ -34,16 +32,16 @@ class AppLogger {
 		}
 	}
 
-	public function debug( $message_or_exception ): void {
+	public function debug( string|\Throwable $message_or_exception ): void {
 		$this->log( LogLevel::debug(), $message_or_exception );
 	}
-	public function info( $message_or_exception ): void {
+	public function info( string|\Throwable $message_or_exception ): void {
 		$this->log( LogLevel::info(), $message_or_exception );
 	}
-	public function warn( $message_or_exception ): void {
+	public function warn( string|\Throwable $message_or_exception ): void {
 		$this->log( LogLevel::warn(), $message_or_exception );
 	}
-	public function error( $message_or_exception ): void {
+	public function error( string|\Throwable $message_or_exception ): void {
 		$this->log( LogLevel::error(), $message_or_exception );
 	}
 }

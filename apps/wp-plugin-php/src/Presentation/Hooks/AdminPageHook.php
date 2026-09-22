@@ -13,11 +13,8 @@ use Psr\Container\ContainerInterface;
 
 class AdminPageHook extends HookBase {
 
-	private ContainerInterface $container;
 
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
-	}
+	public function __construct( private readonly ContainerInterface $container ) {}
 
 	public function register(): void {
 		// 管理画面のメニュー追加。

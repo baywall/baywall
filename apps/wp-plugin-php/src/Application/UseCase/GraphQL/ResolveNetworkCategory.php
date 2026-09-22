@@ -12,22 +12,13 @@ use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 
 class ResolveNetworkCategory {
 
-	private UserAccessChecker $user_access_checker;
-	private ChainRepository $chain_repository;
-	private NetworkCategoryRepository $network_category_repository;
-	private SymbolService $symbol_service;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		ChainRepository $chain_repository,
-		NetworkCategoryRepository $network_category_repository,
-		SymbolService $symbol_service
-	) {
-		$this->user_access_checker         = $user_access_checker;
-		$this->chain_repository            = $chain_repository;
-		$this->network_category_repository = $network_category_repository;
-		$this->symbol_service              = $symbol_service;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly ChainRepository $chain_repository,
+		private readonly NetworkCategoryRepository $network_category_repository,
+		private readonly SymbolService $symbol_service
+	) {}
 
 	public function handle( array $root_value, array $args ): array {
 

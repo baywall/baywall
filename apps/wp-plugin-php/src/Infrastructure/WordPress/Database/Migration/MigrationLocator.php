@@ -14,8 +14,8 @@ class MigrationLocator {
 
 	const MIGRATIONS_DIR = __DIR__ . '/Migrations/';
 
-	private ContainerInterface $container;
-	private NamespaceParser $namespace_parser;
+	private readonly ContainerInterface $container;
+	private readonly NamespaceParser $namespace_parser;
 
 	public function __construct( ContainerInterface $container ) {
 		$this->container        = $container;

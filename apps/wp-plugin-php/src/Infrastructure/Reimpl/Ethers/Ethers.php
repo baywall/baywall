@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\Reimpl\Ethers;
 use Elliptic\EC;
 use kornrunner\Keccak;
 
-class Ethers {
+final class Ethers {
 	/** EIP191のメッセージプレフィックス */
 	public const MESSAGE_PREFIX = "\x19Ethereum Signed Message:\n";
 

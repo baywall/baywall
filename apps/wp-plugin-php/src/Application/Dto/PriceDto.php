@@ -5,11 +5,9 @@ namespace Baywall\Core\Application\Dto;
 
 /** 価格 */
 class PriceDto {
-	public string $amount;
-	public string $symbol;
 
-	public function __construct( string $amount, string $symbol ) {
-		$this->amount = $amount;
-		$this->symbol = $symbol;
-	}
+	public function __construct(
+		public readonly string $amount,
+		public readonly string $symbol
+	) {}
 }

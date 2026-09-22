@@ -17,31 +17,16 @@ use Baywall\Core\Domain\ValueObject\PostId;
 
 class InvoiceService {
 
-	private PostRepository $post_repository;
-	private PriceExchangeService $price_exchange_service;
-	private TokenAmountConverter $token_amount_converter;
-	private SellerRepository $seller_repository;
-	private InvoiceRepository $invoice_repository;
-	private InvoiceTokenRepository $invoice_token_repository;
-	private PausedRepository $paused_repository;
 
 	public function __construct(
-		PostRepository $post_repository,
-		PriceExchangeService $price_exchange_service,
-		TokenAmountConverter $token_amount_converter,
-		SellerRepository $seller_repository,
-		InvoiceRepository $invoice_repository,
-		InvoiceTokenRepository $invoice_token_repository,
-		PausedRepository $paused_repository
-	) {
-		$this->post_repository          = $post_repository;
-		$this->price_exchange_service   = $price_exchange_service;
-		$this->token_amount_converter   = $token_amount_converter;
-		$this->seller_repository        = $seller_repository;
-		$this->invoice_repository       = $invoice_repository;
-		$this->invoice_token_repository = $invoice_token_repository;
-		$this->paused_repository        = $paused_repository;
-	}
+		private readonly PostRepository $post_repository,
+		private readonly PriceExchangeService $price_exchange_service,
+		private readonly TokenAmountConverter $token_amount_converter,
+		private readonly SellerRepository $seller_repository,
+		private readonly InvoiceRepository $invoice_repository,
+		private readonly InvoiceTokenRepository $invoice_token_repository,
+		private readonly PausedRepository $paused_repository
+	) {}
 
 	/** 請求書トークンの文字列から請求書を取得します。 */
 	public function getByInvoiceTokenString( InvoiceTokenString $invoice_token_string ): Invoice {

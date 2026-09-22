@@ -15,15 +15,12 @@ use WP_Block;
 /** WordPressのGutenberg関連のサービスを提供します。 */
 class GutenbergService {
 
-	private PostRepository $post_repository;
-	private BlockNameProvider $block_name_provider;
-	private ThemeSettingRepository $theme_setting_repository;
 
-	public function __construct( PostRepository $post_repository, BlockNameProvider $block_name_provider, ThemeSettingRepository $theme_setting_repository ) {
-		$this->post_repository          = $post_repository;
-		$this->block_name_provider      = $block_name_provider;
-		$this->theme_setting_repository = $theme_setting_repository;
-	}
+	public function __construct(
+		private readonly PostRepository $post_repository,
+		private readonly BlockNameProvider $block_name_provider,
+		private readonly ThemeSettingRepository $theme_setting_repository
+	) {}
 
 	public function getWidgetAttributes( WP_Block $block ): WidgetAttributes {
 		assert( $block->name === $this->block_name_provider->get()->value(), '[8F0F589D]' );

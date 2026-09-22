@@ -12,7 +12,7 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
  */
 class WpPausedRepository implements PausedRepository {
 
-	private BoolOption $option;
+	private readonly BoolOption $option;
 
 	public function __construct() {
 		$this->option = new BoolOption( WpOptionName::PAUSED );

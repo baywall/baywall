@@ -6,13 +6,11 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
 class Price implements ValueObject {
-	private function __construct( Amount $amount, Symbol $symbol ) {
-		$this->amount = $amount;
-		$this->symbol = $symbol;
-	}
+	private function __construct(
+		private readonly Amount $amount,
+		private readonly Symbol $symbol
+	) {}
 
-	private Amount $amount;
-	private Symbol $symbol;
 
 	/**
 	 * 金額の数量を取得します。

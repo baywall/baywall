@@ -12,16 +12,11 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 
 class ResolveTokens {
 
-	private UserAccessChecker $user_access_checker;
-	private TokenRepository $token_repository;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		TokenRepository $token_repository
-	) {
-		$this->user_access_checker = $user_access_checker;
-		$this->token_repository    = $token_repository;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly TokenRepository $token_repository
+	) {}
 
 	/**
 	 * サイトに登録されているトークン一覧を取得します。

@@ -19,11 +19,8 @@ abstract class RefreshTokenService {
 	/** リフレッシュトークンの有効期限を取得します */
 	abstract protected function getExpiresAt(): UnixTimestamp;
 
-	private RefreshTokenRepository $refresh_token_repository;
 
-	protected function __construct( RefreshTokenRepository $refresh_token_repository ) {
-		$this->refresh_token_repository = $refresh_token_repository;
-	}
+	protected function __construct( private readonly RefreshTokenRepository $refresh_token_repository ) {}
 
 	/**
 	 * リフレッシュトークンを発行します

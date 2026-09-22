@@ -17,7 +17,7 @@ class BlockHeight implements ValueObject {
 		$this->block_height_value = $block_height_value;
 	}
 
-	private int $block_height_value;
+	private readonly int $block_height_value;
 
 	public static function from( int $block_height_value ): self {
 		return new self( $block_height_value );

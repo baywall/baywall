@@ -7,19 +7,16 @@ use Baywall\Core\Domain\Repository\SellerRepository;
 
 class ResolveSeller {
 
-	private SellerRepository $seller_repository;
 
-	public function __construct( SellerRepository $seller_repository ) {
-		$this->seller_repository = $seller_repository;
-	}
+	public function __construct( private readonly SellerRepository $seller_repository ) {}
 
 	public function handle( array $root_value, array $args ) {
 		$seller = $this->seller_repository->get();
 
 		return array(
-			'address'        => $seller ? $seller->address()->value() : null,
-			'signingMessage' => $seller ? $seller->signingMessage()->value() : null,
-			'signature'      => $seller ? $seller->signature()->hex()->value() : null,
+			'address'        => $seller?->address()->value(),
+			'signingMessage' => $seller?->signingMessage()->value(),
+			'signature'      => $seller?->signature()->hex()->value(),
 		);
 	}
 }

@@ -20,27 +20,18 @@ use Baywall\Core\Infrastructure\Web3\Service\SignatureService;
 /** ERC-4361の署名を検証してアクセストークン(+リフレッシュトークン)を発行するクラス */
 class ResolveIssueAccessTokenByErc4361Signature {
 
-	private TransactionService $transaction_service;
-	private Erc4361Service $erc4361_service;
-	private Erc4361NonceRepository $erc4361_nonce_repository;
-	private SignatureService $signature_service;
-	private RefreshTokenService $refresh_token_service;
-	private RefreshTokenCookieProvider $refresh_token_cookie_provider;
-	private AccessTokenCookieProvider $access_token_cookie_provider;
-	private AccessTokenService $access_token_service;
-	private CookieWriter $cookie_writer;
 
-	public function __construct( TransactionService $transaction_service, Erc4361Service $erc4361_service, Erc4361NonceRepository $erc4361_nonce_repository, SignatureService $signature_service, RefreshTokenService $refresh_token_service, RefreshTokenCookieProvider $refresh_token_cookie_provider, AccessTokenCookieProvider $access_token_cookie_provider, AccessTokenService $access_token_service, CookieWriter $cookie_writer ) {
-		$this->transaction_service           = $transaction_service;
-		$this->erc4361_service               = $erc4361_service;
-		$this->erc4361_nonce_repository      = $erc4361_nonce_repository;
-		$this->signature_service             = $signature_service;
-		$this->refresh_token_service         = $refresh_token_service;
-		$this->refresh_token_cookie_provider = $refresh_token_cookie_provider;
-		$this->access_token_cookie_provider  = $access_token_cookie_provider;
-		$this->access_token_service          = $access_token_service;
-		$this->cookie_writer                 = $cookie_writer;
-	}
+	public function __construct(
+		private readonly TransactionService $transaction_service,
+		private Erc4361Service $erc4361_service,
+		private Erc4361NonceRepository $erc4361_nonce_repository,
+		private readonly SignatureService $signature_service,
+		private readonly RefreshTokenService $refresh_token_service,
+		private readonly RefreshTokenCookieProvider $refresh_token_cookie_provider,
+		private readonly AccessTokenCookieProvider $access_token_cookie_provider,
+		private readonly AccessTokenService $access_token_service,
+		private readonly CookieWriter $cookie_writer
+	) {}
 
 	public function handle( array $root_value, array $args ) {
 		$address   = Address::from( $args['address'] );

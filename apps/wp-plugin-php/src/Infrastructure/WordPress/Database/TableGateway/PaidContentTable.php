@@ -11,15 +11,15 @@ use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\Symbol;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\PaidContentTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\PaidContentTableRecord;
 
 /**
  * 有料記事の情報を記録するテーブル
  */
 class PaidContentTable {
 
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb       = $wpdb;
@@ -68,10 +68,10 @@ class PaidContentTable {
 			$sql,
 			array(
 				':post_id'                     => $post_id->value(),
-				':paid_content'                => $paid_content ? $paid_content->value() : null,
-				':selling_network_category_id' => $selling_network_category_id ? $selling_network_category_id->value() : null,
-				':selling_amount'              => $selling_amount ? $selling_amount->value() : null,
-				':selling_symbol'              => $selling_symbol ? $selling_symbol->value() : null,
+				':paid_content'                => $paid_content?->value(),
+				':selling_network_category_id' => $selling_network_category_id?->value(),
+				':selling_amount'              => $selling_amount?->value(),
+				':selling_symbol'              => $selling_symbol?->value(),
 				':created_at'                  => $now,
 				':updated_at'                  => $now,
 			)

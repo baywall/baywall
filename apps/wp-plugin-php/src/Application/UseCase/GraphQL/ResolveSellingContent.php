@@ -11,22 +11,13 @@ use Baywall\Core\Domain\ValueObject\PostId;
 
 class ResolveSellingContent {
 
-	private AppLogger $logger;
-	private PostRepository $post_repository;
-	private UserAccessChecker $user_access_checker;
-	private PaidContentService $paid_content_service;
 
 	public function __construct(
-		AppLogger $logger,
-		PostRepository $post_repository,
-		UserAccessChecker $user_access_checker,
-		PaidContentService $paid_content_service
-	) {
-		$this->logger               = $logger;
-		$this->post_repository      = $post_repository;
-		$this->user_access_checker  = $user_access_checker;
-		$this->paid_content_service = $paid_content_service;
-	}
+		private readonly AppLogger $logger,
+		private readonly PostRepository $post_repository,
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly PaidContentService $paid_content_service
+	) {}
 
 	public function handle( array $root_value, array $args ) {
 		$post_id = PostId::from( $args['postId'] );

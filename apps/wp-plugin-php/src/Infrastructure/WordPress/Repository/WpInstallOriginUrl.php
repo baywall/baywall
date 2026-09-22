@@ -10,7 +10,7 @@ use RuntimeException;
 
 class WpInstallOriginUrl implements InstallOriginUrl {
 
-	private StringOption $option;
+	private readonly StringOption $option;
 
 	public function __construct() {
 		$this->option = new StringOption( WpOptionName::INSTALL_ORIGIN_URL );

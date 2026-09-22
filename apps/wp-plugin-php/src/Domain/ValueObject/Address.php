@@ -18,7 +18,7 @@ final class Address implements ValueObject {
 		// アドレスは常に小文字で保持する
 		$this->address_value = strtolower( $address_value );
 	}
-	private string $address_value;
+	private readonly string $address_value;
 
 	public static function from( string $address_value ): self {
 		return new self( $address_value );

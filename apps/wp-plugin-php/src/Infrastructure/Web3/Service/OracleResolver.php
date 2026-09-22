@@ -10,13 +10,11 @@ use Baywall\Core\Domain\Specification\OraclesFilter;
 use Baywall\Core\Domain\ValueObject\SymbolPair;
 
 class OracleResolver {
-	private ChainRepository $chain_repository;
-	private OracleRepository $oracle_repository;
 
-	public function __construct( ChainRepository $chain_repository, OracleRepository $oracle_repository ) {
-		$this->chain_repository  = $chain_repository;
-		$this->oracle_repository = $oracle_repository;
-	}
+	public function __construct(
+		private readonly ChainRepository $chain_repository,
+		private readonly OracleRepository $oracle_repository
+	) {}
 
 	/** `レート取得用のオラクル`を取得します。 */
 	public function resolveRateOracle( SymbolPair $symbol_pair ): ?Oracle {

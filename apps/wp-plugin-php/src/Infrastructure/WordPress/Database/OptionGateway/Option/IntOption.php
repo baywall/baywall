@@ -9,7 +9,7 @@ class IntOption {
 		$this->option = new Option( $option_key_name );
 	}
 
-	private Option $option;
+	private readonly Option $option;
 
 	public function get( $default = null ): ?int {
 		$ret = $this->option->get( $default );

@@ -12,7 +12,7 @@ class BlockName {
 		$this->checkBlockNameValue( $block_name_value );
 		$this->block_name_value = $block_name_value;
 	}
-	private string $block_name_value;
+	private readonly string $block_name_value;
 
 	public function value(): string {
 		return $this->block_name_value;

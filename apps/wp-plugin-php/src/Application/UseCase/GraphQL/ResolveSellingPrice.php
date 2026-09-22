@@ -9,16 +9,11 @@ use Baywall\Core\Domain\ValueObject\PostId;
 
 class ResolveSellingPrice {
 
-	private PostRepository $post_repository;
-	private UserAccessChecker $user_access_checker;
 
 	public function __construct(
-		PostRepository $post_repository,
-		UserAccessChecker $user_access_checker
-	) {
-		$this->post_repository     = $post_repository;
-		$this->user_access_checker = $user_access_checker;
-	}
+		private readonly PostRepository $post_repository,
+		private readonly UserAccessChecker $user_access_checker
+	) {}
 
 	public function handle( array $root_value, array $args ) {
 

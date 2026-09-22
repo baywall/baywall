@@ -21,9 +21,9 @@ final class JwtPayload extends ArrayValueObject {
 	/** 有効期限(UNIXタイムスタンプ) */
 	private const PAYLOAD_KEY_EXPIRES_AT = 'exp';
 
-	private Address $wallet_address;
-	private UnixTimestamp $issued_at;
-	private UnixTimestamp $expires_at;
+	private readonly Address $wallet_address;
+	private readonly UnixTimestamp $issued_at;
+	private readonly UnixTimestamp $expires_at;
 
 	private function __construct( Address $wallet_address, UnixTimestamp $issued_at, UnixTimestamp $expires_at ) {
 		$jwt_payload_value = array(

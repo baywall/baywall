@@ -18,7 +18,7 @@ class Hex implements ValueObject {
 		}
 		$this->hex_value = $hex_value;
 	}
-	private string $hex_value;
+	private readonly string $hex_value;
 
 	public function value(): string {
 		return $this->hex_value;

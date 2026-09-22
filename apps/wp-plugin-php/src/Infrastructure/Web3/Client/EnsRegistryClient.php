@@ -24,7 +24,7 @@ class EnsRegistryClient {
 	 */
 	private const REGISTRY_ADDRESS = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 
-	private Contract $registry;
+	private readonly Contract $registry;
 
 	public function __construct( RpcUrl $rpc_url ) {
 		$this->registry = ( new ContractFactory() )->create( $rpc_url, ( new EnsRegistryAbi() )->get(), Address::from( self::REGISTRY_ADDRESS ) );

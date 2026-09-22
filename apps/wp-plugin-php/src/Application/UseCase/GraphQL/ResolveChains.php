@@ -11,16 +11,11 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 
 class ResolveChains {
 
-	private UserAccessChecker $user_access_checker;
-	private ChainRepository $chain_repository;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		ChainRepository $chain_repository
-	) {
-		$this->user_access_checker = $user_access_checker;
-		$this->chain_repository    = $chain_repository;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly ChainRepository $chain_repository
+	) {}
 
 	public function handle( array $root_value, array $args ): array {
 		$this->user_access_checker->checkHasAdminRole();  // 管理者権限が必要

@@ -6,11 +6,8 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
 class BlockHash implements ValueObject {
-	private function __construct( string $hash ) {
-		$this->hash = $hash;
-	}
+	private function __construct( private readonly string $hash ) {}
 
-	private string $hash;
 
 	/**
 	 * ブロックハッシュを取得します。

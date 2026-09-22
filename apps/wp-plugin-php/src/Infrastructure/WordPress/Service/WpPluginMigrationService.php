@@ -11,17 +11,13 @@ use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInstalledPluginV
 
 class WpPluginMigrationService implements PluginMigrationService {
 
-	private WpInstalledPluginVersionRepository $plugin_version_option;
-	private WpPluginInfoProvider $plugin_info_provider;
-	private MigrationLocator $locator;
-	private AppLogger $logger;
 
-	public function __construct( WpInstalledPluginVersionRepository $plugin_version_option, WpPluginInfoProvider $plugin_info_provider, MigrationLocator $locator, AppLogger $logger ) {
-		$this->plugin_version_option = $plugin_version_option;
-		$this->plugin_info_provider  = $plugin_info_provider;
-		$this->locator               = $locator;
-		$this->logger                = $logger;
-	}
+	public function __construct(
+		private readonly WpInstalledPluginVersionRepository $plugin_version_option,
+		private readonly WpPluginInfoProvider $plugin_info_provider,
+		private readonly MigrationLocator $locator,
+		private readonly AppLogger $logger
+	) {}
 
 	/** @inheritdoc */
 	public function migrate(): void {

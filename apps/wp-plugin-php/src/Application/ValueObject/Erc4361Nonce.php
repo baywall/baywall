@@ -8,13 +8,11 @@ use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 class Erc4361Nonce implements ValueObject {
 
-	private Erc4361NonceString $nonce_string;
-	private UnixTimestamp $issued_at;
 
-	private function __construct( Erc4361NonceString $nonce_string, UnixTimestamp $issued_at ) {
-		$this->nonce_string = $nonce_string;
-		$this->issued_at    = $issued_at;
-	}
+	private function __construct(
+		private Erc4361NonceString $nonce_string,
+		private readonly UnixTimestamp $issued_at
+	) {}
 
 	public static function from( Erc4361NonceString $nonce_string, UnixTimestamp $issued_at ): self {
 		return new self( $nonce_string, $issued_at );

@@ -12,11 +12,8 @@ use GraphQL\Validator\ValidationContext;
  */
 class MutationFieldLimitRule extends ValidationRule {
 
-	private int $max_fields;
 
-	public function __construct( int $max_fields ) {
-		$this->max_fields = $max_fields;
-	}
+	public function __construct( private readonly int $max_fields ) {}
 
 	public function getVisitor( ValidationContext $context ): array {
 		return array(

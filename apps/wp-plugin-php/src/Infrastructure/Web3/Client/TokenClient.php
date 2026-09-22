@@ -15,7 +15,7 @@ class TokenClient {
 	public function __construct( RpcUrl $rpc_url, Address $contract_address ) {
 		$this->token = ( new ContractFactory() )->create( $rpc_url, ( new TokenAbi() )->get(), $contract_address );
 	}
-	private Contract $token;
+	private readonly Contract $token;
 
 	/**
 	 * トークンの小数点以下桁数を取得します。

@@ -16,8 +16,8 @@ class WpOracleRateCache implements OracleRateCache {
 		$this->expiration = $expiration_provider->rate();
 	}
 
-	private TransientStorage $storage;
-	private int $expiration;
+	private readonly TransientStorage $storage;
+	private readonly int $expiration;
 
 	public function set( Oracle $oracle, Rate $rate ): void {
 		$transient_key = $this->transientKey( $oracle );

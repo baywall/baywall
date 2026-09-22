@@ -7,7 +7,7 @@ use Baywall\Core\Domain\Entity\Oracle;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\OracleTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\OracleTableRecord;
 use stdClass;
 
 /**
@@ -15,8 +15,8 @@ use stdClass;
  */
 class OracleTable {
 
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb       = $wpdb;

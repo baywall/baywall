@@ -17,14 +17,9 @@ use Baywall\Core\Constant\Config;
 class WpPluginPackageChecksumVerifier {
 
 	public function __construct(
-		WpAppManifestFetcher $manifest_fetcher,
-		WpPluginInfoProvider $plugin_info_provider
-	) {
-		$this->manifest_fetcher     = $manifest_fetcher;
-		$this->plugin_info_provider = $plugin_info_provider;
-	}
-	private WpAppManifestFetcher $manifest_fetcher;
-	private WpPluginInfoProvider $plugin_info_provider;
+		private readonly WpAppManifestFetcher $manifest_fetcher,
+		private readonly WpPluginInfoProvider $plugin_info_provider
+	) {}
 
 	/**
 	 * `upgrader_pre_download`フィルターでの事前検証を行います。
@@ -32,9 +27,8 @@ class WpPluginPackageChecksumVerifier {
 	 * @param string       $package    パッケージのURL
 	 * @param \WP_Upgrader $upgrader   アップグレーダーのインスタンス（本検証では未使用）
 	 * @param array        $hook_extra フィルタに渡された追加引数（type/plugin等）
-	 * @return false|string|\WP_Error 対象外はfalse、検証成功時は一時ファイルパス、検証失敗時はWP_Error
 	 */
-	public function verifyPreDownload( string $package, \WP_Upgrader $upgrader, array $hook_extra ) {
+	public function verifyPreDownload( string $package, \WP_Upgrader $upgrader, array $hook_extra ): string|false|\WP_Error {
 		// 対象外は素通し（他プラグイン・コア・テーマの更新に影響しない）
 		if ( ! isset( $hook_extra['type'] ) || 'plugin' !== $hook_extra['type'] ) {
 			return false;
@@ -97,12 +91,11 @@ class WpPluginPackageChecksumVerifier {
 	 * sha256チェックサムファイルを取得・パースします。
 	 *
 	 * CDは`sha256sum "$ZIP" > "$ZIP.sha256"`形式（「<hex><空白類><ファイル名>」）を生成するため、
-	 * 先頭トークンのみを採用します。
+	 * 先頭トークンのみを採用します。成功時は期待チェックサム(16進数64桁の文字列)、失敗時はWP_Error。
 	 *
 	 * @param string $sha256_url チェックサムファイルのURL
-	 * @return string|\WP_Error 成功時は期待チェックサム(16進数64桁の文字列)、失敗時はWP_Error
 	 */
-	private function fetchExpectedSha256( string $sha256_url ) {
+	private function fetchExpectedSha256( string $sha256_url ): string|\WP_Error {
 		$response = wp_remote_get(
 			$sha256_url,
 			array(

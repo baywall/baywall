@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Constant;
 
 /** HTTPステータスコードを定義するクラス */
-class HttpStatus {
+final class HttpStatus {
 	/** 200 OK */
 	public const OK = 200;
 	/** 400 Bad Request */

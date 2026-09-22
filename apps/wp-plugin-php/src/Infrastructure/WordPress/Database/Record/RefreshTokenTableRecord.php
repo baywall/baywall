@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Database\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Record;
 
+use Baywall\Core\Infrastructure\WordPress\Database\Record\Base\RecordBase;
 use stdClass;
 
 /** ウォレット認証用のリフレッシュトークンテーブルのレコードを表すクラス */
-class RefreshTokenTableRecord extends TableRecordBase {
+class RefreshTokenTableRecord extends RecordBase {
 
 	protected string $refresh_token_hash;
 	protected string $wallet_address;

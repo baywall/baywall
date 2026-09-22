@@ -8,7 +8,7 @@ use wpdb;
 
 class TableNameProvider {
 
-	private string $prefix;
+	private readonly string $prefix;
 
 	public function __construct( wpdb $wpdb ) {
 		$this->prefix = $wpdb->prefix;

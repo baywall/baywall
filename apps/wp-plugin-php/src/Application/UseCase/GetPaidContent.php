@@ -23,40 +23,19 @@ use Baywall\Core\Domain\ValueObject\PostId;
 
 class GetPaidContent {
 
-	private AppLogger $logger;
-	private UserAccessChecker $user_access_checker;
-	private AccessTokenRequestProvider $access_token_request_provider;
-	private AccessTokenService $access_token_service;
-	private PostRepository $post_repository;
-	private SalesHistoryQueryService $sales_history_query_service;
-	private ChainRepository $chain_repository;
-	private InvoiceRepository $invoice_repository;
-	private ConfirmationsService $confirmations_service;
-	private AppContractCrawlService $app_contract_crawl_service;
 
 	public function __construct(
-		AppLogger $logger,
-		UserAccessChecker $user_access_checker,
-		AccessTokenRequestProvider $access_token_request_provider,
-		AccessTokenService $access_token_service,
-		PostRepository $post_repository,
-		SalesHistoryQueryService $sales_history_query_service,
-		ChainRepository $chain_repository,
-		InvoiceRepository $invoice_repository,
-		ConfirmationsService $confirmations_service,
-		AppContractCrawlService $app_contract_crawl_service
-	) {
-		$this->logger                        = $logger;
-		$this->user_access_checker           = $user_access_checker;
-		$this->access_token_request_provider = $access_token_request_provider;
-		$this->access_token_service          = $access_token_service;
-		$this->post_repository               = $post_repository;
-		$this->sales_history_query_service   = $sales_history_query_service;
-		$this->chain_repository              = $chain_repository;
-		$this->invoice_repository            = $invoice_repository;
-		$this->confirmations_service         = $confirmations_service;
-		$this->app_contract_crawl_service    = $app_contract_crawl_service;
-	}
+		private readonly AppLogger $logger,
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly AccessTokenRequestProvider $access_token_request_provider,
+		private readonly AccessTokenService $access_token_service,
+		private readonly PostRepository $post_repository,
+		private readonly SalesHistoryQueryService $sales_history_query_service,
+		private readonly ChainRepository $chain_repository,
+		private readonly InvoiceRepository $invoice_repository,
+		private readonly ConfirmationsService $confirmations_service,
+		private readonly AppContractCrawlService $app_contract_crawl_service
+	) {}
 
 	public function handle( int $post_id_value ): string {
 		$post_id = PostId::from( $post_id_value );

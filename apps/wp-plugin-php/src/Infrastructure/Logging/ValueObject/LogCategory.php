@@ -19,7 +19,7 @@ final class LogCategory {
 		$this->log_category_value = $log_category_value;
 	}
 
-	private int $log_category_value;
+	private readonly int $log_category_value;
 
 	public function name(): string {
 		return self::$names[ $this->log_category_value ];

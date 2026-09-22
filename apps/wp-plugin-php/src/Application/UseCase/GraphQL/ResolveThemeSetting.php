@@ -7,11 +7,8 @@ use Baywall\Core\Application\Repository\ThemeSettingRepository;
 
 class ResolveThemeSetting {
 
-	private ThemeSettingRepository $theme_setting_repository;
 
-	public function __construct( ThemeSettingRepository $theme_setting_repository ) {
-		$this->theme_setting_repository = $theme_setting_repository;
-	}
+	public function __construct( private readonly ThemeSettingRepository $theme_setting_repository ) {}
 
 	public function handle( array $root_value, array $args ): string {
 		// アクセス制御は不要

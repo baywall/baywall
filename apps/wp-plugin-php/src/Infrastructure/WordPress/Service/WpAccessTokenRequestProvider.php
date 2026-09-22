@@ -7,11 +7,8 @@ use Baywall\Core\Application\Service\AccessTokenRequestProvider;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 
 class WpAccessTokenRequestProvider implements AccessTokenRequestProvider {
-	private CookieNameProvider $cookie_name_provider;
 
-	public function __construct( CookieNameProvider $cookie_name_provider ) {
-		$this->cookie_name_provider = $cookie_name_provider;
-	}
+	public function __construct( private readonly CookieNameProvider $cookie_name_provider ) {}
 
 	public function get(): ?string {
 		/** @var string|null */

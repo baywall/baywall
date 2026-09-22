@@ -12,7 +12,7 @@ class SemVer {
 		$this->checkSemVerValue( $sem_ver_value );
 		$this->sem_ver_value = $sem_ver_value;
 	}
-	private string $sem_ver_value;
+	private readonly string $sem_ver_value;
 
 	public function value(): string {
 		return $this->sem_ver_value;

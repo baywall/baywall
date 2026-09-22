@@ -5,41 +5,18 @@ namespace Baywall\Core\Application\Dto;
 
 class SalesHistoryDto {
 
-	public SalesHistoryInvoiceDto $invoice;
-	public string $post_title;
-	public string $tx_hash;
-	public string $buyer_address;
-	public PriceDto $buyer_payment_price;
-	public string $contract_address;
-	public PriceDto $contract_received_price;
-	public string $seller_address;
-	public PriceDto $seller_received_price;
-	public ?string $affiliate_address;
-	public ?PriceDto $affiliate_received_price;
 
 	public function __construct(
-		SalesHistoryInvoiceDto $invoice,
-		string $post_title,
-		string $tx_hash,
-		string $buyer_address,
-		PriceDto $buyer_payment_price,
-		string $contract_address,
-		PriceDto $contract_received_price,
-		string $seller_address,
-		PriceDto $seller_received_price,
-		?string $affiliate_address,
-		?PriceDto $affiliate_received_price
-	) {
-		$this->invoice                  = $invoice;
-		$this->post_title               = $post_title;
-		$this->tx_hash                  = $tx_hash;
-		$this->buyer_address            = $buyer_address;
-		$this->buyer_payment_price      = $buyer_payment_price;
-		$this->contract_address         = $contract_address;
-		$this->contract_received_price  = $contract_received_price;
-		$this->seller_address           = $seller_address;
-		$this->seller_received_price    = $seller_received_price;
-		$this->affiliate_address        = $affiliate_address;
-		$this->affiliate_received_price = $affiliate_received_price;
-	}
+		public readonly SalesHistoryInvoiceDto $invoice,
+		public readonly string $post_title,
+		public readonly string $tx_hash,
+		public readonly string $buyer_address,
+		public readonly PriceDto $buyer_payment_price,
+		public readonly string $contract_address,
+		public readonly PriceDto $contract_received_price,
+		public readonly string $seller_address,
+		public readonly PriceDto $seller_received_price,
+		public readonly ?string $affiliate_address,
+		public readonly ?PriceDto $affiliate_received_price
+	) {}
 }

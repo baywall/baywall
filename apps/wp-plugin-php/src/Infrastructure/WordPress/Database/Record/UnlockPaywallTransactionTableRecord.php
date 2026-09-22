@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Database\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Record;
 
+use Baywall\Core\Infrastructure\WordPress\Database\Record\Base\RecordBase;
 use stdClass;
 
-class UnlockPaywallTransactionTableRecord extends TableRecordBase {
+class UnlockPaywallTransactionTableRecord extends RecordBase {
 	public function __construct( stdClass $record ) {
 		$record->invoice_id       = (string) $record->invoice_id;
 		$record->chain_id         = (int) $record->chain_id;

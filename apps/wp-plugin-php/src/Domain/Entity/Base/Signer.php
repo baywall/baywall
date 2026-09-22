@@ -14,16 +14,10 @@ class Signer {
 	 * @disregard P1009 Undefined type
 	 */
 	public function __construct(
-		Address $address,
-		#[\SensitiveParameter]
-		PrivateKey $private_key
-	) {
-		$this->address     = $address;
-		$this->private_key = $private_key;
-	}
+		private readonly Address $address,
+		#[\SensitiveParameter] private readonly PrivateKey $private_key
+	) {}
 
-	private PrivateKey $private_key;
-	private Address $address;
 
 	/**
 	 * 秘密鍵を取得します。

@@ -7,7 +7,7 @@ use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\ChainTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\ChainTableRecord;
 use stdClass;
 
 /**
@@ -15,8 +15,8 @@ use stdClass;
  */
 class ChainTable {
 
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb       = $wpdb;
@@ -61,7 +61,7 @@ class ChainTable {
 				':chain_id'            => $chain->id()->value(),
 				':name'                => $chain->name(),
 				':network_category_id' => $chain->networkCategoryId()->value(),
-				':rpc_url'             => $chain->rpcUrl() ? $chain->rpcUrl()->value() : null,
+				':rpc_url'             => $chain->rpcUrl()?->value(),
 				':confirmations'       => $chain->confirmations()->value(),
 				':max_logs_range'      => $chain->maxLogsRange(),
 				':block_explorer_url'  => $chain->blockExplorerUrl(),

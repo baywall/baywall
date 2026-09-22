@@ -12,13 +12,11 @@ class Rate implements ValueObject {
 	 * @param SymbolPair $symbol_pair 通貨ペア
 	 * @param Amount     $amount レートの数量
 	 */
-	private function __construct( SymbolPair $symbol_pair, Amount $amount ) {
-		$this->symbol_pair = $symbol_pair;
-		$this->amount      = $amount;
-	}
+	private function __construct(
+		private readonly SymbolPair $symbol_pair,
+		private readonly Amount $amount
+	) {}
 
-	private SymbolPair $symbol_pair;
-	private Amount $amount;
 
 	public static function from( SymbolPair $symbol_pair, Amount $amount ): self {
 		return new self( $symbol_pair, $amount );

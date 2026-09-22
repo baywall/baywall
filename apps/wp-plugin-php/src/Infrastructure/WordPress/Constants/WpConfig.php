@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Constants;
 /**
  * WordPressにのみ関連する設定値を取得するためのクラス
  */
-class WpConfig {
+final class WpConfig {
 
 	/**
 	 * このプラグインのルートディレクトリ

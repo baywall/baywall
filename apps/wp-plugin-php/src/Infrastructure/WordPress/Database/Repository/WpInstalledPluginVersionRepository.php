@@ -16,7 +16,7 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
  */
 class WpInstalledPluginVersionRepository {
 
-	private StringOption $option;
+	private readonly StringOption $option;
 
 	public function __construct() {
 		$this->option = new StringOption( WpOptionName::PLUGIN_VERSION );

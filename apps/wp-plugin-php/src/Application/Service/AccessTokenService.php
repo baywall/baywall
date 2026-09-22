@@ -13,10 +13,10 @@ use Baywall\Core\Infrastructure\JWT\ValueObject\JwtPayload;
 
 class AccessTokenService {
 
-	private JwtService $jwt_service;
-	private JwtAlgorithmProvider $jwt_algorithm_provider;
-	private JwtSecretKeyRepository $jwt_secret_key_repository;
-	private AccessTokenExpirationProvider $expiration_provider;
+	private readonly JwtService $jwt_service;
+	private readonly JwtAlgorithmProvider $jwt_algorithm_provider;
+	private readonly JwtSecretKeyRepository $jwt_secret_key_repository;
+	private readonly AccessTokenExpirationProvider $expiration_provider;
 
 	public function __construct( JwtService $jwt_service, JwtAlgorithmProvider $jwt_algorithm_provider, JwtSecretKeyRepository $jwt_secret_key_repository, AccessTokenExpirationProvider $access_token_expiration_provider ) {
 		$this->jwt_service               = $jwt_service;

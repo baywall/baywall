@@ -13,13 +13,11 @@ use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 class InvoiceTokenService {
 
-	private InvoiceTokenProvider $invoice_token_provider;
-	private InvoiceTokenRepository $invoice_token_repository;
 
-	public function __construct( InvoiceTokenProvider $invoice_token_provider, InvoiceTokenRepository $invoice_token_repository ) {
-		$this->invoice_token_provider   = $invoice_token_provider;
-		$this->invoice_token_repository = $invoice_token_repository;
-	}
+	public function __construct(
+		private readonly InvoiceTokenProvider $invoice_token_provider,
+		private readonly InvoiceTokenRepository $invoice_token_repository
+	) {}
 
 	/**
 	 * 請求書トークンを発行します

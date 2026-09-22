@@ -11,7 +11,7 @@ use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\TransactionHash;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\UnlockPaywallTransactionTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\UnlockPaywallTransactionTableRecord;
 
 /**
  * ペイウォール解除時のトランザクションに関するデータを記録するテーブル
@@ -19,8 +19,8 @@ use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\UnlockPaywallTran
  */
 class UnlockPaywallTransactionTable {
 
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb       = $wpdb;

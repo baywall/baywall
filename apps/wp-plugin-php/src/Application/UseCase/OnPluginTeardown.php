@@ -11,16 +11,11 @@ use Baywall\Core\Application\Service\PluginTeardownService;
  */
 class OnPluginTeardown {
 
-	private AppLogger $app_logger;
-	private PluginTeardownService $plugin_teardown_service;
 
 	public function __construct(
-		AppLogger $app_logger,
-		PluginTeardownService $plugin_teardown_service
-	) {
-		$this->app_logger              = $app_logger;
-		$this->plugin_teardown_service = $plugin_teardown_service;
-	}
+		private readonly AppLogger $app_logger,
+		private readonly PluginTeardownService $plugin_teardown_service
+	) {}
 
 	public function handle(): void {
 		try {

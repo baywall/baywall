@@ -11,11 +11,8 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\ServerSignerTabl
 
 class WpServerSignerRepository implements ServerSignerRepository {
 
-	private ServerSignerTable $server_signer_table;
 
-	public function __construct( ServerSignerTable $server_signer_table ) {
-		$this->server_signer_table = $server_signer_table;
-	}
+	public function __construct( private readonly ServerSignerTable $server_signer_table ) {}
 
 	/**
 	 * 平文のBase64で保存された秘密鍵を復号します

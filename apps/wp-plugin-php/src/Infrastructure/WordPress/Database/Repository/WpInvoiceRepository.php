@@ -15,15 +15,12 @@ use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\Price;
 use Baywall\Core\Domain\ValueObject\Symbol;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\InvoiceTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\InvoiceTableRecord;
 
 class WpInvoiceRepository implements InvoiceRepository {
 
-	public function __construct( InvoiceTable $invoice_table ) {
-		$this->invoice_table = $invoice_table;
-	}
+	public function __construct( private readonly InvoiceTable $invoice_table ) {}
 
-	private InvoiceTable $invoice_table;
 
 	/** @inheritdoc */
 	public function save( Invoice $invoice ): void {

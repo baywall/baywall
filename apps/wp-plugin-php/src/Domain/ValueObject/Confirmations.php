@@ -15,7 +15,7 @@ final class Confirmations implements ValueObject {
 		$this->confirmations_value = $confirmations_value;
 	}
 
-	private int $confirmations_value;
+	private readonly int $confirmations_value;
 
 	public static function from( int $confirmations_value ): self {
 		return new self( $confirmations_value );

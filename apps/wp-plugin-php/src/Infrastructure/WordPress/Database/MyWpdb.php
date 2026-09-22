@@ -11,14 +11,19 @@ use wpdb;
  * wpdbクラスのような振る舞いをする独自クラス
  */
 class MyWpdb {
-	private wpdb $wpdb;
-	private NamedPlaceholder $named_placeholder;
-	public string $posts;
+	private readonly wpdb $wpdb;
+	private readonly NamedPlaceholder $named_placeholder;
+	private readonly string $posts;
 
 	public function __construct( wpdb $wpdb ) {
 		$this->wpdb              = $wpdb;
 		$this->named_placeholder = new NamedPlaceholder( $wpdb );
 		$this->posts             = $wpdb->posts;
+	}
+
+	/** WordPressの投稿テーブル名を返します */
+	public function getPostsTableName(): string {
+		return $this->posts;
 	}
 
 	/**

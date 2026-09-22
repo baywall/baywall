@@ -16,7 +16,7 @@ final class NetworkCategoryId implements ValueObject {
 	}
 
 	/** ネットワークカテゴリID(数値) */
-	private int $value;
+	private readonly int $value;
 
 	/** ネットワークカテゴリIDを数値で取得します。 */
 	public function value(): int {
@@ -40,17 +40,13 @@ final class NetworkCategoryId implements ValueObject {
 	}
 
 	public function __toString(): string {
-		switch ( $this->value ) {
-			case NetworkCategoryIdConstants::MAINNET:
-				return 'mainnet';
-			case NetworkCategoryIdConstants::TESTNET:
-				return 'testnet';
-			case NetworkCategoryIdConstants::PRIVATENET:
-				return 'privatenet';
-			default:
-				// ここは通らない
-				throw new \InvalidArgumentException( '[D41C6428] Invalid network category ID: ' . $this->value );
-		}
+		return match ( $this->value ) {
+			NetworkCategoryIdConstants::MAINNET    => 'mainnet',
+			NetworkCategoryIdConstants::TESTNET    => 'testnet',
+			NetworkCategoryIdConstants::PRIVATENET => 'privatenet',
+			// default は未知の値に対する防御。通常ここは通らない
+			default => throw new \InvalidArgumentException( '[D41C6428] Invalid network category ID: ' . $this->value ),
+		};
 	}
 
 	private function checkValue( int $network_category_id_value ): void {

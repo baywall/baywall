@@ -14,11 +14,8 @@ use Psr\Container\ContainerInterface;
  */
 class PostEditHook extends HookBase {
 
-	private ContainerInterface $container;
 
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
-	}
+	public function __construct( private readonly ContainerInterface $container ) {}
 
 	public function register(): void {
 		add_action( 'enqueue_block_assets', array( $this, 'addActionEnqueueBlockAssets' ) );

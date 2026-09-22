@@ -7,11 +7,8 @@ use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class UserAccessChecker {
-	public function __construct( UserAccessProvider $user_access_provider ) {
-		$this->user_access_provider = $user_access_provider;
-	}
+	public function __construct( private readonly UserAccessProvider $user_access_provider ) {}
 
-	private UserAccessProvider $user_access_provider;
 
 	/** 現在のユーザーで指定した投稿を閲覧できるかをチェックし、閲覧できない場合は例外をスローします */
 	public function checkCanViewPost( PostId $post_id ): void {

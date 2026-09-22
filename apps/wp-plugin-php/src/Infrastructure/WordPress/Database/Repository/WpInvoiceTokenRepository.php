@@ -13,11 +13,8 @@ use Baywall\Core\Infrastructure\WordPress\ValueObject\WpInvoiceTokenHashString;
 
 class WpInvoiceTokenRepository implements InvoiceTokenRepository {
 
-	private InvoiceTokenTable $invoice_token_table;
 
-	public function __construct( InvoiceTokenTable $invoice_token_table ) {
-		$this->invoice_token_table = $invoice_token_table;
-	}
+	public function __construct( private readonly InvoiceTokenTable $invoice_token_table ) {}
 
 	/** 指定した請求書トークン文字列に合致する請求書情報を取得します。 */
 	public function get( InvoiceTokenString $invoice_token_string ): ?InvoiceToken {

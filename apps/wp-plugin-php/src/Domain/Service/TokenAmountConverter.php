@@ -13,11 +13,8 @@ use Baywall\Core\Domain\ValueObject\Price;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
 class TokenAmountConverter {
-	public function __construct( TokenRepository $token_repository ) {
-		$this->token_repository = $token_repository;
-	}
+	public function __construct( private readonly TokenRepository $token_repository ) {}
 
-	private TokenRepository $token_repository;
 
 	/**
 	 * 指定した価格を対象のチェーンで使用する時の数量に変換します

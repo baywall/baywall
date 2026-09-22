@@ -16,9 +16,9 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
 class V20251106_031_AddChainRecord extends MigrationBase {
 
-	private TransactionService $transaction_service;
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly TransactionService $transaction_service;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->transaction_service = $transaction_service;
@@ -113,7 +113,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 				'chain_id'            => $chain_id->value(),
 				'name'                => $name,
 				'network_category_id' => $network_category_id,
-				'rpc_url'             => $rpc_url ? $rpc_url->value() : null,
+				'rpc_url'             => $rpc_url?->value(),
 				'confirmations'       => $confirmations->value(),
 				'block_explorer_url'  => $block_explorer_url,
 				'created_at'          => $now,

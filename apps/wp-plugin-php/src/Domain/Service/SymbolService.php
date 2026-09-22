@@ -13,15 +13,12 @@ use Baywall\Core\Domain\ValueObject\Symbol;
 
 class SymbolService {
 
-	private ChainRepository $chain_repository;
-	private TokenRepository $token_repository;
-	private OracleRepository $oracle_repository;
 
-	public function __construct( ChainRepository $chain_repository, TokenRepository $token_repository, OracleRepository $oracle_repository ) {
-		$this->chain_repository  = $chain_repository;
-		$this->token_repository  = $token_repository;
-		$this->oracle_repository = $oracle_repository;
-	}
+	public function __construct(
+		private readonly ChainRepository $chain_repository,
+		private readonly TokenRepository $token_repository,
+		private readonly OracleRepository $oracle_repository
+	) {}
 
 	/**
 	 * 本システムで扱うシンボル一覧(法定通貨/暗号資産)を取得します

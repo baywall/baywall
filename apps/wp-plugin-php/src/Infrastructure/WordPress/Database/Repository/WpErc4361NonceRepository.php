@@ -12,11 +12,8 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\Erc4361NonceTabl
 
 class WpErc4361NonceRepository implements Erc4361NonceRepository {
 
-	private Erc4361NonceTable $erc4361_nonce_table;
 
-	public function __construct( Erc4361NonceTable $erc4361_nonce_table ) {
-		$this->erc4361_nonce_table = $erc4361_nonce_table;
-	}
+	public function __construct( private Erc4361NonceTable $erc4361_nonce_table ) {}
 
 	/** @inheritDoc */
 	public function get( Address $address ): ?Erc4361Nonce {

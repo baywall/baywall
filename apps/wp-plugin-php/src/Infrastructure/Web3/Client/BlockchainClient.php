@@ -29,9 +29,9 @@ class BlockchainClient {
 		$this->timeout = Config::BLOCKCHAIN_REQUEST_TIMEOUT;
 		$this->retryer = new BlockchainRetryer();
 	}
-	private RpcUrl $rpc_url;
-	private float $timeout;
-	private BlockchainRetryer $retryer;
+	private readonly RpcUrl $rpc_url;
+	private readonly float $timeout;
+	private readonly BlockchainRetryer $retryer;
 
 	private function eth(): Eth {
 		return new Eth( $this->rpc_url->value(), $this->timeout );
@@ -82,16 +82,12 @@ class BlockchainClient {
 
 	/**
 	 * `eth_getBlockByNumber`を呼び出します。
-	 *
-	 * @param string|BlockNumber|BlockTag $block_number_or_tag
 	 */
-	public function ethGetBlockByNumber( $block_number_or_tag ): EthBlock {
+	public function ethGetBlockByNumber( BlockNumber|BlockTag $block_number_or_tag ): EthBlock {
 		if ( $block_number_or_tag instanceof BlockNumber ) {
 			$block_number = $block_number_or_tag->hex()->value();
-		} elseif ( $block_number_or_tag instanceof BlockTag ) {
-			$block_number = $block_number_or_tag->value();
 		} else {
-			throw new \InvalidArgumentException( '[FDB7CEF6] Invalid argument type. Expected BlockNumber or BlockTag. - ' . var_export( $block_number_or_tag, true ) );
+			$block_number = $block_number_or_tag->value();
 		}
 
 		/** @var null|EthBlock */

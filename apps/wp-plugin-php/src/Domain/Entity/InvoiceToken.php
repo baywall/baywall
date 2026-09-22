@@ -12,17 +12,13 @@ use Baywall\Core\Domain\ValueObject\UnixTimestamp;
  */
 class InvoiceToken {
 
-	private InvoiceId $invoice_id;
-	private InvoiceTokenString $invoice_token;
-	private UnixTimestamp $expires_at;
-	private ?UnixTimestamp $revoked_at;
 
-	private function __construct( InvoiceId $invoice_id, InvoiceTokenString $invoice_token, UnixTimestamp $expires_at, ?UnixTimestamp $revoked_at ) {
-		$this->invoice_id    = $invoice_id;
-		$this->invoice_token = $invoice_token;
-		$this->expires_at    = $expires_at;
-		$this->revoked_at    = $revoked_at;
-	}
+	private function __construct(
+		private readonly InvoiceId $invoice_id,
+		private readonly InvoiceTokenString $invoice_token,
+		private readonly UnixTimestamp $expires_at,
+		private ?UnixTimestamp $revoked_at
+	) {}
 
 	public static function create( InvoiceId $invoice_id, InvoiceTokenString $invoice_token, UnixTimestamp $expires_at, ?UnixTimestamp $revoked_at ): self {
 		return new self( $invoice_id, $invoice_token, $expires_at, $revoked_at );

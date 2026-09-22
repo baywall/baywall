@@ -7,14 +7,14 @@ namespace Baywall\Core\Infrastructure\Cookie;
  */
 class Cookie {
 
-	private string $name;
-	private string $value;
-	private ?int $expires;
-	private ?string $path;
-	private ?string $domain;
-	private ?bool $secure;
-	private ?bool $http_only;
-	private ?string $same_site;
+	private readonly string $name;
+	private readonly string $value;
+	private readonly ?int $expires;
+	private readonly ?string $path;
+	private readonly ?string $domain;
+	private readonly ?bool $secure;
+	private readonly ?bool $http_only;
+	private readonly ?string $same_site;
 
 	private function __construct( string $name, string $value, ?int $expires = null, ?string $path = null, ?string $domain = null, ?bool $secure = null, ?bool $httpOnly = null, ?string $sameSite = null ) {
 		$this->name      = $name;

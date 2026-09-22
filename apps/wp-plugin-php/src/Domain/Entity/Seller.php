@@ -9,19 +9,12 @@ use Baywall\Core\Domain\ValueObject\SigningMessage;
 
 class Seller {
 
-	private Address $address;
-	private SigningMessage $signing_message;
-	private Signature $signature;
 
 	public function __construct(
-		Address $address,
-		SigningMessage $signing_message,
-		Signature $signature
-	) {
-		$this->address         = $address;
-		$this->signing_message = $signing_message;
-		$this->signature       = $signature;
-	}
+		private readonly Address $address,
+		private readonly SigningMessage $signing_message,
+		private readonly Signature $signature
+	) {}
 
 	/** 販売者ウォレットアドレス */
 	public function address(): Address {

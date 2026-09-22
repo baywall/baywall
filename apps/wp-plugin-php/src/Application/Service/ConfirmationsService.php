@@ -13,17 +13,13 @@ use Baywall\Core\Domain\ValueObject\PostId;
 
 class ConfirmationsService {
 
-	private ChainRepository $chain_repository;
-	private AppContractDataProvider $app_contract_data_provider;
-	private BlockNumberProvider $block_number_provider;
-	private ConfirmationsSpecification $confirmations_specification;
 
-	public function __construct( ChainRepository $chain_repository, AppContractDataProvider $app_contract_data_provider, BlockNumberProvider $block_number_provider, ConfirmationsSpecification $confirmations_specification ) {
-		$this->chain_repository            = $chain_repository;
-		$this->app_contract_data_provider  = $app_contract_data_provider;
-		$this->block_number_provider       = $block_number_provider;
-		$this->confirmations_specification = $confirmations_specification;
-	}
+	public function __construct(
+		private readonly ChainRepository $chain_repository,
+		private readonly AppContractDataProvider $app_contract_data_provider,
+		private readonly BlockNumberProvider $block_number_provider,
+		private readonly ConfirmationsSpecification $confirmations_specification
+	) {}
 
 	/**
 	 * ブロックチェーンに問い合わせて該当の投稿が購入され、指定待機ブロック経過しているかどうかを返します

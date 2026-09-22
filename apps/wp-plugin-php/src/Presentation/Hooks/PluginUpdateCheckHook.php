@@ -26,10 +26,7 @@ use Psr\Container\ContainerInterface;
  */
 class PluginUpdateCheckHook extends HookBase {
 
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
-	}
-	private ContainerInterface $container;
+	public function __construct( private readonly ContainerInterface $container ) {}
 
 	/**
 	 * フィルターフック名（update_plugins_{host}）を`Config::UPDATE_URI`のホスト名から導出します。

@@ -18,11 +18,14 @@ use Web3\Contract;
 
 class AppContractClient {
 
-	public function __construct( AppContract $app_contract, ?AppContractAbi $app_contract_abi = null ) {
+	public function __construct(
+		AppContract $app_contract,
+		AppContractAbi $app_contract_abi = new AppContractAbi()
+	) {
 		assert( $app_contract->chain()->connectable(), '[A5ED369D]' );   // 接続可能なチェーンであること
 
 		$this->app_contract      = $app_contract;
-		$this->abi               = $app_contract_abi ?? new AppContractAbi();
+		$this->abi               = $app_contract_abi;
 		$this->contract          = ( new ContractFactory() )->create(
 			$app_contract->chain()->rpcUrl(),
 			$this->abi->get(),
@@ -30,10 +33,10 @@ class AppContractClient {
 		);
 		$this->blockchain_client = new BlockchainClient( $app_contract->chain()->rpcUrl() );
 	}
-	private Contract $contract;
-	private AppContractAbi $abi;
-	private AppContract $app_contract;
-	private BlockchainClient $blockchain_client;
+	private readonly Contract $contract;
+	private readonly AppContractAbi $abi;
+	private readonly AppContract $app_contract;
+	private readonly BlockchainClient $blockchain_client;
 
 	protected function contract(): Contract {
 		return $this->contract;

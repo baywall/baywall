@@ -8,12 +8,12 @@ use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\Erc4361NonceTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\Erc4361NonceTableRecord;
 
 class Erc4361NonceTable {
 
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb       = $wpdb;

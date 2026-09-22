@@ -9,7 +9,7 @@ class SlugProvider {
 	public function __construct() {
 		$this->text_domain = ( new WpPluginInfoProvider() )->textDomain();
 	}
-	private string $text_domain;
+	private readonly string $text_domain;
 
 	/**
 	 * 管理画面メニューのルートで使用するスラッグを取得します。

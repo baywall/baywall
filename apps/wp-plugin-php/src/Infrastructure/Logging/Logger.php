@@ -8,9 +8,6 @@ use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
 interface Logger {
 	/**
 	 * ログを記録します。
-	 *
-	 * @param LogLevel          $level
-	 * @param string|\Throwable $message_or_exception
 	 */
-	public function log( LogLevel $level, $message_or_exception ): void;
+	public function log( LogLevel $level, string|\Throwable $message_or_exception ): void;
 }

@@ -21,12 +21,9 @@ use Psr\Container\ContainerInterface;
  */
 class AppContractCrawlCronHook extends HookBase {
 
-	private ContainerInterface $container;
 	private const LOCK_NAME = '05f69f89-24d8-4c72-b2a2-2c8ecfb24343'; // 排他制御用の適当な文字列
 
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
-	}
+	public function __construct( private readonly ContainerInterface $container ) {}
 
 	public function register(): void {
 		// Cronアクション名を取得

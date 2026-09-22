@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Database\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Record;
 
+use Baywall\Core\Infrastructure\WordPress\Database\Record\Base\RecordBase;
 use stdClass;
 
-class Erc4361NonceTableRecord extends TableRecordBase {
+class Erc4361NonceTableRecord extends RecordBase {
 
 	protected string $erc4361_nonce;
 	protected string $wallet_address;

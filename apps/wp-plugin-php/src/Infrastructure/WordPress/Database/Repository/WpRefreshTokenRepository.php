@@ -13,11 +13,8 @@ use Baywall\Core\Infrastructure\WordPress\ValueObject\WpRefreshTokenHashString;
 
 class WpRefreshTokenRepository implements RefreshTokenRepository {
 
-	public function __construct( RefreshTokenTable $refresh_token_table ) {
-		$this->refresh_token_table = $refresh_token_table;
-	}
+	public function __construct( private readonly RefreshTokenTable $refresh_token_table ) {}
 
-	private RefreshTokenTable $refresh_token_table;
 
 	/**
 	 * リフレッシュトークン情報を保存（追加）します。

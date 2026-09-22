@@ -11,15 +11,12 @@ use Baywall\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyService;
 
 class V20260419_011_AddOptions extends MigrationBase {
 
-	private WpPausedRepository $paused_repository;
-	private WpJwtSecretKeyRepository $jwt_secret_key_repository;
-	private WpJwtSecretKeyService $jwt_secret_key_service;
 
-	public function __construct( WpPausedRepository $paused_repository, WpJwtSecretKeyRepository $jwt_secret_key_repository, WpJwtSecretKeyService $jwt_secret_key_service ) {
-		$this->paused_repository         = $paused_repository;
-		$this->jwt_secret_key_repository = $jwt_secret_key_repository;
-		$this->jwt_secret_key_service    = $jwt_secret_key_service;
-	}
+	public function __construct(
+		private readonly WpPausedRepository $paused_repository,
+		private readonly WpJwtSecretKeyRepository $jwt_secret_key_repository,
+		private readonly WpJwtSecretKeyService $jwt_secret_key_service
+	) {}
 
 	public function version(): string {
 		return '0.0.2';

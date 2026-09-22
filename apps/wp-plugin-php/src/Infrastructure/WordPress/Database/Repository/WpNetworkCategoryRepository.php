@@ -12,13 +12,11 @@ use Baywall\Core\Infrastructure\WordPress\Service\I18nTextProvider;
 
 class WpNetworkCategoryRepository implements NetworkCategoryRepository {
 
-	private ChainTable $chain_table;
-	private I18nTextProvider $i18n;
 
-	public function __construct( ChainTable $chain_table, I18nTextProvider $i18n ) {
-		$this->chain_table = $chain_table;
-		$this->i18n        = $i18n;
-	}
+	public function __construct(
+		private readonly ChainTable $chain_table,
+		private I18nTextProvider $i18n
+	) {}
 
 	/** @inheritdoc */
 	public function all(): array {

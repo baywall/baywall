@@ -13,13 +13,11 @@ use Baywall\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
 
 class AppContractDataProviderImpl implements AppContractDataProvider {
 
-	private AppContractClientFactory $app_contract_client_factory;
-	private ServerSignerRepository $server_signer_repository;
 
-	public function __construct( AppContractClientFactory $app_contract_client_factory, ServerSignerRepository $server_signer_repository ) {
-		$this->app_contract_client_factory = $app_contract_client_factory;
-		$this->server_signer_repository    = $server_signer_repository;
-	}
+	public function __construct(
+		private readonly AppContractClientFactory $app_contract_client_factory,
+		private readonly ServerSignerRepository $server_signer_repository
+	) {}
 
 	/** 購入時のブロック番号を取得します */
 	public function unlockedBlockNumber( ChainId $chain_id, PostId $post_id, Address $buyer_address ): ?BlockNumber {

@@ -18,31 +18,16 @@ use Baywall\Core\Domain\ValueObject\PostId;
 
 class ResolvePost {
 
-	private AppLogger $logger;
-	private UserAccessChecker $user_access_checker;
-	private PostRepository $post_repository;
-	private ChainRepository $chain_repository;
-	private TokenRepository $token_repository;
-	private PostTitleProvider $post_title_provider;
-	private PriceExchangeService $price_exchange_service;
 
 	public function __construct(
-		AppLogger $logger,
-		UserAccessChecker $user_access_checker,
-		PostRepository $post_repository,
-		ChainRepository $chain_repository,
-		TokenRepository $token_repository,
-		PostTitleProvider $post_title_provider,
-		PriceExchangeService $price_exchange_service
-	) {
-		$this->logger                 = $logger;
-		$this->user_access_checker    = $user_access_checker;
-		$this->post_repository        = $post_repository;
-		$this->chain_repository       = $chain_repository;
-		$this->token_repository       = $token_repository;
-		$this->post_title_provider    = $post_title_provider;
-		$this->price_exchange_service = $price_exchange_service;
-	}
+		private readonly AppLogger $logger,
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly PostRepository $post_repository,
+		private readonly ChainRepository $chain_repository,
+		private readonly TokenRepository $token_repository,
+		private readonly PostTitleProvider $post_title_provider,
+		private readonly PriceExchangeService $price_exchange_service
+	) {}
 
 	public function handle( array $root_value, array $args ) {
 		$post_id = PostId::from( $args['postId'] );

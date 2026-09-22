@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Database\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Record;
 
+use Baywall\Core\Infrastructure\WordPress\Database\Record\Base\RecordBase;
 use stdClass;
 
 /** 請求書トークンテーブルのレコードを表すクラス */
-class InvoiceTokenTableRecord extends TableRecordBase {
+class InvoiceTokenTableRecord extends RecordBase {
 
 	protected string $invoice_token_hash;
 	protected string $invoice_id;

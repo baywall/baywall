@@ -7,16 +7,14 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
 class SymbolPair implements ValueObject {
-	private function __construct( Symbol $base_symbol, Symbol $quote_symbol ) {
-		$this->base_symbol  = $base_symbol;
-		$this->quote_symbol = $quote_symbol;
-	}
+	private function __construct(
+		private readonly Symbol $base_symbol,
+		private readonly Symbol $quote_symbol
+	) {}
 	public static function from( Symbol $base_symbol, Symbol $quote_symbol ): self {
 		return new self( $base_symbol, $quote_symbol );
 	}
 
-	private Symbol $base_symbol;
-	private Symbol $quote_symbol;
 
 	public function base(): Symbol {
 		return $this->base_symbol;

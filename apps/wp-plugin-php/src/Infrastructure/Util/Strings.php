@@ -4,64 +4,32 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\Util;
 
 class Strings {
-	private static $IS_MBSTRING_ENABLED = null;
-	private static function is_mbstring_enabled(): bool {
-		if ( self::$IS_MBSTRING_ENABLED === null ) {
-			self::$IS_MBSTRING_ENABLED = extension_loaded( 'mbstring' );
-		}
-		return self::$IS_MBSTRING_ENABLED;
-	}
-
 	public static function substr(
 		string $string,
 		int $start,
 		?int $length = null,
 		?string $encoding = null
-	) {
-		if ( self::is_mbstring_enabled() ) {
-			// $encodingがnullableになったのはphp8.0から
-			if ( is_null( $encoding ) ) {
-				return mb_substr( $string, $start, $length );
-			} else {
-				return mb_substr( $string, $start, $length, $encoding );
-			}
-		} else {
-			// PHP7.xではsubstr()の第3引数にnullを渡せない
-			if ( is_null( $length ) ) {
-				return substr( $string, $start );
-			} else {
-				return substr( $string, $start, $length );
-			}
-		}
+	): string|false {
+		return mb_substr( $string, $start, $length, $encoding );
 	}
 
 
 	/**
-	 * 文字列内で最初に見つかった部分文字列の位置を返します。
-	 *
-	 * @return int|false 位置を見つけた場合はその位置、見つからなかった場合は false を返します。
+	 * 文字列内で最初に見つかった部分文字列の位置を返します。見つからなかった場合は false を返します。
 	 */
 	public static function strpos(
 		string $haystack,
 		string $needle,
 		int $offset = 0
-	) {
-		if ( self::is_mbstring_enabled() ) {
-			return mb_strpos( $haystack, $needle, $offset );
-		} else {
-			return strpos( $haystack, $needle, $offset );
-		}
+	): int|false {
+		return mb_strpos( $haystack, $needle, $offset );
 	}
 
 	/**
 	 * 文字列が指定した部分文字列を含んでいるかどうかを返します。
 	 */
 	public static function contains( string $haystack, string $needle ): bool {
-		// `str_contains`はPHP8以降で使用可能。
-		// ここではself::strposを使用して互換性を保つ。
-		// 空文字が検索文字列に指定された場合はtrueを返す
-		// => https://www.php.net/manual/ja/function.str-contains.php
-		return $needle === '' ? true : self::strpos( $haystack, $needle ) !== false;
+		return str_contains( $haystack, $needle );
 	}
 
 	/**
@@ -83,33 +51,16 @@ class Strings {
 	/**
 	 * @param string      $string
 	 * @param string|null $encoding 省略またはnullの場合は内部エンコーディングを使用します。
-	 * @return int|false
 	 */
-	public static function strlen( string $string, ?string $encoding = null ) {
-		if ( self::is_mbstring_enabled() ) {
-			// $encodingがnullableになったのはphp8.0から
-			if ( is_null( $encoding ) ) {
-				return mb_strlen( $string );
-			} else {
-				return mb_strlen( $string, $encoding );
-			}
-		} else {
-			return strlen( $string );
-		}
+	public static function strlen( string $string, ?string $encoding = null ): int {
+		return mb_strlen( $string, $encoding );
 	}
 
 	public static function starts_with( string $string, string $prefix ): bool {
-		// str_starts_with()はphp8.0以上で使用可
-		return self::substr( $string, 0, self::strlen( $prefix ) ) === $prefix;
+		return str_starts_with( $string, $prefix );
 	}
 
 	public static function ends_with( string $string, string $suffix ): bool {
-		// str_ends_with()はphp8.0以上で使用可
-		// 空文字が指定された場合はtrueを返す
-		// => https://www.php.net/manual/ja/function.str-ends-with.php
-		if ( $suffix === '' ) {
-			return true;
-		}
-		return self::substr( $string, -self::strlen( $suffix ) ) === $suffix;
+		return str_ends_with( $string, $suffix );
 	}
 }

@@ -11,12 +11,9 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 
 class OraclesFilter {
 
-	private ChainRepository $chain_repository;
 	private array $filters = array();
 
-	public function __construct( ChainRepository $chain_repository ) {
-		$this->chain_repository = $chain_repository;
-	}
+	public function __construct( private readonly ChainRepository $chain_repository ) {}
 
 	public function byChainId( ChainId $chain_id ): self {
 		$this->filters[] = fn ( Oracle $oracle ) => $oracle->chainId()->equals( $chain_id );

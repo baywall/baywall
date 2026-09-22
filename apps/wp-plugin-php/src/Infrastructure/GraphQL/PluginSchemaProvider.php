@@ -8,11 +8,8 @@ use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;
 
 class PluginSchemaProvider {
-	private GraphQLService $graphql_service;
 
-	public function __construct( GraphQLService $graphql_service ) {
-		$this->graphql_service = $graphql_service;
-	}
+	public function __construct( private readonly GraphQLService $graphql_service ) {}
 
 	public function get() {
 		// キャッシュファイルをこのプラグインディレクトリ内に作成することで

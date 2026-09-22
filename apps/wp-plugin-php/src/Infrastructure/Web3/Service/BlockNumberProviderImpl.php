@@ -14,10 +14,7 @@ use Baywall\Core\Infrastructure\Web3\Client\BlockchainClient;
 
 class BlockNumberProviderImpl implements BlockNumberProvider {
 
-	public function __construct( ChainRepository $chain_repository ) {
-		$this->chain_repository = $chain_repository;
-	}
-	private ChainRepository $chain_repository;
+	public function __construct( private readonly ChainRepository $chain_repository ) {}
 
 	/** @inheritdoc */
 	public function getByChainId( ChainId $chain_id, ?BlockTag $block_tag = null ): BlockNumber {

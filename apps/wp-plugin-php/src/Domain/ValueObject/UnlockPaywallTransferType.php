@@ -20,7 +20,7 @@ class UnlockPaywallTransferType implements ValueObject {
 		$this->value = $unlock_paywall_transfer_type_value;
 	}
 
-	private int $value;
+	private readonly int $value;
 
 	public function value(): int {
 		return $this->value;

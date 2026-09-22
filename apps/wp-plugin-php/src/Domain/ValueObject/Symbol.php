@@ -15,7 +15,7 @@ final class Symbol implements ValueObject {
 		$this->symbol_value = $symbol_value;
 	}
 
-	private string $symbol_value;
+	private readonly string $symbol_value;
 
 	public static function from( string $symbol_value ): self {
 		return new self( $symbol_value );

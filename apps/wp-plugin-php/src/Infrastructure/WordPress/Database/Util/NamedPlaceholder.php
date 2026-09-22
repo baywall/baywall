@@ -10,7 +10,7 @@ class NamedPlaceholder {
 	public function __construct( wpdb $wpdb ) {
 		$this->wpdb = $wpdb;
 	}
-	private wpdb $wpdb;
+	private readonly wpdb $wpdb;
 
 	/**
 	 * Named placeholder を使用して SQL クエリを構築します

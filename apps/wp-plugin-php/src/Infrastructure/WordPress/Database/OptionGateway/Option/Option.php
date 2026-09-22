@@ -11,7 +11,7 @@ class Option {
 		assert( 0 === Strings::strpos( $option_key_name, WpOptionName::PREFIX ) );
 		$this->option_key_name = $option_key_name;
 	}
-	private string $option_key_name;
+	private readonly string $option_key_name;
 
 	public function get( $default = false ) {
 		return get_option( $this->option_key_name, $default );

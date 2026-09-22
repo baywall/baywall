@@ -11,11 +11,8 @@ use Baywall\Core\Infrastructure\Reimpl\JWT\JwtCodec;
 
 class JwtService {
 
-	private JwtCodec $jwt_codec;
 
-	public function __construct( JwtCodec $jwt_codec ) {
-		$this->jwt_codec = $jwt_codec;
-	}
+	public function __construct( private readonly JwtCodec $jwt_codec ) {}
 
 	public function encode( JwtAlgorithm $algorithm, JwtPayload $payload, JwtSecretKey $secret_key ): Jwt {
 		return Jwt::from(

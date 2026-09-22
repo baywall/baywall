@@ -10,16 +10,11 @@ use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 
 class ResolveNetworkCategories {
 
-	private UserAccessChecker $user_access_checker;
-	private NetworkCategoryRepository $network_category_repository;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		NetworkCategoryRepository $network_category_repository
-	) {
-		$this->user_access_checker         = $user_access_checker;
-		$this->network_category_repository = $network_category_repository;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly NetworkCategoryRepository $network_category_repository
+	) {}
 
 	public function handle( array $root_value, array $args ): array {
 		$this->user_access_checker->checkCanCreatePost();   // 投稿を新規作成できる権限が必要

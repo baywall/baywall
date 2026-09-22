@@ -11,11 +11,8 @@ use Baywall\Core\Constant\Config;
 
 class WpErc4361PropertyProvider implements Erc4361PropertyProvider {
 
-	private WordPressPropertyProvider $wp_property_provider;
 
-	public function __construct( WordPressPropertyProvider $wp_property_provider ) {
-		$this->wp_property_provider = $wp_property_provider;
-	}
+	public function __construct( private readonly WordPressPropertyProvider $wp_property_provider ) {}
 
 	public function domain(): Erc4361Domain {
 		$home_url = $this->wp_property_provider->homeUrl();

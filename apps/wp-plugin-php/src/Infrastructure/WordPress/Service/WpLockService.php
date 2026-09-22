@@ -8,10 +8,7 @@ use wpdb;
 
 class WpLockService extends LockService {
 
-	public function __construct( wpdb $wpdb ) {
-		$this->wpdb = $wpdb;
-	}
-	private wpdb $wpdb;
+	public function __construct( private readonly wpdb $wpdb ) {}
 
 	/** @inheritdoc */
 	public function acquire( string $key, int $timeout ): bool {

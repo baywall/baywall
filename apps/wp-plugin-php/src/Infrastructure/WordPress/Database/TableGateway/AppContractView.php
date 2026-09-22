@@ -13,7 +13,7 @@ use stdClass;
  */
 class AppContractView {
 
-	private MyWpdb $wpdb;
+	private readonly MyWpdb $wpdb;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb                     = $wpdb;
@@ -22,9 +22,9 @@ class AppContractView {
 	}
 
 	/** Appコントラクトの情報を記録するテーブル名 */
-	private string $app_contract_table_name;
+	private readonly string $app_contract_table_name;
 	/** クロール済みのブロックを記録するテーブル名 */
-	private string $crawled_block_table_name;
+	private readonly string $crawled_block_table_name;
 
 	/**
 	 * Appコントラクトの全行を、クロール済みブロック番号と結合して取得します

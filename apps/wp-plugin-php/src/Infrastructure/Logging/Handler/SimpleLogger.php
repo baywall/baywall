@@ -10,11 +10,8 @@ use DateTimeImmutable;
 class SimpleLogger implements Logger {
 	/**
 	 * ログを記録します。
-	 *
-	 * @param LogLevel          $level
-	 * @param string|\Throwable $message_or_exception
 	 */
-	public function log( LogLevel $level, $message_or_exception ): void {
+	public function log( LogLevel $level, string|\Throwable $message_or_exception ): void {
 		$timestamp = ( new DateTimeImmutable() )->setTimestamp( time() )->format( 'Y-m-d H:i:s' );
 		if ( $message_or_exception instanceof \Throwable ) {
 			error_log(
@@ -31,13 +28,12 @@ class SimpleLogger implements Logger {
 				)
 			);
 		} else {
-			assert( is_string( $message_or_exception ), '[F7F9BFDF] Message must be a string or Throwable' );
 			error_log(
 				sprintf(
 					'[%s] [%s] %s%s',
 					$timestamp,
 					$level->name(),
-					(string) $message_or_exception,
+					$message_or_exception,
 					PHP_EOL
 				)
 			);

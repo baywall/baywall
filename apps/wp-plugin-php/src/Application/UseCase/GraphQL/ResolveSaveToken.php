@@ -18,22 +18,13 @@ use Baywall\Core\Infrastructure\Web3\Client\TokenClient;
  */
 class ResolveSaveToken {
 
-	private UserAccessChecker $user_access_checker;
-	private TokenRepository $token_repository;
-	private ChainRepository $chain_repository;
-	private NativeTokenService $native_token_service;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		TokenRepository $token_repository,
-		ChainRepository $chain_repository,
-		NativeTokenService $native_token_service
-	) {
-		$this->user_access_checker  = $user_access_checker;
-		$this->token_repository     = $token_repository;
-		$this->chain_repository     = $chain_repository;
-		$this->native_token_service = $native_token_service;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly TokenRepository $token_repository,
+		private readonly ChainRepository $chain_repository,
+		private readonly NativeTokenService $native_token_service
+	) {}
 
 	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要

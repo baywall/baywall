@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Database\ValueObject;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Record;
 
+use Baywall\Core\Infrastructure\WordPress\Database\Record\Base\RecordBase;
 use stdClass;
 
-class SellerTableRecord extends TableRecordBase {
+class SellerTableRecord extends RecordBase {
 	public function __construct( stdClass $record ) {
 		$record->seller_address  = (string) $record->seller_address;
 		$record->signing_message = (string) $record->signing_message;

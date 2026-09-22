@@ -19,7 +19,7 @@ use stdClass;
  */
 class SalesHistoryView {
 
-	private MyWpdb $wpdb;
+	private readonly MyWpdb $wpdb;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb                = $wpdb;
@@ -27,18 +27,18 @@ class SalesHistoryView {
 		$this->event_table_name    = $table_name_provider->unlockPaywallTransferEvent();
 		$this->invoice_table_name  = $table_name_provider->invoice();
 		$this->chain_table_name    = $table_name_provider->chain();
-		$this->wp_posts_table_name = $wpdb->posts; // WordPressの投稿テーブル名を取得
+		$this->wp_posts_table_name = $wpdb->getPostsTableName();
 	}
 	/** トランザクション情報が格納されているテーブル名 */
-	private string $tx_table_name;
+	private readonly string $tx_table_name;
 	/** トークン転送イベント情報が格納されているテーブル名 */
-	private string $event_table_name;
+	private readonly string $event_table_name;
 	/** インボイステーブル名 */
-	private string $invoice_table_name;
+	private readonly string $invoice_table_name;
 	/** WordPressの投稿テーブル名 */
-	private string $wp_posts_table_name;
+	private readonly string $wp_posts_table_name;
 	/** チェーンテーブル名 */
-	private string $chain_table_name;
+	private readonly string $chain_table_name;
 
 	/**
 	 *

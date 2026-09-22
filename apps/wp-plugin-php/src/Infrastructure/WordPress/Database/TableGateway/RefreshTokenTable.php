@@ -7,7 +7,7 @@ use Baywall\Core\Domain\Entity\RefreshToken;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\RefreshTokenTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\RefreshTokenTableRecord;
 use Baywall\Core\Infrastructure\WordPress\ValueObject\WpRefreshTokenHashString;
 
 /**
@@ -15,8 +15,8 @@ use Baywall\Core\Infrastructure\WordPress\ValueObject\WpRefreshTokenHashString;
  */
 class RefreshTokenTable {
 
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb       = $wpdb;
@@ -66,9 +66,7 @@ class RefreshTokenTable {
 	}
 
 	public function update( RefreshToken $refresh_token ): void {
-		$revoked_at_value         = $refresh_token->revokedAt() !== null
-			? $refresh_token->revokedAt()->value()
-			: null;
+		$revoked_at_value         = $refresh_token->revokedAt()?->value();
 		$refresh_token_hash_value = WpRefreshTokenHashString::from( $refresh_token->token() )->value();
 
 		$result = $this->wpdb->update(

@@ -18,25 +18,14 @@ use Baywall\Core\Infrastructure\Cookie\CookieWriter;
  */
 class LogoutAuth {
 
-	private AppLogger $app_logger;
-	private RefreshTokenService $refresh_token_service;
-	private RefreshTokenCookieProvider $refresh_token_cookie_provider;
-	private AccessTokenCookieProvider $access_token_cookie_provider;
-	private CookieWriter $cookie_writer;
 
 	public function __construct(
-		AppLogger $app_logger,
-		RefreshTokenService $refresh_token_service,
-		RefreshTokenCookieProvider $refresh_token_cookie_provider,
-		AccessTokenCookieProvider $access_token_cookie_provider,
-		CookieWriter $cookie_writer
-	) {
-		$this->app_logger                    = $app_logger;
-		$this->refresh_token_service         = $refresh_token_service;
-		$this->refresh_token_cookie_provider = $refresh_token_cookie_provider;
-		$this->access_token_cookie_provider  = $access_token_cookie_provider;
-		$this->cookie_writer                 = $cookie_writer;
-	}
+		private readonly AppLogger $app_logger,
+		private readonly RefreshTokenService $refresh_token_service,
+		private readonly RefreshTokenCookieProvider $refresh_token_cookie_provider,
+		private readonly AccessTokenCookieProvider $access_token_cookie_provider,
+		private readonly CookieWriter $cookie_writer
+	) {}
 
 	/**
 	 * ログアウト処理を実行します。

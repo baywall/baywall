@@ -11,16 +11,11 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 
 class ResolveOracle {
 
-	private ChainRepository $chain_repository;
-	private OracleRepository $oracle_repository;
 
 	public function __construct(
-		ChainRepository $chain_repository,
-		OracleRepository $oracle_repository
-	) {
-		$this->chain_repository  = $chain_repository;
-		$this->oracle_repository = $oracle_repository;
-	}
+		private readonly ChainRepository $chain_repository,
+		private readonly OracleRepository $oracle_repository
+	) {}
 
 	public function handle( array $root_value, array $args ): array {
 		$chain_id = ChainId::from( $args['chainId'] );

@@ -16,31 +16,16 @@ use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
 class ResolveSaveSiteSettings {
 
-	private UserAccessChecker $user_access_checker;
-	private PausedRepository $paused_repository;
-	private SctaUrlRepository $scta_url_repository;
-	private PurgeOnUninstallRepository $purge_on_uninstall_repository;
-	private ThemeSettingRepository $theme_setting_repository;
-	private TransactionService $transaction_service;
-	private WordPressPropertyProvider $wordpress_property_provider;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		PausedRepository $paused_repository,
-		SctaUrlRepository $scta_url_repository,
-		PurgeOnUninstallRepository $purge_on_uninstall_repository,
-		ThemeSettingRepository $theme_setting_repository,
-		TransactionService $transaction_service,
-		WordPressPropertyProvider $wordpress_property_provider
-	) {
-		$this->user_access_checker           = $user_access_checker;
-		$this->paused_repository             = $paused_repository;
-		$this->scta_url_repository           = $scta_url_repository;
-		$this->purge_on_uninstall_repository = $purge_on_uninstall_repository;
-		$this->theme_setting_repository      = $theme_setting_repository;
-		$this->transaction_service           = $transaction_service;
-		$this->wordpress_property_provider   = $wordpress_property_provider;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly PausedRepository $paused_repository,
+		private readonly SctaUrlRepository $scta_url_repository,
+		private readonly PurgeOnUninstallRepository $purge_on_uninstall_repository,
+		private readonly ThemeSettingRepository $theme_setting_repository,
+		private readonly TransactionService $transaction_service,
+		private readonly WordPressPropertyProvider $wordpress_property_provider
+	) {}
 
 	public function handle( array $root_value, array $args ): bool {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要

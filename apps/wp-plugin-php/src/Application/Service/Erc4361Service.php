@@ -16,15 +16,12 @@ class Erc4361Service {
 
 	private const ERC4361_MESSAGE_VERSION = 1;
 
-	private Erc4361PropertyProvider $erc4361_property_provider;
-	private Erc4361MessageBuilder $message_builder;
-	private Erc4361NonceRepository $repository;
 
-	public function __construct( Erc4361PropertyProvider $erc4361_property_provider, Erc4361MessageBuilder $message_builder, Erc4361NonceRepository $repository ) {
-		$this->erc4361_property_provider = $erc4361_property_provider;
-		$this->message_builder           = $message_builder;
-		$this->repository                = $repository;
-	}
+	public function __construct(
+		private Erc4361PropertyProvider $erc4361_property_provider,
+		private Erc4361MessageBuilder $message_builder,
+		private Erc4361NonceRepository $repository
+	) {}
 
 	/**
 	 * ERC-4361の署名用メッセージを作成します
@@ -39,7 +36,7 @@ class Erc4361Service {
 			$this->message_builder->buildMessage(
 				$domain->value(),
 				$address->value(),   // 署名を要求するアドレス
-				$statement !== null ? $statement->value() : null,
+				$statement?->value(),
 				$uri->value(),
 				(string) self::ERC4361_MESSAGE_VERSION,
 				(string) $chain_id->value(), // 署名を要求するチェーンID

@@ -13,22 +13,13 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 
 class ResolveChain {
 
-	private UserAccessChecker $user_access_checker;
-	private ChainRepository $chain_repository;
-	private TokenRepository $token_repository;
-	private AppContractRepository $app_contract_repository;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		ChainRepository $chain_repository,
-		TokenRepository $token_repository,
-		AppContractRepository $app_contract_repository
-	) {
-		$this->user_access_checker     = $user_access_checker;
-		$this->chain_repository        = $chain_repository;
-		$this->token_repository        = $token_repository;
-		$this->app_contract_repository = $app_contract_repository;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly ChainRepository $chain_repository,
+		private readonly TokenRepository $token_repository,
+		private readonly AppContractRepository $app_contract_repository
+	) {}
 
 	public function handle( array $root_value, array $args ) {
 		$chain_id = ChainId::from( $args['chainId'] );
@@ -89,7 +80,7 @@ class ResolveChain {
 			'name'             => $chain->name(),
 			'appContract'      => $app_contract_callback,
 			'confirmations'    => $chain->confirmations()->value(),
-			'rpcUrl'           => $chain->rpcUrl() ? $chain->rpcUrl()->value() : null,
+			'rpcUrl'           => $chain->rpcUrl()?->value(),
 			'tokens'           => $tokens_callback,
 			'networkCategory'  => $network_category_callback,
 			'blockExplorerUrl' => $chain->blockExplorerUrl(),

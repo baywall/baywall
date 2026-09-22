@@ -16,14 +16,11 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\AppContractView;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\CrawledBlockTable;
 
 class WpAppContractRepository implements AppContractRepository {
-	public function __construct( AppContractView $app_contract_view, CrawledBlockTable $crawled_block_table, ChainRepository $chain_repository ) {
-		$this->app_contract_view   = $app_contract_view;
-		$this->crawled_block_table = $crawled_block_table;
-		$this->chain_repository    = $chain_repository;
-	}
-	private AppContractView $app_contract_view;
-	private CrawledBlockTable $crawled_block_table;
-	private ChainRepository $chain_repository;
+	public function __construct(
+		private readonly AppContractView $app_contract_view,
+		private readonly CrawledBlockTable $crawled_block_table,
+		private readonly ChainRepository $chain_repository
+	) {}
 
 	/** @inheritdoc */
 	public function get( ChainId $chain_id ): ?AppContract {

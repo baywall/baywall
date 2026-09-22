@@ -10,10 +10,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  */
 abstract class ArrayValueObject implements ValueObject {
 
-	protected function __construct( array $array_value ) {
-		$this->array_value = $array_value;
-	}
-	private array $array_value;
+	protected function __construct( private readonly array $array_value ) {}
 
 	public function value(): array {
 		return $this->array_value;

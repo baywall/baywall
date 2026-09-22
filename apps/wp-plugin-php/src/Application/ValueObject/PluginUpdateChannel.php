@@ -31,11 +31,11 @@ class PluginUpdateChannel {
 		$this->sha256_url         = $sha256_url;
 	}
 
-	private string $version;
-	private string $requires_wordpress;
-	private string $requires_php;
-	private string $url;
-	private string $sha256_url;
+	private readonly string $version;
+	private readonly string $requires_wordpress;
+	private readonly string $requires_php;
+	private readonly string $url;
+	private readonly string $sha256_url;
 
 	/** 更新先のプラグインバージョンを取得します。 */
 	public function version(): string {

@@ -11,27 +11,21 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
 
 class WpDatabaseLogger implements Logger {
 
-	private LogTable $log_table;
-	private SimpleLogger $fallback_logger;
 
-	public function __construct( LogTable $log_table, SimpleLogger $fallback_logger ) {
-		$this->log_table       = $log_table;
-		$this->fallback_logger = $fallback_logger;
-	}
+	public function __construct(
+		private readonly LogTable $log_table,
+		private readonly SimpleLogger $fallback_logger
+	) {}
 
 	/**
 	 * ログを記録します。
-	 *
-	 * @param LogLevel          $level
-	 * @param string|\Throwable $message_or_exception
 	 */
-	public function log( LogLevel $level, $message_or_exception ): void {
+	public function log( LogLevel $level, string|\Throwable $message_or_exception ): void {
 		$original_message = $message_or_exception;
 
 		if ( $message_or_exception instanceof \Throwable ) {
 			$message = $message_or_exception->getMessage();
 		} else {
-			assert( is_string( $message_or_exception ), '[D3A17E8F] Message must be a string or Throwable' );
 			$message = $message_or_exception;
 		}
 

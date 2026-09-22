@@ -8,13 +8,11 @@ use Baywall\Core\Domain\Service\SiteService;
 
 class WpSiteService implements SiteService {
 
-	private InstallOriginUrl $install_origin_url;
-	private WordPressPropertyProvider $wordpress_property_provider;
 
-	public function __construct( InstallOriginUrl $install_origin_url, WordPressPropertyProvider $wordpress_property_provider ) {
-		$this->install_origin_url          = $install_origin_url;
-		$this->wordpress_property_provider = $wordpress_property_provider;
-	}
+	public function __construct(
+		private readonly InstallOriginUrl $install_origin_url,
+		private readonly WordPressPropertyProvider $wordpress_property_provider
+	) {}
 
 	/** @inheritdoc */
 	public function isInstallOriginUrlChanged(): bool {

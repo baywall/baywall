@@ -14,7 +14,7 @@ abstract class UrlBase {
 		static::checkValidUrlFormat( $url_value );
 		$this->url_value = $url_value;
 	}
-	private string $url_value;
+	private readonly string $url_value;
 
 	public function value(): string {
 		return $this->url_value;

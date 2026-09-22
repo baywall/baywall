@@ -16,10 +16,10 @@ final class NetworkCategory implements ValueObject {
 	}
 
 	/** ネットワークカテゴリID */
-	private NetworkCategoryId $id;
+	private readonly NetworkCategoryId $id;
 
 	/** ネットワークカテゴリ名 */
-	private string $name;
+	private readonly string $name;
 
 	/** ネットワークカテゴリIDを数値で取得します。 */
 	public function id(): NetworkCategoryId {

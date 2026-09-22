@@ -9,11 +9,8 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
 
 class WpLogQueryService implements LogQueryService {
 
-	private LogTable $log_table;
 
-	public function __construct( LogTable $log_table ) {
-		$this->log_table = $log_table;
-	}
+	public function __construct( private readonly LogTable $log_table ) {}
 
 	/** @inheritDoc */
 	public function findRecent( int $limit ): array {

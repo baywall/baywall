@@ -37,13 +37,11 @@ use Psr\Container\ContainerInterface;
 
 class RootValue {
 
-	private ContainerInterface $container;
-	private AppLogger $logger;
 
-	public function __construct( ContainerInterface $container, AppLogger $logger ) {
-		$this->container = $container;
-		$this->logger    = $logger;
-	}
+	public function __construct(
+		private readonly ContainerInterface $container,
+		private readonly AppLogger $logger
+	) {}
 
 	/**
 	 * @return array<string, mixed>

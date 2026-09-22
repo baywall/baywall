@@ -10,7 +10,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  */
 final class Bytes32 implements ValueObject {
 
-	private Bytes $value;
+	private readonly Bytes $value;
 
 	private function __construct( Bytes $value ) {
 		self::checkValue( $value );

@@ -24,11 +24,8 @@ use WP_REST_Response;
  */
 class RestApiHook extends HookBase {
 
-	private Container $container;
 
-	public function __construct( Container $container ) {
-		$this->container = $container;
-	}
+	public function __construct( private readonly Container $container ) {}
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'addActionRestApiInit' ) );
@@ -47,8 +44,8 @@ class RestApiHook extends HookBase {
 			WpConfig::REST_ROUTE_AUTH_REFRESH,
 			array(
 				'methods'             => 'POST',
-				'callback'            => fn ( \WP_REST_Request $request ) => $this->authRefreshHandler( $request ),
-				'permission_callback' => fn ( \WP_REST_Request $request ) => $this->permissionCallback( $request ),
+				'callback'            => $this->authRefreshHandler( ... ),
+				'permission_callback' => $this->permissionCallback( ... ),
 			)
 		);
 		assert( $success );
@@ -59,8 +56,8 @@ class RestApiHook extends HookBase {
 			WpConfig::REST_ROUTE_AUTH_TOKEN_INVOICE,
 			array(
 				'methods'             => 'POST',
-				'callback'            => fn ( \WP_REST_Request $request ) => $this->authTokenInvoiceHandler( $request ),
-				'permission_callback' => fn ( \WP_REST_Request $request ) => $this->permissionCallback( $request ),
+				'callback'            => $this->authTokenInvoiceHandler( ... ),
+				'permission_callback' => $this->permissionCallback( ... ),
 			)
 		);
 		assert( $success );
@@ -71,8 +68,8 @@ class RestApiHook extends HookBase {
 			WpConfig::REST_ROUTE_PAID_CONTENT,
 			array(
 				'methods'             => 'POST',
-				'callback'            => fn ( \WP_REST_Request $request ) => $this->paidContentHandler( $request ),
-				'permission_callback' => fn ( \WP_REST_Request $request ) => $this->permissionCallback( $request ),
+				'callback'            => $this->paidContentHandler( ... ),
+				'permission_callback' => $this->permissionCallback( ... ),
 			)
 		);
 		assert( $success );
@@ -83,8 +80,8 @@ class RestApiHook extends HookBase {
 			WpConfig::REST_ROUTE_AUTH_LOGOUT,
 			array(
 				'methods'             => 'POST',
-				'callback'            => fn ( \WP_REST_Request $request ) => $this->authLogoutHandler( $request ),
-				'permission_callback' => fn ( \WP_REST_Request $request ) => $this->permissionCallback( $request ),
+				'callback'            => $this->authLogoutHandler( ... ),
+				'permission_callback' => $this->permissionCallback( ... ),
 			)
 		);
 		assert( $success );

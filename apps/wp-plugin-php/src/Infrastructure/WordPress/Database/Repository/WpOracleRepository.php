@@ -10,15 +10,12 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Symbol;
 use Baywall\Core\Domain\ValueObject\SymbolPair;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\OracleTable;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\OracleTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\OracleTableRecord;
 
 class WpOracleRepository implements OracleRepository {
 
-	public function __construct( OracleTable $oracle_table ) {
-		$this->oracle_table = $oracle_table;
-	}
+	public function __construct( private readonly OracleTable $oracle_table ) {}
 
-	private OracleTable $oracle_table;
 
 	/**
 	 * Repositoryに存在するOracle一覧を取得します。

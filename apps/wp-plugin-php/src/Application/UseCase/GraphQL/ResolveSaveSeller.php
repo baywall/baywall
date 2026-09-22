@@ -14,22 +14,13 @@ use Baywall\Core\Infrastructure\Web3\Service\SignatureService;
 
 class ResolveSaveSeller {
 
-	private UserAccessChecker $user_access_checker;
-	private SellerRepository $seller_repository;
-	private SignatureService $signature_service;
-	private TransactionService $transaction_service;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		SellerRepository $seller_repository,
-		SignatureService $signature_service,
-		TransactionService $transaction_service
-	) {
-		$this->user_access_checker = $user_access_checker;
-		$this->seller_repository   = $seller_repository;
-		$this->signature_service   = $signature_service;
-		$this->transaction_service = $transaction_service;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly SellerRepository $seller_repository,
+		private readonly SignatureService $signature_service,
+		private readonly TransactionService $transaction_service
+	) {}
 
 	public function handle( array $root_value, array $args ): bool {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要

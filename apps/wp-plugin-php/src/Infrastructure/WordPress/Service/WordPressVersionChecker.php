@@ -32,12 +32,8 @@ use Composer\Semver\VersionParser;
  */
 class WordPressVersionChecker {
 
-	/** @var WordPressCoreLatestVersionService 最新マイナーバージョン一覧の取得サービス */
-	private WordPressCoreLatestVersionService $version_service;
 
-	public function __construct( WordPressCoreLatestVersionService $version_service ) {
-		$this->version_service = $version_service;
-	}
+	public function __construct( private readonly WordPressCoreLatestVersionService $version_service ) {}
 
 	/**
 	 * 指定されたWordPressバージョンが最新パッチ適用済みかどうかを判定し、

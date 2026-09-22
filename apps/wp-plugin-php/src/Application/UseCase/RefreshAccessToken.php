@@ -20,31 +20,16 @@ use Baywall\Core\Infrastructure\Cookie\CookieWriter;
 class RefreshAccessToken {
 
 
-	private AppLogger $app_logger;
-	private TransactionService $transaction_service;
-	private RefreshTokenService $refresh_token_service;
-	private RefreshTokenCookieProvider $refresh_token_cookie_provider;
-	private AccessTokenCookieProvider $access_token_cookie_provider;
-	private AccessTokenService $access_token_service;
-	private CookieWriter $cookie_writer;
 
 	public function __construct(
-		AppLogger $app_logger,
-		TransactionService $transaction_service,
-		RefreshTokenService $refresh_token_service,
-		RefreshTokenCookieProvider $refresh_token_cookie_provider,
-		AccessTokenCookieProvider $access_token_cookie_provider,
-		AccessTokenService $access_token_service,
-		CookieWriter $cookie_writer
-	) {
-		$this->app_logger                    = $app_logger;
-		$this->transaction_service           = $transaction_service;
-		$this->refresh_token_service         = $refresh_token_service;
-		$this->refresh_token_cookie_provider = $refresh_token_cookie_provider;
-		$this->access_token_cookie_provider  = $access_token_cookie_provider;
-		$this->access_token_service          = $access_token_service;
-		$this->cookie_writer                 = $cookie_writer;
-	}
+		private readonly AppLogger $app_logger,
+		private readonly TransactionService $transaction_service,
+		private readonly RefreshTokenService $refresh_token_service,
+		private readonly RefreshTokenCookieProvider $refresh_token_cookie_provider,
+		private readonly AccessTokenCookieProvider $access_token_cookie_provider,
+		private readonly AccessTokenService $access_token_service,
+		private readonly CookieWriter $cookie_writer
+	) {}
 
 	public function handle( string $refresh_token_value ): void {
 

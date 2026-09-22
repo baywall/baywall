@@ -11,15 +11,12 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Confirmations;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
-use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\ChainTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\ChainTableRecord;
 
 class WpChainRepository implements ChainRepository {
 
-	public function __construct( ChainTable $chain_table ) {
-		$this->chain_table = $chain_table;
-	}
+	public function __construct( private readonly ChainTable $chain_table ) {}
 
-	private ChainTable $chain_table;
 
 	/** @inheritdoc */
 	public function get( ChainId $chain_id ): ?Chain {

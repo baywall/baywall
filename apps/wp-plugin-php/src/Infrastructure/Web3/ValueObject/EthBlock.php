@@ -14,7 +14,7 @@ class EthBlock {
 		$this->response = $get_block_by_number_response;
 	}
 
-	private stdClass $response;
+	private readonly stdClass $response;
 
 	public static function from( stdClass $get_block_by_number_response ): self {
 		return new self( $get_block_by_number_response );

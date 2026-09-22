@@ -23,9 +23,9 @@ use WP_Block;
  */
 class ContentHook extends HookBase {
 
-	private ContentSaveHook $content_save_hook;
-	private ContentLoadHook $content_load_hook;
-	private ContentDeleteHook $content_delete_hook;
+	private readonly ContentSaveHook $content_save_hook;
+	private readonly ContentLoadHook $content_load_hook;
+	private readonly ContentDeleteHook $content_delete_hook;
 
 	public function __construct( ContainerInterface $container ) {
 		$this->content_save_hook   = $container->get( ContentSaveHook::class );
@@ -49,9 +49,6 @@ class ContentHook extends HookBase {
  * @internal
  */
 class ContentSaveHook {
-	private GutenbergService $gutenberg_service;
-	private BlockNameProvider $block_name_provider;
-	private PostRepository $post_repository;
 
 	/**
 	 * ペイウォールブロック＋有料部分のブロック一覧
@@ -62,11 +59,11 @@ class ContentSaveHook {
 	/** 有料記事が削除されていたかどうかのフラグ。保存前に値がセットされ、保存後に評価される */
 	private $pending_delete_paid_content = false;
 
-	public function __construct( GutenbergService $gutenberg_service, BlockNameProvider $block_name_provider, PostRepository $post_repository ) {
-		$this->gutenberg_service   = $gutenberg_service;
-		$this->block_name_provider = $block_name_provider;
-		$this->post_repository     = $post_repository;
-	}
+	public function __construct(
+		private readonly GutenbergService $gutenberg_service,
+		private readonly BlockNameProvider $block_name_provider,
+		private readonly PostRepository $post_repository
+	) {}
 
 	public function register(): void {
 		// `wp_insert_post_data`は保存直前のhook。投稿IDが付与されていない可能性あり。
@@ -173,22 +170,13 @@ class ContentSaveHook {
  */
 class ContentLoadHook {
 
-	private UserAccessProvider $user_access_provider;
-	private GutenbergService $gutenberg_service;
-	private PostRepository $post_repository;
-	private BlockNameProvider $block_name_provider;
 
 	public function __construct(
-		UserAccessProvider $user_access_provider,
-		GutenbergService $gutenberg_service,
-		PostRepository $post_repository,
-		BlockNameProvider $block_name_provider
-	) {
-		$this->user_access_provider = $user_access_provider;
-		$this->gutenberg_service    = $gutenberg_service;
-		$this->post_repository      = $post_repository;
-		$this->block_name_provider  = $block_name_provider;
-	}
+		private readonly UserAccessProvider $user_access_provider,
+		private readonly GutenbergService $gutenberg_service,
+		private readonly PostRepository $post_repository,
+		private readonly BlockNameProvider $block_name_provider
+	) {}
 
 	public function register(): void {
 		// 投稿内容を取得する際のフィルタを登録
@@ -314,16 +302,11 @@ class ContentLoadHook {
  */
 class ContentDeleteHook {
 
-	private PostRepository $post_repository;
-	private PaidContentTable $paid_content_table;
 
 	public function __construct(
-		PostRepository $post_repository,
-		PaidContentTable $paid_content_table
-	) {
-		$this->post_repository    = $post_repository;
-		$this->paid_content_table = $paid_content_table;
-	}
+		private readonly PostRepository $post_repository,
+		private readonly PaidContentTable $paid_content_table
+	) {}
 
 	public function register(): void {
 		// 投稿が削除された時のフックを登録

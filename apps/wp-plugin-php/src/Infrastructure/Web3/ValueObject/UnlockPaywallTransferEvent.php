@@ -14,47 +14,20 @@ use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferType;
 
 class UnlockPaywallTransferEvent {
 	public function __construct(
-		BlockNumber $block_number,
-		int $log_index,
-		TransactionHash $transaction_hash,
-		InvoiceId $invoice_id,
-		Address $server_signer_address,
-		Address $from_address,
-		Address $to_address,
-		Address $token_address,
-		Amount $amount,
-		UnlockPaywallTransferType $transfer_type,
-		UnixTimestamp $block_timestamp,
-		BlockHash $block_hash,
-		bool $removed
-	) {
-		$this->block_number          = $block_number;
-		$this->log_index             = $log_index;
-		$this->transaction_hash      = $transaction_hash;
-		$this->invoice_id            = $invoice_id;
-		$this->server_signer_address = $server_signer_address;
-		$this->from_address          = $from_address;
-		$this->to_address            = $to_address;
-		$this->token_address         = $token_address;
-		$this->amount                = $amount;
-		$this->transfer_type         = $transfer_type;
-		$this->block_timestamp       = $block_timestamp;
-		$this->block_hash            = $block_hash;
-		$this->removed               = $removed;
-	}
-	private BlockNumber $block_number;
-	private int $log_index;
-	private TransactionHash $transaction_hash;
-	private InvoiceId $invoice_id;
-	private Address $server_signer_address;
-	private Address $from_address;
-	private Address $to_address;
-	private Address $token_address;
-	private Amount $amount;
-	private UnlockPaywallTransferType $transfer_type;
-	private UnixTimestamp $block_timestamp;
-	private BlockHash $block_hash;
-	private bool $removed;
+		private readonly BlockNumber $block_number,
+		private readonly int $log_index,
+		private readonly TransactionHash $transaction_hash,
+		private readonly InvoiceId $invoice_id,
+		private readonly Address $server_signer_address,
+		private readonly Address $from_address,
+		private readonly Address $to_address,
+		private readonly Address $token_address,
+		private readonly Amount $amount,
+		private readonly UnlockPaywallTransferType $transfer_type,
+		private readonly UnixTimestamp $block_timestamp,
+		private readonly BlockHash $block_hash,
+		private readonly bool $removed
+	) {}
 
 	public function blockNumber(): BlockNumber {
 		return $this->block_number;

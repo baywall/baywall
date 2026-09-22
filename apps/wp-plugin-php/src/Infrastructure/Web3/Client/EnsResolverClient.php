@@ -16,7 +16,7 @@ use Web3\Contract;
  */
 class EnsResolverClient {
 
-	private Contract $resolver;
+	private readonly Contract $resolver;
 
 	/**
 	 * @param RpcUrl  $rpc_url RPC エンドポイント

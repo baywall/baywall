@@ -12,11 +12,8 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\SellerTable;
 
 class WpSellerRepository implements SellerRepository {
 
-	private SellerTable $seller_table;
 
-	public function __construct( SellerTable $seller_table ) {
-		$this->seller_table = $seller_table;
-	}
+	public function __construct( private readonly SellerTable $seller_table ) {}
 
 	public function get(): ?Seller {
 		$records = $this->seller_table->all();

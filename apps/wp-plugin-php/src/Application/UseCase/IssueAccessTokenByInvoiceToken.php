@@ -26,31 +26,20 @@ use Baywall\Core\Infrastructure\Cookie\CookieWriter;
  */
 class IssueAccessTokenByInvoiceToken {
 
-	private AppLogger $logger;
-	private RefreshTokenService $refresh_token_service;
-	private RefreshTokenCookieProvider $refresh_token_cookie_provider;
-	private AccessTokenCookieProvider $access_token_cookie_provider;
-	private AccessTokenService $access_token_service;
-	private CookieWriter $cookie_writer;
-	private InvoiceTokenService $invoice_token_service;
-	private InvoiceTokenCookieProvider $invoice_token_cookie_provider;
-	private InvoiceService $invoice_service;
-	private ConfirmationsService $confirmations_service;
-	private AppContractCrawlService $app_contract_crawl_service;
 
-	public function __construct( AppLogger $logger, RefreshTokenService $refresh_token_service, RefreshTokenCookieProvider $refresh_token_cookie_provider, AccessTokenCookieProvider $access_token_cookie_provider, AccessTokenService $access_token_service, CookieWriter $cookie_writer, InvoiceTokenService $invoice_token_service, InvoiceTokenCookieProvider $invoice_token_cookie_provider, InvoiceService $invoice_service, ConfirmationsService $confirmations_service, AppContractCrawlService $app_contract_crawl_service ) {
-		$this->logger                        = $logger;
-		$this->refresh_token_service         = $refresh_token_service;
-		$this->refresh_token_cookie_provider = $refresh_token_cookie_provider;
-		$this->access_token_cookie_provider  = $access_token_cookie_provider;
-		$this->access_token_service          = $access_token_service;
-		$this->cookie_writer                 = $cookie_writer;
-		$this->invoice_token_service         = $invoice_token_service;
-		$this->invoice_token_cookie_provider = $invoice_token_cookie_provider;
-		$this->invoice_service               = $invoice_service;
-		$this->confirmations_service         = $confirmations_service;
-		$this->app_contract_crawl_service    = $app_contract_crawl_service;
-	}
+	public function __construct(
+		private readonly AppLogger $logger,
+		private readonly RefreshTokenService $refresh_token_service,
+		private readonly RefreshTokenCookieProvider $refresh_token_cookie_provider,
+		private readonly AccessTokenCookieProvider $access_token_cookie_provider,
+		private readonly AccessTokenService $access_token_service,
+		private readonly CookieWriter $cookie_writer,
+		private readonly InvoiceTokenService $invoice_token_service,
+		private readonly InvoiceTokenCookieProvider $invoice_token_cookie_provider,
+		private readonly InvoiceService $invoice_service,
+		private readonly ConfirmationsService $confirmations_service,
+		private readonly AppContractCrawlService $app_contract_crawl_service
+	) {}
 
 	public function handle( string $invoice_token_string_value ): void {
 		$invoice_token_string = InvoiceTokenString::from( $invoice_token_string_value );

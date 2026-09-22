@@ -10,14 +10,11 @@ use Baywall\Core\Domain\ValueObject\Rate;
 use Baywall\Core\Infrastructure\Cache\OracleRateCache;
 
 class CachedOracleRateProvider implements RateProvider {
-	public function __construct( OracleRateProvider $oracle_rate_provider, OracleResolver $oracle_resolver, OracleRateCache $oracle_rate_cache ) {
-		$this->oracle_rate_provider = $oracle_rate_provider;
-		$this->oracle_resolver      = $oracle_resolver;
-		$this->oracle_rate_cache    = $oracle_rate_cache;
-	}
-	private OracleRateProvider $oracle_rate_provider;
-	private OracleResolver $oracle_resolver;
-	private OracleRateCache $oracle_rate_cache;
+	public function __construct(
+		private readonly OracleRateProvider $oracle_rate_provider,
+		private readonly OracleResolver $oracle_resolver,
+		private readonly OracleRateCache $oracle_rate_cache
+	) {}
 
 	/** @inheritdoc */
 	public function getRate( SymbolPair $symbol_pair ): Rate {

@@ -11,10 +11,7 @@ use yamaneyuta\Ulid;
  */
 class InvoiceId implements ValueObject {
 
-	private function __construct( Ulid $ulid ) {
-		$this->ulid = $ulid;
-	}
-	private Ulid $ulid;
+	private function __construct( private readonly Ulid $ulid ) {}
 
 	public static function fromHex( Hex $hex ): self {
 		return new self( Ulid::from( $hex->value() ) );

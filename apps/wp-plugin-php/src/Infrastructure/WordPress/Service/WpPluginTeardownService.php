@@ -13,13 +13,11 @@ use wpdb;
 /** WordPressからプラグインが削除される際のクリーンアップ処理を行うクラス */
 class WpPluginTeardownService implements PluginTeardownService {
 
-	private wpdb $wpdb;
-	private PurgeOnUninstallRepository $purge_on_uninstall_repository;
 
-	public function __construct( wpdb $wpdb, PurgeOnUninstallRepository $purge_on_uninstall_repository ) {
-		$this->wpdb                          = $wpdb;
-		$this->purge_on_uninstall_repository = $purge_on_uninstall_repository;
-	}
+	public function __construct(
+		private readonly wpdb $wpdb,
+		private readonly PurgeOnUninstallRepository $purge_on_uninstall_repository
+	) {}
 
 	public function teardown(): void {
 		if ( ! $this->purge_on_uninstall_repository->get() ) {

@@ -10,16 +10,11 @@ use Baywall\Core\Constant\Config;
 
 class ResolveLogs {
 
-	private UserAccessChecker $user_access_checker;
-	private LogQueryService $log_query_service;
 
 	public function __construct(
-		UserAccessChecker $user_access_checker,
-		LogQueryService $log_query_service
-	) {
-		$this->user_access_checker = $user_access_checker;
-		$this->log_query_service   = $log_query_service;
-	}
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly LogQueryService $log_query_service
+	) {}
 
 	public function handle( array $root_value, array $args ) {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要

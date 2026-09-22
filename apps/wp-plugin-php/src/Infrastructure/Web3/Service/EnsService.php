@@ -16,12 +16,10 @@ use Baywall\Core\Infrastructure\Web3\Factory\EnsResolverClientFactory;
  */
 class EnsService {
 
-	public function __construct( EnsRegistryClientFactory $ens_registry_client_factory, EnsResolverClientFactory $ens_resolver_client_factory ) {
-		$this->ens_registry_client_factory = $ens_registry_client_factory;
-		$this->ens_resolver_client_factory = $ens_resolver_client_factory;
-	}
-	private EnsRegistryClientFactory $ens_registry_client_factory;
-	private EnsResolverClientFactory $ens_resolver_client_factory;
+	public function __construct(
+		private readonly EnsRegistryClientFactory $ens_registry_client_factory,
+		private readonly EnsResolverClientFactory $ens_resolver_client_factory
+	) {}
 
 	/**
 	 * 指定した ENS 名のテキストレコードを取得します。

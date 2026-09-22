@@ -20,7 +20,7 @@ class BoolOption {
 		$this->option = new IntOption( $option_key_name );
 	}
 
-	private IntOption $option;
+	private readonly IntOption $option;
 
 	public function get( $default = null ): ?bool {
 		$ret = $this->option->get( $default );

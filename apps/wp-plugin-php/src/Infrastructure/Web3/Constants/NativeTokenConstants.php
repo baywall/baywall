@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\Web3\Constants;
 use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants as CHAIN_ID;
 
 /** ネイティブトークンの定義 */
-class NativeTokenConstants {
+final class NativeTokenConstants {
 	// 定義を追加する場合、ここから情報を取得すると良い
 	// https://chainlistapi.com/chains/1
 

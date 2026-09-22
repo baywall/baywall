@@ -14,8 +14,8 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
  */
 class LogTable {
 
-	private MyWpdb $wpdb;
-	private string $table_name;
+	private readonly MyWpdb $wpdb;
+	private readonly string $table_name;
 
 	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
 		$this->wpdb       = $wpdb;

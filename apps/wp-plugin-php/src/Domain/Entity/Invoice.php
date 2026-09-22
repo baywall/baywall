@@ -14,29 +14,19 @@ use Baywall\Core\Domain\ValueObject\Symbol;
 
 class Invoice {
 
-	public function __construct( InvoiceId $id, PostId $post_id, ChainId $chain_id, Price $selling_price, Address $seller_address, Address $payment_token_address, Symbol $payment_token_symbol, Decimals $payment_token_decimals, Amount $payment_amount, Address $buyer_address ) {
-		$this->id                     = $id;
-		$this->post_id                = $post_id;
-		$this->chain_id               = $chain_id;
-		$this->selling_price          = $selling_price;
-		$this->seller_address         = $seller_address;
-		$this->payment_token_address  = $payment_token_address;
-		$this->payment_token_symbol   = $payment_token_symbol;
-		$this->payment_token_decimals = $payment_token_decimals;
-		$this->payment_amount         = $payment_amount;
-		$this->buyer_address          = $buyer_address;
-	}
+	public function __construct(
+		private readonly InvoiceId $id,
+		private readonly PostId $post_id,
+		private readonly ChainId $chain_id,
+		private readonly Price $selling_price,
+		private readonly Address $seller_address,
+		private readonly Address $payment_token_address,
+		private readonly Symbol $payment_token_symbol,
+		private readonly Decimals $payment_token_decimals,
+		private readonly Amount $payment_amount,
+		private readonly Address $buyer_address
+	) {}
 
-	private InvoiceId $id;
-	private PostId $post_id;
-	private ChainId $chain_id;
-	private Price $selling_price;
-	private Address $seller_address;
-	private Address $payment_token_address;
-	private Symbol $payment_token_symbol;
-	private Decimals $payment_token_decimals;
-	private Amount $payment_amount;
-	private Address $buyer_address;
 
 	public function id(): InvoiceId {
 		return $this->id;

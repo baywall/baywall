@@ -8,13 +8,11 @@ use Baywall\Core\Application\Service\UserAccessChecker;
 
 class ResolvePurgeOnUninstall {
 
-	private UserAccessChecker $user_access_checker;
-	private PurgeOnUninstallRepository $purge_on_uninstall_repository;
 
-	public function __construct( UserAccessChecker $user_access_checker, PurgeOnUninstallRepository $purge_on_uninstall_repository ) {
-		$this->user_access_checker           = $user_access_checker;
-		$this->purge_on_uninstall_repository = $purge_on_uninstall_repository;
-	}
+	public function __construct(
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly PurgeOnUninstallRepository $purge_on_uninstall_repository
+	) {}
 
 	public function handle( array $root_value, array $args ): bool {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
