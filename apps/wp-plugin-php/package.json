@@ -44,6 +44,8 @@
     "pretest": "bash scripts/npm/write-test-environment.sh",
     "// 1つのファイルをテストする場合はテスト対象ファイルのパスを後ろに付与してください => pnpm test tests/classes/path-to-test-file.php": "",
     "test": "pnpm clean && pnpm exec wp-env --config .wp-env.tests.json run --env-cwd=\"wp-content/plugins/${PWD##*/}\" cli tests/vendor/bin/phpunit -- -c phpunit.xml --testdox",
+    "// wp-envを使わずホスト側のPHPUnitを直接実行します（MySQL実機テスト用）。DB接続はWP_TESTS_DIR/wp-tests-config.phpから読み取ります": "",
+    "test:mysql": "bash scripts/npm/test-mysql.sh",
     "update:package": "composer update",
     "// `WP_ENV_MYSQL_PORT`,`WP_ENV_TESTS_MYSQL_PORT`,`WP_ENV_PHPMYADMIN_PORT`,`WP_ENV_TESTS_PHPMYADMIN_PORT`を": "",
     "// 指定すると証明書エラーが発生(原因未調査)": "",
