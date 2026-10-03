@@ -46,6 +46,11 @@ class WordPressPropertyProvider {
 		return is_multisite();
 	}
 
+	/** 管理画面で実行されているかどうかを返します。 */
+	public function isAdmin(): bool {
+		return is_admin();
+	}
+
 	/**
 	 * WordPressのバージョン文字列を取得します。
 	 *

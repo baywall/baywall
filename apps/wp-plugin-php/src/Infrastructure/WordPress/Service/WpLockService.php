@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
+use Baywall\Core\Application\Exception\LockAcquisitionException;
 use Baywall\Core\Application\Service\LockService;
-use RuntimeException;
 use wpdb;
 
 class WpLockService extends LockService {
@@ -19,7 +19,9 @@ class WpLockService extends LockService {
 		$sql    = $this->wpdb->prepare( 'SELECT GET_LOCK(%s, %d)', $key, $timeout );
 		$result = $this->wpdb->get_var( $sql );
 		if ( is_null( $result ) ) {
-			throw new RuntimeException( "[D888EC75] GET_LOCK failed: {$this->wpdb->last_error}" );
+			// ロック機構自体のエラー（メモリー不足や mysqladmin kill 等）も、
+			// 呼び出し側でロック取得失敗と同じ経路で扱えるようにする
+			throw new LockAcquisitionException( "[D888EC75] GET_LOCK failed: {$this->wpdb->last_error}" );
 		}
 		assert( $result === '1' || $result === '0', "[2B7D3C13] result: {$result}" );
 		return (bool) $result;

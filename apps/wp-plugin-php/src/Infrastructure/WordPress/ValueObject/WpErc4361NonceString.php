@@ -18,7 +18,10 @@ class WpErc4361NonceString extends Erc4361NonceString {
 		//
 		// 記号が含まれる時、MetaMaskでうまく解釈されない状況になったため、base64ではなくbase62を使用する。
 		// ※ 記号が含まれる場合、MetaMask上でEIP4361用の表示画面でなく通常の署名画面になるだけなので、署名自体は可能。
+		//
+		// 再生攻撃への耐性のため 96bit を生成する（Base62 の 15〜17 文字）。
+		// SIWE のデファクト実装（spruceid/siwe JS）と同等のエントロピーで、署名ダイアログの可読性も保てる。
 
-		return new self( ( new Base62() )->encode( random_bytes( 8 ) ) );
+		return new self( ( new Base62() )->encode( random_bytes( 12 ) ) );
 	}
 }

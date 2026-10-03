@@ -51,4 +51,15 @@ class Erc4361Service {
 		$expirationTime = UnixTimestamp::from( UnixTimestamp::now()->value() - Config::ERC4361_NONCE_DATA_EXPIRATION );
 		$this->repository->deleteExpired( $expirationTime );
 	}
+
+	/**
+	 * nonceが有効期限を超過しているかを判定します
+	 *
+	 * 境界はpurgeExpiredNonceData()（deleteExpired: issued_at < target_timeを削除）と
+	 * 同一の「厳密超過で期限切れ」とし、期限の基準はConfig::ERC4361_NONCE_DATA_EXPIRATIONを
+	 * 共用する。
+	 */
+	public function isNonceExpired( Erc4361Nonce $nonce ): bool {
+		return $nonce->issuedAt()->value() < UnixTimestamp::now()->value() - Config::ERC4361_NONCE_DATA_EXPIRATION;
+	}
 }

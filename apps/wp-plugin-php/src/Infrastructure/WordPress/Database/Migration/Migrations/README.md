@@ -29,7 +29,7 @@
 ### 文字列型の列の幅
 値域が固定の文字列型の列は`varchar(191)`で統一します。`wp_options.option_name`と同じ WordPress の慣習であり、utf8mb4 / utf8mb3 / latin1 のどの charset でも索引長の上限に収まる安全側の値だからです。
 値域が固定でない列はこの統一の対象外です。型幅が 191 でないのは次の列です（URL の`chain.rpc_url`・`chain.block_explorer_url`は`varchar(512)`、列挙値の`log.level`・`log.category`は`varchar(20)`／`varchar(50)`、本文の`seller.signing_message`は`text`、`log.message`は`mediumtext`、`paid_content.paid_content`は`longtext`）。`chain.name`や各テーブルの`symbol`系の列も値域が固定ではありませんが、`varchar(191)`であるためここでは挙げていません。
-値域が固定の列でも`char(n)`は採用しません。理由は次の 2 つです。(1) `erc4361_nonce`（Base62 の 8〜11 文字）のように定長ではない列があるため。(2) 値域の情報源を CHECK 制約の 1 箇所に保つため（`char(n)`を併用すると長さが型幅と CHECK の量化子の 2 箇所に分かれ、どちらか片方だけ直すと不整合が生じる）。加えて、CHAR 型は右側を半角スペースで埋めて格納します。`PAD_CHAR_TO_FULL_LENGTH`が有効なサイトでは末尾の空白が保持されるため、DB から読み直した nonce で ERC-4361 メッセージを再構築する署名検証（ログイン）が常に失敗します。
+値域が固定の列でも`char(n)`は採用しません。理由は次の 2 つです。(1) `erc4361_nonce`（Base62 の 8〜17 文字）のように定長ではない列があるため。(2) 値域の情報源を CHECK 制約の 1 箇所に保つため（`char(n)`を併用すると長さが型幅と CHECK の量化子の 2 箇所に分かれ、どちらか片方だけ直すと不整合が生じる）。加えて、CHAR 型は右側を半角スペースで埋めて格納します。`PAD_CHAR_TO_FULL_LENGTH`が有効なサイトでは末尾の空白が保持されるため、DB から読み直した nonce で ERC-4361 メッセージを再構築する署名検証（ログイン）が常に失敗します。
 
 ### ファイル命名規則
 ファイル名の昇順で実行されるため、マイグレーションファイル名は必ず`V{YYYYMMDD}`(`V` + 作成日)から始めてください。(仕様)

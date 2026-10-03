@@ -30,7 +30,7 @@ class WpInstalledPluginVersionRepository {
 
 	/** インストール済みのプラグインバージョンを更新します */
 	public function update( PluginVersion $version ): void {
-		// 管理画面で使用するだけなので autoload は false で保存
-		$this->option->update( $version->value(), false );
+		// 全リクエストの plugins_loaded で使用するため autoload は true で保存
+		$this->option->update( $version->value(), true );
 	}
 }

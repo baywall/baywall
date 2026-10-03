@@ -19,6 +19,7 @@ use Baywall\Core\Application\Service\JwtAlgorithmProvider;
 use Baywall\Core\Application\Service\LockService;
 use Baywall\Core\Application\Service\LogQueryService;
 use Baywall\Core\Application\Service\PaidContentService;
+use Baywall\Core\Application\Service\PluginDeactivationService;
 use Baywall\Core\Application\Service\PluginMigrationService;
 use Baywall\Core\Application\Service\PluginTeardownService;
 use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
@@ -88,6 +89,7 @@ use Baywall\Core\Infrastructure\WordPress\Service\WpInvoiceTokenProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpJwtAlgorithmProvider;
 use Baywall\Core\Infrastructure\WordPress\Repository\WpJwtSecretKeyRepository;
 use Baywall\Core\Infrastructure\WordPress\Service\WpLockService;
+use Baywall\Core\Infrastructure\WordPress\Service\WpPluginDeactivationService;
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginPackageChecksumVerifier;
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginUpdateChecker;
@@ -164,6 +166,7 @@ final class ContainerDefinitions {
 			Erc4361NonceProvider::class              => autowire( WpErc4361NonceProvider::class ),
 			GraphQLService::class                    => autowire( WpGraphQLService::class ),
 			SiteService::class                       => autowire( WpSiteService::class ),
+			PluginDeactivationService::class         => autowire( WpPluginDeactivationService::class ),
 			PluginInfoProvider::class                => autowire( WpPluginInfoProvider::class ),
 			PluginMigrationService::class            => autowire( WpPluginMigrationService::class ),
 			PluginTeardownService::class             => autowire( WpPluginTeardownService::class ),

@@ -41,6 +41,12 @@ class ResolveIssueAccessTokenByErc4361Signature {
 		// 指定されたアドレスから、保存済みのnonceを取得
 		$stored_nonce = $this->erc4361_nonce_repository->get( $address );
 
+		if ( $stored_nonce === null || $this->erc4361_service->isNonceExpired( $stored_nonce ) ) {
+			// nonce未保存又は期限切れの場合はエラー
+			// ※ 第三者がリクエストを送信している可能性もあるため、保存済みnonce削除は行わない
+			throw new BadRequestException( "[C8DF5CAB] ERC-4361 nonce not found or expired for address: {$address}" );
+		}
+
 		// 保存済みのnonceを使って署名用メッセージを再構築
 		$message = $this->erc4361_service->createMessage( $address, $chain_id, $stored_nonce );
 		// 再構築したメッセージと、受け取った署名からアドレスを計算
