@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase\GraphQL;
 
+use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\OracleRepository;
 use Baywall\Core\Domain\Specification\OraclesFilter;
@@ -13,11 +14,14 @@ class ResolveOracle {
 
 
 	public function __construct(
+		private readonly UserAccessChecker $user_access_checker,
 		private readonly ChainRepository $chain_repository,
 		private readonly OracleRepository $oracle_repository
 	) {}
 
 	public function handle( array $root_value, array $args ): array {
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
+
 		$chain_id = ChainId::from( $args['chainId'] );
 		$address  = Address::from( $args['address'] );
 

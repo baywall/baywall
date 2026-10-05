@@ -39,6 +39,15 @@
   },
   "keywords": [],
   "devDependencies": {
-    "@types/jest": "^30.0.0"
+    "@swc/core": "catalog:",
+    "@swc/jest": "catalog:",
+    "@types/jest": "catalog:",
+    "eslint": "catalog:",
+    "jest": "catalog:",
+    "madge": "catalog:",
+    "npm-run-all": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   }
 }

@@ -39,7 +39,16 @@
     "watch": "pnpm exec tsc -w -p tsconfig.esm.json"
   },
   "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "@types/node": "^26.6.3"
+    "@swc/core": "catalog:",
+    "@swc/jest": "catalog:",
+    "@types/jest": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "jest": "catalog:",
+    "madge": "catalog:",
+    "npm-run-all": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   }
 }
