@@ -42,4 +42,16 @@ class WpServerSignerRepository implements ServerSignerRepository {
 			$this->decodePlainBase64Key( $record->privateKeyValue() )
 		);
 	}
+
+	/** 署名用ウォレットのアドレスを取得します（秘密鍵を読み取らないため、鍵の値に依存しない） */
+	public function getAddress(): Address {
+		$address = $this->server_signer_table->selectAddress();
+
+		if ( $address === null ) {
+			// プラグイン初期化時に登録済みのためここは通らない
+			throw new \RuntimeException( '[73B2B7A4] server signer is not registered.' );
+		}
+
+		return Address::from( $address );
+	}
 }

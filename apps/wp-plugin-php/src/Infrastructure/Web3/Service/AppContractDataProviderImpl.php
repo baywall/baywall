@@ -22,7 +22,7 @@ class AppContractDataProviderImpl implements AppContractDataProvider {
 	/** 購入時のブロック番号を取得します */
 	public function unlockedBlockNumber( ChainId $chain_id, PostId $post_id, Address $buyer_address ): ?BlockNumber {
 		$client         = $this->app_contract_client_factory->create( $chain_id );
-		$signer_address = $this->server_signer_repository->get()->address();
+		$signer_address = $this->server_signer_repository->getAddress();
 
 		$res = $client->getPaywallStatus( $signer_address, $post_id, $buyer_address );
 

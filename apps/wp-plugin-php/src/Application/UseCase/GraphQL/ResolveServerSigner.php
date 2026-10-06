@@ -12,10 +12,10 @@ class ResolveServerSigner {
 
 	public function handle( array $root_value, array $args ) {
 
-		$server_signer = $this->server_signer_repository->get();
+		$address = $this->server_signer_repository->getAddress()->value();
 
-		return $server_signer === null ? null : array(
-			'address' => $server_signer->address()->value(),
+		return array(
+			'address' => $address,
 		);
 	}
 }

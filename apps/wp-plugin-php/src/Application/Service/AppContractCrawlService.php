@@ -63,7 +63,7 @@ class AppContractCrawlService {
 		// 各チェーンでクロールが完了したかどうかのフラグ
 		$crawl_finished = array_map( fn ( ChainId $chain_id ) => false, $chain_ids );
 		// フィルタ条件となる署名用ウォレットアドレスを取得
-		$server_signer_address = $this->server_signer_repository->get()->address();
+		$server_signer_address = $this->server_signer_repository->getAddress();
 
 		// 全てのチェーンでクロールが完了するまで繰り返す
 		while ( in_array( false, $crawl_finished, true ) ) {

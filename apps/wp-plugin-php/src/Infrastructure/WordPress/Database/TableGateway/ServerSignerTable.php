@@ -35,4 +35,21 @@ class ServerSignerTable {
 		// データが存在しない場合はnullを返す
 		return count( $results ) === 0 ? null : new ServerSignerTableRecord( $results[0] );
 	}
+
+	/** アドレスだけを参照する際の計算量削減のため、address 列のみ取得します */
+	public function selectAddress(): ?string {
+		$sql = <<<SQL
+			SELECT `address`
+			FROM `{$this->table_name}`
+		SQL;
+
+		$results = $this->wpdb->get_results( $sql );
+		if ( count( $results ) > 1 ) {
+			// 2件以上データが存在することはない
+			throw new \RuntimeException( '[81CCE569] More than one server signer data found.' );
+		}
+
+		// データが存在しない場合はnullを返す
+		return count( $results ) === 0 ? null : $results[0]->address;
+	}
 }
