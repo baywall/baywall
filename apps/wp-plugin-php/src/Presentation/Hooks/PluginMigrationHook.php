@@ -36,7 +36,7 @@ use Throwable;
 // ■その他注意事項
 // - マルチサイトの場合、他のサイトに対しても処理が実行されるかどうか確認する必要あり(もしくはサイトIDに依存しない設計にする)
 
-class PluginUpdateHook extends HookBase {
+class PluginMigrationHook extends HookBase {
 
 	private const LOCK_NAME = '38FA0139'; // 排他制御用の適当な文字列
 

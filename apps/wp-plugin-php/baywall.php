@@ -4,7 +4,7 @@
  * Description:       You can set up a paywall for blockchain payments.
  * Requires at least: 6.6
  * Requires PHP:      8.1
- * Version:           1.0.0-alpha.2
+ * Version:           1.0.0-alpha.3
  * Author:            yamaneyuta
  * License:           Split License
  * License URI:       ./LICENSE
@@ -25,7 +25,7 @@ use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\GraphQLHook;
 use Baywall\Core\Presentation\Hooks\LogCleanupCronHook;
 use Baywall\Core\Presentation\Hooks\PluginUpdateCheckHook;
-use Baywall\Core\Presentation\Hooks\PluginUpdateHook;
+use Baywall\Core\Presentation\Hooks\PluginMigrationHook;
 use Baywall\Core\Presentation\Hooks\PostEditHook;
 use Baywall\Core\Presentation\Hooks\RestApiHook;
 use Baywall\Core\Presentation\Hooks\ViewPageHook;
@@ -45,7 +45,7 @@ $main = function () {
 
 	/** @var class-string<HookBase>[] $hook_classes */
 	$hook_classes = array(
-		PluginUpdateHook::class, // プラグインの初期化
+		PluginMigrationHook::class, // プラグインの初期化
 		GraphQLHook::class,      // GraphQLのAPI登録
 		RestApiHook::class,    // REST APIの登録(GraphQL以外)
 		AppContractCrawlCronHook::class, // AppコントラクトをクロールするCronの登録

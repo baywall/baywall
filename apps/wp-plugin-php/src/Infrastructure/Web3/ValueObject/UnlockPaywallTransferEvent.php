@@ -8,6 +8,7 @@ use Baywall\Core\Domain\ValueObject\Amount;
 use Baywall\Core\Domain\ValueObject\BlockHash;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\TransactionHash;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferType;
@@ -18,6 +19,7 @@ class UnlockPaywallTransferEvent {
 		private readonly int $log_index,
 		private readonly TransactionHash $transaction_hash,
 		private readonly InvoiceId $invoice_id,
+		private readonly PostId $post_id,
 		private readonly Address $server_signer_address,
 		private readonly Address $from_address,
 		private readonly Address $to_address,
@@ -40,6 +42,9 @@ class UnlockPaywallTransferEvent {
 	}
 	public function invoiceId(): InvoiceId {
 		return $this->invoice_id;
+	}
+	public function postId(): PostId {
+		return $this->post_id;
 	}
 	public function serverSignerAddress(): Address {
 		return $this->server_signer_address;

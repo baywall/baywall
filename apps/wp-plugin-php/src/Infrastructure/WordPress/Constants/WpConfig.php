@@ -3,6 +3,12 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Constants;
 
+// Windowsでも混合セパレータにならないよう、読み込み時に正規化済みパスを求めておく。
+// クラス定数式は関数呼び出しを含められないため、`define`で定義した定数をクラス定数から参照する。
+if ( ! defined( 'BAYWALL_ROOT_DIR' ) ) {
+	define( 'BAYWALL_ROOT_DIR', wp_normalize_path( dirname( __DIR__, 4 ) ) );
+}
+
 /**
  * WordPressにのみ関連する設定値を取得するためのクラス
  */
@@ -10,9 +16,9 @@ final class WpConfig {
 
 	/**
 	 * このプラグインのルートディレクトリ
-	 * (エントリファイルが存在するディレクトリのパス)
+	 * (エントリファイルが存在するディレクトリのパス。セパレータは`/`に正規化済み)
 	 */
-	public const ROOT_DIR = __DIR__ . '/../../../..';
+	public const ROOT_DIR = \BAYWALL_ROOT_DIR;
 
 	/**
 	 * ペイウォールブロックのブロック名

@@ -86,7 +86,7 @@ class WpPluginMigrationService implements PluginMigrationService {
 		$this->plugin_version_option->update( $target_version );
 
 		// 開発環境、テスト環境でのみ実行するスクリプトを実行
-		// ※ テスト環境のデータベース初期化は Hook 経由でないため、PluginUpdateHook では呼び出さず、ここで呼び出す
+		// ※ テスト環境のデータベース初期化は Hook 経由でないため、PluginMigrationHook では呼び出さず、ここで呼び出す
 		$env = new WpEnvironment();
 		if ( $env->isDevelopment() || $env->isTesting() ) {
 			// テスト環境で毎回呼び出す必要があるため require_once ではなく require を使用する

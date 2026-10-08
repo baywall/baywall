@@ -9,6 +9,7 @@ use Baywall\Core\Domain\ValueObject\BlockHash;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\Hex;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\TransactionHash;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferType;
@@ -43,6 +44,7 @@ class AppContractAbi extends AbiBase {
 		assert( is_string( $decoded_event_params['to'] ), '[8E6055C5] ' . var_export( $decoded_event_params['to'], true ) );
 		assert( is_string( $decoded_event_params['token'] ), '[E3FD1079] ' . var_export( $decoded_event_params['token'], true ) );
 		assert( $decoded_event_params['amount'] instanceof BigInteger, '[AF7DF1B0] ' . var_export( $decoded_event_params['amount'], true ) );
+		assert( $decoded_event_params['postId'] instanceof BigInteger, '[6EB9A35F] ' . var_export( $decoded_event_params['postId'], true ) );
 		assert( $decoded_event_params['invoiceId'] instanceof BigInteger, '[D454A801] ' . var_export( $decoded_event_params['invoiceId'], true ) );
 		assert( $decoded_event_params['transferType'] instanceof BigInteger, '[2CC10192] ' . var_export( $decoded_event_params['transferType'], true ) );
 		assert( $decoded_event_params['blockTimestamp'] instanceof BigInteger, '[5C9E047C] ' . var_export( $decoded_event_params['blockTimestamp'], true ) );
@@ -52,6 +54,7 @@ class AppContractAbi extends AbiBase {
 			hexdec( $log->logIndex ), // log_index
 			TransactionHash::from( $log->transactionHash ), // transaction_hash
 			InvoiceId::fromHex( Hex::from( '0x' . $decoded_event_params['invoiceId']->toHex() ) ), // invoice_id
+			PostId::from( (int) $decoded_event_params['postId']->toString() ), // post_id
 			Address::from( $decoded_event_params['signer'] ), // server_signer_address
 			Address::from( $decoded_event_params['from'] ), // from_address
 			Address::from( $decoded_event_params['to'] ), // to_address
@@ -102,6 +105,12 @@ class AppContractAbiData {
 								"indexed": false,
 								"internalType": "uint256",
 								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"indexed": false,
+								"internalType": "uint256",
+								"name": "postId",
 								"type": "uint256"
 							},
 							{

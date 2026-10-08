@@ -103,7 +103,7 @@ class PluginMainFile {
 		// 　 `get_plugin_data`関数内では`_get_plugin_data_markup_translate`が呼び出され、そこから`translate`関数が呼び出される。
 		// 　 ここでは、`_get_plugin_data_markup_translate`が呼び出されないように第二引数、第三引数を共にfalseにしている
 		// 　 (翻訳済みのプラグインの説明などが必要であれば`translate`関数を呼び出す必要があるが、本プラグイン内の使用範囲では不要)
-		// 　 参考: https://github.com/WordPress/wordpress-develop/blob/7.1.2/src/wp-admin/includes/plugin.php#L74-L121
+		// 　 参考: https://github.com/WordPress/wordpress-develop/blob/7.1.3/src/wp-admin/includes/plugin.php#L74-L121
 		$this->plugin_data = get_plugin_data( $this->path(), false, false );
 	}
 
@@ -122,10 +122,14 @@ class PluginMainFile {
 	 */
 	public function path(): string {
 		if ( $this->path === null ) {
-			$ret = glob( WpConfig::ROOT_DIR . '/baywall.php' );
-			assert( count( $ret ) === 1 );
-			assert( count( glob( WpConfig::ROOT_DIR . '/readme.txt' ) ) === 1 );
-			$this->path = realpath( $ret[0] );
+			assert( is_file( WpConfig::ROOT_DIR . '/readme.txt' ) );
+
+			// Windowsで不安定な`glob`は使わず`realpath`で解決し、失敗時はassertに依存せず例外で通知する
+			$resolved = realpath( WpConfig::ROOT_DIR . '/baywall.php' );
+			if ( $resolved === false ) {
+				throw new \RuntimeException( '[6FE56FBB] Failed to resolve plugin main file path.' );
+			}
+			$this->path = $resolved;
 		}
 		return $this->path;
 	}

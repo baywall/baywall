@@ -30,6 +30,7 @@ class UnlockPaywallTransferEventRepository {
 		// トークン転送インベント情報を保存
 		$this->unlock_paywall_transfer_event_table->save(
 			$event->invoiceId(),
+			$event->postId(),
 			$chain_id,
 			$event->transactionHash(),
 			$event->logIndex(),

@@ -9,6 +9,7 @@ use Baywall\Core\Domain\ValueObject\Amount;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Decimals;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
+use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\TransactionHash;
 use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferType;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
@@ -27,7 +28,7 @@ class UnlockPaywallTransferEventTable {
 		$this->table_name = $table_name_provider->unlockPaywallTransferEvent();
 	}
 
-	public function save( InvoiceId $invoice_id, ChainId $chain_id, TransactionHash $transaction_hash, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, UnlockPaywallTransferType $transfer_type ): void {
+	public function save( InvoiceId $invoice_id, PostId $post_id, ChainId $chain_id, TransactionHash $transaction_hash, int $log_index, Address $from, Address $to, Address $token_address, Amount $amount, UnlockPaywallTransferType $transfer_type ): void {
 		// 数量に小数点が含まれることはない
 		assert( $amount->decimals()->equals( Decimals::from( 0 ) ), '[F48CCCE8] Amount must be an integer.' );
 
@@ -35,6 +36,7 @@ class UnlockPaywallTransferEventTable {
 			$this->table_name,
 			array(
 				'invoice_id'       => $invoice_id->ulid(),
+				'post_id'          => $post_id->value(),
 				'chain_id'         => $chain_id->value(),
 				'transaction_hash' => $transaction_hash->value(),
 				'log_index'        => $log_index,
@@ -45,7 +47,7 @@ class UnlockPaywallTransferEventTable {
 				'transfer_type'    => $transfer_type->value(),
 				'created_at'       => UnixTimestamp::now()->value(),
 			),
-			array( '%s', '%d', '%s', '%d', '%s', '%s', '%s', '%s', '%d', '%d' )
+			array( '%s', '%d', '%d', '%s', '%d', '%s', '%s', '%s', '%s', '%d', '%d' )
 		);
 		assert( $result === 1, "[1C8FE9F7] Failed to save unlock paywall transfer event. {$result}" );
 	}

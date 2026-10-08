@@ -24,11 +24,9 @@ class AdminPageHook extends HookBase {
 		add_action( 'admin_enqueue_scripts', array( $this, 'addActionAdminEnqueueScripts' ) );
 
 		// プラグイン一覧のアクションリンクに`設定`を追加。
-		$plugin_file_path = realpath( __DIR__ . '/../../../baywall.php' );
-		if ( $plugin_file_path === false ) {
-			throw new \RuntimeException( '[B3E5333F] Failed to resolve plugin file path.' );
-		}
-		$hook_name = 'plugin_action_links_' . plugin_basename( $plugin_file_path );
+		/** @var WpPluginInfoProvider */
+		$plugin    = $this->container->get( WpPluginInfoProvider::class );
+		$hook_name = 'plugin_action_links_' . plugin_basename( $plugin->mainFilePath() );
 		add_filter( $hook_name, array( $this, 'addFilterPluginActionLinks' ) );
 	}
 
