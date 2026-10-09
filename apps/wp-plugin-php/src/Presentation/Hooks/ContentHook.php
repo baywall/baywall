@@ -13,7 +13,7 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable
 use Baywall\Core\Infrastructure\WordPress\Service\BlockNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\GutenbergService;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
-use Psr\Container\ContainerInterface;
+use DI\Container;
 use WP_Block;
 
 /**
@@ -27,7 +27,7 @@ class ContentHook extends HookBase {
 	private readonly ContentLoadHook $content_load_hook;
 	private readonly ContentDeleteHook $content_delete_hook;
 
-	public function __construct( ContainerInterface $container ) {
+	public function __construct( Container $container ) {
 		$this->content_save_hook   = $container->get( ContentSaveHook::class );
 		$this->content_load_hook   = $container->get( ContentLoadHook::class );
 		$this->content_delete_hook = $container->get( ContentDeleteHook::class );

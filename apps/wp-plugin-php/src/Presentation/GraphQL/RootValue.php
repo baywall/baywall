@@ -33,13 +33,13 @@ use Baywall\Core\Application\UseCase\GraphQL\ResolveSctaUrl;
 use Baywall\Core\Application\UseCase\GraphQL\ResolveThemeSetting;
 use Baywall\Core\Application\UseCase\GraphQL\ResolveToken;
 use Baywall\Core\Application\UseCase\GraphQL\ResolveTokens;
-use Psr\Container\ContainerInterface;
+use DI\Container;
 
 class RootValue {
 
 
 	public function __construct(
-		private readonly ContainerInterface $container,
+		private readonly Container $container,
 		private readonly AppLogger $logger
 	) {}
 

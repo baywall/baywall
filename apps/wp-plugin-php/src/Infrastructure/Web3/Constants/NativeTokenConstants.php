@@ -46,10 +46,5 @@ final class NativeTokenConstants {
 			'decimals' => 18,
 			'name'     => 'Ether',
 		),
-		CHAIN_ID::PRIVATENET2  => array(
-			'symbol'   => 'POL',
-			'decimals' => 18,
-			'name'     => 'POL',
-		),
 	);
 }

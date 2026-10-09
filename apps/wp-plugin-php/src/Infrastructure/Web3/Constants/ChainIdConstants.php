@@ -19,6 +19,4 @@ final class ChainIdConstants {
 	// ==================== Privatenet ====================
 	/** Ethereumの代わりに使用するプライベートネットのチェーンID */
 	public const PRIVATENET1 = 31337;
-	/** Polygonの代わりに使用するプライベートネットのチェーンID */
-	public const PRIVATENET2 = 1337;
 }

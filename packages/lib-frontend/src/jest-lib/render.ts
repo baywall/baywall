@@ -3,7 +3,7 @@ import { render as _render, RenderOptions, RenderResult } from '@testing-library
 /**
  * renderに例外が発生するコンポーネントを渡すとエラーログが出力されるので、それを抑制するラッパー関数。
  *
- * 発生時バージョン: @testing-library/react@16.0.0
+ * 発生時バージョン: `@testing-library/react@16.0.0`
  * @param ui
  * @param options
  * @see ./renderHook.ts

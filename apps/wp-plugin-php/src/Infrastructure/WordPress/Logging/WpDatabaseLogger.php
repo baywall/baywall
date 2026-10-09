@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Logging;
 
-use Baywall\Core\Infrastructure\Logging\Handler\SimpleLogger;
-use Baywall\Core\Infrastructure\Logging\Logger;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Infrastructure\Logging\ErrorLogLogger;
+use Baywall\Core\Application\Logging\Logger;
+use Baywall\Core\Application\Logging\ValueObject\LogCategory;
+use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
 
 class WpDatabaseLogger implements Logger {
@@ -14,7 +14,7 @@ class WpDatabaseLogger implements Logger {
 
 	public function __construct(
 		private readonly LogTable $log_table,
-		private readonly SimpleLogger $fallback_logger
+		private readonly ErrorLogLogger $fallback_logger
 	) {}
 
 	/**

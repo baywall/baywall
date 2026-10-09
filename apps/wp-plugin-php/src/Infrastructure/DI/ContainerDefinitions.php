@@ -56,10 +56,10 @@ use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInvoiceRepositor
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpOracleRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpPostRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpTokenRepository;
-use Baywall\Core\Infrastructure\Logging\Handler\SimpleLogger;
-use Baywall\Core\Infrastructure\Logging\Logger;
+use Baywall\Core\Infrastructure\Logging\ErrorLogLogger;
+use Baywall\Core\Application\Logging\Logger;
 use Baywall\Core\Infrastructure\WordPress\Logging\WpDatabaseLogger;
-use Baywall\Core\Infrastructure\Logging\LogLevelRepository;
+use Baywall\Core\Application\Logging\LogLevelRepository;
 use Baywall\Core\Infrastructure\Web3\Service\AppContractDataProviderImpl;
 use Baywall\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Baywall\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
@@ -181,7 +181,7 @@ final class ContainerDefinitions {
 
 			// Logging
 			Logger::class                            => autowire( WpDatabaseLogger::class ),
-			SimpleLogger::class                      => autowire(),
+			ErrorLogLogger::class                    => autowire(),
 			LogLevelRepository::class                => autowire( WpLogLevelRepository::class ),
 		);
 	}

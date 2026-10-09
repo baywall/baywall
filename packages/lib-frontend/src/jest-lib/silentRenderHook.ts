@@ -8,7 +8,7 @@ type HydrateableContainer = Parameters<(typeof ReactDOMClient)['hydrateRoot']>[0
 /**
  * renderHookに例外が発生する関数オブジェクトを渡すとエラーログが出力されるので、それを抑制するラッパー関数。
  *
- * 発生時バージョン: @testing-library/react@16.0.0
+ * 発生時バージョン: `@testing-library/react@16.0.0`
  * 参考URL: https://stackoverflow.com/questions/72776771/i-need-to-render-a-custom-hook-and-test-the-error-message-when-someone-tries-to#answer-77968325
  * @param render
  * @param options

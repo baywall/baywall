@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Application\Logging\ValueObject\LogCategory;
+use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 

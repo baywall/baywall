@@ -7,12 +7,12 @@ use Baywall\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
-use Psr\Container\ContainerInterface;
+use DI\Container;
 
 class ViewPageHook extends HookBase {
 
 
-	public function __construct( private readonly ContainerInterface $container ) {}
+	public function __construct( private readonly Container $container ) {}
 
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueueViewScripts' ) );

@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
 use Baywall\Core\Application\Service\TransactionService;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Application\Logging\ValueObject\LogCategory;
+use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Baywall\Core\Infrastructure\WordPress\Repository\WpLogLevelRepository;
 

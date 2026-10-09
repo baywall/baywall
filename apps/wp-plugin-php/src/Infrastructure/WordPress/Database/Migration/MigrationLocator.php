@@ -7,17 +7,17 @@ use Baywall\Core\Infrastructure\Util\NamespaceParser;
 use Baywall\Core\Infrastructure\Util\Strings;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Baywall\Core\Application\ValueObject\PluginVersion;
-use Psr\Container\ContainerInterface;
+use DI\Container;
 
 /** マイグレーション対象となるクラスインスタンス一覧を取得します */
 class MigrationLocator {
 
 	const MIGRATIONS_DIR = __DIR__ . '/Migrations/';
 
-	private readonly ContainerInterface $container;
+	private readonly Container $container;
 	private readonly NamespaceParser $namespace_parser;
 
-	public function __construct( ContainerInterface $container ) {
+	public function __construct( Container $container ) {
 		$this->container        = $container;
 		$this->namespace_parser = $container->get( NamespaceParser::class );
 	}

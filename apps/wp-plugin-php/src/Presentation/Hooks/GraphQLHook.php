@@ -20,7 +20,7 @@ use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\DisableIntrospection;
 use GraphQL\Validator\Rules\QueryComplexity;
 use GraphQL\Validator\Rules\QueryDepth;
-use Psr\Container\ContainerInterface;
+use DI\Container;
 
 /**
  * GraphQLのAPI登録
@@ -28,7 +28,7 @@ use Psr\Container\ContainerInterface;
 class GraphQLHook extends HookBase {
 
 
-	public function __construct( private readonly ContainerInterface $container ) {}
+	public function __construct( private readonly Container $container ) {}
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'addActionRestApiInit' ) );

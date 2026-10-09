@@ -1,7 +1,7 @@
 /**
  * ブロック編集コンポーネントの props 型定義
  *
- * 出典: @wordpress/blocks の BlockEditProps 型から抽出
+ * 出典: `@wordpress/blocks` の BlockEditProps 型から抽出
  * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/blocks/src/api/types.ts
  */
 export interface BlockEditProps<T extends Record<string, unknown>> {

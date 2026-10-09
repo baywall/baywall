@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\Logging;
+namespace Baywall\Core\Application\Logging;
 
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 
 interface Logger {
 	/**

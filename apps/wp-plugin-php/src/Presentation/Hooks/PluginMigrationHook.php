@@ -14,7 +14,7 @@ use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInstalledPluginVersionRepository;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressVersionChecker;
-use Psr\Container\ContainerInterface;
+use DI\Container;
 use Throwable;
 
 // ■プラグインがインストールされた時や更新時のhookに関して
@@ -40,7 +40,7 @@ class PluginMigrationHook extends HookBase {
 
 	private const LOCK_NAME = '38FA0139'; // 排他制御用の適当な文字列
 
-	public function __construct( private readonly ContainerInterface $container ) {}
+	public function __construct( private readonly Container $container ) {}
 
 	public function register(): void {
 		// 優先度1で、他プラグインの初期化処理より前にマイグレーションを完了させる

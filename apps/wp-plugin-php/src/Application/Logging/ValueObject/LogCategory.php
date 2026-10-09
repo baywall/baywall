@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\Logging\ValueObject;
+namespace Baywall\Core\Application\Logging\ValueObject;
 
 final class LogCategory {
 	/** アプリケーションログ */

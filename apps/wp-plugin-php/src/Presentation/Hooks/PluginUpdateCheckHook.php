@@ -5,7 +5,7 @@ namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Constant\Config;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
 use Baywall\Core\Infrastructure\WordPress\Service\WpEnvironment;
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
@@ -13,7 +13,7 @@ use Baywall\Core\Infrastructure\WordPress\Service\WpPluginPackageChecksumVerifie
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginUpdateChecker;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
-use Psr\Container\ContainerInterface;
+use DI\Container;
 
 /**
  * プラグインの自動アップデートチェックを行うフック。
@@ -26,7 +26,7 @@ use Psr\Container\ContainerInterface;
  */
 class PluginUpdateCheckHook extends HookBase {
 
-	public function __construct( private readonly ContainerInterface $container ) {}
+	public function __construct( private readonly Container $container ) {}
 
 	/**
 	 * フィルターフック名（update_plugins_{host}）を`Config::UPDATE_URI`のホスト名から導出します。

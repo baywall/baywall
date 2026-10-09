@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\Logging;
+namespace Baywall\Core\Application\Logging;
 
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Application\Logging\ValueObject\LogCategory;
+use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 
 interface LogLevelRepository {
 	/** 指定されたログカテゴリの現在のログレベルを取得します。 */

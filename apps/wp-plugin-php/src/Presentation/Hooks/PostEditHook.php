@@ -7,7 +7,7 @@ use Baywall\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
-use Psr\Container\ContainerInterface;
+use DI\Container;
 
 /**
  * 投稿編集画面のフック(投稿新規作成画面を含む)
@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 class PostEditHook extends HookBase {
 
 
-	public function __construct( private readonly ContainerInterface $container ) {}
+	public function __construct( private readonly Container $container ) {}
 
 	public function register(): void {
 		add_action( 'enqueue_block_assets', array( $this, 'addActionEnqueueBlockAssets' ) );

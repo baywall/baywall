@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\Logging;
 
-use Baywall\Core\Infrastructure\Logging\Logger;
-use Baywall\Core\Infrastructure\Logging\LogLevelRepository;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Application\Logging\ValueObject\LogCategory;
+use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 
 class AppLogger {
 	public function __construct(

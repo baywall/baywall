@@ -10,7 +10,7 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
-use Psr\Container\ContainerInterface;
+use DI\Container;
 
 /**
  * ログテーブルのクリーンアップ処理をwp_cronを使って登録するクラス。
@@ -23,7 +23,7 @@ class LogCleanupCronHook extends HookBase {
 
 	private const LOCK_NAME = 'E1AE6C84'; // 排他制御用の適当な文字列
 
-	public function __construct( private readonly ContainerInterface $container ) {}
+	public function __construct( private readonly Container $container ) {}
 
 	public function register(): void {
 		// Cronアクション名を取得

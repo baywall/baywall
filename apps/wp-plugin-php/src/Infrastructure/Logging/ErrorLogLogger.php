@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\Logging\Handler;
+namespace Baywall\Core\Infrastructure\Logging;
 
-use Baywall\Core\Infrastructure\Logging\Logger;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Application\Logging\Logger;
+use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use DateTimeImmutable;
 
-class SimpleLogger implements Logger {
+class ErrorLogLogger implements Logger {
 	/**
 	 * ログを記録します。
 	 */

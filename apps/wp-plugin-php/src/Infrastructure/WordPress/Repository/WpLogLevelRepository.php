@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Repository;
 
-use Baywall\Core\Infrastructure\Logging\LogLevelRepository;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogCategory;
-use Baywall\Core\Infrastructure\Logging\ValueObject\LogLevel;
+use Baywall\Core\Application\Logging\LogLevelRepository;
+use Baywall\Core\Application\Logging\ValueObject\LogCategory;
+use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
 class WpLogLevelRepository implements LogLevelRepository {

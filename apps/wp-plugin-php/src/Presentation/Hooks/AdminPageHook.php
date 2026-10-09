@@ -9,12 +9,12 @@ use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\SlugProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
-use Psr\Container\ContainerInterface;
+use DI\Container;
 
 class AdminPageHook extends HookBase {
 
 
-	public function __construct( private readonly ContainerInterface $container ) {}
+	public function __construct( private readonly Container $container ) {}
 
 	public function register(): void {
 		// 管理画面のメニュー追加。
@@ -57,9 +57,20 @@ class AdminPageHook extends HookBase {
 
 	/**
 	 * 管理画面で使用するスクリプトを読み込みます
+	 *
+	 * @param string $hook_suffix 現在の管理画面のフックサフィックス(`admin_enqueue_scripts`から第1引数で渡される)
 	 */
-	public function addActionAdminEnqueueScripts(): void {
+	public function addActionAdminEnqueueScripts( string $hook_suffix ): void {
 		assert( is_admin() );
+
+		/** @var SlugProvider */
+		$slug_provider = $this->container->get( SlugProvider::class );
+
+		// トップレベルページのフックサフィックスは`toplevel_page_<menu_slug>`（WPコア get_plugin_page_hookname の規約）。
+		// 設定画面以外では管理画面用スクリプトを読み込まない。
+		if ( 'toplevel_page_' . $slug_provider->adminMenuRoot() !== $hook_suffix ) {
+			return;
+		}
 
 		/** @var HandleNameProvider */
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
