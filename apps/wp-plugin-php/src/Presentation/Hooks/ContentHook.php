@@ -13,6 +13,7 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable
 use Baywall\Core\Infrastructure\WordPress\Service\BlockNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\GutenbergService;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
+use Baywall\Core\Presentation\Hooks\Service\CurrentPaywalledPostResolver;
 use DI\Container;
 use WP_Block;
 
@@ -175,7 +176,8 @@ class ContentLoadHook {
 		private readonly UserAccessProvider $user_access_provider,
 		private readonly GutenbergService $gutenberg_service,
 		private readonly PostRepository $post_repository,
-		private readonly BlockNameProvider $block_name_provider
+		private readonly BlockNameProvider $block_name_provider,
+		private readonly CurrentPaywalledPostResolver $current_paywalled_post_resolver
 	) {}
 
 	public function register(): void {
@@ -197,25 +199,16 @@ class ContentLoadHook {
 	 * 投稿、固定ページの内容に有料記事のウィジェットを追加します。
 	 */
 	public function theContentFilter( string $content ): string {
-		if ( ! is_single() && ! is_page() ) {
-			return $content;    // 投稿、固定ページ以外は処理抜け
-		}
-
-		$post_id = PostId::fromNullable( isset( $GLOBALS['post'] ) ? $GLOBALS['post']->ID : null );
-		if ( $post_id === null ) {
-			return $content;    // 投稿IDが取得できない場合は処理抜け
-		}
-
 		// 有料記事の情報がある場合はウィジェットを結合して返す
 		// ※ $content はすでに `the_content` フィルタが適用された後の内容であることに注意
 		// -> ダミーブロックはコメントだけなので削除済み
-		$post = $this->post_repository->get( $post_id );
-		if ( $post->paidContent() !== null ) {
-			// HTMLコメントを除去したウィジェットを追加
-			return $content . $this->gutenberg_service->createWidgetBlock( $post_id )->render();
-		} else {
-			return $content;
+		$post = $this->current_paywalled_post_resolver->resolve();
+		if ( $post === null ) {
+			return $content;    // ウィジェットが描画されない場合はそのまま返す
 		}
+
+		// HTMLコメントを除去したウィジェットを追加
+		return $content . $this->gutenberg_service->createWidgetBlock( $post->id() )->render();
 	}
 
 	/**

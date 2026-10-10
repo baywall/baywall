@@ -6,6 +6,7 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\Service\HandleNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
+use Baywall\Core\Presentation\Hooks\Service\CurrentPaywalledPostResolver;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
 use DI\Container;
 
@@ -21,6 +22,11 @@ class ViewPageHook extends HookBase {
 
 	public function enqueueViewScripts(): void {
 		if ( is_admin() ) {
+			return;
+		}
+
+		// ペイウォールウィジェットが描画されないページではviewスクリプトを出力しない
+		if ( $this->container->get( CurrentPaywalledPostResolver::class )->resolve() === null ) {
 			return;
 		}
 

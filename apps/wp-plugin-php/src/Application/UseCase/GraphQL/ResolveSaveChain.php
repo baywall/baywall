@@ -43,6 +43,9 @@ class ResolveSaveChain {
 
 				// 更新前のチェーン情報を取得
 				$chain = $this->chain_repository->get( $chain_id );
+				if ( null === $chain ) {
+					throw new \InvalidArgumentException( "[7D681C9D] Chain with ID {$chain_id} does not exist." );
+				}
 
 				// RPC URLが別の値になった場合はそのURLが登録しようとしているチェーンIDと一致するかどうかを確認
 				if ( $rpc_url !== null && ( $chain->rpcUrl() === null || ! $rpc_url->equals( $chain->rpcUrl() ) ) ) {

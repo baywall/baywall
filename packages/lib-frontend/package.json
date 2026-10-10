@@ -57,7 +57,6 @@
     "madge": "catalog:",
     "npm-run-all": "catalog:",
     "prettier": "catalog:",
-    "tsx": "catalog:",
     "typescript": "catalog:"
   },
   "peerDependencies": {

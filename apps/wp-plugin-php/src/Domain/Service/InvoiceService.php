@@ -3,20 +3,23 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Domain\Service;
 
+use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\Entity\Invoice;
 use Baywall\Core\Domain\Entity\Token;
+use Baywall\Core\Domain\Exception\DuplicatePurchaseException;
 use Baywall\Core\Domain\Repository\InvoiceRepository;
 use Baywall\Core\Domain\Repository\InvoiceTokenRepository;
 use Baywall\Core\Domain\Repository\PausedRepository;
 use Baywall\Core\Domain\Repository\PostRepository;
+use Baywall\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
 use Baywall\Core\Domain\Repository\SellerRepository;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 class InvoiceService {
-
 
 	public function __construct(
 		private readonly PostRepository $post_repository,
@@ -47,7 +50,20 @@ class InvoiceService {
 	public function issueInvoice( Address $buyer_address, PostId $post_id, Token $payment_token ): Invoice {
 		$chain_id = $payment_token->chainId();
 		$post     = $this->post_repository->get( $post_id );
-		// TODO: 対象の投稿が購入可能かどうかをチェック
+
+		// 別チェーンで直近に発行された請求書があれば二重購入として請求書発行を抑止する
+		// (同一チェーンの再発行はスマートコントラクトのペイウォール解除済みチェックで抑止されるため対象外)
+		$existing_invoices = $this->invoice_repository->findBy(
+			( new InvoiceSearchCondition() )->setPostId( $post_id )->setBuyerAddress( $buyer_address )
+		);
+		foreach ( $existing_invoices as $existing_invoice ) {
+			if ( $existing_invoice->chainId()->equals( $chain_id ) ) {
+				continue;
+			}
+			if ( UnixTimestamp::now()->value() - $existing_invoice->id()->issuedAt()->value() <= Config::RECENT_INVOICE_WINDOW_SECONDS ) {
+				throw new DuplicatePurchaseException( $post_id, $buyer_address, $chain_id );
+			}
+		}
 
 		$seller        = $this->seller_repository->get();
 		$selling_price = $post->sellingPrice();

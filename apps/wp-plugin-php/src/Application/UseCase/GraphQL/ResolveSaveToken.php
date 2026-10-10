@@ -34,6 +34,11 @@ class ResolveSaveToken {
 		/** @var bool */
 		$is_payable = $args['isPayable'];
 
+		$chain = $this->chain_repository->get( $chain_id );
+		if ( null === $chain ) {
+			throw new \InvalidArgumentException( "[13BC3420] Chain with ID {$chain_id} does not exist." );
+		}
+
 		$token = $this->token_repository->get( $chain_id, $address );
 		if ( null === $token ) {
 			// トークンデータが存在しない場合は新規登録を行うために少数点以下桁数とシンボルを取得する
@@ -43,8 +48,11 @@ class ResolveSaveToken {
 				$symbol   = $this->native_token_service->getSymbol( $chain_id );
 			} else {
 				// チェーンに接続してERC20コントラクトから少数点以下桁数とシンボルを取得する
-				$chain        = $this->chain_repository->get( $chain_id );
-				$token_client = new TokenClient( $chain->rpcUrl(), $address );
+				$rpc_url = $chain->rpcUrl();
+				if ( null === $rpc_url ) {
+					throw new \InvalidArgumentException( "[1731FE8C] Chain {$chain_id} does not have a valid RPC URL." );
+				}
+				$token_client = new TokenClient( $rpc_url, $address );
 
 				$decimals = $token_client->decimals();
 				$symbol   = $token_client->symbol();

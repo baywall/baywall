@@ -35,6 +35,13 @@ class InvoiceId implements ValueObject {
 	}
 
 	/**
+	 * 発行時刻（ULID に含まれる時刻）を取得します。
+	 */
+	public function issuedAt(): UnixTimestamp {
+		return UnixTimestamp::from( (int) $this->ulid->getTime() );
+	}
+
+	/**
 	 * `0x`プレフィックスを含むhex形式で値を取得します。
 	 * TODO: Hexインスタンスを返すように変更
 	 */
