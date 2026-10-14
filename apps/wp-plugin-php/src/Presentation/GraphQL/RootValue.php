@@ -15,11 +15,13 @@ use Baywall\Core\Application\UseCase\GraphQL\ResolveNetworkCategories;
 use Baywall\Core\Application\UseCase\GraphQL\ResolveNetworkCategory;
 use Baywall\Core\Application\UseCase\GraphQL\ResolveOracle;
 use Baywall\Core\Application\UseCase\GraphQL\ResolveOracles;
+use Baywall\Core\Application\UseCase\GraphQL\ResolvePayableTokens;
 use Baywall\Core\Application\UseCase\GraphQL\ResolvePaused;
 use Baywall\Core\Application\UseCase\GraphQL\ResolvePluginVersion;
 use Baywall\Core\Application\UseCase\GraphQL\ResolvePost;
 use Baywall\Core\Application\UseCase\GraphQL\ResolvePurgeOnUninstall;
 use Baywall\Core\Application\UseCase\GraphQL\ResolveSalesHistories;
+use Baywall\Core\Application\UseCase\GraphQL\ResolveSalesHistoriesCount;
 use Baywall\Core\Application\UseCase\GraphQL\ResolveSaveChain;
 use Baywall\Core\Application\UseCase\GraphQL\ResolveSaveOracle;
 use Baywall\Core\Application\UseCase\GraphQL\ResolveSaveSeller;
@@ -62,8 +64,10 @@ class RootValue {
 			'chains'                             => ResolveChains::class,
 			'networkCategories'                  => ResolveNetworkCategories::class,
 			'oracles'                            => ResolveOracles::class,
+			'payableTokens'                      => ResolvePayableTokens::class,
 			'post'                               => ResolvePost::class,
 			'salesHistories'                     => ResolveSalesHistories::class,
+			'salesHistoriesCount'                => ResolveSalesHistoriesCount::class,
 			'seller'                             => ResolveSeller::class,
 			'serverSigner'                       => ResolveServerSigner::class,
 			'tokens'                             => ResolveTokens::class,

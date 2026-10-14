@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\Web3\Abi\Base;
 
 use Baywall\Core\Domain\ValueObject\Address;
+use InvalidArgumentException;
 use kornrunner\Keccak;
+use phpseclib\Math\BigInteger;
 use stdClass;
-use Web3\Contracts\Ethabi;
 
 abstract class AbiBase {
 	/**
@@ -74,6 +75,9 @@ abstract class AbiBase {
 	/**
 	 * 指定したイベントのデコードされた引数を取得します。
 	 *
+	 * indexedな引数はtopicsから、その他の引数はdataから32バイトワード単位でデコードする。
+	 * 対応型は address と uint256 のみ（他の型・動的型は未対応で例外とする）。
+	 *
 	 * @return array<string,mixed>|null
 	 */
 	protected function decodeEventParameters( stdClass $log ): ?array {
@@ -83,8 +87,7 @@ abstract class AbiBase {
 			return null;
 		}
 
-		$abi     = $this->get();
-		$eth_abi = new Ethabi( $abi );
+		$abi = $this->get();
 
 		// indexedな引数はtopicsに格納されており、その他の引数はdataに格納されている
 		// まずはイベントの引数をindexedありと無しとでそれぞれ取得
@@ -92,28 +95,91 @@ abstract class AbiBase {
 		$indexed_inputs = array_values( array_filter( $inputs, fn( $item ) => $item['indexed'] ) );
 		$rest_inputs    = array_values( array_filter( $inputs, fn( $item ) => ! $item['indexed'] ) );
 
+		// トピック数は topic0 + indexed数 と一致するはず（不正なログはここで弾く）
+		/** @var list<string> */
+		$topics = $log->topics;
+		if ( count( $topics ) !== 1 + count( $indexed_inputs ) ) {
+			throw new InvalidArgumentException(
+				sprintf(
+					'[51F1606E] Topics count mismatch for event %s. expected: %d, actual: %d.',
+					$event_name,
+					1 + count( $indexed_inputs ),
+					count( $topics )
+				)
+			);
+		}
+
 		$result = array();
 		// indexedな引数をデコードして戻り値の配列へ追加
 		if ( count( $indexed_inputs ) > 0 ) {
 			foreach ( $indexed_inputs as $index => $input ) {
-				$type                     = $input['type'];
-				$data                     = $log->topics[ $index + 1 ]; // イベントの引数が記録されるのはインデックスが1から
-				$decoded                  = $eth_abi->decodeParameter( $type, $data );
-				$result[ $input['name'] ] = $this->correctDecodedValue( $type, $decoded );
+				$word                     = $topics[ $index + 1 ]; // イベントの引数が記録されるのはインデックスが1から
+				$decoded                  = $this->decodeWord( $input['type'], $word, "[9E00E279] Topics word {$index} of event {$event_name}" );
+				$result[ $input['name'] ] = $this->correctDecodedValue( $input['type'], $decoded );
 			}
 		}
 		// dataに格納されている引数をデコードして戻り値の配列へ追加
 		if ( count( $rest_inputs ) > 0 ) {
-			$data = $log->data;
-			/** @var array */
-			$decoded_array = $eth_abi->decodeParameters( array_map( fn( $item ) => $item['type'], $rest_inputs ), $data );
+			$data = $this->stripZeroPrefix( (string) $log->data );
+			// 全対応型が静的型のため head/tail 分離は不要。data は64hex × 非indexed数のワード列であることだけ検証する
+			if ( strlen( $data ) !== 64 * count( $rest_inputs ) ) {
+				throw new InvalidArgumentException(
+					sprintf(
+						'[EAFD007E] Data length mismatch for event %s. expected: %d hex chars, actual: %d.',
+						$event_name,
+						64 * count( $rest_inputs ),
+						strlen( $data )
+					)
+				);
+			}
 			foreach ( $rest_inputs as $index => $input ) {
-				$decoded                  = $decoded_array[ $index ];
+				$word                     = substr( $data, $index * 64, 64 );
+				$decoded                  = $this->decodeWord( $input['type'], $word, "[85544FEA] Data word {$index} of event {$event_name}" );
 				$result[ $input['name'] ] = $this->correctDecodedValue( $input['type'], $decoded );
 			}
 		}
 
 		return $result;
+	}
+
+	/**
+	 * 32バイトワードをデコードします（イベントログ専用）。
+	 *
+	 * 戻り値は web3p と同一（address は '0x' + 40hex の文字列、uint256 は phpseclib BigInteger）。
+	 * web3p が黙認していた不正な入力（ワード長・16進形式・未対応型）は
+	 * ID 付き InvalidArgumentException で拒否する厳格実装。
+	 * AbiCodec::decodeWord（eth_call 用・戻り値は10進文字列）とは役務が異なる。
+	 * protected はテスト用サブクラスでの expose を許容するため。
+	 *
+	 * @param string $type          ABIの引数型
+	 * @param string $word          32バイトワード（0x プレフィックスあり・なしのどちらも受理。大文字混在は受理）
+	 * @param string $error_context 例外メッセージに付加するエラー発生箇所の説明
+	 * @return mixed address は '0x' + 40hex の文字列、uint256 は BigInteger
+	 */
+	protected function decodeWord( string $type, string $word, string $error_context ): mixed {
+		$hex = $this->stripZeroPrefix( $word );
+		if ( preg_match( '/^[0-9a-fA-F]{64}$/', $hex ) !== 1 ) {
+			throw new InvalidArgumentException(
+				sprintf( '[FD7233AC] %s is not a 32-byte hex word. type: %s, word: %s.', $error_context, $type, $word )
+			);
+		}
+
+		return match ( $type ) {
+			'address' => '0x' . substr( $hex, 24, 40 ),
+			'uint256' => new BigInteger( $hex, 16 ),
+			default   => throw new InvalidArgumentException(
+				sprintf( '[CDE7721A] %s has an unsupported type for event decoding. type: %s.', $error_context, $type )
+			),
+		};
+	}
+
+	/**
+	 * 16進文字列の 0x プレフィックスを除去します。
+	 *
+	 * web3p の Utils::stripZero と同等（プレフィックス除去のみ。大文字小文字はそのまま）。
+	 */
+	private function stripZeroPrefix( string $hex ): string {
+		return str_starts_with( $hex, '0x' ) ? substr( $hex, 2 ) : $hex;
 	}
 
 	/**

@@ -6,58 +6,35 @@ namespace Baywall\Core\Infrastructure\Web3\Client;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Decimals;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
-use Baywall\Core\Infrastructure\Web3\Factory\ContractFactory;
 use phpseclib\Math\BigInteger;
-use Web3\Contract;
 
 class OracleClient {
-	private readonly Contract $oracle_contract;
+	private readonly EthCallClient $client;
+	private readonly Address $address;
 
 	public function __construct( RpcUrl $rpc_url, Address $address ) {
-		$this->oracle_contract = ( new ContractFactory() )->create( $rpc_url, ( new OracleAbi() )->get(), $address );
+		$this->client  = new EthCallClient( $rpc_url );
+		$this->address = $address;
 	}
 
 	/**
 	 * レートの小数点以下桁数を取得します。
 	 */
 	public function decimals(): Decimals {
-		/** @var int|null */
-		$result = null;
-		$this->oracle_contract->call(
-			'decimals',
-			function ( $err, $res ) use ( &$result ) {
-				if ( $err ) {
-					throw $err;
-				}
-				$decimals = $res[0];
-				assert( $decimals instanceof BigInteger );
-				$result = (int) $decimals->toString();
-			}
-		);
+		$res = $this->client->call( $this->address, ( new OracleAbi() )->get(), 'decimals' );
 
-		assert( is_int( $result ) );
-		return Decimals::from( $result );
+		return Decimals::from( (int) $res[0] );
 	}
 
 	/**
 	 * オラクルの説明を取得します。
 	 */
 	public function description(): string {
-		/** @var string|null */
-		$result = null;
-		$this->oracle_contract->call(
-			'description',
-			function ( $err, $res ) use ( &$result ) {
-				if ( $err ) {
-					throw $err;
-				}
-				assert( is_string( $res[0] ) );
-				$result = $res[0];
-			}
-		);
+		$res = $this->client->call( $this->address, ( new OracleAbi() )->get(), 'description' );
 
-		assert( is_string( $result ) );
-		return $result;
+		assert( is_string( $res[0] ) );
+
+		return $res[0];
 	}
 
 	/**
@@ -74,33 +51,15 @@ class OracleClient {
 	 * 最新のデータを取得します。
 	 */
 	public function latestRoundData(): OracleRoundData {
-		/** @var OracleRoundData|null */
-		$result = null;
-		$this->oracle_contract->call(
-			'latestRoundData',
-			function ( $err, $res ) use ( &$result ) {
-				if ( $err ) {
-					throw $err;
-				}
+		$res = $this->client->call( $this->address, ( new OracleAbi() )->get(), 'latestRoundData' );
 
-				$round_id          = $res['roundId'];
-				$answer            = $res['answer'];
-				$started_at        = $res['startedAt'];
-				$updated_at        = $res['updatedAt'];
-				$answered_in_round = $res['answeredInRound'];
-
-				assert( $round_id instanceof BigInteger );
-				assert( $answer instanceof BigInteger );
-				assert( $started_at instanceof BigInteger );
-				assert( $updated_at instanceof BigInteger );
-				assert( $answered_in_round instanceof BigInteger );
-
-				$result = new OracleRoundData( $round_id, $answer, $started_at, $updated_at, $answered_in_round );
-			}
+		return new OracleRoundData(
+			new BigInteger( $res[0], 10 ),
+			new BigInteger( $res[1], 10 ),
+			new BigInteger( $res[2], 10 ),
+			new BigInteger( $res[3], 10 ),
+			new BigInteger( $res[4], 10 )
 		);
-
-		assert( $result instanceof OracleRoundData );
-		return $result;
 	}
 }
 

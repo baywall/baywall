@@ -5,8 +5,6 @@ namespace Baywall\Core\Infrastructure\Web3\Client;
 
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
-use Baywall\Core\Infrastructure\Web3\Factory\ContractFactory;
-use Web3\Contract;
 
 /**
  * ENS Resolver コントラクトのクライアントです。
@@ -16,14 +14,16 @@ use Web3\Contract;
  */
 class EnsResolverClient {
 
-	private readonly Contract $resolver;
+	private readonly EthCallClient $client;
+	private readonly Address $address;
 
 	/**
 	 * @param RpcUrl  $rpc_url RPC エンドポイント
 	 * @param Address $address Resolver コントラクトのアドレス
 	 */
 	public function __construct( RpcUrl $rpc_url, Address $address ) {
-		$this->resolver = ( new ContractFactory() )->create( $rpc_url, ( new EnsResolverAbi() )->get(), $address );
+		$this->client  = new EthCallClient( $rpc_url );
+		$this->address = $address;
 	}
 
 	/**
@@ -34,23 +34,11 @@ class EnsResolverClient {
 	 * @return string テキストレコードの値（未設定の場合は空文字列）
 	 */
 	public function text( string $node, string $key ): string {
-		/** @var string|null */
-		$result = null;
-		$this->resolver->call(
-			'text',
-			$node,
-			$key,
-			function ( $err, $res ) use ( &$result ) {
-				if ( $err ) {
-					throw $err;
-				}
-				assert( is_string( $res[0] ?? null ), '[97A47446] text record is not string.' );
-				$result = $res[0];
-			}
-		);
+		$res = $this->client->call( $this->address, ( new EnsResolverAbi() )->get(), 'text', array( $node, $key ) );
 
-		assert( is_string( $result ) );
-		return $result;
+		assert( is_string( $res[0] ?? null ), '[97A47446] text record is not string.' );
+
+		return $res[0];
 	}
 }
 

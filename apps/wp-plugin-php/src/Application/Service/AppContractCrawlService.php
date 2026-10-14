@@ -7,6 +7,7 @@ use Baywall\Core\Application\Exception\LockAcquisitionException;
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Domain\Repository\AppContractRepository;
 use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\Repository\ServerSignerRepository;
 use Baywall\Core\Domain\Service\BlockNumberProvider;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
@@ -26,6 +27,7 @@ class AppContractCrawlService {
 		private readonly TransactionService $transaction_service,
 		private readonly BlockNumberProvider $block_number_provider,
 		private readonly AppContractRepository $app_contract_repository,
+		private readonly CrawledBlockRepository $crawled_block_repository,
 		private readonly AppContractClientFactory $app_contract_client_factory,
 		private readonly ServerSignerRepository $server_signer_repository,
 		private readonly UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository,
@@ -111,9 +113,7 @@ class AppContractCrawlService {
 						$this->unlock_paywall_transfer_event_repository->save( $chain_id, $event );
 					}
 					// クロール済みブロック番号を更新
-					$app_contract = $this->app_contract_repository->get( $chain_id );
-					$app_contract->setCrawledBlockNumber( $to_block );
-					$this->app_contract_repository->save( $app_contract );
+					$this->crawled_block_repository->save( $chain_id, $to_block );
 
 					$this->transaction_service->commit();
 				} catch ( \Throwable $e ) {

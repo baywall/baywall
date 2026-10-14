@@ -13,12 +13,10 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\Record\AppContractViewRecord;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\AppContractView;
-use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\CrawledBlockTable;
 
 class WpAppContractRepository implements AppContractRepository {
 	public function __construct(
 		private readonly AppContractView $app_contract_view,
-		private readonly CrawledBlockTable $crawled_block_table,
 		private readonly ChainRepository $chain_repository
 	) {}
 
@@ -35,19 +33,6 @@ class WpAppContractRepository implements AppContractRepository {
 			$this->chain_repository->get( $chain_id ),
 			array_values( $records )[0]
 		);
-	}
-
-	/** @inheritdoc */
-	public function save( AppContract $app_contract ): void {
-		// コントラクト情報はプラグインインストール時に設定され、以降変更されないため保存処理は不要
-
-		// クロール済みブロック番号の更新
-		if ( $app_contract->crawledBlockNumber() !== null ) {
-			$this->crawled_block_table->save(
-				$app_contract->chain()->id(),
-				$app_contract->crawledBlockNumber()
-			);
-		}
 	}
 }
 

@@ -10,6 +10,7 @@ use Baywall\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\TransactionHash;
+use Baywall\Core\Constant\Config;
 use InvalidArgumentException;
 
 class ResolveSalesHistories {
@@ -20,10 +21,12 @@ class ResolveSalesHistories {
 		private readonly SalesHistoryQueryService $sales_history_service
 	) {}
 
-	public function handle( array $root_value, array $args ) {
-		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
-
-		// 検索条件の構築
+	/**
+	 * GraphQL 引数から検索条件を構築します。salesHistories / salesHistoriesCount の両リゾルバで共有します。
+	 *
+	 * @throws InvalidArgumentException 負のタイムスタンプ、負の limit / offset
+	 */
+	public static function buildSearchCondition( array $args ): SalesHistorySearchCondition {
 		$condition = new SalesHistorySearchCondition();
 		$condition
 			->setInvoiceId( InvoiceId::fromUlidValueNullable( $args['filter']['invoiceId'] ?? null ) )
@@ -36,10 +39,10 @@ class ResolveSalesHistories {
 
 		// バリデーション: 負のタイムスタンプは不正として例外をスロー
 		if ( $date_from !== null && $date_from < 0 ) {
-			throw new InvalidArgumentException( 'dateFrom must be a non-negative Unix timestamp.' );
+			throw new InvalidArgumentException( '[4C2EC629] dateFrom must be a non-negative Unix timestamp.' );
 		}
 		if ( $date_to !== null && $date_to < 0 ) {
-			throw new InvalidArgumentException( 'dateTo must be a non-negative Unix timestamp.' );
+			throw new InvalidArgumentException( '[BC0B4AE7] dateTo must be a non-negative Unix timestamp.' );
 		}
 
 		// バリデーション: dateFrom > dateTo の場合は自動入れ替え（ユーザー利便性のため）
@@ -50,6 +53,42 @@ class ResolveSalesHistories {
 		$condition
 			->setDateFrom( $date_from )
 			->setDateTo( $date_to );
+
+		return $condition;
+	}
+
+	/**
+	 * limit / offset を正規化して検索条件へ設定します。
+	 *
+	 * - 負数は例外
+	 * - null はデフォルト（最大件数）へ正規化
+	 * - limit = 0 は 0 件取得を許容
+	 * - 上限超過は最大件数へクランプ
+	 *
+	 * @throws InvalidArgumentException limit / offset が負の場合
+	 */
+	public static function applyPaging( SalesHistorySearchCondition $condition, array $args ): void {
+		$limit = isset( $args['limit'] ) ? (int) $args['limit'] : null;
+		if ( $limit !== null && $limit < 0 ) {
+			throw new InvalidArgumentException( '[2F71B5D8] limit must be a non-negative integer.' );
+		}
+
+		$offset = isset( $args['offset'] ) ? (int) $args['offset'] : null;
+		if ( $offset !== null && $offset < 0 ) {
+			throw new InvalidArgumentException( '[E1B3CEC2] offset must be a non-negative integer.' );
+		}
+
+		$condition
+			->setLimit( min( $limit ?? Config::SALES_HISTORIES_MAX_RESULTS, Config::SALES_HISTORIES_MAX_RESULTS ) )
+			->setOffset( $offset );
+	}
+
+	public function handle( array $root_value, array $args ) {
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
+
+		// 検索条件の構築
+		$condition = self::buildSearchCondition( $args );
+		self::applyPaging( $condition, $args );
 
 		$sales_histories = $this->sales_history_service->find( $condition );
 

@@ -12,8 +12,8 @@ class AppContract {
 	protected function __construct(
 		private readonly Chain $chain,
 		private readonly Address $address,
-		private ?BlockNumber $crawled_block_number,
-		private ?UnixTimestamp $crawled_block_number_updated_at
+		private readonly ?BlockNumber $crawled_block_number,
+		private readonly ?UnixTimestamp $crawled_block_number_updated_at
 	) {}
 
 
@@ -25,10 +25,6 @@ class AppContract {
 	}
 	public function crawledBlockNumber(): ?BlockNumber {
 		return $this->crawled_block_number;
-	}
-	public function setCrawledBlockNumber( BlockNumber $crawled_block_number ): void {
-		$this->crawled_block_number            = $crawled_block_number;
-		$this->crawled_block_number_updated_at = UnixTimestamp::now();
 	}
 	public function crawledBlockNumberUpdatedAt(): ?UnixTimestamp {
 		return $this->crawled_block_number_updated_at;

@@ -7,58 +7,35 @@ use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Decimals;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
 use Baywall\Core\Domain\ValueObject\Symbol;
-use Baywall\Core\Infrastructure\Web3\Factory\ContractFactory;
-use phpseclib\Math\BigInteger;
-use Web3\Contract;
 
 class TokenClient {
+	private readonly EthCallClient $client;
+	private readonly Address $address;
+
 	public function __construct( RpcUrl $rpc_url, Address $contract_address ) {
-		$this->token = ( new ContractFactory() )->create( $rpc_url, ( new TokenAbi() )->get(), $contract_address );
+		$this->client  = new EthCallClient( $rpc_url );
+		$this->address = $contract_address;
 	}
-	private readonly Contract $token;
 
 	/**
 	 * トークンの小数点以下桁数を取得します。
 	 */
 	public function decimals(): Decimals {
-		/** @var int|null */
-		$result = null;
-		$this->token->call(
-			'decimals',
-			function ( $err, $res ) use ( &$result ) {
-				if ( $err ) {
-					throw $err;
-				}
-				$decimals = $res[0];
-				assert( $decimals instanceof BigInteger );
-				$result = (int) $decimals->toString();
-			}
-		);
+		$res = $this->client->call( $this->address, ( new TokenAbi() )->get(), 'decimals' );
 
-		assert( is_int( $result ) );
-		return Decimals::from( $result );
+		return Decimals::from( (int) $res[0] );
 	}
 
 	/**
 	 * トークンの通貨シンボルを取得します。
 	 */
 	public function symbol(): Symbol {
-		/** @var string|null */
-		$result = null;
-		$this->token->call(
-			'symbol',
-			function ( $err, $res ) use ( &$result ) {
-				if ( $err ) {
-					throw $err;
-				}
-				assert( is_string( $res[0] ?? null ), '[20FD9BCD] symbol is not string.' );
-				assert( 0 < strlen( $res[0] ), '[6F010DF1] symbol is empty.' );
-				$result = $res[0];
-			}
-		);
+		$res = $this->client->call( $this->address, ( new TokenAbi() )->get(), 'symbol' );
 
-		assert( is_string( $result ) );
-		return Symbol::from( $result );
+		assert( is_string( $res[0] ?? null ), '[20FD9BCD] symbol is not string.' );
+		assert( 0 < strlen( $res[0] ), '[6F010DF1] symbol is empty.' );
+
+		return Symbol::from( $res[0] );
 	}
 }
 

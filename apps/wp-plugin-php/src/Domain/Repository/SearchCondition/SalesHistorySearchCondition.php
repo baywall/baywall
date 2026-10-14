@@ -21,6 +21,8 @@ class SalesHistorySearchCondition {
 	private ?TransactionHash $transaction_hash = null;
 	private ?int $date_from                    = null;
 	private ?int $date_to                      = null;
+	private ?int $limit                        = null;
+	private ?int $offset                       = null;
 
 	/** 請求書IDを取得します */
 	public function invoiceId(): ?InvoiceId {
@@ -75,6 +77,30 @@ class SalesHistorySearchCondition {
 	/** 終了日時を設定します */
 	public function setDateTo( ?int $date_to ): self {
 		$this->date_to = $date_to;
+		return $this;
+	}
+
+	/**
+	 * 取得件数上限を取得します。null の場合は呼び出し側のデフォルトに従います。
+	 */
+	public function limit(): ?int {
+		return $this->limit;
+	}
+	/** 取得件数上限を設定します */
+	public function setLimit( ?int $limit ): self {
+		$this->limit = $limit;
+		return $this;
+	}
+
+	/**
+	 * 取得開始位置（オフセット）を取得します。null の場合はオフセットなし（先頭から）です。
+	 */
+	public function offset(): ?int {
+		return $this->offset;
+	}
+	/** 取得開始位置を設定します */
+	public function setOffset( ?int $offset ): self {
+		$this->offset = $offset;
 		return $this;
 	}
 }

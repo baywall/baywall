@@ -5,8 +5,6 @@ namespace Baywall\Core\Infrastructure\Web3\Client;
 
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
-use Baywall\Core\Infrastructure\Web3\Factory\ContractFactory;
-use Web3\Contract;
 
 /**
  * ENS レジストリコントラクトのクライアントです。
@@ -24,10 +22,10 @@ class EnsRegistryClient {
 	 */
 	private const REGISTRY_ADDRESS = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
 
-	private readonly Contract $registry;
+	private readonly EthCallClient $client;
 
 	public function __construct( RpcUrl $rpc_url ) {
-		$this->registry = ( new ContractFactory() )->create( $rpc_url, ( new EnsRegistryAbi() )->get(), Address::from( self::REGISTRY_ADDRESS ) );
+		$this->client = new EthCallClient( $rpc_url );
 	}
 
 	/**
@@ -37,22 +35,11 @@ class EnsRegistryClient {
 	 * @return string Resolver コントラクトのアドレス
 	 */
 	public function resolver( string $node ): string {
-		/** @var string|null */
-		$result = null;
-		$this->registry->call(
-			'resolver',
-			$node,
-			function ( $err, $res ) use ( &$result ) {
-				if ( $err ) {
-					throw $err;
-				}
-				assert( is_string( $res[0] ?? null ), '[EEE7B02F] resolver address is not string.' );
-				$result = $res[0];
-			}
-		);
+		$res = $this->client->call( Address::from( self::REGISTRY_ADDRESS ), ( new EnsRegistryAbi() )->get(), 'resolver', array( $node ) );
 
-		assert( is_string( $result ) );
-		return $result;
+		assert( is_string( $res[0] ?? null ), '[EEE7B02F] resolver address is not string.' );
+
+		return $res[0];
 	}
 }
 

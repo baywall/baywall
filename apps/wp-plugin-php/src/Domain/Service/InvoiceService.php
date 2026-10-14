@@ -14,6 +14,7 @@ use Baywall\Core\Domain\Repository\PostRepository;
 use Baywall\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
 use Baywall\Core\Domain\Repository\SellerRepository;
 use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 use Baywall\Core\Domain\ValueObject\PostId;
@@ -51,18 +52,8 @@ class InvoiceService {
 		$chain_id = $payment_token->chainId();
 		$post     = $this->post_repository->get( $post_id );
 
-		// 別チェーンで直近に発行された請求書があれば二重購入として請求書発行を抑止する
-		// (同一チェーンの再発行はスマートコントラクトのペイウォール解除済みチェックで抑止されるため対象外)
-		$existing_invoices = $this->invoice_repository->findBy(
-			( new InvoiceSearchCondition() )->setPostId( $post_id )->setBuyerAddress( $buyer_address )
-		);
-		foreach ( $existing_invoices as $existing_invoice ) {
-			if ( $existing_invoice->chainId()->equals( $chain_id ) ) {
-				continue;
-			}
-			if ( UnixTimestamp::now()->value() - $existing_invoice->id()->issuedAt()->value() <= Config::RECENT_INVOICE_WINDOW_SECONDS ) {
-				throw new DuplicatePurchaseException( $post_id, $buyer_address, $chain_id );
-			}
+		if ( $this->isDuplicatePurchase( $post_id, $buyer_address, $chain_id ) ) {
+			throw new DuplicatePurchaseException( $post_id, $buyer_address, $chain_id );
 		}
 
 		$seller        = $this->seller_repository->get();
@@ -100,5 +91,29 @@ class InvoiceService {
 		$this->invoice_repository->save( $invoice );
 
 		return $invoice;
+	}
+
+	/**
+	 * 二重購入の判定になるかどうかを取得します。
+	 *
+	 * 別チェーンで直近に発行された請求書があれば二重購入と判定します。
+	 * ※ 同一チェーンの請求書はスマートコントラクト側に判定を移譲し、ここでは二重購入の判定としない。
+	 * ※ 同一チェーンのウォレットでの支払いキャンセルは もう一度チャレンジできるが、
+	 *    ウォレットでキャンセルした後に別のチェーンで購入するためには1時間経過しないと購入処理が実行できなない。
+	 */
+	public function isDuplicatePurchase( PostId $post_id, Address $buyer_address, ChainId $chain_id ): bool {
+		$existing_invoices = $this->invoice_repository->findBy(
+			( new InvoiceSearchCondition() )->setPostId( $post_id )->setBuyerAddress( $buyer_address )
+		);
+		foreach ( $existing_invoices as $existing_invoice ) {
+			if ( $existing_invoice->chainId()->equals( $chain_id ) ) {
+				continue;
+			}
+			if ( UnixTimestamp::now()->value() - $existing_invoice->id()->issuedAt()->value() <= Config::RECENT_INVOICE_WINDOW_SECONDS ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

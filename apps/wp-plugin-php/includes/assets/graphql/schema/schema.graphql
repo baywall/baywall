@@ -37,11 +37,17 @@ type Query {
 	# オラクル一覧を取得【管理者】
 	oracles: [Oracle!]!
 
+	# 支払いに使用可能なトークン一覧を取得【ゲスト】
+	payableTokens(args: PayableTokensArgs!): [Token!]!
+
 	# 投稿情報を取得【ゲスト】
 	post(postId: Int!): Post!
 
 	# 履歴一覧を取得【管理者】
-	salesHistories(filter: SalesHistoriesFilter): [SalesHistory!]!
+	salesHistories(filter: SalesHistoriesFilter, limit: Int, offset: Int): [SalesHistory!]!
+
+	# 履歴一覧の総件数を取得【管理者】
+	salesHistoriesCount(filter: SalesHistoriesFilter): Int!
 
 	# 販売者情報を取得【ゲスト】
 	seller: Seller!
@@ -129,12 +135,17 @@ type Post {
 	title: String!                  # 投稿タイトル【ゲスト】
 	sellingPrice: Price             # 現在の販売価格【ゲスト】
 	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報【ゲスト】
-	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧【ゲスト】
 }
 
 input TokensFilter {
 	chainId: Int
 	address: String
+}
+
+# 支払いに使用可能なトークン一覧の取得条件
+input PayableTokensArgs {
+	postId: Int!	# 投稿ID
+	buyerAddress: String	# 購入者のウォレットアドレス(未接続時はnull)
 }
 
 input ChainsFilter {

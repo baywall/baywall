@@ -88,6 +88,52 @@ class SalesHistoryView {
 				ON t3.chain_id = t5.chain_id
 		SQL;
 
+		$where_conditions = $this->buildWhereConditions( $condition );
+
+		$sql .= ' WHERE ' . implode( ' AND ', $where_conditions );
+
+		$sql .= ' ORDER BY t1.block_timestamp DESC, t1.transaction_hash DESC';
+
+		// condition->limit() が null の場合のみデフォルト上限を適用する。
+		// GraphQL 経由では resolver で正規化済みのため発動しないが、SalesHistoryView の
+		// 直接利用（テスト含む）と将来の呼び出し元への防御として維持する
+		$limit = $condition->limit() ?? Config::SALES_HISTORIES_MAX_RESULTS;
+		$sql  .= ' LIMIT ' . $this->wpdb->named_prepare( ':limit', array( ':limit' => $limit ) );
+
+		$offset = $condition->offset();
+		if ( $offset !== null ) {
+			$sql .= ' OFFSET ' . $this->wpdb->named_prepare( ':offset', array( ':offset' => $offset ) );
+		}
+
+		$results = $this->wpdb->get_results( $sql );
+
+		return array_map(
+			static function ( stdClass $record ) {
+				return new SalesHistoryViewRecord( $record );
+			},
+			$results
+		);
+	}
+
+	/**
+	 * 検索条件に合致する販売履歴の総件数を返します。limit / offset の影響を受けません。
+	 */
+	public function count( SalesHistorySearchCondition $condition ): int {
+		$where_conditions = $this->buildWhereConditions( $condition );
+
+		$sql = "SELECT COUNT(*) AS count FROM {$this->tx_table_name} AS t1 WHERE " . implode( ' AND ', $where_conditions );
+
+		$result = $this->wpdb->get_row( $sql );
+
+		return isset( $result->count ) ? (int) $result->count : 0;
+	}
+
+	/**
+	 * 検索条件から WHERE 句の条件配列を組み立てます。select() / count() で共有します。
+	 *
+	 * @return string[]
+	 */
+	private function buildWhereConditions( SalesHistorySearchCondition $condition ): array {
 		$where_conditions = array();
 
 		// 必ず適用する条件
@@ -127,19 +173,7 @@ class SalesHistoryView {
 			$where_conditions[] = 't1.block_timestamp <= ' . $this->wpdb->named_prepare( ':date_to', array( ':date_to' => $date_to ) );
 		}
 
-		$sql .= ' WHERE ' . implode( ' AND ', $where_conditions );
-
-		$sql .= ' ORDER BY t1.block_timestamp DESC';
-		$sql .= ' LIMIT ' . $this->wpdb->named_prepare( ':limit', array( ':limit' => Config::SALES_HISTORIES_MAX_RESULTS ) );
-
-		$results = $this->wpdb->get_results( $sql );
-
-		return array_map(
-			static function ( stdClass $record ) {
-				return new SalesHistoryViewRecord( $record );
-			},
-			$results
-		);
+		return $where_conditions;
 	}
 
 

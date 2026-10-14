@@ -28,6 +28,7 @@ use Baywall\Core\Application\Service\TransactionService;
 use Baywall\Core\Application\Service\UserAccessProvider;
 use Baywall\Core\Domain\Repository\AppContractRepository;
 use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\Repository\InvoiceRepository;
 use Baywall\Core\Domain\Repository\InvoiceTokenRepository;
 use Baywall\Core\Domain\Repository\InstallOriginUrl;
@@ -52,6 +53,7 @@ use Baywall\Core\Infrastructure\Cache\OracleRateCache;
 use Baywall\Core\Infrastructure\Content\PaidContentServiceImpl;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpAppContractRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpChainRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpCrawledBlockRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInvoiceRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpOracleRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpPostRepository;
@@ -120,6 +122,7 @@ final class ContainerDefinitions {
 
 			// Repository
 			AppContractRepository::class             => autowire( WpAppContractRepository::class ),
+			CrawledBlockRepository::class            => autowire( WpCrawledBlockRepository::class ),
 			ChainRepository::class                   => autowire( WpChainRepository::class ),
 			InvoiceRepository::class                 => autowire( WpInvoiceRepository::class ),
 			NetworkCategoryRepository::class         => autowire( WpNetworkCategoryRepository::class ),

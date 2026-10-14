@@ -5,6 +5,7 @@ namespace Baywall\Core\Application\UseCase;
 
 use Baywall\Core\Domain\Repository\AppContractRepository;
 use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\BlockTag;
 use Baywall\Core\Domain\ValueObject\ChainId;
@@ -19,6 +20,7 @@ class InitCrawledBlockNumber {
 
 	public function __construct(
 		private readonly AppContractRepository $app_contract_repository,
+		private readonly CrawledBlockRepository $crawled_block_repository,
 		private readonly ChainRepository $chain_repository
 	) {}
 
@@ -36,10 +38,7 @@ class InitCrawledBlockNumber {
 		// ある程度のマージンを持たせてクロール済みのブロック番号を設定する
 
 		$safe_crawled_block_number = $this->getSafetyCrawledBlockNumber( $chain_id );
-		$app_contract->setCrawledBlockNumber( $safe_crawled_block_number );
-
-		// 保存
-		$this->app_contract_repository->save( $app_contract );
+		$this->crawled_block_repository->save( $chain_id, $safe_crawled_block_number );
 	}
 
 	/**

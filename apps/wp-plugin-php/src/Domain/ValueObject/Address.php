@@ -6,6 +6,7 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 use Baywall\Core\Infrastructure\Format\Padding;
+use Baywall\Core\Infrastructure\Reimpl\Ethers\Ethers;
 use Baywall\Core\Infrastructure\Util\Strings;
 
 /**
@@ -53,7 +54,7 @@ final class Address implements ValueObject {
 
 	private static function checkValidAddressFormat( string $address_value ): void {
 		// 本アプリでは`0x`プレフィックスを必須とする
-		$is_valid = Strings::starts_with( $address_value, '0x' ) && \Web3\Utils::isAddress( $address_value );
+		$is_valid = Strings::starts_with( $address_value, '0x' ) && Ethers::isAddress( $address_value );
 		if ( ! $is_valid ) {
 			throw new \InvalidArgumentException( '[B4AE59FC] Invalid address format. ' . $address_value );
 		}

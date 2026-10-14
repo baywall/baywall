@@ -7,14 +7,11 @@ use Baywall\Core\Domain\Entity\AppContract;
 use Baywall\Core\Infrastructure\Web3\Abi\AppContractAbi;
 use Baywall\Core\Infrastructure\Web3\ValueObject\GetPaywallStatusResult;
 use Baywall\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
-use Baywall\Core\Infrastructure\Web3\Factory\ContractFactory;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\Hex;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\PostId;
-use phpseclib\Math\BigInteger;
-use Web3\Contract;
 
 class AppContractClient {
 
@@ -26,54 +23,34 @@ class AppContractClient {
 
 		$this->app_contract      = $app_contract;
 		$this->abi               = $app_contract_abi;
-		$this->contract          = ( new ContractFactory() )->create(
-			$app_contract->chain()->rpcUrl(),
-			$this->abi->get(),
-			$app_contract->address()
-		);
+		$this->eth_call_client   = new EthCallClient( $app_contract->chain()->rpcUrl() );
 		$this->blockchain_client = new BlockchainClient( $app_contract->chain()->rpcUrl() );
 	}
-	private readonly Contract $contract;
+	private readonly EthCallClient $eth_call_client;
 	private readonly AppContractAbi $abi;
 	private readonly AppContract $app_contract;
 	private readonly BlockchainClient $blockchain_client;
 
-	protected function contract(): Contract {
-		return $this->contract;
-	}
-
 	public function getPaywallStatus( Address $signer_address, PostId $post_id, Address $buyer_address ): GetPaywallStatusResult {
 
-		/** @var GetPaywallStatusResult|null */
-		$result = null;
-		$this->contract->call(
+		$res = $this->eth_call_client->call(
+			$this->app_contract->address(),
+			$this->abi->get(),
 			'getPaywallStatus',
-			$signer_address->value(),
-			$post_id->value(),
-			$buyer_address->value(),
-			function ( $err, $res ) use ( &$result ) {
-				if ( $err ) {
-					throw $err;
-				}
-
-				$is_unlocked           = $res['isUnlocked'];
-				$invoice_id            = $res['invoiceId'];
-				$unlocked_block_number = $res['unlockedBlockNumber'];
-
-				assert( is_bool( $is_unlocked ) );
-				assert( $invoice_id instanceof BigInteger );
-				assert( $unlocked_block_number instanceof BigInteger );
-
-				$result = new GetPaywallStatusResult(
-					$is_unlocked,
-					$is_unlocked ? InvoiceId::fromHex( Hex::from( '0x' . $invoice_id->toHex() ) ) : null,
-					$is_unlocked ? BlockNumber::fromHex( Hex::from( '0x' . $unlocked_block_number->toHex() ) ) : null
-				);
-			}
+			array( $signer_address, $post_id->value(), $buyer_address )
 		);
 
-		assert( ! is_null( $result ) );
-		return $result;
+		$is_unlocked  = $res[0];
+		$invoice_id   = $res[1];
+		$block_number = $res[2];
+
+		assert( is_bool( $is_unlocked ) );
+
+		return new GetPaywallStatusResult(
+			$is_unlocked,
+			$is_unlocked ? InvoiceId::fromHex( Hex::fromDecValue( $invoice_id ) ) : null,
+			$is_unlocked ? BlockNumber::fromHex( Hex::fromDecValue( $block_number ) ) : null
+		);
 	}
 
 	/**
@@ -101,27 +78,13 @@ class AppContractClient {
 			),
 		);
 
+		$logs = $this->blockchain_client->ethGetLogs( $filter );
+
 		/** @var UnlockPaywallTransferEvent[] */
 		$results = array();
-		$this->blockchain_client->ethGetLogs(
-			$filter,
-			function ( $err, $logs ) use ( &$results ) {
-				if ( $err ) {
-					throw $err;
-				}
-				// $logsがnullの可能性があるため、nullの場合は空配列に置き換える
-				// [ERROR] TypeError: Argument 2 passed to Baywall\\Core\\Infrastructure\\Web3\\Client\\AppContractClient::Baywall\\Core\\Infrastructure\\Web3\\Client\\{closure}() must be of the type array, null given
-				if ( is_null( $logs ) ) {
-					$logs = array();
-				}
-
-				$results = array();
-				/** @var \stdClass[] $logs */
-				foreach ( $logs as $log ) {
-					$results[] = $this->abi->decodeUnlockPaywallTransferEvent( $log );
-				}
-			}
-		);
+		foreach ( $logs as $log ) {
+			$results[] = $this->abi->decodeUnlockPaywallTransferEvent( $log );
+		}
 
 		return $results;
 	}

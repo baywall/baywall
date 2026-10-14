@@ -81,7 +81,77 @@ final class Ethers {
 	 */
 	public static function computeAddress( string $public_key ): string {
 		$result = '0x' . substr( Keccak::hash( substr( hex2bin( str_replace( '0x', '', $public_key ) ), 1 ), 256 ), 24 );
-		$result = \Web3\Utils::toChecksumAddress( $result ); // チェックサム付きアドレスに変換
+		$result = self::getAddress( $result ); // チェックサム付きアドレスに変換
+		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) );
+		return $result;
+	}
+
+	/**
+	 * 文字列がアドレス形式かを判定します。
+	 *
+	 * @param string $value 判定対象の文字列（`0x`プレフィックスの有無を問わない）
+	 * @return bool 全小文字またはEIP-55チェックサム形式の40文字HEXなら`true`
+	 *
+	 * @see https://docs.ethers.org/v6/api/address/#isAddress
+	 */
+	public static function isAddress( string $value ): bool {
+		if ( preg_match( '/^(0x)?[a-f0-9]{40}$/', $value ) === 1 ) {
+			return true;
+		}
+		return self::isAddressChecksum( $value );
+	}
+
+	/**
+	 * EIP-55チェックサム形式として妥当かを判定します。
+	 *
+	 * strip後の値が16進40文字に一致しない入力は`false`で拒否する（安全側の入力ドメイン縮小）。
+	 */
+	private static function isAddressChecksum( string $value ): bool {
+		$value = 0 === strpos( $value, '0x' ) ? substr( $value, 2 ) : $value;
+		if ( 40 !== mb_strlen( $value ) ) {
+			return false;
+		}
+		if ( preg_match( '/^[0-9a-fA-F]{40}$/', $value ) !== 1 ) {
+			return false;
+		}
+		$hash = Keccak::hash( mb_strtolower( $value ), 256 );
+		for ( $i = 0; $i < 40; $i++ ) {
+			if (
+				( intval( $hash[ $i ], 16 ) > 7 && mb_strtoupper( $value[ $i ] ) !== $value[ $i ] ) ||
+				( intval( $hash[ $i ], 16 ) <= 7 && mb_strtolower( $value[ $i ] ) !== $value[ $i ] )
+			) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * アドレスのEIP-55チェックサム形式を返します。
+	 *
+	 * @param string $value `0x`プレフィックスの有無を問わない40文字HEX（元入力の大小文字情報を保持）
+	 * @return string `0x`で始まるチェックサム付きアドレス
+	 * @throws \InvalidArgumentException フォーマット不正、または混合ケースかつチェックサム不正の場合
+	 *
+	 * @see https://docs.ethers.org/v6/api/address/#getAddress
+	 */
+	public static function getAddress( string $value ): string {
+		// フォーマット検証は正規化前（元入力）に対して行う（`0X`等のプレフィックス表記は拒否）
+		if ( preg_match( '/^(0x)?[0-9a-fA-F]{40}$/', $value ) !== 1 ) {
+			throw new \InvalidArgumentException( '[7AC7AE37] Invalid address format. ' . $value );
+		}
+		$address = 0 === strpos( $value, '0x' ) ? substr( $value, 2 ) : $value;
+		$hash    = Keccak::hash( strtolower( $address ), 256 );
+		$result  = '0x';
+		for ( $i = 0; $i < 40; $i++ ) {
+			$char    = strtolower( $address[ $i ] );
+			$result .= intval( $hash[ $i ], 16 ) >= 8 ? strtoupper( $char ) : $char;
+		}
+		// 混合ケース入力は計算したチェックサムと一致しない限り正規化しない
+		$is_mixed_case = preg_match( '/[a-f]/', $address ) === 1 && preg_match( '/[A-F]/', $address ) === 1;
+		if ( $is_mixed_case && substr( $result, 2 ) !== $address ) {
+			throw new \InvalidArgumentException( '[DFB23B35] Bad address checksum. ' . $value );
+		}
 		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) );
 		return $result;
 	}

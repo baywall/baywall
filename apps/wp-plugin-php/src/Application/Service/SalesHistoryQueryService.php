@@ -22,6 +22,11 @@ interface SalesHistoryQueryService {
 	public function find( SalesHistorySearchCondition $condition ): array;
 
 	/**
+	 * 条件に合致する販売履歴の総件数を取得します。limit / offset の影響を受けません。
+	 */
+	public function count( SalesHistorySearchCondition $condition ): int;
+
+	/**
 	 * 指定された投稿IDと購入者アドレスに対応する販売履歴が存在するかどうかを取得します。
 	 */
 	public function existsByPostIdAndBuyerAddress( PostId $post_id, Address $buyer_address ): bool;

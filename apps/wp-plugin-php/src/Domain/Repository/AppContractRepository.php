@@ -10,7 +10,4 @@ interface AppContractRepository {
 
 	/** Appコントラクトの情報を取得します */
 	public function get( ChainId $chain_id ): ?AppContract;
-
-	/** Appコントラクトの情報を保存します */
-	public function save( AppContract $app_contract ): void;
 }

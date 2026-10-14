@@ -3,30 +3,18 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase\GraphQL;
 
-use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Application\Service\UserAccessChecker;
-use Baywall\Core\Domain\Entity\Post;
-use Baywall\Core\Domain\Entity\Token;
-use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\PostRepository;
-use Baywall\Core\Domain\Repository\TokenRepository;
 use Baywall\Core\Domain\Service\PostTitleProvider;
-use Baywall\Core\Domain\Service\PriceExchangeService;
-use Baywall\Core\Domain\Specification\ChainsFilter;
-use Baywall\Core\Domain\Specification\TokensFilter;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class ResolvePost {
 
 
 	public function __construct(
-		private readonly AppLogger $logger,
 		private readonly UserAccessChecker $user_access_checker,
 		private readonly PostRepository $post_repository,
-		private readonly ChainRepository $chain_repository,
-		private readonly TokenRepository $token_repository,
-		private readonly PostTitleProvider $post_title_provider,
-		private readonly PriceExchangeService $price_exchange_service
+		private readonly PostTitleProvider $post_title_provider
 	) {}
 
 	public function handle( array $root_value, array $args ) {
@@ -37,19 +25,6 @@ class ResolvePost {
 		// 投稿の情報を取得
 		$post = $this->post_repository->get( $post_id );
 
-		$payable_tokens_callback = function () use ( $root_value, $post ) {
-			return array_map(
-				fn( Token $token ) => $root_value['token'](
-					$root_value,
-					array(
-						'chainId' => $token->chainId()->value(),
-						'address' => $token->address()->value(),
-					)
-				),
-				$this->getPayableTokens( $post )
-			);
-		};
-
 		$post_title_callback = function () use ( $post ) {
 			return $this->post_title_provider->getPostTitle( $post->id() );
 		};
@@ -59,49 +34,6 @@ class ResolvePost {
 			'title'          => $post_title_callback,
 			'sellingPrice'   => fn() => $root_value['sellingPrice']( $root_value, array( 'postId' => $post->id()->value() ) ),
 			'sellingContent' => fn() => $root_value['sellingContent']( $root_value, array( 'postId' => $post->id()->value() ) ),
-			'payableTokens'  => $payable_tokens_callback,
 		);
-	}
-
-	/** 指定した投稿で支払可能なトークン一覧を取得します */
-	private function getPayableTokens( Post $post ) {
-		$selling_network_category_id = $post->sellingNetworkCategoryId();
-
-		if ( $selling_network_category_id === null ) {
-			$this->logger->warn( '[22EB42D3] Selling network category is null for post ID: ' . $post->id()->value() );
-			return array(); // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
-		}
-
-		// 投稿に設定されている販売ネットワークカテゴリかつ接続可能なチェーン一覧を取得
-		$payable_chains = ( new ChainsFilter() )
-			->byNetworkCategoryId( $selling_network_category_id )
-			->byConnectable()
-			->apply( $this->chain_repository->all() );
-
-		/** @var Token[] */
-		$result = array();
-
-		// 各チェーンに対して支払可能なトークンを取得
-		$all_tokens = $this->token_repository->all();
-		foreach ( $payable_chains as $chain ) {
-			// 支払可能と設定されているトークンを抽出
-			$payable_tokens = ( new TokensFilter() )
-				->byChainId( $chain->id() )
-				->byIsPayable( true )
-				->apply( $all_tokens );
-
-			// そのうち、レート変換が可能なトークンのみを残す
-			$payable_tokens = array_filter(
-				$payable_tokens,
-				fn( Token $token ) => $this->price_exchange_service->exchangeable(
-					$post->sellingPrice(),
-					$token->symbol()
-				)
-			);
-
-			array_push( $result, ...$payable_tokens );
-		}
-
-		return $result;
 	}
 }

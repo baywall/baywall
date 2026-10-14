@@ -28,6 +28,11 @@ class WpSalesHistoryQueryService implements SalesHistoryQueryService {
 		);
 	}
 
+	/** @inheritDoc */
+	public function count( SalesHistorySearchCondition $condition ): int {
+		return $this->sales_history_view->count( $condition );
+	}
+
 	private function recordToDto( SalesHistoryViewRecord $record ): SalesHistoryDto {
 
 		$invoice_dto = new SalesHistoryInvoiceDto(
