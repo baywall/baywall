@@ -15,7 +15,7 @@ use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferType;
 use Baywall\Core\Infrastructure\Web3\Abi\Base\AbiBase;
 use Baywall\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
-use phpseclib\Math\BigInteger;
+use phpseclib4\Math\BigInteger;
 use stdClass;
 
 class AppContractAbi extends AbiBase {

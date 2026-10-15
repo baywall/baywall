@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\Web3\Abi\Base;
 use Baywall\Core\Domain\ValueObject\Address;
 use InvalidArgumentException;
 use kornrunner\Keccak;
-use phpseclib\Math\BigInteger;
+use phpseclib4\Math\BigInteger;
 use stdClass;
 
 abstract class AbiBase {
@@ -145,7 +145,7 @@ abstract class AbiBase {
 	/**
 	 * 32バイトワードをデコードします（イベントログ専用）。
 	 *
-	 * 戻り値は web3p と同一（address は '0x' + 40hex の文字列、uint256 は phpseclib BigInteger）。
+	 * 戻り値は web3p と同一（address は '0x' + 40hex の文字列、uint256 は phpseclib4 BigInteger）。
 	 * web3p が黙認していた不正な入力（ワード長・16進形式・未対応型）は
 	 * ID 付き InvalidArgumentException で拒否する厳格実装。
 	 * AbiCodec::decodeWord（eth_call 用・戻り値は10進文字列）とは役務が異なる。

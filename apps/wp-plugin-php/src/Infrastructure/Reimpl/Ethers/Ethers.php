@@ -87,46 +87,6 @@ final class Ethers {
 	}
 
 	/**
-	 * 文字列がアドレス形式かを判定します。
-	 *
-	 * @param string $value 判定対象の文字列（`0x`プレフィックスの有無を問わない）
-	 * @return bool 全小文字またはEIP-55チェックサム形式の40文字HEXなら`true`
-	 *
-	 * @see https://docs.ethers.org/v6/api/address/#isAddress
-	 */
-	public static function isAddress( string $value ): bool {
-		if ( preg_match( '/^(0x)?[a-f0-9]{40}$/', $value ) === 1 ) {
-			return true;
-		}
-		return self::isAddressChecksum( $value );
-	}
-
-	/**
-	 * EIP-55チェックサム形式として妥当かを判定します。
-	 *
-	 * strip後の値が16進40文字に一致しない入力は`false`で拒否する（安全側の入力ドメイン縮小）。
-	 */
-	private static function isAddressChecksum( string $value ): bool {
-		$value = 0 === strpos( $value, '0x' ) ? substr( $value, 2 ) : $value;
-		if ( 40 !== mb_strlen( $value ) ) {
-			return false;
-		}
-		if ( preg_match( '/^[0-9a-fA-F]{40}$/', $value ) !== 1 ) {
-			return false;
-		}
-		$hash = Keccak::hash( mb_strtolower( $value ), 256 );
-		for ( $i = 0; $i < 40; $i++ ) {
-			if (
-				( intval( $hash[ $i ], 16 ) > 7 && mb_strtoupper( $value[ $i ] ) !== $value[ $i ] ) ||
-				( intval( $hash[ $i ], 16 ) <= 7 && mb_strtolower( $value[ $i ] ) !== $value[ $i ] )
-			) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
 	 * アドレスのEIP-55チェックサム形式を返します。
 	 *
 	 * @param string $value `0x`プレフィックスの有無を問わない40文字HEX（元入力の大小文字情報を保持）

@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\Web3\Client;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Decimals;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
-use phpseclib\Math\BigInteger;
+use phpseclib4\Math\BigInteger;
 
 class OracleClient {
 	private readonly EthCallClient $client;

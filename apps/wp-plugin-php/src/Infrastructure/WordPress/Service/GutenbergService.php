@@ -6,6 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Service;
 use Baywall\Core\Application\Repository\ThemeSettingRepository;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Domain\Entity\WidgetAttributes;
+use Baywall\Core\Infrastructure\WordPress\Mapper\WidgetAttributesMapper;
 use Baywall\Core\Domain\Repository\PostRepository;
 use Baywall\Core\Domain\ValueObject\Content;
 use Baywall\Core\Domain\ValueObject\PostId;
@@ -19,12 +20,13 @@ class GutenbergService {
 	public function __construct(
 		private readonly PostRepository $post_repository,
 		private readonly BlockNameProvider $block_name_provider,
-		private readonly ThemeSettingRepository $theme_setting_repository
+		private readonly ThemeSettingRepository $theme_setting_repository,
+		private readonly WidgetAttributesMapper $widget_attributes_mapper
 	) {}
 
 	public function getWidgetAttributes( WP_Block $block ): WidgetAttributes {
 		assert( $block->name === $this->block_name_provider->get()->value(), '[8F0F589D]' );
-		return WidgetAttributes::fromArray( $block->attributes );
+		return $this->widget_attributes_mapper->fromArray( $block->attributes );
 	}
 
 	public function createWidgetBlock( PostId $post_id ): WP_Block {
@@ -35,7 +37,7 @@ class GutenbergService {
 			$post->sellingSymbol(),
 		);
 
-		$attrs            = $widget_attributes->toArray();
+		$attrs            = $this->widget_attributes_mapper->toArray( $widget_attributes );
 		$block_name_value = $this->block_name_provider->get()->value();
 
 		$class_name         = WpConfig::PAYWALL_BLOCK_CSS_CLASS_NAME;

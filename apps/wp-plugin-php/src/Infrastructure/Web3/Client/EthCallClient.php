@@ -16,9 +16,9 @@ use Baywall\Core\Infrastructure\Web3\BlockchainRetryer;
  * リトライは `BlockchainRetryer`（旧 `RetryContract::call` と同一設定）で行う。
  */
 class EthCallClient {
-	public function __construct( RpcUrl $rpc_url ) {
+	public function __construct( RpcUrl $rpc_url, ?RpcTransport $transport = null ) {
 		$this->retryer    = new BlockchainRetryer();
-		$this->rpc_client = new RpcClient( $rpc_url );
+		$this->rpc_client = new RpcClient( $rpc_url, $transport );
 	}
 	private readonly BlockchainRetryer $retryer;
 	private readonly RpcClient $rpc_client;

@@ -14,9 +14,9 @@ use Baywall\Core\Infrastructure\Web3\ValueObject\EthBlock;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
 
 class BlockchainClient {
-	public function __construct( RpcUrl $rpc_url ) {
+	public function __construct( RpcUrl $rpc_url, ?RpcTransport $transport = null ) {
 		$this->retryer    = new BlockchainRetryer();
-		$this->rpc_client = new RpcClient( $rpc_url );
+		$this->rpc_client = new RpcClient( $rpc_url, $transport );
 	}
 	private readonly BlockchainRetryer $retryer;
 	private readonly RpcClient $rpc_client;

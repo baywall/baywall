@@ -6,7 +6,6 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 use Baywall\Core\Domain\Repository\NetworkCategoryRepository;
 use Baywall\Core\Domain\ValueObject\NetworkCategory;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
-use Baywall\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
 use Baywall\Core\Infrastructure\WordPress\Service\I18nTextProvider;
 
@@ -43,9 +42,9 @@ class WpNetworkCategoryRepository implements NetworkCategoryRepository {
 
 	private function getName( NetworkCategoryId $network_category_id ): string {
 		$map = array(
-			NetworkCategoryIdConstants::MAINNET    => fn() => $this->i18n->mainnet(),
-			NetworkCategoryIdConstants::TESTNET    => fn() => $this->i18n->testnet(),
-			NetworkCategoryIdConstants::PRIVATENET => fn() => $this->i18n->privatenet(),
+			NetworkCategoryId::MAINNET    => fn() => $this->i18n->mainnet(),
+			NetworkCategoryId::TESTNET    => fn() => $this->i18n->testnet(),
+			NetworkCategoryId::PRIVATENET => fn() => $this->i18n->privatenet(),
 		);
 
 		if ( ! isset( $map[ $network_category_id->value() ] ) ) {

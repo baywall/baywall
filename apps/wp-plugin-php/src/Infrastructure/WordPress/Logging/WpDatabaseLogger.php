@@ -32,7 +32,7 @@ class WpDatabaseLogger implements Logger {
 		try {
 			$this->log_table->insert( $level, LogCategory::app(), $message );
 		} catch ( \Throwable $e ) {
-			$wrapped = new \RuntimeException( 'Failed to save log to database: ' . $original_message, 0, $e );
+			$wrapped = new \RuntimeException( '[863ABB44] Failed to save log to database: ' . $original_message, 0, $e );
 			$this->fallback_logger->log( $level, $wrapped );
 		}
 	}

@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Domain\ValueObject\Base;
 
-use Baywall\Core\Infrastructure\Util\Strings;
-
 /**
  * URLを表すValueObjectの基底クラス
  */
@@ -25,7 +23,7 @@ abstract class UrlBase {
 	}
 
 	protected static function checkValidUrlFormat( string $url_value ): void {
-		$is_url = filter_var( $url_value, FILTER_VALIDATE_URL ) !== false && Strings::starts_with( $url_value, 'http' );
+		$is_url = filter_var( $url_value, FILTER_VALIDATE_URL ) !== false && str_starts_with( $url_value, 'http' );
 		if ( ! $is_url ) {
 			throw new \InvalidArgumentException( '[762B3EE8] Invalid URL format. ' . $url_value );
 		}

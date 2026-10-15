@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\Format;
 
 use Baywall\Core\Domain\ValueObject\Address;
-use phpseclib\Math\BigInteger;
+use phpseclib4\Math\BigInteger;
 
 /**
  * `@openzeppelin/contracts/utils/Strings.sol`の`Strings`コントラクトの関数と同じ結果を取得するためのクラス

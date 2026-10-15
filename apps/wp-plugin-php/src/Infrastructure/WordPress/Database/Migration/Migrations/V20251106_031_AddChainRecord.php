@@ -6,10 +6,10 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 use Baywall\Core\Application\Service\TransactionService;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Confirmations;
+use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
-use Baywall\Core\Infrastructure\Web3\Constants\NetworkCategoryIdConstants;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
@@ -39,7 +39,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 				$this->insert(
 					ChainIdConstants::ETHEREUM,
 					'Ethereum',
-					NetworkCategoryIdConstants::MAINNET,
+					NetworkCategoryId::MAINNET,
 					null, // RPC URLはnull
 					'https://etherscan.io',
 					$now
@@ -49,7 +49,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 				$this->insert(
 					ChainIdConstants::BASE,
 					'Base',
-					NetworkCategoryIdConstants::MAINNET,
+					NetworkCategoryId::MAINNET,
 					null, // RPC URLはnull
 					'https://basescan.org',
 					$now
@@ -59,7 +59,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 				$this->insert(
 					ChainIdConstants::POLYGON_POS,
 					'Polygon PoS',
-					NetworkCategoryIdConstants::MAINNET,
+					NetworkCategoryId::MAINNET,
 					null, // RPC URLはnull
 					'https://polygonscan.com',
 					$now
@@ -70,7 +70,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 				$this->insert(
 					ChainIdConstants::SEPOLIA,
 					'Sepolia',
-					NetworkCategoryIdConstants::TESTNET,
+					NetworkCategoryId::TESTNET,
 					null, // RPC URLはnull
 					'https://sepolia.etherscan.io',
 					$now
@@ -80,7 +80,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 				$this->insert(
 					ChainIdConstants::BASE_SEPOLIA,
 					'Base Sepolia',
-					NetworkCategoryIdConstants::TESTNET,
+					NetworkCategoryId::TESTNET,
 					null, // RPC URLはnull
 					'https://sepolia.basescan.org',
 					$now
@@ -90,7 +90,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 				$this->insert(
 					ChainIdConstants::POLYGON_AMOY,
 					'Polygon Amoy',
-					NetworkCategoryIdConstants::TESTNET,
+					NetworkCategoryId::TESTNET,
 					null, // RPC URLはnull
 					'https://amoy.polygonscan.com',
 					$now

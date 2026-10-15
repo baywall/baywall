@@ -5,9 +5,7 @@ namespace Baywall\Core\Domain\ValueObject;
 
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
-use Baywall\Core\Infrastructure\Format\Padding;
-use Baywall\Core\Infrastructure\Reimpl\Ethers\Ethers;
-use Baywall\Core\Infrastructure\Util\Strings;
+use kornrunner\Keccak;
 
 /**
  * アドレス(ウォレットアドレス/コントラクトアドレス)を表すクラス
@@ -41,7 +39,7 @@ final class Address implements ValueObject {
 	}
 
 	public function toBytes32Hex(): string {
-		return ( new Padding() )->toBytes32Hex( $this->value() );
+		return '0x' . str_pad( substr( $this->address_value, 2 ), 64, '0', STR_PAD_LEFT );
 	}
 
 	public function __toString(): string {
@@ -54,10 +52,38 @@ final class Address implements ValueObject {
 
 	private static function checkValidAddressFormat( string $address_value ): void {
 		// 本アプリでは`0x`プレフィックスを必須とする
-		$is_valid = Strings::starts_with( $address_value, '0x' ) && Ethers::isAddress( $address_value );
+		$is_valid = str_starts_with( $address_value, '0x' );
+		if ( $is_valid ) {
+			$hex40 = substr( $address_value, 2 );
+			// 全小文字は無条件で、それ以外はEIP-55チェックサムに厳密一致する場合のみ有効
+			$is_valid = preg_match( '/^[0-9a-f]{40}$/', $hex40 ) === 1 || self::isValidEip55Checksum( $hex40 );
+		}
 		if ( ! $is_valid ) {
 			throw new \InvalidArgumentException( '[B4AE59FC] Invalid address format. ' . $address_value );
 		}
+	}
+
+	/**
+	 * EIP-55チェックサムに厳密一致するかを判定します。
+	 *
+	 * @param string $hex40 `0x`を除いた40文字HEX
+	 * @see https://eips.ethereum.org/EIPS/eip-55
+	 */
+	private static function isValidEip55Checksum( string $hex40 ): bool {
+		// PCREの`$`は末尾改行の直前にもマッチするため、長さガードで40文字ちょうどを保証する
+		if ( 40 !== strlen( $hex40 ) || preg_match( '/^[0-9a-fA-F]{40}$/', $hex40 ) !== 1 ) {
+			return false;
+		}
+		$hash = Keccak::hash( strtolower( $hex40 ), 256 );
+		for ( $i = 0; $i < 40; $i++ ) {
+			if (
+				( intval( $hash[ $i ], 16 ) > 7 && strtoupper( $hex40[ $i ] ) !== $hex40[ $i ] ) ||
+				( intval( $hash[ $i ], 16 ) <= 7 && strtolower( $hex40[ $i ] ) !== $hex40[ $i ] )
+			) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/** ゼロアドレスを取得します */
