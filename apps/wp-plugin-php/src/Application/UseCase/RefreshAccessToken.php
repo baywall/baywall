@@ -7,6 +7,7 @@ namespace Baywall\Core\Application\UseCase;
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Application\Service\AccessTokenCookieProvider;
 use Baywall\Core\Application\Service\AccessTokenService;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
 use Baywall\Core\Application\Service\TransactionService;
 use Baywall\Core\Domain\Entity\RefreshToken;
@@ -28,19 +29,21 @@ class RefreshAccessToken {
 		private readonly RefreshTokenCookieProvider $refresh_token_cookie_provider,
 		private readonly AccessTokenCookieProvider $access_token_cookie_provider,
 		private readonly AccessTokenService $access_token_service,
-		private readonly CookieWriter $cookie_writer
+		private readonly CookieWriter $cookie_writer,
+		private readonly Clock $clock
 	) {}
 
 	public function handle( string $refresh_token_value ): void {
+		$now = $this->clock->now();
 
 		// 古いリフレッシュトークンデータを削除
 		// ※ タイミングはどこでもよいが、確実に動作するようにここで実行する。
-		$this->refresh_token_service->purgeOldRepositoryData();
+		$this->refresh_token_service->purgeOldRepositoryData( $now );
 
 		$this->transaction_service->transactional(
-			function () use ( $refresh_token_value ) {
+			function () use ( $refresh_token_value, $now ) {
 				// トークンローテーションを実行
-				$new_refresh_token = $this->refresh_token_service->rotation( RefreshTokenString::from( $refresh_token_value ) );
+				$new_refresh_token = $this->refresh_token_service->rotation( RefreshTokenString::from( $refresh_token_value ), $now );
 
 				// 新しいリフレッシュトークンをクッキーに保存
 				$this->setCookie( $new_refresh_token );
@@ -51,9 +54,7 @@ class RefreshAccessToken {
 				$success             = $this->cookie_writer->set( $access_token_cookie );
 
 				if ( $success === false ) {
-					$error = new \RuntimeException( '[02DC84AF] Failed to set access token cookie.' );
-					$this->app_logger->error( $error );
-					throw $error;
+					throw new \RuntimeException( '[02DC84AF] Failed to set access token cookie.' );
 				}
 			}
 		);
@@ -70,9 +71,7 @@ class RefreshAccessToken {
 		$success = $this->cookie_writer->set( $cookie );
 
 		if ( $success === false ) {
-			$error = new \RuntimeException( '[68ACEBC4] Failed to set refresh token cookie.' );
-			$this->app_logger->error( $error );
-			throw $error;
+			throw new \RuntimeException( '[68ACEBC4] Failed to set refresh token cookie.' );
 		}
 	}
 }

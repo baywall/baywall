@@ -7,10 +7,11 @@ use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Application\Service\AccessTokenCookieProvider;
 use Baywall\Core\Application\Service\AccessTokenService;
 use Baywall\Core\Application\Service\AppContractCrawlService;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Service\ConfirmationsService;
 use Baywall\Core\Application\Service\InvoiceTokenCookieProvider;
 use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
-use Baywall\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
+use Baywall\Core\Domain\Exception\PaymentNotCompletedException;
 use Baywall\Core\Domain\Service\InvoiceService;
 use Baywall\Core\Domain\Service\InvoiceTokenService;
 use Baywall\Core\Domain\Service\RefreshTokenService;
@@ -38,10 +39,12 @@ class IssueAccessTokenByInvoiceToken {
 		private readonly InvoiceTokenCookieProvider $invoice_token_cookie_provider,
 		private readonly InvoiceService $invoice_service,
 		private readonly ConfirmationsService $confirmations_service,
-		private readonly AppContractCrawlService $app_contract_crawl_service
+		private readonly AppContractCrawlService $app_contract_crawl_service,
+		private readonly Clock $clock
 	) {}
 
 	public function handle( string $invoice_token_string_value ): void {
+		$now                  = $this->clock->now();
 		$invoice_token_string = InvoiceTokenString::from( $invoice_token_string_value );
 		// 請求書トークンの文字列から発行した請求書を取得
 		$invoice = $this->invoice_service->getByInvoiceTokenString( $invoice_token_string );
@@ -54,11 +57,11 @@ class IssueAccessTokenByInvoiceToken {
 			// ※この後ブロックに取り込まれる可能性もあるのでCookieの無効化は行わない
 
 			// 請求書トークンのローテーション(DB更新+Cookie書き込み)
-			$new_invoice_token        = $this->invoice_token_service->rotation( $invoice_token_string );
+			$new_invoice_token        = $this->invoice_token_service->rotation( $invoice_token_string, $now );
 			$new_invoice_token_cookie = $this->invoice_token_cookie_provider->get( $new_invoice_token );
 			$this->cookie_writer->set( $new_invoice_token_cookie );
 
-			throw new PaymentRequiredException( "[694039A0] Payment not found for invoice: {$invoice}" );
+			throw new PaymentNotCompletedException( "[694039A0] Payment not found for invoice: {$invoice}" );
 		} else {
 			// 支払いが確認できた場合は販売履歴を更新し、リフレッシュトークンとアクセストークンを発行
 
@@ -84,7 +87,7 @@ class IssueAccessTokenByInvoiceToken {
 			$this->cookie_writer->set( $access_token_cookie );
 
 			// 請求書トークンは無効化してCookieから削除
-			$this->invoice_token_service->revoke( $invoice_token_string );
+			$this->invoice_token_service->revoke( $invoice_token_string, $now );
 			$expired_invoice_token_cookie = $this->invoice_token_cookie_provider->getExpired();
 			$this->cookie_writer->set( $expired_invoice_token_cookie );
 		}

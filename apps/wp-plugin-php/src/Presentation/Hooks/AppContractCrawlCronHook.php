@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Application\Exception\LockAcquisitionException;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Service\LockService;
 use Baywall\Core\Application\UseCase\CrawlAllAppContract;
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
@@ -70,7 +71,7 @@ class AppContractCrawlCronHook extends HookBase {
 				function () use ( $action_name ) {
 					// 予約がされていない場合のみ登録
 					if ( false === wp_next_scheduled( $action_name ) ) {
-						$next_time = time() + Config::CRON_INTERVAL_APP_CONTRACT_CRAWL; // 次回の実行時刻
+						$next_time = $this->container->get( Clock::class )->now()->value() + Config::CRON_INTERVAL_APP_CONTRACT_CRAWL; // 次回の実行時刻
 						$success   = wp_schedule_single_event( $next_time, $action_name );
 						assert( $success === true, '[28D837C0] wp_schedule_single_event failed. ' . var_export( $success, true ) );
 					}

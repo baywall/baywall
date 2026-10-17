@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Domain\Entity\RefreshToken;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
@@ -18,7 +19,7 @@ class RefreshTokenTable {
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
 
-	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider, private readonly Clock $clock ) {
 		$this->wpdb       = $wpdb;
 		$this->table_name = $table_name_provider->refreshToken();
 	}
@@ -45,7 +46,7 @@ class RefreshTokenTable {
 			throw new \InvalidArgumentException( '[991AECA4] When adding a new refresh token, revoked_at must be null.' );
 		}
 
-		$now = UnixTimestamp::now()->value();
+		$now = $this->clock->now()->value();
 
 		$result = $this->wpdb->insert(
 			$this->table_name,
@@ -74,7 +75,7 @@ class RefreshTokenTable {
 			array(
 				// ※ `expires_at`は更新しないこと
 				'revoked_at' => $revoked_at_value,
-				'updated_at' => UnixTimestamp::now()->value(),
+				'updated_at' => $this->clock->now()->value(),
 			),
 			array(
 				'refresh_token_hash' => $refresh_token_hash_value,
@@ -93,7 +94,7 @@ class RefreshTokenTable {
 	 * ※ ただし、削除の対象となるのは「期限切れ」または「無効化された」レコードに限定
 	 */
 	public function deleteByCreatedAt( UnixTimestamp $target_time ): void {
-		$current_time = UnixTimestamp::now();
+		$current_time = $this->clock->now();
 
 		$this->wpdb->query(
 			$this->wpdb->named_prepare(

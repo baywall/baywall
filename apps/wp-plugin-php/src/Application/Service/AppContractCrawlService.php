@@ -5,7 +5,6 @@ namespace Baywall\Core\Application\Service;
 
 use Baywall\Core\Application\Exception\LockAcquisitionException;
 use Baywall\Core\Application\Logging\AppLogger;
-use Baywall\Core\Domain\Repository\AppContractRepository;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\Repository\ServerSignerRepository;
@@ -26,7 +25,6 @@ class AppContractCrawlService {
 		private readonly LockService $lock_service,
 		private readonly TransactionService $transaction_service,
 		private readonly BlockNumberProvider $block_number_provider,
-		private readonly AppContractRepository $app_contract_repository,
 		private readonly CrawledBlockRepository $crawled_block_repository,
 		private readonly AppContractClientFactory $app_contract_client_factory,
 		private readonly ServerSignerRepository $server_signer_repository,
@@ -78,10 +76,18 @@ class AppContractCrawlService {
 					continue;
 				}
 
+				// クロール済みブロック番号が未初期化のチェーンはクロール対象外
+				$crawled_block_number = $this->crawled_block_repository->get( $chain_id );
+				if ( null === $crawled_block_number ) {
+					$this->logger->warn( "[6CEB0942] Crawled block number is not initialized. Skipping crawl for chain id: {$chain_id}" );
+					$crawl_finished[ $index ] = true; // 未初期化のチェーンはクロール完了とみなす
+					continue;
+				}
+
 				// クロールの開始ブロック番号及び終了ブロック番号を計算
-				$from_block      = $this->app_contract_repository->get( $chain_id )->crawledBlockNumber()->add( 1 );
+				$from_block      = $crawled_block_number->add( 1 );
 				$chain           = $this->chain_repository->get( $chain_id );
-				$to_block        = $from_block->add( $chain->maxLogsRange() - 1 );
+				$to_block        = $from_block->add( $chain->maxLogsRange()->value() - 1 );
 				$crawl_end_block = $crawl_end_blocks[ $index ];
 				if ( $to_block->compare( $crawl_end_block ) > 0 ) {
 					$to_block = $crawl_end_block; // オーバーランしないように調整
@@ -117,8 +123,9 @@ class AppContractCrawlService {
 
 					$this->transaction_service->commit();
 				} catch ( \Throwable $e ) {
+					// ロールバック後にログ出力する（ログINSERTもトランザクションに参加するため、先にログ出力するとロールバックで消失する）
+					$this->transaction_service->rollback();
 					$this->logger->error( $e );
-					$this->transaction_service->rollBack();
 				}
 			}
 		}

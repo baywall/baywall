@@ -48,11 +48,11 @@ class InvoiceService {
 	}
 
 	/** 請求書を発行します。 */
-	public function issueInvoice( Address $buyer_address, PostId $post_id, Token $payment_token ): Invoice {
+	public function issueInvoice( Address $buyer_address, PostId $post_id, Token $payment_token, UnixTimestamp $now ): Invoice {
 		$chain_id = $payment_token->chainId();
 		$post     = $this->post_repository->get( $post_id );
 
-		if ( $this->isDuplicatePurchase( $post_id, $buyer_address, $chain_id ) ) {
+		if ( $this->isDuplicatePurchase( $post_id, $buyer_address, $chain_id, $now ) ) {
 			throw new DuplicatePurchaseException( $post_id, $buyer_address, $chain_id );
 		}
 
@@ -100,8 +100,10 @@ class InvoiceService {
 	 * ※ 同一チェーンの請求書はスマートコントラクト側に判定を移譲し、ここでは二重購入の判定としない。
 	 * ※ 同一チェーンのウォレットでの支払いキャンセルは もう一度チャレンジできるが、
 	 *    ウォレットでキャンセルした後に別のチェーンで購入するためには1時間経過しないと購入処理が実行できなない。
+	 *
+	 * @param UnixTimestamp $now 判定の基準とする現在時刻
 	 */
-	public function isDuplicatePurchase( PostId $post_id, Address $buyer_address, ChainId $chain_id ): bool {
+	public function isDuplicatePurchase( PostId $post_id, Address $buyer_address, ChainId $chain_id, UnixTimestamp $now ): bool {
 		$existing_invoices = $this->invoice_repository->findBy(
 			( new InvoiceSearchCondition() )->setPostId( $post_id )->setBuyerAddress( $buyer_address )
 		);
@@ -109,7 +111,7 @@ class InvoiceService {
 			if ( $existing_invoice->chainId()->equals( $chain_id ) ) {
 				continue;
 			}
-			if ( UnixTimestamp::now()->value() - $existing_invoice->id()->issuedAt()->value() <= Config::RECENT_INVOICE_WINDOW_SECONDS ) {
+			if ( $now->value() - $existing_invoice->id()->issuedAt()->value() <= Config::RECENT_INVOICE_WINDOW_SECONDS ) {
 				return true;
 			}
 		}

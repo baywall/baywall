@@ -8,9 +8,10 @@ use Baywall\Core\Domain\ValueObject\Amount;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\BlockTag;
 use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\EthBlock;
 use Baywall\Core\Domain\ValueObject\Hex;
+use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\Web3\BlockchainRetryer;
-use Baywall\Core\Infrastructure\Web3\ValueObject\EthBlock;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
 
 class BlockchainClient {
@@ -53,7 +54,11 @@ class BlockchainClient {
 		$this->retryer->execute(
 			function () use ( $block_number, &$result ) {
 				$block  = $this->rpc_client->request( 'eth_getBlockByNumber', array( $block_number, false ) );
-				$result = EthBlock::from( $block );
+				$result = EthBlock::from(
+					BlockNumber::fromHex( Hex::from( $block->number ) ),
+					// タイムスタンプはUNIX時間なのでhexdecで変換して問題ない
+					UnixTimestamp::from( hexdec( Hex::from( $block->timestamp )->value() ) )
+				);
 			}
 		);
 		assert( null !== $result, '[F6805A68] Result should not be null after retry.' );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\DI;
 
 use Baywall\Core\Application\Service\AccessTokenExpirationProvider;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Service\AccessTokenRequestProvider;
 use Baywall\Core\Application\Service\AccessTokenCookieProvider;
 use Baywall\Core\Application\Repository\Erc4361NonceRepository;
@@ -31,7 +32,7 @@ use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\Repository\InvoiceRepository;
 use Baywall\Core\Domain\Repository\InvoiceTokenRepository;
-use Baywall\Core\Domain\Repository\InstallOriginUrl;
+use Baywall\Core\Domain\Repository\InitialSiteUrlRepository;
 use Baywall\Core\Domain\Repository\NetworkCategoryRepository;
 use Baywall\Core\Domain\Repository\OracleRepository;
 use Baywall\Core\Domain\Repository\PausedRepository;
@@ -41,15 +42,18 @@ use Baywall\Core\Domain\Repository\SellerRepository;
 use Baywall\Core\Domain\Repository\ServerSignerRepository;
 use Baywall\Core\Domain\Repository\TokenRepository;
 use Baywall\Core\Domain\Service\AppContractDataProvider;
+use Baywall\Core\Domain\Service\BlockchainService;
 use Baywall\Core\Domain\Service\BlockNumberProvider;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 use Baywall\Core\Domain\Service\InvoiceTokenProvider;
+use Baywall\Core\Domain\Service\OracleService;
 use Baywall\Core\Domain\Service\PluginInfoProvider;
 use Baywall\Core\Domain\Service\PostTitleProvider;
 use Baywall\Core\Domain\Service\RateProvider;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\Service\SiteService;
 use Baywall\Core\Infrastructure\Cache\OracleRateCache;
+use Baywall\Core\Infrastructure\System\SystemClock;
 use Baywall\Core\Infrastructure\Content\PaidContentServiceImpl;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpAppContractRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpChainRepository;
@@ -63,8 +67,10 @@ use Baywall\Core\Application\Logging\Logger;
 use Baywall\Core\Infrastructure\WordPress\Logging\WpDatabaseLogger;
 use Baywall\Core\Application\Logging\LogLevelRepository;
 use Baywall\Core\Infrastructure\Web3\Service\AppContractDataProviderImpl;
+use Baywall\Core\Infrastructure\Web3\Service\BlockchainServiceImpl;
 use Baywall\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
-use Baywall\Core\Infrastructure\Web3\Service\CachedOracleRateProvider;
+use Baywall\Core\Infrastructure\Web3\Service\OracleServiceImpl;
+use Baywall\Core\Infrastructure\Web3\Service\RateProviderImpl;
 use Baywall\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpErc4361NonceRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInvoiceTokenRepository;
@@ -72,7 +78,7 @@ use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpNetworkCategoryR
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpRefreshTokenRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpSellerRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpServerSignerRepository;
-use Baywall\Core\Infrastructure\WordPress\Repository\WpInstallOriginUrl;
+use Baywall\Core\Infrastructure\WordPress\Repository\WpInitialSiteUrlRepository;
 use Baywall\Core\Infrastructure\WordPress\Repository\WpPausedRepository;
 use Baywall\Core\Infrastructure\WordPress\Repository\WpPurgeOnUninstallRepository;
 use Baywall\Core\Infrastructure\WordPress\Repository\WpSctaUrlRepository;
@@ -138,20 +144,19 @@ final class ContainerDefinitions {
 			SctaUrlRepository::class                 => autowire( WpSctaUrlRepository::class ),
 			ThemeSettingRepository::class            => autowire( WpThemeSettingRepository::class ),
 			PurgeOnUninstallRepository::class        => autowire( WpPurgeOnUninstallRepository::class ),
-			InstallOriginUrl::class                  => autowire( WpInstallOriginUrl::class ),
+			InitialSiteUrlRepository::class          => autowire( WpInitialSiteUrlRepository::class ),
 			JwtSecretKeyRepository::class            => autowire( WpJwtSecretKeyRepository::class ),
 
 			// Service
+			Clock::class                             => autowire( SystemClock::class ),
 			PostTitleProvider::class                 => autowire( WpPostTitleProvider::class ),
-			RateProvider::class                      => get( CachedOracleRateProvider::class ),
-			// CachedRateProvider::class    => autowire()->constructor(
-			// get( RateTransient::class ),
-			// get( OracleRateProviderImpl::class )
-			// ),
+			RateProvider::class                      => get( RateProviderImpl::class ),
 			UserAccessProvider::class                => autowire( WpUserAccessProvider::class ),
 			PaidContentService::class                => autowire( PaidContentServiceImpl::class ),
 			AppContractDataProvider::class           => autowire( AppContractDataProviderImpl::class ),
+			OracleService::class                     => autowire( OracleServiceImpl::class ),
 			BlockNumberProvider::class               => autowire( BlockNumberProviderImpl::class ),
+			BlockchainService::class                 => autowire( BlockchainServiceImpl::class ),
 			TransactionService::class                => autowire( WpTransactionService::class ),
 			LockService::class                       => autowire( WpLockService::class ),
 			SalesHistoryQueryService::class          => autowire( WpSalesHistoryQueryService::class ),

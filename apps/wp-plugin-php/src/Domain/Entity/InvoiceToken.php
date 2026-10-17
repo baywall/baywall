@@ -42,8 +42,7 @@ class InvoiceToken {
 	}
 
 	/** 請求書トークンが期限切れかどうかを取得します */
-	public function isExpired(): bool {
-		$now = UnixTimestamp::now();
+	public function isExpired( UnixTimestamp $now ): bool {
 		return $this->expires_at->value() < $now->value();
 	}
 
@@ -53,7 +52,7 @@ class InvoiceToken {
 	}
 
 	/** 請求書トークンを取り消します */
-	public function revoke(): void {
-		$this->revoked_at = UnixTimestamp::now();
+	public function revoke( UnixTimestamp $now ): void {
+		$this->revoked_at = $now;
 	}
 }

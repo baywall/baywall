@@ -78,8 +78,8 @@ type Query {
 	# アンインストール時にデータを完全削除するかどうか【管理者】
 	purgeOnUninstall: Boolean!
 
-	# インストール時のURLと現在のサイトURLが変更されたかどうか【ゲスト】
-	installOriginUrlChanged: Boolean!
+	# 初回インストール時のURLと現在のサイトURLが変更されたかどうか【ゲスト】
+	siteUrlChangedSinceInstall: Boolean!
 
 	# プラグインのバージョン【ゲスト】
 	pluginVersion: String!

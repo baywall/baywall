@@ -5,7 +5,7 @@ namespace Baywall\Core\Domain\Service;
 
 use Baywall\Core\Domain\Entity\Token;
 use Baywall\Core\Domain\Repository\TokenRepository;
-use Baywall\Core\Domain\Specification\TokensFilter;
+use Baywall\Core\Domain\Specification\TokensSpecification;
 use Baywall\Core\Domain\ValueObject\Amount;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Decimals;
@@ -32,16 +32,18 @@ class TokenAmountConverter {
 
 	/** チェーンIDとシンボルに合致するトークン情報を検索します */
 	private function findTokenByChainAndSymbol( ChainId $chain_id, Symbol $symbol ): Token {
-		$tokens = ( new TokensFilter() )
-			->byChainId( $chain_id )
-			->bySymbol( $symbol )
-			->apply( $this->token_repository->all() );
+		$tokens = array_values(
+			array_filter(
+				$this->token_repository->all(),
+				( new TokensSpecification( chain_id: $chain_id, symbol: $symbol ) )->isSatisfiedBy( ... )
+			)
+		);
 
 		if ( 1 !== count( $tokens ) ) {
 			throw new \InvalidArgumentException( "[30E8EDA4] Invalid token data. - chainId: {$chain_id}, symbol: {$symbol}, count: " . count( $tokens ) );
 		}
 
-		return array_values( $tokens )[0];
+		return $tokens[0];
 	}
 
 	/** 小数点桁数から基本単位への変換倍数を計算します */

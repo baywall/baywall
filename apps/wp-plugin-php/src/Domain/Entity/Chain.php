@@ -6,6 +6,7 @@ namespace Baywall\Core\Domain\Entity;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\Confirmations;
+use Baywall\Core\Domain\ValueObject\MaxLogsRange;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
 
 class Chain {
@@ -16,10 +17,10 @@ class Chain {
 	 * @param NetworkCategoryId $network_category_id
 	 * @param null|RpcUrl       $rpc_url
 	 * @param Confirmations     $confirmations
-	 * @param int               $max_logs_range
+	 * @param MaxLogsRange      $max_logs_range
 	 * @param null|string       $block_explorer_url
 	 */
-	protected function __construct( ChainId $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, Confirmations $confirmations, int $max_logs_range, ?string $block_explorer_url ) {
+	protected function __construct( ChainId $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, Confirmations $confirmations, MaxLogsRange $max_logs_range, ?string $block_explorer_url ) {
 		$this->id                  = $chain_id;
 		$this->name                = $name;
 		$this->network_category_id = $network_category_id;
@@ -34,7 +35,7 @@ class Chain {
 	private readonly NetworkCategoryId $network_category_id;
 	private ?RpcUrl $rpc_url;
 	private Confirmations $confirmations;
-	private int $max_logs_range;
+	private MaxLogsRange $max_logs_range;
 	private readonly ?string $block_explorer_url;
 
 	public function id(): ChainId {
@@ -82,18 +83,18 @@ class Chain {
 	/**
 	 * このチェーンのログ取得ブロック範囲最大値を取得します
 	 *
-	 * @return int
+	 * @return MaxLogsRange
 	 */
-	public function maxLogsRange(): int {
+	public function maxLogsRange(): MaxLogsRange {
 		return $this->max_logs_range;
 	}
 
 	/**
 	 * このチェーンのログ取得ブロック範囲最大値を設定します
 	 *
-	 * @param int $max_logs_range
+	 * @param MaxLogsRange $max_logs_range
 	 */
-	public function setMaxLogsRange( int $max_logs_range ): void {
+	public function setMaxLogsRange( MaxLogsRange $max_logs_range ): void {
 		$this->max_logs_range = $max_logs_range;
 	}
 }

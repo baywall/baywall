@@ -3,17 +3,27 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Baywall\Core\Constant\HttpStatus;
-use Baywall\Core\Domain\Exception\HttpStatus\BadRequestException;
-use Baywall\Core\Domain\Exception\HttpStatus\ForbiddenException;
-use Baywall\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
-use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\Exception\AuthenticationFailedException;
+use Baywall\Core\Domain\Exception\PaymentNotCompletedException;
+use Baywall\Core\Domain\Exception\PermissionDeniedException;
+use Baywall\Core\Domain\Exception\ValidationFailedException;
 use InvalidArgumentException;
 use WP_Error;
 use WP_REST_Response;
 
 /** WordPressの例外変換サービス */
 class WpExceptionConverter {
+
+	/** 例外をビジネス分類へ変換します。未分類の例外は INTERNAL_ERROR になります */
+	public function categoryOf( \Throwable $e ): ExceptionCategory {
+		return match ( true ) {
+			$e instanceof ValidationFailedException => ExceptionCategory::VALIDATION_FAILED,
+			$e instanceof AuthenticationFailedException => ExceptionCategory::AUTHENTICATION_FAILED,
+			$e instanceof PaymentNotCompletedException => ExceptionCategory::PAYMENT_NOT_COMPLETED,
+			$e instanceof PermissionDeniedException => ExceptionCategory::PERMISSION_DENIED,
+			default => ExceptionCategory::INTERNAL_ERROR,
+		};
+	}
 
 	public function toWpError( \Throwable $e ): WP_Error {
 		// WP_Error 型の場合はそのまま返す
@@ -23,33 +33,12 @@ class WpExceptionConverter {
 		}
 
 		// 独自例外クラスを WP_Error 型に変換して返す
-		return match ( true ) {
-			$e instanceof BadRequestException => new WP_Error( // 400 Bad Request
-				'bad_request',
-				'Bad Request',
-				array( 'status' => HttpStatus::BAD_REQUEST )
-			),
-			$e instanceof UnauthorizedException => new WP_Error( // 401 Unauthorized
-				'unauthorized',
-				'Unauthorized',
-				array( 'status' => HttpStatus::UNAUTHORIZED )
-			),
-			$e instanceof PaymentRequiredException => new WP_Error( // 402 Payment Required
-				'payment_required',
-				'Payment Required',
-				array( 'status' => HttpStatus::PAYMENT_REQUIRED )
-			),
-			$e instanceof ForbiddenException => new WP_Error( // 403 Forbidden
-				'forbidden',
-				'Forbidden',
-				array( 'status' => HttpStatus::FORBIDDEN )
-			),
-			default => new WP_Error( // その他の例外は 500 Internal Server Error として返す
-				'internal_server_error',
-				'Internal Server Error',
-				array( 'status' => HttpStatus::INTERNAL_SERVER_ERROR )
-			),
-		};
+		$category = $this->categoryOf( $e );
+		return new WP_Error(
+			$category->wpErrorCode(),
+			$category->clientMessage(),
+			array( 'status' => $category->httpStatus() )
+		);
 	}
 
 	/** 内部で発生した例外を WP_REST_Response 型に変換します */
@@ -62,27 +51,13 @@ class WpExceptionConverter {
 
 		// 独自例外クラスを WP_REST_Response 型に変換して返す
 		// - メッセージは抽象的なものを使用し、クライアントに詳細な情報が渡らないようにする
-		return match ( true ) {
-			$e instanceof BadRequestException || $e instanceof InvalidArgumentException => new WP_REST_Response( // 400 Bad Request
-				array( 'message' => 'Bad Request' ),
-				HttpStatus::BAD_REQUEST
-			),
-			$e instanceof UnauthorizedException => new WP_REST_Response( // 401 Unauthorized
-				array( 'message' => 'Unauthorized' ),
-				HttpStatus::UNAUTHORIZED
-			),
-			$e instanceof PaymentRequiredException => new WP_REST_Response( // 402 Payment Required
-				array( 'message' => 'Payment Required' ),
-				HttpStatus::PAYMENT_REQUIRED
-			),
-			$e instanceof ForbiddenException => new WP_REST_Response( // 403 Forbidden
-				array( 'message' => 'Forbidden' ),
-				HttpStatus::FORBIDDEN
-			),
-			default => new WP_REST_Response( // その他の例外は 500 Internal Server Error として返す
-				array( 'message' => 'Internal Server Error' ),
-				HttpStatus::INTERNAL_SERVER_ERROR
-			),
-		};
+		// - InvalidArgumentException → 400 は toWpResponse 限定の挙動（toWpError / GraphQL では 500）。
+		// categoryOf に含めると他トランスポートの契約が変わるため、ここでのみ扱う。
+		$category = $e instanceof InvalidArgumentException ? ExceptionCategory::VALIDATION_FAILED : $this->categoryOf( $e );
+
+		return new WP_REST_Response(
+			array( 'message' => $category->clientMessage() ),
+			$category->httpStatus()
+		);
 	}
 }

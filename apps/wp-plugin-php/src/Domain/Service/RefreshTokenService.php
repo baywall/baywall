@@ -5,7 +5,7 @@ namespace Baywall\Core\Domain\Service;
 
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\Entity\RefreshToken;
-use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Repository\RefreshTokenRepository;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\RefreshTokenString;
@@ -42,8 +42,9 @@ abstract class RefreshTokenService {
 	 * トークンローテーションを実行します
 	 *
 	 * @param RefreshTokenString $refresh_token_string クライアントから送信されたリフレッシュトークン文字列
+	 * @param UnixTimestamp      $now                  判定の基準とする現在時刻
 	 */
-	public function rotation( RefreshTokenString $refresh_token_string ): RefreshToken {
+	public function rotation( RefreshTokenString $refresh_token_string, UnixTimestamp $now ): RefreshToken {
 
 		$refresh_token = $this->refresh_token_repository->get( $refresh_token_string );
 
@@ -51,12 +52,12 @@ abstract class RefreshTokenService {
 		// - データベースに存在しないリフレッシュトークン
 		// - 無効化されたリフレッシュトークン
 		// - 期限切れのリフレッシュトークン
-		if ( $refresh_token === null || $refresh_token->isRevoked() || $refresh_token->isExpired() ) {
-			throw new UnauthorizedException( '[6E4E2DAB] Invalid refresh token.' );
+		if ( $refresh_token === null || $refresh_token->isRevoked() || $refresh_token->isExpired( $now ) ) {
+			throw new AuthenticationFailedException( '[6E4E2DAB] Invalid refresh token.' );
 		}
 
 		// 古いリフレッシュトークンを無効化
-		$refresh_token->revoke();
+		$refresh_token->revoke( $now );
 		$this->refresh_token_repository->update( $refresh_token );
 
 		// 新しいリフレッシュトークンを生成して保存
@@ -77,8 +78,9 @@ abstract class RefreshTokenService {
 	 * refresh token が存在しない、または既に revoke 済みの場合でも例外を投げません。
 	 *
 	 * @param RefreshTokenString $refresh_token_string 無効化するリフレッシュトークン文字列
+	 * @param UnixTimestamp      $now                  判定の基準とする現在時刻
 	 */
-	public function revoke( RefreshTokenString $refresh_token_string ): void {
+	public function revoke( RefreshTokenString $refresh_token_string, UnixTimestamp $now ): void {
 		$refresh_token = $this->refresh_token_repository->get( $refresh_token_string );
 
 		// 存在しない、または既に revoke 済みの場合は何もしない（冪等）
@@ -86,13 +88,13 @@ abstract class RefreshTokenService {
 			return;
 		}
 
-		$refresh_token->revoke();
+		$refresh_token->revoke( $now );
 		$this->refresh_token_repository->update( $refresh_token );
 	}
 
 	/** 古いリフレッシュトークンデータを削除します */
-	public function purgeOldRepositoryData(): void {
-		$expiration_threshold = UnixTimestamp::now()->addSeconds( -Config::REFRESH_TOKEN_DATA_EXPIRATION );
+	public function purgeOldRepositoryData( UnixTimestamp $now ): void {
+		$expiration_threshold = $now->addSeconds( -Config::REFRESH_TOKEN_DATA_EXPIRATION );
 		$this->refresh_token_repository->deleteByCreatedAt( $expiration_threshold );
 	}
 }

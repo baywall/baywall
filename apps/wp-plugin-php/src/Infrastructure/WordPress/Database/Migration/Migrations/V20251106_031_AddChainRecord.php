@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
 use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Confirmations;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
@@ -19,11 +19,13 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 	private readonly TransactionService $transaction_service;
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
+	private readonly Clock $clock;
 
-	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider, Clock $clock ) {
 		$this->transaction_service = $transaction_service;
 		$this->wpdb                = $wpdb;
 		$this->table_name          = $table_name_provider->chain();
+		$this->clock               = $clock;
 	}
 
 	public function version(): string {
@@ -31,7 +33,7 @@ class V20251106_031_AddChainRecord extends MigrationBase {
 	}
 
 	public function up(): void {
-		$now = UnixTimestamp::now()->value();
+		$now = $this->clock->now()->value();
 		$this->transaction_service->transactional(
 			function () use ( $now ) {
 				// Mainnet --------------------

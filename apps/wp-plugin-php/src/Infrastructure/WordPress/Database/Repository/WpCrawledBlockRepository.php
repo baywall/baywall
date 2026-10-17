@@ -14,6 +14,11 @@ class WpCrawledBlockRepository implements CrawledBlockRepository {
 	) {}
 
 	/** @inheritdoc */
+	public function get( ChainId $chain_id ): ?BlockNumber {
+		return $this->crawled_block_table->get( $chain_id );
+	}
+
+	/** @inheritdoc */
 	public function save( ChainId $chain_id, BlockNumber $crawled_block_number ): void {
 		$this->crawled_block_table->save( $chain_id, $crawled_block_number );
 	}

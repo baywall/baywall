@@ -33,10 +33,6 @@ class UnixTimestamp implements ValueObject {
 		return self::from( $this->timestamp + $seconds );
 	}
 
-	public static function now(): self {
-		return new self( time() );
-	}
-
 	public function equals( self $other ): bool {
 		return $this->timestamp === $other->timestamp;
 	}

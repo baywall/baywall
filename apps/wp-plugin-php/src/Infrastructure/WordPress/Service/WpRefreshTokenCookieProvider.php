@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Domain\Entity\RefreshToken;
 use Baywall\Core\Domain\Service\CookieNameProvider;
@@ -14,7 +15,8 @@ class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 
 	public function __construct(
 		private readonly WordPressPropertyProvider $wp_property,
-		private readonly CookieNameProvider $cookie_name_provider
+		private readonly CookieNameProvider $cookie_name_provider,
+		private readonly Clock $clock
 	) {}
 
 	public function get( RefreshToken $refresh_token ): Cookie {
@@ -51,7 +53,7 @@ class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 		return Cookie::create(
 			$this->cookie_name_provider->refreshToken(), // name: get()と同一
 			'', // value: 空文字
-			time() - 3600, // expires: 過去（1時間前）
+			$this->clock->now()->value() - 3600, // expires: 過去（1時間前）
 			$this->path(),
 			null, // domain: get()と同一
 			$this->secure(),

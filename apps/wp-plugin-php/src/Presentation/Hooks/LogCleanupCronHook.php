@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Application\Exception\LockAcquisitionException;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Service\LockService;
-use Baywall\Core\Constant\Config;
+use Baywall\Core\Application\UseCase\CleanupOldLogs;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
-use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
 use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
@@ -70,7 +70,8 @@ class LogCleanupCronHook extends HookBase {
 				function () use ( $action_name ) {
 					// 予約がされていない場合のみ登録
 					if ( false === wp_next_scheduled( $action_name ) ) {
-						$next_time = $this->getNextRunTime( new \DateTimeImmutable( 'now', wp_timezone() ) );
+						$now       = $this->container->get( Clock::class )->now();
+						$next_time = $this->getNextRunTime( ( new \DateTimeImmutable() )->setTimestamp( $now->value() ) );
 						$success   = wp_schedule_single_event( $next_time, $action_name );
 						assert( $success === true, '[9D3C7A2F] wp_schedule_single_event failed. ' . var_export( $success, true ) );
 					}
@@ -85,9 +86,7 @@ class LogCleanupCronHook extends HookBase {
 
 	public function execute(): void {
 		try {
-			/** @var LogTable */
-			$log_table = $this->container->get( LogTable::class );
-			$log_table->deleteOldRecords( Config::LOG_DATA_EXPIRATION );
+			$this->container->get( CleanupOldLogs::class )->handle();
 		} finally {
 			try {
 				$this->registerSchedule( WpCronName::LOG_CLEANUP );

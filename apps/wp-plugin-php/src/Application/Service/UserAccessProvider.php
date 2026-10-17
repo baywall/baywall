@@ -22,4 +22,7 @@ interface UserAccessProvider {
 
 	/** 現在のユーザーが投稿を新規作成できるかどうかを取得します。 */
 	public function canCreatePost(): bool;
+
+	/** 現在のユーザーがログイン済みかどうかを取得します。 */
+	public function isLoggedIn(): bool;
 }

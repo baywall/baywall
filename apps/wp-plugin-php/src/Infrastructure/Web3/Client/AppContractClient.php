@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\Web3\Client;
 
 use Baywall\Core\Domain\Entity\AppContract;
+use Baywall\Core\Domain\Service\BlockchainService;
 use Baywall\Core\Infrastructure\Web3\Abi\AppContractAbi;
 use Baywall\Core\Infrastructure\Web3\ValueObject\GetPaywallStatusResult;
 use Baywall\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
@@ -17,19 +18,20 @@ class AppContractClient {
 
 	public function __construct(
 		AppContract $app_contract,
+		BlockchainService $blockchain_service,
 		AppContractAbi $app_contract_abi = new AppContractAbi()
 	) {
 		assert( $app_contract->chain()->connectable(), '[A5ED369D]' );   // 接続可能なチェーンであること
 
-		$this->app_contract      = $app_contract;
-		$this->abi               = $app_contract_abi;
-		$this->eth_call_client   = new EthCallClient( $app_contract->chain()->rpcUrl() );
-		$this->blockchain_client = new BlockchainClient( $app_contract->chain()->rpcUrl() );
+		$this->app_contract       = $app_contract;
+		$this->blockchain_service = $blockchain_service;
+		$this->abi                = $app_contract_abi;
+		$this->eth_call_client    = new EthCallClient( $app_contract->chain()->rpcUrl() );
 	}
 	private readonly EthCallClient $eth_call_client;
 	private readonly AppContractAbi $abi;
 	private readonly AppContract $app_contract;
-	private readonly BlockchainClient $blockchain_client;
+	private readonly BlockchainService $blockchain_service;
 
 	public function getPaywallStatus( Address $signer_address, PostId $post_id, Address $buyer_address ): GetPaywallStatusResult {
 
@@ -78,7 +80,7 @@ class AppContractClient {
 			),
 		);
 
-		$logs = $this->blockchain_client->ethGetLogs( $filter );
+		$logs = $this->blockchain_service->getLogs( $this->app_contract->chain()->rpcUrl(), $filter );
 
 		/** @var UnlockPaywallTransferEvent[] */
 		$results = array();

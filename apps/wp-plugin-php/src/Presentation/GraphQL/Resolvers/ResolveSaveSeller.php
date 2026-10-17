@@ -1,0 +1,52 @@
+<?php
+declare(strict_types=1);
+
+namespace Baywall\Core\Presentation\GraphQL\Resolvers;
+
+use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Domain\Entity\Seller;
+use Baywall\Core\Domain\Repository\SellerRepository;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Signature;
+use Baywall\Core\Domain\ValueObject\SigningMessage;
+use Baywall\Core\Infrastructure\Web3\Service\SignatureService;
+
+class ResolveSaveSeller {
+
+
+	public function __construct(
+		private readonly UserAccessChecker $user_access_checker,
+		private readonly SellerRepository $seller_repository,
+		private readonly SignatureService $signature_service,
+		private readonly TransactionService $transaction_service
+	) {}
+
+	public function handle( array $root_value, array $args ): bool {
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
+
+		$address         = Address::from( $args['address'] );
+		$signing_message = SigningMessage::from( $args['signingMessage'] );
+		$signature       = Signature::from( $args['signature'] );
+
+		// 署名からアドレスを復元し、指定されたアドレスと一致することを確認
+		$recovered_address = $this->signature_service->recoverAddress( $signing_message, $signature );
+		if ( ! $recovered_address->equals( $address ) ) {
+			throw new \InvalidArgumentException( "[EA91F2D4] Address mismatch. Expected: {$address}, got: {$recovered_address}" );
+		}
+
+		// 販売者情報を保存
+		return $this->transaction_service->transactional(
+			function () use ( $address, $signing_message, $signature ) {
+				$this->seller_repository->save(
+					new Seller(
+						$address,
+						$signing_message,
+						$signature,
+					)
+				);
+				return true;
+			}
+		);
+	}
+}

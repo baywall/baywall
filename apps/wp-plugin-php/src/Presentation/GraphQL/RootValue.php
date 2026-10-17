@@ -3,38 +3,38 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\GraphQL;
 
 use Baywall\Core\Application\Logging\AppLogger;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveChain;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveChains;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveIssueAccessTokenByErc4361Signature;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveIssueErc4361Message;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveIssueInvoiceV2;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveInstallOriginUrlChanged;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveLogs;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveNativeToken;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveNetworkCategories;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveNetworkCategory;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveOracle;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveOracles;
-use Baywall\Core\Application\UseCase\GraphQL\ResolvePayableTokens;
-use Baywall\Core\Application\UseCase\GraphQL\ResolvePaused;
-use Baywall\Core\Application\UseCase\GraphQL\ResolvePluginVersion;
-use Baywall\Core\Application\UseCase\GraphQL\ResolvePost;
-use Baywall\Core\Application\UseCase\GraphQL\ResolvePurgeOnUninstall;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSalesHistories;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSalesHistoriesCount;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSaveChain;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSaveOracle;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSaveSeller;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSaveSiteSettings;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSaveToken;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSeller;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSellingContent;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSellingPrice;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveServerSigner;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveSctaUrl;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveThemeSetting;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveToken;
-use Baywall\Core\Application\UseCase\GraphQL\ResolveTokens;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveChain;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveChains;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveIssueAccessTokenByErc4361Signature;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveIssueErc4361Message;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveIssueInvoiceV2;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSiteUrlChangedSinceInstall;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveLogs;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveNativeToken;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveNetworkCategories;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveNetworkCategory;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveOracle;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveOracles;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolvePayableTokens;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolvePaused;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolvePluginVersion;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolvePost;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolvePurgeOnUninstall;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSalesHistories;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSalesHistoriesCount;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSaveChain;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSaveOracle;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSaveSeller;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSaveSiteSettings;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSaveToken;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSeller;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSellingContent;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSellingPrice;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveServerSigner;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSctaUrl;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveThemeSetting;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveToken;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveTokens;
 use DI\Container;
 
 class RootValue {
@@ -76,7 +76,7 @@ class RootValue {
 			'sctaUrl'                            => ResolveSctaUrl::class,
 			'themeSetting'                       => ResolveThemeSetting::class,
 			'purgeOnUninstall'                   => ResolvePurgeOnUninstall::class,
-			'installOriginUrlChanged'            => ResolveInstallOriginUrlChanged::class,
+			'siteUrlChangedSinceInstall'         => ResolveSiteUrlChangedSinceInstall::class,
 			'pluginVersion'                      => ResolvePluginVersion::class,
 			'logs'                               => ResolveLogs::class,
 

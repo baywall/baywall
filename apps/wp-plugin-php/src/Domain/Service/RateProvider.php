@@ -15,6 +15,7 @@ interface RateProvider {
 	 * 指定した通貨ペアのレートを取得します。
 	 *
 	 * @throws RateNotFoundException レートが見つからない場合にスローされます。
+	 * @throws \RuntimeException チェーン未登録・RPC URL 未設定の場合にスローされます。
 	 */
 	public function getRate( SymbolPair $symbol_pair ): Rate;
 

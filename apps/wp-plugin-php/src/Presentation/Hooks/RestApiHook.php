@@ -9,8 +9,8 @@ use Baywall\Core\Application\UseCase\LogoutAuth;
 use Baywall\Core\Application\UseCase\RefreshAccessToken;
 use Baywall\Core\Constant\HttpStatus;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Baywall\Core\Domain\Exception\HttpStatus\BadRequestException;
-use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\Exception\ValidationFailedException;
+use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
 use Baywall\Core\Infrastructure\WordPress\Service\WpNonceService;
@@ -116,13 +116,13 @@ class RestApiHook extends HookBase {
 		try {
 			// リフレッシュトークンが送信されていない場合は例外をスロー
 			if ( $refresh_token_value === null ) {
-				throw new UnauthorizedException( '[A018971D] Refresh token is missing.' );
+				throw new AuthenticationFailedException( '[A018971D] Refresh token is missing.' );
 			}
 
 			$this->container->get( RefreshAccessToken::class )->handle( $refresh_token_value );
 			return new WP_REST_Response( array(), HttpStatus::OK );
 		} catch ( Throwable $e ) {
-			if ( $e instanceof UnauthorizedException ) {
+			if ( $e instanceof AuthenticationFailedException ) {
 				// アクセストークンが存在しない状態でも
 				// 初回アクセス時にアクセスするためログレベルを抑制
 				$this->container->get( AppLogger::class )->debug( $e );
@@ -143,7 +143,7 @@ class RestApiHook extends HookBase {
 
 		try {
 			if ( $invoice_token_string_value === null ) {
-				throw new UnauthorizedException( '[A693201D] Invoice token is missing.' );
+				throw new AuthenticationFailedException( '[A693201D] Invoice token is missing.' );
 			}
 
 			$this->container->get( IssueAccessTokenByInvoiceToken::class )->handle( $invoice_token_string_value );
@@ -189,12 +189,12 @@ class RestApiHook extends HookBase {
 	private function extractPostId( \WP_REST_Request $request ): int {
 		$body = json_decode( $request->get_body(), true );
 		if ( ! is_array( $body ) || ! array_key_exists( 'postId', $body ) ) {
-			throw new BadRequestException( '[EA4E29F2] postId is required in request body.' );
+			throw new ValidationFailedException( '[EA4E29F2] postId is required in request body.' );
 		}
 
 		$post_id = $body['postId'];
 		if ( ! is_int( $post_id ) || $post_id <= 0 ) {
-			throw new BadRequestException( '[D974364F] Invalid postId.' );
+			throw new ValidationFailedException( '[D974364F] Invalid postId.' );
 		}
 
 		return $post_id;

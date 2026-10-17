@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\ValueObject\Erc4361NonceString;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
@@ -15,7 +16,7 @@ class Erc4361NonceTable {
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
 
-	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider, private readonly Clock $clock ) {
 		$this->wpdb       = $wpdb;
 		$this->table_name = $table_name_provider->erc4361Nonce();
 	}
@@ -37,7 +38,7 @@ class Erc4361NonceTable {
 	}
 
 	public function save( Address $address, Erc4361NonceString $erc4361_nonce_string, UnixTimestamp $issued_at ): void {
-		$now = UnixTimestamp::now()->value();
+		$now = $this->clock->now()->value();
 		$sql = $this->wpdb->named_prepare(
 			<<<SQL
 				INSERT INTO `{$this->table_name}` (

@@ -5,6 +5,7 @@ namespace Baywall\Core\Application\UseCase;
 
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Application\Service\AccessTokenCookieProvider;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\ValueObject\RefreshTokenString;
@@ -24,7 +25,8 @@ class LogoutAuth {
 		private readonly RefreshTokenService $refresh_token_service,
 		private readonly RefreshTokenCookieProvider $refresh_token_cookie_provider,
 		private readonly AccessTokenCookieProvider $access_token_cookie_provider,
-		private readonly CookieWriter $cookie_writer
+		private readonly CookieWriter $cookie_writer,
+		private readonly Clock $clock
 	) {}
 
 	/**
@@ -33,10 +35,11 @@ class LogoutAuth {
 	 * @param string|null $refresh_token_value リフレッシュトークン文字列。null の場合は revoke をスキップします。
 	 */
 	public function handle( ?string $refresh_token_value ): void {
+		$now = $this->clock->now();
 
 		// リフレッシュトークンが存在する場合は無効化
 		if ( $refresh_token_value !== null ) {
-			$this->refresh_token_service->revoke( RefreshTokenString::from( $refresh_token_value ) );
+			$this->refresh_token_service->revoke( RefreshTokenString::from( $refresh_token_value ), $now );
 		}
 
 		// リフレッシュトークン Cookie を期限切れにする

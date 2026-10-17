@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Logging\ValueObject\LogCategory;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
@@ -17,7 +17,7 @@ class LogTable {
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
 
-	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider, private readonly Clock $clock ) {
 		$this->wpdb       = $wpdb;
 		$this->table_name = $table_name_provider->log();
 	}
@@ -36,7 +36,7 @@ class LogTable {
 				'level'      => $level->name(),
 				'category'   => $category->name(),
 				'message'    => $message,
-				'created_at' => UnixTimestamp::now()->value(),
+				'created_at' => $this->clock->now()->value(),
 			),
 			array( '%s', '%s', '%s', '%d' )
 		);
@@ -49,7 +49,7 @@ class LogTable {
 	 */
 	public function deleteOldRecords( int $expiration_seconds ): void {
 		$table_name = $this->table_name;
-		$cutoff     = time() - $expiration_seconds;
+		$cutoff     = $this->clock->now()->value() - $expiration_seconds;
 		$sql        = $this->wpdb->named_prepare(
 			"DELETE FROM `{$table_name}` WHERE `created_at` < :cutoff",
 			array( ':cutoff' => $cutoff )

@@ -7,7 +7,7 @@ use Baywall\Core\Infrastructure\JWT\ValueObject\Jwt;
 use Baywall\Core\Infrastructure\JWT\ValueObject\JwtAlgorithm;
 use Baywall\Core\Infrastructure\JWT\ValueObject\JwtPayload;
 use Baywall\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
-use Baywall\Core\Infrastructure\Reimpl\JWT\JwtCodec;
+use Baywall\Core\Lib\Jwt\JwtCodec;
 
 class JwtService {
 

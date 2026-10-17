@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\Web3\Abi;
 
-use Baywall\Core\Infrastructure\Format\Padding;
+use Baywall\Core\Lib\Padding\Padding;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Bytes32;
 use InvalidArgumentException;

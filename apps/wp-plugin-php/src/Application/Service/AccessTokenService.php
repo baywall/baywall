@@ -6,7 +6,6 @@ namespace Baywall\Core\Application\Service;
 use Baywall\Core\Application\Repository\JwtSecretKeyRepository;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Application\ValueObject\AccessToken;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\JWT\JwtService;
 use Baywall\Core\Infrastructure\JWT\ValueObject\Jwt;
 use Baywall\Core\Infrastructure\JWT\ValueObject\JwtPayload;
@@ -17,12 +16,14 @@ class AccessTokenService {
 	private readonly JwtAlgorithmProvider $jwt_algorithm_provider;
 	private readonly JwtSecretKeyRepository $jwt_secret_key_repository;
 	private readonly AccessTokenExpirationProvider $expiration_provider;
+	private readonly Clock $clock;
 
-	public function __construct( JwtService $jwt_service, JwtAlgorithmProvider $jwt_algorithm_provider, JwtSecretKeyRepository $jwt_secret_key_repository, AccessTokenExpirationProvider $access_token_expiration_provider ) {
+	public function __construct( JwtService $jwt_service, JwtAlgorithmProvider $jwt_algorithm_provider, JwtSecretKeyRepository $jwt_secret_key_repository, AccessTokenExpirationProvider $access_token_expiration_provider, Clock $clock ) {
 		$this->jwt_service               = $jwt_service;
 		$this->jwt_algorithm_provider    = $jwt_algorithm_provider;
 		$this->jwt_secret_key_repository = $jwt_secret_key_repository;
 		$this->expiration_provider       = $access_token_expiration_provider;
+		$this->clock                     = $clock;
 	}
 
 	/** 指定したウォレットアドレスに対するアクセストークンを発行します */
@@ -33,7 +34,7 @@ class AccessTokenService {
 		// ペイロードを作成
 		$payload = JwtPayload::create(
 			$wallet_address,
-			UnixTimestamp::now(), // 発行日時
+			$this->clock->now(), // 発行日時
 			$this->expiration_provider->get(), // 有効期限
 		);
 
@@ -51,7 +52,7 @@ class AccessTokenService {
 	public function isValid( AccessToken $access_token ): bool {
 		// 有効期限が現在時刻より後であれば有効
 		// 署名の検証はdecode時に行われるためここでは不要
-		return $this->decode( $access_token )->expiresAt()->value() > time();
+		return $this->decode( $access_token )->expiresAt()->value() > $this->clock->now()->value();
 	}
 
 	/** 指定したアクセストークンからウォレットアドレスを取得します */

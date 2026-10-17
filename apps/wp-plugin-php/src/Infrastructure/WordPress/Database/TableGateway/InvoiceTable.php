@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Domain\Entity\Invoice;
 use Baywall\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
 use Baywall\Core\Domain\ValueObject\Decimals;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\Record\InvoiceTableRecord;
@@ -19,7 +19,7 @@ class InvoiceTable {
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
 
-	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider, private readonly Clock $clock ) {
 		$this->wpdb       = $wpdb;
 		$this->table_name = $table_name_provider->invoice();
 	}
@@ -67,7 +67,7 @@ class InvoiceTable {
 		// 支払い数量に小数点が含まれることはない
 		assert( $invoice->paymentAmount()->decimals()->equals( Decimals::from( 0 ) ), '[65AA4D6E] Payment amount must be an integer.' );
 
-		$now = UnixTimestamp::now()->value();
+		$now = $this->clock->now()->value();
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
 				( `invoice_id`, `post_id`, `chain_id`, `selling_amount`, `selling_symbol`, `seller_address`, `payment_token_address`, `payment_token_symbol`, `payment_token_decimals`, `payment_amount`, `buyer_address`, `created_at`, `updated_at` )

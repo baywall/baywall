@@ -8,24 +8,22 @@ use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\Repository\AppContractRepository;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\ValueObject\Address;
-use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\ChainId;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
-use Baywall\Core\Infrastructure\WordPress\Database\Record\AppContractViewRecord;
-use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\AppContractView;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\AppContractTableRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\AppContractTable;
 
 class WpAppContractRepository implements AppContractRepository {
 	public function __construct(
-		private readonly AppContractView $app_contract_view,
+		private readonly AppContractTable $app_contract_table,
 		private readonly ChainRepository $chain_repository
 	) {}
 
 	/** @inheritdoc */
 	public function get( ChainId $chain_id ): ?AppContract {
-		$records = $this->app_contract_view->all();
+		$records = $this->app_contract_table->all();
 		$records = array_filter(
 			$records,
-			fn( $record ) => $record->chain_id === $chain_id->value()
+			fn( $record ) => $record->chainIdValue() === $chain_id->value()
 		);
 		assert( count( $records ) <= 1, '[68E05B97] should return at most one record. - ' . count( $records ) );
 
@@ -38,12 +36,10 @@ class WpAppContractRepository implements AppContractRepository {
 
 /** @internal */
 class AppContractImpl extends AppContract {
-	public function __construct( Chain $chain, AppContractViewRecord $record ) {
+	public function __construct( Chain $chain, AppContractTableRecord $record ) {
 		parent::__construct(
 			$chain,
-			Address::from( $record->address ),
-			BlockNumber::fromIntNullable( $record->block_number ),
-			$record->updated_at === null ? null : UnixTimestamp::from( $record->updated_at )
+			Address::from( $record->addressValue() )
 		);
 	}
 }

@@ -5,15 +5,11 @@ namespace Baywall\Core\Domain\Entity;
 
 use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\ValueObject\Address;
-use Baywall\Core\Domain\ValueObject\BlockNumber;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 class AppContract {
 	protected function __construct(
 		private readonly Chain $chain,
-		private readonly Address $address,
-		private readonly ?BlockNumber $crawled_block_number,
-		private readonly ?UnixTimestamp $crawled_block_number_updated_at
+		private readonly Address $address
 	) {}
 
 
@@ -22,11 +18,5 @@ class AppContract {
 	}
 	public function address(): Address {
 		return $this->address;
-	}
-	public function crawledBlockNumber(): ?BlockNumber {
-		return $this->crawled_block_number;
-	}
-	public function crawledBlockNumberUpdatedAt(): ?UnixTimestamp {
-		return $this->crawled_block_number_updated_at;
 	}
 }

@@ -3,13 +3,10 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Domain\ValueObject;
 
-use Baywall\Core\Domain\ValueObject\Base\UrlBase;
-use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
-
 /**
  * RPC URLを表すValueObjectクラス
  */
-final class RpcUrl extends UrlBase implements ValueObject {
+final class RpcUrl extends Url {
 
 	private function __construct( string $rpd_url ) {
 		parent::__construct( $rpd_url );
@@ -23,9 +20,5 @@ final class RpcUrl extends UrlBase implements ValueObject {
 			return null;
 		}
 		return new self( $rpd_url );
-	}
-
-	public function equals( self $other ): bool {
-		return $this->value() === $other->value();
 	}
 }

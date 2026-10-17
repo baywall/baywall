@@ -42,27 +42,6 @@ class WpPluginInfoProvider implements PluginInfoProvider {
 	public function textDomain(): string {
 		return $this->plugin_main_file->getProperty( 'TextDomain' );
 	}
-
-	/**
-	 * プラグインの必要なPHPの最低バージョンを取得します。
-	 */
-	public function requiresPHP(): string {
-		return $this->plugin_main_file->getProperty( 'RequiresPHP' );
-	}
-
-	/**
-	 * プラグインの必要なWordPressの最低バージョンを取得します。
-	 */
-	public function requiresWP(): string {
-		return $this->plugin_main_file->getProperty( 'RequiresWP' );
-	}
-
-	/**
-	 * プラグインのUpdate URIを取得します。
-	 */
-	public function updateUri(): string {
-		return $this->plugin_main_file->getProperty( 'UpdateURI' );
-	}
 }
 
 

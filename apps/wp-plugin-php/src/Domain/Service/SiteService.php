@@ -5,8 +5,8 @@ namespace Baywall\Core\Domain\Service;
 
 interface SiteService {
 	/**
-	 * インストール元URLと現在のサイトURLが不一致かどうかを返します。
+	 * 初回インストール時のURLと現在のサイトURLが不一致かどうかを返します。
 	 * （trueの場合、サイトデータがコピーされた可能性があります）
 	 */
-	public function isInstallOriginUrlChanged(): bool;
+	public function hasSiteUrlChangedSinceInstall(): bool;
 }

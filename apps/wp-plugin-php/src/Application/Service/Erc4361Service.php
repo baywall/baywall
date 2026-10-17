@@ -9,7 +9,6 @@ use Baywall\Core\Application\ValueObject\Erc4361Nonce;
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\Web3\ERC4361\Erc4361MessageBuilder;
 
 class Erc4361Service {
@@ -20,7 +19,8 @@ class Erc4361Service {
 	public function __construct(
 		private Erc4361PropertyProvider $erc4361_property_provider,
 		private Erc4361MessageBuilder $message_builder,
-		private Erc4361NonceRepository $repository
+		private Erc4361NonceRepository $repository,
+		private Clock $clock
 	) {}
 
 	/**
@@ -48,7 +48,7 @@ class Erc4361Service {
 
 	/** 古いERC-4361用のnonceデータをリポジトリから削除します */
 	public function purgeExpiredNonceData(): void {
-		$expirationTime = UnixTimestamp::from( UnixTimestamp::now()->value() - Config::ERC4361_NONCE_DATA_EXPIRATION );
+		$expirationTime = $this->clock->now()->addSeconds( -Config::ERC4361_NONCE_DATA_EXPIRATION );
 		$this->repository->deleteExpired( $expirationTime );
 	}
 
@@ -60,6 +60,6 @@ class Erc4361Service {
 	 * 共用する。
 	 */
 	public function isNonceExpired( Erc4361Nonce $nonce ): bool {
-		return $nonce->issuedAt()->value() < UnixTimestamp::now()->value() - Config::ERC4361_NONCE_DATA_EXPIRATION;
+		return $nonce->issuedAt()->value() < $this->clock->now()->value() - Config::ERC4361_NONCE_DATA_EXPIRATION;
 	}
 }

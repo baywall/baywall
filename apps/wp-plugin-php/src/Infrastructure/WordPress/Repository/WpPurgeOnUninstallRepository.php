@@ -28,9 +28,4 @@ class WpPurgeOnUninstallRepository implements PurgeOnUninstallRepository {
 	public function save( bool $purge_on_uninstall ): void {
 		$this->option->update( $purge_on_uninstall );
 	}
-
-	/** 完全削除フラグを削除します */
-	public function delete(): void {
-		$this->option->delete();
-	}
 }

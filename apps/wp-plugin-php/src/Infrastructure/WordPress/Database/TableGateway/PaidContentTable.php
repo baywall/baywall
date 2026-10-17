@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Domain\ValueObject\Amount;
 use Baywall\Core\Domain\ValueObject\PaidContent;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\Symbol;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\Record\PaidContentTableRecord;
 
@@ -21,7 +21,7 @@ class PaidContentTable {
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
 
-	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider, private readonly Clock $clock ) {
 		$this->wpdb       = $wpdb;
 		$this->table_name = $table_name_provider->paidContent();
 	}
@@ -44,7 +44,7 @@ class PaidContentTable {
 	}
 
 	public function set( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryId $selling_network_category_id, ?Amount $selling_amount, ?Symbol $selling_symbol ): void {
-		$now = UnixTimestamp::now()->value();
+		$now = $this->clock->now()->value();
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}` (
 				`post_id`,

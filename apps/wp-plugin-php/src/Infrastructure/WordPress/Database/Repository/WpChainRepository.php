@@ -6,9 +6,10 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
-use Baywall\Core\Domain\Specification\ChainsFilter;
+use Baywall\Core\Domain\Specification\ChainsSpecification;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Confirmations;
+use Baywall\Core\Domain\ValueObject\MaxLogsRange;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
 use Baywall\Core\Infrastructure\WordPress\Database\Record\ChainTableRecord;
@@ -20,11 +21,11 @@ class WpChainRepository implements ChainRepository {
 
 	/** @inheritdoc */
 	public function get( ChainId $chain_id ): ?Chain {
-		$filtered_chains = ( new ChainsFilter() )
-			->byChainId( $chain_id )
-			->apply( $this->all() );
+		$filtered_chains = array_values(
+			array_filter( $this->all(), ( new ChainsSpecification( chain_id: $chain_id ) )->isSatisfiedBy( ... ) )
+		);
 		assert( count( $filtered_chains ) <= 1, '[BB8A90CF] should return at most one record.' );
-		return empty( $filtered_chains ) ? null : array_values( $filtered_chains )[0];
+		return empty( $filtered_chains ) ? null : $filtered_chains[0];
 	}
 
 	/** @inheritdoc */
@@ -50,7 +51,7 @@ class ChainImpl extends Chain {
 			NetworkCategoryId::from( $record->networkCategoryIdValue() ),
 			RpcUrl::fromNullable( $record->rpcUrlValue() ),
 			Confirmations::from( $record->confirmationsValue() ),
-			$record->maxLogsRangeValue(),
+			MaxLogsRange::from( $record->maxLogsRangeValue() ),
 			$record->blockExplorerUrlValue()
 		);
 	}

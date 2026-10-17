@@ -12,8 +12,8 @@ use Baywall\Core\Application\Service\SalesHistoryQueryService;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Application\ValueObject\AccessToken;
 use Baywall\Core\Domain\Entity\Invoice;
-use Baywall\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
-use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\Exception\PaymentNotCompletedException;
+use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\InvoiceRepository;
 use Baywall\Core\Domain\Repository\PostRepository;
@@ -39,21 +39,22 @@ class GetPaidContent {
 
 	public function handle( int $post_id_value ): string {
 		$post_id = PostId::from( $post_id_value );
-		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_id );
 
 		// アクセストークンをCookieから取得
 		$access_token_value = $this->access_token_request_provider->get();
 		if ( $access_token_value === null ) {
-			throw new UnauthorizedException( '[8AD8257F] Access token is missing.' );
+			throw new AuthenticationFailedException( '[8AD8257F] Access token is missing.' );
 		}
 		$access_token = AccessToken::from( $access_token_value );
 
 		// アクセストークンの妥当性（有効期限切れ）チェック
 		// ※ 署名が不正な場合はdecode時に例外がスローされる
 		if ( ! $this->access_token_service->isValid( $access_token ) ) {
-			throw new UnauthorizedException( '[3975F78C] Access token is invalid.' );
+			throw new AuthenticationFailedException( '[3975F78C] Access token is invalid.' );
 		}
+
+		// アクセストークンで認証済みが確定しているため、ヒント(true)を渡して閲覧権限をチェック
+		$this->user_access_checker->checkCanViewPost( $post_id, true );
 
 		// アクセストークンの所有者（ウォレットアドレス）を取得
 		$address = $this->access_token_service->getWalletAddress( $access_token );
@@ -106,7 +107,7 @@ class GetPaidContent {
 			return $this->post_repository->get( $post_id )->paidContent()->value();
 		} else {
 			// 購入済みでない場合はエラーをスロー
-			throw new PaymentRequiredException( "[E868EFEF] is_paid is false : {$post_id}" );
+			throw new PaymentNotCompletedException( "[E868EFEF] is_paid is false : {$post_id}" );
 		}
 	}
 }

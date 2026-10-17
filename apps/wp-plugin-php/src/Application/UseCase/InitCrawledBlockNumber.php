@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
-use Baywall\Core\Domain\Repository\AppContractRepository;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\CrawledBlockRepository;
+use Baywall\Core\Domain\Service\BlockchainService;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\BlockTag;
 use Baywall\Core\Domain\ValueObject\ChainId;
-use Baywall\Core\Infrastructure\Web3\Client\BlockchainClient;
 
 /**
  * クロール済みブロック番号を初期化します
@@ -19,17 +18,16 @@ class InitCrawledBlockNumber {
 	private const SAFETY_MARGIN_SECONDS = 60 * 5; // 5分
 
 	public function __construct(
-		private readonly AppContractRepository $app_contract_repository,
 		private readonly CrawledBlockRepository $crawled_block_repository,
-		private readonly ChainRepository $chain_repository
+		private readonly ChainRepository $chain_repository,
+		private readonly BlockchainService $blockchain_service
 	) {}
 
 
 	public function handle( int $chain_id_value ): void {
 		$chain_id = ChainId::from( $chain_id_value );
 
-		$app_contract = $this->app_contract_repository->get( $chain_id );
-		if ( null !== $app_contract->crawledBlockNumber() ) {
+		if ( null !== $this->crawled_block_repository->get( $chain_id ) ) {
 			return; // 初期化済みの場合は何もしない
 		}
 
@@ -45,17 +43,16 @@ class InitCrawledBlockNumber {
 	 * クロール済みブロックとして設定しても問題ないブロック番号を取得します
 	 */
 	private function getSafetyCrawledBlockNumber( ChainId $chain_id ): BlockNumber {
-		$chain  = $this->chain_repository->get( $chain_id );
-		$client = ( new BlockchainClient( $chain->rpcUrl() ) );
+		$chain = $this->chain_repository->get( $chain_id );
 
 		// 最新のブロック情報を取得
-		$res                 = $client->ethGetBlockByNumber( BlockTag::latest() );
+		$res                 = $this->blockchain_service->getBlockByNumber( $chain->rpcUrl(), BlockTag::latest() );
 		$latest_block_number = $res->number();
 		$latest_timestamp    = $res->timestamp();
 
 		// 1000ブロック前の情報を取得
 		$target_block_number = BlockNumber::fromInt( max( $latest_block_number->int() - 1000, 1 ) ); // マイナスにならないように調整
-		$prev_res            = $client->ethGetBlockByNumber( $target_block_number );
+		$prev_res            = $this->blockchain_service->getBlockByNumber( $chain->rpcUrl(), $target_block_number );
 		$prev_block_number   = $prev_res->number();
 		$prev_timestamp      = $prev_res->timestamp();
 

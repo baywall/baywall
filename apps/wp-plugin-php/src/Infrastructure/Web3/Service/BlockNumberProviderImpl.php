@@ -6,15 +6,18 @@ namespace Baywall\Core\Infrastructure\Web3\Service;
 use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Service\BlockNumberProvider;
+use Baywall\Core\Domain\Service\BlockchainService;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\BlockTag;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
-use Baywall\Core\Infrastructure\Web3\Client\BlockchainClient;
 
 class BlockNumberProviderImpl implements BlockNumberProvider {
 
-	public function __construct( private readonly ChainRepository $chain_repository ) {}
+	public function __construct(
+		private readonly ChainRepository $chain_repository,
+		private readonly BlockchainService $blockchain_service
+	) {}
 
 	/** @inheritdoc */
 	public function getByChainId( ChainId $chain_id, ?BlockTag $block_tag = null ): BlockNumber {
@@ -37,13 +40,12 @@ class BlockNumberProviderImpl implements BlockNumberProvider {
 	/** 指定したRPC URLからブロック番号を取得します */
 	private function getByRpcUrl( RpcUrl $rpc_url, ?BlockTag $block_tag = null ): BlockNumber {
 		$block_tag = $block_tag ?? BlockTag::latest();
-		$client    = ( new BlockchainClient( $rpc_url ) );
 
 		if ( $block_tag->equals( BlockTag::latest() ) ) {
 			// ブロック番号取得のみであればeth_blockNumberの方が効率がよい
-			return $client->ethBlockNumber();
+			return $this->blockchain_service->getBlockNumber( $rpc_url );
 		} else {
-			return $client->ethGetBlockByNumber( $block_tag )->number();
+			return $this->blockchain_service->getBlockByNumber( $rpc_url, $block_tag )->number();
 		}
 	}
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Application\Service\AccessTokenCookieProvider;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\ValueObject\AccessToken;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
@@ -14,14 +15,15 @@ class WpAccessTokenCookieProvider implements AccessTokenCookieProvider {
 
 	public function __construct(
 		private readonly WordPressPropertyProvider $wp_property,
-		private readonly CookieNameProvider $cookie_name_provider
+		private readonly CookieNameProvider $cookie_name_provider,
+		private readonly Clock $clock
 	) {}
 
 	public function get( AccessToken $access_token ): Cookie {
 		return Cookie::create(
 			$this->cookie_name_provider->accessToken(), // name
 			$access_token->value(), // value
-			time() + WpConfig::ACCESS_TOKEN_EXPIRATION, // expires
+			$this->clock->now()->value() + WpConfig::ACCESS_TOKEN_EXPIRATION, // expires
 			$this->path(),
 			null, // domain: nullで発行元ホスト名が自動設定される
 			$this->secure(),
@@ -56,7 +58,7 @@ class WpAccessTokenCookieProvider implements AccessTokenCookieProvider {
 		return Cookie::create(
 			$this->cookie_name_provider->accessToken(), // name: get()と同一
 			'', // value: 空文字
-			time() - 3600, // expires: 過去（1時間前）
+			$this->clock->now()->value() - 3600, // expires: 過去（1時間前）
 			$this->path(),
 			null, // domain: get()と同一
 			$this->secure(),

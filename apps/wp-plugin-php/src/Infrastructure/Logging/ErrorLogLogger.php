@@ -5,14 +5,18 @@ namespace Baywall\Core\Infrastructure\Logging;
 
 use Baywall\Core\Application\Logging\Logger;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
+use Baywall\Core\Application\Service\Clock;
 use DateTimeImmutable;
 
 class ErrorLogLogger implements Logger {
+
+	public function __construct( private readonly Clock $clock ) {}
+
 	/**
 	 * ログを記録します。
 	 */
 	public function log( LogLevel $level, string|\Throwable $message_or_exception ): void {
-		$timestamp = ( new DateTimeImmutable() )->setTimestamp( time() )->format( 'Y-m-d H:i:s' );
+		$timestamp = ( new DateTimeImmutable() )->setTimestamp( $this->clock->now()->value() )->format( 'Y-m-d H:i:s' );
 		if ( $message_or_exception instanceof \Throwable ) {
 			error_log(
 				sprintf(

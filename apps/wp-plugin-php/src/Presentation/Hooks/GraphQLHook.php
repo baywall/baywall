@@ -4,13 +4,10 @@ namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Constant\Config;
-use Baywall\Core\Domain\Exception\HttpStatus\BadRequestException;
-use Baywall\Core\Domain\Exception\HttpStatus\ForbiddenException;
-use Baywall\Core\Domain\Exception\HttpStatus\PaymentRequiredException;
-use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
 use Baywall\Core\Presentation\GraphQL\RootValue;
 use Baywall\Core\Infrastructure\GraphQL\PluginSchemaProvider;
 use Baywall\Core\Infrastructure\GraphQL\Rule\MutationFieldLimitRule;
+use Baywall\Core\Infrastructure\WordPress\Service\ExceptionCategory;
 use Baywall\Core\Infrastructure\WordPress\Service\RestPropertyProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
@@ -20,6 +17,7 @@ use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\DisableIntrospection;
 use GraphQL\Validator\Rules\QueryComplexity;
 use GraphQL\Validator\Rules\QueryDepth;
+use GraphQL\Validator\Rules\ValidationRule;
 use DI\Container;
 
 /**
@@ -86,19 +84,7 @@ class GraphQLHook extends HookBase {
 		$root_value_instance = $this->container->get( RootValue::class );
 		$root_value          = $root_value_instance->get();
 
-		// クエリの複雑度制限を追加
-		DocumentValidator::addRule( new QueryComplexity( Config::GRAPHQL_MAX_COMPLEXITY ) );
-		// クエリの深度制限を追加
-		DocumentValidator::addRule( new QueryDepth( Config::GRAPHQL_MAX_QUERY_DEPTH ) );
-		// イントロスペクションの無効化
-		if ( Config::GRAPHQL_DISABLE_INTROSPECTION ) {
-			DocumentValidator::addRule( new DisableIntrospection( DisableIntrospection::ENABLED ) );
-		}
-		// 独自ルール追加
-		// mutation呼び出し時のフィールド数制限ルールを追加
-		DocumentValidator::addRule( new MutationFieldLimitRule( Config::GRAPHQL_MUTATION_FIELD_MAX_COUNT ) );
-
-		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values )
+		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values, validationRules: $this->buildValidationRules() )
 			// https://webonyx.github.io/graphql-php/error-handling/#custom-error-handling-and-formatting
 			->setErrorsHandler(
 				function ( array $errors, callable $formatter ): array {
@@ -114,25 +100,14 @@ class GraphQLHook extends HookBase {
 							}
 
 							$extensions = $error->getExtensions() ?? array();
-							$message    = null;
 
 							// エラーのメッセージを抽象的なものに置き換える
-							if ( $prev_error instanceof BadRequestException ) { // 400
-								$extensions['code'] = 'BAD_REQUEST';
-								$message            = 'Bad Request';
-							} elseif ( $prev_error instanceof UnauthorizedException ) { // 401
-								$extensions['code'] = 'UNAUTHORIZED';
-								$message            = 'Unauthorized';
-							} elseif ( $prev_error instanceof PaymentRequiredException ) { // 402
-								$extensions['code'] = 'PAYMENT_REQUIRED';
-								$message            = 'Payment Required';
-							} elseif ( $prev_error instanceof ForbiddenException ) { // 403
-								$extensions['code'] = 'FORBIDDEN';
-								$message            = 'Forbidden';
-							} else {
-								$extensions['code'] = 'INTERNAL_SERVER_ERROR';
-								$message            = 'Internal Server Error';
-							}
+							// $prev_error が null の場合は INTERNAL_ERROR とする
+							/** @var WpExceptionConverter */
+							$exception_converter = $this->container->get( WpExceptionConverter::class );
+							$category            = ( null === $prev_error ) ? ExceptionCategory::INTERNAL_ERROR : $exception_converter->categoryOf( $prev_error );
+							$extensions['code']  = $category->graphqlCode();
+							$message             = $category->clientMessage();
 
 							$new_error = new \GraphQL\Error\Error(
 								$message, // $error->getPrevious()->getMessage(), // message
@@ -153,5 +128,24 @@ class GraphQLHook extends HookBase {
 			->toArray();
 
 		return $result;
+	}
+
+	/**
+	 * リクエストごとのバリデーションルール配列を組み立てます。
+	 * DocumentValidator::addRule() によるプロセス全体への静的状態の持ち越しを避けるため、
+	 * executeQuery の第8引数に渡す配列として返します。
+	 *
+	 * @return array<class-string<ValidationRule>, ValidationRule>
+	 */
+	private function buildValidationRules(): array {
+		// $validationRules を渡すとデフォルトルールは自動追加されないため、defaultRules() を土台に含める
+		$rules                           = DocumentValidator::defaultRules();
+		$rules[ QueryComplexity::class ] = new QueryComplexity( Config::GRAPHQL_MAX_COMPLEXITY );
+		$rules[ QueryDepth::class ]      = new QueryDepth( Config::GRAPHQL_MAX_QUERY_DEPTH );
+		if ( Config::GRAPHQL_DISABLE_INTROSPECTION ) {
+			$rules[ DisableIntrospection::class ] = new DisableIntrospection( DisableIntrospection::ENABLED );
+		}
+		$rules[ MutationFieldLimitRule::class ] = new MutationFieldLimitRule( Config::GRAPHQL_MUTATION_FIELD_MAX_COUNT );
+		return $rules;
 	}
 }

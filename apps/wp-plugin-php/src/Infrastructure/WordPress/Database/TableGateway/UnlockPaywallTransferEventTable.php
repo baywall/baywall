@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Amount;
@@ -12,7 +13,6 @@ use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\TransactionHash;
 use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferType;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 
 /**
@@ -23,7 +23,7 @@ class UnlockPaywallTransferEventTable {
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
 
-	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider, private readonly Clock $clock ) {
 		$this->wpdb       = $wpdb;
 		$this->table_name = $table_name_provider->unlockPaywallTransferEvent();
 	}
@@ -45,7 +45,7 @@ class UnlockPaywallTransferEventTable {
 				'token_address'    => $token_address->value(),
 				'amount'           => $amount->value(),
 				'transfer_type'    => $transfer_type->value(),
-				'created_at'       => UnixTimestamp::now()->value(),
+				'created_at'       => $this->clock->now()->value(),
 			),
 			array( '%s', '%d', '%d', '%s', '%d', '%s', '%s', '%s', '%s', '%d', '%d' )
 		);

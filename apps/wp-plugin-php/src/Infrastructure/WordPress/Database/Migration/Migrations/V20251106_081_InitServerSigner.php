@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
 use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\PrivateKey;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
-use Baywall\Core\Infrastructure\Reimpl\Ethers\EthersWallet;
+use Baywall\Core\Lib\Ether\EthersWallet;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
@@ -18,11 +18,13 @@ class V20251106_081_InitServerSigner extends MigrationBase {
 	private readonly TransactionService $transaction_service;
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
+	private readonly Clock $clock;
 
-	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider, Clock $clock ) {
 		$this->transaction_service = $transaction_service;
 		$this->wpdb                = $wpdb;
 		$this->table_name          = $table_name_provider->serverSigner();
+		$this->clock               = $clock;
 	}
 
 	public function version(): string {
@@ -30,7 +32,7 @@ class V20251106_081_InitServerSigner extends MigrationBase {
 	}
 
 	public function up(): void {
-		$now = UnixTimestamp::now()->value();
+		$now = $this->clock->now()->value();
 		$this->transaction_service->transactional(
 			function () use ( $now ) {
 				// すでにデータが存在する場合はエラー

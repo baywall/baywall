@@ -40,4 +40,9 @@ class WpUserAccessProvider implements UserAccessProvider {
 		// https://wordpress.org/documentation/article/roles-and-capabilities/#capability-vs-role-table
 		return current_user_can( 'edit_posts' );
 	}
+
+	/** @inheritdoc */
+	public function isLoggedIn(): bool {
+		return is_user_logged_in();
+	}
 }

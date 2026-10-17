@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Signature;
 use Baywall\Core\Domain\ValueObject\SigningMessage;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Database\Record\SellerTableRecord;
@@ -20,7 +20,7 @@ class SellerTable {
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
 
-	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider, private readonly Clock $clock ) {
 		$this->wpdb       = $wpdb;
 		$this->table_name = $table_name_provider->seller();
 	}
@@ -48,7 +48,7 @@ class SellerTable {
 	 * 販売者情報を追加します。
 	 */
 	public function add( Address $seller_address, SigningMessage $signing_message, Signature $signature ): void {
-		$now    = UnixTimestamp::now()->value();
+		$now    = $this->clock->now()->value();
 		$result = $this->wpdb->insert(
 			$this->table_name,
 			array(

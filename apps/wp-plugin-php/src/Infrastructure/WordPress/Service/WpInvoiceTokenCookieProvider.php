@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Application\Service\InvoiceTokenCookieProvider;
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Domain\Entity\InvoiceToken;
 use Baywall\Core\Domain\Service\CookieNameProvider;
@@ -14,7 +15,8 @@ class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 
 	public function __construct(
 		private readonly WordPressPropertyProvider $wp_property,
-		private readonly CookieNameProvider $cookie_name_provider
+		private readonly CookieNameProvider $cookie_name_provider,
+		private readonly Clock $clock
 	) {}
 
 	public function get( InvoiceToken $invoice_token ): Cookie {
@@ -35,7 +37,7 @@ class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 		return Cookie::create(
 			$this->cookie_name_provider->invoiceToken(), // name
 			'', // value: 設定不要
-			time() - 3600, // expires: 過去日時をセットしてクッキーが削除されるようにする
+			$this->clock->now()->value() - 3600, // expires: 過去日時をセットしてクッキーが削除されるようにする
 			$this->path(),
 			null, // domain: nullで発行元ホスト名が自動設定される
 			$this->secure(),

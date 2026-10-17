@@ -8,9 +8,14 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 
 interface CrawledBlockRepository {
 	/**
-	 * クロール済みブロック番号を保存します
+	 * クロール済みブロック番号を取得します
 	 *
-	 * 読み取りは AppContractRepository::get()（AppContractView の JOIN）を使うこと。ここに get() を追加しない。
+	 * 未初期化（行が無い）場合は null を返します。初期化は invoice 発行時、更新はクロール時に行われます。
+	 *
+	 * @return BlockNumber|null
 	 */
+	public function get( ChainId $chain_id ): ?BlockNumber;
+
+	/** クロール済みブロック番号を保存します */
 	public function save( ChainId $chain_id, BlockNumber $crawled_block_number ): void;
 }

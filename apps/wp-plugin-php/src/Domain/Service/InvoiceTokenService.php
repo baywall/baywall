@@ -5,7 +5,7 @@ namespace Baywall\Core\Domain\Service;
 
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\Entity\InvoiceToken;
-use Baywall\Core\Domain\Exception\HttpStatus\UnauthorizedException;
+use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Repository\InvoiceTokenRepository;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
@@ -39,8 +39,9 @@ class InvoiceTokenService {
 	 * トークンローテーションを実行します
 	 *
 	 * @param InvoiceTokenString $invoice_token_string クライアントから送信された請求書トークン文字列
+	 * @param UnixTimestamp      $now                  判定の基準とする現在時刻
 	 */
-	public function rotation( InvoiceTokenString $invoice_token_string ): InvoiceToken {
+	public function rotation( InvoiceTokenString $invoice_token_string, UnixTimestamp $now ): InvoiceToken {
 
 		$invoice_token = $this->invoice_token_repository->get( $invoice_token_string );
 
@@ -48,12 +49,12 @@ class InvoiceTokenService {
 		// - データベースに存在しない請求書トークン
 		// - 無効化された請求書トークン
 		// - 期限切れの請求書トークン
-		if ( $invoice_token === null || $invoice_token->isRevoked() || $invoice_token->isExpired() ) {
-			throw new UnauthorizedException( '[1109F03D] Invalid invoice token.' );
+		if ( $invoice_token === null || $invoice_token->isRevoked() || $invoice_token->isExpired( $now ) ) {
+			throw new AuthenticationFailedException( '[1109F03D] Invalid invoice token.' );
 		}
 
 		// 古い請求書トークンを無効化
-		$invoice_token->revoke();
+		$invoice_token->revoke( $now );
 		$this->invoice_token_repository->update( $invoice_token );
 
 		// 新しい請求書トークンを生成して保存
@@ -70,8 +71,10 @@ class InvoiceTokenService {
 
 	/**
 	 * 請求書トークンを無効化します
+	 *
+	 * @param UnixTimestamp $now 判定の基準とする現在時刻
 	 */
-	public function revoke( InvoiceTokenString $invoice_token_string ): void {
+	public function revoke( InvoiceTokenString $invoice_token_string, UnixTimestamp $now ): void {
 		$invoice_token = $this->invoice_token_repository->get( $invoice_token_string );
 
 		if ( $invoice_token === null || $invoice_token->isRevoked() ) {
@@ -79,13 +82,13 @@ class InvoiceTokenService {
 			return;
 		}
 
-		$invoice_token->revoke();
+		$invoice_token->revoke( $now );
 		$this->invoice_token_repository->update( $invoice_token );
 	}
 
 	/** 古い請求書トークンデータを削除します */
-	public function purgeOldRepositoryData(): void {
-		$expiration_threshold = UnixTimestamp::now()->addSeconds( -Config::INVOICE_TOKEN_DATA_EXPIRATION );
+	public function purgeOldRepositoryData( UnixTimestamp $now ): void {
+		$expiration_threshold = $now->addSeconds( -Config::INVOICE_TOKEN_DATA_EXPIRATION );
 		$this->invoice_token_repository->deleteByCreatedAt( $expiration_threshold );
 	}
 }

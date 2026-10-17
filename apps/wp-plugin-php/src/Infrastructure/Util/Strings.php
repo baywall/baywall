@@ -4,16 +4,6 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\Util;
 
 class Strings {
-	public static function substr(
-		string $string,
-		int $start,
-		?int $length = null,
-		?string $encoding = null
-	): string|false {
-		return mb_substr( $string, $start, $length, $encoding );
-	}
-
-
 	/**
 	 * 文字列内で最初に見つかった部分文字列の位置を返します。見つからなかった場合は false を返します。
 	 */
@@ -23,28 +13,6 @@ class Strings {
 		int $offset = 0
 	): int|false {
 		return mb_strpos( $haystack, $needle, $offset );
-	}
-
-	/**
-	 * 文字列が指定した部分文字列を含んでいるかどうかを返します。
-	 */
-	public static function contains( string $haystack, string $needle ): bool {
-		return str_contains( $haystack, $needle );
-	}
-
-	/**
-	 * 文字列内の指定した文字列の出現位置をすべて検索します。(独自実装)
-	 *
-	 * @return int[]
-	 */
-	public static function all_strpos( string $haystack, string $needle ): array {
-		$offset    = 0;
-		$positions = array();
-		while ( ( $pos = self::strpos( $haystack, $needle, $offset ) ) !== false ) {
-			$positions[] = $pos;
-			$offset      = $pos + 1;
-		}
-		return $positions;
 	}
 
 

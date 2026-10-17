@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
+use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Domain\Entity\Token;
-use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Database\Record\TokenTableRecord;
@@ -18,7 +18,7 @@ class TokenTable {
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
 
-	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider ) {
+	public function __construct( MyWpdb $wpdb, TableNameProvider $table_name_provider, private readonly Clock $clock ) {
 		$this->wpdb       = $wpdb;
 		$this->table_name = $table_name_provider->token();
 	}
@@ -48,7 +48,7 @@ class TokenTable {
 	public function save( Token $token ): void {
 
 		// データが存在する時はレコードの更新を行うが、symbol, decimalsの値は変更しない
-		$now = UnixTimestamp::now()->value();
+		$now = $this->clock->now()->value();
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
 			(`chain_id`, `address`, `symbol`, `decimals`, `is_payable`, `created_at`, `updated_at`)
