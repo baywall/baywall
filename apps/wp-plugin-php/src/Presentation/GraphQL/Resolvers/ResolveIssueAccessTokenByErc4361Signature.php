@@ -50,7 +50,7 @@ class ResolveIssueAccessTokenByErc4361Signature {
 		// 保存済みのnonceを使って署名用メッセージを再構築
 		$message = $this->erc4361_service->createMessage( $address, $chain_id, $stored_nonce );
 		// 再構築したメッセージと、受け取った署名からアドレスを計算
-		$recovered_address = $this->signature_service->recoverAddress( $message, $signature );
+		$recovered_address = $this->signature_service->verifyMessage( $message, $signature );
 
 		if ( ! $address->equals( $recovered_address ) ) {
 			// 署名の検証に失敗した場合はエラー

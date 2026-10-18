@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Domain\Specification;
 
+use Baywall\Core\Domain\ValueObject\BlockHeight;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\Confirmations;
 
@@ -18,7 +19,7 @@ class ConfirmationsSpecification {
 	public function isConfirmed( BlockNumber $tx_block_number, BlockNumber $current_block_number, Confirmations $confirmations ): bool {
 		// トランザクションが確認済みとなるブロック番号
 		// トランザクションを含むブロックが確認数1となるため、`必要確認数-1`経過後が確認済みとなるブロック番号
-		$confirmed_block_number = $tx_block_number->add( $confirmations->value() - 1 );
+		$confirmed_block_number = $tx_block_number->add( BlockHeight::from( $confirmations->value() - 1 ) );
 
 		return $confirmed_block_number->compare( $current_block_number ) <= 0;
 	}

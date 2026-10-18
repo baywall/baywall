@@ -11,7 +11,7 @@ use Baywall\Core\Lib\Ether\Ethers;
 /** 署名関連のサービスクラス */
 class SignatureService {
 	/** 署名からアドレスを復元します */
-	public function recoverAddress( SigningMessage $message, Signature $signature ): Address {
+	public function verifyMessage( SigningMessage $message, Signature $signature ): Address {
 		$address_value = Ethers::verifyMessage( $message->value(), $signature->hex()->value() );
 		if ( $address_value === null ) {
 			throw new \RuntimeException( '[8FD0A3B4] Failed to recover address from signature.' );

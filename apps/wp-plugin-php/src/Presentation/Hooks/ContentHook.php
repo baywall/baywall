@@ -94,12 +94,16 @@ class ContentSaveHook {
 				// リビジョンからの復元の場合はペイウォールブロック＋有料部分をフィールドに保持
 				// ※ リビジョンから復元した際にさらにリビジョンが追加されるが、その投稿IDは`save_post`フィルタ内でしか取得できないため
 				// ここで直接上書きすることはできない。
-				$revision_post = $this->post_repository->get( PostId::from( (int) $_GET['revision'] ) );
-				assert( $revision_post->paidContent() !== null, '[B581B4FD]' );
+				$revision_post         = $this->post_repository->get( PostId::from( (int) $_GET['revision'] ) );
+				$revision_paid_content = $revision_post->paidContent();
+				if ( null === $revision_paid_content ) {
+					// 復元元リビジョンに有料部分が無いのは想定外のデータ状態
+					throw new \LogicException( "[CB4E2910] Paid content is null for revision ID: {$revision_post->id()}" );
+				}
 
 				$pending_blocks               = array();
 				$pending_blocks[]             = $this->gutenberg_service->createWidgetBlock( $revision_post->id() );
-				$revision_paid_content_blocks = $this->gutenberg_service->parseBlocks( $revision_post->paidContent() );
+				$revision_paid_content_blocks = $this->gutenberg_service->parseBlocks( $revision_paid_content );
 
 				$pending_blocks       = array_merge( $pending_blocks, $revision_paid_content_blocks );
 				$this->pending_blocks = $pending_blocks;
@@ -149,7 +153,10 @@ class ContentSaveHook {
 		$post = $this->post_repository->get( PostId::from( $post_id_value ) );
 		if ( $this->pending_blocks !== null ) {
 			$paywall_block_index = $this->gutenberg_service->findBlockIndex( $this->pending_blocks, $this->block_name_provider->get() );
-			assert( $paywall_block_index === 0, '[6CD60862]' );
+			if ( 0 !== $paywall_block_index ) {
+				// pending_blocks は先頭にペイウォールブロックを配置して構築するため、それ以外は想定外のデータ状態
+				throw new \LogicException( "[A28D2C6D] Paywall block index is not 0: {$paywall_block_index}" );
+			}
 			// ペイウォールブロックが配置されていた場合は有料部分を更新する
 
 			$widget_attributes = $this->gutenberg_service->getWidgetAttributes( $this->pending_blocks[ $paywall_block_index ] );

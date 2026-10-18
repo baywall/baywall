@@ -22,8 +22,12 @@ class AppContractClientFactory {
 	 * 指定したチェーンにのAppコントラクトへ接続するオブジェクトを生成します。
 	 */
 	public function create( ChainId $chain_id ): AppContractClient {
+		$app_contract = $this->app_contract_repository->get( $chain_id );
+		if ( null === $app_contract ) {
+			throw new \InvalidArgumentException( "[173C93DE] AppContract for chain ID {$chain_id} does not exist." );
+		}
 		return new AppContractClient(
-			$this->app_contract_repository->get( $chain_id ),
+			$app_contract,
 			$this->blockchain_service,
 			$this->app_contract_abi
 		);

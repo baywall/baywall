@@ -32,20 +32,17 @@ class BlockNumber implements ValueObject {
 	}
 
 	/**
-	 * 現在のブロック番号に引数の値を加算した新しいインスタンスを取得します。
-	 * TODO: 引数の型をBlockHeightに変更
+	 * 現在のブロック番号にブロック数（スパン）を加算した新しいインスタンスを取得します。
 	 */
-	public function add( int $addend ): self {
-		return new self( $this->block_number_value + $addend );
+	public function add( BlockHeight $addend ): self {
+		return new self( $this->block_number_value + $addend->value() );
 	}
 
 	/**
-	 * 現在のブロック番号から引数の値を減算した新しいインスタンスを取得します。
-	 *
-	 * TODO: 引数の型をBlockHeightに変更
+	 * 現在のブロック番号からブロック数（スパン）を減算した新しいインスタンスを取得します。
 	 */
-	public function sub( int $subtrahend ): self {
-		return new self( $this->block_number_value - $subtrahend );
+	public function sub( BlockHeight $subtrahend ): self {
+		return new self( $this->block_number_value - $subtrahend->value() );
 	}
 
 	/**

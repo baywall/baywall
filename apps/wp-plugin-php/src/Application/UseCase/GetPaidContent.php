@@ -81,7 +81,12 @@ class GetPaidContent {
 
 			foreach ( $invoice_chain_id_values as $chain_id_value ) {
 				$chain_id = ChainId::from( $chain_id_value );
-				if ( ! $this->chain_repository->get( $chain_id )->connectable() ) {
+				$chain    = $this->chain_repository->get( $chain_id );
+				if ( null === $chain ) {
+					$this->logger->warn( "[9A308587] Chain with ID {$chain_id} does not exist. Skipping payment check for this chain." );
+					continue; // chain テーブルに存在しないチェーンはスキップ
+				}
+				if ( ! $chain->connectable() ) {
 					continue; // ブロックチェーンに接続できない場合はスキップ
 				}
 
@@ -104,7 +109,12 @@ class GetPaidContent {
 
 		// 購入済みの場合は有料部分を返す。
 		if ( $is_paid ) {
-			return $this->post_repository->get( $post_id )->paidContent()->value();
+			$paid_content = $this->post_repository->get( $post_id )->paidContent();
+			if ( null === $paid_content ) {
+				// 支払い確認済みなのに有料部分が未設定は想定外のデータ状態
+				throw new \LogicException( "[8301ADB2] Paid content is null for post ID: {$post_id}" );
+			}
+			return $paid_content->value();
 		} else {
 			// 購入済みでない場合はエラーをスロー
 			throw new PaymentNotCompletedException( "[E868EFEF] is_paid is false : {$post_id}" );

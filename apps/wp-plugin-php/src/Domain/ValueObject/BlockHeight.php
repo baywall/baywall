@@ -6,7 +6,10 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
 /**
- * ブロック高を表すクラス
+ * 位置間の差分（ブロック数）を表すクラス
+ *
+ * ブロック上の位置（ブロック番号）はBlockNumberで表す。
+ * BlockNumber::add() / sub()の引数のような「位置 ± スパン」の演算に用いる。
  */
 class BlockHeight implements ValueObject {
 
@@ -23,7 +26,7 @@ class BlockHeight implements ValueObject {
 		return new self( $block_height_value );
 	}
 
-	/** ブロック高を取得します。 */
+	/** ブロック高（ブロック数）を取得します。 */
 	public function value(): int {
 		return $this->block_height_value;
 	}

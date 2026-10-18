@@ -44,6 +44,9 @@ class InitCrawledBlockNumber {
 	 */
 	private function getSafetyCrawledBlockNumber( ChainId $chain_id ): BlockNumber {
 		$chain = $this->chain_repository->get( $chain_id );
+		if ( null === $chain ) {
+			throw new \InvalidArgumentException( "[9A5C802D] Chain with ID {$chain_id} does not exist." );
+		}
 
 		// 最新のブロック情報を取得
 		$res                 = $this->blockchain_service->getBlockByNumber( $chain->rpcUrl(), BlockTag::latest() );

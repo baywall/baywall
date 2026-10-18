@@ -27,6 +27,11 @@ class ConfirmationsService {
 	 * ※ 販売履歴のチェックは行いません
 	 */
 	public function isConfirmed( ChainId $chain_id, PostId $post_id, Address $buyer_address ): bool {
+		$chain = $this->chain_repository->get( $chain_id );
+		if ( null === $chain ) {
+			throw new \LogicException( "[D20245FE] Chain with ID {$chain_id} does not exist." );
+		}
+
 		// 購入時のブロック番号をコントラクトから取得
 		$unlocked_block_number = $this->app_contract_data_provider->unlockedBlockNumber( $chain_id, $post_id, $buyer_address );
 		if ( $unlocked_block_number === null ) {
@@ -37,7 +42,7 @@ class ConfirmationsService {
 		$current_block_number = $this->block_number_provider->getByChainId( $chain_id );
 
 		// ブロックが待機済みかどうかを判定して返す
-		$confirmations = $this->chain_repository->get( $chain_id )->confirmations();
+		$confirmations = $chain->confirmations();
 		return $this->confirmations_specification->isConfirmed( $unlocked_block_number, $current_block_number, $confirmations );
 	}
 }

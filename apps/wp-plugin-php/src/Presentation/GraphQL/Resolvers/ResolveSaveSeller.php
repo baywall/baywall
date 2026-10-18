@@ -30,7 +30,7 @@ class ResolveSaveSeller {
 		$signature       = Signature::from( $args['signature'] );
 
 		// 署名からアドレスを復元し、指定されたアドレスと一致することを確認
-		$recovered_address = $this->signature_service->recoverAddress( $signing_message, $signature );
+		$recovered_address = $this->signature_service->verifyMessage( $signing_message, $signature );
 		if ( ! $recovered_address->equals( $address ) ) {
 			throw new \InvalidArgumentException( "[EA91F2D4] Address mismatch. Expected: {$address}, got: {$recovered_address}" );
 		}
