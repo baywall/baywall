@@ -5,7 +5,7 @@ const config: CodegenConfig = {
 	documents: ['./graphql/block/*.graphql'],
 	ignoreNoDocuments: true, // for better experience with the watcher
 	generates: {
-		'./src/types/gql/generated.ts': {
+		'./src/shared/api/gql/generated.ts': {
 			// `preset: 'client'`を使用しない場合はファイル名を指定
 			// preset: 'client',
 			// codegen v7 では `typescript` plugin と `typescript-operations` plugin が

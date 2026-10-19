@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useBlockEditProps } from '../../../provider/block-edit-props/useBlockEditProps';
-import { useInvalidDecimalsNotificationProps } from '../../selling-price-amount/components/selling-price-decimals-error/useInvalidDecimalsNotificationProps';
+import { useBlockEditProps } from '../../../shared/lib/block-editor/block-edit-props/useBlockEditProps';
+import { useIsDecimalsError } from '../../selling-price-amount';
 
 /**
  * 保存処理をロックする必要があるかどうかを返します。
@@ -11,7 +11,7 @@ export const useShouldLockEditorSaving = (): boolean => {
 	const attributesLock = useMemo(() => Object.values(attributes).some((value) => value === null), [attributes]);
 
 	/** 入力された金額の小数点以下桁数でエラーが発生しているかどうかを取得 */
-	const isDecimalsError = useInvalidDecimalsNotificationProps().isError;
+	const isDecimalsError = useIsDecimalsError();
 
 	return attributesLock || isDecimalsError;
 };

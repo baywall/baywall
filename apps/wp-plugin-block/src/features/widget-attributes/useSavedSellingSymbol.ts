@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Symbol } from '@baywall/lib-value-object';
-import { useBlockEditProps } from '../../provider/block-edit-props/useBlockEditProps';
+import { useBlockEditProps } from '../../shared/lib/block-editor/block-edit-props/useBlockEditProps';
 
 /**
  * 保存済みの販売価格の通貨シンボルを取得します。

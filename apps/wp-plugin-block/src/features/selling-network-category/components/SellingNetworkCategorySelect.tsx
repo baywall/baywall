@@ -1,4 +1,4 @@
-import { BlockSingleSelect, BlockSingleSelectProps } from '../../../components/BlockSingleSelect';
+import { BlockSingleSelect, BlockSingleSelectProps } from '../../../shared/ui/BlockSingleSelect';
 
 export interface SellingNetworkCategorySelectProps extends BlockSingleSelectProps {}
 

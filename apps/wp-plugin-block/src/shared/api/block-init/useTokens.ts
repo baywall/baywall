@@ -1,0 +1,23 @@
+import { Decimals, NetworkCategoryId, Symbol } from '@baywall/lib-value-object';
+import { useMemo } from 'react';
+import { useBlockInitRawDataQuery } from './useBlockInitRawDataQuery';
+import { Token } from '../../domain/token/Token';
+
+/** サイトに登録されているトークンを取得します */
+export const useTokens = (): Token[] | undefined => {
+	const { data } = useBlockInitRawDataQuery();
+
+	return useMemo(() => {
+		if (data === undefined) {
+			return undefined;
+		}
+
+		return data.tokens.map((t) => {
+			return Token.from(
+				NetworkCategoryId.from(t.chain.networkCategory.id),
+				Symbol.from(t.symbol),
+				Decimals.from(t.decimals)
+			);
+		});
+	}, [data]);
+};

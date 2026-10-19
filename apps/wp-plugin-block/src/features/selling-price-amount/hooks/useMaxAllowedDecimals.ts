@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useTokens } from '../../../hooks/useTokens';
-import { getMaxDecimals } from '../lib/getMaxDecimals';
+import { useTokens } from '../../../shared/api/block-init/useTokens';
+import { getMaxDecimals } from '../utils/getMaxDecimals';
 import { NetworkCategoryId, Symbol } from '@baywall/lib-value-object';
 
 /**

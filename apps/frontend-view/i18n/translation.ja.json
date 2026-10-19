@@ -9,6 +9,7 @@
   "common.loading_label": "読み込み中...",
   "common.select_an_option": "オプションを選択してください",
   "common.server_error": "サーバーエラー",
+  "common.unknown_error": "不明なエラー",
   "dialog.close": "閉じる",
   "divider.to_continue_reading": "続きを読むには",
   "divider.unlocked_content_start_here": "ここから購入済みコンテンツ",

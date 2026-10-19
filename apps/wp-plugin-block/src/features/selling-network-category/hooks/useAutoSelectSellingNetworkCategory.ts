@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useSavedSellingNetworkCategoryId } from '../../widget-attributes/useSavedSellingNetworkCategoryId';
+import { useSavedSellingNetworkCategoryId } from '../../widget-attributes';
 import { useSelectedNetworkCategoryIdState } from './useSelectedNetworkCategoryIdState';
-import { useSellableNetworkCategories } from './useSellableNetworkCategories';
+import { useSellableNetworkCategories } from '../../../shared/api/block-init/useSellableNetworkCategories';
 
 /** 販売ネットワークカテゴリを自動的に選択します */
 export const useAutoSelectSellingNetworkCategory = (): void => {

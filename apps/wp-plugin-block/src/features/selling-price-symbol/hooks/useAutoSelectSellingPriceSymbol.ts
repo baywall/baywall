@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Symbol } from '@baywall/lib-value-object';
-import { useSavedSellingSymbol } from '../../widget-attributes/useSavedSellingSymbol';
+import { useSavedSellingSymbol } from '../../widget-attributes';
 import { useSellingPriceSymbolSelectOptions } from '../components/useSellingPriceSymbolSelectOptions';
 import { useSelectedSellingPriceSymbolState } from './useSelectedSellingPriceSymbolState';
 

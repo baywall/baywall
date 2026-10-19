@@ -1,6 +1,6 @@
 import { Amount } from '@baywall/lib-value-object';
 import { useEffect } from 'react';
-import { useSavedSellingAmount } from '../../widget-attributes/useSavedSellingAmount';
+import { useSavedSellingAmount } from '../../widget-attributes';
 import { useSellingPriceAmountValueState } from './useSellingPriceAmountValueState';
 
 /** 画面で入力されている販売価格を初期化します */

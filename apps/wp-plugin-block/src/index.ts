@@ -16,12 +16,12 @@ import './style.scss';
 /**
  * Internal dependencies
  */
-import Edit from './edit';
-import save from './save';
+import Edit from './app/edit';
+import save from './app/save';
 import metadata from './block.json';
-import { BlockIconProvider } from './lib/icon/BlockIconProvider';
+import { getBlockIcon } from './shared/lib/icon';
 
-import './i18n/i18n'; // i18n初期化処理を実行
+import './app/i18n/i18n'; // i18n初期化処理を実行
 
 /**
  * Every block starts by registering a new block type definition.
@@ -30,7 +30,7 @@ import './i18n/i18n'; // i18n初期化処理を実行
  */
 window.wp.blocks.registerBlockType(metadata.name, {
 	...(metadata as any),
-	icon: new BlockIconProvider().get(),
+	icon: getBlockIcon(),
 	attributes: {
 		// ※ デフォルト値を設定する場合は、`includes/classes/Types/WidgetAttributesType.php`の設定も確認すること。
 		sellingNetworkCategoryId: {

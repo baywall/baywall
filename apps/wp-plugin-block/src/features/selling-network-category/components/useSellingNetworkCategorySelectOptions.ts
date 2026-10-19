@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { type SellingNetworkCategorySelectProps } from './SellingNetworkCategorySelect';
 import { useSelectedNetworkCategoryIdState } from '../hooks/useSelectedNetworkCategoryIdState';
-import { useSellableNetworkCategories } from '../hooks/useSellableNetworkCategories';
+import { useSellableNetworkCategories } from '../../../shared/api/block-init/useSellableNetworkCategories';
 
 /** 販売ネットワークカテゴリの選択肢を取得します */
 export const useSellingNetworkCategorySelectOptions = (): SellingNetworkCategorySelectProps['options'] => {

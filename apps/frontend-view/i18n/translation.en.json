@@ -9,6 +9,7 @@
   "common.loading_label": "Loading...",
   "common.select_an_option": "Select an option",
   "common.server_error": "Server Error",
+  "common.unknown_error": "Unknown Error",
   "dialog.close": "Close",
   "divider.to_continue_reading": "To continue reading",
   "divider.unlocked_content_start_here": "Unlocked content starts here",
