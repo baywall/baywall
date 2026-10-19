@@ -33,13 +33,14 @@ export class NetworkCategoryId implements ValueObject<NetworkCategoryId> {
 		}
 	}
 	private static isNetworkCategoryIdValue(networkCategoryIdValue: number): boolean {
-		return (Object.values(NetworkCategoryIdValue) as number[]).includes(networkCategoryIdValue);
+		return (Object.values(NETWORK_CATEGORY_ID) as number[]).includes(networkCategoryIdValue);
 	}
 }
 
-const NetworkCategoryIdValue = {
-	Mainnet: 1,
-	Testnet: 2,
-	Privatenet: 3,
+export const NETWORK_CATEGORY_ID = {
+	MAINNET: 1,
+	TESTNET: 2,
+	PRIVATENET: 3,
 } as const;
-type NetworkCategoryIdValue = (typeof NetworkCategoryIdValue)[keyof typeof NetworkCategoryIdValue];
+
+export type NetworkCategoryIdValue = (typeof NETWORK_CATEGORY_ID)[keyof typeof NETWORK_CATEGORY_ID];
