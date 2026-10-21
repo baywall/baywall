@@ -2,6 +2,7 @@
  * graphql-codegen(@graphql-codegen/typescript-react-query v6.1.0)が生成したオリジナルのfetcher
  * ※ codegen.tsのconfigをコメントアウトして実行すると、この関数が生成される
  * @deprecated この関数はerrorsの詳細が取得できないのでfetcher.tsのfetcher関数を使ってください
+ * ※ res.okを検査しない参照用コピーです
  * @param      endpoint
  * @param      requestInit
  * @param      query
