@@ -11,7 +11,7 @@ use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Repository\PausedRepository;
 use Baywall\Core\Domain\ValueObject\SctaUrl;
 use Baywall\Core\Domain\ValueObject\ThemeSetting;
-use Baywall\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Lib\Util\Strings;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
 class ResolveSaveSiteSettings {

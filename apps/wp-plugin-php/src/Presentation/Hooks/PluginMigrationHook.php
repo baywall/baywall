@@ -5,13 +5,13 @@ namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Application\Exception\LockAcquisitionException;
 use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Repository\InstalledPluginVersionRepository;
 use Baywall\Core\Application\Service\LockService;
 use Baywall\Core\Application\Service\PluginDeactivationService;
 use Baywall\Core\Application\Service\PluginMigrationService;
 use Baywall\Core\Infrastructure\System\ArchitectureChecker;
 use Baywall\Core\Infrastructure\System\PhpExtChecker;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
-use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInstalledPluginVersionRepository;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressVersionChecker;
 use DI\Container;
@@ -71,8 +71,8 @@ class PluginMigrationHook extends HookBase {
 						}
 
 						// 初回インストールかどうか（前回保存バージョンが null の場合を初回インストールとみなす）
-						/** @var WpInstalledPluginVersionRepository */
-						$wp_installed_plugin_version_repository = $this->container->get( WpInstalledPluginVersionRepository::class );
+						/** @var InstalledPluginVersionRepository */
+						$wp_installed_plugin_version_repository = $this->container->get( InstalledPluginVersionRepository::class );
 						$is_first_install                       = $this->isFirstInstall( $wp_installed_plugin_version_repository );
 
 						// 動作環境のチェック（環境チェック一式は初回・更新時とも実行し、WordPressのバージョンチェックは初回インストール時のみ実行）
@@ -149,9 +149,9 @@ class PluginMigrationHook extends HookBase {
 	 *
 	 * 前回保存されているプラグインバージョンが null（未保存）の場合を初回インストールとみなします。
 	 *
-	 * @param WpInstalledPluginVersionRepository $repository インストール済みプラグインバージョンのリポジトリ
+	 * @param InstalledPluginVersionRepository $repository インストール済みプラグインバージョンのリポジトリ
 	 */
-	private function isFirstInstall( WpInstalledPluginVersionRepository $repository ): bool {
+	private function isFirstInstall( InstalledPluginVersionRepository $repository ): bool {
 		return $repository->get() === null;
 	}
 

@@ -7,9 +7,9 @@ use Baywall\Core\Application\Repository\Erc4361NonceRepository;
 use Baywall\Core\Application\ValueObject\Erc4361Message;
 use Baywall\Core\Application\ValueObject\Erc4361Nonce;
 use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\Service\Erc4361MessageBuilder;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
-use Baywall\Core\Infrastructure\Web3\ERC4361\Erc4361MessageBuilder;
 
 class Erc4361Service {
 

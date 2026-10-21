@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\Repository;
 
-use Baywall\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
+use Baywall\Core\Application\ValueObject\JwtSecretKey;
 
 /** JWTの共通鍵を保管するインタフェース */
 interface JwtSecretKeyRepository {

@@ -5,8 +5,8 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
-use Baywall\Core\Infrastructure\WordPress\Repository\WpJwtSecretKeyRepository;
-use Baywall\Core\Infrastructure\WordPress\Repository\WpPausedRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpJwtSecretKeyRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpPausedRepository;
 use Baywall\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyService;
 
 class V20260419_011_AddOptions extends MigrationBase {

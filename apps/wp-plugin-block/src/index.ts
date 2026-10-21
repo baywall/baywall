@@ -32,7 +32,7 @@ window.wp.blocks.registerBlockType(metadata.name, {
 	...(metadata as any),
 	icon: getBlockIcon(),
 	attributes: {
-		// ※ デフォルト値を設定する場合は、`includes/classes/Types/WidgetAttributesType.php`の設定も確認すること。
+		// ※ デフォルト値を設定する場合は、`apps/wp-plugin-php/src/Infrastructure/WordPress/Mapper/WidgetAttributesMapper.php`の設定も確認すること。
 		sellingNetworkCategoryId: {
 			type: 'number',
 			// nullを指定するとシンタックスエラーになるため強制的に型を指定。

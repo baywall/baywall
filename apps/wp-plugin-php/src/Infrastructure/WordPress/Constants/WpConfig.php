@@ -59,12 +59,12 @@ final class WpConfig {
 	/** GraphQLのルート名 */
 	public const GRAPHQL_ROUTE = 'graphql';
 	/** GraphQLスキーマファイルへのパス */
-	public const GRAPHQL_SCHEMA_PATH = self::ROOT_DIR . '/includes/assets/graphql/schema/schema.graphql';
+	public const GRAPHQL_SCHEMA_PATH = self::ROOT_DIR . '/resources/graphql/schema/schema.graphql';
 	/** GraphQLスキーマのキャッシュファイル(PHPファイル)へのパス */
-	public const GRAPHQL_CACHE_PATH = self::ROOT_DIR . '/includes/cache/graphql-schema.php';
+	public const GRAPHQL_CACHE_PATH = self::ROOT_DIR . '/var/cache/graphql-schema.php';
 
 	/** WordPressコアのバージョンチェックAPI(`https://api.wordpress.org/core/version-check/1.7/`)のローカルJSONスナップショットへのパス */
-	public const WP_CORE_VERSION_CHECK_JSON_PATH = self::ROOT_DIR . '/includes/assets/api-data/wp-core-version-check-1.7.json';
+	public const WP_CORE_VERSION_CHECK_JSON_PATH = self::ROOT_DIR . '/resources/api-data/wp-core-version-check-1.7.json';
 
 	/** アクセストークンの有効期限(秒) */
 	public const ACCESS_TOKEN_EXPIRATION = 60 * 15; // 15分

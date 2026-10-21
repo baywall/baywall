@@ -8,7 +8,7 @@ use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Domain\Entity\InvoiceToken;
 use Baywall\Core\Domain\Service\CookieNameProvider;
-use Baywall\Core\Infrastructure\Cookie\Cookie;
+use Baywall\Core\Application\ValueObject\Cookie;
 
 class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 

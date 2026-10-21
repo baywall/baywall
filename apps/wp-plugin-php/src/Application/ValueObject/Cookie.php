@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Baywall\Core\Infrastructure\Cookie;
+namespace Baywall\Core\Application\ValueObject;
 
 /**
  * Cookieに書き込むプロパティを表すクラス

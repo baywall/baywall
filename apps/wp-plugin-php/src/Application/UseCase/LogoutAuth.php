@@ -9,7 +9,7 @@ use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\ValueObject\RefreshTokenString;
-use Baywall\Core\Infrastructure\Cookie\CookieWriter;
+use Baywall\Core\Application\Service\CookieWriter;
 
 /**
  * ログアウト処理を行います。

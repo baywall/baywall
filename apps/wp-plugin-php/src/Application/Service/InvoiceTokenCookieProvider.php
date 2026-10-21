@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Application\Service;
 
 use Baywall\Core\Domain\Entity\InvoiceToken;
-use Baywall\Core\Infrastructure\Cookie\Cookie;
+use Baywall\Core\Application\ValueObject\Cookie;
 
 /**
  * 請求書トークンをCookieに書き込む際のプロパティを提供します

@@ -3,18 +3,19 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\Web3\Client;
 
+use Baywall\Core\Application\Service\AppContractClient as AppContractClientInterface;
 use Baywall\Core\Domain\Entity\AppContract;
 use Baywall\Core\Domain\Service\BlockchainService;
 use Baywall\Core\Infrastructure\Web3\Abi\AppContractAbi;
 use Baywall\Core\Infrastructure\Web3\ValueObject\GetPaywallStatusResult;
-use Baywall\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
+use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferEvent;
 use Baywall\Core\Domain\ValueObject\Hex;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\PostId;
 
-class AppContractClient {
+class AppContractClient implements AppContractClientInterface {
 
 	public function __construct(
 		AppContract $app_contract,
@@ -67,7 +68,7 @@ class AppContractClient {
 		BlockNumber $from_block,
 		BlockNumber $to_block,
 		Address $server_signer_address
-	) {
+	): array {
 		assert( $from_block->compare( $to_block ) <= 0, '[438F5DEE] from_block must be less than or equal to to_block.' );
 
 		$filter = array(

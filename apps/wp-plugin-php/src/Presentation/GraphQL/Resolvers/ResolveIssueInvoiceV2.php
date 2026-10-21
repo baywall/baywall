@@ -23,7 +23,7 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Hex;
 use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\Signature;
-use Baywall\Core\Infrastructure\Cookie\CookieWriter;
+use Baywall\Core\Application\Service\CookieWriter;
 use Baywall\Core\Lib\Ether\Ethers;
 use Baywall\Core\Lib\Ether\EthersSigningKey;
 

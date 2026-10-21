@@ -16,7 +16,7 @@ use Baywall\Core\Domain\Service\InvoiceService;
 use Baywall\Core\Domain\Service\InvoiceTokenService;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
-use Baywall\Core\Infrastructure\Cookie\CookieWriter;
+use Baywall\Core\Application\Service\CookieWriter;
 
 /**
  * 請求書トークンとアクセストークン(+リフレッシュトークン)の引き換えを行うクラス

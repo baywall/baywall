@@ -14,7 +14,7 @@ use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Signature;
-use Baywall\Core\Infrastructure\Cookie\CookieWriter;
+use Baywall\Core\Application\Service\CookieWriter;
 use Baywall\Core\Infrastructure\Web3\Service\SignatureService;
 
 /** ERC-4361の署名を検証してアクセストークン(+リフレッシュトークン)を発行するクラス */

@@ -6,9 +6,8 @@ namespace Baywall\Core\Application\Service;
 use Baywall\Core\Application\Repository\JwtSecretKeyRepository;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Application\ValueObject\AccessToken;
-use Baywall\Core\Infrastructure\JWT\JwtService;
-use Baywall\Core\Infrastructure\JWT\ValueObject\Jwt;
-use Baywall\Core\Infrastructure\JWT\ValueObject\JwtPayload;
+use Baywall\Core\Application\ValueObject\Jwt;
+use Baywall\Core\Application\ValueObject\JwtPayload;
 
 class AccessTokenService {
 

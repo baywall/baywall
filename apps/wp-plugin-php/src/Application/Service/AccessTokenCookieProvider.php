@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Application\Service;
 
 use Baywall\Core\Application\ValueObject\AccessToken;
-use Baywall\Core\Infrastructure\Cookie\Cookie;
+use Baywall\Core\Application\ValueObject\Cookie;
 
 /**
  * アクセストークンをCookieに書き込む際のプロパティを提供します

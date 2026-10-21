@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\OptionRepository;
 
+use Baywall\Core\Application\Repository\InstalledPluginVersionRepository;
 use Baywall\Core\Application\ValueObject\PluginVersion;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\StringOption;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
@@ -14,7 +15,7 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
  * プラグインのマイグレーションが必要かどうかを、
  * この値と現在のプラグインバージョンを比較して判断するために使用します。
  */
-class WpInstalledPluginVersionRepository {
+class WpInstalledPluginVersionRepository implements InstalledPluginVersionRepository {
 
 	private readonly StringOption $option;
 

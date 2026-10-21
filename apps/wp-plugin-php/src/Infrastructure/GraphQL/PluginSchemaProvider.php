@@ -57,6 +57,12 @@ class PluginSchemaProvider {
 	 * @return bool 書き込みに成功した場合 true。失敗時は一時ファイルを削除して false。
 	 */
 	private function writeCacheFile( string $cache_file_path, DocumentNode $document ): bool {
+		// 配布zipには .gitkeep のみ同梱するため、ディレクトリが無い場合は実行時に作成する
+		$cache_dir_path = dirname( $cache_file_path );
+		if ( ! is_dir( $cache_dir_path ) && ! wp_mkdir_p( $cache_dir_path ) ) {
+			return false;
+		}
+
 		$contents = "<?php\nreturn " . var_export( AST::toArray( $document ), true ) . ";\n";
 
 		// 同一ディレクトリ内の一時ファイルへ書いて差し替えることで、読み取り側に中途半端な内容を渡さない

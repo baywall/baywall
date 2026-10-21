@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\JWT;
 
-use Baywall\Core\Infrastructure\JWT\ValueObject\Jwt;
-use Baywall\Core\Infrastructure\JWT\ValueObject\JwtAlgorithm;
-use Baywall\Core\Infrastructure\JWT\ValueObject\JwtPayload;
-use Baywall\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
+use Baywall\Core\Application\Service\JwtService;
+use Baywall\Core\Application\ValueObject\Jwt;
+use Baywall\Core\Application\ValueObject\JwtAlgorithm;
+use Baywall\Core\Application\ValueObject\JwtPayload;
+use Baywall\Core\Application\ValueObject\JwtSecretKey;
 use Baywall\Core\Lib\Jwt\JwtCodec;
 
-class JwtService {
+class JwtServiceImpl implements JwtService {
 
 
 	public function __construct( private readonly JwtCodec $jwt_codec ) {}

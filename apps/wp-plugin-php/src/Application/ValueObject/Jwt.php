@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\JWT\ValueObject;
+namespace Baywall\Core\Application\ValueObject;
 
 use Baywall\Core\Domain\ValueObject\Base\StringValueObject;
 
@@ -22,7 +22,7 @@ final class Jwt extends StringValueObject {
 	private function checkJwtFormat( string $jwt_value ): void {
 		// 簡易チェック。署名等はチェックしない
 		if ( count( explode( '.', $jwt_value ) ) !== 3 ) {
-			throw new \InvalidArgumentException( '[98936770] Invalid JWT access token format. ' . $jwt_value );
+			throw new \InvalidArgumentException( '[7935630A] Invalid JWT access token format. ' . $jwt_value );
 		}
 	}
 }

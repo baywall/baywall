@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
 
-use Baywall\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Lib\Util\Strings;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 
 class Option {

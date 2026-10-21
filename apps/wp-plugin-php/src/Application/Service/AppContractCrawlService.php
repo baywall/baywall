@@ -9,12 +9,11 @@ use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\Repository\ServerSignerRepository;
+use Baywall\Core\Domain\Repository\UnlockPaywallTransferEventRepository;
 use Baywall\Core\Domain\Service\BlockNumberProvider;
 use Baywall\Core\Domain\ValueObject\BlockHeight;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\ChainId;
-use Baywall\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
-use Baywall\Core\Infrastructure\WordPress\Database\Repository\UnlockPaywallTransferEventRepository;
 
 class AppContractCrawlService {
 
@@ -28,7 +27,7 @@ class AppContractCrawlService {
 		private readonly TransactionService $transaction_service,
 		private readonly BlockNumberProvider $block_number_provider,
 		private readonly CrawledBlockRepository $crawled_block_repository,
-		private readonly AppContractClientFactory $app_contract_client_factory,
+		private readonly AppContractClientProvider $app_contract_client_provider,
 		private readonly ServerSignerRepository $server_signer_repository,
 		private readonly UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository,
 		private readonly ChainRepository $chain_repository
@@ -117,7 +116,7 @@ class AppContractCrawlService {
 				$this->logger->info( "[19189032] Crawl chain id: {$chain_id}, from block: {$from_block}, to block: {$to_block}" );
 
 				// ブロックチェーンからイベントを取得
-				$client = $this->app_contract_client_factory->create( $chain_id );
+				$client = $this->app_contract_client_provider->create( $chain_id );
 				try {
 					$events = $client->getUnlockPaywallTransferEvents( $from_block, $to_block, $server_signer_address );
 				} catch ( \Throwable $e ) {

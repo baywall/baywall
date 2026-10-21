@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\OptionRepository;
 
 use Baywall\Core\Domain\Repository\InitialSiteUrlRepository;
 use Baywall\Core\Domain\ValueObject\Url;

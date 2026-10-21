@@ -7,7 +7,7 @@ use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 use Baywall\Core\Lib\Ether\Ethers;
 use Baywall\Core\Lib\Padding\Padding;
-use Baywall\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Lib\Util\Strings;
 
 /**
  * アドレス(ウォレットアドレス/コントラクトアドレス)を表すクラス

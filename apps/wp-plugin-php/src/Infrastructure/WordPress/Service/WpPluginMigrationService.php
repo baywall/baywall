@@ -4,16 +4,16 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Repository\InstalledPluginVersionRepository;
 use Baywall\Core\Application\Service\PluginMigrationService;
 use Baywall\Core\Application\ValueObject\PluginVersion;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\MigrationLocator;
-use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInstalledPluginVersionRepository;
 
 class WpPluginMigrationService implements PluginMigrationService {
 
 
 	public function __construct(
-		private readonly WpInstalledPluginVersionRepository $plugin_version_option,
+		private readonly InstalledPluginVersionRepository $plugin_version_option,
 		private readonly WpPluginInfoProvider $plugin_info_provider,
 		private readonly MigrationLocator $locator,
 		private readonly AppLogger $logger
@@ -90,7 +90,7 @@ class WpPluginMigrationService implements PluginMigrationService {
 		$env = new WpEnvironment();
 		if ( $env->isDevelopment() || $env->isTesting() ) {
 			// テスト環境で毎回呼び出す必要があるため require_once ではなく require を使用する
-			require __DIR__ . '/../../../../scripts/wp-env/setup-devtest-db.php';
+			require __DIR__ . '/../../../../scripts/dev-data/setup-devtest-db.php';
 		} else {
 			assert( $env->isProduction(), '[8DE77AE4]' );
 		}

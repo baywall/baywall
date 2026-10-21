@@ -4,7 +4,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Application\Service\JwtAlgorithmProvider;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Baywall\Core\Infrastructure\JWT\ValueObject\JwtAlgorithm;
+use Baywall\Core\Application\ValueObject\JwtAlgorithm;
 
 class WpJwtAlgorithmProvider implements JwtAlgorithmProvider {
 	/** @inheritDoc */

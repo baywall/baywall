@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\Web3\Service;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
 use Baywall\Core\Lib\Ether\Ethers;
-use Baywall\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Lib\Util\Strings;
 use Baywall\Core\Infrastructure\Web3\Exception\ResolverNotFoundException;
 use Baywall\Core\Infrastructure\Web3\Factory\EnsRegistryClientFactory;
 use Baywall\Core\Infrastructure\Web3\Factory\EnsResolverClientFactory;

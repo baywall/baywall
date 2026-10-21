@@ -1,7 +1,7 @@
 import { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
-	schema: '../wp-plugin-php/includes/assets/graphql/schema/schema.graphql',
+	schema: '../wp-plugin-php/resources/graphql/schema/schema.graphql',
 	documents: ['./graphql/block/*.graphql'],
 	ignoreNoDocuments: true, // for better experience with the watcher
 	generates: {

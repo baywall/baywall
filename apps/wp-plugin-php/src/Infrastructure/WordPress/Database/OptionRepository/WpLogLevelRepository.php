@@ -1,20 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\OptionRepository;
 
 use Baywall\Core\Application\Logging\LogLevelRepository;
 use Baywall\Core\Application\Logging\ValueObject\LogCategory;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\StringOption;
 
 class WpLogLevelRepository implements LogLevelRepository {
-	public function __construct() {
-	}
 
 	/** @inheritdoc */
 	public function get( LogCategory $category ): LogLevel {
-		$log_level_name = get_option( $this->getOptionName( $category ), null );
+		$log_level_name = $this->option( $category )->get();
 		// 初期化時に設定されているためnullになることは無い
 		assert( $log_level_name !== null, "[F6F7CFF9] Log level for category {$category->name()} is not set." );
 		return LogLevel::from( $log_level_name );
@@ -22,12 +21,16 @@ class WpLogLevelRepository implements LogLevelRepository {
 
 	/** @inheritdoc */
 	public function set( LogCategory $category, LogLevel $level ): void {
-		update_option( $this->getOptionName( $category ), $level->name() );
+		$this->option( $category )->update( $level->name() );
 	}
 
 	/** 指定されたログカテゴリのログレベルを削除します。 */
 	public function deleteLogLevel( LogCategory $category ): void {
-		delete_option( $this->getOptionName( $category ) );
+		$this->option( $category )->delete();
+	}
+
+	private function option( LogCategory $category ): StringOption {
+		return new StringOption( $this->getOptionName( $category ) );
 	}
 
 	private function getOptionName( LogCategory $category ): string {

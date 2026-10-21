@@ -13,7 +13,7 @@ use Baywall\Core\Application\Service\TransactionService;
 use Baywall\Core\Domain\Entity\RefreshToken;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\ValueObject\RefreshTokenString;
-use Baywall\Core\Infrastructure\Cookie\CookieWriter;
+use Baywall\Core\Application\Service\CookieWriter;
 
 /**
  * アクセストークンを更新します

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Baywall\Core\Infrastructure\JWT\ValueObject\JwtSecretKey;
+use Baywall\Core\Application\ValueObject\JwtSecretKey;
 
 /** WordPress用のJWT共通鍵サービス */
 class WpJwtSecretKeyService {

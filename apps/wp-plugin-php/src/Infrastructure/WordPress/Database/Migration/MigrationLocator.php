@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\Migration;
 
 use Baywall\Core\Infrastructure\Util\NamespaceParser;
-use Baywall\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Lib\Util\Strings;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Baywall\Core\Application\ValueObject\PluginVersion;
 use DI\Container;

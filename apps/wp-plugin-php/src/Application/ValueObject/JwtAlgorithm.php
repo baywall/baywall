@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\JWT\ValueObject;
+namespace Baywall\Core\Application\ValueObject;
 
 use Baywall\Core\Domain\ValueObject\Base\StringValueObject;
 

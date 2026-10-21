@@ -13,8 +13,8 @@ use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\TransactionHash;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferType;
+use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferEvent;
 use Baywall\Core\Infrastructure\Web3\Abi\Base\AbiBase;
-use Baywall\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
 use phpseclib4\Math\BigInteger;
 use stdClass;
 

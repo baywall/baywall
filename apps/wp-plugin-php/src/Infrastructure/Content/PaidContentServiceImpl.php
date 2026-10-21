@@ -5,7 +5,7 @@ namespace Baywall\Core\Infrastructure\Content;
 use Baywall\Core\Application\Service\PaidContentService;
 use Baywall\Core\Domain\ValueObject\PaidContent;
 use Baywall\Core\Infrastructure\Format\HtmlFormat;
-use Baywall\Core\Infrastructure\Util\Strings;
+use Baywall\Core\Lib\Util\Strings;
 
 class PaidContentServiceImpl implements PaidContentService {
 

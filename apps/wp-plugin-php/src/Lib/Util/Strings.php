@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\Util;
+namespace Baywall\Core\Lib\Util;
 
 class Strings {
 	/**

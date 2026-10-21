@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\JWT\ValueObject;
+namespace Baywall\Core\Application\ValueObject;
 
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Base\ArrayValueObject;
@@ -14,8 +14,6 @@ final class JwtPayload extends ArrayValueObject {
 
 	/** ウォレットアドレス */
 	private const PAYLOAD_KEY_WALLET_ADDRESS = 'sub';
-	// /** 発行者(URL) */
-	// private const PAYLOAD_KEY_ISSUER = 'iss';
 	/** 発行日時(UNIXタイムスタンプ) */
 	private const PAYLOAD_KEY_ISSUED_AT = 'iat';
 	/** 有効期限(UNIXタイムスタンプ) */

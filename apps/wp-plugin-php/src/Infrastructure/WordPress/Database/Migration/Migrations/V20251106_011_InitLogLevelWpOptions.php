@@ -7,7 +7,7 @@ use Baywall\Core\Application\Service\TransactionService;
 use Baywall\Core\Application\Logging\ValueObject\LogCategory;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
-use Baywall\Core\Infrastructure\WordPress\Repository\WpLogLevelRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpLogLevelRepository;
 
 class V20251106_011_InitLogLevelWpOptions extends MigrationBase {
 

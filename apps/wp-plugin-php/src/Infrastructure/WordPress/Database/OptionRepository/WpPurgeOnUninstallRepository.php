@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Repository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\OptionRepository;
 
 use Baywall\Core\Application\Repository\PurgeOnUninstallRepository;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
