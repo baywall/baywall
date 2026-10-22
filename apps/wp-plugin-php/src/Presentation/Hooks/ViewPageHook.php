@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Baywall\Core\Infrastructure\WordPress\Service\HandleNameProvider;
-use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
+use Baywall\Core\Infrastructure\WordPress\Content\HandleNameProvider;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\CurrentPaywalledPostResolver;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;

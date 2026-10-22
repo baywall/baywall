@@ -13,7 +13,7 @@ use Baywall\Core\Infrastructure\System\ArchitectureChecker;
 use Baywall\Core\Infrastructure\System\PhpExtChecker;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
-use Baywall\Core\Infrastructure\WordPress\Service\WordPressVersionChecker;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WordPressVersionChecker;
 use DI\Container;
 use Throwable;
 

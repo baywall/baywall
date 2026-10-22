@@ -7,7 +7,7 @@ use Baywall\Core\Domain\Repository\NetworkCategoryRepository;
 use Baywall\Core\Domain\ValueObject\NetworkCategory;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
-use Baywall\Core\Infrastructure\WordPress\Service\I18nTextProvider;
+use Baywall\Core\Infrastructure\WordPress\I18n\I18nTextProvider;
 
 class WpNetworkCategoryRepository implements NetworkCategoryRepository {
 

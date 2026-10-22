@@ -1,0 +1,18 @@
+<?php
+declare(strict_types=1);
+
+namespace Baywall\Core\Infrastructure\WordPress\Auth;
+
+use Baywall\Core\Application\Service\AccessTokenRequestProvider;
+use Baywall\Core\Domain\Service\CookieNameProvider;
+
+class WpAccessTokenRequestProvider implements AccessTokenRequestProvider {
+
+	public function __construct( private readonly CookieNameProvider $cookie_name_provider ) {}
+
+	public function get(): ?string {
+		/** @var string|null */
+		$access_token = $_COOKIE[ $this->cookie_name_provider->accessToken() ] ?? null;
+		return $access_token;
+	}
+}

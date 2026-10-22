@@ -8,7 +8,7 @@ use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Service\LockService;
 use Baywall\Core\Application\UseCase\CleanupOldLogs;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
-use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
 

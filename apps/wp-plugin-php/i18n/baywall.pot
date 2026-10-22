@@ -17,6 +17,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: baywall.php
 #: src/Infrastructure/WordPress/Service/I18nTextProvider.php:11
+#: src/Infrastructure/WordPress/I18n/I18nTextProvider.php:11
 msgid "baywall"
 msgstr "baywall"
 
@@ -31,14 +32,17 @@ msgid "yamaneyuta"
 msgstr "yamaneyuta"
 
 #: src/Infrastructure/WordPress/Service/I18nTextProvider.php:16
+#: src/Infrastructure/WordPress/I18n/I18nTextProvider.php:16
 msgid "Mainnet"
 msgstr "Mainnet"
 
 #: src/Infrastructure/WordPress/Service/I18nTextProvider.php:21
+#: src/Infrastructure/WordPress/I18n/I18nTextProvider.php:21
 msgid "Testnet"
 msgstr "Testnet"
 
 #: src/Infrastructure/WordPress/Service/I18nTextProvider.php:31
 #: src/Infrastructure/WordPress/Service/I18nTextProvider.php:32
+#: src/Infrastructure/WordPress/I18n/I18nTextProvider.php:32
 msgid "Privatenet"
 msgstr "Privatenet"

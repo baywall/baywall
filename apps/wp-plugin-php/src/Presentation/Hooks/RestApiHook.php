@@ -13,7 +13,7 @@ use Baywall\Core\Domain\Exception\ValidationFailedException;
 use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
-use Baywall\Core\Infrastructure\WordPress\Service\WpNonceService;
+use Baywall\Core\Infrastructure\WordPress\Auth\WpNonceService;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use DI\Container;
 use Throwable;

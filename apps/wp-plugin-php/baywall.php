@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       baywall
  * Description:       You can set up a paywall for blockchain payments.
- * Requires at least: 6.6
- * Requires PHP:      8.1
+ * Requires at least: 6.6.9
+ * Requires PHP:      8.2.35
  * Version:           1.0.0-alpha.3
  * Author:            yamaneyuta
  * License:           Split License

@@ -17,7 +17,7 @@ class PhpExtChecker {
 	 *   composer install時にのみgmpを要求する点がランタイム要件と不整合。メタデータ自体は変更しない。
 	 *
 	 * チェック対象外の拡張:
-	 * - `json`:PHP >= 8.0で常駐(本プラグインはPHP >= 8.1前提)のためチェック不要
+	 * - `json`:PHP >= 8.0で常駐(本プラグインはPHP >= 8.2前提)のためチェック不要
 	 * - `iconv`:`src/`に直接使用がなく、必須とする`mbstring`により`symfony/polyfill-mbstring`も発火しない。
 	 *   composerレベルの`ext-iconv`要求は存続するがランタイム要件ではない
 	 */

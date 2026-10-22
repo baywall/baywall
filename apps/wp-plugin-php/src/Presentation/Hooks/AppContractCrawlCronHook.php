@@ -7,7 +7,7 @@ use Baywall\Core\Application\Exception\LockAcquisitionException;
 use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Service\LockService;
 use Baywall\Core\Application\UseCase\CrawlAllAppContract;
-use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;

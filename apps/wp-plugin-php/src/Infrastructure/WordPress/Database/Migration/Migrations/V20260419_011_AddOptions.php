@@ -7,7 +7,7 @@ use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\Mig
 use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpJwtSecretKeyRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpPausedRepository;
-use Baywall\Core\Infrastructure\WordPress\Service\WpJwtSecretKeyService;
+use Baywall\Core\Infrastructure\WordPress\Auth\WpJwtSecretKeyService;
 
 class V20260419_011_AddOptions extends MigrationBase {
 

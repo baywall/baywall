@@ -1,0 +1,72 @@
+<?php
+declare(strict_types=1);
+
+namespace Baywall\Core\Infrastructure\WordPress\Query;
+
+use Baywall\Core\Application\Dto\PriceDto;
+use Baywall\Core\Application\Dto\SalesHistoryDto;
+use Baywall\Core\Application\Dto\SalesHistoryInvoiceDto;
+use Baywall\Core\Application\Service\SalesHistoryQueryService;
+use Baywall\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
+use Baywall\Core\Domain\ValueObject\Address;
+use Baywall\Core\Domain\ValueObject\Amount;
+use Baywall\Core\Domain\ValueObject\Decimals;
+use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord;
+use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\SalesHistoryView;
+
+class WpSalesHistoryQueryService implements SalesHistoryQueryService {
+
+
+	public function __construct( private readonly SalesHistoryView $sales_history_view ) {}
+
+	/** @inheritDoc */
+	public function find( SalesHistorySearchCondition $condition ): array {
+		return array_map(
+			fn ( SalesHistoryViewRecord $record ) => $this->recordToDto( $record ),
+			$this->sales_history_view->select( $condition )
+		);
+	}
+
+	/** @inheritDoc */
+	public function count( SalesHistorySearchCondition $condition ): int {
+		return $this->sales_history_view->count( $condition );
+	}
+
+	private function recordToDto( SalesHistoryViewRecord $record ): SalesHistoryDto {
+
+		$invoice_dto = new SalesHistoryInvoiceDto(
+			$record->invoice_id,
+			$record->block_timestamp,
+			$record->post_id,
+			new PriceDto( $record->selling_amount, $record->selling_symbol ),
+			$record->chain_id,
+			$record->chain_name
+		);
+
+		// トークン転送イベントは数量から価格への変換が必要
+		$to_price_dto_callback = fn ( ?string $amount ) => $amount === null ? null : new PriceDto(
+			(string) Amount::fromBaseUnitAndDecimals( $amount, Decimals::from( $record->payment_token_decimals ) ),
+			$record->payment_token_symbol
+		);
+
+		return new SalesHistoryDto(
+			$invoice_dto,
+			$record->post_title,
+			$record->transaction_hash,
+			$record->buyer_address,
+			$to_price_dto_callback( $record->payment_amount ),
+			$record->contract_address,
+			$to_price_dto_callback( $record->contract_received_amount ),
+			$record->seller_address,
+			$to_price_dto_callback( $record->seller_received_amount ),
+			$record->affiliate_address,
+			$to_price_dto_callback( $record->affiliate_received_amount )
+		);
+	}
+
+	/** @inheritDoc */
+	public function existsByPostIdAndBuyerAddress( PostId $post_id, Address $buyer_address ): bool {
+		return $this->sales_history_view->existsByPostIdAndBuyerAddress( $post_id, $buyer_address );
+	}
+}

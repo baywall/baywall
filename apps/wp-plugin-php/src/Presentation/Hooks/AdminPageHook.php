@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Baywall\Core\Infrastructure\WordPress\Service\HandleNameProvider;
-use Baywall\Core\Infrastructure\WordPress\Service\I18nTextProvider;
-use Baywall\Core\Infrastructure\WordPress\Service\WpPluginInfoProvider;
-use Baywall\Core\Infrastructure\WordPress\Service\SlugProvider;
+use Baywall\Core\Infrastructure\WordPress\Content\HandleNameProvider;
+use Baywall\Core\Infrastructure\WordPress\I18n\I18nTextProvider;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
+use Baywall\Core\Infrastructure\WordPress\Content\SlugProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
 use DI\Container;
