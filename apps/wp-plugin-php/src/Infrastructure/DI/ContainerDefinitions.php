@@ -27,9 +27,11 @@ use Baywall\Core\Application\Service\LogQueryService;
 use Baywall\Core\Application\Service\PaidContentService;
 use Baywall\Core\Application\Service\PluginDeactivationService;
 use Baywall\Core\Application\Service\PluginMigrationService;
+use Baywall\Core\Application\Service\PluginService;
 use Baywall\Core\Application\Service\PluginTeardownService;
 use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
 use Baywall\Core\Application\Service\SalesHistoryQueryService;
+use Baywall\Core\Application\Service\SupportedVersionConstraintsProvider;
 use Baywall\Core\Application\Service\TransactionService;
 use Baywall\Core\Application\Service\UserAccessProvider;
 use Baywall\Core\Domain\Repository\AppContractRepository;
@@ -49,12 +51,10 @@ use Baywall\Core\Domain\Repository\TokenRepository;
 use Baywall\Core\Domain\Repository\UnlockPaywallTransferEventRepository;
 use Baywall\Core\Domain\Service\AppContractDataProvider;
 use Baywall\Core\Domain\Service\BlockchainService;
-use Baywall\Core\Domain\Service\BlockNumberProvider;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 use Baywall\Core\Domain\Service\InvoiceTokenProvider;
 use Baywall\Core\Domain\Service\OracleService;
 use Baywall\Core\Domain\Service\PluginInfoProvider;
-use Baywall\Core\Domain\Service\PostTitleProvider;
 use Baywall\Core\Domain\Service\RateProvider;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\Service\SiteService;
@@ -79,7 +79,6 @@ use Baywall\Core\Application\Logging\LogLevelRepository;
 use Baywall\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
 use Baywall\Core\Infrastructure\Web3\Service\AppContractDataProviderImpl;
 use Baywall\Core\Infrastructure\Web3\Service\BlockchainServiceImpl;
-use Baywall\Core\Infrastructure\Web3\Service\BlockNumberProviderImpl;
 use Baywall\Core\Infrastructure\Web3\Service\OracleServiceImpl;
 use Baywall\Core\Infrastructure\Web3\Service\RateProviderImpl;
 use Baywall\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
@@ -100,6 +99,7 @@ use Baywall\Core\Infrastructure\WordPress\Auth\WpAccessTokenExpirationProvider;
 use Baywall\Core\Infrastructure\WordPress\Cookie\WpAccessTokenCookieProvider;
 use Baywall\Core\Infrastructure\WordPress\Cookie\WpCookieNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpAccessTokenRequestProvider;
+use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpErc4361NonceProvider;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpErc4361PropertyProvider;
@@ -109,12 +109,14 @@ use Baywall\Core\Infrastructure\WordPress\Service\WpInvoiceTokenProvider;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpJwtAlgorithmProvider;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpJwtSecretKeyRepository;
 use Baywall\Core\Infrastructure\WordPress\Service\WpLockService;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginAssetUrlProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginDeactivationService;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginPackageChecksumVerifier;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginUpdateChecker;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginMigrationService;
-use Baywall\Core\Infrastructure\WordPress\Content\WpPostTitleProvider;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginService;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WpSupportedVersionConstraintsProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginTeardownService;
 use Baywall\Core\Infrastructure\WordPress\Cookie\WpRefreshTokenCookieProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpRefreshTokenService;
@@ -123,8 +125,6 @@ use Baywall\Core\Infrastructure\WordPress\Query\WpUserAccessProvider;
 use Baywall\Core\Infrastructure\WordPress\Query\WpLogQueryService;
 use Baywall\Core\Infrastructure\WordPress\Query\WpSalesHistoryQueryService;
 use Baywall\Core\Infrastructure\WordPress\Service\WpTransactionService;
-use Baywall\Core\Infrastructure\WordPress\Plugin\WordPressCoreLatestVersionService;
-use Baywall\Core\Infrastructure\WordPress\Plugin\WpWordPressCoreLatestVersionService;
 use wpdb;
 
 use function DI\autowire;
@@ -165,14 +165,12 @@ final class ContainerDefinitions {
 			// Service
 			Clock::class                                => autowire( SystemClock::class ),
 			CookieWriter::class                         => autowire( CookieWriterImpl::class ),
-			PostTitleProvider::class                    => autowire( WpPostTitleProvider::class ),
 			RateProvider::class                         => get( RateProviderImpl::class ),
 			UserAccessProvider::class                   => autowire( WpUserAccessProvider::class ),
 			PaidContentService::class                   => autowire( PaidContentServiceImpl::class ),
 			AppContractDataProvider::class              => autowire( AppContractDataProviderImpl::class ),
 			AppContractClientProvider::class            => autowire( AppContractClientFactory::class ),
 			OracleService::class                        => autowire( OracleServiceImpl::class ),
-			BlockNumberProvider::class                  => autowire( BlockNumberProviderImpl::class ),
 			BlockchainService::class                    => autowire( BlockchainServiceImpl::class ),
 			TransactionService::class                   => autowire( WpTransactionService::class ),
 			LockService::class                          => autowire( WpLockService::class ),
@@ -194,9 +192,13 @@ final class ContainerDefinitions {
 			SiteService::class                          => autowire( WpSiteService::class ),
 			PluginDeactivationService::class            => autowire( WpPluginDeactivationService::class ),
 			PluginInfoProvider::class                   => autowire( WpPluginInfoProvider::class ),
+			WpPluginAssetUrlProvider::class             => autowire(),
 			PluginMigrationService::class               => autowire( WpPluginMigrationService::class ),
+			PluginService::class                        => autowire( WpPluginService::class ),
 			PluginTeardownService::class                => autowire( WpPluginTeardownService::class ),
-			WordPressCoreLatestVersionService::class    => autowire( WpWordPressCoreLatestVersionService::class ),
+			SupportedVersionConstraintsProvider::class  => autowire( WpSupportedVersionConstraintsProvider::class )
+				->constructorParameter( 'wp_versions_json_path', WpConfig::WP_VERSIONS_JSON_PATH )
+				->constructorParameter( 'php_versions_json_path', WpConfig::PHP_VERSIONS_JSON_PATH ),
 			// プラグイン自動アップデートチェック用
 			WpAppManifestFetcher::class                 => autowire(),
 			WpPluginUpdateChecker::class                => autowire(),

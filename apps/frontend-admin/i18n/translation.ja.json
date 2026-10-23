@@ -22,6 +22,8 @@
   "chains.confirmations_positive_integer_message": "確認数は1以上の正の整数である必要があります",
   "chains.different_network_rpc_url_message": "別ネットワークのRPC URLです。(チェーンID: {{actual}})",
   "chains.edit_chain": "チェーン編集",
+  "chains.example_rpc_url_message": "動作確認用として、以下の無料 RPC URL を利用できます（レート制限があります）。",
+  "chains.example_rpc_url_production_notice_message": "本番運用では、信頼できる RPC プロバイダーの URL を指定してください。",
   "chains.go_to_rpc_url_settings_button": "RPC URL設定へ",
   "chains.insufficient_logs_rpc_url_message": "このRPC URLでは十分なログが取得できません。別のRPC URLを指定してください。",
   "chains.invalid_rpc_url_message": "無効なRPC URLです",

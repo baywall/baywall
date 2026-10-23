@@ -5,7 +5,7 @@ namespace Baywall\Core\Application\Service;
 
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Service\AppContractDataProvider;
-use Baywall\Core\Domain\Service\BlockNumberProvider;
+use Baywall\Core\Domain\Service\BlockchainService;
 use Baywall\Core\Domain\Specification\ConfirmationsSpecification;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
@@ -17,7 +17,7 @@ class ConfirmationsService {
 	public function __construct(
 		private readonly ChainRepository $chain_repository,
 		private readonly AppContractDataProvider $app_contract_data_provider,
-		private readonly BlockNumberProvider $block_number_provider,
+		private readonly BlockchainService $blockchain_service,
 		private readonly ConfirmationsSpecification $confirmations_specification
 	) {}
 
@@ -39,7 +39,11 @@ class ConfirmationsService {
 		}
 
 		// 現在のブロック番号をブロックチェーンから取得
-		$current_block_number = $this->block_number_provider->getByChainId( $chain_id );
+		$rpc_url = $chain->rpcUrl();
+		if ( null === $rpc_url ) {
+			throw new \InvalidArgumentException( "[6DD872FD] Chain {$chain_id} does not have a valid RPC URL." );
+		}
+		$current_block_number = $this->blockchain_service->getBlockNumber( $rpc_url );
 
 		// ブロックが待機済みかどうかを判定して返す
 		$confirmations = $chain->confirmations();

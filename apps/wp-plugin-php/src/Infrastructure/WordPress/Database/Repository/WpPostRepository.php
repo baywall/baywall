@@ -32,6 +32,11 @@ class WpPostRepository implements PostRepository {
 	}
 
 	/** @inheritdoc */
+	public function findTitle( PostId $post_id ): ?string {
+		return get_post( $post_id->value() )?->post_title;
+	}
+
+	/** @inheritdoc */
 	public function save( Post $post ): void {
 
 		if ( null === $post->paidContent() ) {

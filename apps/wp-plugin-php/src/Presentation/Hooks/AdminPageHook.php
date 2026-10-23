@@ -5,6 +5,7 @@ namespace Baywall\Core\Presentation\Hooks;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\Content\HandleNameProvider;
 use Baywall\Core\Infrastructure\WordPress\I18n\I18nTextProvider;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginAssetUrlProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Infrastructure\WordPress\Content\SlugProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
@@ -76,8 +77,8 @@ class AdminPageHook extends HookBase {
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
 		/** @var PhpVarExporter */
 		$php_var_exporter = $this->container->get( PhpVarExporter::class );
-		/** @var WpPluginInfoProvider */
-		$plugin = $this->container->get( WpPluginInfoProvider::class );
+		/** @var WpPluginAssetUrlProvider */
+		$asset_url_provider = $this->container->get( WpPluginAssetUrlProvider::class );
 
 		// 管理画面用のスクリプトを登録する際のハンドル名を取得
 		$handle_name = $handle_name_provider->adminScript();
@@ -88,7 +89,7 @@ class AdminPageHook extends HookBase {
 		// 管理画面のスクリプト読み込み
 		wp_enqueue_script(
 			$handle_name,
-			$plugin->toUrl( WpConfig::ADMIN_JS_RELATIVE_PATH ),
+			$asset_url_provider->url( WpConfig::ADMIN_JS_RELATIVE_PATH ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true,   // フッターに出力。

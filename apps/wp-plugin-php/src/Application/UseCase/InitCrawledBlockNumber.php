@@ -48,14 +48,19 @@ class InitCrawledBlockNumber {
 			throw new \InvalidArgumentException( "[9A5C802D] Chain with ID {$chain_id} does not exist." );
 		}
 
+		$rpc_url = $chain->rpcUrl();
+		if ( null === $rpc_url ) {
+			throw new \InvalidArgumentException( "[A67E0A9C] Chain {$chain->id()} does not have a valid RPC URL." );
+		}
+
 		// 最新のブロック情報を取得
-		$res                 = $this->blockchain_service->getBlockByNumber( $chain->rpcUrl(), BlockTag::latest() );
+		$res                 = $this->blockchain_service->getBlockByNumber( $rpc_url, BlockTag::latest() );
 		$latest_block_number = $res->number();
 		$latest_timestamp    = $res->timestamp();
 
 		// 1000ブロック前の情報を取得
 		$target_block_number = BlockNumber::fromInt( max( $latest_block_number->int() - 1000, 1 ) ); // マイナスにならないように調整
-		$prev_res            = $this->blockchain_service->getBlockByNumber( $chain->rpcUrl(), $target_block_number );
+		$prev_res            = $this->blockchain_service->getBlockByNumber( $rpc_url, $target_block_number );
 		$prev_block_number   = $prev_res->number();
 		$prev_timestamp      = $prev_res->timestamp();
 

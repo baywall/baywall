@@ -4,7 +4,7 @@ namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\Content\HandleNameProvider;
-use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginAssetUrlProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
 use DI\Container;
@@ -30,8 +30,8 @@ class PostEditHook extends HookBase {
 
 		/** @var HandleNameProvider */
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
-		/** @var WpPluginInfoProvider */
-		$plugin = $this->container->get( WpPluginInfoProvider::class );
+		/** @var WpPluginAssetUrlProvider */
+		$asset_url_provider = $this->container->get( WpPluginAssetUrlProvider::class );
 		/** @var PhpVarExporter */
 		$php_var_exporter = $this->container->get( PhpVarExporter::class );
 
@@ -44,7 +44,7 @@ class PostEditHook extends HookBase {
 		// ブロックスクリプトを登録
 		wp_enqueue_script(
 			$handle,
-			$plugin->toUrl( WpConfig::BLOCK_JS_RELATIVE_PATH ),
+			$asset_url_provider->url( WpConfig::BLOCK_JS_RELATIVE_PATH ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true,   // フッターに出力。
@@ -56,7 +56,7 @@ class PostEditHook extends HookBase {
 		// スタイルを登録
 		wp_enqueue_style(
 			'b99aafea0cf94d308e4edce4bc087709', // 適当なハンドル名(他で使用しない)
-			$plugin->toUrl( WpConfig::BLOCK_CSS_RELATIVE_PATH ),
+			$asset_url_provider->url( WpConfig::BLOCK_CSS_RELATIVE_PATH ),
 			array(),
 			$asset_file['version']
 		);

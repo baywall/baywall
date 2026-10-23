@@ -28,11 +28,6 @@ final class Config {
 	public const BLOCKCHAIN_REQUEST_TIMEOUT = 10;
 
 	/**
-	 * WordPressコアのバージョンチェックAPIへのリクエストのタイムアウト(秒)
-	 */
-	public const WP_CORE_VERSION_REQUEST_TIMEOUT = 5;
-
-	/**
 	 * ブロックチェーンへのリクエストのリトライ間隔(ミリ秒)
 	 */
 	public const BLOCKCHAIN_REQUEST_RETRY_INTERVALS_MS = array( 1000, 2000, 4000 );

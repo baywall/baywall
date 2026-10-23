@@ -9,11 +9,11 @@ use Baywall\Core\Application\Repository\InstalledPluginVersionRepository;
 use Baywall\Core\Application\Service\LockService;
 use Baywall\Core\Application\Service\PluginDeactivationService;
 use Baywall\Core\Application\Service\PluginMigrationService;
+use Baywall\Core\Application\Service\PluginService;
 use Baywall\Core\Infrastructure\System\ArchitectureChecker;
 use Baywall\Core\Infrastructure\System\PhpExtChecker;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
-use Baywall\Core\Infrastructure\WordPress\Plugin\WordPressVersionChecker;
 use DI\Container;
 use Throwable;
 
@@ -75,7 +75,7 @@ class PluginMigrationHook extends HookBase {
 						$wp_installed_plugin_version_repository = $this->container->get( InstalledPluginVersionRepository::class );
 						$is_first_install                       = $this->isFirstInstall( $wp_installed_plugin_version_repository );
 
-						// 動作環境のチェック（環境チェック一式は初回・更新時とも実行し、WordPressのバージョンチェックは初回インストール時のみ実行）
+						// 動作環境のチェック（環境チェック一式は初回・更新時とも実行し、WordPress・PHPバージョンのサポートチェックは初回インストール時のみ実行）
 						$this->checkSystem( $is_first_install );
 
 						// マイグレーション実行
@@ -114,9 +114,9 @@ class PluginMigrationHook extends HookBase {
 	/**
 	 * 動作環境のチェックを行います
 	 *
-	 * @param bool $check_wordpress_version WordPressのバージョンチェックを実行するかどうか（初回インストール時のみ true）
+	 * @param bool $check_cms_version WordPress・PHPバージョンのサポートチェックを実行するかどうか（初回インストール時のみ true）
 	 */
-	private function checkSystem( bool $check_wordpress_version ): void {
+	private function checkSystem( bool $check_cms_version ): void {
 		// 64ビットのPHP環境であることを確認
 		/** @var ArchitectureChecker */
 		$architecture_checker = $this->container->get( ArchitectureChecker::class );
@@ -134,13 +134,20 @@ class PluginMigrationHook extends HookBase {
 			throw new \RuntimeException( '[CFE0F8E3] This plugin does not support WordPress Multisite.' );
 		}
 
-		// WordPressバージョンのチェックは初回インストール時のみ実行する。
+		// WordPress・PHPバージョンのサポートチェックは初回インストール時のみ実行する。
 		// プラグイン更新時は、プラグインの自動更新機能(PluginUpdateCheckHook)導入以降、
-		// 更新のたびにWordPressコアのバージョンチェックが走るのは不適切なため、初回インストール時に限定する。
-		if ( $check_wordpress_version ) {
-			/** @var WordPressVersionChecker */
-			$wp_version_checker = $this->container->get( WordPressVersionChecker::class );
-			$wp_version_checker->checkVersion( $wp_property_provider->wpVersion() );
+		// 更新のたびにチェックが走るのは不適切なため、初回インストール時に限定する。
+		if ( $check_cms_version ) {
+			/** @var PluginService */
+			$plugin_service = $this->container->get( PluginService::class );
+
+			$wp_version = $wp_property_provider->wpVersion();
+			if ( ! $plugin_service->isSupportCmsVersion( $wp_version ) ) {
+				throw new \RuntimeException( "[96BAB762] This plugin does not support WordPress version {$wp_version}." );
+			}
+			if ( ! $plugin_service->isSupportPhpVersion( PHP_VERSION ) ) {
+				throw new \RuntimeException( '[1ED6C82B] This plugin does not support PHP version ' . PHP_VERSION . '.' );
+			}
 		}
 	}
 

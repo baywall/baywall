@@ -10,7 +10,7 @@ use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\Repository\ServerSignerRepository;
 use Baywall\Core\Domain\Repository\UnlockPaywallTransferEventRepository;
-use Baywall\Core\Domain\Service\BlockNumberProvider;
+use Baywall\Core\Domain\Service\BlockchainService;
 use Baywall\Core\Domain\ValueObject\BlockHeight;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\ChainId;
@@ -25,7 +25,7 @@ class AppContractCrawlService {
 		private readonly AppLogger $logger,
 		private readonly LockService $lock_service,
 		private readonly TransactionService $transaction_service,
-		private readonly BlockNumberProvider $block_number_provider,
+		private readonly BlockchainService $blockchain_service,
 		private readonly CrawledBlockRepository $crawled_block_repository,
 		private readonly AppContractClientProvider $app_contract_client_provider,
 		private readonly ServerSignerRepository $server_signer_repository,
@@ -150,8 +150,13 @@ class AppContractCrawlService {
 
 	/** 販売履歴を取得する最終ブロック番号を取得します */
 	private function getCrawlEndBlockNumber( Chain $chain ): BlockNumber {
+		$rpc_url = $chain->rpcUrl();
+		if ( null === $rpc_url ) {
+			throw new \InvalidArgumentException( "[6DD872FD] Chain {$chain->id()} does not have a valid RPC URL." );
+		}
+
 		// 現時点での最新ブロック番号を取得
-		$latest_block_number = $this->block_number_provider->getByChainId( $chain->id() );
+		$latest_block_number = $this->blockchain_service->getBlockNumber( $rpc_url );
 		// 該当チェーンの待機ブロック数を取得
 		$confirmations = $chain->confirmations();
 

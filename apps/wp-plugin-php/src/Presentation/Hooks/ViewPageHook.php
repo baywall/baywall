@@ -4,7 +4,7 @@ namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\Content\HandleNameProvider;
-use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
+use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginAssetUrlProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\CurrentPaywalledPostResolver;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
@@ -32,8 +32,8 @@ class ViewPageHook extends HookBase {
 
 		/** @var HandleNameProvider */
 		$handle_name_provider = $this->container->get( HandleNameProvider::class );
-		/** @var WpPluginInfoProvider */
-		$plugin = $this->container->get( WpPluginInfoProvider::class );
+		/** @var WpPluginAssetUrlProvider */
+		$asset_url_provider = $this->container->get( WpPluginAssetUrlProvider::class );
 		/** @var PhpVarExporter */
 		$php_var_exporter = $this->container->get( PhpVarExporter::class );
 
@@ -46,7 +46,7 @@ class ViewPageHook extends HookBase {
 		// スクリプトを登録
 		wp_enqueue_script(
 			$handle_name,
-			$plugin->toUrl( WpConfig::VIEW_JS_RELATIVE_PATH ),
+			$asset_url_provider->url( WpConfig::VIEW_JS_RELATIVE_PATH ),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true   // フッターに出力 ※ 7.0.2でも`script_loader_tag`による`defer`挿入が可能であることを確認したため、配列にはせず`true`のままとする
@@ -54,7 +54,7 @@ class ViewPageHook extends HookBase {
 
 		// ウィジェットCSSのURLを生成する(キャッシュバスティングのためバージョンクエリを付与)
 		// フロントエンドは本URLを Shadow DOM 内に`<link>`で注入してスタイルを適用する
-		$view_css_url = add_query_arg( 'ver', $asset_file['version'], $plugin->toUrl( WpConfig::VIEW_CSS_RELATIVE_PATH ) );
+		$view_css_url = add_query_arg( 'ver', $asset_file['version'], $asset_url_provider->url( WpConfig::VIEW_CSS_RELATIVE_PATH ) );
 
 		// インラインスクリプトを追加(CSS URLをフロントエンドへ受け渡す)
 		$php_var_exporter->addInlineScript( $handle_name, $view_css_url );

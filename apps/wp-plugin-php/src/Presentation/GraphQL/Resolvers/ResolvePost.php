@@ -5,7 +5,6 @@ namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Repository\PostRepository;
-use Baywall\Core\Domain\Service\PostTitleProvider;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class ResolvePost {
@@ -13,8 +12,7 @@ class ResolvePost {
 
 	public function __construct(
 		private readonly UserAccessChecker $user_access_checker,
-		private readonly PostRepository $post_repository,
-		private readonly PostTitleProvider $post_title_provider
+		private readonly PostRepository $post_repository
 	) {}
 
 	public function handle( array $root_value, array $args ) {
@@ -26,7 +24,7 @@ class ResolvePost {
 		$post = $this->post_repository->get( $post_id );
 
 		$post_title_callback = function () use ( $post ) {
-			return $this->post_title_provider->getPostTitle( $post->id() );
+			return $this->post_repository->findTitle( $post->id() );
 		};
 
 		return array(
