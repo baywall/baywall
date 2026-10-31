@@ -13,7 +13,7 @@ use Baywall\Core\Domain\ValueObject\Confirmations;
 use Baywall\Core\Domain\ValueObject\MaxLogsRange;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
 
-class ResolveSaveChain {
+class ResolveSaveChain implements Resolver {
 
 
 	public function __construct(
@@ -51,9 +51,12 @@ class ResolveSaveChain {
 				$chain->setRpcUrl( $rpc_url );
 				$chain->setConfirmations( $confirmations );
 				$chain->setMaxLogsRange( $max_logs_range );
+				$chain->resetConsecutiveFailures(); // データ保存時はデータ取得失敗回数をリセット
 
 				// 値を更新したチェーン情報を保存
 				$this->chain_repository->save( $chain );
+				// save() は連続失敗回数を書き込まないため、リセット値を専用の書き込み経路で保存する
+				$this->chain_repository->saveConsecutiveFailures( $chain );
 
 				return true;
 			}

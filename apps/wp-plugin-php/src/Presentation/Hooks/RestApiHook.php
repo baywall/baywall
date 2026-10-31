@@ -15,7 +15,6 @@ use Baywall\Core\Domain\Service\CookieNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpNonceService;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
-use DI\Container;
 use Throwable;
 use WP_REST_Response;
 
@@ -24,8 +23,26 @@ use WP_REST_Response;
  */
 class RestApiHook extends HookBase {
 
-
-	public function __construct( private readonly Container $container ) {}
+	/**
+	 * @param \Closure(): AppLogger                      $logger
+	 * @param \Closure(): WpNonceService                 $nonce_service
+	 * @param \Closure(): WpExceptionConverter           $exception_converter
+	 * @param \Closure(): CookieNameProvider             $cookie_name_provider
+	 * @param \Closure(): RefreshAccessToken             $refresh_access_token
+	 * @param \Closure(): IssueAccessTokenByInvoiceToken $issue_access_token_by_invoice_token
+	 * @param \Closure(): LogoutAuth                     $logout_auth
+	 * @param \Closure(): GetPaidContent                 $get_paid_content
+	 */
+	public function __construct(
+		private readonly \Closure $logger,
+		private readonly \Closure $nonce_service,
+		private readonly \Closure $exception_converter,
+		private readonly \Closure $cookie_name_provider,
+		private readonly \Closure $refresh_access_token,
+		private readonly \Closure $issue_access_token_by_invoice_token,
+		private readonly \Closure $logout_auth,
+		private readonly \Closure $get_paid_content,
+	) {}
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'addActionRestApiInit' ) );
@@ -93,10 +110,10 @@ class RestApiHook extends HookBase {
 	 *
 	 * @return true|WP_Error
 	 */
-	private function permissionCallback( \WP_REST_Request $request ) {
-		$logger              = $this->container->get( AppLogger::class );
-		$nonce_service       = $this->container->get( WpNonceService::class );
-		$exception_converter = $this->container->get( WpExceptionConverter::class );
+	private function permissionCallback( \WP_REST_Request $request ): true|\WP_Error {
+		$logger              = ( $this->logger )();
+		$nonce_service       = ( $this->nonce_service )();
+		$exception_converter = ( $this->exception_converter )();
 
 		try {
 			$nonce_service->checkRequestHeader( $request );
@@ -108,7 +125,7 @@ class RestApiHook extends HookBase {
 	}
 
 	public function authRefreshHandler( \WP_REST_Request $request ) {
-		$cookie_name_provider = $this->container->get( CookieNameProvider::class );
+		$cookie_name_provider = ( $this->cookie_name_provider )();
 
 		// リフレッシュトークンを取得
 		$refresh_token_value = $_COOKIE[ $cookie_name_provider->refreshToken() ] ?? null;
@@ -119,23 +136,23 @@ class RestApiHook extends HookBase {
 				throw new AuthenticationFailedException( '[A018971D] Refresh token is missing.' );
 			}
 
-			$this->container->get( RefreshAccessToken::class )->handle( $refresh_token_value );
+			( $this->refresh_access_token )()->handle( $refresh_token_value );
 			return new WP_REST_Response( array(), HttpStatus::OK );
 		} catch ( Throwable $e ) {
 			if ( $e instanceof AuthenticationFailedException ) {
 				// アクセストークンが存在しない状態でも
 				// 初回アクセス時にアクセスするためログレベルを抑制
-				$this->container->get( AppLogger::class )->debug( $e );
+				( $this->logger )()->debug( $e );
 			} else {
-				$this->container->get( AppLogger::class )->error( $e );
+				( $this->logger )()->error( $e );
 			}
 
-			return $this->container->get( WpExceptionConverter::class )->toWpResponse( $e );
+			return ( $this->exception_converter )()->toWpResponse( $e );
 		}
 	}
 
 	public function authTokenInvoiceHandler( \WP_REST_Request $request ) {
-		$cookie_name_provider = $this->container->get( CookieNameProvider::class );
+		$cookie_name_provider = ( $this->cookie_name_provider )();
 
 		// 請求書トークンをCookieから取得
 		/** @var string|null */
@@ -146,27 +163,27 @@ class RestApiHook extends HookBase {
 				throw new AuthenticationFailedException( '[A693201D] Invoice token is missing.' );
 			}
 
-			$this->container->get( IssueAccessTokenByInvoiceToken::class )->handle( $invoice_token_string_value );
+			( $this->issue_access_token_by_invoice_token )()->handle( $invoice_token_string_value );
 			return new WP_REST_Response( array(), HttpStatus::OK );
 		} catch ( Throwable $e ) {
-			$this->container->get( AppLogger::class )->error( $e );
-			return $this->container->get( WpExceptionConverter::class )->toWpResponse( $e );
+			( $this->logger )()->error( $e );
+			return ( $this->exception_converter )()->toWpResponse( $e );
 		}
 	}
 
 	public function authLogoutHandler( \WP_REST_Request $request ) {
-		$cookie_name_provider = $this->container->get( CookieNameProvider::class );
+		$cookie_name_provider = ( $this->cookie_name_provider )();
 
 		// リフレッシュトークンをCookieから取得
 		/** @var string|null */
 		$refresh_token_value = $_COOKIE[ $cookie_name_provider->refreshToken() ] ?? null;
 
 		try {
-			$this->container->get( LogoutAuth::class )->handle( $refresh_token_value );
+			( $this->logout_auth )()->handle( $refresh_token_value );
 			return new WP_REST_Response( array(), HttpStatus::OK );
 		} catch ( Throwable $e ) {
-			$this->container->get( AppLogger::class )->error( $e );
-			return $this->container->get( WpExceptionConverter::class )->toWpResponse( $e );
+			( $this->logger )()->error( $e );
+			return ( $this->exception_converter )()->toWpResponse( $e );
 		}
 	}
 
@@ -174,14 +191,14 @@ class RestApiHook extends HookBase {
 		try {
 			$post_id = $this->extractPostId( $request );
 
-			$paid_content = $this->container->get( GetPaidContent::class )->handle( $post_id );
+			$paid_content = ( $this->get_paid_content )()->handle( $post_id );
 			return new WP_REST_Response(
 				array( 'paidContent' => $paid_content ),
 				HttpStatus::OK
 			);
 		} catch ( Throwable $e ) {
-			$this->container->get( AppLogger::class )->error( $e );
-			return $this->container->get( WpExceptionConverter::class )->toWpResponse( $e );
+			( $this->logger )()->error( $e );
+			return ( $this->exception_converter )()->toWpResponse( $e );
 		}
 	}
 

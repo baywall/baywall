@@ -4,19 +4,19 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Application\Repository\Erc4361NonceRepository;
-use Baywall\Core\Application\Service\Erc4361NonceProvider;
+use Baywall\Core\Application\Service\Erc4361NonceGenerator;
 use Baywall\Core\Application\Service\Erc4361Service;
 use Baywall\Core\Application\Service\TransactionService;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
-class ResolveIssueErc4361Message {
+class ResolveIssueErc4361Message implements Resolver {
 
 
 	public function __construct(
 		private readonly TransactionService $transaction_service,
 		private Erc4361NonceRepository $erc4361_nonce_repository,
-		private Erc4361NonceProvider $erc4361_nonce_provider,
+		private Erc4361NonceGenerator $erc4361_nonce_generator,
 		private Erc4361Service $erc4361_service
 	) {}
 
@@ -31,7 +31,7 @@ class ResolveIssueErc4361Message {
 		return $this->transaction_service->transactional(
 			function () use ( $address, $chain_id ) {
 				// nonceを生成し、アドレスと紐づけて保存
-				$nonce = $this->erc4361_nonce_provider->generate();
+				$nonce = $this->erc4361_nonce_generator->generate();
 				$this->erc4361_nonce_repository->save( $address, $nonce );
 
 				// 署名用メッセージを生成

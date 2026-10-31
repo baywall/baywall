@@ -6,7 +6,7 @@ namespace Baywall\Core\Domain\Entity\Base;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\PrivateKey;
 
-class Signer {
+readonly class Signer {
 
 	/**
 	 * @param Address    $address

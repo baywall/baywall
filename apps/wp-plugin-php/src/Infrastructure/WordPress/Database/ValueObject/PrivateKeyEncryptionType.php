@@ -5,7 +5,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\ValueObject;
 
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
-class PrivateKeyEncryptionType implements ValueObject {
+readonly class PrivateKeyEncryptionType implements ValueObject {
 
 	// 以下の定義はDBに永続化されるため原則変更不可です。値は`chk_{table}_private_key`の条件と対応しており、付け替えると既存行の再マイグレーションが必要になります。
 	// `0`は予約値（未指定・無効）のため使わず、値は1起点です。

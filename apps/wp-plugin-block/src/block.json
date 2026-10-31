@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "baywall/paywall",
-	"version": "1.0.0-alpha.3",
+	"version": "1.0.0-alpha.4",
 	"title": "baywall",
 	"category": "widgets",
 	"description": "You can set up a paywall for cryptocurrency or stablecoin payments.",

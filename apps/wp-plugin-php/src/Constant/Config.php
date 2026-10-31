@@ -37,6 +37,14 @@ final class Config {
 	 */
 	public const CRON_INTERVAL_APP_CONTRACT_CRAWL = 60 * 1; // 1分
 
+	/**
+	 * チェーンのクロール連続失敗回数の上限
+	 * 連続失敗が上限に達したチェーンはクロール対象から自動的に除外される
+	 *
+	 * @see CRON_INTERVAL_APP_CONTRACT_CRAWL
+	 */
+	public const CHAIN_CONSECUTIVE_FAILURE_LIMIT = 10;
+
 	/** ログデータの保持期間(秒) */
 	public const LOG_DATA_EXPIRATION = 60 * 60 * 24 * 7; // 7日
 
@@ -137,9 +145,14 @@ final class Config {
 	public const UPDATE_URI = 'https://baywall.net/';
 
 	/**
-	 * app-manifest.jsonの配信URL
+	 * app-manifest.jsonの配信URLを解決するENS名
 	 */
-	public const APP_MANIFEST_URL = 'https://static.baywall.net/app-manifest.json';
+	public const APP_MANIFEST_ENS = 'baywall.eth';
+
+	/**
+	 * app-manifest.jsonの配信URLを格納するENSテキストレコードのフィールド名
+	 */
+	public const ENS_TEXT_FIELD_NAME_MANIFEST = 'manifest';
 
 	/**
 	 * app manifest取得リクエストのタイムアウト(秒)

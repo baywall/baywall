@@ -7,7 +7,7 @@ use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Infrastructure\Web3\Service\NativeTokenService;
 
-class ResolveNativeToken {
+class ResolveNativeToken implements Resolver {
 
 
 	public function __construct(

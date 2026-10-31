@@ -12,7 +12,7 @@ class WpCookieNameProvider implements CookieNameProvider {
 	private const SECURE_PREFIX = '__Secure-';
 
 
-	public function __construct( private readonly WordPressPropertyProvider $wp_property ) {}
+	public function __construct( private readonly WordPressPropertyProvider $wordpress_property_provider ) {}
 
 	/** @inheritdoc */
 	public function accessToken(): string {
@@ -30,7 +30,7 @@ class WpCookieNameProvider implements CookieNameProvider {
 	}
 
 	private function resolve( string $base_cookie_name ): string {
-		if ( $this->wp_property->getEnvironmentType() === 'local' ) {
+		if ( $this->wordpress_property_provider->getEnvironmentType() === 'local' ) {
 			// テスト環境の場合は、セキュアプレフィックスなしのクッキー名を返す
 			return $base_cookie_name;
 		} else {

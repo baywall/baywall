@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\Web3\Service;
+namespace Baywall\Core\Domain\Service;
 
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Signature;

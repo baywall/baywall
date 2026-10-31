@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\ValueObject;
 use Baywall\Core\Domain\ValueObject\Base\SecureStringValueObject;
 use Baywall\Core\Domain\ValueObject\RefreshTokenString;
 
-class WpRefreshTokenHashString extends SecureStringValueObject {
+readonly class WpRefreshTokenHashString extends SecureStringValueObject {
 	private const HASH_ALGORITHM = 'sha256';
 
 	private function __construct( string $wp_refresh_token_hash_value ) {

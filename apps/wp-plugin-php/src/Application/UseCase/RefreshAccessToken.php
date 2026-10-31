@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
-use Baywall\Core\Application\Logging\AppLogger;
-use Baywall\Core\Application\Service\AccessTokenCookieProvider;
-use Baywall\Core\Application\Service\AccessTokenService;
 use Baywall\Core\Application\Service\Clock;
-use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
+use Baywall\Core\Application\Service\TokenCookieService;
 use Baywall\Core\Application\Service\TransactionService;
-use Baywall\Core\Domain\Entity\RefreshToken;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\ValueObject\RefreshTokenString;
-use Baywall\Core\Application\Service\CookieWriter;
 
 /**
  * アクセストークンを更新します
@@ -21,15 +16,10 @@ use Baywall\Core\Application\Service\CookieWriter;
 class RefreshAccessToken {
 
 
-
 	public function __construct(
-		private readonly AppLogger $app_logger,
 		private readonly TransactionService $transaction_service,
 		private readonly RefreshTokenService $refresh_token_service,
-		private readonly RefreshTokenCookieProvider $refresh_token_cookie_provider,
-		private readonly AccessTokenCookieProvider $access_token_cookie_provider,
-		private readonly AccessTokenService $access_token_service,
-		private readonly CookieWriter $cookie_writer,
+		private readonly TokenCookieService $token_cookie_service,
 		private readonly Clock $clock
 	) {}
 
@@ -45,33 +35,9 @@ class RefreshAccessToken {
 				// トークンローテーションを実行
 				$new_refresh_token = $this->refresh_token_service->rotation( RefreshTokenString::from( $refresh_token_value ), $now );
 
-				// 新しいリフレッシュトークンをクッキーに保存
-				$this->setCookie( $new_refresh_token );
-
-				// 新しいアクセストークンを発行
-				$access_token        = $this->access_token_service->issue( $new_refresh_token->walletAddress() );
-				$access_token_cookie = $this->access_token_cookie_provider->get( $access_token );
-				$success             = $this->cookie_writer->set( $access_token_cookie );
-
-				if ( $success === false ) {
-					throw new \RuntimeException( '[02DC84AF] Failed to set access token cookie.' );
-				}
+				// 新しいリフレッシュトークンとアクセストークンをクッキーに保存
+				$this->token_cookie_service->setRefreshAndIssueAccess( $new_refresh_token );
 			}
 		);
-	}
-
-
-	/**
-	 * リフレッシュトークンをクッキーに保存します
-	 *
-	 * @param RefreshToken $new_refresh_token 新しいリフレッシュトークン
-	 */
-	public function setCookie( RefreshToken $new_refresh_token ): void {
-		$cookie  = $this->refresh_token_cookie_provider->get( $new_refresh_token );
-		$success = $this->cookie_writer->set( $cookie );
-
-		if ( $success === false ) {
-			throw new \RuntimeException( '[68ACEBC4] Failed to set refresh token cookie.' );
-		}
 	}
 }

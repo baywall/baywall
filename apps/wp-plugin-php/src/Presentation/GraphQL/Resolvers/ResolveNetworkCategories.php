@@ -8,7 +8,7 @@ use Baywall\Core\Domain\Repository\NetworkCategoryRepository;
 use Baywall\Core\Domain\ValueObject\NetworkCategory;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 
-class ResolveNetworkCategories {
+class ResolveNetworkCategories implements Resolver {
 
 
 	public function __construct(

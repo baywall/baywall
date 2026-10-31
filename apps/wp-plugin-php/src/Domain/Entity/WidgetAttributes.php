@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
 /** 販売設定(ペイウォールブロックで画面設定された値) */
-class WidgetAttributes {
+readonly class WidgetAttributes {
 
 
 	private function __construct(

@@ -36,12 +36,12 @@ class PhpVarExporter {
 		$wp_rest_nonce = wp_create_nonce( 'wp_rest' );
 
 		// GraphQL APIのURL
-		$wp_property = new WordPressPropertyProvider();
+		$wordpress_property_provider = new WordPressPropertyProvider();
 
 		// 出力する変数
 		$result = array(
 			'wpRestNonce' => $wp_rest_nonce,
-			'apiRoot'     => trailingslashit( $wp_property->apiRootUrl() ),
+			'apiRoot'     => trailingslashit( $wordpress_property_provider->apiRootUrl() ),
 		);
 
 		// 現在の投稿IDが取得できる場合は追加(取得できなかった場合はnull)

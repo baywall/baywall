@@ -6,7 +6,7 @@ namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 use Baywall\Core\Application\Repository\PurgeOnUninstallRepository;
 use Baywall\Core\Application\Service\UserAccessChecker;
 
-class ResolvePurgeOnUninstall {
+class ResolvePurgeOnUninstall implements Resolver {
 
 
 	public function __construct(

@@ -6,7 +6,7 @@ namespace Baywall\Core\Application\Dto;
 /**
  * ログ1件分のDTO
  */
-class LogDto {
+readonly class LogDto {
 
 
 	public function __construct(

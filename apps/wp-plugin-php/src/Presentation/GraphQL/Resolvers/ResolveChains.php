@@ -9,7 +9,7 @@ use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Specification\ChainsSpecification;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
-class ResolveChains {
+class ResolveChains implements Resolver {
 
 
 	public function __construct(

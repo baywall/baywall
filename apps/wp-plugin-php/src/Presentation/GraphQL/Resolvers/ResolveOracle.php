@@ -9,7 +9,7 @@ use Baywall\Core\Domain\Specification\OraclesSpecification;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
-class ResolveOracle {
+class ResolveOracle implements Resolver {
 
 
 	public function __construct(

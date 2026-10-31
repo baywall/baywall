@@ -10,12 +10,24 @@ use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Infrastructure\WordPress\Content\SlugProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
-use DI\Container;
 
 class AdminPageHook extends HookBase {
 
-
-	public function __construct( private readonly Container $container ) {}
+	/**
+	 * @param \Closure(): I18nTextProvider         $i18n_text_provider
+	 * @param \Closure(): SlugProvider             $slug_provider
+	 * @param \Closure(): HandleNameProvider       $handle_name_provider
+	 * @param \Closure(): PhpVarExporter           $php_var_exporter
+	 * @param \Closure(): WpPluginAssetUrlProvider $asset_url_provider
+	 */
+	public function __construct(
+		private readonly WpPluginInfoProvider $plugin_info_provider,
+		private readonly \Closure $i18n_text_provider,
+		private readonly \Closure $slug_provider,
+		private readonly \Closure $handle_name_provider,
+		private readonly \Closure $php_var_exporter,
+		private readonly \Closure $asset_url_provider,
+	) {}
 
 	public function register(): void {
 		// 管理画面のメニュー追加。
@@ -25,19 +37,15 @@ class AdminPageHook extends HookBase {
 		add_action( 'admin_enqueue_scripts', array( $this, 'addActionAdminEnqueueScripts' ) );
 
 		// プラグイン一覧のアクションリンクに`設定`を追加。
-		/** @var WpPluginInfoProvider */
-		$plugin    = $this->container->get( WpPluginInfoProvider::class );
-		$hook_name = 'plugin_action_links_' . plugin_basename( $plugin->mainFilePath() );
+		$hook_name = 'plugin_action_links_' . plugin_basename( $this->plugin_info_provider->mainFilePath() );
 		add_filter( $hook_name, array( $this, 'addFilterPluginActionLinks' ) );
 	}
 
 	public function addActionAdminMenu(): void {
 		assert( is_admin() );
 
-		/** @var I18nTextProvider */
-		$i18n = $this->container->get( I18nTextProvider::class );
-		/** @var SlugProvider */
-		$slug_provider = $this->container->get( SlugProvider::class );
+		$i18n_text_provider = ( $this->i18n_text_provider )();
+		$slug_provider      = ( $this->slug_provider )();
 
 		$capability    = 'manage_options'; // ユーザー権限(`manage_options`は、管理画面の`設定`へアクセス可能な権限)
 		$page_callback = function () {
@@ -47,8 +55,8 @@ class AdminPageHook extends HookBase {
 
 		// トップレベルメニュー追加
 		add_menu_page(
-			$i18n->pluginName(),    // メニューが表示された際のページのタイトルタグに表示されるテキスト（ブラウザのタブに表示されるテキスト）
-			$i18n->pluginName(),    // 管理画面のメニューに表示されるテキスト
+			$i18n_text_provider->pluginName(),    // メニューが表示された際のページのタイトルタグに表示されるテキスト（ブラウザのタブに表示されるテキスト）
+			$i18n_text_provider->pluginName(),    // 管理画面のメニューに表示されるテキスト
 			$capability,            // ユーザー権限
 			$slug_provider->adminMenuRoot(), // メニューのスラッグ
 			$page_callback,
@@ -64,8 +72,7 @@ class AdminPageHook extends HookBase {
 	public function addActionAdminEnqueueScripts( string $hook_suffix ): void {
 		assert( is_admin() );
 
-		/** @var SlugProvider */
-		$slug_provider = $this->container->get( SlugProvider::class );
+		$slug_provider = ( $this->slug_provider )();
 
 		// トップレベルページのフックサフィックスは`toplevel_page_<menu_slug>`（WPコア get_plugin_page_hookname の規約）。
 		// 設定画面以外では管理画面用スクリプトを読み込まない。
@@ -73,12 +80,9 @@ class AdminPageHook extends HookBase {
 			return;
 		}
 
-		/** @var HandleNameProvider */
-		$handle_name_provider = $this->container->get( HandleNameProvider::class );
-		/** @var PhpVarExporter */
-		$php_var_exporter = $this->container->get( PhpVarExporter::class );
-		/** @var WpPluginAssetUrlProvider */
-		$asset_url_provider = $this->container->get( WpPluginAssetUrlProvider::class );
+		$handle_name_provider = ( $this->handle_name_provider )();
+		$php_var_exporter     = ( $this->php_var_exporter )();
+		$asset_url_provider   = ( $this->asset_url_provider )();
 
 		// 管理画面用のスクリプトを登録する際のハンドル名を取得
 		$handle_name = $handle_name_provider->adminScript();
@@ -108,13 +112,11 @@ class AdminPageHook extends HookBase {
 	public function addFilterPluginActionLinks( array $actions ): array {
 		// @see (example) https://developer.wordpress.org/reference/hooks/plugin_action_links_plugin_file/#more-information
 
-		/** @var I18nTextProvider */
-		$i18n = $this->container->get( I18nTextProvider::class );
-		/** @var SlugProvider */
-		$slug_provider = $this->container->get( SlugProvider::class );
-		$settings_url  = admin_url( 'admin.php?page=' . $slug_provider->adminMenuRoot() );
+		$i18n_text_provider = ( $this->i18n_text_provider )();
+		$slug_provider      = ( $this->slug_provider )();
+		$settings_url       = admin_url( 'admin.php?page=' . $slug_provider->adminMenuRoot() );
 
-		$settings_link = '<a href="' . esc_url( $settings_url ) . '">' . esc_html( $i18n->settings() ) . '</a>';
+		$settings_link = '<a href="' . esc_url( $settings_url ) . '">' . esc_html( $i18n_text_provider->settings() ) . '</a>';
 		return array_merge( array( 'settings' => $settings_link ), $actions );
 	}
 }

@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\PrivateKey;
 
 /** サーバーの署名用ウォレット */
-class ServerSigner extends Signer {
+readonly class ServerSigner extends Signer {
 	/**
 	 * @param Address    $address
 	 * @param PrivateKey $private_key

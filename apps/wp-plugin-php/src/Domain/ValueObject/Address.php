@@ -12,7 +12,7 @@ use Baywall\Core\Lib\Util\Strings;
 /**
  * アドレス(ウォレットアドレス/コントラクトアドレス)を表すクラス
  */
-final class Address implements ValueObject {
+final readonly class Address implements ValueObject {
 
 	private function __construct( string $address_value ) {
 		self::checkValidAddressFormat( $address_value );

@@ -12,7 +12,7 @@ use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\Price;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
-class Invoice {
+readonly class Invoice {
 
 	public function __construct(
 		private readonly InvoiceId $id,

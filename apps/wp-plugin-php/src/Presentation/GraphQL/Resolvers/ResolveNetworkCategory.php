@@ -6,18 +6,18 @@ namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\NetworkCategoryRepository;
-use Baywall\Core\Domain\Service\SymbolService;
+use Baywall\Core\Domain\Service\SellableSymbolsProvider;
 use Baywall\Core\Domain\Specification\ChainsSpecification;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 
-class ResolveNetworkCategory {
+class ResolveNetworkCategory implements Resolver {
 
 
 	public function __construct(
 		private readonly UserAccessChecker $user_access_checker,
 		private readonly ChainRepository $chain_repository,
 		private readonly NetworkCategoryRepository $network_category_repository,
-		private readonly SymbolService $symbol_service
+		private readonly SellableSymbolsProvider $sellable_symbols_provider
 	) {}
 
 	public function handle( array $root_value, array $args ): array {
@@ -25,6 +25,8 @@ class ResolveNetworkCategory {
 		$network_category_id = NetworkCategoryId::from( $args['networkCategoryId'] );
 
 		$chains_callback = function () use ( $root_value, $network_category_id ) {
+			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
+
 			// ネットワークカテゴリで絞り込んだチェーン一覧を取得
 			$chains = array_filter(
 				$this->chain_repository->all(),
@@ -45,7 +47,7 @@ class ResolveNetworkCategory {
 
 			return array_map(
 				fn( $symbol ) => $symbol->value(),
-				$this->symbol_service->sellableSymbols( $network_category_id ),
+				$this->sellable_symbols_provider->sellableSymbols( $network_category_id ),
 			);
 		};
 

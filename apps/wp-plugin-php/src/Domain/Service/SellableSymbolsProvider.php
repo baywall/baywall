@@ -15,7 +15,7 @@ use Baywall\Core\Domain\Specification\TokensSpecification;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
-class SymbolService {
+class SellableSymbolsProvider {
 
 
 	public function __construct(

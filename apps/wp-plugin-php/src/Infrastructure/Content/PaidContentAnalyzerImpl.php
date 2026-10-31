@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\Content;
 
-use Baywall\Core\Application\Service\PaidContentService;
+use Baywall\Core\Application\Service\PaidContentAnalyzer;
 use Baywall\Core\Domain\ValueObject\PaidContent;
 use Baywall\Core\Infrastructure\Format\HtmlFormat;
 use Baywall\Core\Lib\Util\Strings;
 
-class PaidContentServiceImpl implements PaidContentService {
+class PaidContentAnalyzerImpl implements PaidContentAnalyzer {
 
 	/** @inheritdoc */
 	public function getCharacterCount( PaidContent $paid_content ): int {

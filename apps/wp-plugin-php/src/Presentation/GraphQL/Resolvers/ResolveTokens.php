@@ -10,7 +10,7 @@ use Baywall\Core\Domain\Specification\TokensSpecification;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
-class ResolveTokens {
+class ResolveTokens implements Resolver {
 
 
 	public function __construct(

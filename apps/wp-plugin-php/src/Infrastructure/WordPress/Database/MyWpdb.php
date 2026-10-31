@@ -59,7 +59,7 @@ class MyWpdb {
 	 * @param string $query
 	 * @return int|true
 	 */
-	public function query( string $query ) {
+	public function query( string $query ): int|true {
 		$result = $this->wpdb->query( $query );
 		if ( $result === false ) {
 			throw new RuntimeException( "[D76677B0] SQL query failed: {$query}. " . $this->wpdb->last_error );
@@ -118,8 +118,10 @@ class MyWpdb {
 
 	/**
 	 * wpdb->get_row
+	 *
+	 * @return array|object|null
 	 */
-	public function get_row( string $query, string $output = OBJECT, int $y = 0 ) {
+	public function get_row( string $query, string $output = OBJECT, int $y = 0 ): array|object|null {
 		$row = $this->wpdb->get_row( $query, $output, $y );
 		if ( $row === null && ! empty( $this->wpdb->last_error ) ) {
 			throw new RuntimeException( '[108B8388] Failed to get row. ' . $this->wpdb->last_error );
@@ -132,7 +134,7 @@ class MyWpdb {
 	 *
 	 * @return array|object|null
 	 */
-	public function get_results( string $query, string $output = OBJECT ) {
+	public function get_results( string $query, string $output = OBJECT ): array|object|null {
 		$results = $this->wpdb->get_results( $query, $output );
 		if ( ! empty( $this->wpdb->last_error ) ) {
 			throw new RuntimeException( '[FB1C88B8] Failed to get results. ' . $this->wpdb->last_error );

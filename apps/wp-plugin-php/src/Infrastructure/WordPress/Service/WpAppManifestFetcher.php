@@ -5,11 +5,14 @@ namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Application\ValueObject\PluginUpdateChannel;
 use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\ValueObject\RpcUrl;
+use Baywall\Core\Infrastructure\Web3\Service\EnsService;
 
 /**
  * app-manifest.jsonを取得し、WordPressプラグインのリリースチャンネル情報を返すサービス。
  *
- * `Config::APP_MANIFEST_URL` からmanifestを取得・JSONパース・構造検証し、
+ * `Config::APP_MANIFEST_ENS` の `Config::ENS_TEXT_FIELD_NAME_MANIFEST` テキストレコードから
+ * manifestのURLを解決し、取得・JSONパース・構造検証して
  * `wordPressPlugin.channels.{チャンネル}` エントリを `PluginUpdateChannel` として返します。
  *
  * キャッシュ機構は導入せず、チェックのたびに都度取得します。
@@ -17,14 +20,29 @@ use Baywall\Core\Constant\Config;
  */
 class WpAppManifestFetcher {
 
+	public function __construct( private readonly EnsService $ens_service ) {}
+
 	/**
 	 * app-manifest.jsonを取得し、設定されたチャンネルのリリースチャンネル情報を返します。
 	 *
+	 * @param RpcUrl $rpc_url ENS解決に使用するRPCエンドポイント
 	 * @throws \RuntimeException manifestの取得・検証に失敗した場合
 	 */
-	public function fetch(): PluginUpdateChannel {
+	public function fetch( RpcUrl $rpc_url ): PluginUpdateChannel {
+		$manifest_url = $this->ens_service->getText( $rpc_url, Config::APP_MANIFEST_ENS, Config::ENS_TEXT_FIELD_NAME_MANIFEST );
+		if ( '' === $manifest_url ) {
+			// URL未設定は取得失敗として扱う（呼び出し側のフェイルセーフに倒す）
+			throw new \RuntimeException( '[842E73E7] manifest URL is not set in the ENS text record.' );
+		}
+		// 更新zipは任意コード実行に直結するため、平文取得を防ぐ目的でhttpsスキームのみ受け付ける
+		// （`Url::checkValidUrlFormat`はhttp始まりしか検査しないため使用しない）
+		$scheme = wp_parse_url( $manifest_url, PHP_URL_SCHEME );
+		if ( ! is_string( $scheme ) || 'https' !== strtolower( $scheme ) ) {
+			throw new \RuntimeException( "[8812B2B0] manifest URL must use the https scheme. - {$manifest_url}" );
+		}
+
 		$response = wp_remote_get(
-			Config::APP_MANIFEST_URL,
+			$manifest_url,
 			array(
 				'timeout' => Config::APP_MANIFEST_REQUEST_TIMEOUT,
 			)

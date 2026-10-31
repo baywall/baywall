@@ -13,12 +13,12 @@ use Baywall\Core\Domain\ValueObject\TransactionHash;
 use Baywall\Core\Constant\Config;
 use InvalidArgumentException;
 
-class ResolveSalesHistories {
+class ResolveSalesHistories implements Resolver {
 
 
 	public function __construct(
 		private readonly UserAccessChecker $user_access_checker,
-		private readonly SalesHistoryQueryService $sales_history_service
+		private readonly SalesHistoryQueryService $sales_history_query_service
 	) {}
 
 	/**
@@ -90,7 +90,7 @@ class ResolveSalesHistories {
 		$condition = self::buildSearchCondition( $args );
 		self::applyPaging( $condition, $args );
 
-		$sales_histories = $this->sales_history_service->find( $condition );
+		$sales_histories = $this->sales_history_query_service->find( $condition );
 
 		return array_map(
 			fn ( SalesHistoryDto $sales_history_dto ) => array(

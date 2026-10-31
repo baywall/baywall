@@ -15,7 +15,7 @@ class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 
 
 	public function __construct(
-		private readonly WordPressPropertyProvider $wp_property,
+		private readonly WordPressPropertyProvider $wordpress_property_provider,
 		private readonly CookieNameProvider $cookie_name_provider,
 		private readonly Clock $clock
 	) {}
@@ -49,13 +49,13 @@ class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 
 	/** Cookieに書き込むリフレッシュトークンのパスを取得します */
 	private function path(): string {
-		$api_root_url = $this->wp_property->apiRootUrl();
+		$api_root_url = $this->wordpress_property_provider->apiRootUrl();
 		return parse_url( trailingslashit( $api_root_url ) . WpConfig::REST_NAMESPACE . '/' . WpConfig::REST_ROUTE_AUTH_TOKEN_INVOICE, PHP_URL_PATH );
 	}
 
 	private function secure(): bool {
 		// ローカル環境のみ、HTTPSでなくてもクッキーを送信する
 		// ※ HTTP環境のWordPressでは本プラグインは動作しないため、インストール時にチェックが必要
-		return $this->wp_property->getEnvironmentType() === 'local' ? $this->wp_property->isSsl() : true;
+		return $this->wordpress_property_provider->getEnvironmentType() === 'local' ? $this->wordpress_property_provider->isSsl() : true;
 	}
 }

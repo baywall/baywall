@@ -10,7 +10,7 @@ use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 /**
  * 本プラグインで使用するJWT形式のアクセストークンのペイロードを表すクラス
  */
-final class JwtPayload extends ArrayValueObject {
+final readonly class JwtPayload extends ArrayValueObject {
 
 	/** ウォレットアドレス */
 	private const PAYLOAD_KEY_WALLET_ADDRESS = 'sub';

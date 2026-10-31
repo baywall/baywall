@@ -6,11 +6,11 @@ namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 use Baywall\Core\Application\Service\SalesHistoryQueryService;
 use Baywall\Core\Application\Service\UserAccessChecker;
 
-class ResolveSalesHistoriesCount {
+class ResolveSalesHistoriesCount implements Resolver {
 
 	public function __construct(
 		private readonly UserAccessChecker $user_access_checker,
-		private readonly SalesHistoryQueryService $sales_history_service
+		private readonly SalesHistoryQueryService $sales_history_query_service
 	) {}
 
 	public function handle( array $root_value, array $args ): int {
@@ -19,6 +19,6 @@ class ResolveSalesHistoriesCount {
 		// フィルタ条件の構築は salesHistories と共有。limit / offset は count には無関係
 		$condition = ResolveSalesHistories::buildSearchCondition( $args );
 
-		return $this->sales_history_service->count( $condition );
+		return $this->sales_history_query_service->count( $condition );
 	}
 }

@@ -6,6 +6,9 @@ namespace Baywall\Core\Presentation\Hooks;
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
 use Baywall\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
 use Baywall\Core\Infrastructure\WordPress\Service\WpEnvironment;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
@@ -13,20 +16,38 @@ use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginPackageChecksumVerifier
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginUpdateChecker;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
-use DI\Container;
 
 /**
  * プラグインの自動アップデートチェックを行うフック。
  *
  * WordPress 5.8+ 標準の `Update URI` ヘッダ + `update_plugins_{host}` フィルター方式を使用し、
- * manifest(`Config::APP_MANIFEST_URL`)の情報を元に更新情報を管理画面の標準プラグイン一覧に載せる。
+ * manifest（ENSテキストレコードで解決したURL）の情報を元に更新情報を管理画面の標準プラグイン一覧に載せる。
  *
  * 本番環境のみで動作する（開発・テスト環境では更新チェック自体を行わない）。
  * いかなる例外も管理画面の表示障害にしないため、全例外は `\Throwable` で捕捉して `false` を返す（フェイルセーフ）。
  */
 class PluginUpdateCheckHook extends HookBase {
 
-	public function __construct( private readonly Container $container ) {}
+	/**
+	 * @param \Closure(): WpPluginPackageChecksumVerifier $checksum_verifier
+	 * @param \Closure(): WpEnvironment                   $wp_environment
+	 * @param \Closure(): ChainRepository                 $chain_repository
+	 * @param \Closure(): WpAppManifestFetcher            $manifest_fetcher
+	 * @param \Closure(): WpPluginInfoProvider            $plugin_info_provider
+	 * @param \Closure(): WordPressPropertyProvider       $wordpress_property_provider
+	 * @param \Closure(): WpPluginUpdateChecker           $update_checker
+	 * @param \Closure(): AppLogger                       $app_logger
+	 */
+	public function __construct(
+		private readonly \Closure $checksum_verifier,
+		private readonly \Closure $wp_environment,
+		private readonly \Closure $chain_repository,
+		private readonly \Closure $manifest_fetcher,
+		private readonly \Closure $plugin_info_provider,
+		private readonly \Closure $wordpress_property_provider,
+		private readonly \Closure $update_checker,
+		private readonly \Closure $app_logger,
+	) {}
 
 	/**
 	 * フィルターフック名（update_plugins_{host}）を`Config::UPDATE_URI`のホスト名から導出します。
@@ -63,8 +84,7 @@ class PluginUpdateCheckHook extends HookBase {
 		}
 
 		try {
-			/** @var WpPluginPackageChecksumVerifier */
-			$checksum_verifier = $this->container->get( WpPluginPackageChecksumVerifier::class );
+			$checksum_verifier = ( $this->checksum_verifier )();
 			return $checksum_verifier->verifyPreDownload( $package, $upgrader, $hook_extra );
 		} catch ( \Throwable $e ) {
 			// fail-closed: 検証を継続できない場合は更新を中止する（`false`で素通しすると未検証のまま展開されるため許容しない）
@@ -84,28 +104,31 @@ class PluginUpdateCheckHook extends HookBase {
 	 */
 	public function filterUpdatePlugins( $update, array $plugin_data, string $plugin_file, array $locales ) {
 		// 本番環境限定。開発・テスト環境では更新チェック自体を行わない
-		/** @var WpEnvironment */
-		$wp_environment = $this->container->get( WpEnvironment::class );
+		$wp_environment = ( $this->wp_environment )();
 		if ( ! $wp_environment->isProduction() ) {
 			return false;
 		}
 
 		try {
-			/** @var WpAppManifestFetcher */
-			$manifest_fetcher = $this->container->get( WpAppManifestFetcher::class );
-			$channel          = $manifest_fetcher->fetch();
+			// ENS解決に使うEthereum MainnetのRPC URLを解決する（未登録時は更新非提示）
+			$chain_repository = ( $this->chain_repository )();
+			$chain            = $chain_repository->get( ChainId::from( ChainIdConstants::ETHEREUM ) );
+			$rpc_url          = null !== $chain ? $chain->rpcUrl() : null;
+			if ( null === $rpc_url ) {
+				return false;
+			}
 
-			/** @var WpPluginInfoProvider */
-			$plugin_info_provider = $this->container->get( WpPluginInfoProvider::class );
-			/** @var WordPressPropertyProvider */
-			$wp_property_provider = $this->container->get( WordPressPropertyProvider::class );
+			$manifest_fetcher = ( $this->manifest_fetcher )();
+			$channel          = $manifest_fetcher->fetch( $rpc_url );
 
-			/** @var WpPluginUpdateChecker */
-			$update_checker = $this->container->get( WpPluginUpdateChecker::class );
+			$plugin_info_provider        = ( $this->plugin_info_provider )();
+			$wordpress_property_provider = ( $this->wordpress_property_provider )();
+
+			$update_checker = ( $this->update_checker )();
 			$response       = $update_checker->buildUpdateResponse(
 				$channel,
 				$plugin_info_provider->version(),
-				$wp_property_provider->wpVersion(),
+				$wordpress_property_provider->wpVersion(),
 				PHP_VERSION
 			);
 
@@ -128,8 +151,7 @@ class PluginUpdateCheckHook extends HookBase {
 	 */
 	private function logUpdateCheckFailure( \Throwable $e, LogLevel $log_level, string $id ): void {
 		try {
-			/** @var AppLogger */
-			$app_logger = $this->container->get( AppLogger::class );
+			$app_logger = ( $this->app_logger )();
 			$message    = "[{$id}] {$e->getMessage()}";
 			if ( LogLevel::warn()->name() === $log_level->name() ) {
 				$app_logger->warn( $message );

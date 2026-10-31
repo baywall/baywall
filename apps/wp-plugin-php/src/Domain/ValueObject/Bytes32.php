@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 /**
  * bytes32型の値を表すクラス
  */
-final class Bytes32 implements ValueObject {
+final readonly class Bytes32 implements ValueObject {
 
 	private readonly Bytes $value;
 

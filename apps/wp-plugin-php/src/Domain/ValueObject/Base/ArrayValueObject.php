@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 /**
  * 配列の値を表す基底クラス
  */
-abstract class ArrayValueObject implements ValueObject {
+abstract readonly class ArrayValueObject implements ValueObject {
 
 	protected function __construct( private readonly array $array_value ) {}
 

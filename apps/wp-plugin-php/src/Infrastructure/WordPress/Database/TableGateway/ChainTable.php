@@ -28,7 +28,7 @@ class ChainTable {
 	 */
 	public function all(): array {
 		$sql     = <<<SQL
-			SELECT `chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `max_logs_range`, `block_explorer_url`
+			SELECT `chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `max_logs_range`, `consecutive_failures`, `block_explorer_url`
 			FROM `{$this->table_name}`
 		SQL;
 		$results = $this->wpdb->get_results( $sql );
@@ -70,6 +70,23 @@ class ChainTable {
 			)
 		);
 
+		$this->wpdb->query( $sql );
+	}
+
+	/** 連続失敗回数を保存します。 */
+	public function saveConsecutiveFailures( int $chain_id, int $consecutive_failures ): void {
+		$sql = <<<SQL
+			UPDATE `{$this->table_name}`
+			SET `consecutive_failures` = :consecutive_failures
+			WHERE `chain_id` = :chain_id
+		SQL;
+		$sql = $this->wpdb->named_prepare(
+			$sql,
+			array(
+				':consecutive_failures' => $consecutive_failures,
+				':chain_id'             => $chain_id,
+			)
+		);
 		$this->wpdb->query( $sql );
 	}
 }

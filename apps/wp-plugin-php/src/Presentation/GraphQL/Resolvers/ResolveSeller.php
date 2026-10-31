@@ -5,7 +5,7 @@ namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Domain\Repository\SellerRepository;
 
-class ResolveSeller {
+class ResolveSeller implements Resolver {
 
 
 	public function __construct( private readonly SellerRepository $seller_repository ) {}

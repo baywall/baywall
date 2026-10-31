@@ -11,7 +11,7 @@ use Baywall\Core\Domain\Repository\TokenRepository;
 use Baywall\Core\Domain\Specification\TokensSpecification;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
-class ResolveChain {
+class ResolveChain implements Resolver {
 
 
 	public function __construct(
@@ -77,17 +77,28 @@ class ResolveChain {
 			return $chain->maxLogsRange()->value();
 		};
 
+		$has_reached_consecutive_failure_limit_callback = function () use ( $chain ) {
+			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
+			return $chain->hasReachedConsecutiveFailureLimit();
+		};
+
+		$rpc_url_callback = function () use ( $chain ) {
+			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
+			return $chain->rpcUrl()?->value();
+		};
+
 		return array(
-			'id'               => $chain->id()->value(),
-			'name'             => $chain->name(),
-			'appContract'      => $app_contract_callback,
-			'confirmations'    => $chain->confirmations()->value(),
-			'rpcUrl'           => $chain->rpcUrl()?->value(),
-			'tokens'           => $tokens_callback,
-			'networkCategory'  => $network_category_callback,
-			'blockExplorerUrl' => $chain->blockExplorerUrl(),
-			'connectable'      => $connectable_callback,
-			'maxLogsRange'     => $max_logs_range_callback,
+			'id'                                => $chain->id()->value(),
+			'name'                              => $chain->name(),
+			'appContract'                       => $app_contract_callback,
+			'confirmations'                     => $chain->confirmations()->value(),
+			'rpcUrl'                            => $rpc_url_callback,
+			'tokens'                            => $tokens_callback,
+			'networkCategory'                   => $network_category_callback,
+			'blockExplorerUrl'                  => $chain->blockExplorerUrl(),
+			'connectable'                       => $connectable_callback,
+			'maxLogsRange'                      => $max_logs_range_callback,
+			'hasReachedConsecutiveFailureLimit' => $has_reached_consecutive_failure_limit_callback,
 		);
 	}
 }

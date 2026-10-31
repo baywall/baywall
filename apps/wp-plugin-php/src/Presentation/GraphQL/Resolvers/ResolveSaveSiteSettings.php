@@ -14,7 +14,7 @@ use Baywall\Core\Domain\ValueObject\ThemeSetting;
 use Baywall\Core\Lib\Util\Strings;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
-class ResolveSaveSiteSettings {
+class ResolveSaveSiteSettings implements Resolver {
 
 
 	public function __construct(

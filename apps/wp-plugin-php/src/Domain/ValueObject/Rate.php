@@ -5,7 +5,7 @@ namespace Baywall\Core\Domain\ValueObject;
 
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
-class Rate implements ValueObject {
+readonly class Rate implements ValueObject {
 	/**
 	 * Rateインスタンスを生成します。
 	 *

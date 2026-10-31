@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Domain\ValueObject;
 
 /** 記事の有料部分を表現するクラス */
-class PaidContent extends Content {
+readonly class PaidContent extends Content {
 	private function __construct( string $paid_content_text ) {
 		parent::__construct( $paid_content_text );
 	}

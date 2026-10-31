@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 /**
  * 投稿IDを表す値オブジェクト
  */
-class PostId implements ValueObject {
+readonly class PostId implements ValueObject {
 
 	private function __construct( int $post_id ) {
 		if ( $post_id <= 0 ) {

@@ -7,7 +7,7 @@ use Baywall\Core\Domain\ValueObject\Bytes;
 use Baywall\Core\Domain\ValueObject\RefreshTokenString;
 use DateTimeImmutable;
 
-class WpRefreshTokenString extends RefreshTokenString {
+readonly class WpRefreshTokenString extends RefreshTokenString {
 
 	private function __construct( string $wp_refresh_token_value ) {
 		parent::__construct( $wp_refresh_token_value );

@@ -9,7 +9,7 @@ namespace Baywall\Core\Application\ValueObject;
  * バージョン情報とダウンロード用URL、および中間者改ざん対策用のsha256ファイルURLを保持する。
  * いずれのフィールドも非空文字列であることが前提であり、空文字・型違いの場合は`\InvalidArgumentException`を送出する。
  */
-class PluginUpdateChannel {
+readonly class PluginUpdateChannel {
 
 	public function __construct(
 		string $version,

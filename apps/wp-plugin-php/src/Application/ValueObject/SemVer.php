@@ -6,7 +6,7 @@ namespace Baywall\Core\Application\ValueObject;
 /**
  * セマンティックバージョンを表す値オブジェクト
  */
-class SemVer {
+readonly class SemVer {
 
 	protected function __construct( string $sem_ver_value ) {
 		$this->checkSemVerValue( $sem_ver_value );

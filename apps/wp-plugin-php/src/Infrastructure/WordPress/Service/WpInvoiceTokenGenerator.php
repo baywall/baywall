@@ -5,12 +5,12 @@ namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
-use Baywall\Core\Domain\Service\InvoiceTokenProvider;
+use Baywall\Core\Domain\Service\InvoiceTokenGenerator;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\ValueObject\WpInvoiceTokenString;
 
-class WpInvoiceTokenProvider implements InvoiceTokenProvider {
+class WpInvoiceTokenGenerator implements InvoiceTokenGenerator {
 
 	public function __construct( private readonly Clock $clock ) {}
 

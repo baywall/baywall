@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 /**
  * チェーンIDを表す値オブジェクト
  */
-class ChainId implements ValueObject {
+readonly class ChainId implements ValueObject {
 
 	private function __construct( int $chain_id_value ) {
 		if ( $chain_id_value <= 0 ) {

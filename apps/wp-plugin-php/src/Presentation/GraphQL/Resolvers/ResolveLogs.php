@@ -8,7 +8,7 @@ use Baywall\Core\Application\Service\LogQueryService;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Constant\Config;
 
-class ResolveLogs {
+class ResolveLogs implements Resolver {
 
 
 	public function __construct(

@@ -10,7 +10,7 @@ use InvalidArgumentException;
 /**
  * 数量等を表すクラス
  */
-final class Amount implements ValueObject {
+final readonly class Amount implements ValueObject {
 
 	private function __construct( string $amount_text ) {
 		if ( false !== strpos( $amount_text, '.' ) ) {

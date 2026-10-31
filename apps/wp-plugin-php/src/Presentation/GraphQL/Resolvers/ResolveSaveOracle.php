@@ -14,7 +14,7 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 /**
  * Oracle情報をサーバーに登録します。
  */
-class ResolveSaveOracle {
+class ResolveSaveOracle implements Resolver {
 
 
 	public function __construct(

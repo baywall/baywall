@@ -7,7 +7,7 @@ use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Entity\Oracle;
 use Baywall\Core\Domain\Repository\OracleRepository;
 
-class ResolveOracles {
+class ResolveOracles implements Resolver {
 
 
 	public function __construct(

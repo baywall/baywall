@@ -10,7 +10,7 @@
   "agreements.terms_agreement_notice": "本プラグインをご利用いただくには、本利用規約及びプライバシーポリシーへの同意が必要です。",
   "agreements.terms_heading": "利用条件について",
   "agreements.terms_of_service": "利用規約",
-  "agreements.wallet_address_notice": "署名に用いたウォレットアドレスが、トークン受け取り用アドレスとして登録されます。",
+  "agreements.wallet_address_notice": "この画面で署名すると、接続中のウォレットのアドレスが、トークン受け取り用アドレスとして登録されます。",
   "chain.rpc_url_not_registered": "RPC URL 未登録",
   "chain.rpc_url_registered": "RPC URL 登録済み",
   "chains.advanced_settings": "高度な設定",
@@ -20,6 +20,7 @@
   "chains.confirmations_description": "支払いが確定したとみなすブロックの数です。\n数値を大きくするほど、安全性は高まりますが、確定までの時間が長くなります。",
   "chains.confirmations_helper_message": "必要なブロック確認数を設定します（1以上）。",
   "chains.confirmations_positive_integer_message": "確認数は1以上の正の整数である必要があります",
+  "chains.connection_failed_message": "ブロックチェーンへの接続に失敗しています。\nRPC URL を更新してください。",
   "chains.different_network_rpc_url_message": "別ネットワークのRPC URLです。(チェーンID: {{actual}})",
   "chains.edit_chain": "チェーン編集",
   "chains.example_rpc_url_message": "動作確認用として、以下の無料 RPC URL を利用できます（レート制限があります）。",
@@ -57,6 +58,7 @@
   "common.search": "検索",
   "common.search_button": "検索",
   "common.show_button": "表示",
+  "dashboard.connection_failed_chain_message": "接続に失敗しているチェーンがあります。",
   "dashboard.inconsistent_token_settings_message": "設定に不整合があるため、一部のトークンが無効になっています。",
   "dashboard.load_failed_message": "データの取得に失敗しました。",
   "dashboard.no_alert_message": "通知はありません。",
@@ -154,5 +156,8 @@
   "tokens.token_info_fetch_error": "トークンの情報取得に失敗しました",
   "tokens.token_information": "トークン情報",
   "wallet.connect_wallet_button": "ウォレットを接続",
-  "wallet.disconnect_wallet_confirmation_message": "ウォレットを切断しますか？"
+  "wallet.disconnect_wallet_confirmation_message": "ウォレットを切断しますか？",
+  "wallet.get_metamask": "MetaMaskを入手",
+  "wallet.not_found_title": "ウォレットが見つかりません",
+  "wallet.wallet_not_found_message": "この機能を利用するには、ウォレットが必要です。"
 }

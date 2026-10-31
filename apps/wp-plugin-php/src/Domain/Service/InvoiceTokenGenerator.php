@@ -6,7 +6,7 @@ namespace Baywall\Core\Domain\Service;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
-interface InvoiceTokenProvider {
+interface InvoiceTokenGenerator {
 	/** 請求書トークン文字列を生成します */
 	public function generateInvoiceTokenString(): InvoiceTokenString;
 

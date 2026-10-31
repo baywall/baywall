@@ -10,7 +10,7 @@
   "agreements.terms_agreement_notice": "To use this plugin, you must agree to these Terms of Service and the Privacy Policy.",
   "agreements.terms_heading": "Terms and Conditions",
   "agreements.terms_of_service": "Terms of Service (Japanese only)",
-  "agreements.wallet_address_notice": "The wallet address used for signing will be registered as the address for receiving tokens.",
+  "agreements.wallet_address_notice": "When you sign on this screen, the connected wallet address will be registered as the address for receiving tokens.",
   "chain.rpc_url_not_registered": "RPC URL not registered",
   "chain.rpc_url_registered": "RPC URL registered",
   "chains.advanced_settings": "Advanced settings",
@@ -20,6 +20,7 @@
   "chains.confirmations_description": "The number of blocks considered as confirmed for a payment.\nA larger value increases security but prolongs the confirmation time.",
   "chains.confirmations_helper_message": "Set the number of block confirmations required (1 or more).",
   "chains.confirmations_positive_integer_message": "Confirmations must be a positive integer (1 or more)",
+  "chains.connection_failed_message": "Failed to connect to the blockchain.\nPlease update the RPC URL.",
   "chains.different_network_rpc_url_message": "This is an RPC URL for a different network. (Chain ID: {{actual}})",
   "chains.edit_chain": "Edit Chain",
   "chains.example_rpc_url_message": "For testing purposes, you can use the following free RPC URL (subject to rate limits).",
@@ -57,6 +58,7 @@
   "common.search": "Search",
   "common.search_button": "Search",
   "common.show_button": "Show",
+  "dashboard.connection_failed_chain_message": "There are chains that are failing to connect.",
   "dashboard.inconsistent_token_settings_message": "Some tokens are disabled due to inconsistent settings.",
   "dashboard.load_failed_message": "Failed to load dashboard data.",
   "dashboard.no_alert_message": "There are no notifications.",
@@ -154,5 +156,8 @@
   "tokens.token_info_fetch_error": "Failed to retrieve token information.",
   "tokens.token_information": "Token Information",
   "wallet.connect_wallet_button": "Connect Wallet",
-  "wallet.disconnect_wallet_confirmation_message": "Are you sure you want to disconnect your wallet?"
+  "wallet.disconnect_wallet_confirmation_message": "Are you sure you want to disconnect your wallet?",
+  "wallet.get_metamask": "Get MetaMask",
+  "wallet.not_found_title": "Wallet not found",
+  "wallet.wallet_not_found_message": "You need a wallet to use this feature."
 }

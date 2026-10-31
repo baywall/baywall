@@ -36,7 +36,7 @@ class WpOracleRepository implements OracleRepository {
 }
 
 /** @internal */
-class OracleImpl extends Oracle {
+readonly class OracleImpl extends Oracle {
 	public function __construct( OracleTableRecord $oracle_record ) {
 		parent::__construct(
 			ChainId::from( $oracle_record->chainIdValue() ),

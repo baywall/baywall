@@ -19,7 +19,7 @@ class Erc4361Service {
 	public function __construct(
 		private Erc4361PropertyProvider $erc4361_property_provider,
 		private Erc4361MessageBuilder $message_builder,
-		private Erc4361NonceRepository $repository,
+		private Erc4361NonceRepository $erc4361_nonce_repository,
 		private Clock $clock
 	) {}
 
@@ -49,7 +49,7 @@ class Erc4361Service {
 	/** 古いERC-4361用のnonceデータをリポジトリから削除します */
 	public function purgeExpiredNonceData(): void {
 		$expirationTime = $this->clock->now()->addSeconds( -Config::ERC4361_NONCE_DATA_EXPIRATION );
-		$this->repository->deleteExpired( $expirationTime );
+		$this->erc4361_nonce_repository->deleteExpired( $expirationTime );
 	}
 
 	/**

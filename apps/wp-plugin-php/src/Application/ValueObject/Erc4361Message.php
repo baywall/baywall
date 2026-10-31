@@ -10,7 +10,7 @@ use Baywall\Core\Domain\ValueObject\SigningMessage;
  *
  * @see https://eips.ethereum.org/EIPS/eip-4361
  */
-class Erc4361Message extends SigningMessage {
+readonly class Erc4361Message extends SigningMessage {
 
 	private function __construct( string $message_value ) {
 		parent::__construct( $message_value );

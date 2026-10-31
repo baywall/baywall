@@ -18,27 +18,39 @@ use GraphQL\Validator\Rules\DisableIntrospection;
 use GraphQL\Validator\Rules\QueryComplexity;
 use GraphQL\Validator\Rules\QueryDepth;
 use GraphQL\Validator\Rules\ValidationRule;
-use DI\Container;
 
 /**
  * GraphQLのAPI登録
  */
 class GraphQLHook extends HookBase {
 
-
-	public function __construct( private readonly Container $container ) {}
+	/**
+	 * @param \Closure(): RestPropertyProvider $rest_property_provider
+	 * @param \Closure(): AppLogger            $logger
+	 * @param \Closure(): WpNonceService       $nonce_service
+	 * @param \Closure(): WpExceptionConverter $exception_converter
+	 * @param \Closure(): PluginSchemaProvider $plugin_schema_provider
+	 * @param \Closure(): RootValue            $root_value
+	 */
+	public function __construct(
+		private readonly \Closure $rest_property_provider,
+		private readonly \Closure $logger,
+		private readonly \Closure $nonce_service,
+		private readonly \Closure $exception_converter,
+		private readonly \Closure $plugin_schema_provider,
+		private readonly \Closure $root_value,
+	) {}
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'addActionRestApiInit' ) );
 	}
 
 	public function addActionRestApiInit(): void {
-		/** @var RestPropertyProvider */
-		$rest_property = $this->container->get( RestPropertyProvider::class );
+		$rest_property_provider = ( $this->rest_property_provider )();
 		// GraphQLのエンドポイントを登録
 		$success = register_rest_route(
-			$rest_property->namespace(),
-			$rest_property->graphQlRoute(),
+			$rest_property_provider->namespace(),
+			$rest_property_provider->graphQlRoute(),
 			array(
 				'methods'             => 'POST',
 				'callback'            => $this->callback( ... ),
@@ -54,13 +66,10 @@ class GraphQLHook extends HookBase {
 	 *
 	 * @return true|WP_Error
 	 */
-	private function permissionCallback( \WP_REST_Request $request ) {
-		/** @var AppLogger */
-		$logger = $this->container->get( AppLogger::class );
-		/** @var WpNonceService */
-		$nonce_service = $this->container->get( WpNonceService::class );
-		/** @var WpExceptionConverter */
-		$exception_converter = $this->container->get( WpExceptionConverter::class );
+	private function permissionCallback( \WP_REST_Request $request ): true|\WP_Error {
+		$logger              = ( $this->logger )();
+		$nonce_service       = ( $this->nonce_service )();
+		$exception_converter = ( $this->exception_converter )();
 
 		try {
 			$nonce_service->checkRequestHeader( $request );
@@ -77,11 +86,9 @@ class GraphQLHook extends HookBase {
 		$query           = $input['query'];
 		$variable_values = isset( $input['variables'] ) ? $input['variables'] : null;
 
-		/** @var PluginSchemaProvider */
-		$schema_instance = $this->container->get( PluginSchemaProvider::class );
-		$schema          = $schema_instance->get();
-		/** @var RootValue */
-		$root_value_instance = $this->container->get( RootValue::class );
+		$schema_instance     = ( $this->plugin_schema_provider )();
+		$schema              = $schema_instance->get();
+		$root_value_instance = ( $this->root_value )();
 		$root_value          = $root_value_instance->get();
 
 		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values, validationRules: $this->buildValidationRules() )
@@ -92,19 +99,17 @@ class GraphQLHook extends HookBase {
 						function ( \GraphQL\Error\Error $error ) use ( $formatter ) {
 							$prev_error = $error->getPrevious();
 
-							/** @var AppLogger */
-							$app_logger = $this->container->get( AppLogger::class );
-							$app_logger->error( $error );
+							$logger = ( $this->logger )();
+							$logger->error( $error );
 							if ( $prev_error ) {
-								$app_logger->error( $prev_error );
+								$logger->error( $prev_error );
 							}
 
 							$extensions = $error->getExtensions() ?? array();
 
 							// エラーのメッセージを抽象的なものに置き換える
 							// $prev_error が null の場合は INTERNAL_ERROR とする
-							/** @var WpExceptionConverter */
-							$exception_converter = $this->container->get( WpExceptionConverter::class );
+							$exception_converter = ( $this->exception_converter )();
 							$category            = ( null === $prev_error ) ? ExceptionCategory::INTERNAL_ERROR : $exception_converter->categoryOf( $prev_error );
 							$extensions['code']  = $category->graphqlCode();
 							$message             = $category->clientMessage();

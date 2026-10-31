@@ -5,7 +5,7 @@ namespace Baywall\Core\Application\ValueObject;
 /**
  * Cookieに書き込むプロパティを表すクラス
  */
-class Cookie {
+readonly class Cookie {
 
 	private readonly string $name;
 	private readonly string $value;

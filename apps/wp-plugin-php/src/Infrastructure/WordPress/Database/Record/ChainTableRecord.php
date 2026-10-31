@@ -8,10 +8,11 @@ use stdClass;
 
 class ChainTableRecord extends RecordBase {
 	public function __construct( stdClass $record ) {
-		$record->chain_id            = (int) $record->chain_id;
-		$record->network_category_id = (int) $record->network_category_id;
-		$record->confirmations       = (int) $record->confirmations;
-		$record->max_logs_range      = (int) $record->max_logs_range;
+		$record->chain_id             = (int) $record->chain_id;
+		$record->network_category_id  = (int) $record->network_category_id;
+		$record->confirmations        = (int) $record->confirmations;
+		$record->max_logs_range       = (int) $record->max_logs_range;
+		$record->consecutive_failures = (int) $record->consecutive_failures;
 
 		$this->import( $record );
 	}
@@ -22,6 +23,7 @@ class ChainTableRecord extends RecordBase {
 	protected ?string $rpc_url;
 	protected int $confirmations; // テーブル定義はint unsignedなのでint型で定義する
 	protected int $max_logs_range;
+	protected int $consecutive_failures;
 	protected ?string $block_explorer_url;
 
 	public function chainIdValue(): int {
@@ -50,5 +52,9 @@ class ChainTableRecord extends RecordBase {
 
 	public function maxLogsRangeValue(): int {
 		return $this->max_logs_range;
+	}
+
+	public function consecutiveFailuresValue(): int {
+		return $this->consecutive_failures;
 	}
 }

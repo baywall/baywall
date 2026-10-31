@@ -10,7 +10,7 @@ use Baywall\Core\Domain\ValueObject\Base\SecureStringValueObject;
  *
  * - 請求書トークン文字列のフォーマットは実装次第のため、ここではチェックしない
  */
-class InvoiceTokenString extends SecureStringValueObject {
+readonly class InvoiceTokenString extends SecureStringValueObject {
 	protected function __construct( string $invoice_token_value ) {
 		parent::__construct( $invoice_token_value );
 	}

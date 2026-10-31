@@ -13,10 +13,10 @@ use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 class WpErc4361PropertyProvider implements Erc4361PropertyProvider {
 
 
-	public function __construct( private readonly WordPressPropertyProvider $wp_property_provider ) {}
+	public function __construct( private readonly WordPressPropertyProvider $wordpress_property_provider ) {}
 
 	public function domain(): Erc4361Domain {
-		$home_url = $this->wp_property_provider->homeUrl();
+		$home_url = $this->wordpress_property_provider->homeUrl();
 		return Erc4361Domain::from( parse_url( $home_url, PHP_URL_HOST ) );
 	}
 
@@ -25,7 +25,7 @@ class WpErc4361PropertyProvider implements Erc4361PropertyProvider {
 	}
 
 	public function uri(): Erc4361Uri {
-		$home_url = $this->wp_property_provider->homeUrl();
+		$home_url = $this->wordpress_property_provider->homeUrl();
 		return Erc4361Uri::from( $home_url );
 	}
 }

@@ -9,7 +9,7 @@ use yamaneyuta\Ulid;
 /**
  * 請求書IDを表すクラス
  */
-class InvoiceId implements ValueObject {
+readonly class InvoiceId implements ValueObject {
 
 	private function __construct( private readonly Ulid $ulid ) {}
 

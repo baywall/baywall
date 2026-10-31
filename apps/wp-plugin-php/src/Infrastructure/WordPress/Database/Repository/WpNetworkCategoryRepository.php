@@ -14,7 +14,7 @@ class WpNetworkCategoryRepository implements NetworkCategoryRepository {
 
 	public function __construct(
 		private readonly ChainTable $chain_table,
-		private I18nTextProvider $i18n
+		private I18nTextProvider $i18n_text_provider
 	) {}
 
 	/** @inheritdoc */
@@ -42,9 +42,9 @@ class WpNetworkCategoryRepository implements NetworkCategoryRepository {
 
 	private function getName( NetworkCategoryId $network_category_id ): string {
 		$map = array(
-			NetworkCategoryId::MAINNET    => fn() => $this->i18n->mainnet(),
-			NetworkCategoryId::TESTNET    => fn() => $this->i18n->testnet(),
-			NetworkCategoryId::PRIVATENET => fn() => $this->i18n->privatenet(),
+			NetworkCategoryId::MAINNET    => fn() => $this->i18n_text_provider->mainnet(),
+			NetworkCategoryId::TESTNET    => fn() => $this->i18n_text_provider->testnet(),
+			NetworkCategoryId::PRIVATENET => fn() => $this->i18n_text_provider->privatenet(),
 		);
 
 		if ( ! isset( $map[ $network_category_id->value() ] ) ) {

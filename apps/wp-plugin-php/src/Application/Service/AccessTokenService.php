@@ -14,15 +14,15 @@ class AccessTokenService {
 	private readonly JwtService $jwt_service;
 	private readonly JwtAlgorithmProvider $jwt_algorithm_provider;
 	private readonly JwtSecretKeyRepository $jwt_secret_key_repository;
-	private readonly AccessTokenExpirationProvider $expiration_provider;
+	private readonly AccessTokenExpirationProvider $access_token_expiration_provider;
 	private readonly Clock $clock;
 
 	public function __construct( JwtService $jwt_service, JwtAlgorithmProvider $jwt_algorithm_provider, JwtSecretKeyRepository $jwt_secret_key_repository, AccessTokenExpirationProvider $access_token_expiration_provider, Clock $clock ) {
-		$this->jwt_service               = $jwt_service;
-		$this->jwt_algorithm_provider    = $jwt_algorithm_provider;
-		$this->jwt_secret_key_repository = $jwt_secret_key_repository;
-		$this->expiration_provider       = $access_token_expiration_provider;
-		$this->clock                     = $clock;
+		$this->jwt_service                      = $jwt_service;
+		$this->jwt_algorithm_provider           = $jwt_algorithm_provider;
+		$this->jwt_secret_key_repository        = $jwt_secret_key_repository;
+		$this->access_token_expiration_provider = $access_token_expiration_provider;
+		$this->clock                            = $clock;
 	}
 
 	/** 指定したウォレットアドレスに対するアクセストークンを発行します */
@@ -34,7 +34,7 @@ class AccessTokenService {
 		$payload = JwtPayload::create(
 			$wallet_address,
 			$this->clock->now(), // 発行日時
-			$this->expiration_provider->get(), // 有効期限
+			$this->access_token_expiration_provider->get(), // 有効期限
 		);
 
 		// 署名用の秘密鍵を取得

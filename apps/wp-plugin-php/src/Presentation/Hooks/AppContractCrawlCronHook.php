@@ -11,7 +11,6 @@ use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
-use DI\Container;
 
 /**
  * AppContractのイベントクロール処理をwp_cronを使って登録するクラス。
@@ -24,7 +23,17 @@ class AppContractCrawlCronHook extends HookBase {
 
 	private const LOCK_NAME = '05f69f89-24d8-4c72-b2a2-2c8ecfb24343'; // 排他制御用の適当な文字列
 
-	public function __construct( private readonly Container $container ) {}
+	/**
+	 * @param \Closure(): LockService         $lock_service
+	 * @param \Closure(): Clock               $clock
+	 * @param \Closure(): CrawlAllAppContract $crawl_all_app_contract
+	 */
+	public function __construct(
+		private readonly WpPluginInfoProvider $plugin_info_provider,
+		private readonly \Closure $lock_service,
+		private readonly \Closure $clock,
+		private readonly \Closure $crawl_all_app_contract,
+	) {}
 
 	public function register(): void {
 		// Cronアクション名を取得
@@ -34,10 +43,8 @@ class AppContractCrawlCronHook extends HookBase {
 		add_action( $action_name, array( $this, 'execute' ) );
 
 		// プラグインが無効化された時に登録したアクションを削除
-		/** @var WpPluginInfoProvider */
-		$plugin_info_provider = $this->container->get( WpPluginInfoProvider::class );
 		register_deactivation_hook(
-			$plugin_info_provider->mainFilePath(),
+			$this->plugin_info_provider->mainFilePath(),
 			function () use ( $action_name ) {
 				wp_clear_scheduled_hook( $action_name );
 			}
@@ -64,14 +71,13 @@ class AppContractCrawlCronHook extends HookBase {
 		//
 
 		try {
-			/** @var LockService */
-			$lock_service = $this->container->get( LockService::class );
+			$lock_service = ( $this->lock_service )();
 			$lock_service->withLock(
 				self::LOCK_NAME,
 				function () use ( $action_name ) {
 					// 予約がされていない場合のみ登録
 					if ( false === wp_next_scheduled( $action_name ) ) {
-						$next_time = $this->container->get( Clock::class )->now()->value() + Config::CRON_INTERVAL_APP_CONTRACT_CRAWL; // 次回の実行時刻
+						$next_time = ( $this->clock )()->now()->value() + Config::CRON_INTERVAL_APP_CONTRACT_CRAWL; // 次回の実行時刻
 						$success   = wp_schedule_single_event( $next_time, $action_name );
 						assert( $success === true, '[28D837C0] wp_schedule_single_event failed. ' . var_export( $success, true ) );
 					}
@@ -85,8 +91,7 @@ class AppContractCrawlCronHook extends HookBase {
 	}
 
 	public function execute(): void {
-		/** @var CrawlAllAppContract */
-		$crawl_all_app_contract = $this->container->get( CrawlAllAppContract::class );
+		$crawl_all_app_contract = ( $this->crawl_all_app_contract )();
 		$crawl_all_app_contract->handle();
 	}
 }

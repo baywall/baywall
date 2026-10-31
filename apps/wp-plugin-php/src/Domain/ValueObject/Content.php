@@ -6,7 +6,7 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
 /** 記事の内容を表現するクラス */
-class Content implements ValueObject {
+readonly class Content implements ValueObject {
 	protected function __construct( private readonly string $content_text ) {}
 
 	public static function from( string $content_text ): self {

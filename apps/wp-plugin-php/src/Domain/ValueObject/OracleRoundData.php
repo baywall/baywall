@@ -11,7 +11,7 @@ use phpseclib4\Math\BigInteger;
  * `ValueObject` インタフェースは実装していません。複合フィールドのため `__toString` の
  * 意味論が定まらないこと、`BigInteger` の ValueObject 化とあわせて後日見直すためです。
  */
-class OracleRoundData {
+readonly class OracleRoundData {
 	public function __construct( BigInteger $round_id, BigInteger $answer, BigInteger $started_at, BigInteger $updated_at, BigInteger $answered_in_round ) {
 		$this->round_id          = $round_id;
 		$this->answer            = $answer;

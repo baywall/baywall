@@ -14,9 +14,9 @@ class WpPluginMigrationService implements PluginMigrationService {
 
 
 	public function __construct(
-		private readonly InstalledPluginVersionRepository $plugin_version_option,
+		private readonly InstalledPluginVersionRepository $installed_plugin_version_repository,
 		private readonly WpPluginInfoProvider $plugin_info_provider,
-		private readonly MigrationLocator $locator,
+		private readonly MigrationLocator $migration_locator,
 		private readonly AppLogger $logger
 	) {}
 
@@ -33,7 +33,7 @@ class WpPluginMigrationService implements PluginMigrationService {
 
 	/** 前回のインストール済みバージョンを取得します */
 	private function previousVersion(): PluginVersion {
-		$prev_version = $this->plugin_version_option->get();
+		$prev_version = $this->installed_plugin_version_repository->get();
 		return $prev_version !== null ? $prev_version : PluginVersion::from( '0.0.0' );
 	}
 
@@ -45,7 +45,7 @@ class WpPluginMigrationService implements PluginMigrationService {
 
 	/** バージョンを指定してマイグレーションを実行します */
 	public function migrateWithVersion( PluginVersion $prev_version, PluginVersion $target_version ): void {
-		$migrations = $this->locator->get( $prev_version, $target_version );
+		$migrations = $this->migration_locator->get( $prev_version, $target_version );
 
 		$executed = array();
 		foreach ( $migrations as $migration ) {
@@ -84,16 +84,16 @@ class WpPluginMigrationService implements PluginMigrationService {
 		}
 
 		// マイグレーションに成功した場合は、インストール済みバージョンを更新
-		$this->plugin_version_option->update( $target_version );
+		$this->installed_plugin_version_repository->update( $target_version );
 
 		// 開発環境、テスト環境でのみ実行するスクリプトを実行
 		// ※ テスト環境のデータベース初期化は Hook 経由でないため、PluginMigrationHook では呼び出さず、ここで呼び出す
-		$env = new WpEnvironment();
-		if ( $env->isDevelopment() || $env->isTesting() ) {
+		$wp_environment = new WpEnvironment();
+		if ( $wp_environment->isDevelopment() || $wp_environment->isTesting() ) {
 			// テスト環境で毎回呼び出す必要があるため require_once ではなく require を使用する
 			require __DIR__ . '/../../../../scripts/dev-data/setup-devtest-db.php';
 		} else {
-			assert( $env->isProduction(), '[8DE77AE4]' );
+			assert( $wp_environment->isProduction(), '[8DE77AE4]' );
 		}
 	}
 }

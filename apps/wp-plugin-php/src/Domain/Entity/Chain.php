@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Domain\Entity;
 
+use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\Confirmations;
@@ -18,16 +19,18 @@ class Chain {
 	 * @param null|RpcUrl       $rpc_url
 	 * @param Confirmations     $confirmations
 	 * @param MaxLogsRange      $max_logs_range
+	 * @param int               $consecutive_failures
 	 * @param null|string       $block_explorer_url
 	 */
-	protected function __construct( ChainId $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, Confirmations $confirmations, MaxLogsRange $max_logs_range, ?string $block_explorer_url ) {
-		$this->id                  = $chain_id;
-		$this->name                = $name;
-		$this->network_category_id = $network_category_id;
-		$this->rpc_url             = $rpc_url;
-		$this->confirmations       = $confirmations;
-		$this->max_logs_range      = $max_logs_range;
-		$this->block_explorer_url  = $block_explorer_url;
+	protected function __construct( ChainId $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, Confirmations $confirmations, MaxLogsRange $max_logs_range, int $consecutive_failures, ?string $block_explorer_url ) {
+		$this->id                   = $chain_id;
+		$this->name                 = $name;
+		$this->network_category_id  = $network_category_id;
+		$this->rpc_url              = $rpc_url;
+		$this->confirmations        = $confirmations;
+		$this->max_logs_range       = $max_logs_range;
+		$this->consecutive_failures = $consecutive_failures;
+		$this->block_explorer_url   = $block_explorer_url;
 	}
 
 	private readonly ChainId $id;
@@ -36,6 +39,7 @@ class Chain {
 	private ?RpcUrl $rpc_url;
 	private Confirmations $confirmations;
 	private MaxLogsRange $max_logs_range;
+	private int $consecutive_failures;
 	private readonly ?string $block_explorer_url;
 
 	public function id(): ChainId {
@@ -96,5 +100,25 @@ class Chain {
 	 */
 	public function setMaxLogsRange( MaxLogsRange $max_logs_range ): void {
 		$this->max_logs_range = $max_logs_range;
+	}
+
+	/** このチェーンのクロール連続失敗回数を取得します */
+	public function consecutiveFailures(): int {
+		return $this->consecutive_failures;
+	}
+
+	/** このチェーンのクロール連続失敗回数をインクリメントします */
+	public function incrementConsecutiveFailures(): void {
+		++$this->consecutive_failures;
+	}
+
+	/** このチェーンのクロール連続失敗回数を 0 にリセットします */
+	public function resetConsecutiveFailures(): void {
+		$this->consecutive_failures = 0;
+	}
+
+	/** このチェーンのクロール連続失敗回数が上限に達しているかどうかを取得します */
+	public function hasReachedConsecutiveFailureLimit(): bool {
+		return $this->consecutive_failures >= Config::CHAIN_CONSECUTIVE_FAILURE_LIMIT;
 	}
 }

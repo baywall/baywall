@@ -14,7 +14,6 @@ use Baywall\Core\Infrastructure\WordPress\Content\BlockNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Content\GutenbergService;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\CurrentPaywalledPostResolver;
-use DI\Container;
 use WP_Block;
 
 /**
@@ -24,15 +23,11 @@ use WP_Block;
  */
 class ContentHook extends HookBase {
 
-	private readonly ContentSaveHook $content_save_hook;
-	private readonly ContentLoadHook $content_load_hook;
-	private readonly ContentDeleteHook $content_delete_hook;
-
-	public function __construct( Container $container ) {
-		$this->content_save_hook   = $container->get( ContentSaveHook::class );
-		$this->content_load_hook   = $container->get( ContentLoadHook::class );
-		$this->content_delete_hook = $container->get( ContentDeleteHook::class );
-	}
+	public function __construct(
+		private readonly ContentSaveHook $content_save_hook,
+		private readonly ContentLoadHook $content_load_hook,
+		private readonly ContentDeleteHook $content_delete_hook,
+	) {}
 
 	/**
 	 * フックを登録します。

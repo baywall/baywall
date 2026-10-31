@@ -9,7 +9,7 @@ namespace Baywall\Core\Domain\ValueObject;
  * `ValueObject` インタフェースは実装していません。複合フィールドのため `__toString` の
  * 意味論が定まらないこと、`OracleRoundData` と同様に扱うためです。
  */
-class EthBlock {
+readonly class EthBlock {
 
 	private function __construct(
 		private readonly BlockNumber $block_number,

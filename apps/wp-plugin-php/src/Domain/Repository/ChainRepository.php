@@ -20,4 +20,7 @@ interface ChainRepository {
 
 	/** チェーン情報を保存します。 */
 	public function save( Chain $chain ): void;
+
+	/** 連続失敗回数を保存します。 */
+	public function saveConsecutiveFailures( Chain $chain ): void;
 }

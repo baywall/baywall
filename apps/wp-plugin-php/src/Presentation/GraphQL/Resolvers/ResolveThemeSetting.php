@@ -5,7 +5,7 @@ namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Application\Repository\ThemeSettingRepository;
 
-class ResolveThemeSetting {
+class ResolveThemeSetting implements Resolver {
 
 
 	public function __construct( private readonly ThemeSettingRepository $theme_setting_repository ) {}

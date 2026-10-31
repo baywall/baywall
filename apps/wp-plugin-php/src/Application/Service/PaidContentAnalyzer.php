@@ -5,7 +5,7 @@ namespace Baywall\Core\Application\Service;
 
 use Baywall\Core\Domain\ValueObject\PaidContent;
 
-interface PaidContentService {
+interface PaidContentAnalyzer {
 	/** 有料部分の文字数を取得します */
 	public function getCharacterCount( PaidContent $paid_content ): int;
 

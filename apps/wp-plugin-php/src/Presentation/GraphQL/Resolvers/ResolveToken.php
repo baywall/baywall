@@ -8,7 +8,7 @@ use Baywall\Core\Domain\Repository\TokenRepository;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
-class ResolveToken {
+class ResolveToken implements Resolver {
 
 
 	public function __construct(
@@ -30,12 +30,17 @@ class ResolveToken {
 			return $token->decimals()->value();
 		};
 
+		$is_payable_callback = function () use ( $token ) {
+			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
+			return $token->isPayable();
+		};
+
 		return array(
 			'chain'     => fn() => $root_value['chain']( $root_value, array( 'chainId' => $token->chainId()->value() ) ),
 			'address'   => $token->address()->value(),
 			'symbol'    => $token->symbol()->value(),
 			'decimals'  => $decimals_callback,
-			'isPayable' => $token->isPayable(),
+			'isPayable' => $is_payable_callback,
 		);
 	}
 }

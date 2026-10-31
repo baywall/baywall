@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
 use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
 use Baywall\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
 
 /**
@@ -19,7 +22,8 @@ class WpPluginPackageChecksumVerifier {
 
 	public function __construct(
 		private readonly WpAppManifestFetcher $manifest_fetcher,
-		private readonly WpPluginInfoProvider $plugin_info_provider
+		private readonly WpPluginInfoProvider $plugin_info_provider,
+		private readonly ChainRepository $chain_repository
 	) {}
 
 	/**
@@ -40,7 +44,14 @@ class WpPluginPackageChecksumVerifier {
 
 		// manifestをこの時点で再取得（fail-closed: 取得失敗時は更新自体を中止する）
 		try {
-			$channel = $this->manifest_fetcher->fetch();
+			// ENS解決に使うEthereum MainnetのRPC URLを解決する（未登録時はfail-closedで更新を中止する）
+			$chain   = $this->chain_repository->get( ChainId::from( ChainIdConstants::ETHEREUM ) );
+			$rpc_url = null !== $chain ? $chain->rpcUrl() : null;
+			if ( null === $rpc_url ) {
+				return new \WP_Error( 'baywall_checksum_verification_failed', '[CFCCA265] RPC URL for Ethereum Mainnet is not registered.' );
+			}
+
+			$channel = $this->manifest_fetcher->fetch( $rpc_url );
 		} catch ( \Throwable $e ) {
 			return new \WP_Error( 'baywall_checksum_verification_failed', '[A8FA65AE] Failed to fetch app-manifest.json: ' . $e->getMessage() );
 		}

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\Dto;
 
-class SalesHistoryDto {
+readonly class SalesHistoryDto {
 
 
 	public function __construct(

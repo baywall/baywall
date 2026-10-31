@@ -7,15 +7,22 @@ use Baywall\Core\Infrastructure\WordPress\Content\HandleNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginAssetUrlProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
-use DI\Container;
 
 /**
  * 投稿編集画面のフック(投稿新規作成画面を含む)
  */
 class PostEditHook extends HookBase {
 
-
-	public function __construct( private readonly Container $container ) {}
+	/**
+	 * @param \Closure(): HandleNameProvider       $handle_name_provider
+	 * @param \Closure(): WpPluginAssetUrlProvider $asset_url_provider
+	 * @param \Closure(): PhpVarExporter           $php_var_exporter
+	 */
+	public function __construct(
+		private readonly \Closure $handle_name_provider,
+		private readonly \Closure $asset_url_provider,
+		private readonly \Closure $php_var_exporter,
+	) {}
 
 	public function register(): void {
 		add_action( 'enqueue_block_assets', array( $this, 'addActionEnqueueBlockAssets' ) );
@@ -28,12 +35,9 @@ class PostEditHook extends HookBase {
 			return;
 		}
 
-		/** @var HandleNameProvider */
-		$handle_name_provider = $this->container->get( HandleNameProvider::class );
-		/** @var WpPluginAssetUrlProvider */
-		$asset_url_provider = $this->container->get( WpPluginAssetUrlProvider::class );
-		/** @var PhpVarExporter */
-		$php_var_exporter = $this->container->get( PhpVarExporter::class );
+		$handle_name_provider = ( $this->handle_name_provider )();
+		$asset_url_provider   = ( $this->asset_url_provider )();
+		$php_var_exporter     = ( $this->php_var_exporter )();
 
 		// ブロックエディタで使用するスクリプトを登録するときのハンドル名を取得。
 		$handle = $handle_name_provider->blockScript();

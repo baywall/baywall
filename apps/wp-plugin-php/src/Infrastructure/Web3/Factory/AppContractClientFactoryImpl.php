@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\Web3\Factory;
 
-use Baywall\Core\Application\Service\AppContractClientProvider;
+use Baywall\Core\Application\Service\AppContractClientFactory;
 use Baywall\Core\Domain\Repository\AppContractRepository;
 use Baywall\Core\Domain\Service\BlockchainService;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Infrastructure\Web3\Abi\AppContractAbi;
 use Baywall\Core\Infrastructure\Web3\Client\AppContractClient;
 
-class AppContractClientFactory implements AppContractClientProvider {
+class AppContractClientFactoryImpl implements AppContractClientFactory {
 
 
 	public function __construct(

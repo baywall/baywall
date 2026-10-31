@@ -210,27 +210,64 @@ final class Ethers {
 	}
 
 	/**
+	 * ENS名を簡易正規化します（ENSIP-15の簡易版、ethersのensNormalizeに相当）。
+	 *
+	 * ASCII大文字を小文字化し、`.`区切りの各ラベルが`a-z0-9-`のみで構成されることを検証します。
+	 * ENSIP-15の完全準拠（Unicode NFC・全角半角マッピング・スクリプト検証）は行わず、
+	 * Unicode・記号・`xn--`（punycode）ラベルを含む名前は拒否します。
+	 *
+	 * @param string $name ENS名（例: 'Baywall.eth'）
+	 * @return string 小文字化したENS名
+	 * @throws \InvalidArgumentException 空ラベル・未対応文字・`xn--`ラベルを含む場合（空文字も空ラベルとして拒否）
+	 *
+	 * @see https://docs.ens.domains/ensip/15
+	 * @see https://docs.ethers.org/v6/api/hashing/#ensNormalize
+	 * @example
+	 * ensNormalize( 'Baywall.ETH' );  // 'baywall.eth'
+	 * ensNormalize( '123-AbC.ETH' );  // '123-abc.eth'
+	 */
+	public static function ensNormalize( string $name ): string {
+		$normalized = strtolower( $name );
+		foreach ( explode( '.', $normalized ) as $label ) {
+			if ( '' === $label ) {
+				throw new \InvalidArgumentException( '[540906CC] Empty label in ENS name. ' . $name );
+			}
+			if ( ! preg_match( '/\A[a-z0-9-]+\z/', $label ) ) {
+				throw new \InvalidArgumentException( '[DF5AB3DB] Unsupported label in ENS name. ' . $name );
+			}
+			if ( str_starts_with( $label, 'xn--' ) ) {
+				throw new \InvalidArgumentException( '[EC2D3DD5] Punycode label is not allowed in ENS name. ' . $name );
+			}
+		}
+		return $normalized;
+	}
+
+	/**
 	 * ENS名からnamehashを計算します（EIP-137）。
 	 *
-	 * ラベルを右から左へ順に Keccak-256 でハッシュし、32バイトのノードIDを生成します。
+	 * ENS名を簡易正規化（ensNormalize()）した上で、ラベルを右から左へ順に Keccak-256 でハッシュし、
+	 * 32バイトのノードIDを生成します。
 	 *
-	 * @param string $name ENS名（例: 'baywall.eth'）。空文字の場合はゼロハッシュを返します。
+	 * @param string $name ENS名（例: 'baywall.eth'）。空文字の場合はゼロハッシュを返します
+	 *                     （EIP-137のルートノード。ethersのnamehashは空文字を拒否するため、ここだけ既存挙動を維持する差分となる）。
 	 * @return string namehash（`0x`で始まる64文字のHEX文字列）
+	 * @throws \InvalidArgumentException 空ラベル・未対応文字・`xn--`ラベルを含む場合（空文字を除く）
 	 *
 	 * @see https://eips.ethereum.org/EIPS/eip-137
 	 * @see https://docs.ethers.org/v6/api/hashing/#namehash
 	 * @see https://docs.ens.domains/resolution/names/#hashing-names
 	 * @example
-	 * namehash( '' );          // '0x0000000000000000000000000000000000000000000000000000000000000000'
-	 * namehash( 'eth' );       // '0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae'
-	 * namehash( 'foo.eth' );   // '0xde9b09fd7c5f901e23a3f19fecc54828e9c848539801e86591bd9801b019f84f'
+	 * namehash( '' ); // '0x0000000000000000000000000000000000000000000000000000000000000000'
+	 * namehash( 'eth' );         // '0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae'
+	 * namehash( 'foo.eth' );     // '0xde9b09fd7c5f901e23a3f19fecc54828e9c848539801e86591bd9801b019f84f'
+	 * namehash( 'Baywall.ETH' ); // '0x89c631420b2fc4e2ba91c52ada1292252b4019608699c5949879361d382c3f70'
 	 */
 	public static function namehash( string $name ): string {
 		// 空文字の場合は32バイトのゼロハッシュ
 		$node = str_repeat( "\x00", 32 );
 
 		if ( '' !== $name ) {
-			$labels = explode( '.', $name );
+			$labels = explode( '.', self::ensNormalize( $name ) );
 			for ( $i = count( $labels ) - 1; $i >= 0; $i-- ) {
 				$label_hash = hex2bin( Keccak::hash( $labels[ $i ], 256 ) );
 				$node       = hex2bin( Keccak::hash( $node . $label_hash, 256 ) );
@@ -239,6 +276,33 @@ final class Ethers {
 
 		$result = '0x' . bin2hex( $node );
 		assert( preg_match( '/^0x[0-9a-f]{64}$/', $result ) );
+		return $result;
+	}
+
+	/**
+	 * ENS名をDNSワイヤ形式にエンコードします（ENSIP-10 の name 引数等）。
+	 *
+	 * ENS名を簡易正規化（ensNormalize()）した上で、各ラベルを「長さバイト + ラベルバイト」で連結し、
+	 * 終端のゼロバイトで終わらせます。ラベルは63バイト以下に制限します（ethers の dnsEncode の既定 maxLength と同一）。
+	 *
+	 * @param string $name ENS名（例: 'baywall.eth'）
+	 * @return string DNSワイヤ形式（`0x`で始まる小文字16進文字列）
+	 * @throws \InvalidArgumentException 空文字・空ラベル・未対応文字・`xn--`ラベルを含む場合、またはラベルが63バイトを超える場合
+	 *
+	 * @see https://docs.ethers.org/v6/api/hashing/#dnsEncode
+	 * @example
+	 * dnsEncode( 'baywall.eth' ); // '0x0762617977616c6c0365746800'
+	 */
+	public static function dnsEncode( string $name ): string {
+		$encoded = '';
+		foreach ( explode( '.', self::ensNormalize( $name ) ) as $label ) {
+			if ( 63 < strlen( $label ) ) {
+				throw new \InvalidArgumentException( '[0076A9C6] ENS name label exceeds 63 bytes. ' . $name );
+			}
+			$encoded .= chr( strlen( $label ) ) . $label;
+		}
+		$result = '0x' . bin2hex( $encoded . "\x00" );
+		assert( preg_match( '/^0x[0-9a-f]+$/', $result ) );
 		return $result;
 	}
 

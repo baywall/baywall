@@ -6,7 +6,7 @@ namespace Baywall\Core\Domain\Entity;
 use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\ValueObject\Address;
 
-class AppContract {
+readonly class AppContract {
 	protected function __construct(
 		private readonly Chain $chain,
 		private readonly Address $address

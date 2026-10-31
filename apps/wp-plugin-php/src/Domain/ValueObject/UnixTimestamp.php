@@ -6,7 +6,7 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 use DateTimeImmutable;
 
-class UnixTimestamp implements ValueObject {
+readonly class UnixTimestamp implements ValueObject {
 
 
 	private function __construct( private readonly int $timestamp ) {}

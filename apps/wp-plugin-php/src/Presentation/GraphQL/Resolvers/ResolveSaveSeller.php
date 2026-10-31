@@ -10,9 +10,9 @@ use Baywall\Core\Domain\Repository\SellerRepository;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Signature;
 use Baywall\Core\Domain\ValueObject\SigningMessage;
-use Baywall\Core\Infrastructure\Web3\Service\SignatureService;
+use Baywall\Core\Domain\Service\SignatureService;
 
-class ResolveSaveSeller {
+class ResolveSaveSeller implements Resolver {
 
 
 	public function __construct(

@@ -5,6 +5,7 @@ namespace Baywall\Core\Infrastructure\Web3\Client;
 
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
+use Baywall\Core\Infrastructure\Web3\Exception\RpcErrorException;
 use Baywall\Core\Infrastructure\Web3\Exception\RpcException;
 
 /** JSON-RPC 2.0 のリクエストを1件送信し、`result` を返すクラス */
@@ -65,7 +66,7 @@ class RpcClient {
 			// error.code / error.message が無い応答に備え、フォールバックで RpcException に統一する
 			$code    = (int) ( $decoded->error->code ?? 0 );
 			$message = (string) ( $decoded->error->message ?? '' );
-			throw new RpcException( "[B4A8E6D0] JSON-RPC error (code: {$code}): {$message}", $code );
+			throw new RpcErrorException( "[B4A8E6D0] JSON-RPC error (code: {$code}): {$message}", $code );
 		}
 
 		// property_exists() は非オブジェクトで TypeError になるため is_object() を先に判定する

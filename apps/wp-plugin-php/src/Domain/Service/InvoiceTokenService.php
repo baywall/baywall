@@ -15,7 +15,7 @@ class InvoiceTokenService {
 
 
 	public function __construct(
-		private readonly InvoiceTokenProvider $invoice_token_provider,
+		private readonly InvoiceTokenGenerator $invoice_token_generator,
 		private readonly InvoiceTokenRepository $invoice_token_repository
 	) {}
 
@@ -25,8 +25,8 @@ class InvoiceTokenService {
 	public function issue( InvoiceId $invoice_id ): InvoiceToken {
 		$new_invoice_token = InvoiceToken::create(
 			$invoice_id,
-			$this->invoice_token_provider->generateInvoiceTokenString(),
-			$this->invoice_token_provider->getExpiresAt(),
+			$this->invoice_token_generator->generateInvoiceTokenString(),
+			$this->invoice_token_generator->getExpiresAt(),
 			null // 請求書トークン生成時、`revoked_at`はnullに設定
 		);
 
@@ -60,8 +60,8 @@ class InvoiceTokenService {
 		// 新しい請求書トークンを生成して保存
 		$new_invoice_token = InvoiceToken::create(
 			$invoice_token->invoiceId(),
-			$this->invoice_token_provider->generateInvoiceTokenString(),
-			$this->invoice_token_provider->getExpiresAt(),
+			$this->invoice_token_generator->generateInvoiceTokenString(),
+			$this->invoice_token_generator->getExpiresAt(),
 			null // 請求書トークン生成時、`revoked_at`はnullに設定
 		);
 		$this->invoice_token_repository->add( $new_invoice_token );

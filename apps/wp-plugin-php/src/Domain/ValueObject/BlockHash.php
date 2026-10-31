@@ -5,7 +5,7 @@ namespace Baywall\Core\Domain\ValueObject;
 
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
-class BlockHash implements ValueObject {
+readonly class BlockHash implements ValueObject {
 	private function __construct( private readonly string $hash ) {}
 
 

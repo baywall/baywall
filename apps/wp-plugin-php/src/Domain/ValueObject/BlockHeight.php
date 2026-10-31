@@ -11,7 +11,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * ブロック上の位置（ブロック番号）はBlockNumberで表す。
  * BlockNumber::add() / sub()の引数のような「位置 ± スパン」の演算に用いる。
  */
-class BlockHeight implements ValueObject {
+readonly class BlockHeight implements ValueObject {
 
 	private function __construct( int $block_height_value ) {
 		if ( $block_height_value < 0 ) {

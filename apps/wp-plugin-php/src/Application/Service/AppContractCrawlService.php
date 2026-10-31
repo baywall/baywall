@@ -27,10 +27,12 @@ class AppContractCrawlService {
 		private readonly TransactionService $transaction_service,
 		private readonly BlockchainService $blockchain_service,
 		private readonly CrawledBlockRepository $crawled_block_repository,
-		private readonly AppContractClientProvider $app_contract_client_provider,
+		private readonly AppContractClientFactory $app_contract_client_factory,
 		private readonly ServerSignerRepository $server_signer_repository,
 		private readonly UnlockPaywallTransferEventRepository $unlock_paywall_transfer_event_repository,
-		private readonly ChainRepository $chain_repository
+		private readonly ChainRepository $chain_repository,
+		private readonly AdminNotificationService $admin_notification_service,
+		private readonly CrawlFailureNotificationMessageProvider $crawl_failure_notification_message_provider
 	) {}
 
 	/**
@@ -71,9 +73,22 @@ class AppContractCrawlService {
 				$crawl_finished[ $index ] = true; // 対象外のチェーンはクロール完了とみなす
 				continue;
 			}
-			$chains[ $index ]           = $chain;
-			$crawl_end_blocks[ $index ] = $this->getCrawlEndBlockNumber( $chain );
-			$crawl_finished[ $index ]   = false;
+			if ( $chain->hasReachedConsecutiveFailureLimit() ) {
+				// 上限到達で除外済みのチェーンは RPC を呼び出さずスキップする
+				$this->logger->warn( "[63C90281] Chain with ID {$chain_id} has reached the consecutive failure limit. Skipping crawl for this chain." );
+				$crawl_finished[ $index ] = true; // 除外済みのチェーンはクロール完了とみなす
+				continue;
+			}
+			$chains[ $index ]         = $chain;
+			$crawl_finished[ $index ] = false;
+			try {
+				$crawl_end_blocks[ $index ] = $this->getCrawlEndBlockNumber( $chain );
+			} catch ( \Throwable $e ) {
+				// 終了ブロックの取得に失敗したチェーンのみスキップし、クロール全体は続行する
+				$this->logger->error( "[BBDF5CEF] Failed to get crawl end block number for chain id: {$chain_id}" );
+				$this->logger->error( $e );
+				$this->handleCrawlFailure( $chain, $index, $crawl_finished );
+			}
 		}
 		// フィルタ条件となる署名用ウォレットアドレスを取得
 		$server_signer_address = $this->server_signer_repository->getAddress();
@@ -109,6 +124,11 @@ class AppContractCrawlService {
 				}
 				if ( $from_block->compare( $to_block ) > 0 ) {
 					$this->logger->info( "[23FA101A] Crawl finished for chain id: {$chain_id}. from block: {$from_block} is greater than to block: {$to_block}" );
+					if ( $chain->consecutiveFailures() > 0 ) {
+						// チェーンの処理が最後まで完了したため連続失敗回数をリセットする（commit 後のトランザクション外）
+						$chain->resetConsecutiveFailures();
+						$this->chain_repository->saveConsecutiveFailures( $chain );
+					}
 					$crawl_finished[ $index ] = true;
 					continue; // クロール対象のブロックがない場合はスキップ
 				}
@@ -116,30 +136,31 @@ class AppContractCrawlService {
 				$this->logger->info( "[19189032] Crawl chain id: {$chain_id}, from block: {$from_block}, to block: {$to_block}" );
 
 				// ブロックチェーンからイベントを取得
-				$client = $this->app_contract_client_provider->create( $chain_id );
 				try {
+					$client = $this->app_contract_client_factory->create( $chain_id );
 					$events = $client->getUnlockPaywallTransferEvents( $from_block, $to_block, $server_signer_address );
 				} catch ( \Throwable $e ) {
 					$this->logger->error( "[7C06C04A] Failed to get logs for chain id: {$chain_id}, from block: {$from_block}, to block: {$to_block}" );
 					$this->logger->error( $e );
-					$crawl_finished[ $index ] = true; // エラーが発生したチェーンは処理抜けのためにクロール完了とする
+					$this->handleCrawlFailure( $chain, $index, $crawl_finished ); // エラーが発生したチェーンは処理抜けのためにクロール完了とする
 					continue;
 				}
 
 				// イベント情報をDBに保存
-				$this->transaction_service->beginTransaction();
 				try {
-					// イベント情報をDBに保存
-					foreach ( $events as $event ) {
-						$this->unlock_paywall_transfer_event_repository->save( $chain_id, $event );
-					}
-					// クロール済みブロック番号を更新
-					$this->crawled_block_repository->save( $chain_id, $to_block );
-
-					$this->transaction_service->commit();
+					$this->transaction_service->transactional(
+						function () use ( $chain_id, $events, $to_block ) {
+							// イベント情報をDBに保存
+							foreach ( $events as $event ) {
+								$this->unlock_paywall_transfer_event_repository->save( $chain_id, $event );
+							}
+							// クロール済みブロック番号を更新
+							$this->crawled_block_repository->save( $chain_id, $to_block );
+						}
+					);
 				} catch ( \Throwable $e ) {
-					// ロールバック後にログ出力する（ログINSERTもトランザクションに参加するため、先にログ出力するとロールバックで消失する）
-					$this->transaction_service->rollback();
+					// transactional() がロールバック済みのため、ログINSERTが消失しない（ログINSERTもトランザクションに参加するため）
+					$this->logger->error( "[75DA6932] Failed to save events for chain id: {$chain_id}, from block: {$from_block}, to block: {$to_block}" );
 					$this->logger->error( $e );
 					$crawl_finished[ $index ] = true; // 保存に失敗したチェーンは処理抜けのためにクロール完了とする
 				}
@@ -147,6 +168,26 @@ class AppContractCrawlService {
 		}
 	}
 
+
+	/**
+	 * チェーンのクロール失敗を共通処理します。
+	 * 連続失敗回数を加算し、上限に達した場合のみ管理者へ通知して、対象チェーンのクロールを完了とみなします。
+	 *
+	 * @param int             $index
+	 * @param array<int,bool> $crawl_finished
+	 */
+	private function handleCrawlFailure( Chain $chain, int $index, array &$crawl_finished ): void {
+		$chain->incrementConsecutiveFailures();
+		$this->chain_repository->saveConsecutiveFailures( $chain );
+		if ( $chain->hasReachedConsecutiveFailureLimit() ) {
+			// 上限到達後は初期ループでスキップされるため、この遷移でのみ通知される
+			$this->admin_notification_service->notify(
+				$this->crawl_failure_notification_message_provider->title(),
+				$this->crawl_failure_notification_message_provider->message( $chain->name(), $chain->id() )
+			);
+		}
+		$crawl_finished[ $index ] = true;
+	}
 
 	/** 販売履歴を取得する最終ブロック番号を取得します */
 	private function getCrawlEndBlockNumber( Chain $chain ): BlockNumber {

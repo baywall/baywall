@@ -5,7 +5,7 @@ namespace Baywall\Core\Application\Service;
 
 use Baywall\Core\Application\ValueObject\Erc4361Nonce;
 
-interface Erc4361NonceProvider {
+interface Erc4361NonceGenerator {
 	/** ERC4361で使用するNonceを生成します */
 	public function generate(): Erc4361Nonce;
 }

@@ -65,8 +65,8 @@ class AbiCodec {
 		$head  = $data;
 		$tail  = '';
 		$words = array();
-		if ( in_array( 'string', $output_types, true ) ) {
-			// 動的型を含む場合はワード列を head と tail に分離する
+		if ( in_array( 'string', $output_types, true ) || in_array( 'bytes', $output_types, true ) ) {
+			// 動的型（string / bytes）を含む場合はワード列を head と tail に分離する
 			$word_count = count( $output_types );
 			$head       = substr( $data, 0, $word_count * 64 );
 			$tail       = substr( $data, $word_count * 64 );
@@ -233,8 +233,16 @@ class AbiCodec {
 			case 'bytes32' === $type:
 				return '0x' . $word;
 
+			case 'bytes' === $type:
+				return $this->decodeDynamicBytes( $word, $tail, $head_word_count, $method );
+
 			case 'string' === $type:
-				return $this->decodeDynamicString( $word, $tail, $head_word_count, $method );
+				$hex     = $this->decodeDynamicBytes( $word, $tail, $head_word_count, $method );
+				$decoded = hex2bin( substr( $hex, 2 ) );
+				if ( false === $decoded ) {
+					throw new InvalidArgumentException( sprintf( '[A3D1B8C0] Invalid string hex for %s.', $method ) );
+				}
+				return $decoded;
 
 			default:
 				throw new InvalidArgumentException( sprintf( '[C9F7D4E6] Unsupported output type for %s: %s.', $method, $type ) );
@@ -242,31 +250,26 @@ class AbiCodec {
 	}
 
 	/**
-	 * 動的 string を tail から読み取ります。
+	 * 動的型（string / bytes）のデータを tail から読み取り、`0x` 付き16進文字列で返します。
 	 *
 	 * ABI 仕様上、オフセットは「データ部（head + tail 全体）の先頭」からのバイト数のため、
 	 * tail 内では head ワード分（32バイト × head ワード数）を差し引いた位置を読む。
 	 * tail は16進文字列のため、バイト数は文字数の2倍に拡張して扱う。
 	 */
-	private function decodeDynamicString( string $offset_word, string $tail, int $head_word_count, string $method ): string {
+	private function decodeDynamicBytes( string $offset_word, string $tail, int $head_word_count, string $method ): string {
 		$offset = (int) $this->hexToDec( $offset_word );
 		// head ワード分のバイト数を差し引き、16進文字列用に2倍する
 		$char_offset = ( $offset - $head_word_count * 32 ) * 2;
 		if ( $char_offset < 0 || $char_offset + 64 > strlen( $tail ) ) {
-			throw new InvalidArgumentException( sprintf( '[D0A8E5F7] Invalid string offset for %s: %d.', $method, $offset ) );
+			throw new InvalidArgumentException( sprintf( '[D0A8E5F7] Invalid dynamic data offset for %s: %d.', $method, $offset ) );
 		}
 		$length_word = substr( $tail, $char_offset, 64 );
 		$length      = (int) $this->hexToDec( $length_word );
 		if ( $char_offset + 64 + $length * 2 > strlen( $tail ) ) {
-			throw new InvalidArgumentException( sprintf( '[F2C0A7B9] String data out of range for %s.', $method ) );
-		}
-		$data    = substr( $tail, $char_offset + 64, $length * 2 );
-		$decoded = hex2bin( $data );
-		if ( false === $decoded ) {
-			throw new InvalidArgumentException( sprintf( '[A3D1B8C0] Invalid string hex for %s.', $method ) );
+			throw new InvalidArgumentException( sprintf( '[F2C0A7B9] Dynamic data out of range for %s.', $method ) );
 		}
 
-		return $decoded;
+		return '0x' . substr( $tail, $char_offset + 64, $length * 2 );
 	}
 
 	/**

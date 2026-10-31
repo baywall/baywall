@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 /**
  * 通貨シンボルを表すValueObject
  */
-final class Symbol implements ValueObject {
+final readonly class Symbol implements ValueObject {
 
 	private function __construct( string $symbol_value ) {
 		self::checkValidSymbolFormat( $symbol_value );

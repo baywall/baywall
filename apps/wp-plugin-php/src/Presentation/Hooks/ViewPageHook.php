@@ -8,12 +8,21 @@ use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginAssetUrlProvider;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\CurrentPaywalledPostResolver;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
-use DI\Container;
 
 class ViewPageHook extends HookBase {
 
-
-	public function __construct( private readonly Container $container ) {}
+	/**
+	 * @param \Closure(): CurrentPaywalledPostResolver $current_paywalled_post_resolver
+	 * @param \Closure(): HandleNameProvider           $handle_name_provider
+	 * @param \Closure(): WpPluginAssetUrlProvider     $asset_url_provider
+	 * @param \Closure(): PhpVarExporter               $php_var_exporter
+	 */
+	public function __construct(
+		private readonly \Closure $current_paywalled_post_resolver,
+		private readonly \Closure $handle_name_provider,
+		private readonly \Closure $asset_url_provider,
+		private readonly \Closure $php_var_exporter,
+	) {}
 
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueueViewScripts' ) );
@@ -26,16 +35,13 @@ class ViewPageHook extends HookBase {
 		}
 
 		// ペイウォールウィジェットが描画されないページではviewスクリプトを出力しない
-		if ( $this->container->get( CurrentPaywalledPostResolver::class )->resolve() === null ) {
+		if ( ( $this->current_paywalled_post_resolver )()->resolve() === null ) {
 			return;
 		}
 
-		/** @var HandleNameProvider */
-		$handle_name_provider = $this->container->get( HandleNameProvider::class );
-		/** @var WpPluginAssetUrlProvider */
-		$asset_url_provider = $this->container->get( WpPluginAssetUrlProvider::class );
-		/** @var PhpVarExporter */
-		$php_var_exporter = $this->container->get( PhpVarExporter::class );
+		$handle_name_provider = ( $this->handle_name_provider )();
+		$asset_url_provider   = ( $this->asset_url_provider )();
+		$php_var_exporter     = ( $this->php_var_exporter )();
 
 		// ゲストユーザー(一般の訪問者)表示用の登録する際のハンドル名を取得
 		$handle_name = $handle_name_provider->viewScript();
@@ -68,8 +74,7 @@ class ViewPageHook extends HookBase {
 		// WordPress 7.0.2 での動作が確認できたため`wp_enqueue_script`側の対応はそのままとする。
 		// https://note.com/hapiclo_leaves/n/n044526d7e82f
 
-		/** @var HandleNameProvider */
-		$handle_name_provider = $this->container->get( HandleNameProvider::class );
+		$handle_name_provider = ( $this->handle_name_provider )();
 
 		// view用のスクリプトの場合、`defer`属性を追加する
 		// ※ すでにフッターに出力する設定を`wp_enqueue_script`で行っているので効果は薄い

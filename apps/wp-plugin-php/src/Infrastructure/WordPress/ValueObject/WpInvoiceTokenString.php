@@ -7,7 +7,7 @@ use Baywall\Core\Domain\ValueObject\Bytes;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 use DateTimeImmutable;
 
-class WpInvoiceTokenString extends InvoiceTokenString {
+readonly class WpInvoiceTokenString extends InvoiceTokenString {
 
 	private function __construct( string $wp_invoice_token_value ) {
 		parent::__construct( $wp_invoice_token_value );

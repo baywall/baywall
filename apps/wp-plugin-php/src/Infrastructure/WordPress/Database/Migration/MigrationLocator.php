@@ -7,19 +7,21 @@ use Baywall\Core\Infrastructure\Util\NamespaceParser;
 use Baywall\Core\Lib\Util\Strings;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Baywall\Core\Application\ValueObject\PluginVersion;
-use DI\Container;
 
 /** マイグレーション対象となるクラスインスタンス一覧を取得します */
 class MigrationLocator {
 
 	const MIGRATIONS_DIR = __DIR__ . '/Migrations/';
 
-	private readonly Container $container;
 	private readonly NamespaceParser $namespace_parser;
+	private readonly \Closure $migration_factory;
 
-	public function __construct( Container $container ) {
-		$this->container        = $container;
-		$this->namespace_parser = $container->get( NamespaceParser::class );
+	/**
+	 * @param \Closure(class-string<MigrationBase>): MigrationBase $migration_factory クラス名からマイグレーションインスタンスを解決するファクトリ
+	 */
+	public function __construct( NamespaceParser $namespace_parser, \Closure $migration_factory ) {
+		$this->namespace_parser  = $namespace_parser;
+		$this->migration_factory = $migration_factory;
 	}
 
 	/**
@@ -43,7 +45,7 @@ class MigrationLocator {
 			$namespace  = $this->namespace_parser->get( $file_path );
 			$class_name = $namespace . '\\' . pathinfo( $file, PATHINFO_FILENAME );
 
-			$instance = $this->container->get( $class_name );
+			$instance = ( $this->migration_factory )( $class_name );
 			assert( $instance instanceof MigrationBase, "[DD850FCA] Invalid class: {$class_name}" );
 			$version = PluginVersion::from( $instance->version() );
 			if ( $gt_version->compareOperator( $version, '<' ) && $version->compareOperator( $le_version, '<=' ) ) {

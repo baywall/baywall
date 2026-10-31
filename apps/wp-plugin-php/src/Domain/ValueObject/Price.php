@@ -5,7 +5,7 @@ namespace Baywall\Core\Domain\ValueObject;
 
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
-class Price implements ValueObject {
+readonly class Price implements ValueObject {
 	private function __construct(
 		private readonly Amount $amount,
 		private readonly Symbol $symbol

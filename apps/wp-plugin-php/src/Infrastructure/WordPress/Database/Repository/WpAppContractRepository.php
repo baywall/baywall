@@ -35,7 +35,7 @@ class WpAppContractRepository implements AppContractRepository {
 }
 
 /** @internal */
-class AppContractImpl extends AppContract {
+readonly class AppContractImpl extends AppContract {
 	public function __construct( Chain $chain, AppContractTableRecord $record ) {
 		parent::__construct(
 			$chain,

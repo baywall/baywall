@@ -10,7 +10,7 @@ use Baywall\Core\Domain\ValueObject\Base\SecureStringValueObject;
  *
  * - リフレッシュトークン文字列のフォーマットは実装次第のため、ここではチェックしない
  */
-class RefreshTokenString extends SecureStringValueObject {
+readonly class RefreshTokenString extends SecureStringValueObject {
 	protected function __construct( string $refresh_token_value ) {
 		parent::__construct( $refresh_token_value );
 	}

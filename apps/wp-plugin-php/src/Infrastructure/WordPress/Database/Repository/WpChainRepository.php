@@ -40,6 +40,11 @@ class WpChainRepository implements ChainRepository {
 	public function save( Chain $chain ): void {
 		$this->chain_table->save( $chain );
 	}
+
+	/** @inheritdoc */
+	public function saveConsecutiveFailures( Chain $chain ): void {
+		$this->chain_table->saveConsecutiveFailures( $chain->id()->value(), $chain->consecutiveFailures() );
+	}
 }
 
 /** @internal */
@@ -52,6 +57,7 @@ class ChainImpl extends Chain {
 			RpcUrl::fromNullable( $record->rpcUrlValue() ),
 			Confirmations::from( $record->confirmationsValue() ),
 			MaxLogsRange::from( $record->maxLogsRangeValue() ),
+			$record->consecutiveFailuresValue(),
 			$record->blockExplorerUrlValue()
 		);
 	}

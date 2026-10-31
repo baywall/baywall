@@ -6,7 +6,7 @@ namespace Baywall\Core\Application\Service;
 /**
  * GraphQL関連の設定値を提供するインタフェース
  */
-interface GraphQLService {
+interface GraphQLConfigProvider {
 	/** GraphQLスキーマファイルへのパスを取得 */
 	public function getSchemaFilePath(): string;
 

@@ -19,7 +19,7 @@ use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
-class ResolvePayableTokens {
+class ResolvePayableTokens implements Resolver {
 
 
 	public function __construct(

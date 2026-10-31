@@ -7,7 +7,7 @@ use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\SymbolPair;
 
-class Oracle {
+readonly class Oracle {
 
 	public function __construct(
 		private readonly ChainId $chain_id,

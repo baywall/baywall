@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 /**
  * 小数点以下桁数を表す値オブジェクト
  */
-class Decimals implements ValueObject {
+readonly class Decimals implements ValueObject {
 
 	private function __construct( int $decimals_value ) {
 		if ( $decimals_value < 0 ) {

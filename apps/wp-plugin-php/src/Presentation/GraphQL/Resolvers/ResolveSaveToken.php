@@ -16,7 +16,7 @@ use Baywall\Core\Infrastructure\Web3\Factory\TokenClientFactory;
 /**
  * トークンの情報をサーバーに登録します。
  */
-class ResolveSaveToken {
+class ResolveSaveToken implements Resolver {
 
 
 	public function __construct(

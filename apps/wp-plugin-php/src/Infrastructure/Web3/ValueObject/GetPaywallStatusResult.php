@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\Web3\ValueObject;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 
-class GetPaywallStatusResult {
+readonly class GetPaywallStatusResult {
 	public function __construct(
 		private readonly bool $is_unlocked,
 		private readonly ?InvoiceId $invoice_id,

@@ -7,7 +7,7 @@ use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Repository\PostRepository;
 use Baywall\Core\Domain\ValueObject\PostId;
 
-class ResolveSellingPrice {
+class ResolveSellingPrice implements Resolver {
 
 
 	public function __construct(

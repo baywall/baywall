@@ -4,19 +4,19 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Application\Logging\AppLogger;
-use Baywall\Core\Application\Service\PaidContentService;
+use Baywall\Core\Application\Service\PaidContentAnalyzer;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Repository\PostRepository;
 use Baywall\Core\Domain\ValueObject\PostId;
 
-class ResolveSellingContent {
+class ResolveSellingContent implements Resolver {
 
 
 	public function __construct(
 		private readonly AppLogger $logger,
 		private readonly PostRepository $post_repository,
 		private readonly UserAccessChecker $user_access_checker,
-		private readonly PaidContentService $paid_content_service
+		private readonly PaidContentAnalyzer $paid_content_analyzer
 	) {}
 
 	public function handle( array $root_value, array $args ) {
@@ -35,8 +35,8 @@ class ResolveSellingContent {
 		}
 
 		return array(
-			'characterCount' => $this->paid_content_service->getCharacterCount( $paid_content ),
-			'imageCount'     => $this->paid_content_service->getImageCount( $paid_content ),
+			'characterCount' => $this->paid_content_analyzer->getCharacterCount( $paid_content ),
+			'imageCount'     => $this->paid_content_analyzer->getImageCount( $paid_content ),
 		);
 	}
 }

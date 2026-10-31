@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\ValueObject;
 use Baywall\Core\Domain\ValueObject\Base\SecureStringValueObject;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 
-class WpInvoiceTokenHashString extends SecureStringValueObject {
+readonly class WpInvoiceTokenHashString extends SecureStringValueObject {
 	private const HASH_ALGORITHM = 'sha256';
 
 	private function __construct( string $wp_invoice_token_hash_value ) {

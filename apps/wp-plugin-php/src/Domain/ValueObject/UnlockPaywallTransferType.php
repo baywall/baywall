@@ -5,7 +5,7 @@ namespace Baywall\Core\Domain\ValueObject;
 
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
-class UnlockPaywallTransferType implements ValueObject {
+readonly class UnlockPaywallTransferType implements ValueObject {
 
 	// 以下の定義はコントラクトで定義されている内容と一致させるようにしてください。
 	/** 販売手数料 */

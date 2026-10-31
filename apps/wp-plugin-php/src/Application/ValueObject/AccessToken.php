@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Base\SecureStringValueObject;
 /**
  * アクセストークンを表すクラス
  */
-class AccessToken extends SecureStringValueObject {
+readonly class AccessToken extends SecureStringValueObject {
 
 	private function __construct( string $access_token_value ) {
 		parent::__construct( $access_token_value );

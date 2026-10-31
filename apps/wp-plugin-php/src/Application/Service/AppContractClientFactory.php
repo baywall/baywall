@@ -5,7 +5,7 @@ namespace Baywall\Core\Application\Service;
 
 use Baywall\Core\Domain\ValueObject\ChainId;
 
-interface AppContractClientProvider {
+interface AppContractClientFactory {
 	/** 指定したチェーンのAppコントラクトへ接続するクライアントを生成します。 */
 	public function create( ChainId $chain_id ): AppContractClient;
 }

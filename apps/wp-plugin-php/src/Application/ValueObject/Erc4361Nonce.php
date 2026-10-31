@@ -6,7 +6,7 @@ namespace Baywall\Core\Application\ValueObject;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
-class Erc4361Nonce implements ValueObject {
+readonly class Erc4361Nonce implements ValueObject {
 
 
 	private function __construct(

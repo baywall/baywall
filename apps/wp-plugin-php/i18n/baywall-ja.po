@@ -2,7 +2,7 @@
 # This file is distributed under the Split License.
 msgid ""
 msgstr ""
-"Project-Id-Version: baywall 1.0.0-alpha.3\n"
+"Project-Id-Version: baywall 1.0.0-alpha.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-plugin-php\n"
 "POT-Creation-Date: 2026-03-08T12:41:35+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -46,3 +46,28 @@ msgstr "Testnet"
 #: src/Infrastructure/WordPress/I18n/I18nTextProvider.php:32
 msgid "Privatenet"
 msgstr "Privatenet"
+
+#: src/Infrastructure/WordPress/Service/WpCrawlFailureNotificationMessageProvider.php:12
+msgid "baywall: RPC URL failure detected"
+msgstr "【baywall】RPC URL 不具合検知"
+
+#. translators: 1: chain name, 2: chain ID, 3: site URL
+#: src/Infrastructure/WordPress/Service/WpCrawlFailureNotificationMessageProvider.php:19
+#, php-format
+msgid ""
+"Site: %3$s\n"
+"\"%1$s\" (Chain ID: %2$d) is failing to connect.\n"
+"Please update the RPC URL for this chain."
+msgstr ""
+"サイト: %3$s\n"
+"「%1$s」（Chain ID: %2$d）の接続に失敗しています。\n"
+"当該チェーンの RPC URL を更新してください。"
+
+#: src/Presentation/Hooks/PluginRowMetaHook.php:67
+#: src/Presentation/Hooks/PluginRowMetaHook.php:73
+msgid ""
+"To enable automatic updates, you need to register an RPC URL for Ethereum "
+"Mainnet."
+msgstr ""
+"自動アップデートを有効にするには、Ethereum Mainnet の RPC URL を登録してくだ"
+"さい。"

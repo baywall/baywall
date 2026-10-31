@@ -7,7 +7,7 @@ use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Signature;
 use Baywall\Core\Domain\ValueObject\SigningMessage;
 
-class Seller {
+readonly class Seller {
 
 
 	public function __construct(

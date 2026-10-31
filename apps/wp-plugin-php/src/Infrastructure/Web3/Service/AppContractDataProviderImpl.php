@@ -9,13 +9,13 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
-use Baywall\Core\Infrastructure\Web3\Factory\AppContractClientFactory;
+use Baywall\Core\Infrastructure\Web3\Factory\AppContractClientFactoryImpl;
 
 class AppContractDataProviderImpl implements AppContractDataProvider {
 
 
 	public function __construct(
-		private readonly AppContractClientFactory $app_contract_client_factory,
+		private readonly AppContractClientFactoryImpl $app_contract_client_factory,
 		private readonly ServerSignerRepository $server_signer_repository
 	) {}
 

@@ -13,7 +13,7 @@ use Baywall\Core\Domain\ValueObject\TransactionHash;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferType;
 
-class UnlockPaywallTransferEvent {
+readonly class UnlockPaywallTransferEvent {
 	public function __construct(
 		private readonly BlockNumber $block_number,
 		private readonly int $log_index,

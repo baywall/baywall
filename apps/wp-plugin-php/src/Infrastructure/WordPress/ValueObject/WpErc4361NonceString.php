@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\ValueObject;
 use Baywall\Core\Application\ValueObject\Erc4361NonceString;
 use Tuupola\Base62;
 
-class WpErc4361NonceString extends Erc4361NonceString {
+readonly class WpErc4361NonceString extends Erc4361NonceString {
 
 	private function __construct( string $nonce_string_value ) {
 		parent::__construct( $nonce_string_value );

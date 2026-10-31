@@ -5,7 +5,7 @@ namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Application\Repository\SctaUrlRepository;
 
-class ResolveSctaUrl {
+class ResolveSctaUrl implements Resolver {
 
 
 	public function __construct( private readonly SctaUrlRepository $scta_url_repository ) {}

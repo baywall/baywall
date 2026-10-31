@@ -5,7 +5,7 @@ namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Domain\Repository\ServerSignerRepository;
 
-class ResolveServerSigner {
+class ResolveServerSigner implements Resolver {
 
 
 	public function __construct( private readonly ServerSignerRepository $server_signer_repository ) {}

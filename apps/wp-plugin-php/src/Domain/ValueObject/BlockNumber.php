@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 /**
  * ブロック番号を表すクラス
  */
-class BlockNumber implements ValueObject {
+readonly class BlockNumber implements ValueObject {
 
 	private function __construct( int $block_number_value ) {
 		if ( $block_number_value < 0 ) {

@@ -5,7 +5,7 @@ namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Domain\Repository\PausedRepository;
 
-class ResolvePaused {
+class ResolvePaused implements Resolver {
 
 
 	public function __construct( private readonly PausedRepository $paused_repository ) {}

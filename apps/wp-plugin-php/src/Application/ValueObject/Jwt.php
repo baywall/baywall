@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Base\StringValueObject;
 /**
  * JWT形式のトークンを表すクラス
  */
-final class Jwt extends StringValueObject {
+final readonly class Jwt extends StringValueObject {
 
 	private function __construct( string $jwt_value ) {
 		parent::__construct( $jwt_value );

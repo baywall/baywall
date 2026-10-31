@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Application\Dto;
 
 /** 販売履歴取得用の invoice 情報 */
-class SalesHistoryInvoiceDto {
+readonly class SalesHistoryInvoiceDto {
 	public readonly string $id;
 	public readonly int $block_timestamp;
 	public readonly int $post_id;

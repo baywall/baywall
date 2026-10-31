@@ -16,7 +16,7 @@ use Baywall\Core\Domain\Repository\ServerSignerRepository;
 use Baywall\Core\Domain\Repository\TokenRepository;
 use Baywall\Core\Domain\Service\InvoiceService;
 use Baywall\Core\Domain\Service\InvoiceTokenService;
-use Baywall\Core\Domain\Service\SiteService;
+use Baywall\Core\Domain\Service\SiteUrlChecker;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Bytes;
 use Baywall\Core\Domain\ValueObject\ChainId;
@@ -27,7 +27,7 @@ use Baywall\Core\Application\Service\CookieWriter;
 use Baywall\Core\Lib\Ether\Ethers;
 use Baywall\Core\Lib\Ether\EthersSigningKey;
 
-class ResolveIssueInvoiceV2 {
+class ResolveIssueInvoiceV2 implements Resolver {
 
 
 	public function __construct(
@@ -41,7 +41,7 @@ class ResolveIssueInvoiceV2 {
 		private readonly InvoiceTokenService $invoice_token_service,
 		private readonly InvoiceTokenCookieProvider $invoice_token_cookie_provider,
 		private readonly CookieWriter $cookie_writer,
-		private readonly SiteService $site_service,
+		private readonly SiteUrlChecker $site_url_checker,
 		private readonly Clock $clock
 	) {}
 
@@ -65,7 +65,7 @@ class ResolveIssueInvoiceV2 {
 		}
 
 		// サイトURLが変更されている時は請求書発行を拒否（フロントエンドではボタンを無効化するため例外スローで対応）
-		if ( $this->site_service->hasSiteUrlChangedSinceInstall() ) {
+		if ( $this->site_url_checker->hasSiteUrlChangedSinceInstall() ) {
 			throw new ValidationFailedException( '[D94C9765] Site URL has changed since initial site URL was recorded.' );
 		}
 

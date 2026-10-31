@@ -12,7 +12,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * - `light`: ライトモード
  * - `dark`: ダークモード
  */
-final class ThemeSetting implements ValueObject {
+final readonly class ThemeSetting implements ValueObject {
 	public const AUTO  = 'auto';
 	public const LIGHT = 'light';
 	public const DARK  = 'dark';

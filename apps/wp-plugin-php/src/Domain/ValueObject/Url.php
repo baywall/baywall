@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 /**
  * URLを表すValueObjectクラス
  */
-class Url implements ValueObject {
+readonly class Url implements ValueObject {
 
 	protected function __construct( string $url_value ) {
 		static::checkValidUrlFormat( $url_value );

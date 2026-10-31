@@ -6,7 +6,7 @@ namespace Baywall\Core\Domain\ValueObject;
 /**
  * RPC URLを表すValueObjectクラス
  */
-final class RpcUrl extends Url {
+final readonly class RpcUrl extends Url {
 
 	private function __construct( string $rpd_url ) {
 		parent::__construct( $rpd_url );

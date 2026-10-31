@@ -4,17 +4,14 @@ declare(strict_types=1);
 namespace Baywall\Core\Application\UseCase;
 
 use Baywall\Core\Application\Logging\AppLogger;
-use Baywall\Core\Application\Service\AccessTokenCookieProvider;
-use Baywall\Core\Application\Service\AccessTokenService;
 use Baywall\Core\Application\Service\AppContractCrawlService;
 use Baywall\Core\Application\Service\Clock;
 use Baywall\Core\Application\Service\ConfirmationsService;
 use Baywall\Core\Application\Service\InvoiceTokenCookieProvider;
-use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
+use Baywall\Core\Application\Service\TokenCookieService;
 use Baywall\Core\Domain\Exception\PaymentNotCompletedException;
 use Baywall\Core\Domain\Service\InvoiceService;
 use Baywall\Core\Domain\Service\InvoiceTokenService;
-use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 use Baywall\Core\Application\Service\CookieWriter;
 
@@ -30,10 +27,7 @@ class IssueAccessTokenByInvoiceToken {
 
 	public function __construct(
 		private readonly AppLogger $logger,
-		private readonly RefreshTokenService $refresh_token_service,
-		private readonly RefreshTokenCookieProvider $refresh_token_cookie_provider,
-		private readonly AccessTokenCookieProvider $access_token_cookie_provider,
-		private readonly AccessTokenService $access_token_service,
+		private readonly TokenCookieService $token_cookie_service,
 		private readonly CookieWriter $cookie_writer,
 		private readonly InvoiceTokenService $invoice_token_service,
 		private readonly InvoiceTokenCookieProvider $invoice_token_cookie_provider,
@@ -76,15 +70,8 @@ class IssueAccessTokenByInvoiceToken {
 			// 購入者ウォレットアドレスを取得
 			$buyer_address = $invoice->buyerAddress();
 
-			// リフレッシュトークンを発行し、クッキーに保存
-			$refresh_token        = $this->refresh_token_service->issue( $buyer_address );
-			$refresh_token_cookie = $this->refresh_token_cookie_provider->get( $refresh_token );
-			$this->cookie_writer->set( $refresh_token_cookie );
-
-			// アクセストークンを発行
-			$access_token        = $this->access_token_service->issue( $buyer_address );
-			$access_token_cookie = $this->access_token_cookie_provider->get( $access_token );
-			$this->cookie_writer->set( $access_token_cookie );
+			// リフレッシュトークン/アクセストークンを発行し、クッキーに保存
+			$this->token_cookie_service->issueAndSetCookies( $buyer_address );
 
 			// 請求書トークンは無効化してCookieから削除
 			$this->invoice_token_service->revoke( $invoice_token_string, $now );

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\GraphQL;
 
-use Baywall\Core\Application\Service\GraphQLService;
+use Baywall\Core\Application\Service\GraphQLConfigProvider;
 use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\Parser;
 use GraphQL\Utils\AST;
@@ -10,15 +10,15 @@ use GraphQL\Utils\BuildSchema;
 
 class PluginSchemaProvider {
 
-	public function __construct( private readonly GraphQLService $graphql_service ) {}
+	public function __construct( private readonly GraphQLConfigProvider $graphql_config_provider ) {}
 
 	public function get() {
 		// キャッシュファイルをこのプラグインディレクトリ内に作成することで
 		// プラグインアップデート時は存在しなくなり、再作成される仕組み。
-		$cache_file_path = $this->graphql_service->getCacheFilePath();
+		$cache_file_path = $this->graphql_config_provider->getCacheFilePath();
 
 		if ( $this->isCacheFileCreationNeeded() ) {
-			$graphql_schema_path = $this->graphql_service->getSchemaFilePath();
+			$graphql_schema_path = $this->graphql_config_provider->getSchemaFilePath();
 			$document            = Parser::parse( file_get_contents( $graphql_schema_path ) );
 			if ( ! $this->writeCacheFile( $cache_file_path, $document ) ) {
 				// 書き込みに失敗してもパース結果で処理を継続する（次回リクエストで再作成が試みられる）
@@ -37,8 +37,8 @@ class PluginSchemaProvider {
 	 * キャッシュファイルを作成(または再作成)する必要があるかどうかを判定します。
 	 */
 	private function isCacheFileCreationNeeded(): bool {
-		$cache_file_path     = $this->graphql_service->getCacheFilePath();
-		$graphql_schema_path = $this->graphql_service->getSchemaFilePath();
+		$cache_file_path     = $this->graphql_config_provider->getCacheFilePath();
+		$graphql_schema_path = $this->graphql_config_provider->getSchemaFilePath();
 
 		if ( ! file_exists( $cache_file_path ) ) {
 			// キャッシュファイルが存在しない場合は作成が必要

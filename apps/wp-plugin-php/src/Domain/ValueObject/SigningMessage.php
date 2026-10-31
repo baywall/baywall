@@ -6,7 +6,7 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
 /** 署名のためのメッセージ */
-class SigningMessage implements ValueObject {
+readonly class SigningMessage implements ValueObject {
 
 	protected function __construct( private readonly string $signing_message_value ) {}
 	public static function from( string $signing_message_value ): self {

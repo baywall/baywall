@@ -6,7 +6,7 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
 /** 署名データ */
-class Signature implements ValueObject {
+readonly class Signature implements ValueObject {
 
 	private readonly Bytes $value;
 

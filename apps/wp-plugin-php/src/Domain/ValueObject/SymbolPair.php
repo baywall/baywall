@@ -6,7 +6,7 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
-class SymbolPair implements ValueObject {
+readonly class SymbolPair implements ValueObject {
 	private function __construct(
 		private readonly Symbol $base_symbol,
 		private readonly Symbol $quote_symbol

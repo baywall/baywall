@@ -81,9 +81,6 @@ type Query {
 	# 初回インストール時のURLと現在のサイトURLが変更されたかどうか【ゲスト】
 	siteUrlChangedSinceInstall: Boolean!
 
-	# プラグインのバージョン【ゲスト】
-	pluginVersion: String!
-
 	# ログ一覧を取得【管理者】
 	logs: [Log!]!
 }
@@ -175,6 +172,7 @@ type Chain {
 	blockExplorerUrl: String	# ブロックエクスプローラーのURL(例: "https://etherscan.io/")【ゲスト】
 	connectable: Boolean!		# チェーンに接続可能かどうか【管理者】
 	maxLogsRange: Int!			# ログ取得ブロック範囲最大値【管理者】
+	hasReachedConsecutiveFailureLimit: Boolean!	# クロール連続失敗回数が上限に達しているかどうか【管理者】
 }
 
 type Oracle {

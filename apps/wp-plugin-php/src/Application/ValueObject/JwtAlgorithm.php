@@ -6,7 +6,7 @@ namespace Baywall\Core\Application\ValueObject;
 use Baywall\Core\Domain\ValueObject\Base\StringValueObject;
 
 /** JWT署名アルゴリズムを表すクラス */
-final class JwtAlgorithm extends StringValueObject {
+final readonly class JwtAlgorithm extends StringValueObject {
 
 	private const ALG_HS256 = 'HS256';
 

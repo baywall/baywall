@@ -43,7 +43,7 @@ class WpInvoiceRepository implements InvoiceRepository {
 }
 
 /** @internal */
-class InvoiceImpl extends Invoice {
+readonly class InvoiceImpl extends Invoice {
 	public function __construct( InvoiceTableRecord $invoice_record ) {
 		parent::__construct(
 			InvoiceId::fromUlidValue( $invoice_record->invoiceIdValue() ),

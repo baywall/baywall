@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 /**
  * ネットワークカテゴリIDを表すクラス
  */
-final class NetworkCategoryId implements ValueObject {
+final readonly class NetworkCategoryId implements ValueObject {
 
 	/** メインネット(Ethereumメインネット、Polygonメインネット等) */
 	public const MAINNET = 1;
