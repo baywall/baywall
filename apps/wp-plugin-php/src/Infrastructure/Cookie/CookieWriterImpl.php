@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\Cookie;
 
-use Baywall\Core\Application\Service\CookieWriter;
+use Baywall\Core\Application\Port\CookieWriter;
 use Baywall\Core\Application\ValueObject\Cookie;
 
 class CookieWriterImpl implements CookieWriter {

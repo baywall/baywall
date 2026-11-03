@@ -3,28 +3,22 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
-use Baywall\Core\Application\Service\UserAccessChecker;
-use Baywall\Core\Domain\Repository\PostRepository;
+use Baywall\Core\Application\UseCase\GetPost;
+use Baywall\Core\Application\UseCase\GetPostTitle;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class ResolvePost implements Resolver {
-
-
 	public function __construct(
-		private readonly UserAccessChecker $user_access_checker,
-		private readonly PostRepository $post_repository
+		private readonly GetPost $get_post,
+		private readonly GetPostTitle $get_post_title
 	) {}
 
+	/** @return array<string, mixed> */
 	public function handle( array $root_value, array $args ) {
-		$post_id = PostId::from( $args['postId'] );
-		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_id );
-
-		// 投稿の情報を取得
-		$post = $this->post_repository->get( $post_id );
+		$post = $this->get_post->handle( PostId::from( $args['postId'] ) );
 
 		$post_title_callback = function () use ( $post ) {
-			return $this->post_repository->findTitle( $post->id() );
+			return $this->get_post_title->handle( $post->id() );
 		};
 
 		return array(

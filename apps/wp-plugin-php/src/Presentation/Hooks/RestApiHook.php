@@ -22,7 +22,6 @@ use WP_REST_Response;
  * REST APIのフック登録(GraphQLを除く)
  */
 class RestApiHook extends HookBase {
-
 	/**
 	 * @param \Closure(): AppLogger                      $logger
 	 * @param \Closure(): WpNonceService                 $nonce_service
@@ -104,11 +103,10 @@ class RestApiHook extends HookBase {
 		assert( $success );
 	}
 
-
 	/**
 	 * REST エンドポイントの実行可否を判定します。
 	 *
-	 * @return true|WP_Error
+	 * @return true|\WP_Error
 	 */
 	private function permissionCallback( \WP_REST_Request $request ): true|\WP_Error {
 		$logger              = ( $this->logger )();
@@ -124,6 +122,7 @@ class RestApiHook extends HookBase {
 		}
 	}
 
+	/** @return WP_REST_Response */
 	public function authRefreshHandler( \WP_REST_Request $request ) {
 		$cookie_name_provider = ( $this->cookie_name_provider )();
 
@@ -151,6 +150,7 @@ class RestApiHook extends HookBase {
 		}
 	}
 
+	/** @return WP_REST_Response */
 	public function authTokenInvoiceHandler( \WP_REST_Request $request ) {
 		$cookie_name_provider = ( $this->cookie_name_provider )();
 
@@ -171,6 +171,7 @@ class RestApiHook extends HookBase {
 		}
 	}
 
+	/** @return WP_REST_Response */
 	public function authLogoutHandler( \WP_REST_Request $request ) {
 		$cookie_name_provider = ( $this->cookie_name_provider )();
 
@@ -187,6 +188,7 @@ class RestApiHook extends HookBase {
 		}
 	}
 
+	/** @return WP_REST_Response */
 	public function paidContentHandler( \WP_REST_Request $request ) {
 		try {
 			$post_id = $this->extractPostId( $request );

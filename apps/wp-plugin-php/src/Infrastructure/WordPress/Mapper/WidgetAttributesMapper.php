@@ -11,7 +11,7 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 
 /** Gutenberg属性配列⇔WidgetAttributes(販売設定のドメイン形式)の変換を行います。 */
 class WidgetAttributesMapper {
-
+	/** @param array<string, mixed> $attrs */
 	public function fromArray( array $attrs ): WidgetAttributes {
 		return WidgetAttributes::from(
 			NetworkCategoryId::fromNullable( $attrs[ WpConfig::BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID ] ?? null ),
@@ -20,6 +20,7 @@ class WidgetAttributesMapper {
 		);
 	}
 
+	/** @return array<string, int|string|null> */
 	public function toArray( WidgetAttributes $widget_attributes ): array {
 		return array(
 			WpConfig::BLOCK_ATTR_NAME_SELLING_NETWORK_CATEGORY_ID => $widget_attributes->sellingNetworkCategoryId()?->value(),

@@ -9,11 +9,11 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * URLを表すValueObjectクラス
  */
 readonly class Url implements ValueObject {
-
 	protected function __construct( string $url_value ) {
 		static::checkValidUrlFormat( $url_value );
 		$this->url_value = $url_value;
 	}
+
 	private readonly string $url_value;
 
 	public static function from( string $url_value ): self {

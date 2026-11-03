@@ -10,6 +10,7 @@ class StringOption {
 
 	private readonly Option $option;
 
+	/** @param string|null $default */
 	public function get( $default = null ): ?string {
 		return $this->option->get( $default );
 	}

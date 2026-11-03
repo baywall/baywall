@@ -12,7 +12,6 @@ use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
  * 投稿編集画面のフック(投稿新規作成画面を含む)
  */
 class PostEditHook extends HookBase {
-
 	/**
 	 * @param \Closure(): HandleNameProvider       $handle_name_provider
 	 * @param \Closure(): WpPluginAssetUrlProvider $asset_url_provider

@@ -6,6 +6,7 @@ namespace Baywall\Core\Domain\Service;
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\Entity\Invoice;
 use Baywall\Core\Domain\Entity\Token;
+use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Exception\DuplicatePurchaseException;
 use Baywall\Core\Domain\Repository\InvoiceRepository;
 use Baywall\Core\Domain\Repository\InvoiceTokenRepository;
@@ -21,7 +22,6 @@ use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 class InvoiceService {
-
 	public function __construct(
 		private readonly PostRepository $post_repository,
 		private readonly PriceExchangeService $price_exchange_service,
@@ -37,11 +37,11 @@ class InvoiceService {
 
 		$invoice_token = $this->invoice_token_repository->get( $invoice_token_string );
 		if ( $invoice_token === null ) {
-			throw new \InvalidArgumentException( "[BCD15F61] Invalid invoice token: {$invoice_token_string}" );
+			throw new AuthenticationFailedException( "[BCD15F61] Invalid invoice token: {$invoice_token_string}" );
 		}
 		$invoice = $this->invoice_repository->get( $invoice_token->invoiceId() );
 		if ( $invoice === null ) {
-			throw new \InvalidArgumentException( "[AD1EB338] Invoice not found for invoice token: {$invoice_token_string}" );
+			throw new AuthenticationFailedException( "[AD1EB338] Invoice not found for invoice token: {$invoice_token_string}" );
 		}
 
 		return $invoice;

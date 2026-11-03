@@ -9,9 +9,10 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * 配列の値を表す基底クラス
  */
 abstract readonly class ArrayValueObject implements ValueObject {
-
+	/** @param array<string, mixed> $array_value */
 	protected function __construct( private readonly array $array_value ) {}
 
+	/** @return array<string, mixed> */
 	public function value(): array {
 		return $this->array_value;
 	}

@@ -28,6 +28,7 @@ class SalesHistorySearchCondition {
 	public function invoiceId(): ?InvoiceId {
 		return $this->invoice_id;
 	}
+
 	/** 請求書IDを設定します */
 	public function setInvoiceId( ?InvoiceId $invoice_id ): self {
 		$this->invoice_id = $invoice_id;
@@ -38,6 +39,7 @@ class SalesHistorySearchCondition {
 	public function chainId(): ?ChainId {
 		return $this->chain_id;
 	}
+
 	/** チェーンIDを設定します */
 	public function setChainId( ?ChainId $chain_id ): self {
 		$this->chain_id = $chain_id;
@@ -48,6 +50,7 @@ class SalesHistorySearchCondition {
 	public function transactionHash(): ?TransactionHash {
 		return $this->transaction_hash;
 	}
+
 	/** トランザクションハッシュを設定します */
 	public function setTransactionHash( ?TransactionHash $transaction_hash ): self {
 		$this->transaction_hash = $transaction_hash;
@@ -61,6 +64,7 @@ class SalesHistorySearchCondition {
 	public function dateFrom(): ?int {
 		return $this->date_from;
 	}
+
 	/** 開始日時を設定します */
 	public function setDateFrom( ?int $date_from ): self {
 		$this->date_from = $date_from;
@@ -74,6 +78,7 @@ class SalesHistorySearchCondition {
 	public function dateTo(): ?int {
 		return $this->date_to;
 	}
+
 	/** 終了日時を設定します */
 	public function setDateTo( ?int $date_to ): self {
 		$this->date_to = $date_to;
@@ -86,6 +91,7 @@ class SalesHistorySearchCondition {
 	public function limit(): ?int {
 		return $this->limit;
 	}
+
 	/** 取得件数上限を設定します */
 	public function setLimit( ?int $limit ): self {
 		$this->limit = $limit;
@@ -98,6 +104,7 @@ class SalesHistorySearchCondition {
 	public function offset(): ?int {
 		return $this->offset;
 	}
+
 	/** 取得開始位置を設定します */
 	public function setOffset( ?int $offset ): self {
 		$this->offset = $offset;

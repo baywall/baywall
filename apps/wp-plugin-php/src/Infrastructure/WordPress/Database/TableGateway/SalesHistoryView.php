@@ -29,6 +29,7 @@ class SalesHistoryView {
 		$this->chain_table_name    = $table_name_provider->chain();
 		$this->wp_posts_table_name = $wpdb->getPostsTableName();
 	}
+
 	/** トランザクション情報が格納されているテーブル名 */
 	private readonly string $tx_table_name;
 	/** トークン転送イベント情報が格納されているテーブル名 */
@@ -175,7 +176,6 @@ class SalesHistoryView {
 
 		return $where_conditions;
 	}
-
 
 	/**
 	 * 販売履歴に指定した投稿IDと購入者アドレスが存在するかどうか(=購入済みかどうか)を返します

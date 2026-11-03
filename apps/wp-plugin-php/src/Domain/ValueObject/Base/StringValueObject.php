@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * 文字列の値を表す基底クラス
  */
 abstract readonly class StringValueObject implements ValueObject {
-
 	protected function __construct( private readonly string $string_value ) {}
 
 	public function value(): string {

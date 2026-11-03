@@ -47,7 +47,7 @@ class EnsRegistryClient {
  * @internal
  */
 class EnsRegistryAbi {
-
+	/** @return list<array<string, mixed>> */
 	public function get(): array {
 		$abi_json = <<<JSON
 		{

@@ -8,7 +8,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 readonly class BlockHash implements ValueObject {
 	private function __construct( private readonly string $hash ) {}
 
-
 	/**
 	 * ブロックハッシュを取得します。
 	 */

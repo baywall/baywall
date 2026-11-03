@@ -5,11 +5,10 @@ namespace Baywall\Core\Infrastructure\Logging;
 
 use Baywall\Core\Application\Logging\Logger;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
-use Baywall\Core\Application\Service\Clock;
+use Baywall\Core\Application\Port\Clock;
 use DateTimeImmutable;
 
 class ErrorLogLogger implements Logger {
-
 	public function __construct( private readonly Clock $clock ) {}
 
 	/**
@@ -20,7 +19,7 @@ class ErrorLogLogger implements Logger {
 		if ( $message_or_exception instanceof \Throwable ) {
 			error_log(
 				sprintf(
-					'[%s] [%s] %s: %s in %s on line %d%s',
+					'[%s] [%s] %s: %s in %s on line %d%s%s',
 					$timestamp,
 					$level->name(),
 					get_class( $message_or_exception ),

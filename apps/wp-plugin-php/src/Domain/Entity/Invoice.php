@@ -13,7 +13,6 @@ use Baywall\Core\Domain\ValueObject\Price;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
 readonly class Invoice {
-
 	public function __construct(
 		private readonly InvoiceId $id,
 		private readonly PostId $post_id,
@@ -27,34 +26,42 @@ readonly class Invoice {
 		private readonly Address $buyer_address
 	) {}
 
-
 	public function id(): InvoiceId {
 		return $this->id;
 	}
+
 	public function postId(): PostId {
 		return $this->post_id;
 	}
+
 	public function chainId(): ChainId {
 		return $this->chain_id;
 	}
+
 	public function sellingPrice(): Price {
 		return $this->selling_price;
 	}
+
 	public function sellerAddress(): Address {
 		return $this->seller_address;
 	}
+
 	public function paymentTokenAddress(): Address {
 		return $this->payment_token_address;
 	}
+
 	public function paymentTokenSymbol(): Symbol {
 		return $this->payment_token_symbol;
 	}
+
 	public function paymentTokenDecimals(): Decimals {
 		return $this->payment_token_decimals;
 	}
+
 	public function paymentAmount(): Amount {
 		return $this->payment_amount;
 	}
+
 	public function buyerAddress(): Address {
 		return $this->buyer_address;
 	}

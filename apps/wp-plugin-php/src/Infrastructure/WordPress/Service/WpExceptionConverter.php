@@ -8,12 +8,12 @@ use Baywall\Core\Domain\Exception\PaymentNotCompletedException;
 use Baywall\Core\Domain\Exception\PermissionDeniedException;
 use Baywall\Core\Domain\Exception\ValidationFailedException;
 use InvalidArgumentException;
+use RuntimeException;
 use WP_Error;
 use WP_REST_Response;
 
 /** WordPressの例外変換サービス */
 class WpExceptionConverter {
-
 	/** 例外をビジネス分類へ変換します。未分類の例外は INTERNAL_ERROR になります */
 	public function categoryOf( \Throwable $e ): ExceptionCategory {
 		return match ( true ) {
@@ -28,8 +28,7 @@ class WpExceptionConverter {
 	public function toWpError( \Throwable $e ): WP_Error {
 		// WP_Error 型の場合はそのまま返す
 		if ( $e instanceof WP_Error ) {
-			assert( false, '[7D72E2C8] ' . var_export( $e, true ) ); // 通常ここは通らない
-			return $e;
+			throw new RuntimeException( '[7D72E2C8] ' . var_export( $e, true ) ); // 通常ここは通らない
 		}
 
 		// 独自例外クラスを WP_Error 型に変換して返す
@@ -45,8 +44,7 @@ class WpExceptionConverter {
 	public function toWpResponse( \Throwable $e ): WP_REST_Response {
 		// WP_REST_Response 型の場合はそのまま返す
 		if ( $e instanceof WP_REST_Response ) {
-			assert( false, '[6C1C2987] ' . var_export( $e, true ) ); // 通常ここは通らない
-			return $e;
+			throw new RuntimeException( '[6C1C2987] ' . var_export( $e, true ) ); // 通常ここは通らない
 		}
 
 		// 独自例外クラスを WP_REST_Response 型に変換して返す

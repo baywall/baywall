@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Port\TransactionService;
 use wpdb;
 
 class WpTransactionService extends TransactionService {

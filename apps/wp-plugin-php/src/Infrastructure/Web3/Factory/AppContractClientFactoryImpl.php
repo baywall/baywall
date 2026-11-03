@@ -3,16 +3,14 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\Web3\Factory;
 
-use Baywall\Core\Application\Service\AppContractClientFactory;
+use Baywall\Core\Application\Port\AppContractClientFactory;
 use Baywall\Core\Domain\Repository\AppContractRepository;
 use Baywall\Core\Domain\Service\BlockchainService;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Infrastructure\Web3\Abi\AppContractAbi;
-use Baywall\Core\Infrastructure\Web3\Client\AppContractClient;
+use Baywall\Core\Infrastructure\Web3\Client\AppContractClientImpl;
 
 class AppContractClientFactoryImpl implements AppContractClientFactory {
-
-
 	public function __construct(
 		private readonly AppContractRepository $app_contract_repository,
 		private readonly BlockchainService $blockchain_service,
@@ -22,12 +20,12 @@ class AppContractClientFactoryImpl implements AppContractClientFactory {
 	/**
 	 * 指定したチェーンにのAppコントラクトへ接続するオブジェクトを生成します。
 	 */
-	public function create( ChainId $chain_id ): AppContractClient {
+	public function create( ChainId $chain_id ): AppContractClientImpl {
 		$app_contract = $this->app_contract_repository->get( $chain_id );
 		if ( null === $app_contract ) {
 			throw new \InvalidArgumentException( "[173C93DE] AppContract for chain ID {$chain_id} does not exist." );
 		}
-		return new AppContractClient(
+		return new AppContractClientImpl(
 			$app_contract,
 			$this->blockchain_service,
 			$this->app_contract_abi

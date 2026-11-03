@@ -10,10 +10,15 @@ class ArrayOption {
 
 	private readonly Option $option;
 
+	/**
+	 * @param array<array-key, mixed>|null $default
+	 * @return array<array-key, mixed>|null
+	 */
 	public function get( $default = null ): ?array {
 		return $this->option->get( $default );
 	}
 
+	/** @param array<array-key, mixed> $value */
 	public function update( array $value, ?bool $autoload = null ): void {
 		$this->option->update( $value, $autoload );
 		assert( $value === $this->get( $value ) );

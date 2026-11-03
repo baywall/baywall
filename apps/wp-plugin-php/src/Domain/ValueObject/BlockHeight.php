@@ -12,7 +12,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * BlockNumber::add() / sub()の引数のような「位置 ± スパン」の演算に用いる。
  */
 readonly class BlockHeight implements ValueObject {
-
 	private function __construct( int $block_height_value ) {
 		if ( $block_height_value < 0 ) {
 			throw new \InvalidArgumentException( "[B0E977E6] Invalid block height value: {$block_height_value}" );

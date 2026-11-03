@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\GraphQL\Rule;
 
 use GraphQL\Error\Error;
+use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\OperationDefinitionNode;
 use GraphQL\Validator\Rules\ValidationRule;
 use GraphQL\Validator\ValidationContext;
@@ -11,20 +12,19 @@ use GraphQL\Validator\ValidationContext;
  * GraphQLのmutation呼び出し時のフィールド数を制限するルール
  */
 class MutationFieldLimitRule extends ValidationRule {
-
-
 	public function __construct( private readonly int $max_fields ) {}
 
 	public function getVisitor( ValidationContext $context ): array {
 		return array(
-			'OperationDefinition' => function ( OperationDefinitionNode $node ) use ( $context ) {
+			'OperationDefinition' => function ( Node $node ) use ( $context ) {
+				if ( ! $node instanceof OperationDefinitionNode ) {
+					return;
+				}
 				if ( $node->operation !== 'mutation' ) {
 					return;
 				}
 
-				$top_level_fields = $node->selectionSet
-					? count( $node->selectionSet->selections )
-					: 0;
+				$top_level_fields = count( $node->selectionSet->selections );
 
 				if ( $top_level_fields > $this->max_fields ) {
 					$context->reportError(

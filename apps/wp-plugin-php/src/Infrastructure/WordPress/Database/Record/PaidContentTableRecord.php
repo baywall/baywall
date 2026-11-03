@@ -23,15 +23,19 @@ class PaidContentTableRecord extends RecordBase {
 	public function postIdValue(): int {
 		return $this->post_id;
 	}
+
 	public function paidContentValue(): string {
 		return $this->paid_content;
 	}
+
 	public function sellingNetworkCategoryIdValue(): ?int {
 		return $this->selling_network_category_id;
 	}
+
 	public function sellingAmountValue(): ?string {
 		return $this->selling_amount;
 	}
+
 	public function sellingSymbolValue(): ?string {
 		return $this->selling_symbol;
 	}

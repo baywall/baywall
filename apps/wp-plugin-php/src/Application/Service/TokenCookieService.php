@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\Service;
 
+use Baywall\Core\Application\Port\AccessTokenCookieProvider;
+use Baywall\Core\Application\Port\CookieWriter;
+use Baywall\Core\Application\Port\RefreshTokenCookieProvider;
 use Baywall\Core\Domain\Entity\RefreshToken;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\ValueObject\Address;
@@ -13,8 +16,6 @@ use Baywall\Core\Domain\ValueObject\Address;
  * ERC-4361署名・請求書トークン・リフレッシュの3経路で重複していた処理を集約する。
  */
 class TokenCookieService {
-
-
 	public function __construct(
 		private readonly RefreshTokenService $refresh_token_service,
 		private readonly RefreshTokenCookieProvider $refresh_token_cookie_provider,

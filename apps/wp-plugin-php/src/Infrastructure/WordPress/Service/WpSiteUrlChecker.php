@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Baywall\Core\Domain\Repository\InitialSiteUrlRepository;
+use Baywall\Core\Application\Repository\InitialSiteUrlRepository;
 use Baywall\Core\Domain\Service\SiteUrlChecker;
 
 class WpSiteUrlChecker implements SiteUrlChecker {
-
-
 	public function __construct(
 		private readonly InitialSiteUrlRepository $initial_site_url_repository,
 		private readonly WordPressPropertyProvider $wordpress_property_provider

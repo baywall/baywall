@@ -8,7 +8,6 @@ use Baywall\Core\Presentation\Hooks\Base\HookBase;
 
 /** プラグインのテキストドメインをロードするクラス。 */
 class I18nHook extends HookBase {
-
 	/**
 	 * @param \Closure(): WpPluginInfoProvider $plugin_info_provider
 	 */

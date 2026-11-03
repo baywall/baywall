@@ -7,7 +7,6 @@ use Baywall\Core\Domain\Entity\Post;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 interface PostRepository {
-
 	/** 指定した投稿IDに合致する投稿情報を取得します。 */
 	public function get( PostId $post_id ): Post;
 

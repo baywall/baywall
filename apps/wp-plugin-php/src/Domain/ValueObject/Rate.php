@@ -17,7 +17,6 @@ readonly class Rate implements ValueObject {
 		private readonly Amount $amount
 	) {}
 
-
 	public static function from( SymbolPair $symbol_pair, Amount $amount ): self {
 		return new self( $symbol_pair, $amount );
 	}

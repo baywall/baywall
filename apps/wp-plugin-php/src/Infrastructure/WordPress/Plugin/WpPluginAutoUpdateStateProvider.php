@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
-use Baywall\Core\Application\Service\PluginAutoUpdateStateProvider;
+use Baywall\Core\Application\Port\PluginAutoUpdateStateProvider;
 
 /**
  * WordPress上でプラグインの自動アップデート状態を判定するクラス。
@@ -12,13 +12,13 @@ use Baywall\Core\Application\Service\PluginAutoUpdateStateProvider;
  * 自プラグインが自動アップデートされる状態にあるかを判定します。
  */
 class WpPluginAutoUpdateStateProvider implements PluginAutoUpdateStateProvider {
-
 	public function __construct( private readonly WpPluginInfoProvider $plugin_info_provider ) {}
 
 	/** @inheritdoc */
 	public function isAutoUpdateEnabled(): bool {
 		// `wp_is_auto_update_*`はwp-admin/includes/update.phpに定義されるため、cron等の未読込経路に備えて防御的にロードする
 		if ( ! function_exists( 'wp_is_auto_update_enabled_for_type' ) ) {
+			// @phpstan-ignore requireOnce.fileNotFound, requireOnce.fileNotFound
 			require_once ABSPATH . 'wp-admin/includes/update.php';
 		}
 
@@ -33,6 +33,7 @@ class WpPluginAutoUpdateStateProvider implements PluginAutoUpdateStateProvider {
 		$enabled = in_array( $plugin_basename, (array) get_site_option( 'auto_update_plugins', array() ), true );
 
 		// 3. ホスティング等による強制（強制 ON / OFF 両方）があれば2の結果を上書き
+		/** @var null|bool スタブの @return bool と異なり、第二引数の null（フィルタ未介入）がそのまま返り得る */
 		$forced = wp_is_auto_update_forced_for_item( 'plugin', null, $this->filterPayload( $plugin_basename ) );
 		return is_null( $forced ) ? $enabled : $forced;
 	}

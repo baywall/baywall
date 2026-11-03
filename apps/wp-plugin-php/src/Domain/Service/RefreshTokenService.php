@@ -12,13 +12,11 @@ use Baywall\Core\Domain\ValueObject\RefreshTokenString;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 abstract class RefreshTokenService {
-
 	/** リフレッシュトークン文字列を生成します */
 	abstract protected function generateRefreshTokenString(): RefreshTokenString;
 
 	/** リフレッシュトークンの有効期限を取得します */
 	abstract protected function getExpiresAt(): UnixTimestamp;
-
 
 	protected function __construct( private readonly RefreshTokenRepository $refresh_token_repository ) {}
 

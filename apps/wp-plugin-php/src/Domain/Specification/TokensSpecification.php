@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
 class TokensSpecification {
-
 	/**
 	 * @param bool|null $is_payable 支払い可能かどうか。null の場合は支払い可能性を判定しない。
 	 */

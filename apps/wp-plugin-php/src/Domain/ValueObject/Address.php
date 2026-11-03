@@ -7,18 +7,17 @@ use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 use Baywall\Core\Lib\Ether\Ethers;
 use Baywall\Core\Lib\Padding\Padding;
-use Baywall\Core\Lib\Util\Strings;
 
 /**
  * アドレス(ウォレットアドレス/コントラクトアドレス)を表すクラス
  */
 final readonly class Address implements ValueObject {
-
 	private function __construct( string $address_value ) {
 		self::checkValidAddressFormat( $address_value );
 		// アドレスは常に小文字で保持する
 		$this->address_value = strtolower( $address_value );
 	}
+
 	private readonly string $address_value;
 
 	public static function from( string $address_value ): self {
@@ -54,7 +53,7 @@ final readonly class Address implements ValueObject {
 
 	private static function checkValidAddressFormat( string $address_value ): void {
 		// 本アプリでは`0x`プレフィックスを必須とする
-		$is_valid = Strings::starts_with( $address_value, '0x' ) && Ethers::isAddress( $address_value );
+		$is_valid = str_starts_with( $address_value, '0x' ) && Ethers::isAddress( $address_value );
 		if ( ! $is_valid ) {
 			throw new \InvalidArgumentException( '[B4AE59FC] Invalid address format. ' . $address_value );
 		}

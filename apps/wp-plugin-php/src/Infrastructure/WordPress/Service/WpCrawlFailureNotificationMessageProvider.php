@@ -2,11 +2,10 @@
 declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Baywall\Core\Application\Service\CrawlFailureNotificationMessageProvider;
+use Baywall\Core\Application\Port\CrawlFailureNotificationMessageProvider;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
 class WpCrawlFailureNotificationMessageProvider implements CrawlFailureNotificationMessageProvider {
-
 	/** @inheritdoc */
 	public function title(): string {
 		return __( 'baywall: RPC URL failure detected', 'baywall' );

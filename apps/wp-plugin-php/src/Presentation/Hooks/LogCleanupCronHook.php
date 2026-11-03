@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Application\Exception\LockAcquisitionException;
-use Baywall\Core\Application\Service\Clock;
-use Baywall\Core\Application\Service\LockService;
+use Baywall\Core\Application\Port\Clock;
+use Baywall\Core\Application\Port\LockService;
 use Baywall\Core\Application\UseCase\CleanupOldLogs;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;

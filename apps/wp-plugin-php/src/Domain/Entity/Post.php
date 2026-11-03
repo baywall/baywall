@@ -11,7 +11,6 @@ use Baywall\Core\Domain\ValueObject\Price;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
 class Post {
-
 	public function __construct(
 		private readonly PostId $post_id,
 		private ?PaidContent $paid_content,
@@ -20,22 +19,26 @@ class Post {
 		private ?Symbol $selling_symbol
 	) {}
 
-
 	public function id(): PostId {
 		return $this->post_id;
 	}
+
 	public function paidContent(): ?PaidContent {
 		return $this->paid_content;
 	}
+
 	public function sellingNetworkCategoryId(): ?NetworkCategoryId {
 		return $this->selling_network_category_id;
 	}
+
 	public function sellingAmount(): ?Amount {
 		return $this->selling_amount;
 	}
+
 	public function sellingSymbol(): ?Symbol {
 		return $this->selling_symbol;
 	}
+
 	public function sellingPrice(): ?Price {
 		if ( $this->selling_amount && $this->selling_symbol ) {
 			return Price::from( $this->selling_amount, $this->selling_symbol );

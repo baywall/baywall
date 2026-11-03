@@ -30,9 +30,7 @@ class PriceExchangeService {
 	/** レート変換不可 */
 	private const EXCHANGE_METHOD_UNSUPPORTED = 'unsupported';
 
-
 	public function __construct( private readonly RateProvider $rate_provider ) {}
-
 
 	/** 指定された通貨ペアが交換可能かどうかを取得します */
 	public function exchangeable( Price $price, Symbol $to_symbol ): bool {

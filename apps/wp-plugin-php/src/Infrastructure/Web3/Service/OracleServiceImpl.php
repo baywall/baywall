@@ -18,7 +18,6 @@ use Baywall\Core\Infrastructure\Web3\Client\RpcTransport;
 use phpseclib4\Math\BigInteger;
 
 class OracleServiceImpl implements OracleService {
-
 	/** テストでトランスポートを差し替えられるようにする（省略時は `HttpRpcTransport`） */
 	public function __construct( private readonly ?RpcTransport $rpc_transport = null ) {}
 
@@ -59,13 +58,15 @@ class OracleServiceImpl implements OracleService {
 
 	/**
 	 * `description`（登録書式: `BASE/QUOTE`）から通貨ペアを導出します。
-	 * 登録経路（`ResolveSaveOracle`）と同じ書式処理で、先頭 2 セグメント（`[0]` = base、`[1]` = quote）を使用し、
+	 * 登録経路（`SaveOracle`）と同じ書式処理で、先頭 2 セグメント（`[0]` = base、`[1]` = quote）を使用し、
 	 * 余剰セグメントは無視します。導出不能時は保険として例外で失敗させます（登録経路で到達しない経路）。
 	 */
 	public function symbolPair( RpcUrl $rpc_url, Address $address ): SymbolPair {
 		$description = $this->description( $rpc_url, $address );
 		$symbols     = array_map( 'trim', explode( '/', $description ) );
 
+		// 保険として [0] も `?? ''` でフォールバックし、下のチェックで例外に倒す（[1] と同一の形に揃える）
+		// @phpstan-ignore nullCoalesce.offset
 		$base_symbol  = $symbols[0] ?? '';
 		$quote_symbol = $symbols[1] ?? '';
 		if ( ! $base_symbol || ! $quote_symbol || ! in_array( $quote_symbol, array( 'USD', 'ETH' ), true ) ) {

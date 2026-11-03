@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * ネットワークカテゴリを表すクラス
  */
 final readonly class NetworkCategory implements ValueObject {
-
 	private function __construct( NetworkCategoryId $network_category_id, string $name ) {
 		$this->id   = $network_category_id;
 		$this->name = $name;

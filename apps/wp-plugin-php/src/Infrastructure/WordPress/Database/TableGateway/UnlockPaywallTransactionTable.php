@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Baywall\Core\Application\Service\Clock;
+use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Domain\ValueObject\BlockHash;
 use Baywall\Core\Domain\ValueObject\BlockNumber;

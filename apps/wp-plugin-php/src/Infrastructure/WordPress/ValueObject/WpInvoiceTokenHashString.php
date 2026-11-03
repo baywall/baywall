@@ -9,15 +9,19 @@ use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 readonly class WpInvoiceTokenHashString extends SecureStringValueObject {
 	private const HASH_ALGORITHM = 'sha256';
 
+	/** 入力トークン・生成ハッシュ双方が同一形式（`<17桁数字>.<sha256の小文字hex>`） */
+	private const TOKEN_VALUE_PATTERN = '/^\d{17}\.[0-9a-f]{64}$/';
+
 	private function __construct( string $wp_invoice_token_hash_value ) {
 		parent::__construct( $wp_invoice_token_hash_value );
 		self::checkWpInvoiceTokenHashFormat( $wp_invoice_token_hash_value );
 	}
 
 	public static function from( InvoiceTokenString $invoice_token_string ): self {
-		assert( WpInvoiceTokenString::from( $invoice_token_string->value() ) instanceof WpInvoiceTokenString, '[81339409]' );
-		// WpInvoiceTokenStringのフォーマット変更があった場合に気づけるようにassert文を追加
-		assert( preg_match( '/^\d{17}\.[0-9a-f]{64}$/', $invoice_token_string->value() ) === 1, '[EA028F00]' );
+		// 外部入力がそのまま届くため合成前に形式を実検証する（`assert` は `zend.assertions=-1` で評価されないため使わない）
+		if ( preg_match( self::TOKEN_VALUE_PATTERN, $invoice_token_string->value() ) !== 1 ) {
+			throw new \InvalidArgumentException( '[EA028F00] Invalid invoice token format: ' . $invoice_token_string->value() );
+		}
 
 		$parts           = explode( '.', $invoice_token_string->value() );
 		$timestamp_text  = $parts[0];
@@ -35,7 +39,7 @@ readonly class WpInvoiceTokenHashString extends SecureStringValueObject {
 	 * 結果的に`WpInvoiceTokenString`と同じチェックだが、一応別扱い
 	 */
 	private static function checkWpInvoiceTokenHashFormat( string $wp_invoice_token_hash_value ): void {
-		if ( ! preg_match( '/^\d{17}\.[0-9a-f]{64}$/', $wp_invoice_token_hash_value ) ) {
+		if ( ! preg_match( self::TOKEN_VALUE_PATTERN, $wp_invoice_token_hash_value ) ) {
 			throw new \InvalidArgumentException( '[56389772] Invalid invoice token hash format: ' . $wp_invoice_token_hash_value );
 		}
 	}

@@ -7,7 +7,6 @@ use Baywall\Core\Infrastructure\WordPress\Database\Record\Base\RecordBase;
 use stdClass;
 
 class SalesHistoryViewRecord extends RecordBase {
-
 	public function __construct( stdClass $record ) {
 		$record->chain_id               = (int) $record->chain_id;
 		$record->block_number           = (int) $record->block_number;

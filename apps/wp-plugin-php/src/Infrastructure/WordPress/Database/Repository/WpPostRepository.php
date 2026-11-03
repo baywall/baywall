@@ -11,12 +11,9 @@ use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Domain\ValueObject\Symbol;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
-use Baywall\Core\Infrastructure\WordPress\Database\Record\PaidContentTableRecord;
 
 class WpPostRepository implements PostRepository {
-
 	public function __construct( private readonly PaidContentTable $paid_content_table ) {}
-
 
 	/** @inheritdoc */
 	public function get( PostId $post_id ): Post {
@@ -28,7 +25,17 @@ class WpPostRepository implements PostRepository {
 		// テーブルから有料記事情報を取得
 		$record = $this->paid_content_table->select( $post_id );
 
-		return $record ? new PostImpl( $record ) : new Post( $post_id, null, null, null, null );
+		if ( null === $record ) {
+			return new Post( $post_id, null, null, null, null );
+		}
+
+		return new Post(
+			PostId::from( $record->postIdValue() ),
+			PaidContent::from( $record->paidContentValue() ),
+			NetworkCategoryId::fromNullable( $record->sellingNetworkCategoryIdValue() ),
+			Amount::fromNullable( $record->sellingAmountValue() ),
+			Symbol::fromNullable( $record->sellingSymbolValue() )
+		);
 	}
 
 	/** @inheritdoc */
@@ -52,19 +59,5 @@ class WpPostRepository implements PostRepository {
 				$post->sellingSymbol(),
 			);
 		}
-	}
-}
-
-/** @internal */
-class PostImpl extends Post {
-
-	public function __construct( PaidContentTableRecord $record ) {
-		parent::__construct(
-			PostId::from( $record->postIdValue() ),
-			PaidContent::from( $record->paidContentValue() ),
-			NetworkCategoryId::fromNullable( $record->sellingNetworkCategoryIdValue() ),
-			Amount::fromNullable( $record->sellingAmountValue() ),
-			Symbol::fromNullable( $record->sellingSymbolValue() ),
-		);
 	}
 }

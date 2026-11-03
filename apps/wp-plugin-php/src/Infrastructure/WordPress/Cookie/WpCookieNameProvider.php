@@ -11,7 +11,6 @@ class WpCookieNameProvider implements CookieNameProvider {
 
 	private const SECURE_PREFIX = '__Secure-';
 
-
 	public function __construct( private readonly WordPressPropertyProvider $wordpress_property_provider ) {}
 
 	/** @inheritdoc */

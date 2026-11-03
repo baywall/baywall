@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
 class WpPluginAssetUrlProvider {
-
 	public function __construct( private readonly WpPluginInfoProvider $plugin_info_provider ) {}
 
 	/** 指定された相対パスをURLに変換します。 */

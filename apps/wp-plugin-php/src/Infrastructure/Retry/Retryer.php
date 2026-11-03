@@ -9,6 +9,7 @@ class Retryer {
 	 *
 	 * @param callable $callable
 	 * @param int[]    $intervals_ms
+	 * @return mixed
 	 */
 	public function execute( callable $callable, array $intervals_ms ) {
 		// $intervalsの要素が0の場合は即座に実行
@@ -31,13 +32,3 @@ class Retryer {
 		}
 	}
 }
-
-/*
-動作確認用コード
-$ret = (new Retryer())->execute(function () {
-	echo date("Y-m-d H:i:s") . "\n";
-	throw new \Exception("test");
-	// return 123;
-}, [1000, 2000, 4000]);
-echo "ret: " . var_export($ret, true) . "\n";
-// */

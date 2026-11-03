@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Baywall\Core\Application\Service\Clock;
+use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Application\Logging\ValueObject\LogCategory;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
@@ -61,7 +61,7 @@ class LogTable {
 	 * 最近のログレコードを取得します。
 	 *
 	 * @param int $limit 取得件数の上限
-	 * @return array ログレコードの連想配列
+	 * @return list<array<string, mixed>> ログレコードの連想配列
 	 */
 	public function selectRecent( int $limit ): array {
 		$sql = $this->wpdb->named_prepare(

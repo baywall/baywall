@@ -8,7 +8,6 @@ use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Domain\ValueObject\Confirmations;
 
 class ConfirmationsSpecification {
-
 	/**
 	 * トランザクションが確認済みかどうかを判定します
 	 *

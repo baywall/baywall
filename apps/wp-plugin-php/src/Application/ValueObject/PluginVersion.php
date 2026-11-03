@@ -7,7 +7,6 @@ namespace Baywall\Core\Application\ValueObject;
  * プラグインバージョンを表す値オブジェクト
  */
 readonly class PluginVersion extends SemVer {
-
 	public function __construct( string $plugin_version ) {
 		parent::__construct( $plugin_version );
 	}

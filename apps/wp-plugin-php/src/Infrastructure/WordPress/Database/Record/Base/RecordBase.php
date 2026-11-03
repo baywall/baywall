@@ -11,9 +11,10 @@ abstract class RecordBase {
 	 * ※ フィールドにアクセスできるように子クラスのフィールドはpublicまたはprotectedで定義してください。
 	 *
 	 * @param stdClass $record テーブルから取得したレコード
+	 * @return void
 	 */
 	protected function import( stdClass $record ) {
-		foreach ( $record as $property => $value ) {
+		foreach ( get_object_vars( $record ) as $property => $value ) {
 			assert( property_exists( $this, $property ), '[F72ED81D] Invalid property: ' . $property );
 			$this->{$property} = $value;
 		}

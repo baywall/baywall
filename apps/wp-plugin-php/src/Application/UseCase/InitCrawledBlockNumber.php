@@ -23,7 +23,6 @@ class InitCrawledBlockNumber {
 		private readonly BlockchainService $blockchain_service
 	) {}
 
-
 	public function handle( int $chain_id_value ): void {
 		$chain_id = ChainId::from( $chain_id_value );
 

@@ -7,7 +7,6 @@ use Baywall\Core\Domain\Entity\ServerSigner;
 use Baywall\Core\Domain\ValueObject\Address;
 
 interface ServerSignerRepository {
-
 	/** 署名用ウォレットを取得します */
 	public function get(): ServerSigner;
 

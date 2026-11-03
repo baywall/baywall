@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\Web3\Service;
 
+use Baywall\Core\Application\Port\NativeTokenProvider;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Decimals;
 use Baywall\Core\Domain\ValueObject\Symbol;
 use Baywall\Core\Infrastructure\Web3\Constants\NativeTokenConstants;
 
-class NativeTokenService {
+class NativeTokenService implements NativeTokenProvider {
 	/** 指定したチェーンのネイティブトークンシンボルを取得します (例: ETH) */
 	public function getSymbol( ChainId $chain_id ): Symbol {
 		$symbol_value = NativeTokenConstants::DEFINITIONS[ $chain_id->value() ]['symbol'] ?? null;

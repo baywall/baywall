@@ -4,45 +4,36 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Application\UseCase\GetAppContract;
+use Baywall\Core\Application\UseCase\GetChain;
+use Baywall\Core\Application\UseCase\GetTokens;
 use Baywall\Core\Domain\Entity\Token;
-use Baywall\Core\Domain\Repository\AppContractRepository;
-use Baywall\Core\Domain\Repository\ChainRepository;
-use Baywall\Core\Domain\Repository\TokenRepository;
-use Baywall\Core\Domain\Specification\TokensSpecification;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
 class ResolveChain implements Resolver {
-
-
 	public function __construct(
 		private readonly UserAccessChecker $user_access_checker,
-		private readonly ChainRepository $chain_repository,
-		private readonly TokenRepository $token_repository,
-		private readonly AppContractRepository $app_contract_repository
+		private readonly GetChain $get_chain,
+		private readonly GetAppContract $get_app_contract,
+		private readonly GetTokens $get_tokens
 	) {}
 
+	/** @return array<string, mixed> */
 	public function handle( array $root_value, array $args ) {
 		$chain_id = ChainId::from( $args['chainId'] );
 
-		$chain = $this->chain_repository->get( $chain_id );
-		if ( null === $chain ) {
-			throw new \InvalidArgumentException( "[CA31D9B5] chain data is not found. chain id: {$chain_id}" );
-		}
+		$chain = $this->get_chain->handle( $chain_id );
+
 		// `AppContractResolver`の作成を省略してコールバックを定義
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
 		$app_contract_callback = function () use ( $chain ) {
 			// 権限チェック不要
-			$app_contract = $this->app_contract_repository->get( $chain->id() );
+			$app_contract = $this->get_app_contract->handle( $chain->id() );
 			return $app_contract === null ? null : array( 'address' => $app_contract->address()->value() );
 		};
 
 		$tokens_callback = function () use ( $root_value, $chain_id ) {
-			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
-
-			$filtered_tokens = array_filter(
-				$this->token_repository->all(),
-				( new TokensSpecification( chain_id: $chain_id ) )->isSatisfiedBy( ... )
-			);
+			$filtered_tokens = $this->get_tokens->handle( $chain_id, null );
 
 			return array_map(
 				fn( Token $token ) => $root_value['token'](

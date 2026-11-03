@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Baywall\Core\Application\Repository;
 
 interface PurgeOnUninstallRepository {
-
 	/** アンインストール時にデータを完全削除するかどうかを取得します */
 	public function get(): bool;
 

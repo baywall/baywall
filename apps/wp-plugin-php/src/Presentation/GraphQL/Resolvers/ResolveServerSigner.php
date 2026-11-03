@@ -3,19 +3,16 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
-use Baywall\Core\Domain\Repository\ServerSignerRepository;
+use Baywall\Core\Application\UseCase\GetServerSigner;
 
 class ResolveServerSigner implements Resolver {
+	public function __construct( private readonly GetServerSigner $get_server_signer ) {}
 
-
-	public function __construct( private readonly ServerSignerRepository $server_signer_repository ) {}
-
+	/** @return array<string, mixed> */
 	public function handle( array $root_value, array $args ) {
 
-		$address = $this->server_signer_repository->getAddress()->value();
-
 		return array(
-			'address' => $address,
+			'address' => $this->get_server_signer->handle()->value(),
 		);
 	}
 }

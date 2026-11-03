@@ -46,7 +46,7 @@ class EnsResolverClient {
  * @internal
  */
 class EnsResolverAbi {
-
+	/** @return list<array<string, mixed>> */
 	public function get(): array {
 		$abi_json = <<<JSON
 		{

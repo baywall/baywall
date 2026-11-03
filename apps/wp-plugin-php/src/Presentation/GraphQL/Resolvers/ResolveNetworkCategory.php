@@ -3,35 +3,27 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
-use Baywall\Core\Application\Service\UserAccessChecker;
-use Baywall\Core\Domain\Repository\ChainRepository;
-use Baywall\Core\Domain\Repository\NetworkCategoryRepository;
-use Baywall\Core\Domain\Service\SellableSymbolsProvider;
-use Baywall\Core\Domain\Specification\ChainsSpecification;
+use Baywall\Core\Application\UseCase\GetChains;
+use Baywall\Core\Application\UseCase\GetNetworkCategory;
+use Baywall\Core\Application\UseCase\GetSellableSymbols;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 
 class ResolveNetworkCategory implements Resolver {
-
-
 	public function __construct(
-		private readonly UserAccessChecker $user_access_checker,
-		private readonly ChainRepository $chain_repository,
-		private readonly NetworkCategoryRepository $network_category_repository,
-		private readonly SellableSymbolsProvider $sellable_symbols_provider
+		private readonly GetNetworkCategory $get_network_category,
+		private readonly GetChains $get_chains,
+		private readonly GetSellableSymbols $get_sellable_symbols
 	) {}
 
+	/** @return array<string, mixed> */
 	public function handle( array $root_value, array $args ): array {
 
 		$network_category_id = NetworkCategoryId::from( $args['networkCategoryId'] );
+		$network_category    = $this->get_network_category->handle( $network_category_id );
 
 		$chains_callback = function () use ( $root_value, $network_category_id ) {
-			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
-
 			// ネットワークカテゴリで絞り込んだチェーン一覧を取得
-			$chains = array_filter(
-				$this->chain_repository->all(),
-				( new ChainsSpecification( network_category_id: $network_category_id ) )->isSatisfiedBy( ... )
-			);
+			$chains = $this->get_chains->handle( null, $network_category_id, null );
 
 			return array_map(
 				function ( $chain ) use ( $root_value ) {
@@ -43,17 +35,15 @@ class ResolveNetworkCategory implements Resolver {
 
 		// 対象のネットワークカテゴリで販売可能なシンボル一覧を取得
 		$sellable_symbols_callback = function () use ( $network_category_id ) {
-			$this->user_access_checker->checkCanCreatePost();   // 投稿を新規作成できる権限が必要
-
 			return array_map(
 				fn( $symbol ) => $symbol->value(),
-				$this->sellable_symbols_provider->sellableSymbols( $network_category_id ),
+				$this->get_sellable_symbols->handle( $network_category_id ),
 			);
 		};
 
 		return array(
-			'id'              => $network_category_id->value(),
-			'name'            => $this->network_category_repository->get( $network_category_id )->name(),
+			'id'              => $network_category->id()->value(),
+			'name'            => $network_category->name(),
 			'chains'          => $chains_callback,
 			'sellableSymbols' => $sellable_symbols_callback,
 		);

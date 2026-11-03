@@ -12,7 +12,6 @@ use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
 
 class AdminPageHook extends HookBase {
-
 	/**
 	 * @param \Closure(): I18nTextProvider         $i18n_text_provider
 	 * @param \Closure(): SlugProvider             $slug_provider

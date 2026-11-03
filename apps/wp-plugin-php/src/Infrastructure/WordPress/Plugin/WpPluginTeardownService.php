@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
 use Baywall\Core\Application\Repository\PurgeOnUninstallRepository;
-use Baywall\Core\Application\Service\PluginTeardownService;
+use Baywall\Core\Application\Port\PluginTeardownService;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpTableCoreName;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpTransientName;
@@ -12,8 +12,6 @@ use wpdb;
 
 /** WordPressからプラグインが削除される際のクリーンアップ処理を行うクラス */
 class WpPluginTeardownService implements PluginTeardownService {
-
-
 	public function __construct(
 		private readonly wpdb $wpdb,
 		private readonly PurgeOnUninstallRepository $purge_on_uninstall_repository

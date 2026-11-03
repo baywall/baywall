@@ -6,7 +6,6 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Domain\ValueObject\Base\SecureStringValueObject;
 
 readonly class PrivateKey extends SecureStringValueObject {
-
 	/** @disregard P1009 Undefined type */
 	private function __construct(
 		#[\SensitiveParameter]

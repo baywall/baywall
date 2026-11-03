@@ -13,9 +13,7 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\OracleTable;
 use Baywall\Core\Infrastructure\WordPress\Database\Record\OracleTableRecord;
 
 class WpOracleRepository implements OracleRepository {
-
 	public function __construct( private readonly OracleTable $oracle_table ) {}
-
 
 	/**
 	 * Repositoryに存在するOracle一覧を取得します。
@@ -24,7 +22,14 @@ class WpOracleRepository implements OracleRepository {
 	 */
 	public function all(): array {
 		return array_map(
-			fn( OracleTableRecord $record ) => new OracleImpl( $record ),
+			fn( OracleTableRecord $record ) => new Oracle(
+				ChainId::from( $record->chainIdValue() ),
+				Address::from( $record->addressValue() ),
+				SymbolPair::from(
+					Symbol::from( $record->baseSymbolValue() ),
+					Symbol::from( $record->quoteSymbolValue() )
+				)
+			),
 			$this->oracle_table->all()
 		);
 	}
@@ -32,19 +37,5 @@ class WpOracleRepository implements OracleRepository {
 	/** @inheritdoc */
 	public function save( Oracle $oracle ): void {
 		$this->oracle_table->save( $oracle );
-	}
-}
-
-/** @internal */
-readonly class OracleImpl extends Oracle {
-	public function __construct( OracleTableRecord $oracle_record ) {
-		parent::__construct(
-			ChainId::from( $oracle_record->chainIdValue() ),
-			Address::from( $oracle_record->addressValue() ),
-			SymbolPair::from(
-				Symbol::from( $oracle_record->baseSymbolValue() ),
-				Symbol::from( $oracle_record->quoteSymbolValue() )
-			)
-		);
 	}
 }

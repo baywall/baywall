@@ -3,45 +3,43 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\Web3\Constants;
 
-use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants as CHAIN_ID;
-
 /** ネイティブトークンの定義 */
 final class NativeTokenConstants {
 	// 定義を追加する場合、ここから情報を取得すると良い
 	// https://chainlistapi.com/chains/1
 
 	public const DEFINITIONS = array(
-		CHAIN_ID::ETHEREUM     => array(
+		ChainIdConstants::ETHEREUM     => array(
 			'symbol'   => 'ETH',
 			'decimals' => 18,
 			'name'     => 'Ether',
 		),
-		CHAIN_ID::BASE         => array(
+		ChainIdConstants::BASE         => array(
 			'symbol'   => 'ETH',
 			'decimals' => 18,
 			'name'     => 'Ether',
 		),
-		CHAIN_ID::POLYGON_POS  => array(
+		ChainIdConstants::POLYGON_POS  => array(
 			'symbol'   => 'POL',
 			'decimals' => 18,
 			'name'     => 'POL',
 		),
-		CHAIN_ID::SEPOLIA      => array(
+		ChainIdConstants::SEPOLIA      => array(
 			'symbol'   => 'ETH',
 			'decimals' => 18,
 			'name'     => 'Ether',
 		),
-		CHAIN_ID::BASE_SEPOLIA => array(
+		ChainIdConstants::BASE_SEPOLIA => array(
 			'symbol'   => 'ETH',
 			'decimals' => 18,
 			'name'     => 'Ether',
 		),
-		CHAIN_ID::POLYGON_AMOY => array(
+		ChainIdConstants::POLYGON_AMOY => array(
 			'symbol'   => 'POL',
 			'decimals' => 18,
 			'name'     => 'POL',
 		),
-		CHAIN_ID::PRIVATENET1  => array(
+		ChainIdConstants::PRIVATENET1  => array(
 			'symbol'   => 'ETH',
 			'decimals' => 18,
 			'name'     => 'Ether',

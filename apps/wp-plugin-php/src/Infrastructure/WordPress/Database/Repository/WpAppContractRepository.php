@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
 use Baywall\Core\Domain\Entity\AppContract;
-use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\Repository\AppContractRepository;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\ValueObject\Address;
@@ -23,22 +22,17 @@ class WpAppContractRepository implements AppContractRepository {
 		$records = $this->app_contract_table->all();
 		$records = array_filter(
 			$records,
-			fn( $record ) => $record->chainIdValue() === $chain_id->value()
+			fn( AppContractTableRecord $record ) => $record->chainIdValue() === $chain_id->value()
 		);
 		assert( count( $records ) <= 1, '[68E05B97] should return at most one record. - ' . count( $records ) );
 
-		return empty( $records ) ? null : new AppContractImpl(
-			$this->chain_repository->get( $chain_id ),
-			array_values( $records )[0]
-		);
-	}
-}
+		$record = array_values( $records )[0] ?? null;
+		if ( null === $record ) {
+			return null;
+		}
 
-/** @internal */
-readonly class AppContractImpl extends AppContract {
-	public function __construct( Chain $chain, AppContractTableRecord $record ) {
-		parent::__construct(
-			$chain,
+		return new AppContract(
+			$this->chain_repository->get( $chain_id ),
 			Address::from( $record->addressValue() )
 		);
 	}

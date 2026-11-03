@@ -8,14 +8,8 @@ use Baywall\Core\Domain\ValueObject\RefreshTokenString;
 use DateTimeImmutable;
 
 readonly class WpRefreshTokenString extends RefreshTokenString {
-
 	private function __construct( string $wp_refresh_token_value ) {
 		parent::__construct( $wp_refresh_token_value );
-		self::checkWpRefreshTokenFormat( $wp_refresh_token_value );
-	}
-
-	public static function from( string $wp_refresh_token_value ): self {
-		return new self( $wp_refresh_token_value );
 	}
 
 	/**
@@ -37,12 +31,5 @@ readonly class WpRefreshTokenString extends RefreshTokenString {
 			. str_replace( '0x', '', $random_bytes->hex()->value() );
 
 		return new self( $token_value );
-	}
-
-	/** WordPress環境で使用するリフレッシュトークンのフォーマットチェック */
-	private static function checkWpRefreshTokenFormat( string $wp_refresh_token_value ): void {
-		if ( ! preg_match( '/^\d{17}\.[0-9a-f]{64}$/', $wp_refresh_token_value ) ) {
-			throw new \InvalidArgumentException( '[4202FE76] Invalid refresh token format: ' . $wp_refresh_token_value );
-		}
 	}
 }

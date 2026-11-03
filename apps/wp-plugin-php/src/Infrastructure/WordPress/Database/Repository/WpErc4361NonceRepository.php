@@ -11,8 +11,6 @@ use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\Erc4361NonceTable;
 
 class WpErc4361NonceRepository implements Erc4361NonceRepository {
-
-
 	public function __construct( private Erc4361NonceTable $erc4361_nonce_table ) {}
 
 	/** @inheritDoc */

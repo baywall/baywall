@@ -10,7 +10,6 @@ namespace Baywall\Core\Domain\Repository;
  * - サイト所有者がなにらかしらの理由でサイト全体で購入を制限する場合に使用します
  */
 interface PausedRepository {
-
 	/** 一時停止状態を取得します */
 	public function get(): bool;
 

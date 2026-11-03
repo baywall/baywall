@@ -11,6 +11,8 @@ readonly class UnlockPaywallTransferType implements ValueObject {
 	/** 販売手数料 */
 	private const HANDLING_FEE = 1;
 	/** 販売者の売上 */
+	// コントラクトの enum との対応表を構成するため未使用でも残す
+	// @phpstan-ignore classConstant.unused
 	private const SELLER_PROFIT = 2;
 	/** アフィリエイト報酬 */
 	private const AFFILIATE_REWARD = 3;

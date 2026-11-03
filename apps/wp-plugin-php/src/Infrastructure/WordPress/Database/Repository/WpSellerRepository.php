@@ -11,8 +11,6 @@ use Baywall\Core\Domain\ValueObject\SigningMessage;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\SellerTable;
 
 class WpSellerRepository implements SellerRepository {
-
-
 	public function __construct( private readonly SellerTable $seller_table ) {}
 
 	public function get(): ?Seller {

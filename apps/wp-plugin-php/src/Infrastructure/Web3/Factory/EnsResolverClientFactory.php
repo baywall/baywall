@@ -8,7 +8,6 @@ use Baywall\Core\Domain\ValueObject\RpcUrl;
 use Baywall\Core\Infrastructure\Web3\Client\EnsResolverClient;
 
 class EnsResolverClientFactory {
-
 	/**
 	 * 指定した RPC エンドポイントと Resolver アドレスに接続する ENS Resolver クライアントを生成します。
 	 *

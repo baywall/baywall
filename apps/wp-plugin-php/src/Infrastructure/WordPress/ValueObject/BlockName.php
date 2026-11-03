@@ -7,11 +7,11 @@ namespace Baywall\Core\Infrastructure\WordPress\ValueObject;
  * Gutenbergのブロック名を表す値オブジェクト
  */
 readonly class BlockName {
-
 	private function __construct( string $block_name_value ) {
 		$this->checkBlockNameValue( $block_name_value );
 		$this->block_name_value = $block_name_value;
 	}
+
 	private readonly string $block_name_value;
 
 	public function value(): string {

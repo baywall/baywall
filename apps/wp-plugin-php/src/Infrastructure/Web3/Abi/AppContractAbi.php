@@ -22,9 +22,10 @@ class AppContractAbi extends AbiBase {
 
 	private const EVENT_NAME_UNLOCK_PAYWALL_TRANSFER = 'UnlockPaywallTransfer';
 
-	/** @var array|null */
+	/** @var list<array<string, mixed>>|null */
 	private $abi_cache = null;
 
+	/** @return list<array<string, mixed>> */
 	public function get(): array {
 		if ( $this->abi_cache === null ) {
 			$this->abi_cache = AppContractAbiData::get();
@@ -70,6 +71,7 @@ class AppContractAbi extends AbiBase {
 
 
 class AppContractAbiData {
+	/** @return list<array<string, mixed>> */
 	public static function get(): array {
 		$abi_json = <<<JSON
 			{

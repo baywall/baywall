@@ -4,12 +4,13 @@ declare(strict_types=1);
 namespace Baywall\Core\Application\UseCase;
 
 use Baywall\Core\Application\Logging\AppLogger;
-use Baywall\Core\Application\Service\AccessTokenCookieProvider;
-use Baywall\Core\Application\Service\Clock;
-use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
+use Baywall\Core\Application\Port\AccessTokenCookieProvider;
+use Baywall\Core\Application\Port\Clock;
+use Baywall\Core\Application\Port\RefreshTokenCookieProvider;
+use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\ValueObject\RefreshTokenString;
-use Baywall\Core\Application\Service\CookieWriter;
+use Baywall\Core\Application\Port\CookieWriter;
 
 /**
  * ログアウト処理を行います。
@@ -18,8 +19,6 @@ use Baywall\Core\Application\Service\CookieWriter;
  * refresh token が不在の場合も Cookie 失効処理は実行します（冪等）。
  */
 class LogoutAuth {
-
-
 	public function __construct(
 		private readonly AppLogger $app_logger,
 		private readonly RefreshTokenService $refresh_token_service,
@@ -39,7 +38,11 @@ class LogoutAuth {
 
 		// リフレッシュトークンが存在する場合は無効化
 		if ( $refresh_token_value !== null ) {
-			$this->refresh_token_service->revoke( RefreshTokenString::from( $refresh_token_value ), $now );
+			try {
+				$this->refresh_token_service->revoke( RefreshTokenString::from( $refresh_token_value ), $now );
+			} catch ( \InvalidArgumentException | AuthenticationFailedException $e ) {
+				$this->app_logger->debug( $e );
+			}
 		}
 
 		// リフレッシュトークン Cookie を期限切れにする

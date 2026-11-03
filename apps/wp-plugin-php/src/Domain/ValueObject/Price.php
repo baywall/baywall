@@ -11,7 +11,6 @@ readonly class Price implements ValueObject {
 		private readonly Symbol $symbol
 	) {}
 
-
 	/**
 	 * 金額の数量を取得します。
 	 */

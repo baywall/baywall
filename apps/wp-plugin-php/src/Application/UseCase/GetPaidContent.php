@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Baywall\Core\Application\UseCase;
 
 use Baywall\Core\Application\Logging\AppLogger;
-use Baywall\Core\Application\Service\AccessTokenRequestProvider;
+use Baywall\Core\Application\Port\AccessTokenRequestProvider;
 use Baywall\Core\Application\Service\AccessTokenService;
 use Baywall\Core\Application\Service\AppContractCrawlService;
 use Baywall\Core\Application\Service\ConfirmationsService;
-use Baywall\Core\Application\Service\SalesHistoryQueryService;
+use Baywall\Core\Application\Port\SalesHistoryQueryService;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Application\ValueObject\AccessToken;
 use Baywall\Core\Domain\Entity\Invoice;
@@ -22,8 +22,6 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class GetPaidContent {
-
-
 	public function __construct(
 		private readonly AppLogger $logger,
 		private readonly UserAccessChecker $user_access_checker,

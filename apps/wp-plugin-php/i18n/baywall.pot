@@ -47,12 +47,12 @@ msgstr "Testnet"
 msgid "Privatenet"
 msgstr "Privatenet"
 
-#: src/Infrastructure/WordPress/Service/WpCrawlFailureNotificationMessageProvider.php:12
+#: src/Infrastructure/WordPress/Service/WpCrawlFailureNotificationMessageProvider.php:11
 msgid "baywall: RPC URL failure detected"
 msgstr ""
 
 #. translators: 1: chain name, 2: chain ID, 3: site URL
-#: src/Infrastructure/WordPress/Service/WpCrawlFailureNotificationMessageProvider.php:19
+#: src/Infrastructure/WordPress/Service/WpCrawlFailureNotificationMessageProvider.php:18
 #, php-format
 msgid ""
 "Site: %3$s\n"
@@ -60,7 +60,20 @@ msgid ""
 "Please update the RPC URL for this chain."
 msgstr ""
 
-#: src/Presentation/Hooks/PluginRowMetaHook.php:67
-#: src/Presentation/Hooks/PluginRowMetaHook.php:73
+#: src/Presentation/Hooks/PluginRowMetaHook.php:69
 msgid "To enable automatic updates, you need to register an RPC URL for Ethereum Mainnet."
+msgstr ""
+
+#: src/Infrastructure/WordPress/Service/WpSellerWalletChangeNotificationMessageProvider.php:11
+msgid "baywall: Seller wallet address changed"
+msgstr ""
+
+#. translators: 1: previous address, 2: new address, 3: site URL
+#: src/Infrastructure/WordPress/Service/WpSellerWalletChangeNotificationMessageProvider.php:18
+#, php-format
+msgid ""
+"Site: %3$s\n"
+"The seller wallet address has been changed.\n"
+"Old: %1$s\n"
+"New: %2$s"
 msgstr ""

@@ -6,7 +6,6 @@ namespace Baywall\Core\Infrastructure\WordPress\Content;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 
 class HandleNameProvider {
-
 	public function blockScript(): string {
 		return WpConfig::HANDLE_NAME_BLOCK_SCRIPT;
 	}

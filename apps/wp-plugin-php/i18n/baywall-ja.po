@@ -47,12 +47,12 @@ msgstr "Testnet"
 msgid "Privatenet"
 msgstr "Privatenet"
 
-#: src/Infrastructure/WordPress/Service/WpCrawlFailureNotificationMessageProvider.php:12
+#: src/Infrastructure/WordPress/Service/WpCrawlFailureNotificationMessageProvider.php:11
 msgid "baywall: RPC URL failure detected"
 msgstr "【baywall】RPC URL 不具合検知"
 
 #. translators: 1: chain name, 2: chain ID, 3: site URL
-#: src/Infrastructure/WordPress/Service/WpCrawlFailureNotificationMessageProvider.php:19
+#: src/Infrastructure/WordPress/Service/WpCrawlFailureNotificationMessageProvider.php:18
 #, php-format
 msgid ""
 "Site: %3$s\n"
@@ -63,11 +63,28 @@ msgstr ""
 "「%1$s」（Chain ID: %2$d）の接続に失敗しています。\n"
 "当該チェーンの RPC URL を更新してください。"
 
-#: src/Presentation/Hooks/PluginRowMetaHook.php:67
-#: src/Presentation/Hooks/PluginRowMetaHook.php:73
+#: src/Presentation/Hooks/PluginRowMetaHook.php:69
 msgid ""
 "To enable automatic updates, you need to register an RPC URL for Ethereum "
 "Mainnet."
 msgstr ""
 "自動アップデートを有効にするには、Ethereum Mainnet の RPC URL を登録してくだ"
 "さい。"
+
+#: src/Infrastructure/WordPress/Service/WpSellerWalletChangeNotificationMessageProvider.php:11
+msgid "baywall: Seller wallet address changed"
+msgstr "【baywall】販売者ウォレットアドレス変更のお知らせ"
+
+#. translators: 1: previous address, 2: new address, 3: site URL
+#: src/Infrastructure/WordPress/Service/WpSellerWalletChangeNotificationMessageProvider.php:18
+#, php-format
+msgid ""
+"Site: %3$s\n"
+"The seller wallet address has been changed.\n"
+"Old: %1$s\n"
+"New: %2$s"
+msgstr ""
+"サイト: %3$s\n"
+"販売者ウォレットアドレスが変更されました。\n"
+"変更前: %1$s\n"
+"変更後: %2$s"

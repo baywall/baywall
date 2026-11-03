@@ -19,7 +19,6 @@ use Baywall\Core\Constant\Config;
  * 戻り値は「更新ペイロード / `no_update`用ペイロード / null」の3状態を取ります。
  */
 class WpPluginUpdateChecker {
-
 	/**
 	 * 更新可否を判定し、コアが期待する更新情報ペイロード配列を構築します。
 	 *
@@ -27,7 +26,7 @@ class WpPluginUpdateChecker {
 	 * @param string              $installed_version   インストール済みプラグインバージョン
 	 * @param string              $current_wp_version  現在のWordPressバージョン
 	 * @param string              $current_php_version 現在のPHPバージョン
-	 * @return array|null 戻り値は以下の3状態:
+	 * @return array<string, string>|null 戻り値は以下の3状態:
 	 *                    - 更新ペイロード配列（更新あり・要件充足）
 	 *                    - `no_update`用ペイロード配列（更新なし）
 	 *                    - null（更新ありだが要件未達）

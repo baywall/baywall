@@ -3,7 +3,12 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\Service;
 
+use Baywall\Core\Application\Port\AccessTokenExpirationProvider;
+use Baywall\Core\Application\Port\Clock;
+use Baywall\Core\Application\Port\JwtAlgorithmProvider;
+use Baywall\Core\Application\Port\JwtService;
 use Baywall\Core\Application\Repository\JwtSecretKeyRepository;
+use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Application\ValueObject\AccessToken;
 use Baywall\Core\Application\ValueObject\Jwt;
@@ -59,13 +64,19 @@ class AccessTokenService {
 		return $this->decode( $access_token )->walletAddress();
 	}
 
+	/** @throws AuthenticationFailedException トークンの形式不正・署名検証失敗などデコードに失敗した場合 */
 	private function decode( AccessToken $access_token ): JwtPayload {
-		// Jwt型に変換
-		$jwt = Jwt::from( $access_token->value() );
+		// 認証不能は401に統一する。元例外は $previous で保持し、ログから原因を切り分けられるようにする
+		try {
+			// Jwt型に変換
+			$jwt = Jwt::from( $access_token->value() );
 
-		// 署名用の秘密鍵を取得
-		$secret_key = $this->jwt_secret_key_repository->get();
+			// 署名用の秘密鍵を取得
+			$secret_key = $this->jwt_secret_key_repository->get();
 
-		return $this->jwt_service->decode( $jwt, $secret_key );
+			return $this->jwt_service->decode( $jwt, $secret_key );
+		} catch ( \InvalidArgumentException $e ) {
+			throw new AuthenticationFailedException( '[21E94F4F] ' . $e->getMessage(), 0, $e );
+		}
 	}
 }

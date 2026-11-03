@@ -12,10 +12,7 @@ use Baywall\Core\Domain\ValueObject\Decimals;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
 class WpTokenRepository implements TokenRepository {
-
 	public function __construct( private readonly TokenTable $token_table ) {}
-
-
 
 	/** @inheritdoc */
 	public function save( Token $token ): void {
@@ -43,7 +40,7 @@ class WpTokenRepository implements TokenRepository {
 			$this->all(),
 			fn( Token $token ) => $token->chainId()->equals( $chain_id ) && $token->address()->equals( $address )
 		);
-		assert( is_array( $tokens ) && count( $tokens ) <= 1, '[A236DEBB] Expected at most one token for the given chain ID and address.' );
+		assert( count( $tokens ) <= 1, '[A236DEBB] Expected at most one token for the given chain ID and address.' );
 
 		return array_values( $tokens )[0] ?? null;
 	}

@@ -7,7 +7,6 @@ use Baywall\Core\Domain\Entity\AppContract;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
 interface AppContractRepository {
-
 	/** Appコントラクトの情報を取得します */
 	public function get( ChainId $chain_id ): ?AppContract;
 }

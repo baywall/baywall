@@ -26,12 +26,15 @@ class InvoiceTokenTableRecord extends RecordBase {
 	public function invoiceIdValue(): string {
 		return $this->invoice_id;
 	}
+
 	public function invoiceTokenHashValue(): string {
 		return $this->invoice_token_hash;
 	}
+
 	public function expiresAtValue(): int {
 		return $this->expires_at;
 	}
+
 	public function revokedAtValue(): ?int {
 		return $this->revoked_at;
 	}

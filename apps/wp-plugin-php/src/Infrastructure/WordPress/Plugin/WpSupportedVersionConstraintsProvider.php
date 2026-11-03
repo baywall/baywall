@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
-use Baywall\Core\Application\Service\SupportedVersionConstraintsProvider;
+use Baywall\Core\Application\Port\SupportedVersionConstraintsProvider;
 use Composer\Semver\VersionParser;
 
 /**
@@ -15,7 +15,6 @@ use Composer\Semver\VersionParser;
  * - 本クラスはWordPress環境に依存しないため、PHPUnitの標準`TestCase`で直接テスト可能です。
  */
 class WpSupportedVersionConstraintsProvider implements SupportedVersionConstraintsProvider {
-
 	/**
 	 * @param string $wp_versions_json_path  WordPressバージョンの対応定義JSONへのパス
 	 * @param string $php_versions_json_path PHPバージョンの対応定義JSONへのパス

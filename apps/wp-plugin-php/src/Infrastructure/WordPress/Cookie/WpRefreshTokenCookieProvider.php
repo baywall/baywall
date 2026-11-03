@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Cookie;
 
-use Baywall\Core\Application\Service\RefreshTokenCookieProvider;
-use Baywall\Core\Application\Service\Clock;
+use Baywall\Core\Application\Port\RefreshTokenCookieProvider;
+use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Domain\Entity\RefreshToken;
 use Baywall\Core\Domain\Service\CookieNameProvider;
@@ -12,8 +12,6 @@ use Baywall\Core\Application\ValueObject\Cookie;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
 class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
-
-
 	public function __construct(
 		private readonly WordPressPropertyProvider $wordpress_property_provider,
 		private readonly CookieNameProvider $cookie_name_provider,

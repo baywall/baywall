@@ -10,7 +10,6 @@ use Baywall\Core\Application\Repository\LogRepository;
  * 保持期間を超過したログレコードを削除します
  */
 class CleanupOldLogs {
-
 	public function __construct( private readonly LogRepository $log_repository ) {}
 
 	public function handle(): void {

@@ -7,7 +7,6 @@ use Baywall\Core\Domain\ValueObject\RpcUrl;
 use Baywall\Core\Infrastructure\Web3\Client\EnsRegistryClient;
 
 class EnsRegistryClientFactory {
-
 	/**
 	 * 指定した RPC エンドポイントに接続する ENS レジストリクライアントを生成します。
 	 */

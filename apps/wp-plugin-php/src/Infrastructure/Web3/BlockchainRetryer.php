@@ -10,9 +10,11 @@ class BlockchainRetryer {
 	public function __construct() {
 		$this->intervals_ms = Config::BLOCKCHAIN_REQUEST_RETRY_INTERVALS_MS;
 	}
+
 	/** @var int[] */
 	private readonly array $intervals_ms;
 
+	/** @return mixed */
 	public function execute( callable $callback ) {
 		return ( new Retryer() )->execute( $callback, $this->intervals_ms );
 	}

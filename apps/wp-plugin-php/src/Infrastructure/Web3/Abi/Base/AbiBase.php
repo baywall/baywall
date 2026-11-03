@@ -19,6 +19,8 @@ abstract class AbiBase {
 
 	/**
 	 * ABIの定義を取得します。
+	 *
+	 * @return list<array<string, mixed>>
 	 */
 	abstract public function get(): array;
 
@@ -44,7 +46,6 @@ abstract class AbiBase {
 		return $this->topic_hash_cache[ $func_or_event_name ];
 	}
 
-
 	/**
 	 * eth_getLogsで取得したログオブジェクトのイベント名を取得します。
 	 */
@@ -53,7 +54,6 @@ abstract class AbiBase {
 		$log_topic_hash = $log->topics[0];
 
 		// キャッシュに存在する場合はそのまま返す
-		/** @var string|false */
 		$result = array_search( $log_topic_hash, $this->topic_hash_cache, true );
 		if ( is_string( $result ) ) {
 			return $result;
@@ -68,8 +68,7 @@ abstract class AbiBase {
 			}
 		}
 
-		assert( false, "[0FACDB6E] Unknown event name. log_topic_hash: {$log_topic_hash}, log: " . json_encode( $log ) );
-		return null;
+		throw new InvalidArgumentException( "[0FACDB6E] Unknown event name. log_topic_hash: {$log_topic_hash}, log: " . json_encode( $log ) );
 	}
 
 	/**
@@ -83,8 +82,7 @@ abstract class AbiBase {
 	protected function decodeEventParameters( stdClass $log ): ?array {
 		$event_name = $this->getEventName( $log );
 		if ( is_null( $event_name ) ) {
-			assert( false, '[F88AADB9] Unknown event name.' );
-			return null;
+			throw new InvalidArgumentException( '[F88AADB9] Unknown event name.' );
 		}
 
 		$abi = $this->get();
@@ -184,6 +182,9 @@ abstract class AbiBase {
 
 	/**
 	 * web3-phpでデコードされた値を補正します。
+	 *
+	 * @param mixed $value
+	 * @return mixed
 	 */
 	private function correctDecodedValue( string $type, $value ) {
 		if ( $type === 'address' ) {

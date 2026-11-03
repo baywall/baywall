@@ -22,6 +22,7 @@ class BoolOption {
 
 	private readonly IntOption $option;
 
+	/** @param bool|null $default */
 	public function get( $default = null ): ?bool {
 		$ret = $this->option->get( $default );
 		return is_null( $ret ) ? null : $ret !== self::FALSE_VALUE;

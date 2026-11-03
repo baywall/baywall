@@ -5,7 +5,6 @@ namespace Baywall\Core\Infrastructure\Util;
 
 /** PHPファイルを解析して名前空間を取得するクラス */
 class NamespaceParser {
-
 	public function get( string $file_path ): string {
 		$contents = file_get_contents( $file_path );
 		if ( $contents === false ) {

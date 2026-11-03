@@ -14,6 +14,7 @@ class LogLevel {
 	private const INFO  = 'info';
 	private const DEBUG = 'debug';
 
+	/** @var list<string> */
 	private static array $levels = array( self::NONE, self::ERROR, self::WARN, self::INFO, self::DEBUG );
 
 	private function __construct( string $log_level_value ) {
@@ -52,19 +53,22 @@ class LogLevel {
 		return $other_index <= $this_index;
 	}
 
-
 	public static function debug(): self {
 		return new self( self::DEBUG );
 	}
+
 	public static function info(): self {
 		return new self( self::INFO );
 	}
+
 	public static function warn(): self {
 		return new self( self::WARN );
 	}
+
 	public static function error(): self {
 		return new self( self::ERROR );
 	}
+
 	public static function none(): self {
 		return new self( self::NONE );
 	}

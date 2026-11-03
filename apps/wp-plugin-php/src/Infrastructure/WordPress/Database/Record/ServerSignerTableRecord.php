@@ -21,6 +21,7 @@ class ServerSignerTableRecord extends RecordBase {
 	public function addressValue(): string {
 		return $this->address;
 	}
+
 	public function privateKeyValue(): string {
 		return $this->private_key;
 	}

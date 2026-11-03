@@ -10,8 +10,6 @@ use Baywall\Core\Domain\ValueObject\PrivateKey;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\ServerSignerTable;
 
 class WpServerSignerRepository implements ServerSignerRepository {
-
-
 	public function __construct( private readonly ServerSignerTable $server_signer_table ) {}
 
 	/**

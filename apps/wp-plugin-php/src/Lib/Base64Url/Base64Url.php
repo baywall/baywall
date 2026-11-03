@@ -11,7 +11,6 @@ namespace Baywall\Core\Lib\Base64Url;
  * @see https://ja.wikipedia.org/wiki/Base64#%E5%A4%89%E5%BD%A2%E7%89%88
  */
 class Base64Url {
-
 	public function encode( string $data ): string {
 		// `+ => -`, `/ => _`, パディング削除
 		return rtrim( strtr( base64_encode( $data ), '+/', '-_' ), '=' );

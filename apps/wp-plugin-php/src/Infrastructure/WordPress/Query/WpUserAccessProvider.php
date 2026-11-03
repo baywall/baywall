@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Query;
 
-use Baywall\Core\Application\Service\UserAccessProvider;
+use Baywall\Core\Application\Port\UserAccessProvider;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class WpUserAccessProvider implements UserAccessProvider {
-
 	/** @inheritdoc */
 	public function canViewPost( PostId $post_id ): bool {
 		// current_user_can( 'read_post', $post_id ); だけで判定しようとしていたが、

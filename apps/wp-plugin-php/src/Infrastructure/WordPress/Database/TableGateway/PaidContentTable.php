@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\TableGateway;
 
-use Baywall\Core\Application\Service\Clock;
+use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Domain\ValueObject\Amount;
 use Baywall\Core\Domain\ValueObject\PaidContent;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
@@ -89,12 +89,5 @@ class PaidContentTable {
 		$sql    = $this->wpdb->named_prepare( $sql, array( ':post_id' => $post_id->value() ) );
 		$result = $this->wpdb->query( $sql );
 		assert( $result <= 1, "[64CF23D9] Failed to delete paid content data. - post_id: {$post_id}, result: {$result}" );
-	}
-
-	/**
-	 * テーブルが存在するかどうかを取得します。
-	 */
-	public function exists(): bool {
-		return (bool) $this->wpdb->get_var( "SHOW TABLES LIKE '{$this->table_name}'" );
 	}
 }

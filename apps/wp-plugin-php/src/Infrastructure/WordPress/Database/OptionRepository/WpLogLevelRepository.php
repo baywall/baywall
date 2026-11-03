@@ -10,7 +10,6 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\StringOption;
 
 class WpLogLevelRepository implements LogLevelRepository {
-
 	/** @inheritdoc */
 	public function get( LogCategory $category ): LogLevel {
 		$log_level_name = $this->option( $category )->get();

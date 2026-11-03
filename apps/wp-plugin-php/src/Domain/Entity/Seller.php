@@ -8,8 +8,6 @@ use Baywall\Core\Domain\ValueObject\Signature;
 use Baywall\Core\Domain\ValueObject\SigningMessage;
 
 readonly class Seller {
-
-
 	public function __construct(
 		private readonly Address $address,
 		private readonly SigningMessage $signing_message,

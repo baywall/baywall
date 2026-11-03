@@ -116,13 +116,6 @@ final class Config {
 	public const GRAPHQL_MAX_QUERY_DEPTH = 3;
 
 	/**
-	 * GraphQLのインテロスペクションを無効化するかどうか
-	 *
-	 * @see https://webonyx.github.io/graphql-php/security/#disabling-introspection
-	 */
-	public const GRAPHQL_DISABLE_INTROSPECTION = true;
-
-	/**
 	 * GraphQLのmutationで許可される最大フィールド数
 	 *
 	 * mutation呼び出し時に許容するフィールド数の上限（独自ルール）

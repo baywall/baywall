@@ -19,24 +19,25 @@ declare(strict_types=1);
 
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Application\Repository\InstalledPluginVersionRepository;
-use Baywall\Core\Application\Service\Clock;
-use Baywall\Core\Application\Service\LockService;
-use Baywall\Core\Application\Service\PluginDeactivationService;
-use Baywall\Core\Application\Service\PluginAutoUpdateStateProvider;
-use Baywall\Core\Application\Service\PluginMigrationService;
-use Baywall\Core\Application\Service\PluginCompatibilityChecker;
-use Baywall\Core\Application\Service\UserAccessProvider;
+use Baywall\Core\Application\Port\Clock;
+use Baywall\Core\Application\Port\LockService;
+use Baywall\Core\Application\Port\PluginDeactivationService;
+use Baywall\Core\Application\Port\PluginAutoUpdateStateProvider;
+use Baywall\Core\Application\Port\PluginMigrationService;
+use Baywall\Core\Application\Port\PluginCompatibilityChecker;
+use Baywall\Core\Application\Port\UserAccessProvider;
+use Baywall\Core\Application\Service\EnsRpcUrlResolver;
 use Baywall\Core\Application\UseCase\CrawlAllAppContract;
 use Baywall\Core\Application\UseCase\CleanupOldLogs;
 use Baywall\Core\Application\UseCase\GetPaidContent;
 use Baywall\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
 use Baywall\Core\Application\UseCase\LogoutAuth;
 use Baywall\Core\Application\UseCase\RefreshAccessToken;
-use Baywall\Core\Domain\Repository\ChainRepository;
+use Baywall\Core\Application\UseCase\SavePostContent;
+use Baywall\Core\DI\ContainerDefinitions;
 use Baywall\Core\Domain\Repository\PostRepository;
 use Baywall\Core\Domain\Service\CookieNameProvider;
-use Baywall\Core\Infrastructure\DI\ContainerDefinitions;
-use Baywall\Core\Infrastructure\System\ArchitectureChecker;
+use Baywall\Core\Infrastructure\System\RuntimeEnvironmentChecker;
 use Baywall\Core\Infrastructure\System\PhpExtChecker;
 use Baywall\Core\Infrastructure\GraphQL\PluginSchemaProvider;
 use Baywall\Core\Infrastructure\WordPress\Content\BlockNameProvider;
@@ -44,7 +45,6 @@ use Baywall\Core\Infrastructure\WordPress\Content\GutenbergService;
 use Baywall\Core\Infrastructure\WordPress\Content\HandleNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Content\RestPropertyProvider;
 use Baywall\Core\Infrastructure\WordPress\Content\SlugProvider;
-use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\PaidContentTable;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpNonceService;
 use Baywall\Core\Infrastructure\WordPress\I18n\I18nTextProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginAssetUrlProvider;
@@ -98,7 +98,7 @@ $main = function () {
 		fn() => $container->get( InstalledPluginVersionRepository::class ),
 		fn() => $container->get( AppLogger::class ),
 		fn() => $container->get( WordPressPropertyProvider::class ),
-		fn() => $container->get( ArchitectureChecker::class ),
+		fn() => $container->get( RuntimeEnvironmentChecker::class ),
 		fn() => $container->get( PhpExtChecker::class ),
 		fn() => $container->get( PluginCompatibilityChecker::class ),
 		fn() => $container->get( PluginDeactivationService::class ),
@@ -167,13 +167,12 @@ $main = function () {
 	$view_page_hook->register();
 
 	// 投稿を保存または取得する時のフィルタ処理
-	// （サブフック3クラスはContentHook.phpに同居するため、new ContentHook()のクラス解決で
-	// 　 同ファイルが読み込まれた後に引数が評価されるこの形式で組み立てる）
 	$content_hook = new ContentHook(
 		new ContentSaveHook(
 			$container->get( GutenbergService::class ),
 			$container->get( BlockNameProvider::class ),
 			$container->get( PostRepository::class ),
+			$container->get( SavePostContent::class ),
 		),
 		new ContentLoadHook(
 			$container->get( UserAccessProvider::class ),
@@ -183,8 +182,7 @@ $main = function () {
 			$container->get( CurrentPaywalledPostResolver::class ),
 		),
 		new ContentDeleteHook(
-			$container->get( PostRepository::class ),
-			$container->get( PaidContentTable::class ),
+			$container->get( SavePostContent::class ),
 		),
 	);
 	$content_hook->register();
@@ -202,7 +200,7 @@ $main = function () {
 	$plugin_update_check_hook = new PluginUpdateCheckHook(
 		fn() => $container->get( WpPluginPackageChecksumVerifier::class ),
 		fn() => $container->get( WpEnvironment::class ),
-		fn() => $container->get( ChainRepository::class ),
+		fn() => $container->get( EnsRpcUrlResolver::class ),
 		fn() => $container->get( WpAppManifestFetcher::class ),
 		fn() => $container->get( WpPluginInfoProvider::class ),
 		fn() => $container->get( WordPressPropertyProvider::class ),
@@ -216,7 +214,7 @@ $main = function () {
 		fn() => $container->get( WpPluginInfoProvider::class ),
 		fn() => $container->get( WpEnvironment::class ),
 		fn() => $container->get( PluginAutoUpdateStateProvider::class ),
-		fn() => $container->get( ChainRepository::class ),
+		fn() => $container->get( EnsRpcUrlResolver::class ),
 	);
 	$plugin_row_meta_hook->register();
 };

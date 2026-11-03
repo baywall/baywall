@@ -10,41 +10,52 @@ class NamedPlaceholder {
 	public function __construct( wpdb $wpdb ) {
 		$this->wpdb = $wpdb;
 	}
+
 	private readonly wpdb $wpdb;
 
 	/**
 	 * Named placeholder を使用して SQL クエリを構築します
 	 * ※プレースホルダは、キーがコロンで始まる形式（例: `:key`）で指定してください。
+	 * ※クエリ中の `:[a-z0-9_]+` 形式のトークンはすべて `$args` で指定してください（未指定は `InvalidArgumentException`）。
+	 *   SQL の文字列リテラル内に同形式の文字列（時刻 `12:30` 等）を書くことはできません。
 	 *
 	 * @param string              $query
 	 * @param array<string,mixed> $args プレースホルダに対応する値の連想配列
 	 */
 	public function prepare( string $query, array $args ): string {
 
-		$searches = array(); // str_replace の検索用配列
-		$replaces = array(); // str_replace の置換用配列
-
-		// 前方一致のプレースホルダーが含まれている場合、変換がうまく動作しないことがあるため
-		// $args のキーをすべて取得し、文字列の長い順にソート
-		$keys = array_keys( $args );
-		usort( $keys, fn( $a, $b ) => strlen( $b ) - strlen( $a ) );
-
-		foreach ( $keys as $key ) {
-			$placeholder = $key;
-			$value       = $args[ $key ];
-			// プレースホルダのフォーマットとクエリに含まれているかをチェック
-			$this->checkPlaceholderFormat( $placeholder );
-			$this->checkPlaceholderContained( $query, $placeholder );
-
-			// 変換元と変換後の配列に追加
-			$searches[] = $placeholder;
-			$replaces[] = $this->sanitizeValue( $value );
+		// 例外の優先順位を検出順とするため、フォーマット検証は走査前に全キーに対して実施する
+		foreach ( array_keys( $args ) as $key ) {
+			$this->checkPlaceholderFormat( $key );
 		}
 
-		return str_replace( $searches, $replaces, $query ); // プレースホルダを置換したクエリを返す
+		$used_keys = array();
+
+		// クエリを1回だけ走査して置換する（置換結果はリテラル扱いのため、値に別プレースホルダ名を含んでも再置換されない）
+		$result = preg_replace_callback(
+			'/:[a-z0-9_]+/',
+			function ( array $matches ) use ( $args, &$used_keys ): string {
+				$token = $matches[0];
+				if ( ! array_key_exists( $token, $args ) ) {
+					throw new InvalidArgumentException( "[FB35D38A] Placeholder not found in args: {$token}" );
+				}
+				$used_keys[ $token ] = true;
+				return $this->sanitizeValue( $args[ $token ] );
+			},
+			$query
+		) ?? throw new InvalidArgumentException( '[3C52FC92] Failed to replace placeholders' );
+
+		// 走査で1回も出現しなかったキーは例外（従来の契約を維持）
+		foreach ( array_keys( $args ) as $key ) {
+			if ( ! isset( $used_keys[ $key ] ) ) {
+				throw new InvalidArgumentException( "[D3190731] Placeholder not found in query: {$key}" );
+			}
+		}
+
+		return $result;
 	}
 
-
+	/** @param mixed $value */
 	private function sanitizeValue( $value ): string {
 		if ( is_null( $value ) ) {
 			return 'NULL';
@@ -59,21 +70,11 @@ class NamedPlaceholder {
 		}
 	}
 
-	/** プレースホルダが含まれているかどうかを返します */
-	private function isPlaceholderContained( string $query, string $placeholder ): bool {
-		return false !== strpos( $query, $placeholder );
-	}
-	/** プレースホルダがクエリに含まれていない場合に例外をスローします */
-	private function checkPlaceholderContained( string $query, string $placeholder ): void {
-		if ( ! $this->isPlaceholderContained( $query, $placeholder ) ) {
-			throw new InvalidArgumentException( "[D3190731] Placeholder not found in query: {$placeholder}" );
-		}
-	}
-
 	/** プレースホルダのフォーマットに一致しているかどうかを返します */
 	private function isPlaceholderFormat( string $key ): bool {
 		return 1 === preg_match( '/^:[a-z0-9_]+$/', $key ); // 例: :key, :another_key など
 	}
+
 	/** プレースホルダのフォーマットが不正な場合に例外をスローします */
 	private function checkPlaceholderFormat( string $key ): void {
 		if ( ! $this->isPlaceholderFormat( $key ) ) {

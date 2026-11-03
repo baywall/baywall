@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
-use Baywall\Core\Application\Service\PluginDeactivationService;
+use Baywall\Core\Application\Port\PluginDeactivationService;
 
 /** WordPress上でプラグインを無効化するクラス */
 class WpPluginDeactivationService implements PluginDeactivationService {
-
 	public function __construct( private readonly WpPluginInfoProvider $plugin_info_provider ) {}
 
 	/** @inheritdoc */
 	public function deactivatePlugin(): void {
 		if ( ! function_exists( 'deactivate_plugins' ) ) {
+			// @phpstan-ignore requireOnce.fileNotFound, requireOnce.fileNotFound
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 		// プラグインを無効化

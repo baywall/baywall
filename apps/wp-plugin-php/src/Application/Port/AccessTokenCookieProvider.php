@@ -1,0 +1,21 @@
+<?php
+declare(strict_types=1);
+
+namespace Baywall\Core\Application\Port;
+
+use Baywall\Core\Application\ValueObject\AccessToken;
+use Baywall\Core\Application\ValueObject\Cookie;
+
+/**
+ * アクセストークンをCookieに書き込む際のプロパティを提供します
+ */
+interface AccessTokenCookieProvider {
+	public function get( AccessToken $access_token ): Cookie;
+
+	/**
+	 * アクセストークンを無効化するための期限切れCookieを返します。
+	 *
+	 * 同名・同path・同domain・同secure・同httponly・同samesite で expires=過去 の Cookie を返します。
+	 */
+	public function getExpired(): Cookie;
+}

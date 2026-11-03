@@ -6,7 +6,6 @@ use Baywall\Core\Domain\Entity\Oracle;
 use Baywall\Core\Domain\ValueObject\Rate;
 
 interface OracleRateCache {
-
 	/** 対象となるオラクルから取得したレートをキャッシュとして保存します */
 	public function set( Oracle $oracle, Rate $rate ): void;
 

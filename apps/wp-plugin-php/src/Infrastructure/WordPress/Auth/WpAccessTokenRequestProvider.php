@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Auth;
 
-use Baywall\Core\Application\Service\AccessTokenRequestProvider;
+use Baywall\Core\Application\Port\AccessTokenRequestProvider;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 
 class WpAccessTokenRequestProvider implements AccessTokenRequestProvider {
-
 	public function __construct( private readonly CookieNameProvider $cookie_name_provider ) {}
 
 	public function get(): ?string {

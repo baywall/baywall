@@ -17,7 +17,6 @@ class WpJwtSecretKeyRepository implements JwtSecretKeyRepository {
 
 	/** @inheritdoc */
 	public function get(): JwtSecretKey {
-		/** @var array|null */
 		$data = $this->option->get( null );
 
 		if ( $data === null ) {

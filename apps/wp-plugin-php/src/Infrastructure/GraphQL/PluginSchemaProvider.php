@@ -2,16 +2,18 @@
 declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\GraphQL;
 
-use Baywall\Core\Application\Service\GraphQLConfigProvider;
+use Baywall\Core\Application\Port\GraphQLConfigProvider;
 use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\Parser;
+use GraphQL\Type\Schema;
 use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;
+use RuntimeException;
 
 class PluginSchemaProvider {
-
 	public function __construct( private readonly GraphQLConfigProvider $graphql_config_provider ) {}
 
+	/** @return Schema */
 	public function get() {
 		// キャッシュファイルをこのプラグインディレクトリ内に作成することで
 		// プラグインアップデート時は存在しなくなり、再作成される仕組み。
@@ -26,6 +28,9 @@ class PluginSchemaProvider {
 			}
 		} else {
 			$document = AST::fromArray( require $cache_file_path );
+			if ( ! $document instanceof DocumentNode ) {
+				throw new RuntimeException( '[3F2E2050] Invalid schema cache document. ' . $cache_file_path );
+			}
 		}
 
 		$schema = BuildSchema::build( $document );

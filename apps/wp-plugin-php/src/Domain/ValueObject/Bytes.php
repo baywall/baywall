@@ -10,7 +10,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * バイトデータを表すクラス
  */
 readonly class Bytes implements ValueObject {
-
 	/**
 	 * バイナリデータとしての値
 	 *

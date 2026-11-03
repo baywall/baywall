@@ -9,13 +9,13 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * 小数点以下桁数を表す値オブジェクト
  */
 readonly class Decimals implements ValueObject {
-
 	private function __construct( int $decimals_value ) {
 		if ( $decimals_value < 0 ) {
 			throw new \InvalidArgumentException( '[7CE0FCDE] Decimals must be a non-negative integer.' );
 		}
 		$this->decimals_value = $decimals_value;
 	}
+
 	private readonly int $decimals_value;
 
 	public function value(): int {
@@ -33,8 +33,4 @@ readonly class Decimals implements ValueObject {
 	public function __toString(): string {
 		return (string) $this->decimals_value;
 	}
-
-	// public static function fromNullable( ?int $decimals_value ): ?self {
-	// return $decimals_value === null ? null : new self( $decimals_value );
-	// }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
 use Baywall\Core\Domain\Entity\RefreshToken;
+use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Repository\RefreshTokenRepository;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\RefreshTokenString;
@@ -12,9 +13,7 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\RefreshTokenTabl
 use Baywall\Core\Infrastructure\WordPress\ValueObject\WpRefreshTokenHashString;
 
 class WpRefreshTokenRepository implements RefreshTokenRepository {
-
 	public function __construct( private readonly RefreshTokenTable $refresh_token_table ) {}
-
 
 	/**
 	 * リフレッシュトークン情報を保存（追加）します。
@@ -25,10 +24,16 @@ class WpRefreshTokenRepository implements RefreshTokenRepository {
 
 	/**
 	 * リフレッシュトークンの文字列から、リフレッシュトークン情報を取得します。
+	 *
+	 * @throws AuthenticationFailedException トークン文字列の形式が不正な場合
 	 */
 	public function get( RefreshTokenString $refresh_token_string ): ?RefreshToken {
-
-		$refresh_token_hash_string = WpRefreshTokenHashString::from( $refresh_token_string );
+		try {
+			$refresh_token_hash_string = WpRefreshTokenHashString::from( $refresh_token_string );
+		} catch ( \InvalidArgumentException $e ) {
+			// 不正なトークンの場合は認証失敗として例外をスロー
+			throw new AuthenticationFailedException( $e->getMessage(), 0, $e );
+		}
 
 		$record = $this->refresh_token_table->get( $refresh_token_hash_string );
 		if ( $record === null ) {

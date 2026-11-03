@@ -3,15 +3,12 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
-use Baywall\Core\Domain\Repository\PausedRepository;
+use Baywall\Core\Application\UseCase\GetPaused;
 
 class ResolvePaused implements Resolver {
-
-
-	public function __construct( private readonly PausedRepository $paused_repository ) {}
+	public function __construct( private readonly GetPaused $get_paused ) {}
 
 	public function handle( array $root_value, array $args ): bool {
-		// アクセス制御は不要
-		return $this->paused_repository->get();
+		return $this->get_paused->handle();
 	}
 }

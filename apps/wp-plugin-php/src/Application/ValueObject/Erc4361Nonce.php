@@ -7,8 +7,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 readonly class Erc4361Nonce implements ValueObject {
-
-
 	private function __construct(
 		private Erc4361NonceString $nonce_string,
 		private readonly UnixTimestamp $issued_at

@@ -15,7 +15,6 @@ use Baywall\Core\Infrastructure\Web3\Client\BlockchainClient;
 use Baywall\Core\Infrastructure\Web3\Client\RpcTransport;
 
 class BlockchainServiceImpl implements BlockchainService {
-
 	/** テストでトランスポートを差し替えられるようにする（省略時は `HttpRpcTransport`） */
 	public function __construct( private readonly ?RpcTransport $rpc_transport = null ) {}
 

@@ -11,8 +11,6 @@ use Baywall\Core\Domain\ValueObject\UnixTimestamp;
  * リフレッシュトークンを表すクラス
  */
 class RefreshToken {
-
-
 	private function __construct(
 		private readonly RefreshTokenString $refresh_token_string,
 		private readonly Address $wallet_address,

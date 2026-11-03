@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\Content;
 
-use Baywall\Core\Application\Service\PaidContentAnalyzer;
+use Baywall\Core\Application\Port\PaidContentAnalyzer;
 use Baywall\Core\Domain\ValueObject\PaidContent;
 use Baywall\Core\Infrastructure\Format\HtmlFormat;
 use Baywall\Core\Lib\Util\Strings;
 
 class PaidContentAnalyzerImpl implements PaidContentAnalyzer {
-
 	/** @inheritdoc */
 	public function getCharacterCount( PaidContent $paid_content ): int {
 		return ( new HtmlContentAnalyzer( $paid_content->value() ) )->getCharacterCount();
@@ -22,7 +21,6 @@ class PaidContentAnalyzerImpl implements PaidContentAnalyzer {
 
 /** @internal */
 class HtmlContentAnalyzer {
-
 	public function __construct( string $content ) {
 		// HTMLタグは分析対象から除外
 		$this->content = HtmlFormat::removeHtmlComments( $content );

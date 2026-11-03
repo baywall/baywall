@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\Base\StringValueObject;
  * ERC-4361 URI 文字列を表すクラス
  */
 readonly class Erc4361Uri extends StringValueObject {
-
 	protected function __construct( string $erc4361_uri_value ) {
 		parent::__construct( $erc4361_uri_value );
 	}

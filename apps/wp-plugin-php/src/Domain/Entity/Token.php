@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\Decimals;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
 class Token {
-
 	public function __construct(
 		private readonly ChainId $chain_id,
 		private readonly Address $address,
@@ -17,7 +16,6 @@ class Token {
 		private readonly Decimals $decimals,
 		private bool $is_payable
 	) {}
-
 
 	public function chainId(): ChainId {
 		return $this->chain_id;
@@ -38,6 +36,7 @@ class Token {
 	public function isPayable(): bool {
 		return $this->is_payable;
 	}
+
 	public function setIsPayable( bool $is_payable ): void {
 		$this->is_payable = $is_payable;
 	}

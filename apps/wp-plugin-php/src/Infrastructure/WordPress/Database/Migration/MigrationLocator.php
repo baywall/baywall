@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\Migration;
 
 use Baywall\Core\Infrastructure\Util\NamespaceParser;
-use Baywall\Core\Lib\Util\Strings;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
 use Baywall\Core\Application\ValueObject\PluginVersion;
 
@@ -36,7 +35,7 @@ class MigrationLocator {
 		$files = scandir( self::MIGRATIONS_DIR, SCANDIR_SORT_ASCENDING );
 		assert( is_array( $files ), '[CF0D36ED] Failed to scan migrations directory' );
 		// .phpで終わるファイルのみ抽出
-		$php_files = array_filter( $files, fn( string $file ): bool => Strings::ends_with( $file, '.php' ) );
+		$php_files = array_filter( $files, fn( string $file ): bool => str_ends_with( $file, '.php' ) );
 		/** @var MigrationBase[] */
 		$migrations = array();
 
@@ -46,8 +45,7 @@ class MigrationLocator {
 			$class_name = $namespace . '\\' . pathinfo( $file, PATHINFO_FILENAME );
 
 			$instance = ( $this->migration_factory )( $class_name );
-			assert( $instance instanceof MigrationBase, "[DD850FCA] Invalid class: {$class_name}" );
-			$version = PluginVersion::from( $instance->version() );
+			$version  = PluginVersion::from( $instance->version() );
 			if ( $gt_version->compareOperator( $version, '<' ) && $version->compareOperator( $le_version, '<=' ) ) {
 				$migrations[] = $instance;
 			}

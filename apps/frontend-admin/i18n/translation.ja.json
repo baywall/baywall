@@ -89,7 +89,6 @@
   "nav.sales_histories": "販売履歴",
   "nav.settings": "設定",
   "nav.tokens": "トークン",
-  "nav.version": "バージョン",
   "notifications.alerts_panel_title": "通知",
   "notifications.setting_ignored_without_rpc_url_message": "ネットワークのRPC URLが未設定のため、この設定は無視されます。",
   "notifications.turn_off_setting_or_configure_rpc_url_message": "設定を無効にするか、RPC URLを設定してください。",

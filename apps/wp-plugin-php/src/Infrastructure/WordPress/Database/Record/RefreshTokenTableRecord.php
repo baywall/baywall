@@ -26,12 +26,15 @@ class RefreshTokenTableRecord extends RecordBase {
 	public function refreshTokenHashValue(): string {
 		return $this->refresh_token_hash;
 	}
+
 	public function walletAddressValue(): string {
 		return $this->wallet_address;
 	}
+
 	public function expiresAtValue(): int {
 		return $this->expires_at;
 	}
+
 	public function revokedAtValue(): ?int {
 		return $this->revoked_at;
 	}

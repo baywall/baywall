@@ -7,10 +7,10 @@ use Baywall\Core\Domain\Service\PluginInfoProvider;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 
 class WpPluginInfoProvider implements PluginInfoProvider {
-
 	public function __construct() {
 		$this->plugin_main_file = PluginMainFile::getInstance();
 	}
+
 	private readonly PluginMainFile $plugin_main_file;
 
 	/**
@@ -44,17 +44,17 @@ class WpPluginInfoProvider implements PluginInfoProvider {
  * @internal
  */
 class PluginMainFile {
-
 	private function __construct() {
 		// Do nothing
 	}
+
 	public static function getInstance(): PluginMainFile {
 		static $instance = new PluginMainFile();
 		return $instance;
 	}
 
 	// ファイルから取得したプラグインの情報
-	/** @var array<string,string>|null */
+	/** @var array<string, bool|string>|null */
 	private $plugin_data = null;
 
 	// プラグインの最初に読みこまれるファイルのパス
@@ -65,6 +65,7 @@ class PluginMainFile {
 		assert( $this->plugin_data === null, '[DD2821BD] Plugin data is initialized.' );
 
 		if ( ! function_exists( 'get_plugin_data' ) ) {
+			// @phpstan-ignore requireOnce.fileNotFound, requireOnce.fileNotFound
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 		// プラグインの情報を取得してフィールドに保持
@@ -84,7 +85,12 @@ class PluginMainFile {
 		assert( $this->plugin_data !== null, '[7F6EA5BA] Plugin data is not initialized.' );
 
 		assert( array_key_exists( $property_name, $this->plugin_data ) );
-		return $this->plugin_data[ $property_name ];
+		$value = $this->plugin_data[ $property_name ];
+		// `Network`ヘッダのみboolに変換される（get_plugin_data）ため、文字列ヘッダであることを保証する
+		if ( ! is_string( $value ) ) {
+			throw new \LogicException( "[227310C0] Plugin header '{$property_name}' is not a string." );
+		}
+		return $value;
 	}
 
 	/**

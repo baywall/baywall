@@ -4,6 +4,7 @@ namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Constant\Config;
+use Baywall\Core\Domain\Exception\ValidationFailedException;
 use Baywall\Core\Presentation\GraphQL\RootValue;
 use Baywall\Core\Infrastructure\GraphQL\PluginSchemaProvider;
 use Baywall\Core\Infrastructure\GraphQL\Rule\MutationFieldLimitRule;
@@ -23,7 +24,6 @@ use GraphQL\Validator\Rules\ValidationRule;
  * GraphQLのAPI登録
  */
 class GraphQLHook extends HookBase {
-
 	/**
 	 * @param \Closure(): RestPropertyProvider $rest_property_provider
 	 * @param \Closure(): AppLogger            $logger
@@ -64,7 +64,7 @@ class GraphQLHook extends HookBase {
 	/**
 	 * GraphQL RESTエンドポイントの実行可否を判定します。
 	 *
-	 * @return true|WP_Error
+	 * @return true|\WP_Error
 	 */
 	private function permissionCallback( \WP_REST_Request $request ): true|\WP_Error {
 		$logger              = ( $this->logger )();
@@ -80,18 +80,28 @@ class GraphQLHook extends HookBase {
 		}
 	}
 
+	/**
+	 * GraphQLクエリを実行します。
+	 *
+	 * @return array<string, mixed>|\WP_Error リクエストボディが不正な場合は WP_Error(400)
+	 */
 	public function callback( \WP_REST_Request $request ) {
-		// リクエストボディをデコード
-		$input           = json_decode( $request->get_body(), true );
-		$query           = $input['query'];
-		$variable_values = isset( $input['variables'] ) ? $input['variables'] : null;
+		try {
+			$input           = $this->extractGraphQlRequestParams( $request );
+			$query           = $input['query'];
+			$variable_values = $input['variables'];
+			$operation_name  = $input['operationName'];
+		} catch ( \Throwable $e ) {
+			( $this->logger )()->debug( $e );
+			return ( $this->exception_converter )()->toWpError( $e );
+		}
 
 		$schema_instance     = ( $this->plugin_schema_provider )();
 		$schema              = $schema_instance->get();
 		$root_value_instance = ( $this->root_value )();
 		$root_value          = $root_value_instance->get();
 
-		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values, validationRules: $this->buildValidationRules() )
+		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values, $operation_name, validationRules: $this->buildValidationRules() )
 			// https://webonyx.github.io/graphql-php/error-handling/#custom-error-handling-and-formatting
 			->setErrorsHandler(
 				function ( array $errors, callable $formatter ): array {
@@ -136,6 +146,41 @@ class GraphQLHook extends HookBase {
 	}
 
 	/**
+	 * リクエストボディからGraphQLのクエリ・変数・オペレーション名を抽出します。
+	 *
+	 * @return array{query: string, variables: array<string, mixed>|null, operationName: string|null}
+	 * @throws ValidationFailedException ボディがJSONオブジェクトでない、queryが無い・文字列でない、variablesがJSONオブジェクトでない、operationNameが文字列でない場合
+	 */
+	private function extractGraphQlRequestParams( \WP_REST_Request $request ): array {
+		$input = json_decode( $request->get_body(), true );
+		if ( ! is_array( $input ) || ! isset( $input['query'] ) || ! is_string( $input['query'] ) ) {
+			throw new ValidationFailedException( '[138C76E4] query is required in request body.' );
+		}
+
+		$variable_values = $input['variables'] ?? null;
+		// json_decode(連想配列)では JSON の {} と [] を区別できないため、空は空マップとして許容する
+		$is_not_map = null !== $variable_values
+			&& ( ! is_array( $variable_values ) || ( array() !== $variable_values && array_is_list( $variable_values ) ) );
+		if ( $is_not_map ) {
+			throw new ValidationFailedException( '[04F53341] variables must be an object in request body.' );
+		}
+
+		$operation_name = null;
+		if ( array_key_exists( 'operationName', $input ) ) {
+			if ( ! is_string( $input['operationName'] ) ) {
+				throw new ValidationFailedException( '[2FD59D40] operationName must be a string in request body.' );
+			}
+			$operation_name = $input['operationName'];
+		}
+
+		return array(
+			'query'         => $input['query'],
+			'variables'     => $variable_values,
+			'operationName' => $operation_name,
+		);
+	}
+
+	/**
 	 * リクエストごとのバリデーションルール配列を組み立てます。
 	 * DocumentValidator::addRule() によるプロセス全体への静的状態の持ち越しを避けるため、
 	 * executeQuery の第8引数に渡す配列として返します。
@@ -144,12 +189,10 @@ class GraphQLHook extends HookBase {
 	 */
 	private function buildValidationRules(): array {
 		// $validationRules を渡すとデフォルトルールは自動追加されないため、defaultRules() を土台に含める
-		$rules                           = DocumentValidator::defaultRules();
-		$rules[ QueryComplexity::class ] = new QueryComplexity( Config::GRAPHQL_MAX_COMPLEXITY );
-		$rules[ QueryDepth::class ]      = new QueryDepth( Config::GRAPHQL_MAX_QUERY_DEPTH );
-		if ( Config::GRAPHQL_DISABLE_INTROSPECTION ) {
-			$rules[ DisableIntrospection::class ] = new DisableIntrospection( DisableIntrospection::ENABLED );
-		}
+		$rules                                  = DocumentValidator::defaultRules();
+		$rules[ QueryComplexity::class ]        = new QueryComplexity( Config::GRAPHQL_MAX_COMPLEXITY );
+		$rules[ QueryDepth::class ]             = new QueryDepth( Config::GRAPHQL_MAX_QUERY_DEPTH );
+		$rules[ DisableIntrospection::class ]   = new DisableIntrospection( DisableIntrospection::ENABLED );
 		$rules[ MutationFieldLimitRule::class ] = new MutationFieldLimitRule( Config::GRAPHQL_MUTATION_FIELD_MAX_COUNT );
 		return $rules;
 	}

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\GraphQL;
 
-use Baywall\Core\Application\Service\GraphQLConfigProvider;
+use Baywall\Core\Application\Port\GraphQLConfigProvider;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 
 class WpGraphQLConfigProvider implements GraphQLConfigProvider {

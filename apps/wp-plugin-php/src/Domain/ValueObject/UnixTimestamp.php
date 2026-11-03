@@ -7,8 +7,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 use DateTimeImmutable;
 
 readonly class UnixTimestamp implements ValueObject {
-
-
 	private function __construct( private readonly int $timestamp ) {}
 
 	public static function from( int $timestamp ): self {

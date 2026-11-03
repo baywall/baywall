@@ -5,7 +5,6 @@ namespace Baywall\Core\Infrastructure\Web3\Client;
 
 /** JSON-RPC リクエストの HTTP POST 送信を担うトランスポート */
 interface RpcTransport {
-
 	/**
 	 * HTTP POST でボディを送信します。
 	 *

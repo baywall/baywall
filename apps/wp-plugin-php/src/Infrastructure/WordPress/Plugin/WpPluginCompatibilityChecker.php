@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
-use Baywall\Core\Application\Service\PluginCompatibilityChecker;
-use Baywall\Core\Application\Service\SupportedVersionConstraintsProvider;
+use Baywall\Core\Application\Port\PluginCompatibilityChecker;
+use Baywall\Core\Application\Port\SupportedVersionConstraintsProvider;
 use Composer\Semver\Semver;
 
 /**
@@ -19,7 +19,6 @@ use Composer\Semver\Semver;
  * 本クラスはWordPress環境に依存しないため、PHPUnitの標準`TestCase`で直接テスト可能です。
  */
 class WpPluginCompatibilityChecker implements PluginCompatibilityChecker {
-
 	public function __construct( private readonly SupportedVersionConstraintsProvider $constraints_provider ) {}
 
 	/**

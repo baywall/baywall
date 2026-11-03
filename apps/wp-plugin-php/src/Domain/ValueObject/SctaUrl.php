@@ -7,7 +7,6 @@ namespace Baywall\Core\Domain\ValueObject;
  * 「特定商取引法に基づく表記」のURLを表すValueObjectクラス
  */
 final readonly class SctaUrl extends Url {
-
 	private function __construct( string $scta_url ) {
 		parent::__construct( $scta_url );
 	}
@@ -15,6 +14,7 @@ final readonly class SctaUrl extends Url {
 	public static function from( string $scta_url ): self {
 		return new self( $scta_url );
 	}
+
 	public static function fromNullable( ?string $scta_url ): ?self {
 		if ( $scta_url === null ) {
 			return null;

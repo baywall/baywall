@@ -5,7 +5,6 @@ namespace Baywall\Core\Infrastructure\Web3\Client;
 
 /** PHP ストリーム（http / https ラッパー）で HTTP POST する `RpcTransport` の既定実装 */
 class HttpRpcTransport implements RpcTransport {
-
 	/** @inheritDoc */
 	public function post( string $url, string $body, array $headers, int $timeout ): array {
 		$header_lines = array();
@@ -46,7 +45,7 @@ class HttpRpcTransport implements RpcTransport {
 		// @see https://php-errors.readthedocs.io/en/latest/messages/the-predefined-locally-scoped-$http_response_header-variable-is-deprecated,.html
 		$response_headers = function_exists( 'http_get_last_response_headers' )
 			? ( http_get_last_response_headers() ?? array() )
-			: ( $http_response_header ?? array() );
+			: ( $http_response_header ?? array() ); // @phpstan-ignore nullCoalesce.variable
 
 		return array(
 			'status' => self::parseStatusCode( $response_headers ),

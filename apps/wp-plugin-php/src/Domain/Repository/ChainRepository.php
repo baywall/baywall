@@ -7,7 +7,6 @@ use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
 interface ChainRepository {
-
 	/** 指定したチェーンIDに合致するチェーン情報を取得します。 */
 	public function get( ChainId $chain_id ): ?Chain;
 

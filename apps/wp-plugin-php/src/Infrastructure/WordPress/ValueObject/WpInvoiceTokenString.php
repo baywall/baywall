@@ -8,14 +8,8 @@ use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 use DateTimeImmutable;
 
 readonly class WpInvoiceTokenString extends InvoiceTokenString {
-
 	private function __construct( string $wp_invoice_token_value ) {
 		parent::__construct( $wp_invoice_token_value );
-		self::checkWpInvoiceTokenFormat( $wp_invoice_token_value );
-	}
-
-	public static function from( string $wp_invoice_token_value ): self {
-		return new self( $wp_invoice_token_value );
 	}
 
 	/**
@@ -37,12 +31,5 @@ readonly class WpInvoiceTokenString extends InvoiceTokenString {
 			. str_replace( '0x', '', $random_bytes->hex()->value() );
 
 		return new self( $token_value );
-	}
-
-	/** WordPress環境で使用する請求書トークンのフォーマットチェック */
-	private static function checkWpInvoiceTokenFormat( string $wp_invoice_token_value ): void {
-		if ( ! preg_match( '/^\d{17}\.[0-9a-f]{64}$/', $wp_invoice_token_value ) ) {
-			throw new \InvalidArgumentException( '[954B0903] Invalid invoice token format: ' . $wp_invoice_token_value );
-		}
 	}
 }

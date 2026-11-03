@@ -10,12 +10,12 @@ use yamaneyuta\Ulid;
  * 請求書IDを表すクラス
  */
 readonly class InvoiceId implements ValueObject {
-
 	private function __construct( private readonly Ulid $ulid ) {}
 
 	public static function fromHex( Hex $hex ): self {
 		return new self( Ulid::from( $hex->value() ) );
 	}
+
 	/** ULID形式の文字列からインスタンスを生成します */
 	public static function fromUlidValue( string $ulid_value ): self {
 		$ulid = Ulid::from( $ulid_value );
@@ -43,10 +43,9 @@ readonly class InvoiceId implements ValueObject {
 
 	/**
 	 * `0x`プレフィックスを含むhex形式で値を取得します。
-	 * TODO: Hexインスタンスを返すように変更
 	 */
-	public function hex(): string {
-		return '0x' . $this->ulid->toHex();
+	public function hex(): Hex {
+		return Hex::from( '0x' . $this->ulid->toHex() );
 	}
 
 	/**

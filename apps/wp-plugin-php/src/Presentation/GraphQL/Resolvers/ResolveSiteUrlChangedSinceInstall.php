@@ -3,15 +3,12 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
-use Baywall\Core\Domain\Service\SiteUrlChecker;
+use Baywall\Core\Application\UseCase\GetSiteUrlChangedSinceInstall;
 
 class ResolveSiteUrlChangedSinceInstall implements Resolver {
-
-
-	public function __construct( private readonly SiteUrlChecker $site_url_checker ) {}
+	public function __construct( private readonly GetSiteUrlChangedSinceInstall $get_site_url_changed_since_install ) {}
 
 	public function handle( array $root_value, array $args ): bool {
-		// アクセス制御は不要
-		return $this->site_url_checker->hasSiteUrlChangedSinceInstall();
+		return $this->get_site_url_changed_since_install->handle();
 	}
 }

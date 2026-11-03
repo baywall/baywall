@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
+use Baywall\Core\Application\Service\EnsRpcUrlResolver;
 use Baywall\Core\Constant\Config;
-use Baywall\Core\Domain\Repository\ChainRepository;
-use Baywall\Core\Domain\ValueObject\ChainId;
-use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
 use Baywall\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
 
 /**
@@ -19,19 +17,18 @@ use Baywall\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
  * `WP_Error`を返して更新自体を中止させる。
  */
 class WpPluginPackageChecksumVerifier {
-
 	public function __construct(
 		private readonly WpAppManifestFetcher $manifest_fetcher,
 		private readonly WpPluginInfoProvider $plugin_info_provider,
-		private readonly ChainRepository $chain_repository
+		private readonly EnsRpcUrlResolver $ens_rpc_url_resolver
 	) {}
 
 	/**
 	 * `upgrader_pre_download`フィルターでの事前検証を行います。
 	 *
-	 * @param string       $package    パッケージのURL
-	 * @param \WP_Upgrader $upgrader   アップグレーダーのインスタンス（本検証では未使用）
-	 * @param array        $hook_extra フィルタに渡された追加引数（type/plugin等）
+	 * @param string               $package    パッケージのURL
+	 * @param \WP_Upgrader         $upgrader   アップグレーダーのインスタンス（本検証では未使用）
+	 * @param array<string, mixed> $hook_extra フィルタに渡された追加引数（type/plugin等）
 	 */
 	public function verifyPreDownload( string $package, \WP_Upgrader $upgrader, array $hook_extra ): string|false|\WP_Error {
 		// 対象外は素通し（他プラグイン・コア・テーマの更新に影響しない）
@@ -45,8 +42,7 @@ class WpPluginPackageChecksumVerifier {
 		// manifestをこの時点で再取得（fail-closed: 取得失敗時は更新自体を中止する）
 		try {
 			// ENS解決に使うEthereum MainnetのRPC URLを解決する（未登録時はfail-closedで更新を中止する）
-			$chain   = $this->chain_repository->get( ChainId::from( ChainIdConstants::ETHEREUM ) );
-			$rpc_url = null !== $chain ? $chain->rpcUrl() : null;
+			$rpc_url = $this->ens_rpc_url_resolver->resolve();
 			if ( null === $rpc_url ) {
 				return new \WP_Error( 'baywall_checksum_verification_failed', '[CFCCA265] RPC URL for Ethereum Mainnet is not registered.' );
 			}
@@ -70,6 +66,7 @@ class WpPluginPackageChecksumVerifier {
 		// 更新用zipを一時ファイルへダウンロード（コアのダウンロードを肩代わり）
 		// `download_url`はwp-admin/includes/file.phpに定義されるが、cron(自動更新)経路では未読込の可能性があるため防御的にrequireする
 		if ( ! function_exists( 'download_url' ) ) {
+			// @phpstan-ignore requireOnce.fileNotFound, requireOnce.fileNotFound
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 		$tmp_path = download_url( $package, Config::PLUGIN_UPDATE_PACKAGE_DOWNLOAD_TIMEOUT );

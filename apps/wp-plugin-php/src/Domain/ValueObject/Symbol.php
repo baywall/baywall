@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * 通貨シンボルを表すValueObject
  */
 final readonly class Symbol implements ValueObject {
-
 	private function __construct( string $symbol_value ) {
 		self::checkValidSymbolFormat( $symbol_value );
 		$this->symbol_value = $symbol_value;
@@ -20,6 +19,7 @@ final readonly class Symbol implements ValueObject {
 	public static function from( string $symbol_value ): self {
 		return new self( $symbol_value );
 	}
+
 	public static function fromNullable( ?string $symbol_value ): ?self {
 		return is_null( $symbol_value ) ? null : new self( $symbol_value );
 	}

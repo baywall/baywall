@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
+use Baywall\Core\Application\Port\HomeUrlProvider;
+
 /**
  * WordPressの設定情報を取得するクラス。
  */
 // ※ このクラスはWordPressから情報を取得するためのクラスなので、WpPropertyProviderという名前を避けています。
-class WordPressPropertyProvider {
-
+class WordPressPropertyProvider implements HomeUrlProvider {
 	/**
 	 * サイトのホームURLを取得します。
 	 *

@@ -156,7 +156,6 @@ final class Ethers {
 		return $result;
 	}
 
-
 	/**
 	 * @param string[]       $types
 	 * @param (int|string)[] $values 数値または`0x`始まりのHEX文字列
@@ -166,7 +165,6 @@ final class Ethers {
 		// 引数の長さが一致することを確認
 		assert( count( $types ) === count( $values ), '[5C6F2D1E] types len: ' . count( $types ) . ', values len: ' . count( $values ) );
 
-		// TODO: pack等で最適化
 		$packed = '0x';
 		foreach ( $types as $index => $type ) {
 			$value = $values[ $index ];
@@ -179,7 +177,6 @@ final class Ethers {
 			} else {
 				throw new \InvalidArgumentException( '[5963C820] Unsupported value type: ' . gettype( $value ) );
 			}
-			assert( is_string( $raw_hex ), '[4851DA47]' );
 			assert( preg_match( '/^[0-9a-f]*$/', $raw_hex ), "[D3C2E2B1] {$raw_hex}" );
 
 			switch ( $type ) {

@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\Base\StringValueObject;
  * ERC-4361 Statement 文字列を表すクラス
  */
 readonly class Erc4361Statement extends StringValueObject {
-
 	protected function __construct( string $erc4361_statement_value ) {
 		parent::__construct( $erc4361_statement_value );
 	}

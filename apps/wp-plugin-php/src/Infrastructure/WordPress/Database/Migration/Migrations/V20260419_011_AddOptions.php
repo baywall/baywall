@@ -10,8 +10,6 @@ use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpPausedRepo
 use Baywall\Core\Infrastructure\WordPress\Auth\WpJwtSecretKeyService;
 
 class V20260419_011_AddOptions extends MigrationBase {
-
-
 	public function __construct(
 		private readonly WpPausedRepository $paused_repository,
 		private readonly WpJwtSecretKeyRepository $jwt_secret_key_repository,

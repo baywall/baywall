@@ -12,8 +12,6 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class ConfirmationsService {
-
-
 	public function __construct(
 		private readonly ChainRepository $chain_repository,
 		private readonly AppContractDataProvider $app_contract_data_provider,

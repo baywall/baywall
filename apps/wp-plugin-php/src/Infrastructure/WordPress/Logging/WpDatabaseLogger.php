@@ -10,8 +10,6 @@ use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
 
 class WpDatabaseLogger implements Logger {
-
-
 	public function __construct(
 		private readonly LogTable $log_table,
 		private readonly ErrorLogLogger $fallback_logger

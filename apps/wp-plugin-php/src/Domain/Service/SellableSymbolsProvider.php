@@ -16,8 +16,6 @@ use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\Symbol;
 
 class SellableSymbolsProvider {
-
-
 	public function __construct(
 		private readonly ChainRepository $chain_repository,
 		private readonly TokenRepository $token_repository,

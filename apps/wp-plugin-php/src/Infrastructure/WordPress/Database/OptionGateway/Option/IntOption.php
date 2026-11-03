@@ -11,6 +11,7 @@ class IntOption {
 
 	private readonly Option $option;
 
+	/** @param bool|int|null $default */
 	public function get( $default = null ): ?int {
 		$ret = $this->option->get( $default );
 		return is_null( $ret ) ? null : (int) $ret;

@@ -17,6 +17,7 @@ class InvoiceSearchCondition {
 	public function invoiceId(): ?InvoiceId {
 		return $this->invoice_id;
 	}
+
 	/** 請求書IDを設定します */
 	public function setInvoiceId( ?InvoiceId $invoice_id ): self {
 		$this->invoice_id = $invoice_id;
@@ -27,6 +28,7 @@ class InvoiceSearchCondition {
 	public function postId(): ?PostId {
 		return $this->post_id;
 	}
+
 	/** 投稿IDを設定します */
 	public function setPostId( ?PostId $post_id ): self {
 		$this->post_id = $post_id;
@@ -37,6 +39,7 @@ class InvoiceSearchCondition {
 	public function buyerAddress(): ?Address {
 		return $this->buyer_address;
 	}
+
 	/** 購入者アドレスを設定します */
 	public function setBuyerAddress( ?Address $buyer_address ): self {
 		$this->buyer_address = $buyer_address;

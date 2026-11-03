@@ -20,6 +20,7 @@ class EthCallClient {
 		$this->retryer    = new BlockchainRetryer();
 		$this->rpc_client = new RpcClient( $rpc_url, $transport );
 	}
+
 	private readonly BlockchainRetryer $retryer;
 	private readonly RpcClient $rpc_client;
 

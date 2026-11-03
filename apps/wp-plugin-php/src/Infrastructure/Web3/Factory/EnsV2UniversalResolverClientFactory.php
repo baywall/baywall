@@ -7,7 +7,6 @@ use Baywall\Core\Domain\ValueObject\RpcUrl;
 use Baywall\Core\Infrastructure\Web3\Client\EnsV2UniversalResolverClient;
 
 class EnsV2UniversalResolverClientFactory {
-
 	/**
 	 * 指定した RPC エンドポイントに接続する ENSv2 Universal Resolver クライアントを生成します。
 	 *

@@ -22,7 +22,7 @@ class Chain {
 	 * @param int               $consecutive_failures
 	 * @param null|string       $block_explorer_url
 	 */
-	protected function __construct( ChainId $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, Confirmations $confirmations, MaxLogsRange $max_logs_range, int $consecutive_failures, ?string $block_explorer_url ) {
+	public function __construct( ChainId $chain_id, string $name, NetworkCategoryId $network_category_id, ?RpcUrl $rpc_url, Confirmations $confirmations, MaxLogsRange $max_logs_range, int $consecutive_failures, ?string $block_explorer_url ) {
 		$this->id                   = $chain_id;
 		$this->name                 = $name;
 		$this->network_category_id  = $network_category_id;
@@ -45,15 +45,19 @@ class Chain {
 	public function id(): ChainId {
 		return $this->id;
 	}
+
 	public function name(): string {
 		return $this->name;
 	}
+
 	public function rpcUrl(): ?RpcUrl {
 		return $this->rpc_url;
 	}
+
 	public function setRpcUrl( ?RpcUrl $rpc_url ): void {
 		$this->rpc_url = $rpc_url;
 	}
+
 	/**
 	 * @return Confirmations
 	 */

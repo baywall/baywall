@@ -3,15 +3,12 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
-use Baywall\Core\Application\Repository\ThemeSettingRepository;
+use Baywall\Core\Application\UseCase\GetThemeSetting;
 
 class ResolveThemeSetting implements Resolver {
-
-
-	public function __construct( private readonly ThemeSettingRepository $theme_setting_repository ) {}
+	public function __construct( private readonly GetThemeSetting $get_theme_setting ) {}
 
 	public function handle( array $root_value, array $args ): string {
-		// アクセス制御は不要
-		return $this->theme_setting_repository->get()->value();
+		return $this->get_theme_setting->handle();
 	}
 }

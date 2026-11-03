@@ -10,12 +10,11 @@ use Baywall\Core\Domain\ValueObject\Signature;
 
 /** ERC-4361の署名を検証してアクセストークン(+リフレッシュトークン)を発行するクラス */
 class ResolveIssueAccessTokenByErc4361Signature implements Resolver {
-
-
 	public function __construct(
 		private readonly IssueAccessTokenByErc4361Signature $issue_access_token_by_erc4361_signature
 	) {}
 
+	/** @return array<string, mixed> */
 	public function handle( array $root_value, array $args ) {
 		$this->issue_access_token_by_erc4361_signature->handle(
 			Address::from( $args['address'] ),

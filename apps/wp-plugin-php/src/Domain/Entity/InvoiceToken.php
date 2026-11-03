@@ -11,8 +11,6 @@ use Baywall\Core\Domain\ValueObject\UnixTimestamp;
  * 請求書トークンを表すクラス
  */
 class InvoiceToken {
-
-
 	private function __construct(
 		private readonly InvoiceId $invoice_id,
 		private readonly InvoiceTokenString $invoice_token,
@@ -28,14 +26,17 @@ class InvoiceToken {
 	public function invoiceId(): InvoiceId {
 		return $this->invoice_id;
 	}
+
 	/** 請求書トークンの文字列 */
 	public function token(): InvoiceTokenString {
 		return $this->invoice_token;
 	}
+
 	/** 請求書トークンの有効期限 */
 	public function expiresAt(): UnixTimestamp {
 		return $this->expires_at;
 	}
+
 	/** 請求書トークンの取り消し日時 */
 	public function revokedAt(): ?UnixTimestamp {
 		return $this->revoked_at;

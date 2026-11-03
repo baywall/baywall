@@ -8,7 +8,6 @@ use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
 class ChainsSpecification {
-
 	/**
 	 * @param bool|null $is_connectable 接続可能かどうか。null の場合は接続可能性を判定しない。
 	 */

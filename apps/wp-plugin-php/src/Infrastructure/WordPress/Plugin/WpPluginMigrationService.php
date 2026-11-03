@@ -5,14 +5,12 @@ namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Application\Repository\InstalledPluginVersionRepository;
-use Baywall\Core\Application\Service\PluginMigrationService;
+use Baywall\Core\Application\Port\PluginMigrationService;
 use Baywall\Core\Application\ValueObject\PluginVersion;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\MigrationLocator;
 use Baywall\Core\Infrastructure\WordPress\Service\WpEnvironment;
 
 class WpPluginMigrationService implements PluginMigrationService {
-
-
 	public function __construct(
 		private readonly InstalledPluginVersionRepository $installed_plugin_version_repository,
 		private readonly WpPluginInfoProvider $plugin_info_provider,

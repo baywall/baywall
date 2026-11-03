@@ -11,16 +11,10 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 final readonly class BlockTag implements ValueObject {
 	private const LATEST = 'latest';
 
-	// 以下は必要になったタイミングでアンコメント
-	// private const EARLIEST = 'earliest';
-	// private const PENDING = 'pending';
-	// private const SAFE = 'safe';
-	// private const FINALIZED = 'finalized';
-
 	private readonly string $tag;
 
 	private function __construct( string $tag ) {
-		if ( ! in_array( $tag, array( self::LATEST /*, self::EARLIEST, self::PENDING, self::SAFE, self::FINALIZED */ ), true ) ) {
+		if ( ! in_array( $tag, array( self::LATEST ), true ) ) {
 			throw new \InvalidArgumentException( '[62BF0CAE] Invalid block tag: ' . $tag );
 		}
 

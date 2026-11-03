@@ -11,7 +11,6 @@ use InvalidArgumentException;
  * 数量等を表すクラス
  */
 final readonly class Amount implements ValueObject {
-
 	private function __construct( string $amount_text ) {
 		if ( false !== strpos( $amount_text, '.' ) ) {
 			// 小数点以下の末尾が0の場合は削除
@@ -111,8 +110,8 @@ final readonly class Amount implements ValueObject {
 
 	/**
 	 *
-	 * @param Amount        $other
-	 * @param null|Decimals $accuracy_decimals 最大精度。割り切れない場合は、指定した精度で切り捨て。
+	 * @param Amount   $other
+	 * @param Decimals $accuracy_decimals 最大精度。割り切れない場合は、指定した精度で切り捨て。
 	 * @throws DivisionByZeroError
 	 */
 	public function div( self $other, Decimals $accuracy_decimals ): self {

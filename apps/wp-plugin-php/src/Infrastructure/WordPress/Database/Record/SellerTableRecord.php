@@ -22,9 +22,11 @@ class SellerTableRecord extends RecordBase {
 	public function sellerAddressValue(): string {
 		return $this->seller_address;
 	}
+
 	public function signingMessageValue(): string {
 		return $this->signing_message;
 	}
+
 	public function signatureValue(): string {
 		return $this->signature;
 	}

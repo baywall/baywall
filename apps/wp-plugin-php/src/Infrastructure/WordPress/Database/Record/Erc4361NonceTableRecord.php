@@ -22,9 +22,11 @@ class Erc4361NonceTableRecord extends RecordBase {
 	public function erc4361NonceValue(): string {
 		return $this->erc4361_nonce;
 	}
+
 	public function walletAddressValue(): string {
 		return $this->wallet_address;
 	}
+
 	public function issuedAtValue(): int {
 		return $this->issued_at;
 	}

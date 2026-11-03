@@ -8,13 +8,11 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\SymbolPair;
 
 readonly class Oracle {
-
 	public function __construct(
 		private readonly ChainId $chain_id,
 		private readonly Address $address,
 		private readonly SymbolPair $symbol_pair
 	) {}
-
 
 	public function chainId(): ChainId {
 		return $this->chain_id;

@@ -10,7 +10,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * ログ取得ブロック範囲最大値を表すクラス
  */
 final readonly class MaxLogsRange implements ValueObject {
-
 	private function __construct( int $max_logs_range_value ) {
 		self::checkMaxLogsRangeValue( $max_logs_range_value );
 		$this->max_logs_range_value = $max_logs_range_value;

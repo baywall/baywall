@@ -6,7 +6,6 @@ namespace Baywall\Core\Infrastructure\Web3\Service;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
 use Baywall\Core\Lib\Ether\Ethers;
-use Baywall\Core\Lib\Util\Strings;
 use Baywall\Core\Infrastructure\Web3\Exception\ResolverNotFoundException;
 use Baywall\Core\Infrastructure\Web3\Factory\EnsRegistryClientFactory;
 use Baywall\Core\Infrastructure\Web3\Factory\EnsResolverClientFactory;
@@ -16,7 +15,6 @@ use Baywall\Core\Infrastructure\Web3\Factory\EnsV2UniversalResolverClientFactory
  * ENS から情報を取得するサービスです。
  */
 class EnsService {
-
 	public function __construct(
 		private readonly EnsRegistryClientFactory $ens_registry_client_factory,
 		private readonly EnsResolverClientFactory $ens_resolver_client_factory,
@@ -39,7 +37,7 @@ class EnsService {
 	 */
 	public function getText( RpcUrl $rpc_url, string $ens_name, string $key ): string {
 		// ENS 名は `.eth` で終わることを必須とする（正規化前の名前で判定し、空名等はここで拒否する）
-		if ( ! Strings::ends_with( strtolower( $ens_name ), '.eth' ) ) {
+		if ( ! str_ends_with( strtolower( $ens_name ), '.eth' ) ) {
 			throw new \InvalidArgumentException( "[28115649] ens_name must end with '.eth'. - {$ens_name}" );
 		}
 

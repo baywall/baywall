@@ -3,40 +3,25 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
-use Baywall\Core\Application\Logging\AppLogger;
-use Baywall\Core\Application\Service\PaidContentAnalyzer;
-use Baywall\Core\Application\Service\UserAccessChecker;
-use Baywall\Core\Domain\Repository\PostRepository;
+use Baywall\Core\Application\UseCase\GetSellingContent;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class ResolveSellingContent implements Resolver {
-
-
 	public function __construct(
-		private readonly AppLogger $logger,
-		private readonly PostRepository $post_repository,
-		private readonly UserAccessChecker $user_access_checker,
-		private readonly PaidContentAnalyzer $paid_content_analyzer
+		private readonly GetSellingContent $get_selling_content
 	) {}
 
+	/** @return array<string, mixed>|null */
 	public function handle( array $root_value, array $args ) {
-		$post_id = PostId::from( $args['postId'] );
+		$selling_content = $this->get_selling_content->handle( PostId::from( $args['postId'] ) );
 
-		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_id );
-
-		// 有料部分のコンテンツを取得
-		$paid_content = $this->post_repository->get( $post_id )->paidContent();
-
-		// 有料部分のコンテンツが取得できなかった場合はnullを返す
-		if ( null === $paid_content ) {
-			$this->logger->warn( "[248F67EA] Paid content is null for post ID: {$post_id}" );
+		if ( null === $selling_content ) {
 			return null;
 		}
 
 		return array(
-			'characterCount' => $this->paid_content_analyzer->getCharacterCount( $paid_content ),
-			'imageCount'     => $this->paid_content_analyzer->getImageCount( $paid_content ),
+			'characterCount' => $selling_content->character_count,
+			'imageCount'     => $selling_content->image_count,
 		);
 	}
 }

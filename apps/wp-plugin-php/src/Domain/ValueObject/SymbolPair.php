@@ -11,10 +11,10 @@ readonly class SymbolPair implements ValueObject {
 		private readonly Symbol $base_symbol,
 		private readonly Symbol $quote_symbol
 	) {}
+
 	public static function from( Symbol $base_symbol, Symbol $quote_symbol ): self {
 		return new self( $base_symbol, $quote_symbol );
 	}
-
 
 	public function base(): Symbol {
 		return $this->base_symbol;

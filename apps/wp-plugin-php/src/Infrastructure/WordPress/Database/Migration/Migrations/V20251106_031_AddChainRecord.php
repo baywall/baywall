@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
-use Baywall\Core\Application\Service\TransactionService;
-use Baywall\Core\Application\Service\Clock;
+use Baywall\Core\Application\Port\TransactionService;
+use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Confirmations;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;

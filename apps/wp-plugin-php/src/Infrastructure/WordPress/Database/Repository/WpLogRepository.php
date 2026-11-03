@@ -7,7 +7,6 @@ use Baywall\Core\Application\Repository\LogRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
 
 class WpLogRepository implements LogRepository {
-
 	public function __construct( private readonly LogTable $log_table ) {}
 
 	/** @inheritDoc */

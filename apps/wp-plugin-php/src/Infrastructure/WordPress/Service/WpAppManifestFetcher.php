@@ -19,7 +19,6 @@ use Baywall\Core\Infrastructure\Web3\Service\EnsService;
  * 取得・検証に失敗した場合は `\RuntimeException` を送出します（呼び出し側で「更新非提示」として扱います）。
  */
 class WpAppManifestFetcher {
-
 	public function __construct( private readonly EnsService $ens_service ) {}
 
 	/**

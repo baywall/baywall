@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * ブロック番号を表すクラス
  */
 readonly class BlockNumber implements ValueObject {
-
 	private function __construct( int $block_number_value ) {
 		if ( $block_number_value < 0 ) {
 			throw new \InvalidArgumentException( "[60261E42] Invalid block number value: {$block_number_value}" );
@@ -19,10 +18,10 @@ readonly class BlockNumber implements ValueObject {
 
 	private readonly int $block_number_value;
 
-
 	public static function fromInt( int $block_number_value ): self {
 		return new self( $block_number_value );
 	}
+
 	public static function fromHex( Hex $hex ): self {
 		return new self( $hex->intValue() );
 	}

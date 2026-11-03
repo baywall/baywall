@@ -10,7 +10,6 @@ namespace Baywall\Core\Domain\ValueObject;
  * 意味論が定まらないこと、`OracleRoundData` と同様に扱うためです。
  */
 readonly class EthBlock {
-
 	private function __construct(
 		private readonly BlockNumber $block_number,
 		private readonly UnixTimestamp $timestamp

@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * 投稿IDを表す値オブジェクト
  */
 readonly class PostId implements ValueObject {
-
 	private function __construct( int $post_id ) {
 		if ( $post_id <= 0 ) {
 			throw new \InvalidArgumentException( '[8B2A1F3C] Post ID must be a positive integer.' );

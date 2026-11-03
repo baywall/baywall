@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\Service;
 
+use Baywall\Core\Application\Port\UserAccessProvider;
 use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Exception\PermissionDeniedException;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class UserAccessChecker {
 	public function __construct( private readonly UserAccessProvider $user_access_provider ) {}
-
 
 	/**
 	 * 現在のユーザーで指定した投稿を閲覧できるかをチェックし、閲覧できない場合は例外をスローします

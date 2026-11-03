@@ -15,20 +15,11 @@ class Strings {
 		return mb_strpos( $haystack, $needle, $offset );
 	}
 
-
 	/**
 	 * @param string      $string
 	 * @param string|null $encoding 省略またはnullの場合は内部エンコーディングを使用します。
 	 */
 	public static function strlen( string $string, ?string $encoding = null ): int {
 		return mb_strlen( $string, $encoding );
-	}
-
-	public static function starts_with( string $string, string $prefix ): bool {
-		return str_starts_with( $string, $prefix );
-	}
-
-	public static function ends_with( string $string, string $suffix ): bool {
-		return str_ends_with( $string, $suffix );
 	}
 }

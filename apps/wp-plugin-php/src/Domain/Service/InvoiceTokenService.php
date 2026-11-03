@@ -12,8 +12,6 @@ use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 class InvoiceTokenService {
-
-
 	public function __construct(
 		private readonly InvoiceTokenGenerator $invoice_token_generator,
 		private readonly InvoiceTokenRepository $invoice_token_repository

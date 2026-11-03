@@ -33,12 +33,15 @@ class AppLogger {
 	public function debug( string|\Throwable $message_or_exception ): void {
 		$this->log( LogLevel::debug(), $message_or_exception );
 	}
+
 	public function info( string|\Throwable $message_or_exception ): void {
 		$this->log( LogLevel::info(), $message_or_exception );
 	}
+
 	public function warn( string|\Throwable $message_or_exception ): void {
 		$this->log( LogLevel::warn(), $message_or_exception );
 	}
+
 	public function error( string|\Throwable $message_or_exception ): void {
 		$this->log( LogLevel::error(), $message_or_exception );
 	}

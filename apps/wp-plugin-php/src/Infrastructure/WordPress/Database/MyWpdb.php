@@ -64,21 +64,20 @@ class MyWpdb {
 		if ( $result === false ) {
 			throw new RuntimeException( "[D76677B0] SQL query failed: {$query}. " . $this->wpdb->last_error );
 		}
-		assert( $result === true || is_int( $result ), "[4E471767] {$result}" );
 		return $result;
 	}
 
 	/**
 	 * wpdbインスタンスを使用してテーブルへデータを挿入します。
 	 *
-	 * @param string[]|string $format
+	 * @param array<string, mixed> $data
+	 * @param string[]|string      $format
 	 */
 	public function insert( string $table, array $data, $format = null ): int {
 		$result = $this->wpdb->insert( $table, $data, $format );
 		if ( $result === false ) {
 			throw new RuntimeException( "[356E918B] wpdb insert failed: {$this->wpdb->last_error}" );
 		}
-		assert( is_int( $result ), "[221420F1] {$result}" );
 
 		return $result;
 	}
@@ -86,11 +85,11 @@ class MyWpdb {
 	/**
 	 * wpdb->update
 	 *
-	 * @param string          $table
-	 * @param array           $data
-	 * @param array           $where
-	 * @param string[]|string $format
-	 * @param string[]|string $where_format
+	 * @param string               $table
+	 * @param array<string, mixed> $data
+	 * @param array<string, mixed> $where
+	 * @param string[]|string      $format
+	 * @param string[]|string      $where_format
 	 * @return int
 	 */
 	public function update( string $table, array $data, array $where, $format = null, $where_format = null ): int {
@@ -98,20 +97,21 @@ class MyWpdb {
 		if ( $result === false ) {
 			throw new RuntimeException( "[3AC6E13E] wpdb update failed: {$this->wpdb->last_error}" );
 		}
-		assert( is_int( $result ), "[6131415E] {$result}" );
 
 		return $result;
 	}
 
 	/**
 	 * wpdb->delete
+	 *
+	 * @param array<string, mixed> $where
+	 * @param string[]|string      $where_format
 	 */
 	public function delete( string $table, array $where, $where_format = null ): int {
 		$result = $this->wpdb->delete( $table, $where, $where_format );
 		if ( $result === false ) {
 			throw new RuntimeException( "[64BB03B5] wpdb delete failed: {$this->wpdb->last_error}" );
 		}
-		assert( is_int( $result ), "[3F45CD57] {$result}" );
 
 		return $result;
 	}
@@ -119,7 +119,7 @@ class MyWpdb {
 	/**
 	 * wpdb->get_row
 	 *
-	 * @return array|object|null
+	 * @return array<array-key, mixed>|object|null
 	 */
 	public function get_row( string $query, string $output = OBJECT, int $y = 0 ): array|object|null {
 		$row = $this->wpdb->get_row( $query, $output, $y );
@@ -132,7 +132,7 @@ class MyWpdb {
 	/**
 	 * wpdb->get_results
 	 *
-	 * @return array|object|null
+	 * @return array<array-key, mixed>|object|null
 	 */
 	public function get_results( string $query, string $output = OBJECT ): array|object|null {
 		$results = $this->wpdb->get_results( $query, $output );

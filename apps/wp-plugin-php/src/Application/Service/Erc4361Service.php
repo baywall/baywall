@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\Service;
 
+use Baywall\Core\Application\Port\Clock;
+use Baywall\Core\Application\Port\Erc4361PropertyProvider;
 use Baywall\Core\Application\Repository\Erc4361NonceRepository;
 use Baywall\Core\Application\ValueObject\Erc4361Message;
 use Baywall\Core\Application\ValueObject\Erc4361Nonce;
@@ -14,7 +16,6 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 class Erc4361Service {
 
 	private const ERC4361_MESSAGE_VERSION = 1;
-
 
 	public function __construct(
 		private Erc4361PropertyProvider $erc4361_property_provider,

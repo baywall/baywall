@@ -9,7 +9,6 @@ namespace Baywall\Core\Domain\ValueObject\Base;
  * equalsではタイミング攻撃耐性のある比較を行う。
  */
 abstract readonly class SecureStringValueObject extends StringValueObject {
-
 	protected function __construct( string $string_value ) {
 		parent::__construct( $string_value );
 	}

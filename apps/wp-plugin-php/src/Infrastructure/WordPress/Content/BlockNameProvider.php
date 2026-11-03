@@ -7,7 +7,6 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\ValueObject\BlockName;
 
 class BlockNameProvider {
-
 	/** ブロックエディタで使用されるブロック名を取得します。 */
 	public function get(): BlockName {
 		if ( file_exists( WpConfig::BLOCK_JSON_PATH ) ) {

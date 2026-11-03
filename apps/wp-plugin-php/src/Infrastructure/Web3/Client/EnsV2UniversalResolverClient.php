@@ -84,7 +84,7 @@ class EnsV2UniversalResolverClient {
  * @internal
  */
 class EnsV2UniversalResolverAbi {
-
+	/** @return list<array<string, mixed>> */
 	public function get(): array {
 		$abi_json = <<<JSON
 		{

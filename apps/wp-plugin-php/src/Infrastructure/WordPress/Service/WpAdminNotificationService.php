@@ -3,12 +3,11 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Application\Logging\AppLogger;
-use Baywall\Core\Application\Service\AdminNotificationService;
+use Baywall\Core\Application\Port\AdminNotificationService;
 use Baywall\Core\Application\ValueObject\EmailAddress;
 use WP_User_Query;
 
 class WpAdminNotificationService implements AdminNotificationService {
-
 	public function __construct( private readonly AppLogger $logger ) {}
 
 	/** @inheritdoc */

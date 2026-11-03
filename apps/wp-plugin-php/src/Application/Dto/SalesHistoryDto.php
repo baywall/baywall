@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace Baywall\Core\Application\Dto;
 
 readonly class SalesHistoryDto {
-
-
 	public function __construct(
 		public readonly SalesHistoryInvoiceDto $invoice,
 		public readonly string $post_title,

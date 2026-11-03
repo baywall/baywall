@@ -10,7 +10,6 @@ use Baywall\Core\Infrastructure\Cache\OracleRateCache;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpTransientName;
 
 class WpOracleRateCache implements OracleRateCache {
-
 	public function __construct( TransientStorage $storage, TransientExpirationProvider $expiration_provider ) {
 		$this->storage    = $storage;
 		$this->expiration = $expiration_provider->rate();

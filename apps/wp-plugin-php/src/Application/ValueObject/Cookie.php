@@ -39,6 +39,7 @@ readonly class Cookie {
 		return $this->value;
 	}
 
+	/** @return array<string, int|string|bool> */
 	public function options(): array {
 		$options = array();
 		if ( $this->expires !== null ) {

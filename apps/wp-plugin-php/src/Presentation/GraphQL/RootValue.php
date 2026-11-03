@@ -6,8 +6,6 @@ use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Presentation\GraphQL\Resolvers\Resolver;
 
 class RootValue {
-
-
 	/**
 	 * @param array<string, \Closure(): Resolver> $resolvers フィールド名 → resolver 生成 closure の対応表
 	 */

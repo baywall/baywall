@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Query;
 use Baywall\Core\Application\Dto\PriceDto;
 use Baywall\Core\Application\Dto\SalesHistoryDto;
 use Baywall\Core\Application\Dto\SalesHistoryInvoiceDto;
-use Baywall\Core\Application\Service\SalesHistoryQueryService;
+use Baywall\Core\Application\Port\SalesHistoryQueryService;
 use Baywall\Core\Domain\Repository\SearchCondition\SalesHistorySearchCondition;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Amount;
@@ -16,8 +16,6 @@ use Baywall\Core\Infrastructure\WordPress\Database\Record\SalesHistoryViewRecord
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\SalesHistoryView;
 
 class WpSalesHistoryQueryService implements SalesHistoryQueryService {
-
-
 	public function __construct( private readonly SalesHistoryView $sales_history_view ) {}
 
 	/** @inheritDoc */

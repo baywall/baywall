@@ -15,9 +15,7 @@ use Baywall\Core\Domain\ValueObject\RpcUrl;
 use Baywall\Core\Infrastructure\WordPress\Database\Record\ChainTableRecord;
 
 class WpChainRepository implements ChainRepository {
-
 	public function __construct( private readonly ChainTable $chain_table ) {}
-
 
 	/** @inheritdoc */
 	public function get( ChainId $chain_id ): ?Chain {
@@ -31,7 +29,16 @@ class WpChainRepository implements ChainRepository {
 	/** @inheritdoc */
 	public function all(): array {
 		return array_map(
-			fn( $record ) => new ChainImpl( $record ),
+			fn( ChainTableRecord $record ) => new Chain(
+				ChainId::from( $record->chainIdValue() ),
+				$record->nameValue(),
+				NetworkCategoryId::from( $record->networkCategoryIdValue() ),
+				RpcUrl::fromNullable( $record->rpcUrlValue() ),
+				Confirmations::from( $record->confirmationsValue() ),
+				MaxLogsRange::from( $record->maxLogsRangeValue() ),
+				$record->consecutiveFailuresValue(),
+				$record->blockExplorerUrlValue()
+			),
 			$this->chain_table->all()
 		);
 	}
@@ -44,21 +51,5 @@ class WpChainRepository implements ChainRepository {
 	/** @inheritdoc */
 	public function saveConsecutiveFailures( Chain $chain ): void {
 		$this->chain_table->saveConsecutiveFailures( $chain->id()->value(), $chain->consecutiveFailures() );
-	}
-}
-
-/** @internal */
-class ChainImpl extends Chain {
-	public function __construct( ChainTableRecord $record ) {
-		parent::__construct(
-			ChainId::from( $record->chainIdValue() ),
-			$record->nameValue(),
-			NetworkCategoryId::from( $record->networkCategoryIdValue() ),
-			RpcUrl::fromNullable( $record->rpcUrlValue() ),
-			Confirmations::from( $record->confirmationsValue() ),
-			MaxLogsRange::from( $record->maxLogsRangeValue() ),
-			$record->consecutiveFailuresValue(),
-			$record->blockExplorerUrlValue()
-		);
 	}
 }

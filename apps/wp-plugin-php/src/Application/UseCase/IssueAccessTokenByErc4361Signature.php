@@ -6,7 +6,7 @@ namespace Baywall\Core\Application\UseCase;
 use Baywall\Core\Application\Repository\Erc4361NonceRepository;
 use Baywall\Core\Application\Service\Erc4361Service;
 use Baywall\Core\Application\Service\TokenCookieService;
-use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Port\TransactionService;
 use Baywall\Core\Domain\Exception\ValidationFailedException;
 use Baywall\Core\Domain\Service\SignatureService;
 use Baywall\Core\Domain\ValueObject\Address;
@@ -14,8 +14,6 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Signature;
 
 class IssueAccessTokenByErc4361Signature {
-
-
 	public function __construct(
 		private readonly TransactionService $transaction_service,
 		private readonly Erc4361Service $erc4361_service,

@@ -7,7 +7,6 @@ use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\PrivateKey;
 
 readonly class Signer {
-
 	/**
 	 * @param Address    $address
 	 * @param PrivateKey $private_key
@@ -17,7 +16,6 @@ readonly class Signer {
 		private readonly Address $address,
 		#[\SensitiveParameter] private readonly PrivateKey $private_key
 	) {}
-
 
 	/**
 	 * 秘密鍵を取得します。

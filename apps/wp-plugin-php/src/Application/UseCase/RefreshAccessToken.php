@@ -1,12 +1,11 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
-use Baywall\Core\Application\Service\Clock;
+use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Application\Service\TokenCookieService;
-use Baywall\Core\Application\Service\TransactionService;
+use Baywall\Core\Application\Port\TransactionService;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\ValueObject\RefreshTokenString;
 
@@ -14,8 +13,6 @@ use Baywall\Core\Domain\ValueObject\RefreshTokenString;
  * アクセストークンを更新します
  */
 class RefreshAccessToken {
-
-
 	public function __construct(
 		private readonly TransactionService $transaction_service,
 		private readonly RefreshTokenService $refresh_token_service,

@@ -12,7 +12,6 @@ use Baywall\Core\Domain\ValueObject\PostId;
  * ウィジェット(`the_content`フィルタ)とviewスクリプトの出力条件を一致させるために使用する。
  */
 class CurrentPaywalledPostResolver {
-
 	public function __construct( private readonly PostRepository $post_repository ) {}
 
 	/**

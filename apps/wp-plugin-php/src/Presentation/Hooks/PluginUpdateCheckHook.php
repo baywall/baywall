@@ -6,9 +6,7 @@ namespace Baywall\Core\Presentation\Hooks;
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
-use Baywall\Core\Domain\Repository\ChainRepository;
-use Baywall\Core\Domain\ValueObject\ChainId;
-use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
+use Baywall\Core\Application\Service\EnsRpcUrlResolver;
 use Baywall\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
 use Baywall\Core\Infrastructure\WordPress\Service\WpEnvironment;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
@@ -27,11 +25,10 @@ use Baywall\Core\Presentation\Hooks\Base\HookBase;
  * いかなる例外も管理画面の表示障害にしないため、全例外は `\Throwable` で捕捉して `false` を返す（フェイルセーフ）。
  */
 class PluginUpdateCheckHook extends HookBase {
-
 	/**
 	 * @param \Closure(): WpPluginPackageChecksumVerifier $checksum_verifier
 	 * @param \Closure(): WpEnvironment                   $wp_environment
-	 * @param \Closure(): ChainRepository                 $chain_repository
+	 * @param \Closure(): EnsRpcUrlResolver               $ens_rpc_url_resolver
 	 * @param \Closure(): WpAppManifestFetcher            $manifest_fetcher
 	 * @param \Closure(): WpPluginInfoProvider            $plugin_info_provider
 	 * @param \Closure(): WordPressPropertyProvider       $wordpress_property_provider
@@ -41,7 +38,7 @@ class PluginUpdateCheckHook extends HookBase {
 	public function __construct(
 		private readonly \Closure $checksum_verifier,
 		private readonly \Closure $wp_environment,
-		private readonly \Closure $chain_repository,
+		private readonly \Closure $ens_rpc_url_resolver,
 		private readonly \Closure $manifest_fetcher,
 		private readonly \Closure $plugin_info_provider,
 		private readonly \Closure $wordpress_property_provider,
@@ -55,7 +52,6 @@ class PluginUpdateCheckHook extends HookBase {
 	 */
 	public static function updatePluginsFilterName(): string {
 		$host = wp_parse_url( Config::UPDATE_URI, PHP_URL_HOST );
-		assert( is_string( $host ) && '' !== $host, '[87E12F57] UPDATE_URI must contain a valid hostname.' );
 		return 'update_plugins_' . $host;
 	}
 
@@ -71,10 +67,10 @@ class PluginUpdateCheckHook extends HookBase {
 	 * 本プラグインの更新zipについてsha256チェックサム検証を行う(fail-closed)。
 	 * 対象外の更新では`false`を返し、コアの通常ダウンロード処理に委ねる。
 	 *
-	 * @param mixed        $reply      先に登録されたフィルタの応答(false以外ならそれを尊重する)
-	 * @param string       $package    パッケージのURL
-	 * @param \WP_Upgrader $upgrader   アップグレーダーのインスタンス
-	 * @param array        $hook_extra 追加引数
+	 * @param mixed                $reply      先に登録されたフィルタの応答(false以外ならそれを尊重する)
+	 * @param string               $package    パッケージのURL
+	 * @param \WP_Upgrader         $upgrader   アップグレーダーのインスタンス
+	 * @param array<string, mixed> $hook_extra 追加引数
 	 * @return mixed|false|string|\WP_Error 対象外はfalse、検証成功時は一時ファイルパス、検証失敗時はWP_Error
 	 */
 	public function filterUpgraderPreDownload( $reply, string $package, \WP_Upgrader $upgrader, array $hook_extra ) {
@@ -96,11 +92,11 @@ class PluginUpdateCheckHook extends HookBase {
 	/**
 	 * `update_plugins_{host}`フィルターのコールバック。
 	 *
-	 * @param mixed  $update      コアから渡される既存の更新情報（通常はfalse）
-	 * @param array  $plugin_data プラグインヘッダ情報
-	 * @param string $plugin_file プラグインベース名
-	 * @param array  $locales     インストール済みロケール一覧
-	 * @return array|false 更新提示時はペイロード配列、それ以外はfalse
+	 * @param mixed                $update      コアから渡される既存の更新情報（通常はfalse）
+	 * @param array<string, mixed> $plugin_data プラグインヘッダ情報
+	 * @param string               $plugin_file プラグインベース名
+	 * @param string[]             $locales     インストール済みロケール一覧
+	 * @return array<string, string>|false 更新提示時はペイロード配列、それ以外はfalse
 	 */
 	public function filterUpdatePlugins( $update, array $plugin_data, string $plugin_file, array $locales ) {
 		// 本番環境限定。開発・テスト環境では更新チェック自体を行わない
@@ -111,9 +107,7 @@ class PluginUpdateCheckHook extends HookBase {
 
 		try {
 			// ENS解決に使うEthereum MainnetのRPC URLを解決する（未登録時は更新非提示）
-			$chain_repository = ( $this->chain_repository )();
-			$chain            = $chain_repository->get( ChainId::from( ChainIdConstants::ETHEREUM ) );
-			$rpc_url          = null !== $chain ? $chain->rpcUrl() : null;
+			$rpc_url = ( $this->ens_rpc_url_resolver )()->resolve();
 			if ( null === $rpc_url ) {
 				return false;
 			}

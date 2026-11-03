@@ -11,7 +11,6 @@ use Baywall\Core\Domain\Specification\OraclesSpecification;
 use Baywall\Core\Domain\ValueObject\SymbolPair;
 
 class OracleResolver {
-
 	public function __construct(
 		private readonly ChainRepository $chain_repository,
 		private readonly OracleRepository $oracle_repository

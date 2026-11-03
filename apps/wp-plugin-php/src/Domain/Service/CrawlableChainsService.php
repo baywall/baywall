@@ -10,8 +10,6 @@ use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\Specification\ChainsSpecification;
 
 class CrawlableChainsService {
-
-
 	public function __construct(
 		private readonly ChainRepository $chain_repository,
 		private readonly AppContractRepository $app_contract_repository,

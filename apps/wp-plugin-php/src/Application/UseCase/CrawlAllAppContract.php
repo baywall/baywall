@@ -11,7 +11,6 @@ use Baywall\Core\Domain\Service\CrawlableChainsService;
  * すべてのチェーンに対してAppコントラクトのイベント収集を行います
  */
 class CrawlAllAppContract {
-
 	public function __construct(
 		private readonly CrawlableChainsService $crawlable_chains_service,
 		private readonly AppContractCrawlService $app_contract_crawl_service

@@ -17,10 +17,6 @@ use kornrunner\Keccak;
  * 出力は位置配列（list<mixed>）。uintN は10進文字列、int256 は2の補数デコードした10進文字列。
  */
 class AbiCodec {
-
-	/** エンコード対応の静的型 */
-	private const ENCODABLE_STATIC_TYPES = array( 'address', 'bytes32', 'uint8', 'uint80', 'uint256', 'bool' );
-
 	/**
 	 * 関数呼び出しの calldata（0x + 4バイトセレクタ + 引数）をエンコードします。
 	 *

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Auth;
 
-use Baywall\Core\Application\Service\JwtAlgorithmProvider;
+use Baywall\Core\Application\Port\JwtAlgorithmProvider;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Application\ValueObject\JwtAlgorithm;
 

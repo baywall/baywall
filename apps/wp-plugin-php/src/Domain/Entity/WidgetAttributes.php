@@ -9,8 +9,6 @@ use Baywall\Core\Domain\ValueObject\Symbol;
 
 /** 販売設定(ペイウォールブロックで画面設定された値) */
 readonly class WidgetAttributes {
-
-
 	private function __construct(
 		private readonly ?NetworkCategoryId $selling_network_category_id,
 		private readonly ?Amount $selling_amount,
@@ -24,9 +22,11 @@ readonly class WidgetAttributes {
 	public function sellingNetworkCategoryId(): ?NetworkCategoryId {
 		return $this->selling_network_category_id;
 	}
+
 	public function sellingAmount(): ?Amount {
 		return $this->selling_amount;
 	}
+
 	public function sellingSymbol(): ?Symbol {
 		return $this->selling_symbol;
 	}

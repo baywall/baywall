@@ -34,42 +34,55 @@ readonly class UnlockPaywallTransferEvent {
 	public function blockNumber(): BlockNumber {
 		return $this->block_number;
 	}
+
 	public function logIndex(): int {
 		return $this->log_index;
 	}
+
 	public function transactionHash(): TransactionHash {
 		return $this->transaction_hash;
 	}
+
 	public function invoiceId(): InvoiceId {
 		return $this->invoice_id;
 	}
+
 	public function postId(): PostId {
 		return $this->post_id;
 	}
+
 	public function serverSignerAddress(): Address {
 		return $this->server_signer_address;
 	}
+
 	public function fromAddress(): Address {
 		return $this->from_address;
 	}
+
 	public function toAddress(): Address {
 		return $this->to_address;
 	}
+
 	public function tokenAddress(): Address {
 		return $this->token_address;
 	}
+
 	public function amount(): Amount {
 		return $this->amount;
 	}
+
 	public function transferType(): UnlockPaywallTransferType {
 		return $this->transfer_type;
 	}
+
 	public function blockTimestamp(): UnixTimestamp {
 		return $this->block_timestamp;
 	}
+
 	public function blockHash(): BlockHash {
 		return $this->block_hash;
 	}
+
 	public function removed(): bool {
 		return $this->removed;
 	}

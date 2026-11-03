@@ -18,9 +18,7 @@ use Baywall\Core\Domain\ValueObject\Symbol;
 use Baywall\Core\Infrastructure\WordPress\Database\Record\InvoiceTableRecord;
 
 class WpInvoiceRepository implements InvoiceRepository {
-
 	public function __construct( private readonly InvoiceTable $invoice_table ) {}
-
 
 	/** @inheritdoc */
 	public function save( Invoice $invoice ): void {
@@ -30,35 +28,33 @@ class WpInvoiceRepository implements InvoiceRepository {
 
 	/** @inheritdoc */
 	public function get( InvoiceId $invoice_id ): ?Invoice {
-		$invoice_records = $this->invoice_table->select( ( new InvoiceSearchCondition() )->setInvoiceId( $invoice_id ) );
-		assert( count( $invoice_records ) <= 1, '[406F62EA]' );
-		return empty( $invoice_records ) ? null : new InvoiceImpl( $invoice_records[0] );
+		$invoices = $this->findBy( ( new InvoiceSearchCondition() )->setInvoiceId( $invoice_id ) );
+		assert( count( $invoices ) <= 1, '[406F62EA]' );
+
+		return $invoices[0] ?? null;
 	}
 
 	/** @inheritdoc */
 	public function findBy( InvoiceSearchCondition $condition ): array {
 		$invoice_records = $this->invoice_table->select( $condition );
-		return array_map( fn( InvoiceTableRecord $record ) => new InvoiceImpl( $record ), $invoice_records );
-	}
-}
 
-/** @internal */
-readonly class InvoiceImpl extends Invoice {
-	public function __construct( InvoiceTableRecord $invoice_record ) {
-		parent::__construct(
-			InvoiceId::fromUlidValue( $invoice_record->invoiceIdValue() ),
-			PostId::from( $invoice_record->postIdValue() ),
-			ChainId::from( $invoice_record->chainIdValue() ),
-			Price::from(
-				Amount::from( $invoice_record->sellingAmountValue() ),
-				Symbol::from( $invoice_record->sellingSymbolValue() )
+		return array_map(
+			fn( InvoiceTableRecord $record ) => new Invoice(
+				InvoiceId::fromUlidValue( $record->invoiceIdValue() ),
+				PostId::from( $record->postIdValue() ),
+				ChainId::from( $record->chainIdValue() ),
+				Price::from(
+					Amount::from( $record->sellingAmountValue() ),
+					Symbol::from( $record->sellingSymbolValue() )
+				),
+				Address::from( $record->sellerAddressValue() ),
+				Address::from( $record->paymentTokenAddressValue() ),
+				Symbol::from( $record->paymentTokenSymbolValue() ),
+				Decimals::from( $record->paymentTokenDecimalsValue() ),
+				Amount::from( $record->paymentAmountValue() ),
+				Address::from( $record->buyerAddressValue() )
 			),
-			Address::from( $invoice_record->sellerAddressValue() ),
-			Address::from( $invoice_record->paymentTokenAddressValue() ),
-			Symbol::from( $invoice_record->paymentTokenSymbolValue() ),
-			Decimals::from( $invoice_record->paymentTokenDecimalsValue() ),
-			Amount::from( $invoice_record->paymentAmountValue() ),
-			Address::from( $invoice_record->buyerAddressValue() ),
+			$invoice_records
 		);
 	}
 }

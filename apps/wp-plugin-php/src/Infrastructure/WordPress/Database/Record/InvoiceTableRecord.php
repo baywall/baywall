@@ -30,33 +30,43 @@ class InvoiceTableRecord extends RecordBase {
 	public function invoiceIdValue(): string {
 		return $this->invoice_id;
 	}
+
 	public function postIdValue(): int {
 		return $this->post_id;
 	}
+
 	public function chainIdValue(): int {
 		return $this->chain_id;
 	}
+
 	public function sellingAmountValue(): string {
 		return $this->selling_amount;
 	}
+
 	public function sellingSymbolValue(): string {
 		return $this->selling_symbol;
 	}
+
 	public function sellerAddressValue(): string {
 		return $this->seller_address;
 	}
+
 	public function paymentTokenAddressValue(): string {
 		return $this->payment_token_address;
 	}
+
 	public function paymentTokenSymbolValue(): string {
 		return $this->payment_token_symbol;
 	}
+
 	public function paymentTokenDecimalsValue(): int {
 		return $this->payment_token_decimals;
 	}
+
 	public function paymentAmountValue(): string {
 		return $this->payment_amount;
 	}
+
 	public function buyerAddressValue(): string {
 		return $this->buyer_address;
 	}

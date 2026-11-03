@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\SymbolPair;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
 class OraclesSpecification {
-
 	/**
 	 * @param ChainId[]|null $connectable_chain_ids 接続可能チェーンIDの一覧。null の場合は接続可能性を判定しない。
 	 */

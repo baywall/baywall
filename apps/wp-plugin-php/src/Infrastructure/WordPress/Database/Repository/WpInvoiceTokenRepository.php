@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
 use Baywall\Core\Domain\Entity\InvoiceToken;
+use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Repository\InvoiceTokenRepository;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
@@ -12,13 +13,22 @@ use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\InvoiceTokenTabl
 use Baywall\Core\Infrastructure\WordPress\ValueObject\WpInvoiceTokenHashString;
 
 class WpInvoiceTokenRepository implements InvoiceTokenRepository {
-
-
 	public function __construct( private readonly InvoiceTokenTable $invoice_token_table ) {}
 
-	/** 指定した請求書トークン文字列に合致する請求書情報を取得します。 */
+	/**
+	 * 指定した請求書トークン文字列に合致する請求書情報を取得します。
+	 *
+	 * @throws AuthenticationFailedException トークン文字列の形式が不正な場合
+	 */
 	public function get( InvoiceTokenString $invoice_token_string ): ?InvoiceToken {
-		$record = $this->invoice_token_table->get( WpInvoiceTokenHashString::from( $invoice_token_string ) );
+		try {
+			$invoice_token_hash_string = WpInvoiceTokenHashString::from( $invoice_token_string );
+		} catch ( \InvalidArgumentException $e ) {
+			// 不正なトークンの場合は認証失敗として例外をスロー
+			throw new AuthenticationFailedException( $e->getMessage(), 0, $e );
+		}
+
+		$record = $this->invoice_token_table->get( $invoice_token_hash_string );
 
 		return $record !== null ? InvoiceToken::create(
 			InvoiceId::fromUlidValue( $record->invoiceIdValue() ),

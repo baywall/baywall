@@ -9,14 +9,13 @@ use Baywall\Core\Domain\Entity\WidgetAttributes;
 use Baywall\Core\Infrastructure\WordPress\Mapper\WidgetAttributesMapper;
 use Baywall\Core\Domain\Repository\PostRepository;
 use Baywall\Core\Domain\ValueObject\Content;
+use Baywall\Core\Domain\ValueObject\PaidContent;
 use Baywall\Core\Domain\ValueObject\PostId;
 use Baywall\Core\Infrastructure\WordPress\ValueObject\BlockName;
 use WP_Block;
 
 /** WordPressのGutenberg関連のサービスを提供します。 */
 class GutenbergService {
-
-
 	public function __construct(
 		private readonly PostRepository $post_repository,
 		private readonly BlockNameProvider $block_name_provider,
@@ -104,5 +103,65 @@ class GutenbergService {
 	public function parseBlocks( Content $content ): array {
 		$blocks = parse_blocks( $content->value() );
 		return array_map( fn( $b ) => new WP_Block( $b ), $blocks );
+	}
+
+	/**
+	 * ペイウォールブロックと差し替えるダミーブロックを生成します。
+	 */
+	public function createDummyPaywallBlock( string $hash_value ): WP_Block {
+		$block_name = $this->block_name_provider->getDummyPaywallBlockName();
+		return new WP_Block(
+			array(
+				'blockName'    => $block_name->value(),
+				'attrs'        => array( 'hash' => $hash_value ),
+				'innerBlocks'  => array(),
+				'innerHTML'    => '',
+				'innerContent' => array( '' ),
+			),
+		);
+	}
+
+	/**
+	 * ブロック一覧のハッシュ値を取得します。
+	 *
+	 * @param WP_Block[] $blocks
+	 */
+	private function hashBlocks( array $blocks ): string {
+		return wp_hash( $this->serializeBlocks( $blocks )->value() );
+	}
+
+	/**
+	 * ペイウォールブロック以降を有料部分として分離し、本文を「無料部分＋ダミーブロック」に差し替えます。
+	 *
+	 * ハッシュ入力はペイウォールブロック＋有料部分の全体（保存済みのhash属性値と一致させるため）。
+	 *
+	 * @param WP_Block[] $blocks
+	 * @param int        $paywall_block_index ペイウォールブロックのインデックス
+	 */
+	public function splitPaywallBlocks( array $blocks, int $paywall_block_index ): PaywallSplitResult {
+		$paywall_and_paid_blocks = array_slice( $blocks, $paywall_block_index );
+		$hash                    = $this->hashBlocks( $paywall_and_paid_blocks );
+		$widget_attributes       = $this->getWidgetAttributes( $paywall_and_paid_blocks[0] );
+		$paid_content            = PaidContent::from( $this->serializeBlocks( array_slice( $paywall_and_paid_blocks, 1 ) )->value() );
+
+		$free_content_blocks   = array_slice( $blocks, 0, $paywall_block_index );
+		$free_content_blocks[] = $this->createDummyPaywallBlock( $hash );
+
+		return new PaywallSplitResult( $free_content_blocks, $paid_content, $widget_attributes );
+	}
+
+	/**
+	 * 無料部分と有料部分から表示用の投稿内容を再組み立てします。
+	 * 有料部分が無い場合は無料部分のみで再組み立てします。
+	 *
+	 * @param WP_Block[] $free_blocks ダミーブロックを除いた無料部分のブロック一覧
+	 */
+	public function buildContentWithPaidPart( array $free_blocks, PostId $post_id, ?PaidContent $paid_content ): Content {
+		$result_blocks = $free_blocks;
+		if ( null !== $paid_content ) {
+			$result_blocks[] = $this->createWidgetBlock( $post_id );
+			$result_blocks   = array_merge( $result_blocks, $this->parseBlocks( $paid_content ) );
+		}
+		return $this->serializeBlocks( $result_blocks );
 	}
 }

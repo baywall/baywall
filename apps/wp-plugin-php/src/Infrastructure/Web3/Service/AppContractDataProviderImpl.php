@@ -12,8 +12,6 @@ use Baywall\Core\Domain\ValueObject\BlockNumber;
 use Baywall\Core\Infrastructure\Web3\Factory\AppContractClientFactoryImpl;
 
 class AppContractDataProviderImpl implements AppContractDataProvider {
-
-
 	public function __construct(
 		private readonly AppContractClientFactoryImpl $app_contract_client_factory,
 		private readonly ServerSignerRepository $server_signer_repository

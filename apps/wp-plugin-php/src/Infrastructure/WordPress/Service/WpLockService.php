@@ -3,11 +3,10 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Application\Exception\LockAcquisitionException;
-use Baywall\Core\Application\Service\LockService;
+use Baywall\Core\Application\Port\LockService;
 use wpdb;
 
 class WpLockService extends LockService {
-
 	public function __construct( private readonly wpdb $wpdb ) {}
 
 	/** @inheritdoc */

@@ -89,7 +89,6 @@
   "nav.sales_histories": "Sales Histories",
   "nav.settings": "Settings",
   "nav.tokens": "Tokens",
-  "nav.version": "Version",
   "notifications.alerts_panel_title": "Notifications",
   "notifications.setting_ignored_without_rpc_url_message": "This setting will be ignored because the network RPC URL is not configured.",
   "notifications.turn_off_setting_or_configure_rpc_url_message": "Please turn off this setting or configure the RPC URL.",

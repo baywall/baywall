@@ -5,11 +5,16 @@ namespace Baywall\Core\Application\Service;
 
 use Baywall\Core\Application\Exception\LockAcquisitionException;
 use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Port\AdminNotificationService;
+use Baywall\Core\Application\Port\AppContractClientFactory;
+use Baywall\Core\Application\Port\CrawlFailureNotificationMessageProvider;
+use Baywall\Core\Application\Port\LockService;
+use Baywall\Core\Application\Port\TransactionService;
 use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\Repository\ServerSignerRepository;
-use Baywall\Core\Domain\Repository\UnlockPaywallTransferEventRepository;
+use Baywall\Core\Application\Repository\UnlockPaywallTransferEventRepository;
 use Baywall\Core\Domain\Service\BlockchainService;
 use Baywall\Core\Domain\ValueObject\BlockHeight;
 use Baywall\Core\Domain\ValueObject\BlockNumber;
@@ -19,7 +24,6 @@ class AppContractCrawlService {
 
 	private const LOCK_NAME            = '6cb0475a-47f7-4468-b733-c7a97e34802b';
 	private const LOCK_TIMEOUT_SECONDS = 0;
-
 
 	public function __construct(
 		private readonly AppLogger $logger,
@@ -44,7 +48,6 @@ class AppContractCrawlService {
 		if ( $chain_ids instanceof ChainId ) {
 			$chain_ids = array( $chain_ids );
 		}
-		assert( is_array( $chain_ids ), '[9D65CCC6]' );
 
 		// ロックを取得してクロール処理を実行
 		try {
@@ -60,6 +63,7 @@ class AppContractCrawlService {
 		}
 	}
 
+	/** @param ChainId[] $chain_ids */
 	private function crawlChains( array $chain_ids ): void {
 		// チェーン情報を解決し、各チェーンのクロール終了ブロックを取得する
 		// chain テーブルに存在しないチェーンはクロール対象外（オンデマンド呼び出しでは請求書の ChainId がそのまま渡るため）
@@ -168,7 +172,6 @@ class AppContractCrawlService {
 		}
 	}
 
-
 	/**
 	 * チェーンのクロール失敗を共通処理します。
 	 * 連続失敗回数を加算し、上限に達した場合のみ管理者へ通知して、対象チェーンのクロールを完了とみなします。
@@ -193,7 +196,7 @@ class AppContractCrawlService {
 	private function getCrawlEndBlockNumber( Chain $chain ): BlockNumber {
 		$rpc_url = $chain->rpcUrl();
 		if ( null === $rpc_url ) {
-			throw new \InvalidArgumentException( "[6DD872FD] Chain {$chain->id()} does not have a valid RPC URL." );
+			throw new \InvalidArgumentException( "[6FAC89E4] Chain {$chain->id()} does not have a valid RPC URL." );
 		}
 
 		// 現時点での最新ブロック番号を取得

@@ -4,22 +4,16 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Application\Dto\LogDto;
-use Baywall\Core\Application\Service\LogQueryService;
-use Baywall\Core\Application\Service\UserAccessChecker;
-use Baywall\Core\Constant\Config;
+use Baywall\Core\Application\UseCase\GetLogs;
 
 class ResolveLogs implements Resolver {
-
-
 	public function __construct(
-		private readonly UserAccessChecker $user_access_checker,
-		private readonly LogQueryService $log_query_service
+		private readonly GetLogs $get_logs
 	) {}
 
+	/** @return array<string, mixed>[] */
 	public function handle( array $root_value, array $args ) {
-		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
-
-		$logs = $this->log_query_service->findRecent( Config::LOGS_MAX_RESULTS );
+		$logs = $this->get_logs->handle();
 
 		return array_map(
 			function ( LogDto $log ) {

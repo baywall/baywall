@@ -65,7 +65,7 @@ type Query {
 	# # 投稿一覧を取得
 	# allPosts: [Post!]!
 
-	# 一時停止状態を取得【ゲスト】
+	# 一時停止状態を取得【管理者】
 	# 一時停止状態の場合、支払い関連の機能が利用不可となります
 	paused: Boolean!
 
@@ -78,8 +78,12 @@ type Query {
 	# アンインストール時にデータを完全削除するかどうか【管理者】
 	purgeOnUninstall: Boolean!
 
-	# 初回インストール時のURLと現在のサイトURLが変更されたかどうか【ゲスト】
+	# 初回インストール時のURLと現在のサイトURLが変更されたかどうか【管理者】
 	siteUrlChangedSinceInstall: Boolean!
+
+	# 取引が一時停止中かどうかを取得【ゲスト】
+	# (販売者ウォレットが取得できない場合、サイト一時停止中、または初回インストール時のURLが変更された場合は true)
+	isTransactionSuspended: Boolean!
 
 	# ログ一覧を取得【管理者】
 	logs: [Log!]!

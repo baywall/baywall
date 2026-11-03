@@ -7,15 +7,15 @@ use Baywall\Core\Domain\Entity\Chain;
 use Baywall\Core\Domain\ValueObject\Address;
 
 readonly class AppContract {
-	protected function __construct(
+	public function __construct(
 		private readonly Chain $chain,
 		private readonly Address $address
 	) {}
 
-
 	public function chain(): Chain {
 		return $this->chain;
 	}
+
 	public function address(): Address {
 		return $this->address;
 	}

@@ -6,7 +6,6 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
 class PhpVarExporter {
-
 	/**
 	 * @param string      $handle       インラインスクリプトを追加するスクリプトハンドル名
 	 * @param string|null $view_css_url Shadow DOM 内に注入するウィジェットCSSのURL(バージョンクエリ付き)。
@@ -30,6 +29,7 @@ class PhpVarExporter {
 	 * `wp_add_inline_script`で出力する値を返します
 	 *
 	 * @param string|null $view_css_url ウィジェットCSSのURL(指定時のみ`viewCssUrl`キーに含める)
+	 * @return array<string, mixed>
 	 */
 	private function getPhpVar( ?string $view_css_url = null ): array {
 		// REST APIアクセス用のnonce

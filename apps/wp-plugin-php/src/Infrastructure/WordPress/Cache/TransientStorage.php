@@ -15,6 +15,10 @@ class TransientStorage {
 	 */
 	private const MAX_TRANSIENT_KEY_LENGTH = 172;
 
+	/**
+	 * @param mixed $default
+	 * @return mixed
+	 */
 	public function get( string $transient, $default = null ) {
 		$this->checkKey( $transient );
 
@@ -22,6 +26,7 @@ class TransientStorage {
 		return false === $result ? $default : $result;
 	}
 
+	/** @param mixed $value */
 	public function set( string $transient, $value, int $expiration = 0 ): void {
 		$this->checkKey( $transient );
 

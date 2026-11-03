@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
-use Baywall\Core\Application\Service\Clock;
+use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Domain\Repository\RefreshTokenRepository;
 use Baywall\Core\Domain\Service\RefreshTokenService;
@@ -12,7 +12,6 @@ use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 use Baywall\Core\Infrastructure\WordPress\ValueObject\WpRefreshTokenString;
 
 class WpRefreshTokenService extends RefreshTokenService {
-
 	public function __construct( RefreshTokenRepository $refresh_token_repository, private readonly Clock $clock ) {
 		parent::__construct( $refresh_token_repository );
 	}

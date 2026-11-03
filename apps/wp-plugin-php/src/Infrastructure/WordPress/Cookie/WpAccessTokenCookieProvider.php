@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Cookie;
 
-use Baywall\Core\Application\Service\AccessTokenCookieProvider;
-use Baywall\Core\Application\Service\Clock;
+use Baywall\Core\Application\Port\AccessTokenCookieProvider;
+use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Application\ValueObject\AccessToken;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
@@ -12,8 +12,6 @@ use Baywall\Core\Application\ValueObject\Cookie;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
 class WpAccessTokenCookieProvider implements AccessTokenCookieProvider {
-
-
 	public function __construct(
 		private readonly WordPressPropertyProvider $wordpress_property_provider,
 		private readonly CookieNameProvider $cookie_name_provider,

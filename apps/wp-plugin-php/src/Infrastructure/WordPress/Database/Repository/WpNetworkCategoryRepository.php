@@ -3,15 +3,13 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
-use Baywall\Core\Domain\Repository\NetworkCategoryRepository;
+use Baywall\Core\Application\Repository\NetworkCategoryRepository;
 use Baywall\Core\Domain\ValueObject\NetworkCategory;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\ChainTable;
 use Baywall\Core\Infrastructure\WordPress\I18n\I18nTextProvider;
 
 class WpNetworkCategoryRepository implements NetworkCategoryRepository {
-
-
 	public function __construct(
 		private readonly ChainTable $chain_table,
 		private I18nTextProvider $i18n_text_provider

@@ -11,7 +11,6 @@ use Baywall\Core\Domain\ValueObject\SigningMessage;
  * @see https://eips.ethereum.org/EIPS/eip-4361
  */
 readonly class Erc4361Message extends SigningMessage {
-
 	private function __construct( string $message_value ) {
 		parent::__construct( $message_value );
 		$this->checkErc4361Format( $message_value );

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\OptionRepository;
 
-use Baywall\Core\Domain\Repository\InitialSiteUrlRepository;
+use Baywall\Core\Application\Repository\InitialSiteUrlRepository;
 use Baywall\Core\Domain\ValueObject\Url;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\StringOption;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;

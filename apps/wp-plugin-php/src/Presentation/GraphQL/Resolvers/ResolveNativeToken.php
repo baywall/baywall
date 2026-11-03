@@ -3,27 +3,22 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
-use Baywall\Core\Application\Service\UserAccessChecker;
+use Baywall\Core\Application\UseCase\GetNativeToken;
 use Baywall\Core\Domain\ValueObject\ChainId;
-use Baywall\Core\Infrastructure\Web3\Service\NativeTokenService;
 
 class ResolveNativeToken implements Resolver {
-
-
 	public function __construct(
-		private readonly UserAccessChecker $user_access_checker,
-		private readonly NativeTokenService $native_token_service
+		private readonly GetNativeToken $get_native_token
 	) {}
 
+	/** @return array<string, mixed> */
 	public function handle( array $root_value, array $args ): array {
-		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
-
-		$chain_id = ChainId::from( $args['chainId'] );
+		$native_token = $this->get_native_token->handle( ChainId::from( $args['chainId'] ) );
 
 		return array(
-			'symbol'   => $this->native_token_service->getSymbol( $chain_id )->value(),
-			'name'     => $this->native_token_service->getName( $chain_id ),
-			'decimals' => $this->native_token_service->getDecimals( $chain_id )->value(),
+			'symbol'   => $native_token->symbol->value(),
+			'name'     => $native_token->name,
+			'decimals' => $native_token->decimals->value(),
 		);
 	}
 }

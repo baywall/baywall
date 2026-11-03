@@ -4,26 +4,22 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\GraphQL\Resolvers;
 
 use Baywall\Core\Application\Service\UserAccessChecker;
-use Baywall\Core\Domain\Repository\TokenRepository;
+use Baywall\Core\Application\UseCase\GetToken;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
 class ResolveToken implements Resolver {
-
-
 	public function __construct(
 		private readonly UserAccessChecker $user_access_checker,
-		private readonly TokenRepository $token_repository
+		private readonly GetToken $get_token
 	) {}
 
+	/** @return array<string, mixed> */
 	public function handle( array $root_value, array $args ) {
-		$chain_id = ChainId::from( $args['chainId'] );
-		$address  = Address::from( $args['address'] );
-
-		$token = $this->token_repository->get( $chain_id, $address );
-		if ( $token === null ) {
-			throw new \InvalidArgumentException( "[436EAC2D] Token not found for chain ID {$chain_id} and address {$address}" );
-		}
+		$token = $this->get_token->handle(
+			ChainId::from( $args['chainId'] ),
+			Address::from( $args['address'] )
+		);
 
 		$decimals_callback = function () use ( $token ) {
 			$this->user_access_checker->checkCanCreatePost(); // 投稿編集者の権限が必要

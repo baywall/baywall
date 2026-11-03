@@ -5,15 +5,15 @@ namespace Baywall\Core\Application\UseCase;
 
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Application\Service\AppContractCrawlService;
-use Baywall\Core\Application\Service\Clock;
+use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Application\Service\ConfirmationsService;
-use Baywall\Core\Application\Service\InvoiceTokenCookieProvider;
+use Baywall\Core\Application\Port\InvoiceTokenCookieProvider;
 use Baywall\Core\Application\Service\TokenCookieService;
 use Baywall\Core\Domain\Exception\PaymentNotCompletedException;
 use Baywall\Core\Domain\Service\InvoiceService;
 use Baywall\Core\Domain\Service\InvoiceTokenService;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
-use Baywall\Core\Application\Service\CookieWriter;
+use Baywall\Core\Application\Port\CookieWriter;
 
 /**
  * 請求書トークンとアクセストークン(+リフレッシュトークン)の引き換えを行うクラス
@@ -23,8 +23,6 @@ use Baywall\Core\Application\Service\CookieWriter;
  * ※ サーバー指定の待機ブロック数は有料記事取得時に判定します
  */
 class IssueAccessTokenByInvoiceToken {
-
-
 	public function __construct(
 		private readonly AppLogger $logger,
 		private readonly TokenCookieService $token_cookie_service,

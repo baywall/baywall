@@ -8,7 +8,6 @@ use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\ChainId;
 
 interface TokenRepository {
-
 	/** トークンデータを保存します。 */
 	public function save( Token $token ): void;
 

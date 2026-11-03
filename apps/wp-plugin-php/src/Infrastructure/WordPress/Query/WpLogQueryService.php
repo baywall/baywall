@@ -4,12 +4,10 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Query;
 
 use Baywall\Core\Application\Dto\LogDto;
-use Baywall\Core\Application\Service\LogQueryService;
+use Baywall\Core\Application\Port\LogQueryService;
 use Baywall\Core\Infrastructure\WordPress\Database\TableGateway\LogTable;
 
 class WpLogQueryService implements LogQueryService {
-
-
 	public function __construct( private readonly LogTable $log_table ) {}
 
 	/** @inheritDoc */

@@ -6,11 +6,11 @@ namespace Baywall\Core\Presentation\Hooks;
 use Baywall\Core\Application\Exception\LockAcquisitionException;
 use Baywall\Core\Application\Logging\AppLogger;
 use Baywall\Core\Application\Repository\InstalledPluginVersionRepository;
-use Baywall\Core\Application\Service\LockService;
-use Baywall\Core\Application\Service\PluginDeactivationService;
-use Baywall\Core\Application\Service\PluginMigrationService;
-use Baywall\Core\Application\Service\PluginCompatibilityChecker;
-use Baywall\Core\Infrastructure\System\ArchitectureChecker;
+use Baywall\Core\Application\Port\LockService;
+use Baywall\Core\Application\Port\PluginDeactivationService;
+use Baywall\Core\Application\Port\PluginMigrationService;
+use Baywall\Core\Application\Port\PluginCompatibilityChecker;
+use Baywall\Core\Infrastructure\System\RuntimeEnvironmentChecker;
 use Baywall\Core\Infrastructure\System\PhpExtChecker;
 use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
@@ -45,7 +45,7 @@ class PluginMigrationHook extends HookBase {
 	 * @param \Closure(): InstalledPluginVersionRepository $installed_plugin_version_repository
 	 * @param \Closure(): AppLogger                        $app_logger
 	 * @param \Closure(): WordPressPropertyProvider        $wordpress_property_provider
-	 * @param \Closure(): ArchitectureChecker              $architecture_checker
+	 * @param \Closure(): RuntimeEnvironmentChecker        $runtime_environment_checker
 	 * @param \Closure(): PhpExtChecker                    $php_ext_checker
 	 * @param \Closure(): PluginCompatibilityChecker       $plugin_compatibility_checker
 	 * @param \Closure(): PluginDeactivationService        $plugin_deactivation_service
@@ -56,7 +56,7 @@ class PluginMigrationHook extends HookBase {
 		private readonly \Closure $installed_plugin_version_repository,
 		private readonly \Closure $app_logger,
 		private readonly \Closure $wordpress_property_provider,
-		private readonly \Closure $architecture_checker,
+		private readonly \Closure $runtime_environment_checker,
 		private readonly \Closure $php_ext_checker,
 		private readonly \Closure $plugin_compatibility_checker,
 		private readonly \Closure $plugin_deactivation_service,
@@ -84,6 +84,7 @@ class PluginMigrationHook extends HookBase {
 					self::LOCK_NAME,
 					function () use ( $plugin_migration_service ) {
 						// ロック待ちの間に他リクエストでマイグレーション済みだった場合の二重チェック
+						// @phpstan-ignore booleanNot.alwaysFalse
 						if ( ! $plugin_migration_service->required() ) {
 							return;
 						}
@@ -132,8 +133,8 @@ class PluginMigrationHook extends HookBase {
 	 */
 	private function checkSystem( bool $check_cms_version ): void {
 		// 64ビットのPHP環境であることを確認
-		$architecture_checker = ( $this->architecture_checker )();
-		$architecture_checker->checkIs64bit( PHP_INT_SIZE );
+		$runtime_environment_checker = ( $this->runtime_environment_checker )();
+		$runtime_environment_checker->checkIs64bit( PHP_INT_SIZE );
 
 		// PHP拡張のチェック
 		$php_ext_checker = ( $this->php_ext_checker )();

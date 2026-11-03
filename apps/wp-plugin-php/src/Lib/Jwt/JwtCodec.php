@@ -7,6 +7,7 @@ use Baywall\Core\Lib\Base64Url\Base64Url;
 
 class JwtCodec {
 
+	/** @var array<string, string> */
 	private $supported_algorithm_map = array(
 		'HS256' => 'sha256',
 		// 'HS384' => 'sha384',
@@ -19,7 +20,10 @@ class JwtCodec {
 		$this->base64url = new Base64Url();
 	}
 
-	/** @disregard P1009 Undefined type */
+	/**
+	 * @disregard P1009 Undefined type
+	 * @param array<string, mixed> $payload
+	 */
 	public function encode(
 		string $alg,
 		array $payload,
@@ -53,7 +57,10 @@ class JwtCodec {
 		return $data . '.' . $signature_encoded;
 	}
 
-	/** @disregard P1009 Undefined type */
+	/**
+	 * @disregard P1009 Undefined type
+	 * @return array<string, mixed>
+	 */
 	public function decode(
 		string $jwt,
 		#[\SensitiveParameter]
@@ -83,9 +90,6 @@ class JwtCodec {
 		} elseif ( ! is_array( $payload ) ) {
 			throw new \InvalidArgumentException( '[400F78C8] Invalid JWT payload.' );
 		}
-		/** @var array<string, mixed> $header */
-		/** @var array<string, mixed> $payload */
-
 		$alg            = $header['alg'];
 		$hash_algorithm = $this->supported_algorithm_map[ $alg ] ?? null;
 		if ( $hash_algorithm === null ) {

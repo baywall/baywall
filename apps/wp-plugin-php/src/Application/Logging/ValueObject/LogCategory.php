@@ -9,6 +9,7 @@ final class LogCategory {
 	/** 監査ログ */
 	private const AUDIT = 2;
 
+	/** @var array<int, string> */
 	private static array $names = array(
 		self::APP   => 'app',
 		self::AUDIT => 'audit',
@@ -29,6 +30,7 @@ final class LogCategory {
 	public static function app(): self {
 		return new self( self::APP );
 	}
+
 	/** 監査ログ */
 	public static function audit(): self {
 		return new self( self::AUDIT );
@@ -37,6 +39,7 @@ final class LogCategory {
 	public function equals( self $other ): bool {
 		return $this->log_category_value === $other->log_category_value;
 	}
+
 	public function __toString(): string {
 		return $this->name();
 	}

@@ -10,7 +10,6 @@ use Baywall\Core\Presentation\Hooks\Service\CurrentPaywalledPostResolver;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
 
 class ViewPageHook extends HookBase {
-
 	/**
 	 * @param \Closure(): CurrentPaywalledPostResolver $current_paywalled_post_resolver
 	 * @param \Closure(): HandleNameProvider           $handle_name_provider

@@ -9,7 +9,6 @@ use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
  * ブロックチェーンのトランザクションの確認数を表すクラス
  */
 final readonly class Confirmations implements ValueObject {
-
 	private function __construct( int $confirmations_value ) {
 		self::checkConfirmationsValue( $confirmations_value );
 		$this->confirmations_value = $confirmations_value;

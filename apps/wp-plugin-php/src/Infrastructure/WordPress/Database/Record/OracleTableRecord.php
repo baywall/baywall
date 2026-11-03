@@ -24,12 +24,15 @@ class OracleTableRecord extends RecordBase {
 	public function chainIdValue(): int {
 		return $this->chain_id;
 	}
+
 	public function addressValue(): string {
 		return $this->address;
 	}
+
 	public function baseSymbolValue(): string {
 		return $this->base_symbol;
 	}
+
 	public function quoteSymbolValue(): string {
 		return $this->quote_symbol;
 	}

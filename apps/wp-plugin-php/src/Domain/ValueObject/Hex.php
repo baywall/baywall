@@ -10,7 +10,6 @@ use InvalidArgumentException;
  * 16進数の文字列を表す値オブジェクト
  */
 readonly class Hex implements ValueObject {
-
 	private function __construct( string $hex_value ) {
 		// 16進数の形式をチェック(大文字のA-Fは許容しない)
 		if ( ! preg_match( '/^0x[0-9a-f]+$/', $hex_value ) ) {
@@ -18,6 +17,7 @@ readonly class Hex implements ValueObject {
 		}
 		$this->hex_value = $hex_value;
 	}
+
 	private readonly string $hex_value;
 
 	public function value(): string {
@@ -27,6 +27,7 @@ readonly class Hex implements ValueObject {
 	public static function from( string $hex_value ): self {
 		return new self( $hex_value );
 	}
+
 	/** 10進数の文字列からインスタンスを生成します */
 	public static function fromDecValue( string $dec_value ): self {
 		if ( ! preg_match( '/^\d+$/', $dec_value ) ) {
