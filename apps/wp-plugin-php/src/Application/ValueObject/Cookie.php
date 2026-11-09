@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Baywall\Core\Application\ValueObject;
 
 /**
@@ -17,6 +18,9 @@ readonly class Cookie {
 	private readonly ?string $same_site;
 
 	private function __construct( string $name, string $value, ?int $expires = null, ?string $path = null, ?string $domain = null, ?bool $secure = null, ?bool $httpOnly = null, ?string $sameSite = null ) {
+		if ( $sameSite !== null && in_array( $sameSite, array( 'Lax', 'lax', 'None', 'none', 'Strict', 'strict' ), true ) === false ) {
+			throw new \InvalidArgumentException( "[46D93428] Invalid SameSite value. {$sameSite}" );
+		}
 		$this->name      = $name;
 		$this->value     = $value;
 		$this->expires   = $expires;
@@ -27,6 +31,9 @@ readonly class Cookie {
 		$this->same_site = $sameSite;
 	}
 
+	/**
+	 * @param 'Lax'|'lax'|'None'|'none'|'Strict'|'strict'|null $sameSite
+	 */
 	public static function create( string $name, string $value, ?int $expires = null, ?string $path = null, ?string $domain = null, ?bool $secure = null, ?bool $httpOnly = null, ?string $sameSite = null ): self {
 		return new self( $name, $value, $expires, $path, $domain, $secure, $httpOnly, $sameSite );
 	}
@@ -39,7 +46,7 @@ readonly class Cookie {
 		return $this->value;
 	}
 
-	/** @return array<string, int|string|bool> */
+	/** @return array{expires?: int, path?: string, domain?: string, secure?: bool, httponly?: bool, samesite?: 'Lax'|'lax'|'None'|'none'|'Strict'|'strict'} */
 	public function options(): array {
 		$options = array();
 		if ( $this->expires !== null ) {

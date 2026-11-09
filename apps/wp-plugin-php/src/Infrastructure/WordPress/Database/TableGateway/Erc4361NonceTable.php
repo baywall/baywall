@@ -24,7 +24,7 @@ class Erc4361NonceTable {
 	public function get( Address $address ): ?Erc4361NonceTableRecord {
 		$sql = $this->wpdb->named_prepare(
 			<<<SQL
-				SELECT `erc4361_nonce`, `wallet_address`, `issued_at`
+				SELECT `wallet_address`, `erc4361_nonce`, `issued_at`
 				FROM `{$this->table_name}`
 				WHERE `wallet_address` = :wallet_address
 				LIMIT 1
@@ -34,7 +34,7 @@ class Erc4361NonceTable {
 
 		$record = $this->wpdb->get_row( $sql );
 
-		return $record === null ? null : new Erc4361NonceTableRecord( $record );
+		return $record instanceof \stdClass ? new Erc4361NonceTableRecord( $record ) : null;
 	}
 
 	public function save( Address $address, Erc4361NonceString $erc4361_nonce_string, UnixTimestamp $issued_at ): void {

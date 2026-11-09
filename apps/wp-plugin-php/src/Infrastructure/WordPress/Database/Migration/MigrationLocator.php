@@ -44,6 +44,10 @@ class MigrationLocator {
 			$namespace  = $this->namespace_parser->get( $file_path );
 			$class_name = $namespace . '\\' . pathinfo( $file, PATHINFO_FILENAME );
 
+			if ( ! is_a( $class_name, MigrationBase::class, true ) ) {
+				throw new \RuntimeException( "[3070BE52] Migration class does not extend MigrationBase: {$class_name}" );
+			}
+
 			$instance = ( $this->migration_factory )( $class_name );
 			$version  = PluginVersion::from( $instance->version() );
 			if ( $gt_version->compareOperator( $version, '<' ) && $version->compareOperator( $le_version, '<=' ) ) {

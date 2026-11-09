@@ -64,8 +64,19 @@ class ViewPageHook extends HookBase {
 		// インラインスクリプトを追加(CSS URLをフロントエンドへ受け渡す)
 		$php_var_exporter->addInlineScript( $handle_name, $view_css_url );
 
-		// ※ ウィジェット用CSSの`wp_enqueue_style`は廃止した。
+		// ホスト要素(ペイウォールブロックの`aside`)へのテーマの`:focus`ルール適用を抑制するインラインスタイルを出力する。
+		// テーマの`:focus`ルール(例: Twenty Twenty-Fourの`:where(.wp-site-blocks *:focus)`)は、Shadow DOM内のコントロールがフォーカスを受けた際にホスト要素にもマッチし、ウィジェット全体にoutlineが描画されてしまう。
+		// ホスト自体はフォーカス可能な要素ではなく、実際のフォーカス表示はShadow内のコントロール側にあるため、ホスト側のoutlineは抑制する。
+		// Shadow内の`:host`ルールではライトDOM側の宣言を上書きできないため、ここで出力する。
+		$host_style_handle = $handle_name_provider->viewHostStyle();
+		$host_class_name   = '.' . WpConfig::PAYWALL_BLOCK_CSS_CLASS_NAME;
+		wp_register_style( $host_style_handle, false, array(), $asset_file['version'] );
+		wp_enqueue_style( $host_style_handle );
+		wp_add_inline_style( $host_style_handle, $host_class_name . ':focus, ' . $host_class_name . ':focus-within { outline: none !important; }' );
+
+		// ※ ウィジェット内部用CSSの`wp_enqueue_style`は廃止した。
 		// CSSは Shadow DOM 内の`<link>`注入のみで適用するため、ライトDOMへの`<link>`出力は行わない。
+		// 上記のインラインスタイルはホスト要素へのテーマ適用を打ち消すためのもので、ウィジェット内部のスタイルではない。
 	}
 
 	public function addFilterScriptLoaderTag( string $tag, string $handle, string $src ): string {
@@ -78,12 +89,11 @@ class ViewPageHook extends HookBase {
 		// view用のスクリプトの場合、`defer`属性を追加する
 		// ※ すでにフッターに出力する設定を`wp_enqueue_script`で行っているので効果は薄い
 		if ( $handle_name_provider->viewScript() === $handle ) {
-			$result = preg_replace(
+			return preg_replace(
 				'/<script(.*?)src=[\'"]' . preg_quote( $src, '/' ) . '[\'"](.*?)>/i',
 				'<script$1src="' . esc_url( $src ) . '" defer$2>',
 				$tag
-			);
-			return $result;
+			) ?? throw new \RuntimeException( '[B809A845] Failed to add defer attribute.' );
 		}
 		return $tag;
 	}

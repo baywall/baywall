@@ -14,6 +14,7 @@ use Baywall\Core\Domain\ValueObject\UnlockPaywallTransferEvent;
 use Baywall\Core\Domain\ValueObject\Hex;
 use Baywall\Core\Domain\ValueObject\InvoiceId;
 use Baywall\Core\Domain\ValueObject\PostId;
+use Baywall\Core\Domain\ValueObject\RpcUrl;
 
 class AppContractClientImpl implements AppContractClient {
 	public function __construct(
@@ -26,13 +27,22 @@ class AppContractClientImpl implements AppContractClient {
 		$this->app_contract       = $app_contract;
 		$this->blockchain_service = $blockchain_service;
 		$this->abi                = $app_contract_abi;
-		$this->eth_call_client    = new EthCallClient( $app_contract->chain()->rpcUrl() );
+		$this->eth_call_client    = new EthCallClient( $this->rpcUrl() );
 	}
 
 	private readonly EthCallClient $eth_call_client;
 	private readonly AppContractAbi $abi;
 	private readonly AppContract $app_contract;
 	private readonly BlockchainService $blockchain_service;
+
+	/**
+	 * 接続可能チェーンの RPC URL を取得します。
+	 *
+	 * setRpcUrl() 後の変化を反映するため、コンストラクタでの確定保持ではなく都度取得します。
+	 */
+	private function rpcUrl(): RpcUrl {
+		return $this->app_contract->chain()->rpcUrl() ?? throw new \RuntimeException( '[2F903C78] RPC URL is not set for the chain.' );
+	}
 
 	public function getPaywallStatus( Address $signer_address, PostId $post_id, Address $buyer_address ): GetPaywallStatusResult {
 
@@ -81,7 +91,7 @@ class AppContractClientImpl implements AppContractClient {
 			),
 		);
 
-		$logs = $this->blockchain_service->getLogs( $this->app_contract->chain()->rpcUrl(), $filter );
+		$logs = $this->blockchain_service->getLogs( $this->rpcUrl(), $filter );
 
 		/** @var UnlockPaywallTransferEvent[] */
 		$results = array();

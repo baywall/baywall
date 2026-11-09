@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AppLogService;
+use Baywall\Core\Application\Logging\AuditLogService;
 use Baywall\Core\Application\Service\AppContractCrawlService;
 use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Application\Service\ConfirmationsService;
 use Baywall\Core\Application\Port\InvoiceTokenCookieProvider;
 use Baywall\Core\Application\Service\TokenCookieService;
 use Baywall\Core\Domain\Exception\PaymentNotCompletedException;
+use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Service\InvoiceService;
 use Baywall\Core\Domain\Service\InvoiceTokenService;
 use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
@@ -24,15 +26,17 @@ use Baywall\Core\Application\Port\CookieWriter;
  */
 class IssueAccessTokenByInvoiceToken {
 	public function __construct(
-		private readonly AppLogger $logger,
+		private readonly AppLogService $app_log_service,
 		private readonly TokenCookieService $token_cookie_service,
 		private readonly CookieWriter $cookie_writer,
 		private readonly InvoiceTokenService $invoice_token_service,
 		private readonly InvoiceTokenCookieProvider $invoice_token_cookie_provider,
 		private readonly InvoiceService $invoice_service,
 		private readonly ConfirmationsService $confirmations_service,
+		private readonly ChainRepository $chain_repository,
 		private readonly AppContractCrawlService $app_contract_crawl_service,
-		private readonly Clock $clock
+		private readonly Clock $clock,
+		private readonly AuditLogService $audit_log_service
 	) {}
 
 	public function handle( string $invoice_token_string_value ): void {
@@ -59,9 +63,15 @@ class IssueAccessTokenByInvoiceToken {
 
 			// 販売履歴を更新
 			try {
-				$this->app_contract_crawl_service->crawl( $invoice->chainId() );
+				$chain = $this->chain_repository->get( $invoice->chainId() );
+				if ( null === $chain ) {
+					// chain テーブルに存在しないチェーンは販売履歴を更新できないためクロールのみスキップする
+					$this->app_log_service->warn( "[D7A6B355] Chain with ID {$invoice->chainId()} does not exist. Skipping crawl for this chain." );
+				} else {
+					$this->app_contract_crawl_service->crawl( $chain );
+				}
 			} catch ( \Throwable $e ) {
-				$this->logger->error( $e );
+				$this->app_log_service->error( $e );
 				// 再スローはせずに処理を続行する
 			}
 
@@ -76,5 +86,9 @@ class IssueAccessTokenByInvoiceToken {
 			$expired_invoice_token_cookie = $this->invoice_token_cookie_provider->getExpired();
 			$this->cookie_writer->set( $expired_invoice_token_cookie );
 		}
+
+		// 非ログイン（ゲスト）のため user_id では区別できないので、実行者の wallet アドレスを message に入れる
+		// 請求書トークンの値は記録しない
+		$this->audit_log_service->info( 'auth_login_invoice', "Invoice token login succeeded. postId: {$invoice->postId()}, buyerAddress: {$invoice->buyerAddress()}" );
 	}
 }

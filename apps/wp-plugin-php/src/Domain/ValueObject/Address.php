@@ -35,6 +35,9 @@ final readonly class Address implements ValueObject {
 	/** アドレスの値をバイナリ形式で取得します */
 	public function bin(): string {
 		$bin = hex2bin( str_replace( '0x', '', $this->address_value ) );
+		if ( false === $bin ) {
+			throw new \InvalidArgumentException( '[0D67A383] Invalid hex string for binary conversion: ' . $this->address_value );
+		}
 		assert( strlen( $bin ) === 20 );
 		return $bin;
 	}

@@ -57,8 +57,7 @@ class BlockchainClient {
 				$block  = $this->rpc_client->request( 'eth_getBlockByNumber', array( $block_number, false ) );
 				$result = EthBlock::from(
 					BlockNumber::fromHex( Hex::from( $block->number ) ),
-					// タイムスタンプはUNIX時間なのでhexdecで変換して問題ない
-					UnixTimestamp::from( hexdec( Hex::from( $block->timestamp )->value() ) )
+					UnixTimestamp::from( Hex::from( $block->timestamp )->intValue() )
 				);
 			}
 		);
@@ -82,7 +81,7 @@ class BlockchainClient {
 			}
 		);
 
-		return $block_number;
+		return $block_number ?? throw new \RuntimeException( '[0E16392B] Failed to get block number.' );
 	}
 
 	/**
@@ -100,7 +99,7 @@ class BlockchainClient {
 			}
 		);
 
-		return $balance;
+		return $balance ?? throw new \RuntimeException( '[6A2F9FC6] Failed to get balance.' );
 	}
 
 	/**

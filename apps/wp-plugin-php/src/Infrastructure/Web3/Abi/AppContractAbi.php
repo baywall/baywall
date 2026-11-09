@@ -52,7 +52,7 @@ class AppContractAbi extends AbiBase {
 
 		return new UnlockPaywallTransferEvent(
 			BlockNumber::fromHex( Hex::from( $log->blockNumber ) ), // block_number
-			hexdec( $log->logIndex ), // log_index
+			Hex::from( $log->logIndex )->intValue(), // log_index
 			TransactionHash::from( $log->transactionHash ), // transaction_hash
 			InvoiceId::fromHex( Hex::from( '0x' . $decoded_event_params['invoiceId']->toHex() ) ), // invoice_id
 			PostId::from( (int) $decoded_event_params['postId']->toString() ), // post_id

@@ -31,8 +31,13 @@ class WpAppContractRepository implements AppContractRepository {
 			return null;
 		}
 
+		$chain = $this->chain_repository->get( $chain_id );
+		if ( null === $chain ) {
+			return null; // AppContract は Chain 非 null 必須のため、チェーン欠損時は契約なしとして扱う
+		}
+
 		return new AppContract(
-			$this->chain_repository->get( $chain_id ),
+			$chain,
 			Address::from( $record->addressValue() )
 		);
 	}

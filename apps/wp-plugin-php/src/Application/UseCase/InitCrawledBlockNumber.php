@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
+use Baywall\Core\Application\Logging\AppLogService;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\Service\BlockchainService;
@@ -18,6 +19,7 @@ class InitCrawledBlockNumber {
 	private const SAFETY_MARGIN_SECONDS = 60 * 5; // 5分
 
 	public function __construct(
+		private readonly AppLogService $app_log_service,
 		private readonly CrawledBlockRepository $crawled_block_repository,
 		private readonly ChainRepository $chain_repository,
 		private readonly BlockchainService $blockchain_service
@@ -27,6 +29,8 @@ class InitCrawledBlockNumber {
 		$chain_id = ChainId::from( $chain_id_value );
 
 		if ( null !== $this->crawled_block_repository->get( $chain_id ) ) {
+			// 初期化済みは高頻度で通るため、性能影響を避けて debug で記録する
+			$this->app_log_service->debug( "[DC43864A] Crawled block number is already initialized. chainId: {$chain_id}" );
 			return; // 初期化済みの場合は何もしない
 		}
 
@@ -36,6 +40,9 @@ class InitCrawledBlockNumber {
 
 		$safe_crawled_block_number = $this->getSafetyCrawledBlockNumber( $chain_id );
 		$this->crawled_block_repository->save( $chain_id, $safe_crawled_block_number );
+
+		// IssueInvoice のトランザクション内から呼ばれるため、トランザクション失敗時はこのログも消失しうる
+		$this->app_log_service->info( "[93C348BA] Crawled block number initialized. chainId: {$chain_id}, blockNumber: {$safe_crawled_block_number}" );
 	}
 
 	/**

@@ -49,7 +49,8 @@ class Token {
 				'symbol'     => $this->symbol->value(),
 				'decimals'   => $this->decimals->value(),
 				'is_payable' => $this->is_payable,
-			)
+			),
+			JSON_THROW_ON_ERROR
 		);
 	}
 }

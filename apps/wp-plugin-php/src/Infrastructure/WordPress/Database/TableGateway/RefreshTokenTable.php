@@ -37,7 +37,7 @@ class RefreshTokenTable {
 
 		$record = $this->wpdb->get_row( $sql );
 
-		return $record === null ? null : new RefreshTokenTableRecord( $record );
+		return $record instanceof \stdClass ? new RefreshTokenTableRecord( $record ) : null;
 	}
 
 	public function add( RefreshToken $refresh_token ): void {

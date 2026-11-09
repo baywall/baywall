@@ -57,12 +57,16 @@ class WpPluginTeardownService implements PluginTeardownService {
 		// optionsテーブルから、プレフィックスにマッチするトランジェント名をすべて取得
 		$transient_names = $this->wpdb->get_col(
 			$this->wpdb->prepare(
-				"SELECT option_name FROM {$this->wpdb->options} WHERE option_name LIKE %s",
+				'SELECT option_name FROM %i WHERE option_name LIKE %s',
+				$this->wpdb->options,
 				$this->wpdb->esc_like( '_transient_' . WpTransientName::PREFIX ) . '%'
 			)
 		);
 
 		foreach ( $transient_names as $transient_name ) {
+			if ( is_null( $transient_name ) ) {
+				continue; // アンインストール時のクリーンアップを中断させないため null 要素はスキップ
+			}
 			// テーブルから直接削除せず、delete_transient経由で削除する
 			delete_transient( str_replace( '_transient_', '', $transient_name ) );
 		}
@@ -71,7 +75,7 @@ class WpPluginTeardownService implements PluginTeardownService {
 	/**
 	 * 指定したクラスのpublic constで定義されている値をすべて取得します
 	 *
-	 * @param string $class_name
+	 * @param class-string<object> $class_name
 	 * @return string[]
 	 */
 	private function getConstValues( string $class_name ): array {

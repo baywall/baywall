@@ -3,119 +3,72 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AuditLogService;
 use Baywall\Core\Application\Port\AccessTokenRequestProvider;
 use Baywall\Core\Application\Service\AccessTokenService;
-use Baywall\Core\Application\Service\AppContractCrawlService;
-use Baywall\Core\Application\Service\ConfirmationsService;
-use Baywall\Core\Application\Port\SalesHistoryQueryService;
+use Baywall\Core\Application\Service\PaymentVerifier;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Application\ValueObject\AccessToken;
-use Baywall\Core\Domain\Entity\Invoice;
 use Baywall\Core\Domain\Exception\PaymentNotCompletedException;
 use Baywall\Core\Domain\Exception\AuthenticationFailedException;
-use Baywall\Core\Domain\Repository\ChainRepository;
-use Baywall\Core\Domain\Repository\InvoiceRepository;
 use Baywall\Core\Domain\Repository\PostRepository;
-use Baywall\Core\Domain\Repository\SearchCondition\InvoiceSearchCondition;
-use Baywall\Core\Domain\ValueObject\ChainId;
+use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class GetPaidContent {
 	public function __construct(
-		private readonly AppLogger $logger,
 		private readonly UserAccessChecker $user_access_checker,
 		private readonly AccessTokenRequestProvider $access_token_request_provider,
 		private readonly AccessTokenService $access_token_service,
 		private readonly PostRepository $post_repository,
-		private readonly SalesHistoryQueryService $sales_history_query_service,
-		private readonly ChainRepository $chain_repository,
-		private readonly InvoiceRepository $invoice_repository,
-		private readonly ConfirmationsService $confirmations_service,
-		private readonly AppContractCrawlService $app_contract_crawl_service
+		private readonly PaymentVerifier $payment_verifier,
+		private readonly AuditLogService $audit_log_service
 	) {}
 
 	public function handle( int $post_id_value ): string {
 		$post_id = PostId::from( $post_id_value );
 
-		// アクセストークンをCookieから取得
+		$access_token = $this->resolveAccessToken();
+		$this->checkCanViewPost( $post_id );
+		$address = $this->resolveWalletAddress( $access_token );
+
+		if ( ! $this->payment_verifier->isPaid( $post_id, $address ) ) {
+			throw new PaymentNotCompletedException( "[E868EFEF] is_paid is false : {$post_id}" );
+		}
+		$paid_content = $this->getPaidContentValue( $post_id );
+		$this->audit_log_service->info( 'paid_content_served', "Paid content served. postId: {$post_id}, walletAddress: {$address}" );
+		return $paid_content;
+	}
+
+	private function resolveAccessToken(): AccessToken {
 		$access_token_value = $this->access_token_request_provider->get();
 		if ( $access_token_value === null ) {
 			throw new AuthenticationFailedException( '[8AD8257F] Access token is missing.' );
 		}
 		$access_token = AccessToken::from( $access_token_value );
 
-		// アクセストークンの妥当性（有効期限切れ）チェック
-		// ※ 署名が不正な場合はdecode時に例外がスローされる
+		// 署名が不正な場合はdecode時に例外がスローされる
 		if ( ! $this->access_token_service->isValid( $access_token ) ) {
 			throw new AuthenticationFailedException( '[3975F78C] Access token is invalid.' );
 		}
+		return $access_token;
+	}
 
+	private function checkCanViewPost( PostId $post_id ): void {
 		// アクセストークンで認証済みが確定しているため、ヒント(true)を渡して閲覧権限をチェック
 		$this->user_access_checker->checkCanViewPost( $post_id, true );
+	}
 
-		// アクセストークンの所有者（ウォレットアドレス）を取得
-		$address = $this->access_token_service->getWalletAddress( $access_token );
+	private function resolveWalletAddress( AccessToken $access_token ): Address {
+		return $this->access_token_service->getWalletAddress( $access_token );
+	}
 
-		// 販売履歴に記事の続きを要求したウォレットが指定した投稿を支払済みかどうかを取得
-		$is_paid = $this->sales_history_query_service->existsByPostIdAndBuyerAddress( $post_id, $address );
-
-		// 販売履歴に存在しない場合はブロックチェーンから情報を取得して確認する
-		if ( ! $is_paid ) {
-			$invoices = $this->invoice_repository->findBy( ( new InvoiceSearchCondition() )->setPostId( $post_id )->setBuyerAddress( $address ) );
-
-			/** @var int[] チェック対象のチェーンID一覧 */
-			$invoice_chain_id_values = array_reduce(
-				$invoices,
-				function ( array $carry, Invoice $invoice ) {
-					$chain_id_value = $invoice->chainId()->value();
-					if ( ! in_array( $chain_id_value, $carry, true ) ) {
-						$carry[] = $chain_id_value;
-					}
-					return $carry;
-				},
-				array()
-			);
-
-			foreach ( $invoice_chain_id_values as $chain_id_value ) {
-				$chain_id = ChainId::from( $chain_id_value );
-				$chain    = $this->chain_repository->get( $chain_id );
-				if ( null === $chain ) {
-					$this->logger->warn( "[9A308587] Chain with ID {$chain_id} does not exist. Skipping payment check for this chain." );
-					continue; // chain テーブルに存在しないチェーンはスキップ
-				}
-				if ( ! $chain->connectable() ) {
-					continue; // ブロックチェーンに接続できない場合はスキップ
-				}
-
-				$is_confirmed = $this->confirmations_service->isConfirmed( $chain_id, $post_id, $address );
-				if ( $is_confirmed ) {
-					try {
-						// 販売履歴に存在しないが、ブロックチェーン上では支払が確認できている
-						// という状態なので購入履歴を更新しておく
-						$this->app_contract_crawl_service->crawl( $chain_id );
-					} catch ( \Throwable $e ) {
-						$this->logger->error( $e );
-						// 再スローはせずに処理を続行する
-					}
-
-					$is_paid = true;
-					break;
-				}
-			}
+	private function getPaidContentValue( PostId $post_id ): string {
+		$paid_content = $this->post_repository->get( $post_id )->paidContent();
+		if ( null === $paid_content ) {
+			// 支払い確認済みなのに有料部分が未設定は想定外のデータ状態
+			throw new \LogicException( "[8301ADB2] Paid content is null for post ID: {$post_id}" );
 		}
-
-		// 購入済みの場合は有料部分を返す。
-		if ( $is_paid ) {
-			$paid_content = $this->post_repository->get( $post_id )->paidContent();
-			if ( null === $paid_content ) {
-				// 支払い確認済みなのに有料部分が未設定は想定外のデータ状態
-				throw new \LogicException( "[8301ADB2] Paid content is null for post ID: {$post_id}" );
-			}
-			return $paid_content->value();
-		} else {
-			// 購入済みでない場合はエラーをスロー
-			throw new PaymentNotCompletedException( "[E868EFEF] is_paid is false : {$post_id}" );
-		}
+		return $paid_content->value();
 	}
 }

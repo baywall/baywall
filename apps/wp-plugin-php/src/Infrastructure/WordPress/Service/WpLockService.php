@@ -6,7 +6,7 @@ use Baywall\Core\Application\Exception\LockAcquisitionException;
 use Baywall\Core\Application\Port\LockService;
 use wpdb;
 
-class WpLockService extends LockService {
+class WpLockService implements LockService {
 	public function __construct( private readonly wpdb $wpdb ) {}
 
 	/** @inheritdoc */

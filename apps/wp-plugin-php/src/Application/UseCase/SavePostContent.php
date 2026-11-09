@@ -3,13 +3,17 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
+use Baywall\Core\Application\Logging\AuditLogService;
 use Baywall\Core\Domain\Entity\WidgetAttributes;
 use Baywall\Core\Domain\Repository\PostRepository;
 use Baywall\Core\Domain\ValueObject\PaidContent;
 use Baywall\Core\Domain\ValueObject\PostId;
 
 class SavePostContent {
-	public function __construct( private readonly PostRepository $post_repository ) {}
+	public function __construct(
+		private readonly PostRepository $post_repository,
+		private readonly AuditLogService $audit_log_service
+	) {}
 
 	/**
 	 * 有料部分を保存・削除する。
@@ -26,5 +30,11 @@ class SavePostContent {
 			$post->setPaidContent( $paid_content, $widget_attributes->sellingNetworkCategoryId(), $widget_attributes->sellingAmount(), $widget_attributes->sellingSymbol() );
 		}
 		$this->post_repository->save( $post );
+
+		if ( null === $paid_content ) {
+			$this->audit_log_service->info( 'delete_paid_content', "Paid content deleted. postId: {$post_id_value}" );
+		} else {
+			$this->audit_log_service->info( 'save_paid_content', "Paid content saved. postId: {$post_id_value}" );
+		}
 	}
 }

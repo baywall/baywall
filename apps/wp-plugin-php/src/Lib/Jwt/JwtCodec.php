@@ -45,8 +45,8 @@ class JwtCodec {
 			throw new \InvalidArgumentException( "[8812C526] Unsupported JWT algorithm: {$alg}" );
 		}
 
-		$header_encoded  = $this->base64url->encode( json_encode( $header, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
-		$payload_encoded = $this->base64url->encode( json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
+		$header_encoded  = $this->base64url->encode( json_encode( $header, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
+		$payload_encoded = $this->base64url->encode( json_encode( $payload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
 
 		$data = $header_encoded . '.' . $payload_encoded;   // 署名対象文字列
 

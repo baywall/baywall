@@ -17,9 +17,9 @@ final class Ethers {
 	 * @return string
 	 */
 	public static function keccak256( string $hex_value ): string {
-		assert( preg_match( '/^0x[0-9a-f]*$/', $hex_value ) );
+		assert( preg_match( '/^0x[0-9a-f]*$/', $hex_value ) === 1 );
 		$result = '0x' . Keccak::hash( hex2bin( substr( $hex_value, 2 ) ), 256 );
-		assert( preg_match( '/^0x[0-9a-f]{64}$/', $result ) );
+		assert( preg_match( '/^0x[0-9a-f]{64}$/', $result ) === 1 );
 		return $result;
 	}
 
@@ -39,7 +39,7 @@ final class Ethers {
 
 		// EIP191形式に変換したメッセージのKeccak-256ハッシュを計算
 		$result = self::keccak256( '0x' . bin2hex( self::MESSAGE_PREFIX . strlen( $message ) . $message ) );
-		assert( preg_match( '/^0x[0-9a-f]{64}$/', $result ) );
+		assert( preg_match( '/^0x[0-9a-f]{64}$/', $result ) === 1 );
 		return $result;
 	}
 
@@ -53,14 +53,16 @@ final class Ethers {
 	 * @see https://github.com/simplito/elliptic-php?tab=readme-ov-file#verifying-ethereum-signature
 	 */
 	public static function verifyMessage( string $message, string $signature ): ?string {
-		assert( preg_match( '/^0x[0-9a-f]{130}$/', $signature ) );
+		assert( preg_match( '/^0x[0-9a-f]{130}$/', $signature ) === 1 );
 
-		$hash  = str_replace( '0x', '', self::hashMessage( $message ) );
-		$sign  = array(
+		$hash      = str_replace( '0x', '', self::hashMessage( $message ) );
+		$sign      = array(
 			'r' => substr( $signature, 2, 64 ),
 			's' => substr( $signature, 66, 64 ),
 		);
-		$recid = ord( hex2bin( substr( $signature, 130, 2 ) ) ) - 27;
+		$recid_bin = hex2bin( substr( $signature, 130, 2 ) );
+		assert( is_string( $recid_bin ) );
+		$recid = ord( $recid_bin ) - 27;
 		if ( $recid != ( $recid & 1 ) ) {
 			return null;
 		}
@@ -70,7 +72,7 @@ final class Ethers {
 		$public_key = $ec->recoverPubKey( $hash, $sign, $recid );
 
 		$result = self::computeAddress( '0x' . $public_key->encode( 'hex' ) );
-		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) );
+		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) === 1 );
 		return $result;
 	}
 
@@ -80,9 +82,11 @@ final class Ethers {
 	 * @see https://github.com/simplito/elliptic-php#verifying-ethereum-signature
 	 */
 	public static function computeAddress( string $public_key ): string {
-		$result = '0x' . substr( Keccak::hash( substr( hex2bin( str_replace( '0x', '', $public_key ) ), 1 ), 256 ), 24 );
+		$public_key_bin = hex2bin( str_replace( '0x', '', $public_key ) );
+		assert( is_string( $public_key_bin ) );
+		$result = '0x' . substr( Keccak::hash( substr( $public_key_bin, 1 ), 256 ), 24 );
 		$result = self::getAddress( $result ); // チェックサム付きアドレスに変換
-		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) );
+		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) === 1 );
 		return $result;
 	}
 
@@ -152,7 +156,7 @@ final class Ethers {
 		if ( $is_mixed_case && substr( $result, 2 ) !== $address ) {
 			throw new \InvalidArgumentException( '[DFB23B35] Bad address checksum. ' . $value );
 		}
-		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) );
+		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) === 1 );
 		return $result;
 	}
 
@@ -172,16 +176,16 @@ final class Ethers {
 			if ( is_int( $value ) ) {
 				$raw_hex = dechex( $value );
 			} elseif ( is_string( $value ) ) {
-				assert( preg_match( '/^0x[0-9a-fA-F]+$/', $value ) );
+				assert( preg_match( '/^0x[0-9a-fA-F]+$/', $value ) === 1 );
 				$raw_hex = strtolower( substr( $value, 2 ) );
 			} else {
 				throw new \InvalidArgumentException( '[5963C820] Unsupported value type: ' . gettype( $value ) );
 			}
-			assert( preg_match( '/^[0-9a-f]*$/', $raw_hex ), "[D3C2E2B1] {$raw_hex}" );
+			assert( preg_match( '/^[0-9a-f]*$/', $raw_hex ) === 1, "[D3C2E2B1] {$raw_hex}" );
 
 			switch ( $type ) {
 				case 'address':
-					assert( preg_match( '/^[0-9a-f]{40}$/', $raw_hex ), "[EB3A3707] {$raw_hex}" );
+					assert( preg_match( '/^[0-9a-f]{40}$/', $raw_hex ) === 1, "[EB3A3707] {$raw_hex}" );
 					$packed .= $raw_hex;
 					break;
 				case 'uint256':
@@ -189,11 +193,11 @@ final class Ethers {
 				case 'uint64':
 					$hex_len      = (int) str_replace( 'uint', '', $type ) / 4;
 					$value_packed = str_pad( $raw_hex, $hex_len, '0', STR_PAD_LEFT );
-					assert( preg_match( "/^[0-9a-f]{{$hex_len}}$/", $value_packed ), "[7C2D1F6E] {$value_packed}" );
+					assert( preg_match( "/^[0-9a-f]{{$hex_len}}$/", $value_packed ) === 1, "[7C2D1F6E] {$value_packed}" );
 					$packed .= $value_packed;
 					break;
 				case 'bytes32':
-					assert( preg_match( '/^[0-9a-f]{64}$/', $raw_hex ), "[70601E35] {$raw_hex}" );
+					assert( preg_match( '/^[0-9a-f]{64}$/', $raw_hex ) === 1, "[70601E35] {$raw_hex}" );
 					$packed .= $raw_hex;
 					break;
 				case 'bytes':
@@ -271,8 +275,9 @@ final class Ethers {
 			}
 		}
 
+		assert( is_string( $node ) );
 		$result = '0x' . bin2hex( $node );
-		assert( preg_match( '/^0x[0-9a-f]{64}$/', $result ) );
+		assert( preg_match( '/^0x[0-9a-f]{64}$/', $result ) === 1 );
 		return $result;
 	}
 
@@ -299,7 +304,7 @@ final class Ethers {
 			$encoded .= chr( strlen( $label ) ) . $label;
 		}
 		$result = '0x' . bin2hex( $encoded . "\x00" );
-		assert( preg_match( '/^0x[0-9a-f]+$/', $result ) );
+		assert( preg_match( '/^0x[0-9a-f]+$/', $result ) === 1 );
 		return $result;
 	}
 

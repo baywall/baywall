@@ -17,16 +17,17 @@
 
 declare(strict_types=1);
 
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AppLogService;
+use Baywall\Core\Application\Logging\ErrorLogWriter;
 use Baywall\Core\Application\Repository\InstalledPluginVersionRepository;
 use Baywall\Core\Application\Port\Clock;
-use Baywall\Core\Application\Port\LockService;
 use Baywall\Core\Application\Port\PluginDeactivationService;
 use Baywall\Core\Application\Port\PluginAutoUpdateStateProvider;
 use Baywall\Core\Application\Port\PluginMigrationService;
 use Baywall\Core\Application\Port\PluginCompatibilityChecker;
 use Baywall\Core\Application\Port\UserAccessProvider;
 use Baywall\Core\Application\Service\EnsRpcUrlResolver;
+use Baywall\Core\Application\Service\LockRunner;
 use Baywall\Core\Application\UseCase\CrawlAllAppContract;
 use Baywall\Core\Application\UseCase\CleanupOldLogs;
 use Baywall\Core\Application\UseCase\GetPaidContent;
@@ -94,9 +95,9 @@ $main = function () {
 	// プラグインの初期化
 	$plugin_migration_hook = new PluginMigrationHook(
 		fn() => $container->get( PluginMigrationService::class ),
-		fn() => $container->get( LockService::class ),
+		fn() => $container->get( LockRunner::class ),
 		fn() => $container->get( InstalledPluginVersionRepository::class ),
-		fn() => $container->get( AppLogger::class ),
+		fn() => $container->get( AppLogService::class ),
 		fn() => $container->get( WordPressPropertyProvider::class ),
 		fn() => $container->get( RuntimeEnvironmentChecker::class ),
 		fn() => $container->get( PhpExtChecker::class ),
@@ -108,7 +109,7 @@ $main = function () {
 	// GraphQLのAPI登録
 	$graphql_hook = new GraphQLHook(
 		fn() => $container->get( RestPropertyProvider::class ),
-		fn() => $container->get( AppLogger::class ),
+		fn() => $container->get( AppLogService::class ),
 		fn() => $container->get( WpNonceService::class ),
 		fn() => $container->get( WpExceptionConverter::class ),
 		fn() => $container->get( PluginSchemaProvider::class ),
@@ -118,7 +119,7 @@ $main = function () {
 
 	// REST APIの登録(GraphQL以外)
 	$rest_api_hook = new RestApiHook(
-		fn() => $container->get( AppLogger::class ),
+		fn() => $container->get( AppLogService::class ),
 		fn() => $container->get( WpNonceService::class ),
 		fn() => $container->get( WpExceptionConverter::class ),
 		fn() => $container->get( CookieNameProvider::class ),
@@ -132,7 +133,7 @@ $main = function () {
 	// AppコントラクトをクロールするCronの登録
 	$app_contract_crawl_cron_hook = new AppContractCrawlCronHook(
 		$container->get( WpPluginInfoProvider::class ),
-		fn() => $container->get( LockService::class ),
+		fn() => $container->get( LockRunner::class ),
 		fn() => $container->get( Clock::class ),
 		fn() => $container->get( CrawlAllAppContract::class ),
 	);
@@ -190,9 +191,10 @@ $main = function () {
 	// ログクリーンアップCronの登録
 	$log_cleanup_cron_hook = new LogCleanupCronHook(
 		$container->get( WpPluginInfoProvider::class ),
-		fn() => $container->get( LockService::class ),
+		fn() => $container->get( LockRunner::class ),
 		fn() => $container->get( Clock::class ),
 		fn() => $container->get( CleanupOldLogs::class ),
+		$container->get( ErrorLogWriter::class ),
 	);
 	$log_cleanup_cron_hook->register();
 
@@ -205,7 +207,7 @@ $main = function () {
 		fn() => $container->get( WpPluginInfoProvider::class ),
 		fn() => $container->get( WordPressPropertyProvider::class ),
 		fn() => $container->get( WpPluginUpdateChecker::class ),
-		fn() => $container->get( AppLogger::class ),
+		fn() => $container->get( AppLogService::class ),
 	);
 	$plugin_update_check_hook->register();
 

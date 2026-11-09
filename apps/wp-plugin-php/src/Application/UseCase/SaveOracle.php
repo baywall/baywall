@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
+use Baywall\Core\Application\Logging\AuditLogService;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Entity\Oracle;
 use Baywall\Core\Domain\Repository\ChainRepository;
@@ -16,7 +17,8 @@ class SaveOracle {
 		private readonly UserAccessChecker $user_access_checker,
 		private readonly OracleRepository $oracle_repository,
 		private readonly ChainRepository $chain_repository,
-		private readonly OracleService $oracle_service
+		private readonly OracleService $oracle_service,
+		private readonly AuditLogService $audit_log_service
 	) {}
 
 	/** Oracle情報をサーバーに登録します */
@@ -41,6 +43,8 @@ class SaveOracle {
 
 		// Oracle情報を保存
 		$this->oracle_repository->save( $oracle );
+
+		$this->audit_log_service->info( 'save_oracle', "Oracle saved. chainId: {$chain_id}, oracle address: {$address}" );
 
 		return true;
 	}

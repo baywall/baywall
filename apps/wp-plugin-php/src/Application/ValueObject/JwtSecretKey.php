@@ -21,7 +21,7 @@ final readonly class JwtSecretKey extends SecureStringValueObject {
 
 	private function checkJwtSecretKeyValue( string $jwt_secret_key_value ): void {
 		// 空文字の場合はエラー
-		if ( empty( $jwt_secret_key_value ) ) {
+		if ( '' === $jwt_secret_key_value ) {
 			throw new \InvalidArgumentException( '[98936770] JWT secret key cannot be empty.' );
 		}
 	}

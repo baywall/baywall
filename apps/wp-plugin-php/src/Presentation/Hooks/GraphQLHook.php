@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AppLogService;
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Domain\Exception\ValidationFailedException;
 use Baywall\Core\Presentation\GraphQL\RootValue;
@@ -26,7 +26,7 @@ use GraphQL\Validator\Rules\ValidationRule;
 class GraphQLHook extends HookBase {
 	/**
 	 * @param \Closure(): RestPropertyProvider $rest_property_provider
-	 * @param \Closure(): AppLogger            $logger
+	 * @param \Closure(): AppLogService        $app_log_service
 	 * @param \Closure(): WpNonceService       $nonce_service
 	 * @param \Closure(): WpExceptionConverter $exception_converter
 	 * @param \Closure(): PluginSchemaProvider $plugin_schema_provider
@@ -34,7 +34,7 @@ class GraphQLHook extends HookBase {
 	 */
 	public function __construct(
 		private readonly \Closure $rest_property_provider,
-		private readonly \Closure $logger,
+		private readonly \Closure $app_log_service,
 		private readonly \Closure $nonce_service,
 		private readonly \Closure $exception_converter,
 		private readonly \Closure $plugin_schema_provider,
@@ -47,10 +47,15 @@ class GraphQLHook extends HookBase {
 
 	public function addActionRestApiInit(): void {
 		$rest_property_provider = ( $this->rest_property_provider )();
+		$namespace              = $rest_property_provider->namespace();
+		$route                  = $rest_property_provider->graphQlRoute();
+		if ( ! $namespace || ! $route ) {
+			throw new \RuntimeException( '[848379A8] GraphQL REST namespace and route must not be empty.' );
+		}
 		// GraphQLのエンドポイントを登録
 		$success = register_rest_route(
-			$rest_property_provider->namespace(),
-			$rest_property_provider->graphQlRoute(),
+			$namespace,
+			$route,
 			array(
 				'methods'             => 'POST',
 				'callback'            => $this->callback( ... ),
@@ -67,7 +72,7 @@ class GraphQLHook extends HookBase {
 	 * @return true|\WP_Error
 	 */
 	private function permissionCallback( \WP_REST_Request $request ): true|\WP_Error {
-		$logger              = ( $this->logger )();
+		$app_log_service     = ( $this->app_log_service )();
 		$nonce_service       = ( $this->nonce_service )();
 		$exception_converter = ( $this->exception_converter )();
 
@@ -75,7 +80,7 @@ class GraphQLHook extends HookBase {
 			$nonce_service->checkRequestHeader( $request );
 			return true;
 		} catch ( \Throwable $e ) {
-			$logger->debug( $e );
+			$app_log_service->debug( $e );
 			return $exception_converter->toWpError( $e );
 		}
 	}
@@ -92,7 +97,7 @@ class GraphQLHook extends HookBase {
 			$variable_values = $input['variables'];
 			$operation_name  = $input['operationName'];
 		} catch ( \Throwable $e ) {
-			( $this->logger )()->debug( $e );
+			( $this->app_log_service )()->debug( $e );
 			return ( $this->exception_converter )()->toWpError( $e );
 		}
 
@@ -109,10 +114,10 @@ class GraphQLHook extends HookBase {
 						function ( \GraphQL\Error\Error $error ) use ( $formatter ) {
 							$prev_error = $error->getPrevious();
 
-							$logger = ( $this->logger )();
-							$logger->error( $error );
+							$app_log_service = ( $this->app_log_service )();
+							$app_log_service->error( $error );
 							if ( $prev_error ) {
-								$logger->error( $prev_error );
+								$app_log_service->error( $prev_error );
 							}
 
 							$extensions = $error->getExtensions() ?? array();

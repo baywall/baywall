@@ -39,7 +39,11 @@ class WpAccessTokenCookieProvider implements AccessTokenCookieProvider {
 	 */
 	private function path(): string {
 		$api_root_url = $this->wordpress_property_provider->apiRootUrl();
-		return parse_url( trailingslashit( $api_root_url ) . WpConfig::REST_NAMESPACE . '/' . WpConfig::REST_ROUTE_PAID_CONTENT, PHP_URL_PATH );
+		$path         = parse_url( trailingslashit( $api_root_url ) . WpConfig::REST_NAMESPACE . '/' . WpConfig::REST_ROUTE_PAID_CONTENT, PHP_URL_PATH );
+		if ( ! is_string( $path ) || '' === $path ) {
+			throw new \RuntimeException( '[C80E3DDE] Failed to parse path from API root URL: ' . $api_root_url );
+		}
+		return $path;
 	}
 
 	private function secure(): bool {

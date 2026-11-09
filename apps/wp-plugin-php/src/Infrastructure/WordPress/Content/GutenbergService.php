@@ -70,10 +70,12 @@ class GutenbergService {
 	 * @return int
 	 */
 	public function findBlockIndex( array $blocks, BlockName $block_name ): int {
+		$index = 0;
 		foreach ( $blocks as $block ) {
 			if ( $block->name === $block_name->value() ) {
-				return array_search( $block, $blocks );
+				return $index;
 			}
+			++$index;
 		}
 		return -1;
 	}

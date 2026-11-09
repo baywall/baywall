@@ -11,6 +11,6 @@ class HtmlFormat {
 	 * @return string コメントを削除したHTML文字列
 	 */
 	public static function removeHtmlComments( string $html ): string {
-		return preg_replace( '/<!--.*?-->/s', '', $html );
+		return preg_replace( '/<!--.*?-->/s', '', $html ) ?? throw new \RuntimeException( '[8BE0977E] Failed to remove HTML comments.' );
 	}
 }

@@ -23,6 +23,11 @@ final class Config {
 	public const RATE_TRANSIENT_EXPIRATION = 60 * 10; // 10分
 
 	/**
+	 * app-manifestの一時データの有効期限(秒)
+	 */
+	public const APP_MANIFEST_TRANSIENT_EXPIRATION = 60 * 10; // 10分
+
+	/**
 	 * ブロックチェーンへのリクエストのタイムアウト(秒)
 	 */
 	public const BLOCKCHAIN_REQUEST_TIMEOUT = 10;

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AppLogService;
 use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Entity\Post;
@@ -21,7 +21,7 @@ use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 class GetPayableTokens {
 	public function __construct(
-		private readonly AppLogger $logger,
+		private readonly AppLogService $app_log_service,
 		private readonly UserAccessChecker $user_access_checker,
 		private readonly PostRepository $post_repository,
 		private readonly ChainRepository $chain_repository,
@@ -57,8 +57,14 @@ class GetPayableTokens {
 		$selling_network_category_id = $post->sellingNetworkCategoryId();
 
 		if ( $selling_network_category_id === null ) {
-			$this->logger->warn( '[22EB42D3] Selling network category is null for post ID: ' . $post->id()->value() );
+			$this->app_log_service->warn( '[22EB42D3] Selling network category is null for post ID: ' . $post->id()->value() );
 			return array(); // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
+		}
+
+		$selling_price = $post->sellingPrice();
+		if ( $selling_price === null ) {
+			$this->app_log_service->warn( '[49E790B1] Selling price is null for post ID: ' . $post->id()->value() );
+			return array(); // 販売価格が設定されていない場合は空の配列を返す
 		}
 
 		// 投稿に設定されている販売ネットワークカテゴリかつ接続可能なチェーン一覧を取得
@@ -83,7 +89,7 @@ class GetPayableTokens {
 			$payable_tokens = array_filter(
 				$payable_tokens,
 				fn( Token $token ) => $this->price_exchange_service->exchangeable(
-					$post->sellingPrice(),
+					$selling_price,
 					$token->symbol()
 				)
 			);

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\GraphQL;
 
+use Baywall\Core\Application\Logging\ErrorLogWriter;
 use Baywall\Core\Application\Port\GraphQLConfigProvider;
 use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\Parser;
@@ -11,7 +12,10 @@ use GraphQL\Utils\BuildSchema;
 use RuntimeException;
 
 class PluginSchemaProvider {
-	public function __construct( private readonly GraphQLConfigProvider $graphql_config_provider ) {}
+	public function __construct(
+		private readonly GraphQLConfigProvider $graphql_config_provider,
+		private readonly ErrorLogWriter $error_log_writer,
+	) {}
 
 	/** @return Schema */
 	public function get() {
@@ -21,10 +25,14 @@ class PluginSchemaProvider {
 
 		if ( $this->isCacheFileCreationNeeded() ) {
 			$graphql_schema_path = $this->graphql_config_provider->getSchemaFilePath();
-			$document            = Parser::parse( file_get_contents( $graphql_schema_path ) );
+			$schema_contents     = file_get_contents( $graphql_schema_path );
+			if ( false === $schema_contents ) {
+				throw new RuntimeException( '[3D93EEED] Failed to read GraphQL schema file: ' . $graphql_schema_path );
+			}
+			$document = Parser::parse( $schema_contents );
 			if ( ! $this->writeCacheFile( $cache_file_path, $document ) ) {
 				// 書き込みに失敗してもパース結果で処理を継続する（次回リクエストで再作成が試みられる）
-				error_log( '[3969B135] PluginSchemaProvider schema cache write failed: ' . $cache_file_path );
+				$this->error_log_writer->write( '[3969B135] PluginSchemaProvider schema cache write failed: ' . $cache_file_path );
 			}
 		} else {
 			$document = AST::fromArray( require $cache_file_path );

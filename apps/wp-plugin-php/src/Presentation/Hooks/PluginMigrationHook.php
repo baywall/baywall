@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Application\Exception\LockAcquisitionException;
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AppLogService;
 use Baywall\Core\Application\Repository\InstalledPluginVersionRepository;
-use Baywall\Core\Application\Port\LockService;
+use Baywall\Core\Application\Service\LockRunner;
 use Baywall\Core\Application\Port\PluginDeactivationService;
 use Baywall\Core\Application\Port\PluginMigrationService;
 use Baywall\Core\Application\Port\PluginCompatibilityChecker;
@@ -41,9 +41,9 @@ class PluginMigrationHook extends HookBase {
 
 	/**
 	 * @param \Closure(): PluginMigrationService           $plugin_migration_service
-	 * @param \Closure(): LockService                      $lock_service
+	 * @param \Closure(): LockRunner                       $lock_runner
 	 * @param \Closure(): InstalledPluginVersionRepository $installed_plugin_version_repository
-	 * @param \Closure(): AppLogger                        $app_logger
+	 * @param \Closure(): AppLogService                    $app_log_service
 	 * @param \Closure(): WordPressPropertyProvider        $wordpress_property_provider
 	 * @param \Closure(): RuntimeEnvironmentChecker        $runtime_environment_checker
 	 * @param \Closure(): PhpExtChecker                    $php_ext_checker
@@ -52,9 +52,9 @@ class PluginMigrationHook extends HookBase {
 	 */
 	public function __construct(
 		private readonly \Closure $plugin_migration_service,
-		private readonly \Closure $lock_service,
+		private readonly \Closure $lock_runner,
 		private readonly \Closure $installed_plugin_version_repository,
-		private readonly \Closure $app_logger,
+		private readonly \Closure $app_log_service,
 		private readonly \Closure $wordpress_property_provider,
 		private readonly \Closure $runtime_environment_checker,
 		private readonly \Closure $php_ext_checker,
@@ -77,10 +77,10 @@ class PluginMigrationHook extends HookBase {
 			}
 
 			try {
-				$lock_service = ( $this->lock_service )();
+				$lock_runner = ( $this->lock_runner )();
 
 				// タイムアウト0で即時失敗させ、同時リクエスト時は先着のリクエストにマイグレーションを委譲する
-				$lock_service->withLock(
+				$lock_runner->withLock(
 					self::LOCK_NAME,
 					function () use ( $plugin_migration_service ) {
 						// ロック待ちの間に他リクエストでマイグレーション済みだった場合の二重チェック
@@ -103,12 +103,12 @@ class PluginMigrationHook extends HookBase {
 			} catch ( LockAcquisitionException $e ) {
 				// ロック取得失敗（同時リクエスト）又はロック機構のエラー時は次リクエストに委譲する。
 				// ロック機構のエラーはDBの一次的な障害と考えられるため、プラグインの無効化までは行わない。
-				( $this->app_logger )()->warn( '[CB148F01] Plugin migration skipped (lock not acquired): ' . $e->getMessage() );
+				( $this->app_log_service )()->warn( '[CB148F01] Plugin migration skipped (lock not acquired): ' . $e->getMessage() );
 				return;
 			}
 		} catch ( Throwable $e ) {
 			// 例外を記録（フロントエンドは画面出力が無いため、ここでの記録が唯一の手がかり）
-			( $this->app_logger )()->error( $e );
+			( $this->app_log_service )()->error( $e );
 
 			// アップデートに失敗した場合はプラグインを無効化
 			$this->deactivatePlugin();

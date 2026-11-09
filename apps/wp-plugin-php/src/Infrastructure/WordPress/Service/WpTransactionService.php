@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Service;
 use Baywall\Core\Application\Port\TransactionService;
 use wpdb;
 
-class WpTransactionService extends TransactionService {
+class WpTransactionService implements TransactionService {
 	public function __construct( private readonly wpdb $wpdb ) {}
 
 	public function beginTransaction(): void {

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AppLogService;
 use Baywall\Core\Application\UseCase\GetPaidContent;
 use Baywall\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
 use Baywall\Core\Application\UseCase\LogoutAuth;
@@ -11,6 +11,7 @@ use Baywall\Core\Constant\HttpStatus;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Domain\Exception\ValidationFailedException;
 use Baywall\Core\Domain\Exception\AuthenticationFailedException;
+use Baywall\Core\Domain\Exception\PaymentNotCompletedException;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpNonceService;
@@ -23,7 +24,7 @@ use WP_REST_Response;
  */
 class RestApiHook extends HookBase {
 	/**
-	 * @param \Closure(): AppLogger                      $logger
+	 * @param \Closure(): AppLogService                  $app_log_service
 	 * @param \Closure(): WpNonceService                 $nonce_service
 	 * @param \Closure(): WpExceptionConverter           $exception_converter
 	 * @param \Closure(): CookieNameProvider             $cookie_name_provider
@@ -33,7 +34,7 @@ class RestApiHook extends HookBase {
 	 * @param \Closure(): GetPaidContent                 $get_paid_content
 	 */
 	public function __construct(
-		private readonly \Closure $logger,
+		private readonly \Closure $app_log_service,
 		private readonly \Closure $nonce_service,
 		private readonly \Closure $exception_converter,
 		private readonly \Closure $cookie_name_provider,
@@ -109,7 +110,7 @@ class RestApiHook extends HookBase {
 	 * @return true|\WP_Error
 	 */
 	private function permissionCallback( \WP_REST_Request $request ): true|\WP_Error {
-		$logger              = ( $this->logger )();
+		$app_log_service     = ( $this->app_log_service )();
 		$nonce_service       = ( $this->nonce_service )();
 		$exception_converter = ( $this->exception_converter )();
 
@@ -117,7 +118,7 @@ class RestApiHook extends HookBase {
 			$nonce_service->checkRequestHeader( $request );
 			return true;
 		} catch ( \Throwable $e ) {
-			$logger->debug( $e );
+			$app_log_service->debug( $e );
 			return $exception_converter->toWpError( $e );
 		}
 	}
@@ -141,9 +142,9 @@ class RestApiHook extends HookBase {
 			if ( $e instanceof AuthenticationFailedException ) {
 				// アクセストークンが存在しない状態でも
 				// 初回アクセス時にアクセスするためログレベルを抑制
-				( $this->logger )()->debug( $e );
+				( $this->app_log_service )()->debug( $e );
 			} else {
-				( $this->logger )()->error( $e );
+				( $this->app_log_service )()->error( $e );
 			}
 
 			return ( $this->exception_converter )()->toWpResponse( $e );
@@ -166,7 +167,13 @@ class RestApiHook extends HookBase {
 			( $this->issue_access_token_by_invoice_token )()->handle( $invoice_token_string_value );
 			return new WP_REST_Response( array(), HttpStatus::OK );
 		} catch ( Throwable $e ) {
-			( $this->logger )()->error( $e );
+			if ( $e instanceof PaymentNotCompletedException ) {
+				// 支払い未確認は想定内の状態なのでログレベルを抑制
+				( $this->app_log_service )()->info( $e );
+			} else {
+				( $this->app_log_service )()->error( $e );
+			}
+
 			return ( $this->exception_converter )()->toWpResponse( $e );
 		}
 	}
@@ -183,7 +190,7 @@ class RestApiHook extends HookBase {
 			( $this->logout_auth )()->handle( $refresh_token_value );
 			return new WP_REST_Response( array(), HttpStatus::OK );
 		} catch ( Throwable $e ) {
-			( $this->logger )()->error( $e );
+			( $this->app_log_service )()->error( $e );
 			return ( $this->exception_converter )()->toWpResponse( $e );
 		}
 	}
@@ -199,7 +206,13 @@ class RestApiHook extends HookBase {
 				HttpStatus::OK
 			);
 		} catch ( Throwable $e ) {
-			( $this->logger )()->error( $e );
+			if ( $e instanceof PaymentNotCompletedException ) {
+				// 未購入・未確認は想定内の状態なのでログレベルを抑制
+				( $this->app_log_service )()->info( $e );
+			} else {
+				( $this->app_log_service )()->error( $e );
+			}
+
 			return ( $this->exception_converter )()->toWpResponse( $e );
 		}
 	}

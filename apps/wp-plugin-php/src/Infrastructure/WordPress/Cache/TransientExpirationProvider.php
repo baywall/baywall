@@ -9,4 +9,8 @@ class TransientExpirationProvider {
 	public function rate(): int {
 		return Config::RATE_TRANSIENT_EXPIRATION;
 	}
+
+	public function appManifest(): int {
+		return Config::APP_MANIFEST_TRANSIENT_EXPIRATION;
+	}
 }

@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
+use Baywall\Core\Application\Logging\AuditLogService;
 use Baywall\Core\Application\Repository\Erc4361NonceRepository;
 use Baywall\Core\Application\Service\Erc4361Service;
 use Baywall\Core\Application\Service\TokenCookieService;
-use Baywall\Core\Application\Port\TransactionService;
+use Baywall\Core\Application\Service\TransactionRunner;
 use Baywall\Core\Domain\Exception\ValidationFailedException;
 use Baywall\Core\Domain\Service\SignatureService;
 use Baywall\Core\Domain\ValueObject\Address;
@@ -15,11 +16,12 @@ use Baywall\Core\Domain\ValueObject\Signature;
 
 class IssueAccessTokenByErc4361Signature {
 	public function __construct(
-		private readonly TransactionService $transaction_service,
+		private readonly TransactionRunner $transaction_runner,
 		private readonly Erc4361Service $erc4361_service,
 		private readonly Erc4361NonceRepository $erc4361_nonce_repository,
 		private readonly SignatureService $signature_service,
-		private readonly TokenCookieService $token_cookie_service
+		private readonly TokenCookieService $token_cookie_service,
+		private readonly AuditLogService $audit_log_service
 	) {}
 
 	/** ERC-4361の署名を検証してアクセストークン(+リフレッシュトークン)を発行する */
@@ -44,7 +46,7 @@ class IssueAccessTokenByErc4361Signature {
 			throw new ValidationFailedException( "[27FA5840] ERC-4361 signature verification failed for address: {$address}" );
 		}
 
-		$this->transaction_service->transactional(
+		$this->transaction_runner->transactional(
 			function () use ( $address ) {
 				// リフレッシュトークン/アクセストークンを発行し、クッキーに保存
 				$this->token_cookie_service->issueAndSetCookies( $address );
@@ -53,5 +55,9 @@ class IssueAccessTokenByErc4361Signature {
 				$this->erc4361_nonce_repository->delete( $address );
 			}
 		);
+
+		// 非ログイン（ゲスト）のため user_id では区別できないので、実行者の wallet アドレスを message に入れる
+		// 署名・nonceの値は記録しない
+		$this->audit_log_service->info( 'auth_login_erc4361', "ERC-4361 login succeeded. address: {$address}, chainId: {$chain_id}" );
 	}
 }

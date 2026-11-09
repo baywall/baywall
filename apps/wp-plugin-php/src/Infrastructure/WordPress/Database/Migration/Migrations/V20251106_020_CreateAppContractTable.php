@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
-use Baywall\Core\Application\Port\TransactionService;
+use Baywall\Core\Application\Service\TransactionRunner;
 use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
@@ -26,16 +26,16 @@ class V20251106_020_CreateAppContractTable extends MigrationBase {
 		ChainIdConstants::BASE_SEPOLIA,
 	);
 
-	private readonly TransactionService $transaction_service;
+	private readonly TransactionRunner $transaction_runner;
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;
 	private readonly Clock $clock;
 
-	public function __construct( TransactionService $transaction_service, MyWpdb $wpdb, TableNameProvider $table_name_provider, Clock $clock ) {
-		$this->transaction_service = $transaction_service;
-		$this->wpdb                = $wpdb;
-		$this->table_name          = $table_name_provider->appContract();
-		$this->clock               = $clock;
+	public function __construct( TransactionRunner $transaction_runner, MyWpdb $wpdb, TableNameProvider $table_name_provider, Clock $clock ) {
+		$this->transaction_runner = $transaction_runner;
+		$this->wpdb               = $wpdb;
+		$this->table_name         = $table_name_provider->appContract();
+		$this->clock              = $clock;
 	}
 
 	public function version(): string {
@@ -65,7 +65,7 @@ class V20251106_020_CreateAppContractTable extends MigrationBase {
 		// テーブル作成は暗黙コミットを伴うためトランザクションに含められない。INSERT のみをまとめて実行する
 		// `CHAIN_IDS` は `ChainIdConstants` の正の int リテラルで `ChainId` の検証（正数のみ）を自明に通るため、
 		// `V20251106_031_AddChainRecord` と異なり `ChainId::from()` による確認は行わない
-		$this->transaction_service->transactional(
+		$this->transaction_runner->transactional(
 			function () use ( $address, $now ) {
 				foreach ( self::CHAIN_IDS as $chain_id ) {
 					$this->wpdb->insert(

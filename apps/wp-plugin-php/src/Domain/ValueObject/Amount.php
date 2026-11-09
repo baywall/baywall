@@ -23,7 +23,11 @@ final readonly class Amount implements ValueObject {
 		$this->amount_text = $amount_text;
 	}
 
-	/** 値を10進数の文字列で保持 */
+	/**
+	 * 値を10進数の文字列で保持
+	 *
+	 * @var numeric-string
+	 */
 	private readonly string $amount_text;
 
 	/** 10進数の文字列からインスタンスを作成します。 */
@@ -78,6 +82,9 @@ final readonly class Amount implements ValueObject {
 		return Hex::fromDecValue( $this->amount_text );
 	}
 
+	/**
+	 * @return numeric-string
+	 */
 	public function value(): string {
 		return $this->amount_text;
 	}
@@ -122,9 +129,12 @@ final readonly class Amount implements ValueObject {
 		return new self( bcdiv( $this->amount_text, $other->amount_text, $accuracy_decimals->value() ) );
 	}
 
+	/**
+	 * @phpstan-assert numeric-string $amount_text
+	 */
 	private static function checkAmountText( string $amount_text ): void {
 		// 数値の形式をチェック
-		if ( ! preg_match( '/^-?(?:0|[1-9]\d*)(\.\d+)?$/', $amount_text ) ) {
+		if ( ! preg_match( '/^-?(?:0|[1-9]\d*)(\.\d+)?$/D', $amount_text ) ) {
 			throw new \InvalidArgumentException( '[275B6F0E] Invalid amount text: ' . $amount_text );
 		}
 	}

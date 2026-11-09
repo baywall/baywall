@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
+use Baywall\Core\Application\Logging\AuditLogService;
 use Baywall\Core\Application\Port\NativeTokenProvider;
 use Baywall\Core\Application\Port\TokenClientFactory;
 use Baywall\Core\Application\Service\UserAccessChecker;
@@ -19,7 +20,8 @@ class SaveToken {
 		private readonly ChainRepository $chain_repository,
 		private readonly TokenRepository $token_repository,
 		private readonly NativeTokenProvider $native_token_provider,
-		private readonly TokenClientFactory $token_client_factory
+		private readonly TokenClientFactory $token_client_factory,
+		private readonly AuditLogService $audit_log_service
 	) {}
 
 	/** トークンの情報をサーバーに登録します */
@@ -65,6 +67,8 @@ class SaveToken {
 
 		// トークン情報の新規登録または更新
 		$this->token_repository->save( $token );
+
+		$this->audit_log_service->info( 'save_token', "Token saved. chainId: {$chain_id}, token address: {$address}, isPayable: " . ( $is_payable ? 'true' : 'false' ) );
 
 		return true;
 	}

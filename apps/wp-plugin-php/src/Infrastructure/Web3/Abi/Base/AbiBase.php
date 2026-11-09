@@ -77,9 +77,9 @@ abstract class AbiBase {
 	 * indexedな引数はtopicsから、その他の引数はdataから32バイトワード単位でデコードする。
 	 * 対応型は address と uint256 のみ（他の型・動的型は未対応で例外とする）。
 	 *
-	 * @return array<string,mixed>|null
+	 * @return array<string,mixed>
 	 */
-	protected function decodeEventParameters( stdClass $log ): ?array {
+	protected function decodeEventParameters( stdClass $log ): array {
 		$event_name = $this->getEventName( $log );
 		if ( is_null( $event_name ) ) {
 			throw new InvalidArgumentException( '[F88AADB9] Unknown event name.' );

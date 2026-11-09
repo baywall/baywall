@@ -5,7 +5,7 @@ namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Application\Exception\LockAcquisitionException;
 use Baywall\Core\Application\Port\Clock;
-use Baywall\Core\Application\Port\LockService;
+use Baywall\Core\Application\Service\LockRunner;
 use Baywall\Core\Application\UseCase\CrawlAllAppContract;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Constant\Config;
@@ -24,13 +24,13 @@ class AppContractCrawlCronHook extends HookBase {
 	private const LOCK_NAME = '05f69f89-24d8-4c72-b2a2-2c8ecfb24343'; // 排他制御用の適当な文字列
 
 	/**
-	 * @param \Closure(): LockService         $lock_service
+	 * @param \Closure(): LockRunner          $lock_runner
 	 * @param \Closure(): Clock               $clock
 	 * @param \Closure(): CrawlAllAppContract $crawl_all_app_contract
 	 */
 	public function __construct(
 		private readonly WpPluginInfoProvider $plugin_info_provider,
-		private readonly \Closure $lock_service,
+		private readonly \Closure $lock_runner,
 		private readonly \Closure $clock,
 		private readonly \Closure $crawl_all_app_contract,
 	) {}
@@ -71,8 +71,8 @@ class AppContractCrawlCronHook extends HookBase {
 		//
 
 		try {
-			$lock_service = ( $this->lock_service )();
-			$lock_service->withLock(
+			$lock_runner = ( $this->lock_runner )();
+			$lock_runner->withLock(
 				self::LOCK_NAME,
 				function () use ( $action_name ) {
 					// 予約がされていない場合のみ登録

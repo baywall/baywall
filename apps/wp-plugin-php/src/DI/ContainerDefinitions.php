@@ -46,7 +46,6 @@ use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Repository\CrawledBlockRepository;
 use Baywall\Core\Domain\Repository\InvoiceRepository;
 use Baywall\Core\Domain\Repository\InvoiceTokenRepository;
-use Baywall\Core\Application\Repository\InitialSiteUrlRepository;
 use Baywall\Core\Application\Repository\NetworkCategoryRepository;
 use Baywall\Core\Domain\Repository\OracleRepository;
 use Baywall\Core\Domain\Repository\PausedRepository;
@@ -65,6 +64,7 @@ use Baywall\Core\Domain\Service\PluginInfoProvider;
 use Baywall\Core\Domain\Service\RateProvider;
 use Baywall\Core\Domain\Service\RefreshTokenService;
 use Baywall\Core\Domain\Service\SiteUrlChecker;
+use Baywall\Core\Infrastructure\Cache\AppManifestCache;
 use Baywall\Core\Infrastructure\Cache\OracleRateCache;
 use Baywall\Core\Infrastructure\Cookie\CookieWriterImpl;
 use Baywall\Core\Infrastructure\JWT\JwtServiceImpl;
@@ -81,19 +81,27 @@ use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpOracleRepository
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpPostRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpTokenRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpUnlockPaywallTransferEventRepository;
-use Baywall\Core\Infrastructure\Logging\ErrorLogLogger;
-use Baywall\Core\Application\Logging\AppLogger;
-use Baywall\Core\Application\Logging\Logger;
-use Baywall\Core\Infrastructure\WordPress\Logging\WpDatabaseLogger;
-use Baywall\Core\Application\Logging\LogLevelRepository;
+use Baywall\Core\Application\Logging\AppLogService;
+use Baywall\Core\Application\Logging\AuditLogService;
+use Baywall\Core\Application\Logging\ErrorLogWriter;
+use Baywall\Core\Infrastructure\Logging\ErrorLogFormatter;
+use Baywall\Core\Infrastructure\Logging\ErrorLogWriterImpl;
+use Baywall\Core\Infrastructure\WordPress\Logging\WpAppLogService;
+use Baywall\Core\Infrastructure\WordPress\Logging\WpAuditLogService;
+use Baywall\Core\Application\Logging\AppLogLevelRepository;
 use Baywall\Core\Infrastructure\Web3\Factory\AppContractClientFactoryImpl;
 use Baywall\Core\Infrastructure\Web3\Factory\TokenClientFactoryImpl;
+use Baywall\Core\Infrastructure\Web3\Client\HttpGetTransport;
+use Baywall\Core\Infrastructure\Web3\Client\HttpStreamGetTransport;
 use Baywall\Core\Infrastructure\Web3\Service\AppContractDataProviderImpl;
+use Baywall\Core\Infrastructure\Web3\Service\AppManifestFetchService;
+use Baywall\Core\Infrastructure\Web3\Service\AppManifestFetchServiceImpl;
 use Baywall\Core\Infrastructure\Web3\Service\BlockchainServiceImpl;
 use Baywall\Core\Infrastructure\Web3\Service\EnsService;
 use Baywall\Core\Infrastructure\Web3\Service\NativeTokenService;
 use Baywall\Core\Infrastructure\Web3\Service\OracleServiceImpl;
 use Baywall\Core\Infrastructure\Web3\Service\RateProviderImpl;
+use Baywall\Core\Infrastructure\WordPress\Cache\WpAppManifestCache;
 use Baywall\Core\Infrastructure\WordPress\Cache\WpOracleRateCache;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpErc4361NonceRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInvoiceTokenRepository;
@@ -101,13 +109,12 @@ use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpNetworkCategoryR
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpRefreshTokenRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpSellerRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpServerSignerRepository;
-use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpInitialSiteUrlRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpInstalledPluginVersionRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpPausedRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpPurgeOnUninstallRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpSctaUrlRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpThemeSettingRepository;
-use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpLogLevelRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpAppLogLevelRepository;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpAccessTokenExpirationProvider;
 use Baywall\Core\Infrastructure\WordPress\Cookie\WpAccessTokenCookieProvider;
 use Baywall\Core\Infrastructure\WordPress\Cookie\WpCookieNameProvider;
@@ -116,6 +123,7 @@ use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpAdminNotificationService;
 use Baywall\Core\Infrastructure\WordPress\Service\WpAppManifestFetcher;
+use Baywall\Core\Infrastructure\WordPress\Service\WpCachedAppManifestFetchService;
 use Baywall\Core\Infrastructure\WordPress\Service\WpCrawlFailureNotificationMessageProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpSellerWalletChangeNotificationMessageProvider;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpErc4361NonceGenerator;
@@ -210,7 +218,6 @@ final class ContainerDefinitions {
 			SctaUrlRepository::class                       => autowire( WpSctaUrlRepository::class ),
 			ThemeSettingRepository::class                  => autowire( WpThemeSettingRepository::class ),
 			PurgeOnUninstallRepository::class              => autowire( WpPurgeOnUninstallRepository::class ),
-			InitialSiteUrlRepository::class                => autowire( WpInitialSiteUrlRepository::class ),
 			JwtSecretKeyRepository::class                  => autowire( WpJwtSecretKeyRepository::class ),
 			LogRepository::class                           => autowire( WpLogRepository::class ),
 			UnlockPaywallTransferEventRepository::class    => autowire( WpUnlockPaywallTransferEventRepository::class ),
@@ -230,6 +237,9 @@ final class ContainerDefinitions {
 			OracleService::class                           => autowire( OracleServiceImpl::class ),
 			BlockchainService::class                       => autowire( BlockchainServiceImpl::class ),
 			EnsService::class                              => autowire(),
+			AppManifestFetchService::class                 => autowire( WpCachedAppManifestFetchService::class ),
+			AppManifestFetchServiceImpl::class             => autowire(),
+			HttpGetTransport::class                        => autowire( HttpStreamGetTransport::class ),
 			TransactionService::class                      => autowire( WpTransactionService::class ),
 			LockService::class                             => autowire( WpLockService::class ),
 			SalesHistoryQueryService::class                => autowire( WpSalesHistoryQueryService::class ),
@@ -304,7 +314,7 @@ final class ContainerDefinitions {
 					'saveSiteSettings'                   => fn() => $container->get( ResolveSaveSiteSettings::class ),
 					'saveToken'                          => fn() => $container->get( ResolveSaveToken::class ),
 				);
-				return new RootValue( $resolvers, $container->get( AppLogger::class ) );
+				return new RootValue( $resolvers, $container->get( AppLogService::class ) );
 			},
 
 			// プラグイン自動アップデートチェック用
@@ -320,11 +330,14 @@ final class ContainerDefinitions {
 
 			// Cache
 			OracleRateCache::class                         => autowire( WpOracleRateCache::class ),
+			AppManifestCache::class                        => autowire( WpAppManifestCache::class ),
 
 			// Logging
-			Logger::class                                  => autowire( WpDatabaseLogger::class ),
-			ErrorLogLogger::class                          => autowire(),
-			LogLevelRepository::class                      => autowire( WpLogLevelRepository::class ),
+			AppLogService::class                           => autowire( WpAppLogService::class ),
+			AuditLogService::class                         => autowire( WpAuditLogService::class ),
+			ErrorLogFormatter::class                       => autowire(),
+			ErrorLogWriter::class                          => autowire( ErrorLogWriterImpl::class ),
+			AppLogLevelRepository::class                   => autowire( WpAppLogLevelRepository::class ),
 		);
 	}
 }

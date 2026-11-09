@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
+use Baywall\Core\Application\Logging\AuditLogService;
 use Baywall\Core\Application\Port\AdminNotificationService;
 use Baywall\Core\Application\Port\SellerWalletChangeNotificationMessageProvider;
-use Baywall\Core\Application\Port\TransactionService;
+use Baywall\Core\Application\Service\TransactionRunner;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Entity\Seller;
 use Baywall\Core\Domain\Repository\SellerRepository;
@@ -19,9 +20,10 @@ class SaveSeller {
 		private readonly UserAccessChecker $user_access_checker,
 		private readonly SellerRepository $seller_repository,
 		private readonly SignatureService $signature_service,
-		private readonly TransactionService $transaction_service,
+		private readonly TransactionRunner $transaction_runner,
 		private readonly AdminNotificationService $admin_notification_service,
-		private readonly SellerWalletChangeNotificationMessageProvider $seller_wallet_change_notification_message_provider
+		private readonly SellerWalletChangeNotificationMessageProvider $seller_wallet_change_notification_message_provider,
+		private readonly AuditLogService $audit_log_service
 	) {}
 
 	/** 販売者情報を保存します */
@@ -38,7 +40,7 @@ class SaveSeller {
 		$previous = $this->seller_repository->get();
 
 		// 販売者情報を保存
-		$result = $this->transaction_service->transactional(
+		$result = $this->transaction_runner->transactional(
 			function () use ( $address, $signing_message, $signature ) {
 				$this->seller_repository->save(
 					new Seller(
@@ -50,6 +52,8 @@ class SaveSeller {
 				return true;
 			}
 		);
+
+		$this->audit_log_service->info( 'save_seller', "Seller saved. seller address: {$address}, signingMessage: {$signing_message}" );
 
 		// 保存確定後に通知する（トランザクションがロールバックされた場合は送信しない）。
 		// notify() は best-effort 契約のため、例外ハンドリングは行わない

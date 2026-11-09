@@ -40,7 +40,7 @@ class PaidContentTable {
 
 		$record = $this->wpdb->get_row( $sql );
 
-		return $record === null ? null : new PaidContentTableRecord( $record );
+		return $record instanceof \stdClass ? new PaidContentTableRecord( $record ) : null;
 	}
 
 	public function set( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryId $selling_network_category_id, ?Amount $selling_amount, ?Symbol $selling_symbol ): void {

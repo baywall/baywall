@@ -60,7 +60,7 @@ class InvoiceTable {
 		$sql     = $where_clauses ? $sql . ' WHERE ' . implode( ' AND ', $where_clauses ) : $sql;
 		$records = $this->wpdb->get_results( $sql );
 
-		return array_values( array_map( fn( \stdClass $record ) => new InvoiceTableRecord( $record ), $records ) );
+		return array_map( fn( \stdClass $record ) => new InvoiceTableRecord( $record ), $records );
 	}
 
 	public function save( Invoice $invoice ): void {

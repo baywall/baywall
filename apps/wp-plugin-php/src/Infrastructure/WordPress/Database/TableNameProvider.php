@@ -79,8 +79,13 @@ class TableNameProvider {
 		return $this->prefix . WpTableCoreName::ERC4361_NONCE;
 	}
 
-	/** ログを記録するテーブル名 */
-	public function log(): string {
-		return $this->prefix . WpTableCoreName::LOG;
+	/** アプリログを記録するテーブル名 */
+	public function logApp(): string {
+		return $this->prefix . WpTableCoreName::LOG_APP;
+	}
+
+	/** 監査ログを記録するテーブル名 */
+	public function logAudit(): string {
+		return $this->prefix . WpTableCoreName::LOG_AUDIT;
 	}
 }

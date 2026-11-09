@@ -60,11 +60,11 @@ class NamedPlaceholder {
 		if ( is_null( $value ) ) {
 			return 'NULL';
 		} elseif ( is_int( $value ) || is_bool( $value ) ) {
-			return $this->wpdb->prepare( '%d', $value );
+			return $this->wpdb->prepare( '%d', $value ) ?? throw new InvalidArgumentException( '[689B634D] Failed to format value as %d.' );
 		} elseif ( is_float( $value ) ) {
-			return $this->wpdb->prepare( '%f', $value );
+			return $this->wpdb->prepare( '%f', $value ) ?? throw new InvalidArgumentException( '[33F5FA53] Failed to format value as %f.' );
 		} elseif ( is_string( $value ) ) {
-			return $this->wpdb->prepare( '%s', $value );
+			return $this->wpdb->prepare( '%s', $value ) ?? throw new InvalidArgumentException( '[C3C81D0F] Failed to format value as %s.' );
 		} else {
 			throw new InvalidArgumentException( '[D8496A28] Unsupported value type: ' . gettype( $value ) );
 		}

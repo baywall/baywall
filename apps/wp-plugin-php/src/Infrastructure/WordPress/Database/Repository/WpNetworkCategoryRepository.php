@@ -27,10 +27,13 @@ class WpNetworkCategoryRepository implements NetworkCategoryRepository {
 			)
 		);
 
-		return array_map(
+		$network_categories = array_map(
 			fn( int $network_category_id_value ) => $this->get( NetworkCategoryId::from( $network_category_id_value ) ),
 			array_values( $network_category_id_values )
 		);
+
+		// get() は定義上戻り値が nullable なので null 要素を除外する処理を実施
+		return array_values( array_filter( $network_categories ) );
 	}
 
 	/** @inheritdoc */

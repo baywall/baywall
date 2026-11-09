@@ -39,7 +39,7 @@ class EthersSigningKey {
 		$v = dechex( $signature->recoveryParam + 27 );
 
 		$result = "0x{$r}{$s}{$v}";
-		assert( preg_match( '/^0x[0-9a-f]{130}$/', $result ) );
+		assert( preg_match( '/^0x[0-9a-f]{130}$/', $result ) === 1 );
 		return $result;
 	}
 
@@ -63,7 +63,7 @@ class EthersSigningKey {
 	 */
 	public function publicKey(): string {
 		$public_key = '0x' . $this->key_pair->getPublic( false, 'hex' );
-		assert( preg_match( '/^0x04[0-9a-f]{128}/', $public_key ) );
+		assert( preg_match( '/^0x04[0-9a-f]{128}/', $public_key ) === 1 );
 		return $public_key;
 	}
 

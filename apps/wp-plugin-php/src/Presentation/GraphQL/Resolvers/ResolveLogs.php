@@ -21,7 +21,6 @@ class ResolveLogs implements Resolver {
 					'id'        => $log->id,
 					'createdAt' => $log->createdAt,
 					'level'     => $log->level,
-					'category'  => $log->category,
 					'message'   => $log->message,
 				);
 			},

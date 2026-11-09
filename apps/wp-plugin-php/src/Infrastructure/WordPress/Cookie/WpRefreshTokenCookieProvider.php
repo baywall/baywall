@@ -34,7 +34,11 @@ class WpRefreshTokenCookieProvider implements RefreshTokenCookieProvider {
 	/** Cookieに書き込むリフレッシュトークンのパスを取得します */
 	private function path(): string {
 		$api_root_url = $this->wordpress_property_provider->apiRootUrl();
-		return parse_url( trailingslashit( $api_root_url ) . WpConfig::REST_NAMESPACE . '/' . WpConfig::REST_ROUTE_AUTH_PREFIX, PHP_URL_PATH );
+		$path         = parse_url( trailingslashit( $api_root_url ) . WpConfig::REST_NAMESPACE . '/' . WpConfig::REST_ROUTE_AUTH_PREFIX, PHP_URL_PATH );
+		if ( ! is_string( $path ) || '' === $path ) {
+			throw new \RuntimeException( '[702B62AF] Failed to parse path from API root URL: ' . $api_root_url );
+		}
+		return $path;
 	}
 
 	private function secure(): bool {

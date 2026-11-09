@@ -53,11 +53,11 @@ class WpSalesHistoryQueryService implements SalesHistoryQueryService {
 			$record->post_title,
 			$record->transaction_hash,
 			$record->buyer_address,
-			$to_price_dto_callback( $record->payment_amount ),
-			$record->contract_address,
-			$to_price_dto_callback( $record->contract_received_amount ),
+			$to_price_dto_callback( $record->payment_amount ) ?? throw new \RuntimeException( '[3DE91589] Payment amount is missing for invoice ID: ' . $record->invoice_id ),
+			$record->contract_address ?? throw new \RuntimeException( '[78E095C2] Contract address is missing for invoice ID: ' . $record->invoice_id ),
+			$to_price_dto_callback( $record->contract_received_amount ) ?? throw new \RuntimeException( '[5DA0D17A] Contract received amount is missing for invoice ID: ' . $record->invoice_id ),
 			$record->seller_address,
-			$to_price_dto_callback( $record->seller_received_amount ),
+			$to_price_dto_callback( $record->seller_received_amount ) ?? throw new \RuntimeException( '[9D39BB0A] Seller received amount is missing for invoice ID: ' . $record->invoice_id ),
 			$record->affiliate_address,
 			$to_price_dto_callback( $record->affiliate_received_amount )
 		);

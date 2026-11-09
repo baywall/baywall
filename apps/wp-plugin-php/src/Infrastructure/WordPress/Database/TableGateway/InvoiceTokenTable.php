@@ -27,7 +27,7 @@ class InvoiceTokenTable {
 	public function get( WpInvoiceTokenHashString $wp_invoice_token_hash ): ?InvoiceTokenTableRecord {
 		$sql = $this->wpdb->named_prepare(
 			<<<SQL
-				SELECT `invoice_token_hash`, `invoice_id`, `expires_at`, `revoked_at`
+				SELECT `invoice_id`, `invoice_token_hash`, `expires_at`, `revoked_at`
 				FROM `{$this->table_name}`
 				WHERE `invoice_token_hash` = :invoice_token_hash
 				LIMIT 1
@@ -39,7 +39,7 @@ class InvoiceTokenTable {
 
 		$record = $this->wpdb->get_row( $sql );
 
-		return $record === null ? null : new InvoiceTokenTableRecord( $record );
+		return $record instanceof \stdClass ? new InvoiceTokenTableRecord( $record ) : null;
 	}
 
 	public function add( InvoiceToken $invoice_token ): void {

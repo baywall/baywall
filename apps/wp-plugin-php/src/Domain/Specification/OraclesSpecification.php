@@ -29,12 +29,16 @@ class OraclesSpecification {
 		if ( null !== $this->symbol_pair && ! $oracle->symbolPair()->equals( $this->symbol_pair ) ) {
 			return false;
 		}
-		return null === $this->connectable_chain_ids || $this->isConnectable( $oracle->chainId() );
+		return null === $this->connectable_chain_ids || $this->isConnectable( $oracle->chainId(), $this->connectable_chain_ids );
 	}
 
-	/** ChainId::equals() で判定する（厳密比較では等価だが別インスタンスの ValueObject が弾かれるため）。 */
-	private function isConnectable( ChainId $chain_id ): bool {
-		foreach ( $this->connectable_chain_ids as $connectable_chain_id ) {
+	/**
+	 * ChainId::equals() で判定する（厳密比較では等価だが別インスタンスの ValueObject が弾かれるため）。
+	 *
+	 * @param ChainId[] $connectable_chain_ids
+	 */
+	private function isConnectable( ChainId $chain_id, array $connectable_chain_ids ): bool {
+		foreach ( $connectable_chain_ids as $connectable_chain_id ) {
 			if ( $chain_id->equals( $connectable_chain_id ) ) {
 				return true;
 			}

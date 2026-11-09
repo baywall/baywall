@@ -9,8 +9,6 @@ final class WpOptionName {
 
 	/** ログレベル（アプリケーションログ） */
 	public const LOG_LEVEL_APP = self::PREFIX . 'log_level_app';
-	/** ログレベル（監査ログ） */
-	public const LOG_LEVEL_AUDIT = self::PREFIX . 'log_level_audit';
 
 	/** インストール済みプラグインバージョン（プラグイン更新時に使用） */
 	public const PLUGIN_VERSION = self::PREFIX . 'plugin_version';

@@ -29,11 +29,12 @@ readonly class Oracle {
 	public function __toString() {
 		return json_encode(
 			array(
-				'chain_id'     => $this->chain_id,
-				'address'      => $this->address,
+				'chain_id'     => $this->chain_id->value(),
+				'address'      => $this->address->value(),
 				'base_symbol'  => $this->symbol_pair->base()->value(),
 				'quote_symbol' => $this->symbol_pair->quote()->value(),
-			)
+			),
+			JSON_THROW_ON_ERROR
 		);
 	}
 }

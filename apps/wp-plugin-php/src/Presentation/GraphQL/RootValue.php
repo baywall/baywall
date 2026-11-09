@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Baywall\Core\Presentation\GraphQL;
 
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AppLogService;
 use Baywall\Core\Presentation\GraphQL\Resolvers\Resolver;
 
 class RootValue {
@@ -11,7 +11,7 @@ class RootValue {
 	 */
 	public function __construct(
 		private readonly array $resolvers,
-		private readonly AppLogger $logger
+		private readonly AppLogService $app_log_service
 	) {}
 
 	/**
@@ -26,7 +26,7 @@ class RootValue {
 					$resolver = $resolver_factory();
 					return $resolver->handle( $root_value, $args );
 				} catch ( \Throwable $e ) {
-					$this->logger->error( $e );
+					$this->app_log_service->error( $e );
 					throw $e;
 				}
 			};

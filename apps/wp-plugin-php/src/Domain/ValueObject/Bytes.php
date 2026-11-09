@@ -38,9 +38,7 @@ readonly class Bytes implements ValueObject {
 		return (string) $this->hex();
 	}
 
-	/**
-	 * 指定したバイト長の値を生成します。
-	 */
+	/** 指定したバイト長の値を生成します。 */
 	public static function generateRandom( int $bytes ): self {
 		// `wp_generate_uuid4`は`mt_rand`を用いているため、別の方法で乱数を生成する。
 		// 参考:
@@ -48,6 +46,10 @@ readonly class Bytes implements ValueObject {
 		// - mt_rand: https://www.php.net/manual/ja/function.mt-rand.php
 		// 　> この関数が生成する値は、暗号学的にセキュアではありません。そのため、これを暗号や、戻り値を推測できないことが必須の値として使っては いけません。
 		// 　> 簡単なユースケースの場合、random_int() と random_bytes() 関数が、オペレーティングシステムの CSPRNG を使った、 便利で安全な API を提供します。
+
+		if ( $bytes < 1 ) {
+			throw new \InvalidArgumentException( '[22E0B516] Invalid byte length for random generation: ' . $bytes );
+		}
 
 		return new self( random_bytes( $bytes ) );
 	}

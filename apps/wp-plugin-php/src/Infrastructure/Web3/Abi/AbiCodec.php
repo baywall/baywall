@@ -130,7 +130,7 @@ class AbiCodec {
 				$data_hex     = substr( $hex, 2 );
 				$word_count   = (int) ceil( strlen( $data_hex ) / 64 );
 				$head_parts[] = str_pad( dechex( $tail_offset ), 64, '0', STR_PAD_LEFT );
-				$tail_parts[] = str_pad( dechex( strlen( $data_hex ) / 2 ), 64, '0', STR_PAD_LEFT );
+				$tail_parts[] = str_pad( dechex( intdiv( strlen( $data_hex ), 2 ) ), 64, '0', STR_PAD_LEFT );
 				$tail_parts[] = str_pad( $data_hex, $word_count * 64, '0', STR_PAD_RIGHT );
 				// 以降の動的データは 長さワード(32バイト) + データワード で積まれる
 				$tail_offset += 32 + $word_count * 32;
@@ -178,7 +178,7 @@ class AbiCodec {
 						throw new InvalidArgumentException( sprintf( '[20E5088E] Argument %d of %s must not be negative for uint.', $index, $method ) );
 					}
 					$dec = (string) $arg;
-				} elseif ( is_string( $arg ) && preg_match( '/^\d+$/', $arg ) ) {
+				} elseif ( is_string( $arg ) && ctype_digit( $arg ) ) {
 					$dec = $arg;
 				} else {
 					throw new InvalidArgumentException( sprintf( '[E5B3F0A2] Argument %d of %s must be uint.', $index, $method ) );
@@ -217,7 +217,11 @@ class AbiCodec {
 				if ( hexdec( $word[0] ) >= 8 ) {
 					$inverted = '';
 					foreach ( str_split( $word ) as $ch ) {
-						$inverted .= dechex( 15 - hexdec( $ch ) );
+						$digit = strpos( '0123456789abcdef', $ch );
+						if ( false === $digit ) {
+							throw new InvalidArgumentException( sprintf( '[3E3EE7A0] Invalid hex digit for %s: %s.', $method, $ch ) );
+						}
+						$inverted .= dechex( 15 - $digit );
 					}
 					return '-' . bcadd( $this->hexToDec( $inverted ), '1' );
 				}
@@ -270,6 +274,8 @@ class AbiCodec {
 
 	/**
 	 * 10進文字列を小文字16進（0x無し）へ変換します（bcmath）。
+	 *
+	 * @param numeric-string $dec
 	 */
 	private function decToHex( string $dec ): string {
 		$hex = '';
@@ -283,12 +289,17 @@ class AbiCodec {
 
 	/**
 	 * 小文字16進（0x無し）を10進文字列へ変換します（bcmath）。
+	 *
+	 * @return numeric-string
 	 */
 	private function hexToDec( string $hex ): string {
 		$result = '0';
 		$len    = strlen( $hex );
 		for ( $i = 0; $i < $len; $i++ ) {
-			$digit  = strpos( '0123456789abcdef', $hex[ $i ] );
+			$digit = strpos( '0123456789abcdef', $hex[ $i ] );
+			if ( false === $digit ) {
+				throw new InvalidArgumentException( '[10DAE673] Invalid hex digit for: ' . $hex[ $i ] );
+			}
 			$power  = bcpow( '16', (string) ( $len - $i - 1 ) );
 			$result = bcadd( $result, bcmul( (string) $digit, $power ) );
 		}

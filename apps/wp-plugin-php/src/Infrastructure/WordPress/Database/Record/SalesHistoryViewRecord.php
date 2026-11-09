@@ -22,9 +22,9 @@ class SalesHistoryViewRecord extends RecordBase {
 	public string $chain_name;
 	public int $block_number;
 	public string $transaction_hash;
-	public string $contract_address;
-	public string $contract_received_amount;
-	public string $seller_received_amount;
+	public ?string $contract_address;
+	public ?string $contract_received_amount;
+	public ?string $seller_received_amount;
 	public ?string $affiliate_address;
 	public ?string $affiliate_received_amount;
 	public int $block_timestamp;

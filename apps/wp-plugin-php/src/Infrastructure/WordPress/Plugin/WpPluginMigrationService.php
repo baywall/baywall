@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AppLogService;
 use Baywall\Core\Application\Repository\InstalledPluginVersionRepository;
 use Baywall\Core\Application\Port\PluginMigrationService;
 use Baywall\Core\Application\ValueObject\PluginVersion;
@@ -15,7 +15,7 @@ class WpPluginMigrationService implements PluginMigrationService {
 		private readonly InstalledPluginVersionRepository $installed_plugin_version_repository,
 		private readonly WpPluginInfoProvider $plugin_info_provider,
 		private readonly MigrationLocator $migration_locator,
-		private readonly AppLogger $logger
+		private readonly AppLogService $app_log_service
 	) {}
 
 	/** @inheritdoc */
@@ -59,22 +59,22 @@ class WpPluginMigrationService implements PluginMigrationService {
 				// それが例外を投げずに以下のエラーを管理画面に表示するので、それを抑制する。
 				//
 				// エラー内容:
-				// WordPress database error: [Table 'wordpress.wp_baywall_log' doesn't exist]
-				// SHOW FULL COLUMNS FROM `wp_baywall_log`
+				// WordPress database error: [Table 'wordpress.wp_baywall_log_app' doesn't exist]
+				// SHOW FULL COLUMNS FROM `wp_baywall_log_app`
 				if ( version_compare( '0.0.1', $migration->version(), '<' ) ) {
 					// 一番最初のマイグレーション処理でログレベルが設定されるので、ログ出力はそれ以降に行う
-					$this->logger->info( '[E923FBC1] Applied migration: ' . get_class( $migration ) );
+					$this->app_log_service->info( '[E923FBC1] Applied migration: ' . get_class( $migration ) );
 				}
 			} catch ( \Throwable $e ) {
-				$this->logger->error( $e );
-				$this->logger->info( '[B9A8BB31] Rolling back applied migrations...' );
+				$this->app_log_service->error( $e );
+				$this->app_log_service->info( '[B9A8BB31] Rolling back applied migrations...' );
 				foreach ( array_reverse( $executed ) as $rollback ) {
 					try {
-						$this->logger->info( '[60697478] Rolling back migration: ' . get_class( $rollback ) );
+						$this->app_log_service->info( '[60697478] Rolling back migration: ' . get_class( $rollback ) );
 						$rollback->down();
 					} catch ( \Throwable $ex ) {
 						// ロールバック中に発生したエラーは再スローせずにログ出力だけ行う
-						$this->logger->error( $ex );
+						$this->app_log_service->error( $ex );
 					}
 				}
 				throw $e;

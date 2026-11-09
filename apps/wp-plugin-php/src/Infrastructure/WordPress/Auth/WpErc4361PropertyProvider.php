@@ -15,7 +15,11 @@ class WpErc4361PropertyProvider implements Erc4361PropertyProvider {
 
 	public function domain(): Erc4361Domain {
 		$home_url = $this->wordpress_property_provider->homeUrl();
-		return Erc4361Domain::from( parse_url( $home_url, PHP_URL_HOST ) );
+		$host     = parse_url( $home_url, PHP_URL_HOST );
+		if ( ! is_string( $host ) || '' === $host ) {
+			throw new \RuntimeException( "[31C5E485] Failed to parse host from home URL: {$home_url}" );
+		}
+		return Erc4361Domain::from( $host );
 	}
 
 	public function statement(): ?Erc4361Statement {

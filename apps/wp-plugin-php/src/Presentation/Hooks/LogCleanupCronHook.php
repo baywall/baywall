@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Application\Exception\LockAcquisitionException;
+use Baywall\Core\Application\Logging\ErrorLogWriter;
 use Baywall\Core\Application\Port\Clock;
-use Baywall\Core\Application\Port\LockService;
+use Baywall\Core\Application\Service\LockRunner;
 use Baywall\Core\Application\UseCase\CleanupOldLogs;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
@@ -23,15 +24,17 @@ class LogCleanupCronHook extends HookBase {
 	private const LOCK_NAME = 'E1AE6C84'; // 排他制御用の適当な文字列
 
 	/**
-	 * @param \Closure(): LockService    $lock_service
+	 * @param \Closure(): LockRunner     $lock_runner
 	 * @param \Closure(): Clock          $clock
 	 * @param \Closure(): CleanupOldLogs $cleanup_old_logs
+	 * @param ErrorLogWriter             $error_log_writer
 	 */
 	public function __construct(
 		private readonly WpPluginInfoProvider $plugin_info_provider,
-		private readonly \Closure $lock_service,
+		private readonly \Closure $lock_runner,
 		private readonly \Closure $clock,
 		private readonly \Closure $cleanup_old_logs,
+		private readonly ErrorLogWriter $error_log_writer,
 	) {}
 
 	public function register(): void {
@@ -70,8 +73,8 @@ class LogCleanupCronHook extends HookBase {
 		//
 
 		try {
-			$lock_service = ( $this->lock_service )();
-			$lock_service->withLock(
+			$lock_runner = ( $this->lock_runner )();
+			$lock_runner->withLock(
 				self::LOCK_NAME,
 				function () use ( $action_name ) {
 					// 予約がされていない場合のみ登録
@@ -98,7 +101,7 @@ class LogCleanupCronHook extends HookBase {
 				$this->registerSchedule( WpCronName::LOG_CLEANUP );
 			} catch ( \Throwable $e ) {
 				// 再予約失敗はログに記録するが、元の例外をマスキングしない
-				error_log( '[9B98948F] LogCleanupCronHook reschedule failed: ' . $e->getMessage() );
+				$this->error_log_writer->write( '[9B98948F] LogCleanupCronHook reschedule failed: ' . $e->getMessage() );
 			}
 		}
 	}

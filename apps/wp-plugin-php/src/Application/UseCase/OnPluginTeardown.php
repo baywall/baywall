@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AppLogService;
 use Baywall\Core\Application\Port\PluginTeardownService;
 
 /**
@@ -11,7 +11,7 @@ use Baywall\Core\Application\Port\PluginTeardownService;
  */
 class OnPluginTeardown {
 	public function __construct(
-		private readonly AppLogger $app_logger,
+		private readonly AppLogService $app_log_service,
 		private readonly PluginTeardownService $plugin_teardown_service
 	) {}
 
@@ -19,7 +19,7 @@ class OnPluginTeardown {
 		try {
 			$this->plugin_teardown_service->teardown();
 		} catch ( \Throwable $e ) {
-			$this->app_logger->error( $e );
+			$this->app_log_service->error( $e );
 			throw $e;
 		}
 	}

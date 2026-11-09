@@ -11,7 +11,13 @@ class BlockNameProvider {
 	public function get(): BlockName {
 		if ( file_exists( WpConfig::BLOCK_JSON_PATH ) ) {
 			$block_json = file_get_contents( WpConfig::BLOCK_JSON_PATH );
-			$block      = json_decode( $block_json, true );
+			if ( false === $block_json ) {
+				throw new \RuntimeException( '[E323F527] Failed to read block.json file: ' . WpConfig::BLOCK_JSON_PATH );
+			}
+			$block = json_decode( $block_json, true );
+			if ( ! is_array( $block ) ) {
+				throw new \RuntimeException( '[1D7A6DE0] Invalid JSON in block.json file (decode failed): ' . WpConfig::BLOCK_JSON_PATH );
+			}
 			$block_name = $block['name'];
 			assert( $block_name === WpConfig::PAYWALL_BLOCK_NAME, '[5F98FB07] block.json file does not match the expected block name.' );
 		}

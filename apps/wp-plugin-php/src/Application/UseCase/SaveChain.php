@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace Baywall\Core\Application\UseCase;
 
 use Baywall\Core\Application\Exception\ChainIdMismatchException;
-use Baywall\Core\Application\Port\TransactionService;
+use Baywall\Core\Application\Logging\AuditLogService;
+use Baywall\Core\Application\Service\TransactionRunner;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Domain\Repository\ChainRepository;
 use Baywall\Core\Domain\Service\BlockchainService;
@@ -17,15 +18,16 @@ class SaveChain {
 	public function __construct(
 		private readonly UserAccessChecker $user_access_checker,
 		private readonly ChainRepository $chain_repository,
-		private readonly TransactionService $transaction_service,
-		private readonly BlockchainService $blockchain_service
+		private readonly TransactionRunner $transaction_runner,
+		private readonly BlockchainService $blockchain_service,
+		private readonly AuditLogService $audit_log_service
 	) {}
 
 	/** チェーン情報を保存します */
 	public function handle( ChainId $chain_id, ?RpcUrl $rpc_url, Confirmations $confirmations, MaxLogsRange $max_logs_range ): bool {
 		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
-		return $this->transaction_service->transactional(
+		$result = $this->transaction_runner->transactional(
 			function () use ( $chain_id, $rpc_url, $confirmations, $max_logs_range ) {
 
 				// 更新前のチェーン情報を取得
@@ -53,6 +55,11 @@ class SaveChain {
 				return true;
 			}
 		);
+
+		// RPC URL は API キー等を含む可能性があるため値をそのまま記録しない
+		$this->audit_log_service->info( 'save_chain', "Chain saved. chainId: {$chain_id}, rpcUrl: " . ( $rpc_url === null ? 'null' : '[string]' ) );
+
+		return $result;
 	}
 
 	/**

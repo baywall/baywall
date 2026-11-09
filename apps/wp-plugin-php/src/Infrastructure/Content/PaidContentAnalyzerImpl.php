@@ -37,7 +37,7 @@ class HtmlContentAnalyzer {
 		$content = strip_tags( $this->content );
 
 		// $contentから空白文字を除去
-		$content = preg_replace( '/\s+/', '', $content );
+		$content = preg_replace( '/\s+/', '', $content ) ?? throw new \RuntimeException( '[DF3C4FC7] Failed to remove whitespace.' );
 
 		return Strings::strlen( $content );
 	}

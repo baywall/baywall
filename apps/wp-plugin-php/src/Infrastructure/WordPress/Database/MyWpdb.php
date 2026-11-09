@@ -5,6 +5,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Database;
 
 use Baywall\Core\Infrastructure\WordPress\Database\Util\NamedPlaceholder;
 use RuntimeException;
+use stdClass;
 use wpdb;
 
 /**
@@ -30,8 +31,8 @@ class MyWpdb {
 	 * wpdb->prepare
 	 *
 	 * @deprecated Use named_prepare instead.
-	 * @param string $query
-	 * @param mixed  ...$args
+	 * @param literal-string $query
+	 * @param mixed          ...$args
 	 * @return string|null
 	 */
 	public function prepare( string $query, ...$args ) {
@@ -119,10 +120,11 @@ class MyWpdb {
 	/**
 	 * wpdb->get_row
 	 *
-	 * @return array<array-key, mixed>|object|null
+	 * @param int<0,max> $y
+	 * @return stdClass|null
 	 */
-	public function get_row( string $query, string $output = OBJECT, int $y = 0 ): array|object|null {
-		$row = $this->wpdb->get_row( $query, $output, $y );
+	public function get_row( string $query, int $y = 0 ): object|null {
+		$row = $this->wpdb->get_row( $query, OBJECT, $y );
 		if ( $row === null && ! empty( $this->wpdb->last_error ) ) {
 			throw new RuntimeException( '[108B8388] Failed to get row. ' . $this->wpdb->last_error );
 		}
@@ -132,12 +134,15 @@ class MyWpdb {
 	/**
 	 * wpdb->get_results
 	 *
-	 * @return array<array-key, mixed>|object|null
+	 * @return list<stdClass>
 	 */
-	public function get_results( string $query, string $output = OBJECT ): array|object|null {
-		$results = $this->wpdb->get_results( $query, $output );
+	public function get_results( string $query ): array {
+		$results = $this->wpdb->get_results( $query, OBJECT );
 		if ( ! empty( $this->wpdb->last_error ) ) {
 			throw new RuntimeException( '[FB1C88B8] Failed to get results. ' . $this->wpdb->last_error );
+		}
+		if ( $results === null ) {
+			throw new RuntimeException( '[AD3EC3D5] Failed to get results: wpdb returned null.' );
 		}
 		return $results;
 	}

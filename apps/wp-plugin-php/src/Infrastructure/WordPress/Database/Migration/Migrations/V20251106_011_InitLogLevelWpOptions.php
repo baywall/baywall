@@ -3,16 +3,15 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
-use Baywall\Core\Application\Port\TransactionService;
-use Baywall\Core\Application\Logging\ValueObject\LogCategory;
+use Baywall\Core\Application\Service\TransactionRunner;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
-use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpLogLevelRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpAppLogLevelRepository;
 
 class V20251106_011_InitLogLevelWpOptions extends MigrationBase {
 	public function __construct(
-		private readonly TransactionService $transaction_service,
-		private readonly WpLogLevelRepository $log_level_repository
+		private readonly TransactionRunner $transaction_runner,
+		private readonly WpAppLogLevelRepository $app_log_level_repository
 	) {}
 
 	public function version(): string {
@@ -20,16 +19,14 @@ class V20251106_011_InitLogLevelWpOptions extends MigrationBase {
 	}
 
 	public function up(): void {
-		$this->transaction_service->transactional(
+		$this->transaction_runner->transactional(
 			function () {
-				$this->log_level_repository->set( LogCategory::app(), LogLevel::info() );
-				$this->log_level_repository->set( LogCategory::audit(), LogLevel::info() );
+				$this->app_log_level_repository->set( LogLevel::info() );
 			}
 		);
 	}
 
 	public function down(): void {
-		$this->log_level_repository->deleteLogLevel( LogCategory::app() );
-		$this->log_level_repository->deleteLogLevel( LogCategory::audit() );
+		$this->app_log_level_repository->deleteLogLevel();
 	}
 }

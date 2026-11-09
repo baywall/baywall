@@ -30,7 +30,7 @@ readonly class Hex implements ValueObject {
 
 	/** 10進数の文字列からインスタンスを生成します */
 	public static function fromDecValue( string $dec_value ): self {
-		if ( ! preg_match( '/^\d+$/', $dec_value ) ) {
+		if ( ! self::isNumericString( $dec_value ) ) {
 			throw new InvalidArgumentException( '[54F21E6B] Invalid decimal format for: ' . $dec_value );
 		}
 
@@ -64,7 +64,10 @@ readonly class Hex implements ValueObject {
 			$len           = strlen( $raw_hex_value );
 
 			for ( $i = 0; $i < $len; $i++ ) {
-				$digit  = strpos( '0123456789abcdef', $raw_hex_value[ $i ] );
+				$digit = strpos( '0123456789abcdef', $raw_hex_value[ $i ] );
+				if ( false === $digit ) {
+					throw new InvalidArgumentException( '[F0FECD42] Invalid hex digit for: ' . $raw_hex_value[ $i ] );
+				}
 				$power  = bcpow( '16', (string) ( $len - $i - 1 ) );
 				$result = bcadd( $result, bcmul( (string) $digit, $power ) );
 			}
@@ -85,6 +88,25 @@ readonly class Hex implements ValueObject {
 
 	/** バイナリデータとしての値を取得します */
 	public function bin(): string {
-		return hex2bin( str_replace( '0x', '', $this->hex_value ) );
+		$raw_hex_value = str_replace( '0x', '', $this->hex_value );
+
+		// 奇数長の hex はバイト列に変換できないため、hex2bin() の失敗(TypeError)より前に検証する
+		if ( strlen( $raw_hex_value ) % 2 !== 0 ) {
+			throw new InvalidArgumentException( '[E27F7625] Odd-length hex cannot be converted to binary.' );
+		}
+
+		$bin = hex2bin( $raw_hex_value );
+		if ( false === $bin ) {
+			throw new InvalidArgumentException( '[09FDC7BA] Invalid hex string for binary conversion: ' . $this->hex_value );
+		}
+
+		return $bin;
+	}
+
+	/**
+	 * @phpstan-assert-if-true numeric-string $value
+	 */
+	private static function isNumericString( string $value ): bool {
+		return 1 === preg_match( '/^\d+$/D', $value );
 	}
 }

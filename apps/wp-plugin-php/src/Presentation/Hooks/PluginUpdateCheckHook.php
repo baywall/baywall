@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Presentation\Hooks;
 
-use Baywall\Core\Application\Logging\AppLogger;
+use Baywall\Core\Application\Logging\AppLogService;
 use Baywall\Core\Constant\Config;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Application\Service\EnsRpcUrlResolver;
@@ -33,7 +33,7 @@ class PluginUpdateCheckHook extends HookBase {
 	 * @param \Closure(): WpPluginInfoProvider            $plugin_info_provider
 	 * @param \Closure(): WordPressPropertyProvider       $wordpress_property_provider
 	 * @param \Closure(): WpPluginUpdateChecker           $update_checker
-	 * @param \Closure(): AppLogger                       $app_logger
+	 * @param \Closure(): AppLogService                   $app_log_service
 	 */
 	public function __construct(
 		private readonly \Closure $checksum_verifier,
@@ -43,7 +43,7 @@ class PluginUpdateCheckHook extends HookBase {
 		private readonly \Closure $plugin_info_provider,
 		private readonly \Closure $wordpress_property_provider,
 		private readonly \Closure $update_checker,
-		private readonly \Closure $app_logger,
+		private readonly \Closure $app_log_service,
 	) {}
 
 	/**
@@ -145,12 +145,12 @@ class PluginUpdateCheckHook extends HookBase {
 	 */
 	private function logUpdateCheckFailure( \Throwable $e, LogLevel $log_level, string $id ): void {
 		try {
-			$app_logger = ( $this->app_logger )();
-			$message    = "[{$id}] {$e->getMessage()}";
+			$app_log_service = ( $this->app_log_service )();
+			$message         = "[{$id}] {$e->getMessage()}";
 			if ( LogLevel::warn()->name() === $log_level->name() ) {
-				$app_logger->warn( $message );
+				$app_log_service->warn( $message );
 			} else {
-				$app_logger->error( $message );
+				$app_log_service->error( $message );
 			}
 		} catch ( \Throwable $log_exception ) {
 			// Do nothing: ログ記録失敗によりフェイルセーフ判断を阻害しない

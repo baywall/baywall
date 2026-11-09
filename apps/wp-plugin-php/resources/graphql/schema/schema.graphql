@@ -93,7 +93,6 @@ type Log {
 	id: Int!
 	createdAt: Float! # UNIXタイムスタンプ(秒)
 	level: String!
-	category: String!
 	message: String!
 }
 
@@ -247,7 +246,7 @@ type Seller {
 # 販売履歴(1件分)
 type SalesHistory {
 	invoice: SalesHistoryInvoice!	# 販売履歴用請求書情報
-	postTitle: String!				# 投稿タイトル
+	postTitle: String				# 投稿タイトル(投稿が削除されている場合はnull)
 	txHash: String!					# トランザクションハッシュ
 
 	buyerAddress: String!		# 購入者のアドレス

@@ -136,4 +136,6 @@ final class WpConfig {
 	public const VIEW_CSS_RELATIVE_PATH = self::VIEW_BUILD_RELATIVE_DIR . '/index.css';
 	/** 投稿表示用スクリプトのハンドル名 */
 	public const HANDLE_NAME_VIEW_SCRIPT = '7f21752c82485b2bc9afb940ba2a6794'; // 『public/view/index.js』(文字列)のMD5ハッシュ値
+	/** 投稿表示用ホスト要素スタイルのハンドル名 */
+	public const HANDLE_NAME_VIEW_HOST_STYLE = '8b57f78d400e2a3d3d83373cd57e671a';
 }

@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Application\UseCase;
 
+use Baywall\Core\Application\Logging\AppLogService;
 use Baywall\Core\Application\Port\InvoiceTokenCookieProvider;
 use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Application\Port\CookieWriter;
-use Baywall\Core\Application\Port\TransactionService;
+use Baywall\Core\Application\Service\TransactionRunner;
 use Baywall\Core\Application\Service\UserAccessChecker;
 use Baywall\Core\Application\UseCase\InitCrawledBlockNumber;
 use Baywall\Core\Domain\Exception\ValidationFailedException;
@@ -21,8 +22,9 @@ use Baywall\Core\Domain\ValueObject\PostId;
 
 class IssueInvoice {
 	public function __construct(
+		private readonly AppLogService $app_log_service,
 		private readonly UserAccessChecker $user_access_checker,
-		private readonly TransactionService $transaction_service,
+		private readonly TransactionRunner $transaction_runner,
 		private readonly InvoiceService $invoice_service,
 		private readonly TokenRepository $token_repository,
 		private readonly ServerSignerService $server_signer_service,
@@ -59,7 +61,7 @@ class IssueInvoice {
 		$this->invoice_token_service->purgeOldRepositoryData( $now );
 
 		// 請求書番号を発行(+現在の販売価格を記録)
-		return $this->transaction_service->transactional(
+		$result = $this->transaction_runner->transactional(
 			function () use ( $post_id, $payment_token, $buyer_address, $now ) {
 				// 請求書を作成
 				$invoice = $this->invoice_service->issueInvoice( $buyer_address, $post_id, $payment_token, $now );
@@ -91,5 +93,11 @@ class IssueInvoice {
 				);
 			}
 		);
+
+		// トランザクション内で記録するとロールバック時に消失するため、確定後に記録する
+		// 請求書トークンと署名は機密値のため記録しない
+		$this->app_log_service->info( "[FA4AFCCF] Invoice issued. postId: {$post_id}, chainId: {$chain_id}, tokenAddress: {$token_address}, buyerAddress: {$buyer_address}" );
+
+		return $result;
 	}
 }

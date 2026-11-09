@@ -11,7 +11,6 @@ readonly class LogDto {
 		public readonly int $id,
 		public readonly int $createdAt,
 		public readonly string $level,
-		public readonly string $category,
 		public readonly string $message
 	) {}
 }

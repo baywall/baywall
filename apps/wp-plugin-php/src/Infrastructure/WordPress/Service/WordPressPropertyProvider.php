@@ -72,6 +72,10 @@ class WordPressPropertyProvider implements HomeUrlProvider {
 		// - development
 		// - staging
 		// - production
-		return wp_get_environment_type();
+		$type = wp_get_environment_type();
+		if ( in_array( $type, array( 'local', 'development', 'staging', 'production' ), true ) === false ) {
+			throw new \RuntimeException( "[3C3B73FE] Invalid environment type: {$type}" );
+		}
+		return $type;
 	}
 }
