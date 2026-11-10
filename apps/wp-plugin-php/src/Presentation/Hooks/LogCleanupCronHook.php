@@ -10,7 +10,6 @@ use Baywall\Core\Application\Service\LockRunner;
 use Baywall\Core\Application\UseCase\CleanupOldLogs;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
-use Baywall\Core\Presentation\Hooks\Base\HookBase;
 
 /**
  * ログテーブルのクリーンアップ処理をwp_cronを使って登録するクラス。
@@ -19,7 +18,7 @@ use Baywall\Core\Presentation\Hooks\Base\HookBase;
  * `wp_schedule_event`では、デフォルトで1時間に1回が一番短いサイクル。
  * `cron_schedules`フィルタで追加は可能だが、他プラグインとの競合等を考慮し`wp_schedule_single_event`を毎回登録する方法を採用。
  */
-class LogCleanupCronHook extends HookBase {
+class LogCleanupCronHook implements Hook {
 
 	private const LOCK_NAME = 'E1AE6C84'; // 排他制御用の適当な文字列
 

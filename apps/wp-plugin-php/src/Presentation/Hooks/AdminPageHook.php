@@ -8,10 +8,9 @@ use Baywall\Core\Infrastructure\WordPress\I18n\I18nTextProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginAssetUrlProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Infrastructure\WordPress\Content\SlugProvider;
-use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
 
-class AdminPageHook extends HookBase {
+class AdminPageHook implements Hook {
 	/**
 	 * @param \Closure(): I18nTextProvider         $i18n_text_provider
 	 * @param \Closure(): SlugProvider             $slug_provider

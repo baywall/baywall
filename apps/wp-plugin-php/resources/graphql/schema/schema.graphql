@@ -81,6 +81,10 @@ type Query {
 	# 初回インストール時のURLと現在のサイトURLが変更されたかどうか【管理者】
 	siteUrlChangedSinceInstall: Boolean!
 
+	# プラグインバージョンが最低サポートバージョン未満かどうか【管理者】
+	# manifest 等の取得不可の場合は null
+	isPluginVersionTooLow: Boolean
+
 	# 取引が一時停止中かどうかを取得【ゲスト】
 	# (販売者ウォレットが取得できない場合、サイト一時停止中、または初回インストール時のURLが変更された場合は true)
 	isTransactionSuspended: Boolean!

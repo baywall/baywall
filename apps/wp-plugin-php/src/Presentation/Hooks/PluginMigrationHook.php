@@ -12,7 +12,6 @@ use Baywall\Core\Application\Port\PluginMigrationService;
 use Baywall\Core\Application\Port\PluginCompatibilityChecker;
 use Baywall\Core\Infrastructure\System\RuntimeEnvironmentChecker;
 use Baywall\Core\Infrastructure\System\PhpExtChecker;
-use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 use Throwable;
 
@@ -35,7 +34,7 @@ use Throwable;
 // ■その他注意事項
 // - マルチサイトの場合、他のサイトに対しても処理が実行されるかどうか確認する必要あり(もしくはサイトIDに依存しない設計にする)
 
-class PluginMigrationHook extends HookBase {
+class PluginMigrationHook implements Hook {
 
 	private const LOCK_NAME = '38FA0139'; // 排他制御用の適当な文字列
 

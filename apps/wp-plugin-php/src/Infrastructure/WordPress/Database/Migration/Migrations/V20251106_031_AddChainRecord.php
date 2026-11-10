@@ -10,11 +10,11 @@ use Baywall\Core\Domain\ValueObject\Confirmations;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
 use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
-use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migration;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
-class V20251106_031_AddChainRecord extends MigrationBase {
+class V20251106_031_AddChainRecord implements Migration {
 
 	private readonly TransactionRunner $transaction_runner;
 	private readonly MyWpdb $wpdb;

@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
-use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migration;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
-class V20261001_010_AlterErc4361NonceCheck extends MigrationBase {
+class V20261001_010_AlterErc4361NonceCheck implements Migration {
 
 	private readonly MyWpdb $wpdb;
 	private readonly string $table_name;

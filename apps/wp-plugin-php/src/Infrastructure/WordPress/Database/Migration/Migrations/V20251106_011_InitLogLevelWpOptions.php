@@ -5,10 +5,10 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
 use Baywall\Core\Application\Service\TransactionRunner;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
-use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migration;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpAppLogLevelRepository;
 
-class V20251106_011_InitLogLevelWpOptions extends MigrationBase {
+class V20251106_011_InitLogLevelWpOptions implements Migration {
 	public function __construct(
 		private readonly TransactionRunner $transaction_runner,
 		private readonly WpAppLogLevelRepository $app_log_level_repository

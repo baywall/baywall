@@ -13,7 +13,6 @@ use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginPackageChecksumVerifier;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginUpdateChecker;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
-use Baywall\Core\Presentation\Hooks\Base\HookBase;
 
 /**
  * プラグインの自動アップデートチェックを行うフック。
@@ -24,7 +23,7 @@ use Baywall\Core\Presentation\Hooks\Base\HookBase;
  * 本番環境のみで動作する（開発・テスト環境では更新チェック自体を行わない）。
  * いかなる例外も管理画面の表示障害にしないため、全例外は `\Throwable` で捕捉して `false` を返す（フェイルセーフ）。
  */
-class PluginUpdateCheckHook extends HookBase {
+class PluginUpdateCheckHook implements Hook {
 	/**
 	 * @param \Closure(): WpPluginPackageChecksumVerifier $checksum_verifier
 	 * @param \Closure(): WpEnvironment                   $wp_environment

@@ -7,11 +7,11 @@ use Baywall\Core\Application\Service\TransactionRunner;
 use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
-use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migration;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 
-class V20251106_020_CreateAppContractTable extends MigrationBase {
+class V20251106_020_CreateAppContractTable implements Migration {
 
 	/** 本番環境で使用する App コントラクトアドレス（全チェーン共通） */
 	private const PRODUCTION_APP_CONTRACT_ADDRESS = '0xa9B8F9aAb08A700fB17a10568502A573Ae63F625';

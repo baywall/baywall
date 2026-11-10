@@ -64,6 +64,7 @@
   "dashboard.no_alert_message": "There are no notifications.",
   "dashboard.no_connectable_chain_message": "There are no connectable chains. Register an RPC URL now to start using the app's features.",
   "dashboard.no_payable_token_message": "No payable token is available. Update token settings so you can receive tokens.",
+  "dashboard.plugin_version_too_low_message": "The plugin version is outdated. Some features are restricted. Please update the plugin.",
   "dashboard.seller_wallet_not_registered_message": "The wallet is not registered. Register it now so you can receive tokens.",
   "dashboard.site_paused_message": "Maintenance mode is enabled.",
   "dashboard.site_url_changed_since_install_message": "A site URL change has been detected. Some features are restricted for security.",

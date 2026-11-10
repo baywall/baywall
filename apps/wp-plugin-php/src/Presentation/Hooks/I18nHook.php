@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
-use Baywall\Core\Presentation\Hooks\Base\HookBase;
 
 /** プラグインのテキストドメインをロードするクラス。 */
-class I18nHook extends HookBase {
+class I18nHook implements Hook {
 	/**
 	 * @param \Closure(): WpPluginInfoProvider $plugin_info_provider
 	 */

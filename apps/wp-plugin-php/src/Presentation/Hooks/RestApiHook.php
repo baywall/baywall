@@ -15,14 +15,13 @@ use Baywall\Core\Domain\Exception\PaymentNotCompletedException;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpNonceService;
-use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Throwable;
 use WP_REST_Response;
 
 /**
  * REST APIのフック登録(GraphQLを除く)
  */
-class RestApiHook extends HookBase {
+class RestApiHook implements Hook {
 	/**
 	 * @param \Closure(): AppLogService                  $app_log_service
 	 * @param \Closure(): WpNonceService                 $nonce_service

@@ -8,12 +8,12 @@ use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\PrivateKey;
 use Baywall\Core\Lib\Ether\EthersWallet;
-use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migration;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Database\ValueObject\PrivateKeyEncryptionType;
 
-class V20251106_081_InitServerSigner extends MigrationBase {
+class V20251106_081_InitServerSigner implements Migration {
 
 	private readonly TransactionRunner $transaction_runner;
 	private readonly MyWpdb $wpdb;

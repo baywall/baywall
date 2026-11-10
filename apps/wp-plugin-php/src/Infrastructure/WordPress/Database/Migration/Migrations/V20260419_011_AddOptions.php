@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 
-use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations\Base\MigrationBase;
+use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migration;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpJwtSecretKeyRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpPausedRepository;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpJwtSecretKeyService;
 
-class V20260419_011_AddOptions extends MigrationBase {
+class V20260419_011_AddOptions implements Migration {
 	public function __construct(
 		private readonly WpPausedRepository $paused_repository,
 		private readonly WpJwtSecretKeyRepository $jwt_secret_key_repository,

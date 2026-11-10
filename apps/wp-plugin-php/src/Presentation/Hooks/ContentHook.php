@@ -3,14 +3,12 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Presentation\Hooks;
 
-use Baywall\Core\Presentation\Hooks\Base\HookBase;
-
 /**
  * 投稿内容を保存、または取得時のhooksを登録するクラス
  * ※ インストールしているテーマやプラグインの影響を受ける可能性が高い。
  *    完全な対応は難しいため、問題があれば都度対応することになると思われる。
  */
-class ContentHook extends HookBase {
+class ContentHook implements Hook {
 	public function __construct(
 		private readonly ContentSaveHook $content_save_hook,
 		private readonly ContentLoadHook $content_load_hook,

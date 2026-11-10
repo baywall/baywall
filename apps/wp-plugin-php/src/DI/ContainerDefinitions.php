@@ -63,6 +63,7 @@ use Baywall\Core\Domain\Service\OracleService;
 use Baywall\Core\Domain\Service\PluginInfoProvider;
 use Baywall\Core\Domain\Service\RateProvider;
 use Baywall\Core\Domain\Service\RefreshTokenService;
+use Baywall\Core\Domain\Service\MinimumSupportedVersionChecker;
 use Baywall\Core\Domain\Service\SiteUrlChecker;
 use Baywall\Core\Infrastructure\Cache\AppManifestCache;
 use Baywall\Core\Infrastructure\Cache\OracleRateCache;
@@ -146,6 +147,7 @@ use Baywall\Core\Infrastructure\WordPress\Plugin\WpSupportedVersionConstraintsPr
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginTeardownService;
 use Baywall\Core\Infrastructure\WordPress\Cookie\WpRefreshTokenCookieProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpRefreshTokenService;
+use Baywall\Core\Infrastructure\WordPress\Service\WpMinimumSupportedVersionChecker;
 use Baywall\Core\Infrastructure\WordPress\Service\WpSiteUrlChecker;
 use Baywall\Core\Infrastructure\WordPress\Query\WpUserAccessProvider;
 use Baywall\Core\Infrastructure\WordPress\Query\WpLogQueryService;
@@ -180,6 +182,7 @@ use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSctaUrl;
 use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSeller;
 use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSellingContent;
 use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSellingPrice;
+use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveIsPluginVersionTooLow;
 use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveServerSigner;
 use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveSiteUrlChangedSinceInstall;
 use Baywall\Core\Presentation\GraphQL\Resolvers\ResolveThemeSetting;
@@ -258,6 +261,7 @@ final class ContainerDefinitions {
 			Erc4361NonceGenerator::class                   => autowire( WpErc4361NonceGenerator::class ),
 			GraphQLConfigProvider::class                   => autowire( WpGraphQLConfigProvider::class ),
 			SiteUrlChecker::class                          => autowire( WpSiteUrlChecker::class ),
+			MinimumSupportedVersionChecker::class          => autowire( WpMinimumSupportedVersionChecker::class ),
 			PluginDeactivationService::class               => autowire( WpPluginDeactivationService::class ),
 			PluginAutoUpdateStateProvider::class           => autowire( WpPluginAutoUpdateStateProvider::class ),
 			PluginInfoProvider::class                      => autowire( WpPluginInfoProvider::class ),
@@ -301,6 +305,7 @@ final class ContainerDefinitions {
 					'themeSetting'                       => fn() => $container->get( ResolveThemeSetting::class ),
 					'purgeOnUninstall'                   => fn() => $container->get( ResolvePurgeOnUninstall::class ),
 					'siteUrlChangedSinceInstall'         => fn() => $container->get( ResolveSiteUrlChangedSinceInstall::class ),
+					'isPluginVersionTooLow'              => fn() => $container->get( ResolveIsPluginVersionTooLow::class ),
 					'isTransactionSuspended'             => fn() => $container->get( ResolveIsTransactionSuspended::class ),
 					'logs'                               => fn() => $container->get( ResolveLogs::class ),
 

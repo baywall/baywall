@@ -16,8 +16,7 @@ msgstr ""
 "X-Domain: baywall\n"
 
 #. Plugin Name of the plugin
-#: baywall.php src/Infrastructure/WordPress/Service/I18nTextProvider.php:11
-#: src/Infrastructure/WordPress/I18n/I18nTextProvider.php:11
+#: baywall.php src/Infrastructure/WordPress/I18n/I18nTextProvider.php:11
 msgid "baywall"
 msgstr "baywall"
 
@@ -31,18 +30,14 @@ msgstr "ブロックチェーン決済のペイウォールを設置できます
 msgid "yamaneyuta"
 msgstr "yamaneyuta"
 
-#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:16
 #: src/Infrastructure/WordPress/I18n/I18nTextProvider.php:16
 msgid "Mainnet"
 msgstr "Mainnet"
 
-#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:21
 #: src/Infrastructure/WordPress/I18n/I18nTextProvider.php:21
 msgid "Testnet"
 msgstr "Testnet"
 
-#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:31
-#: src/Infrastructure/WordPress/Service/I18nTextProvider.php:32
 #: src/Infrastructure/WordPress/I18n/I18nTextProvider.php:32
 msgid "Privatenet"
 msgstr "Privatenet"
@@ -63,14 +58,6 @@ msgstr ""
 "「%1$s」（Chain ID: %2$d）の接続に失敗しています。\n"
 "当該チェーンの RPC URL を更新してください。"
 
-#: src/Presentation/Hooks/PluginRowMetaHook.php:69
-msgid ""
-"To enable automatic updates, you need to register an RPC URL for Ethereum "
-"Mainnet."
-msgstr ""
-"自動アップデートを有効にするには、Ethereum Mainnet の RPC URL を登録してくだ"
-"さい。"
-
 #: src/Infrastructure/WordPress/Service/WpSellerWalletChangeNotificationMessageProvider.php:11
 msgid "baywall: Seller wallet address changed"
 msgstr "【baywall】販売者ウォレットアドレス変更のお知らせ"
@@ -88,3 +75,17 @@ msgstr ""
 "販売者ウォレットアドレスが変更されました。\n"
 "変更前: %1$s\n"
 "変更後: %2$s"
+
+#: src/Presentation/Hooks/PermalinkSettingsNoticeHook.php:39
+msgid ""
+"baywall: Changing the permalink settings improves the security of the "
+"cookies used by the baywall plugin."
+msgstr "baywall: パーマリンク設定を変更すると、baywall プラグインが使用する Cookie のセキュリティが向上します。"
+
+#: src/Presentation/Hooks/PluginRowMetaHook.php:68
+msgid ""
+"To enable automatic updates, you need to register an RPC URL for Ethereum "
+"Mainnet."
+msgstr ""
+"自動アップデートを有効にするには、Ethereum Mainnet の RPC URL を登録してくだ"
+"さい。"

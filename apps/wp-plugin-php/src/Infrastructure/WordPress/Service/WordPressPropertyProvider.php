@@ -35,6 +35,13 @@ class WordPressPropertyProvider implements HomeUrlProvider {
 		*/
 	}
 
+	/**
+	 * 「設定 > パーマリンク設定」で「基本」(英語の場合は「Plain」)のパーマリンクが選択されているかどうかを返します。
+	 */
+	public function isDefaultPermalinkStructure(): bool {
+		return get_option( 'permalink_structure' ) === '';
+	}
+
 	/** SSLでアクセスされているかどうかを取得します */
 	public function isSsl(): bool {
 		// ※ リバースプロキシを使って設定が漏れている場合はHTTPSアクセスでもfalseを返す可能性あり

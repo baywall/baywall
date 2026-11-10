@@ -5,13 +5,12 @@ namespace Baywall\Core\Presentation\Hooks;
 use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\Content\HandleNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginAssetUrlProvider;
-use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Presentation\Hooks\Service\PhpVarExporter;
 
 /**
  * 投稿編集画面のフック(投稿新規作成画面を含む)
  */
-class PostEditHook extends HookBase {
+class PostEditHook implements Hook {
 	/**
 	 * @param \Closure(): HandleNameProvider       $handle_name_provider
 	 * @param \Closure(): WpPluginAssetUrlProvider $asset_url_provider

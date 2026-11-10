@@ -66,6 +66,7 @@ use Baywall\Core\Presentation\Hooks\GraphQLHook;
 use Baywall\Core\Presentation\GraphQL\RootValue;
 use Baywall\Core\Presentation\Hooks\I18nHook;
 use Baywall\Core\Presentation\Hooks\LogCleanupCronHook;
+use Baywall\Core\Presentation\Hooks\PermalinkSettingsNoticeHook;
 use Baywall\Core\Presentation\Hooks\PluginRowMetaHook;
 use Baywall\Core\Presentation\Hooks\PluginUpdateCheckHook;
 use Baywall\Core\Presentation\Hooks\PluginMigrationHook;
@@ -149,6 +150,12 @@ $main = function () {
 		fn() => $container->get( WpPluginAssetUrlProvider::class ),
 	);
 	$admin_page_hook->register();
+
+	// 「設定 > パーマリンク設定」画面への通知
+	$permalink_settings_notice_hook = new PermalinkSettingsNoticeHook(
+		fn() => $container->get( WordPressPropertyProvider::class ),
+	);
+	$permalink_settings_notice_hook->register();
 
 	// 投稿(新規/編集)画面
 	$post_edit_hook = new PostEditHook(

@@ -7,7 +7,6 @@ use Baywall\Core\Application\Port\PluginAutoUpdateStateProvider;
 use Baywall\Core\Application\Service\EnsRpcUrlResolver;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpEnvironment;
-use Baywall\Core\Presentation\Hooks\Base\HookBase;
 
 /**
  * プラグイン一覧に注意メッセージを表示するフック。
@@ -16,7 +15,7 @@ use Baywall\Core\Presentation\Hooks\Base\HookBase;
  * 自プラグインの行にRPC URL登録を促すメッセージを表示します。
  * 表示処理の例外でプラグイン一覧を壊さないよう、全例外は`\Throwable`で捕捉して素通しします。
  */
-class PluginRowMetaHook extends HookBase {
+class PluginRowMetaHook implements Hook {
 	/**
 	 * @param \Closure(): WpPluginInfoProvider          $plugin_info_provider
 	 * @param \Closure(): WpEnvironment                 $wp_environment

@@ -11,7 +11,6 @@ use Baywall\Core\Infrastructure\GraphQL\Rule\MutationFieldLimitRule;
 use Baywall\Core\Infrastructure\WordPress\Service\ExceptionCategory;
 use Baywall\Core\Infrastructure\WordPress\Content\RestPropertyProvider;
 use Baywall\Core\Infrastructure\WordPress\Service\WpExceptionConverter;
-use Baywall\Core\Presentation\Hooks\Base\HookBase;
 use Baywall\Core\Infrastructure\WordPress\Auth\WpNonceService;
 use GraphQL\GraphQL;
 use GraphQL\Validator\DocumentValidator;
@@ -23,7 +22,7 @@ use GraphQL\Validator\Rules\ValidationRule;
 /**
  * GraphQLのAPI登録
  */
-class GraphQLHook extends HookBase {
+class GraphQLHook implements Hook {
 	/**
 	 * @param \Closure(): RestPropertyProvider $rest_property_provider
 	 * @param \Closure(): AppLogService        $app_log_service
