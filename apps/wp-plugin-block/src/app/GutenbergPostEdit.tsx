@@ -18,6 +18,7 @@ import {
 	useWarnDecimalsErrorSnackbar,
 } from '../features/selling-price-amount';
 import { useSyncWidgetAttributes } from './useSyncWidgetAttributes';
+import { useQueryErrorLog } from './useQueryErrorLog';
 import { useControlEditorSaving } from '../features/control-editor-saving';
 import {
 	ApiErrorNotification,
@@ -37,6 +38,7 @@ export const GutenbergPostEdit = () => {
 	useAutoSelectSellingPriceSymbol(); // 販売価格の通貨シンボルの自動選択
 	useWarnAmountErrorSnackbar(); // 販売価格の数量が不正な場合の警告通知
 	useWarnDecimalsErrorSnackbar(); // 販売価格の小数点以下桁数が不正な場合の警告通知
+	useQueryErrorLog();
 
 	return (
 		<Placeholder
