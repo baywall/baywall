@@ -5,6 +5,12 @@
 		}
 	},
 	"scripts": {
+		"post-install-cmd": [
+			"bash scripts/setup/patch.sh"
+		],
+		"post-update-cmd": [
+			"bash scripts/setup/patch.sh"
+		],
 		"format": "pnpm format",
 		"lint": "pnpm lint",
 		"test": "pnpm test"
@@ -24,7 +30,6 @@
 		"php-di/php-di": "^7.0",
 		"tuupola/base62": "^2.1",
 		"composer/semver": "^3.4",
-		"kornrunner/keccak": "^1.1",
 		"phpseclib/phpseclib": "^4.0"
 	}
 }

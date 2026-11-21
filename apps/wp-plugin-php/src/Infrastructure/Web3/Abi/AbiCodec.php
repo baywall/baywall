@@ -7,7 +7,7 @@ use Baywall\Core\Lib\Padding\Padding;
 use Baywall\Core\Domain\ValueObject\Address;
 use Baywall\Core\Domain\ValueObject\Bytes32;
 use InvalidArgumentException;
-use kornrunner\Keccak;
+use phpseclib4\Crypt\Hash;
 
 /**
  * コントラクト呼び出し（eth_call）用の最小 ABI コーデック。
@@ -34,7 +34,7 @@ class AbiCodec {
 			);
 		}
 
-		$selector = '0x' . substr( Keccak::hash( $method . '(' . implode( ',', $input_types ) . ')', 256 ), 0, 8 );
+		$selector = '0x' . substr( bin2hex( ( new Hash( 'keccak256' ) )->hash( $method . '(' . implode( ',', $input_types ) . ')' ) ), 0, 8 );
 
 		return strtolower( $selector . $this->encodeArguments( $input_types, $args, $method ) );
 	}

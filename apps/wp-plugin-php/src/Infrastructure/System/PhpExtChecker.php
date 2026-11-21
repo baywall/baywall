@@ -15,11 +15,12 @@ class PhpExtChecker {
 	 * - `gmp`:`simplito/bigint-wrapper-php`がBCMathにフォールバックするためランタイムに不要。
 	 *   `simplito/elliptic-php`のcomposer `require: ext-gmp`は過剰な宣言(コード上`gmp_`の直接呼び出しなし)で、
 	 *   composer install時にのみgmpを要求する点がランタイム要件と不整合。メタデータ自体は変更しない。
+	 *   また、通常のビルドで有効となる bcmath と異なり、`--with-gmp` オプションで明示的にコンパイルしないといけないため、
+	 *   初期セットアップ時に有効になっていないサーバーが多数存在（あとから有効にできるサーバーや、そもそも有効にできないサーバーが混在）。
+	 *   そのため、`gmp` を必須とする依存ライブラリは原則導入不可。
 	 *
 	 * チェック対象外の拡張:
 	 * - `json`:PHP >= 8.0で常駐(本プラグインはPHP >= 8.2前提)のためチェック不要
-	 * - `iconv`:`src/`に直接使用がなく、必須とする`mbstring`により`symfony/polyfill-mbstring`も発火しない。
-	 *   composerレベルの`ext-iconv`要求は存続するがランタイム要件ではない
 	 */
 	private const REQUIRED_EXTENSIONS = array( 'bcmath', 'mbstring' );
 

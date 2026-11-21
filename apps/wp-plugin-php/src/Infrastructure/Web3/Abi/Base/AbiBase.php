@@ -5,7 +5,7 @@ namespace Baywall\Core\Infrastructure\Web3\Abi\Base;
 
 use Baywall\Core\Domain\ValueObject\Address;
 use InvalidArgumentException;
-use kornrunner\Keccak;
+use phpseclib4\Crypt\Hash;
 use phpseclib4\Math\BigInteger;
 use stdClass;
 
@@ -38,7 +38,7 @@ abstract class AbiBase {
 
 			$input_types = array_map( fn( $item ) => $item['type'], $target['inputs'] );
 
-			$hash = '0x' . Keccak::hash( $func_or_event_name . '(' . implode( ',', $input_types ) . ')', 256 );
+			$hash = '0x' . bin2hex( ( new Hash( 'keccak256' ) )->hash( $func_or_event_name . '(' . implode( ',', $input_types ) . ')' ) );
 
 			$this->topic_hash_cache[ $func_or_event_name ] = $hash;
 		}

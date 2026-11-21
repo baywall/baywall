@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Lib\Ether;
 
 use Elliptic\EC;
-use kornrunner\Keccak;
+use phpseclib4\Crypt\Hash;
 
 final class Ethers {
 	/** EIP191のメッセージプレフィックス */
@@ -18,7 +18,9 @@ final class Ethers {
 	 */
 	public static function keccak256( string $hex_value ): string {
 		assert( preg_match( '/^0x[0-9a-f]*$/', $hex_value ) === 1 );
-		$result = '0x' . Keccak::hash( hex2bin( substr( $hex_value, 2 ) ), 256 );
+		$raw = hex2bin( substr( $hex_value, 2 ) );
+		assert( is_string( $raw ) );
+		$result = '0x' . bin2hex( ( new Hash( 'keccak256' ) )->hash( $raw ) );
 		assert( preg_match( '/^0x[0-9a-f]{64}$/', $result ) === 1 );
 		return $result;
 	}
@@ -84,7 +86,7 @@ final class Ethers {
 	public static function computeAddress( string $public_key ): string {
 		$public_key_bin = hex2bin( str_replace( '0x', '', $public_key ) );
 		assert( is_string( $public_key_bin ) );
-		$result = '0x' . substr( Keccak::hash( substr( $public_key_bin, 1 ), 256 ), 24 );
+		$result = '0x' . substr( bin2hex( ( new Hash( 'keccak256' ) )->hash( substr( $public_key_bin, 1 ) ) ), 24 );
 		$result = self::getAddress( $result ); // チェックサム付きアドレスに変換
 		assert( preg_match( '/^0x[0-9a-fA-F]{40}$/', $result ) === 1 );
 		return $result;
@@ -118,7 +120,7 @@ final class Ethers {
 		if ( preg_match( '/^[0-9a-fA-F]{40}$/', $value ) !== 1 ) {
 			return false;
 		}
-		$hash = Keccak::hash( mb_strtolower( $value ), 256 );
+		$hash = bin2hex( ( new Hash( 'keccak256' ) )->hash( mb_strtolower( $value ) ) );
 		for ( $i = 0; $i < 40; $i++ ) {
 			if (
 				( intval( $hash[ $i ], 16 ) > 7 && mb_strtoupper( $value[ $i ] ) !== $value[ $i ] ) ||
@@ -145,7 +147,7 @@ final class Ethers {
 			throw new \InvalidArgumentException( '[7AC7AE37] Invalid address format. ' . $value );
 		}
 		$address = 0 === strpos( $value, '0x' ) ? substr( $value, 2 ) : $value;
-		$hash    = Keccak::hash( strtolower( $address ), 256 );
+		$hash    = bin2hex( ( new Hash( 'keccak256' ) )->hash( strtolower( $address ) ) );
 		$result  = '0x';
 		for ( $i = 0; $i < 40; $i++ ) {
 			$char    = strtolower( $address[ $i ] );
@@ -270,12 +272,11 @@ final class Ethers {
 		if ( '' !== $name ) {
 			$labels = explode( '.', self::ensNormalize( $name ) );
 			for ( $i = count( $labels ) - 1; $i >= 0; $i-- ) {
-				$label_hash = hex2bin( Keccak::hash( $labels[ $i ], 256 ) );
-				$node       = hex2bin( Keccak::hash( $node . $label_hash, 256 ) );
+				$label_hash = ( new Hash( 'keccak256' ) )->hash( $labels[ $i ] );
+				$node       = ( new Hash( 'keccak256' ) )->hash( $node . $label_hash );
 			}
 		}
 
-		assert( is_string( $node ) );
 		$result = '0x' . bin2hex( $node );
 		assert( preg_match( '/^0x[0-9a-f]{64}$/', $result ) === 1 );
 		return $result;
