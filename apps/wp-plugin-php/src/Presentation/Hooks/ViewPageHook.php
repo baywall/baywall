@@ -41,7 +41,7 @@ class ViewPageHook implements Hook {
 		$asset_url_provider   = ( $this->asset_url_provider )();
 		$php_var_exporter     = ( $this->php_var_exporter )();
 
-		// ゲストユーザー(一般の訪問者)表示用の登録する際のハンドル名を取得
+		// ゲストユーザー(一般の訪問者)表示用スクリプトを登録する際のハンドル名を取得
 		$handle_name = $handle_name_provider->viewScript();
 
 		// アセットファイルを読み込む

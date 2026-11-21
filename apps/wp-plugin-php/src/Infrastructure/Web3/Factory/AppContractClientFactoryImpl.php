@@ -18,7 +18,7 @@ class AppContractClientFactoryImpl implements AppContractClientFactory {
 	) {}
 
 	/**
-	 * 指定したチェーンにのAppコントラクトへ接続するオブジェクトを生成します。
+	 * 指定したチェーンのAppコントラクトへ接続するオブジェクトを生成します。
 	 */
 	public function create( ChainId $chain_id ): AppContractClientImpl {
 		$app_contract = $this->app_contract_repository->get( $chain_id );

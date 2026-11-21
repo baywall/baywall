@@ -45,7 +45,7 @@ class WpInvoiceTokenCookieProvider implements InvoiceTokenCookieProvider {
 		);
 	}
 
-	/** Cookieに書き込むリフレッシュトークンのパスを取得します */
+	/** Cookieに書き込む請求書トークンのパスを取得します */
 	private function path(): string {
 		$api_root_url = $this->wordpress_property_provider->apiRootUrl();
 		$path         = parse_url( trailingslashit( $api_root_url ) . WpConfig::REST_NAMESPACE . '/' . WpConfig::REST_ROUTE_AUTH_TOKEN_INVOICE, PHP_URL_PATH );

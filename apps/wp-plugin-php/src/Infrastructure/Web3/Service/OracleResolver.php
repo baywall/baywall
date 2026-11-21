@@ -16,7 +16,7 @@ class OracleResolver {
 		private readonly OracleRepository $oracle_repository
 	) {}
 
-	/** `レート取得用のオラクル`を取得します。 */
+	/** レート取得用のオラクルを取得します。 */
 	public function resolveRateOracle( SymbolPair $symbol_pair ): ?Oracle {
 		// 接続可能性の判定用に、接続可能チェーンのID一覧を1回のI/Oで用意する
 		$connectable_chain_ids = array_map(

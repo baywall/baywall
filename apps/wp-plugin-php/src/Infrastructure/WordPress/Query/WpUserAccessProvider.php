@@ -10,8 +10,8 @@ class WpUserAccessProvider implements UserAccessProvider {
 	/** @inheritdoc */
 	public function canViewPost( PostId $post_id ): bool {
 		// current_user_can( 'read_post', $post_id ); だけで判定しようとしていたが、
-		// get_post_status( $post_id ) === 'publish' && wp_get_current_user()->ID === 0 の場合
-		// (ゲストユーザーのアクセス)の場合にfalseとなったため以下の判定処理で実装
+		// get_post_status( $post_id ) === 'publish' && wp_get_current_user()->ID === 0
+		// （ゲストユーザーのアクセス）の場合にfalseとなったため以下の判定処理で実装
 		if ( is_user_logged_in() ) {
 			return current_user_can( 'read_post', $post_id->value() );
 		} else {

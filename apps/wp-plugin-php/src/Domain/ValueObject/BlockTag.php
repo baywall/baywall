@@ -6,7 +6,7 @@ namespace Baywall\Core\Domain\ValueObject;
 use Baywall\Core\Domain\ValueObject\Interfaces\ValueObject;
 
 /**
- * `latest`など、evm_getBlockByNumber等で指定できるタグを表すクラス
+ * `latest`など、eth_getBlockByNumber等で指定できるタグを表すクラス
  */
 final readonly class BlockTag implements ValueObject {
 	private const LATEST = 'latest';

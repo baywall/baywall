@@ -43,7 +43,7 @@ class WpPluginUpdateChecker {
 		// ※ リンク表示（update-supported）は`response`/`no_update`への登録有無で決まり、`package`には依存しない。
 		// `package`は将来`response`に入った際の実ダウンロードに必要なため含めている。
 		// ※ semverとして解釈不能なバージョン文字列が来た場合はComparatorが例外を投げるため、
-		// 呼び出し側（フック）で\Throwableを捕捉して更新非提示に倒す
+		// 呼び出し側（フック）で\Throwableを捕捉して更新なしとして扱う
 		if ( ! Comparator::greaterThan( $channel->version(), $installed_version ) ) {
 			// 更新なしパスでは要件チェックを行わないため、環境要件未達でも`requires`/`requires_php`が
 			// そのまま載る。ただし`no_update`はコアがプラグイン一覧に表示しないため実害はない。

@@ -28,7 +28,7 @@ class AppManifestFetchServiceImpl implements AppManifestFetchService {
 	public function fetch( RpcUrl $rpc_url ): string {
 		$manifest_url = $this->ens_service->getText( $rpc_url, Config::APP_MANIFEST_ENS, Config::ENS_TEXT_FIELD_NAME_MANIFEST );
 		if ( '' === $manifest_url ) {
-			// URL未設定は取得失敗として扱う（呼び出し側のフェイルセーフに倒す）
+			// URL未設定は取得失敗として扱う（呼び出し側のフェイルセーフ処理に委ねる）
 			throw new \RuntimeException( '[842E73E7] manifest URL is not set in the ENS text record.' );
 		}
 		// 更新zipは任意コード実行に直結するため、平文取得を防ぐ目的でhttpsスキームのみ受け付ける

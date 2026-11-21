@@ -108,7 +108,7 @@ class GetPayableTokens {
 	 * 直近に発行された請求書のチェーン以外のトークンを除外します。
 	 *
 	 * 二重購入抑止（InvoiceService::isDuplicatePurchase）と同じ判定で、
-	 * 別チェーンの請求書が窓内にあるチェーンのトークンを選択肢から外す。
+	 * 別チェーンの請求書が制限時間内にあるチェーンのトークンを選択肢から外します。
 	 *
 	 * @param Token[] $tokens
 	 * @return Token[]

@@ -7,7 +7,7 @@ use Baywall\Core\Domain\Exception\ValidationFailedException;
 use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use WP_REST_Request;
 
-/** X-WP-Nonceを関連サービス */
+/** X-WP-Nonce関連サービス */
 class WpNonceService {
 	/**
 	 * REST APIリクエストのヘッダに含まれるnonceを検査します。

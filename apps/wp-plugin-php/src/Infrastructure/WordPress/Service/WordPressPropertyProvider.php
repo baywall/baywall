@@ -8,7 +8,6 @@ use Baywall\Core\Application\Port\HomeUrlProvider;
 /**
  * WordPressの設定情報を取得するクラス。
  */
-// ※ このクラスはWordPressから情報を取得するためのクラスなので、WpPropertyProviderという名前を避けています。
 class WordPressPropertyProvider implements HomeUrlProvider {
 	/**
 	 * サイトのホームURLを取得します。
@@ -24,7 +23,7 @@ class WordPressPropertyProvider implements HomeUrlProvider {
 		return get_rest_url();
 
 		/*
-		get_rest_url() 置き換え前は以下のコードでパーマリンクがデフォルトの場合とそうでない場合を判定してした
+		get_rest_url() 置き換え前は以下のコードでパーマリンクがデフォルトの場合とそうでない場合を判定していた
 
 		// パーマリンク構造が基本の場合は、`/wp-json/`を含むURLではアクセスできないので`?rest_route=`を含むURLでAPIアクセスを行う。
 		// 参考: https://labor.ewigleere.net/2021/11/06/wordpress-restapi-404notfound-permalink-basic/

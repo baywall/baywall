@@ -14,7 +14,7 @@ class UserAccessChecker {
 	/**
 	 * 現在のユーザーで指定した投稿を閲覧できるかをチェックし、閲覧できない場合は例外をスローします
 	 *
-	 * @param bool|null $is_authenticated 認証済みが確定している経路からのヒント。null の場合はログイン状態から判定します
+	 * @param bool|null $is_authenticated 認証済みと確定している経路から渡すヒント。null の場合はログイン状態から判定します
 	 */
 	public function checkCanViewPost( PostId $post_id, ?bool $is_authenticated = null ): void {
 		if ( ! $this->user_access_provider->canViewPost( $post_id ) ) {
@@ -39,7 +39,7 @@ class UserAccessChecker {
 		}
 	}
 
-	/** 拒否を認証状態で振り分けてスローします（未認証 → 401、認証済みだが権限なし → 403） */
+	/** 認証状態に応じて例外を振り分けてスローします（未認証 → 401、認証済みで権限なし → 403） */
 	private function throwDenied( bool $is_authenticated, string $permission_denied_message ): void {
 		if ( ! $is_authenticated ) {
 			throw new AuthenticationFailedException( '[3F2B6AB2] You must be logged in.' );

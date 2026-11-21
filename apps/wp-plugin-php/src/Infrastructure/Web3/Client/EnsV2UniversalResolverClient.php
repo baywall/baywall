@@ -68,7 +68,7 @@ class EnsV2UniversalResolverClient {
 			}
 			$decoded = $codec->decodeResult( $abi, 'text', $res[0] );
 		} catch ( RpcErrorException $e ) {
-			// revert（未登録名等の解決失敗）は型付きの未解決に正規化する
+			// revert（未登録名等の解決失敗）は ResolverNotFoundException として扱う
 			throw new ResolverNotFoundException( "[C28781C1] ENSv2 resolution failed. - {$ens_name}", 0, $e );
 		} catch ( \InvalidArgumentException $e ) {
 			// 空結果・デコード不能も未解決として扱う

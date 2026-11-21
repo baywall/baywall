@@ -13,7 +13,7 @@ use WP_REST_Response;
 
 /** WordPressの例外変換サービス */
 class WpExceptionConverter {
-	/** 例外をビジネス分類へ変換します。未分類の例外は INTERNAL_ERROR になります */
+	/** 例外を業務分類へ変換します。未分類の例外は INTERNAL_ERROR になります */
 	public function categoryOf( \Throwable $e ): ExceptionCategory {
 		return match ( true ) {
 			$e instanceof ValidationFailedException => ExceptionCategory::VALIDATION_FAILED,

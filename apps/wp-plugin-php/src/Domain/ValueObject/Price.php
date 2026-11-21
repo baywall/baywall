@@ -12,13 +12,13 @@ readonly class Price implements ValueObject {
 	) {}
 
 	/**
-	 * 金額の数量を取得します。
+	 * 金額の値を取得します。
 	 */
 	public function amount(): Amount {
 		return $this->amount;
 	}
 
-	/** 通貨記号(`USD`, `ETH`等)を取得します。記号(`$`等)ではない。 */
+	/** 通貨シンボル(`USD`, `ETH`等)を取得します。通貨記号(`$`等)ではありません。 */
 	public function symbol(): Symbol {
 		return $this->symbol;
 	}

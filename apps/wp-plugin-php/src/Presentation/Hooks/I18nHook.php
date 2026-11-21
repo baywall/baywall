@@ -17,7 +17,7 @@ class I18nHook implements Hook {
 	}
 
 	public function loadTextdomain(): void {
-		// プラグイン同梱の languages/ は WP の自動探索対象外のため、明示的にロードする
+		// プラグイン同梱の languages/ は WordPress の自動読み込み対象外のため、明示的にロードする
 		$plugin_info_provider = ( $this->plugin_info_provider )();
 		load_plugin_textdomain( 'baywall', false, dirname( plugin_basename( $plugin_info_provider->mainFilePath() ) ) . '/languages' );
 	}

@@ -18,7 +18,7 @@ readonly class WpRefreshTokenHashString extends SecureStringValueObject {
 	}
 
 	public static function from( RefreshTokenString $refresh_token_string ): self {
-		// 外部入力がそのまま届くため合成前に形式を実検証する（`assert` は `zend.assertions=-1` で評価されないため使わない）
+		// 外部入力がそのまま届くため合成前に形式を検証する（`assert` は `zend.assertions=-1` で評価されないため使わない）
 		if ( preg_match( self::TOKEN_VALUE_PATTERN, $refresh_token_string->value() ) !== 1 ) {
 			throw new \InvalidArgumentException( '[D4C2C6E1] Invalid refresh token format: ' . $refresh_token_string->value() );
 		}
@@ -36,7 +36,7 @@ readonly class WpRefreshTokenHashString extends SecureStringValueObject {
 	/**
 	 * WordPress環境で使用するリフレッシュトークンハッシュのフォーマットチェック
 	 *
-	 * 結果的に`WpRefreshTokenString`と同じチェックだが、一応別扱い
+	 * 検証ロジックは WpInvoiceTokenStringと同一だが、型安全性を確保するため独立した値オブジェクトとして扱う。
 	 */
 	private static function checkWpRefreshTokenHashFormat( string $wp_refresh_token_hash_value ): void {
 		if ( ! preg_match( self::TOKEN_VALUE_PATTERN, $wp_refresh_token_hash_value ) ) {

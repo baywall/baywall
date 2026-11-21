@@ -8,7 +8,7 @@ use Baywall\Core\Domain\ValueObject\InvoiceTokenString;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
 
 interface InvoiceTokenRepository {
-	/** 指定した請求書トークン文字列に合致する請求書情報を取得します。 */
+	/** 指定した請求書トークン文字列に合致する請求書トークン情報を取得します。 */
 	public function get( InvoiceTokenString $invoice_token_string ): ?InvoiceToken;
 
 	/** 請求書トークン情報を追加します。 */

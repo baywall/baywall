@@ -24,8 +24,6 @@ class ResolveChain implements Resolver {
 
 		$chain = $this->get_chain->handle( $chain_id );
 
-		// `AppContractResolver`の作成を省略してコールバックを定義
-		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
 		$app_contract_callback = function () use ( $chain ) {
 			// 権限チェック不要
 			$app_contract = $this->get_app_contract->handle( $chain->id() );

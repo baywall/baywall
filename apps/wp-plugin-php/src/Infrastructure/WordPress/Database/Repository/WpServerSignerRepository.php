@@ -15,8 +15,8 @@ class WpServerSignerRepository implements ServerSignerRepository {
 	/**
 	 * 平文のBase64で保存された秘密鍵を復号します
 	 *
-	 * `private_key`の値域はCHECK制約で88文字のBase64に固定されているため、CHECK制約が執行されるDBでは
-	 * `base64_decode()`は失敗しません（CHECK制約が執行されないDBへのfail-safeとして分岐を残しています）
+	 * `private_key`の値域はCHECK制約で88文字のBase64に固定されているため、CHECK制約が有効なDBでは
+	 * `base64_decode()`は失敗しません（CHECK制約が無効なDBへのfail-safeとして分岐を残しています）
 	 */
 	private function decodePlainBase64Key( string $stored_value ): PrivateKey {
 		$decoded = base64_decode( $stored_value, true );

@@ -16,7 +16,7 @@ class WpInvoiceTokenRepository implements InvoiceTokenRepository {
 	public function __construct( private readonly InvoiceTokenTable $invoice_token_table ) {}
 
 	/**
-	 * 指定した請求書トークン文字列に合致する請求書情報を取得します。
+	 * 指定した請求書トークン文字列に合致する請求書トークン情報を取得します。
 	 *
 	 * @throws AuthenticationFailedException トークン文字列の形式が不正な場合
 	 */

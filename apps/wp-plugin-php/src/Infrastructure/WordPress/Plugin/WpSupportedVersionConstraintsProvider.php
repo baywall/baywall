@@ -44,7 +44,7 @@ class WpSupportedVersionConstraintsProvider implements SupportedVersionConstrain
 	 * 対応バージョン定義JSONから制約文字列の一覧を読み込みます。
 	 *
 	 * 各制約文字列はここで事前検証し、パース不能な制約は同梱データ異常として fail-closed とします
-	 * （制約のパース失敗を解釈不能なバージョンの例外捕捉で握らないため）。
+	 * （制約のパース失敗を、解釈不能なバージョンの例外捕捉で握りつぶさないため）。
 	 *
 	 * @param string $json_path 対応バージョン定義JSONへのパス
 	 * @return string[] 制約文字列の配列

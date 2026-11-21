@@ -65,7 +65,7 @@ class OracleServiceImpl implements OracleService {
 		$description = $this->description( $rpc_url, $address );
 		$symbols     = array_map( 'trim', explode( '/', $description ) );
 
-		// 保険として [0] も `?? ''` でフォールバックし、下のチェックで例外に倒す（[1] と同一の形に揃える）
+		// 保険として [0] も `?? ''` でフォールバックし、下のチェックで例外にする（[1] と同一の形に揃える）
 		// @phpstan-ignore nullCoalesce.offset
 		$base_symbol  = $symbols[0] ?? '';
 		$quote_symbol = $symbols[1] ?? '';

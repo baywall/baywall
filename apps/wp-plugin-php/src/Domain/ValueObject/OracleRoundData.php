@@ -7,9 +7,6 @@ use phpseclib4\Math\BigInteger;
 
 /**
  * `latestRoundData` の戻り値を保持するクラス。
- *
- * `ValueObject` インタフェースは実装していません。複合フィールドのため `__toString` の
- * 意味論が定まらないこと、`BigInteger` の ValueObject 化とあわせて後日見直すためです。
  */
 readonly class OracleRoundData {
 	public function __construct( BigInteger $round_id, BigInteger $answer, BigInteger $started_at, BigInteger $updated_at, BigInteger $answered_in_round ) {

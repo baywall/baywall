@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
 /**
- * 投稿内容を保存、または取得時のhooksを登録するクラス
- * ※ インストールしているテーマやプラグインの影響を受ける可能性が高い。
- *    完全な対応は難しいため、問題があれば都度対応することになると思われる。
+ * 投稿内容を保存・取得する際のhooksを登録するクラス
+ *
+ * ※ サードパーティ製テーマやプラグインとの干渉が生じる可能性があるため、
+ *    互換性の問題が判明した際は個別に対処する必要がある。
  */
 class ContentHook implements Hook {
 	public function __construct(

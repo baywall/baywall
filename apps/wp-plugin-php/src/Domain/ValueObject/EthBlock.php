@@ -5,9 +5,6 @@ namespace Baywall\Core\Domain\ValueObject;
 
 /**
  * ブロック情報を表すクラス。
- *
- * `ValueObject` インタフェースは実装していません。複合フィールドのため `__toString` の
- * 意味論が定まらないこと、`OracleRoundData` と同様に扱うためです。
  */
 readonly class EthBlock {
 	private function __construct(

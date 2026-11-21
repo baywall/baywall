@@ -178,7 +178,7 @@ class SalesHistoryView {
 	}
 
 	/**
-	 * 販売履歴に指定した投稿IDと購入者アドレスが存在するかどうか(=購入済みかどうか)を返します
+	 * 販売履歴に指定した投稿IDと購入者アドレスの組み合わせが存在するかどうか(=購入済みかどうか)を返します
 	 */
 	public function existsByPostIdAndBuyerAddress( PostId $post_id, Address $buyer_address ): bool {
 		$sql = <<<SQL

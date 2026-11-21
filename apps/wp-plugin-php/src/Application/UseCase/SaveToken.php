@@ -43,13 +43,13 @@ class SaveToken {
 				$this->checkDecimalsWithinLimit( $token );
 			}
 		} else {
-			// トークンデータが存在しない場合は新規登録を行うために少数点以下桁数とシンボルを取得する
+			// トークンデータが存在しない場合は新規登録を行うために小数点以下桁数とシンボルを取得する
 			if ( $address->equals( Address::nativeToken() ) ) {
 				// ネイティブトークンの場合
 				$decimals = $this->native_token_provider->getDecimals( $chain_id );
 				$symbol   = $this->native_token_provider->getSymbol( $chain_id );
 			} else {
-				// チェーンに接続してERC20コントラクトから少数点以下桁数とシンボルを取得する
+				// チェーンに接続してERC20コントラクトから小数点以下桁数とシンボルを取得する
 				$rpc_url = $chain->rpcUrl();
 				if ( null === $rpc_url ) {
 					throw new \InvalidArgumentException( "[1731FE8C] Chain {$chain_id} does not have a valid RPC URL." );

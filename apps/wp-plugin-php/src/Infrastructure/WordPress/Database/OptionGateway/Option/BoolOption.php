@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
 
-/** WordPressのoptionsテーブルにbool値を保存または取得するクラス */
+/**
+ * WordPressのoptionsテーブルにbool値を保存または取得するクラス
+ *
+ * ※ WordPress の update_option では false を保存すると
+ *    取得時に null（未設定）と区別できなくなるため、
+ *    `1`または`0`を書き込む仕様としています。
+ */
 class BoolOption {
-
-	//
-	// falseを保存するとnullで返ってきてしまうため、
-	// `1`または`0`を書き込む仕様としています。
-	//
 
 	/** trueを保存する際にテーブルに書き込まれる値(変更禁止) */
 	private const TRUE_VALUE = 1;

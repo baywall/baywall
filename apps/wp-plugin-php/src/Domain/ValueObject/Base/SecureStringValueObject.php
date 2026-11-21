@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Domain\ValueObject\Base;
 
 /**
- * 推測されるとまずい文字列の値を表す基底クラス
+ * 推測されると問題のある文字列の値を表す基底クラス
  *
  * equalsではタイミング攻撃耐性のある比較を行う。
  */

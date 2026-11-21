@@ -97,7 +97,7 @@ class SellableSymbolsProvider {
 		// symbolが'USD'以外の場合は、[symbol]/USDのOracleが存在しないとレート変換が出来ないため販売不可
 		if ( ! $symbol->equals( Symbol::from( 'USD' ) ) ) {
 			// [symbol]/USDのOracleを取得
-			// ※ array_findはPH8.4以降でしか使えないためarray_filterで代用
+			// ※ array_findはPHP8.4以降でしか使えないためarray_filterで代用
 			$symbol_usd_oracles = array_filter( $usd_quote_oracles, fn( $oracle ) => $oracle->symbolPair()->base()->equals( $symbol ) );
 
 			// [symbol]/USDのOracleが存在しない場合はレート変換できないので販売不可

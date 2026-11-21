@@ -45,7 +45,7 @@ class TokenAmountConverter {
 		return $tokens[0];
 	}
 
-	/** 小数点桁数から基本単位への変換倍数を計算します */
+	/** 小数点以下桁数から基本単位への変換倍率を計算します */
 	private function calculateBaseUnitMultiplier( Decimals $decimals ): Amount {
 		return Amount::from( (string) ( 10 ** $decimals->value() ) );
 	}

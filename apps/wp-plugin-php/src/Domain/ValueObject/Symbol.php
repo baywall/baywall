@@ -37,7 +37,7 @@ final readonly class Symbol implements ValueObject {
 	}
 
 	private static function checkValidSymbolFormat( string $symbol_value ): void {
-		// 様々な通貨記号が存在するため、空文字列以外であれば有効とする。
+		// 様々な通貨シンボルが存在するため、空文字列以外であれば有効とする。
 		if ( trim( $symbol_value ) !== $symbol_value || empty( $symbol_value ) ) {
 			throw new \InvalidArgumentException( '[12CF7A2F] Invalid symbol format. ' . $symbol_value );
 		}

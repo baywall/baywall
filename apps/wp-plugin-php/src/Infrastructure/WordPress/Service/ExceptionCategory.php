@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Service;
 use Baywall\Core\Constant\HttpStatus;
 
 /**
- * 例外のビジネス分類とトランスポート契約値の翻訳表
+ * 例外の業務分類とトランスポート契約値の対応表
  *
  * HTTPステータス・WP_Errorコード・GraphQL extensions.code・クライアント向けメッセージの対応は公開契約であり変更しない。
  */

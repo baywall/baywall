@@ -81,13 +81,13 @@ final class Config {
 	 */
 	public const MIN_CONFIRMATIONS = 1; // 【変更不可】
 
-	// 以下のスレッドで以下の制限があるとの記述あり
+	// 以下のスレッドに以下の制限があるとの記述あり
 	// https://github.com/bnb-chain/bsc/issues/113
 	// - BSC: 5000
 	// - Alchemy: 2000 => https://docs.alchemy.com/reference/eth-getlogs
 	//
 	// QuickNodeの無料プランはPolygonであっても最大5ブロックしか取得できない点に注意(有料プランであれば最大10,000ブロック)
-	// -> 10秒に1回以上リクエストしないと取得しきれないため、本アプリにおいては使い物にならない
+	// -> 10秒に1回以上の頻度でリクエストする必要があり、本プラグインのクロール要件を満たさないため採用しない。
 	// https://www.quicknode.com/docs/polygon/eth_getLogs
 
 	// 一旦、Alchemyの制限に合わせる

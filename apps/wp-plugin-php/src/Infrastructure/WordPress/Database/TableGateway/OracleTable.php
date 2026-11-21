@@ -44,7 +44,7 @@ class OracleTable {
 	}
 
 	public function save( Oracle $oracle ): void {
-		// 一旦、ON DUPLICATE KEY UPDATEは不要なので使用しない。
+		// 現状、新規追加のみを想定しているため、ON DUPLICATE KEY UPDATE は使用しない。
 		$now = $this->clock->now()->value();
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`

@@ -27,7 +27,7 @@ class V20261013_010_AlterUnlockPaywallTransactionIndex implements Migration {
 	}
 
 	public function up(): void {
-		// block_timestamp 単列インデックスを複合へ張り替える。
+		// block_timestamp 単列インデックスを複合インデックスへ張り替える。
 		// 同一 block_timestamp の行が transaction_hash 順に安定するため、
 		// offset ページング時の行の重複・欠落を防ぐ。インデックス名は FORCE INDEX 句の互換のため維持
 		$sql = <<<SQL

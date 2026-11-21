@@ -37,7 +37,7 @@ class IssueInvoice {
 	) {}
 
 	/**
-	 * 請求書を発行し、サーバ署名と InvoiceToken Cookie を設定して発行結果を返します
+	 * 請求書を発行し、サーバー署名と InvoiceToken Cookie を設定して発行結果を返します
 	 *
 	 * @return array{message: string, signature: string, paymentAmount: string}
 	 */

@@ -139,8 +139,7 @@ class RestApiHook implements Hook {
 			return new WP_REST_Response( array(), HttpStatus::OK );
 		} catch ( Throwable $e ) {
 			if ( $e instanceof AuthenticationFailedException ) {
-				// アクセストークンが存在しない状態でも
-				// 初回アクセス時にアクセスするためログレベルを抑制
+				// 初回アクセス時はアクセストークンが存在しない状態でも呼ばれるため、ログレベルを抑制
 				( $this->app_log_service )()->debug( $e );
 			} else {
 				( $this->app_log_service )()->error( $e );

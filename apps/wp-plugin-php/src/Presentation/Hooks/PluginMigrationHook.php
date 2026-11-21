@@ -101,7 +101,7 @@ class PluginMigrationHook implements Hook {
 				);
 			} catch ( LockAcquisitionException $e ) {
 				// ロック取得失敗（同時リクエスト）又はロック機構のエラー時は次リクエストに委譲する。
-				// ロック機構のエラーはDBの一次的な障害と考えられるため、プラグインの無効化までは行わない。
+				// ロック機構のエラーはDBの一時的な障害と考えられるため、プラグインの無効化までは行わない。
 				( $this->app_log_service )()->warn( '[CB148F01] Plugin migration skipped (lock not acquired): ' . $e->getMessage() );
 				return;
 			}

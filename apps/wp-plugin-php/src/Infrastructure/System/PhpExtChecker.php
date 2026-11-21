@@ -13,7 +13,7 @@ class PhpExtChecker {
 	 *
 	 * 任意扱いの拡張:
 	 * - `gmp`:`simplito/bigint-wrapper-php`がBCMathにフォールバックするためランタイムに不要。
-	 *   `simplito/elliptic-php`のcomposer `require: ext-gmp`は過大宣言(コード上`gmp_`直接呼出しなし)で、
+	 *   `simplito/elliptic-php`のcomposer `require: ext-gmp`は過剰な宣言(コード上`gmp_`の直接呼び出しなし)で、
 	 *   composer install時にのみgmpを要求する点がランタイム要件と不整合。メタデータ自体は変更しない。
 	 *
 	 * チェック対象外の拡張:

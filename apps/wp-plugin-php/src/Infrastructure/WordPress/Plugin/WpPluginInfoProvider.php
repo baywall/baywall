@@ -57,7 +57,7 @@ class PluginMainFile {
 	/** @var array<string, bool|string>|null */
 	private $plugin_data = null;
 
-	// プラグインの最初に読みこまれるファイルのパス
+	// プラグインで最初に読み込まれるファイルのパス
 	/** @var string|null */
 	private $path = null;
 

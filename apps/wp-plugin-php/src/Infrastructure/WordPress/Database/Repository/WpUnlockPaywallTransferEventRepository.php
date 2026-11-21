@@ -27,7 +27,7 @@ class WpUnlockPaywallTransferEventRepository implements UnlockPaywallTransferEve
 			$event->removed()
 		);
 
-		// トークン転送インベント情報を保存
+		// トークン転送イベント情報を保存
 		$this->unlock_paywall_transfer_event_table->save(
 			$event->invoiceId(),
 			$event->postId(),

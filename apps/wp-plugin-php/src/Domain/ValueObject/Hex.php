@@ -79,11 +79,14 @@ readonly class Hex implements ValueObject {
 
 	/** int型の値で取得します */
 	public function intValue(): int {
-		$result = hexdec( $this->hex_value );
-		if ( is_int( $result ) ) {
-			return $result;
+		// hexdec() は PHP 8.6 以降、精度を保てない変換で Notice を出すため、事前に桁数で範囲を判定する
+		$digits     = ltrim( substr( $this->hex_value, 2 ), '0' );
+		$max_digits = dechex( PHP_INT_MAX );
+		if ( strlen( $digits ) > strlen( $max_digits )
+			|| ( strlen( $digits ) === strlen( $max_digits ) && strcmp( $digits, $max_digits ) > 0 ) ) {
+			throw new \RuntimeException( '[F361A92C] Hex value is too large to convert to int: ' . $this->hex_value );
 		}
-		throw new \RuntimeException( '[F361A92C] Hex value is too large to convert to int: ' . $this->hex_value );
+		return (int) hexdec( $digits );
 	}
 
 	/** バイナリデータとしての値を取得します */
