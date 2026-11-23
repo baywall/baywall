@@ -3,7 +3,7 @@
 ## Application の分類
 
 - [Application/Port](Application/Port): Infrastructure 実装前提の抽象（`interface` / `abstract class`）のみを置きます。具象クラスは置きません。
-- [Application/Service](Application/Service): 具象の application service のみを置きます。
+- [Application/Service](Application/Service): 具象クラスの application service のみを置きます。
 - [Application/Logging](Application/Logging): ログ基盤の抽象を置く例外ディレクトリです。`AppLogService` / `AppLogLevelRepository` / `ErrorLogWriter`（抽象）、`ValueObject`（`LogLevel`）を現状の配置のまま置きます。具象は Infrastructure 側に置き、`WpAppLogService` は [Infrastructure/WordPress/Logging](Infrastructure/WordPress/Logging)、`ErrorLogFormatter` / `ErrorLogWriterImpl` は [Infrastructure/Logging](Infrastructure/Logging) にあります。
 - 役割の判別はディレクトリで行い、命名規則（`*Port` 接尾辞など）は導入しません。
 
