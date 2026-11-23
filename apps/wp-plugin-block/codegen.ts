@@ -30,7 +30,7 @@ const config: CodegenConfig = {
 
 				// https://github.com/dotansimha/graphql-code-generator/issues/9786#issuecomment-1938602063
 				*/
-				addSuspeneQuery: true,
+				addSuspenseQuery: true,
 				reactQueryVersion: 5,
 			},
 		},
