@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Database\OptionRepository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
 use Baywall\Core\Application\Repository\ThemeSettingRepository;
 use Baywall\Core\Domain\ValueObject\ThemeSetting;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpOptionName;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\StringOption;
 
 /**

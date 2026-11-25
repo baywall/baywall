@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\Web3\Constants;
+namespace Baywall\Core\Infrastructure\Web3\Constant;
 
 final class ChainIdConstants {
 	// ==================== Mainnet ====================

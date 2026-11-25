@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 use Baywall\Core\Application\Service\TransactionRunner;
 use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Domain\ValueObject\Address;
-use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
+use Baywall\Core\Infrastructure\Web3\Constant\ChainIdConstants;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migration;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;

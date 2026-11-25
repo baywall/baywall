@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Service;
 
 use Baywall\Core\Domain\Service\SiteUrlChecker;
-use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpInitialSiteUrlRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpInitialSiteUrlRepository;
 
 class WpSiteUrlChecker implements SiteUrlChecker {
 	public function __construct(

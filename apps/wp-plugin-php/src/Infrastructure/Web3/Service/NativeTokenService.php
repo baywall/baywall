@@ -7,7 +7,7 @@ use Baywall\Core\Application\Port\NativeTokenProvider;
 use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Decimals;
 use Baywall\Core\Domain\ValueObject\Symbol;
-use Baywall\Core\Infrastructure\Web3\Constants\NativeTokenConstants;
+use Baywall\Core\Infrastructure\Web3\Constant\NativeTokenConstants;
 
 class NativeTokenService implements NativeTokenProvider {
 	/** 指定したチェーンのネイティブトークンシンボルを取得します (例: ETH) */

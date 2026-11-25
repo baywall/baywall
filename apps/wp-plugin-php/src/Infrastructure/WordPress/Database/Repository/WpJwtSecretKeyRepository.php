@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Baywall\Core\Infrastructure\WordPress\Database\OptionRepository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
 use Baywall\Core\Application\Repository\JwtSecretKeyRepository;
 use Baywall\Core\Application\ValueObject\JwtSecretKey;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpOptionName;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\ArrayOption;
 
 class WpJwtSecretKeyRepository implements JwtSecretKeyRepository {

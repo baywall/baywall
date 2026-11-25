@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Constants;
+namespace Baywall\Core\Infrastructure\WordPress\Constant;
 
 final class WpOptionName {
 	/** optionsテーブルに格納する際のキー名に付与するプレフィックス */

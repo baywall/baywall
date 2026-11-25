@@ -9,7 +9,7 @@ use Baywall\Core\Domain\ValueObject\ChainId;
 use Baywall\Core\Domain\ValueObject\Confirmations;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\RpcUrl;
-use Baywall\Core\Infrastructure\Web3\Constants\ChainIdConstants;
+use Baywall\Core\Infrastructure\Web3\Constant\ChainIdConstants;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migration;
 use Baywall\Core\Infrastructure\WordPress\Database\MyWpdb;
 use Baywall\Core\Infrastructure\WordPress\Database\TableNameProvider;

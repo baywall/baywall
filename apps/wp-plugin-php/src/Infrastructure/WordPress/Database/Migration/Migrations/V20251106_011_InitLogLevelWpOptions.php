@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Database\Migration\Migrations;
 use Baywall\Core\Application\Service\TransactionRunner;
 use Baywall\Core\Application\Logging\ValueObject\LogLevel;
 use Baywall\Core\Infrastructure\WordPress\Database\Migration\Migration;
-use Baywall\Core\Infrastructure\WordPress\Database\OptionRepository\WpAppLogLevelRepository;
+use Baywall\Core\Infrastructure\WordPress\Database\Repository\WpAppLogLevelRepository;
 
 class V20251106_011_InitLogLevelWpOptions implements Migration {
 	public function __construct(

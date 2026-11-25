@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Constants;
+namespace Baywall\Core\Infrastructure\WordPress\Constant;
 
 final class WpCronName {
 	/** Cronジョブ名に付与するプレフィックス */

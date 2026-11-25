@@ -59,7 +59,7 @@ class RpcClient {
 		try {
 			$decoded = json_decode( $response['body'], false, 512, JSON_THROW_ON_ERROR );
 		} catch ( \JsonException $e ) {
-			throw new RpcException( '[F1D2B3C4] JSON-RPC response is not valid JSON.', 0, $e );
+			throw new RpcException( '[0E594777] JSON-RPC response is not valid JSON.', 0, $e );
 		}
 
 		if ( isset( $decoded->error ) ) {

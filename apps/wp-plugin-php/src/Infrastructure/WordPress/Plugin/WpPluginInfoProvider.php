@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
 use Baywall\Core\Domain\Service\PluginInfoProvider;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpConfig;
 
 class WpPluginInfoProvider implements PluginInfoProvider {
 	public function __construct() {

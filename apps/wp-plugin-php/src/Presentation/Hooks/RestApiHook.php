@@ -8,7 +8,7 @@ use Baywall\Core\Application\UseCase\IssueAccessTokenByInvoiceToken;
 use Baywall\Core\Application\UseCase\LogoutAuth;
 use Baywall\Core\Application\UseCase\RefreshAccessToken;
 use Baywall\Core\Constant\HttpStatus;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpConfig;
 use Baywall\Core\Domain\Exception\ValidationFailedException;
 use Baywall\Core\Domain\Exception\AuthenticationFailedException;
 use Baywall\Core\Domain\Exception\PaymentNotCompletedException;

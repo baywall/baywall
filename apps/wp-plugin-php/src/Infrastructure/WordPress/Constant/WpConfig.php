@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Constants;
+namespace Baywall\Core\Infrastructure\WordPress\Constant;
 
 // Windowsでも混合セパレータにならないよう、読み込み時に正規化済みパスを求めておく。
 // クラス定数式は関数呼び出しを含められないため、`define`で定義した定数をクラス定数から参照する。

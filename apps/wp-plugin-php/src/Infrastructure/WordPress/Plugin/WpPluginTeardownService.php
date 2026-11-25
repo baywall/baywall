@@ -5,9 +5,9 @@ namespace Baywall\Core\Infrastructure\WordPress\Plugin;
 
 use Baywall\Core\Application\Repository\PurgeOnUninstallRepository;
 use Baywall\Core\Application\Port\PluginTeardownService;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpTableCoreName;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpTransientName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpOptionName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpTableCoreName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpTransientName;
 use wpdb;
 
 /** WordPressからプラグインが削除される際のクリーンアップ処理を行うクラス */

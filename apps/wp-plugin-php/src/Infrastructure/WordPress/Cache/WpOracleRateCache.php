@@ -7,7 +7,7 @@ use Baywall\Core\Domain\Entity\Oracle;
 use Baywall\Core\Domain\ValueObject\Amount;
 use Baywall\Core\Domain\ValueObject\Rate;
 use Baywall\Core\Infrastructure\Cache\OracleRateCache;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpTransientName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpTransientName;
 
 class WpOracleRateCache implements OracleRateCache {
 	public function __construct( TransientStorage $storage, TransientExpirationProvider $expiration_provider ) {

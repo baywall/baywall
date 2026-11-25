@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option;
 
 use Baywall\Core\Lib\Util\Strings;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpOptionName;
 
 class Option {
 	public function __construct( string $option_key_name ) {

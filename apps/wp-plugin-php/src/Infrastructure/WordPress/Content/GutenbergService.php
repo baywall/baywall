@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Content;
 
 use Baywall\Core\Application\Repository\ThemeSettingRepository;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpConfig;
 use Baywall\Core\Domain\Entity\WidgetAttributes;
 use Baywall\Core\Infrastructure\WordPress\Mapper\WidgetAttributesMapper;
 use Baywall\Core\Domain\Repository\PostRepository;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Baywall\Core\Infrastructure\WordPress\Cache;
 
 use Baywall\Core\Infrastructure\Cache\AppManifestCache;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpTransientName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpTransientName;
 
 class WpAppManifestCache implements AppManifestCache {
 	public function __construct( TransientStorage $storage, TransientExpirationProvider $expiration_provider ) {

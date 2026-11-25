@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks\Service;
 
-use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 
 class PhpVarExporter {

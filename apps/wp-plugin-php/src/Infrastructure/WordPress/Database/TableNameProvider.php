@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Baywall\Core\Infrastructure\WordPress\Database;
 
-use Baywall\Core\Infrastructure\WordPress\Constants\WpTableCoreName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpTableCoreName;
 use wpdb;
 
 class TableNameProvider {

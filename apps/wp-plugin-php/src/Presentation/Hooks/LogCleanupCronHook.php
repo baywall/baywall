@@ -8,7 +8,7 @@ use Baywall\Core\Application\Logging\ErrorLogWriter;
 use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Application\Service\LockRunner;
 use Baywall\Core\Application\UseCase\CleanupOldLogs;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpCronName;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 
 /**

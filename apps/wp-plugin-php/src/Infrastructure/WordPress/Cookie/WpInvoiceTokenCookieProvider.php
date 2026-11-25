@@ -5,7 +5,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Cookie;
 
 use Baywall\Core\Application\Port\InvoiceTokenCookieProvider;
 use Baywall\Core\Application\Port\Clock;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpConfig;
 use Baywall\Core\Domain\Entity\InvoiceToken;
 use Baywall\Core\Domain\Service\CookieNameProvider;
 use Baywall\Core\Application\ValueObject\Cookie;

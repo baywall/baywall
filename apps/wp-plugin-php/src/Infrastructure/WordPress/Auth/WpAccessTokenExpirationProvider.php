@@ -6,7 +6,7 @@ namespace Baywall\Core\Infrastructure\WordPress\Auth;
 use Baywall\Core\Application\Port\AccessTokenExpirationProvider;
 use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Domain\ValueObject\UnixTimestamp;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpConfig;
 
 /** WordPress環境におけるアクセストークンの有効期限提供クラス */
 class WpAccessTokenExpirationProvider implements AccessTokenExpirationProvider {

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Baywall\Core\Presentation\Hooks;
 
-use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpConfig;
 use Baywall\Core\Infrastructure\WordPress\Content\HandleNameProvider;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginAssetUrlProvider;
 use Baywall\Core\Presentation\Hooks\Service\CurrentPaywalledPostResolver;

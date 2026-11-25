@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Baywall\Core\Infrastructure\WordPress\Database\OptionRepository;
+namespace Baywall\Core\Infrastructure\WordPress\Database\Repository;
 
 use Baywall\Core\Domain\Repository\PausedRepository;
 use Baywall\Core\Infrastructure\WordPress\Database\OptionGateway\Option\BoolOption;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpOptionName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpOptionName;
 
 /**
  * 一時停止状態を取得または保存するクラス

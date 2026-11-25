@@ -7,7 +7,7 @@ use Baywall\Core\Domain\Entity\WidgetAttributes;
 use Baywall\Core\Domain\ValueObject\Amount;
 use Baywall\Core\Domain\ValueObject\NetworkCategoryId;
 use Baywall\Core\Domain\ValueObject\Symbol;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpConfig;
 
 /** Gutenberg属性配列⇔WidgetAttributes(販売設定のドメイン形式)の変換を行います。 */
 class WidgetAttributesMapper {

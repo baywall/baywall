@@ -7,7 +7,7 @@ use Baywall\Core\Application\Port\AccessTokenCookieProvider;
 use Baywall\Core\Application\Port\Clock;
 use Baywall\Core\Application\ValueObject\AccessToken;
 use Baywall\Core\Domain\Service\CookieNameProvider;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpConfig;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpConfig;
 use Baywall\Core\Application\ValueObject\Cookie;
 use Baywall\Core\Infrastructure\WordPress\Service\WordPressPropertyProvider;
 

@@ -9,7 +9,7 @@ use Baywall\Core\Application\Service\LockRunner;
 use Baywall\Core\Application\UseCase\CrawlAllAppContract;
 use Baywall\Core\Infrastructure\WordPress\Plugin\WpPluginInfoProvider;
 use Baywall\Core\Constant\Config;
-use Baywall\Core\Infrastructure\WordPress\Constants\WpCronName;
+use Baywall\Core\Infrastructure\WordPress\Constant\WpCronName;
 
 /**
  * AppContractのイベントクロール処理をwp_cronを使って登録するクラス。
