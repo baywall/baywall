@@ -1,3 +1,4 @@
+export { assert } from './features/assert/assert.js';
 export { fetcher } from './features/graphql-codegen/fetcher.js';
 export { GraphqlError } from './features/graphql-codegen/error/GraphqlError.js';
 export { HttpError } from './error/HttpError.js';

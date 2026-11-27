@@ -1,4 +1,4 @@
-import assert from 'assert';
+import { assert } from '@baywall/lib-frontend';
 import { BlockEditPropsContext } from './BlockEditPropsProvider';
 import { useContext } from 'react';
 
